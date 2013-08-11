@@ -20,7 +20,7 @@ namespace DBGL
 class Mesh;
 
 /**
- * Defines an interface to place draw calls
+ * @brief Defines an interface to place draw calls
  */
 class RenderContext
 {
@@ -69,12 +69,12 @@ public:
 	 * @brief Uploads some data to the graphics card
 	 * @param data Raw data to push
 	 * @param length Length of the data array
-	 * @param vboHandle Handle of the vertex buffer to use. If this is negative a new buffer is created.
+	 * @param vboHandle Handle of the vertex buffer to use. If this equals GL_INVALID_VALUE a new buffer is created.
 	 * @param usage Specifies the expected usage pattern
-	 * @return The handle of the vertex buffer, the data has been uploaded
+	 * @return The handle of the vertex buffer the data has been uploaded to
 	 */
-	static const GLuint createVBOFloat(GLfloat* data, int length,
-			GLuint vboHandle = GL_INVALID_VALUE, GLenum usage = GL_STATIC_DRAW);
+	static const GLuint createVBO(void* data, int length, GLuint vboHandle =
+	GL_INVALID_VALUE, GLenum usage = GL_STATIC_DRAW);
 
 private:
 	ShaderProgram* _curShader; // Current "in use" shader

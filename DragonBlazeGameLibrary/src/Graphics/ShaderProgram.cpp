@@ -123,6 +123,258 @@ void ShaderProgram::setUniformFloat(int handle, float value) const
 }
 
 /**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformFloat2(int handle, float value[2]) const
+{
+	glUniform2f(handle, value[0], value[1]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformFloat3(int handle, float value[3]) const
+{
+	glUniform3f(handle, value[0], value[1], value[2]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformFloat4(int handle, float value[4]) const
+{
+	glUniform4f(handle, value[0], value[1], value[2], value[3]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformInt(int handle, int value) const
+{
+	glUniform1i(handle, value);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformInt2(int handle, int value[2]) const
+{
+	glUniform2i(handle, value[0], value[1]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformInt3(int handle, int value[3]) const
+{
+	glUniform3i(handle, value[0], value[1], value[2]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformInt4(int handle, int value[4]) const
+{
+	glUniform4i(handle, value[0], value[1], value[2], value[3]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformBool(int handle, bool value) const
+{
+	glUniform1i(handle, value);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformBool2(int handle, bool value[2]) const
+{
+	glUniform2i(handle, value[0], value[1]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformBool3(int handle, bool value[3]) const
+{
+	glUniform3i(handle, value[0], value[1], value[2]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformBool4(int handle, bool value[4]) const
+{
+	glUniform4i(handle, value[0], value[1], value[2], value[3]);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloatArray(int handle, unsigned int count,
+		float* values) const
+{
+	glUniform1fv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloat2Array(int handle, unsigned int count,
+		float* values) const
+{
+	glUniform2fv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloat3Array(int handle, unsigned int count,
+		float* values) const
+{
+	glUniform3fv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloat4Array(int handle, unsigned int count,
+		float* values) const
+{
+	glUniform4fv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformIntArray(int handle, unsigned int count,
+		int* values) const
+{
+	glUniform1iv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformInt2Array(int handle, unsigned int count,
+		int* values) const
+{
+	glUniform2iv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformInt3Array(int handle, unsigned int count,
+		int* values) const
+{
+	glUniform3iv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformInt4Array(int handle, unsigned int count,
+		int* values) const
+{
+	glUniform4iv(handle, count, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloatMatrix2Array(int handle, unsigned int count,
+		bool transpose, float* values) const
+{
+	glUniformMatrix2fv(handle, count, transpose, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloatMatrix3Array(int handle, unsigned int count,
+		bool transpose, float* values) const
+{
+	glUniformMatrix2fv(handle, count, transpose, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param count Amount of elements of the uniform array
+ * @param values Pointer to array with count values
+ */
+void ShaderProgram::setUniformFloatMatrix4Array(int handle, unsigned int count,
+		bool transpose, float* values) const
+{
+	glUniformMatrix2fv(handle, count, transpose, values);
+}
+
+/**
+ * @brief Sets a uniform by it's handle
+ * @param handle Uniform handle
+ * @param value New value
+ */
+void ShaderProgram::setUniformSampler(int handle, int value) const
+{
+	glUniform1i(handle, value);
+}
+
+/**
  * @return OpenGL handle of the shader program
  */
 GLuint ShaderProgram::getHandle() const

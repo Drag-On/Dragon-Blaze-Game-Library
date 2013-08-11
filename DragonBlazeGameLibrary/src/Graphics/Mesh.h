@@ -30,7 +30,7 @@ public:
 		GLenum type; // Element type
 		GLsizei normalized; // True if data should be normalized
 		GLsizei stride; // Byte offset between consecutive generic vertex attributes
-		const GLvoid * pointer; // Offset of first element
+		const GLvoid* pointer; // Offset of first element
 	};
 
 	/**
@@ -85,7 +85,7 @@ public:
 	/**
 	 * @return Handle of the VBO where the color data is stored
 	 */
-	GLuint getColorVBOHandle () const;
+	GLuint getColorVBOHandle() const;
 
 private:
 	GLfloat* _pVertices; // Vertex data

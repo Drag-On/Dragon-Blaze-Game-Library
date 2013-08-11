@@ -57,6 +57,185 @@ public:
 	void setUniformFloat(int handle, float value) const;
 
 	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformFloat2(int handle, float value[2]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformFloat3(int handle, float value[3]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformFloat4(int handle, float value[4]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformInt(int handle, int value) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformInt2(int handle, int value[2]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformInt3(int handle, int value[3]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformInt4(int handle, int value[4]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformBool(int handle, bool value) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformBool2(int handle, bool value[2]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformBool3(int handle, bool value[3]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformBool4(int handle, bool value[4]) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloatArray(int handle, unsigned int count,
+			float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloat2Array(int handle, unsigned int count,
+			float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloat3Array(int handle, unsigned int count,
+			float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloat4Array(int handle, unsigned int count,
+			float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformIntArray(int handle, unsigned int count, int* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformInt2Array(int handle, unsigned int count, int* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformInt3Array(int handle, unsigned int count, int* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformInt4Array(int handle, unsigned int count, int* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloatMatrix2Array(int handle, unsigned int count,
+			bool transpose, float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloatMatrix3Array(int handle, unsigned int count,
+			bool transpose, float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param count Amount of elements of the uniform array
+	 * @param values Pointer to array with count values
+	 */
+	void setUniformFloatMatrix4Array(int handle, unsigned int count,
+			bool transpose, float* values) const;
+
+	/**
+	 * @brief Sets a uniform by it's handle
+	 * @param handle Uniform handle
+	 * @param value New value
+	 */
+	void setUniformSampler(int handle, int value) const;
+
+	/**
 	 * @return OpenGL handle of the shader program
 	 */
 	GLuint getHandle() const;

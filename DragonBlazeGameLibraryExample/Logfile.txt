@@ -2186,3 +2186,9 @@
 2013-08-11.21:28:14
 -----------------
 21:28:14: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.22:24:42
+-----------------
+22:24:42: INFO: Dragon Blaze Game Library - Development Build
