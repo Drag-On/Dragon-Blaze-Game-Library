@@ -36,3 +36,4 @@ local.properties
 [Dd]ebug/
 [Rr]elease/
 *.o
+*/Logfile.txt

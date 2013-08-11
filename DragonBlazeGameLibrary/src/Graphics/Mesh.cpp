@@ -21,7 +21,7 @@ Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 {
 	_pVertices = vertices;
 	_pVertexFormat = attrFormat;
-	_vertexVBOHandle = RenderContext::createVBOFloat(_pVertices, length);
+	_vertexVBOHandle = RenderContext::createVBO(_pVertices, length);
 	_pColors = NULL;
 	_pColorFormat = NULL;
 	_colorVBOHandle = 0;
@@ -83,7 +83,7 @@ void Mesh::setColorData(GLfloat* colorData, int length,
 {
 	_pColors = colorData;
 	_pColorFormat = attrFormat;
-	_colorVBOHandle = RenderContext::createVBOFloat(_pColors, length);
+	_colorVBOHandle = RenderContext::createVBO(_pColors, length);
 }
 
 /**
