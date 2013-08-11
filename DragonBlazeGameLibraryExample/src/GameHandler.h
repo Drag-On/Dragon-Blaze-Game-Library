@@ -13,6 +13,9 @@
 #include <Graphics/ShaderProgram.h>
 #include <Graphics/RenderContext.h>
 #include <math.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 using namespace DBGL;
 

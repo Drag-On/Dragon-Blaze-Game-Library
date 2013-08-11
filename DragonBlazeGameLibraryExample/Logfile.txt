@@ -2204,3 +2204,376 @@
 2013-08-11.23:07:02
 -----------------
 23:07:02: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:13:44
+-----------------
+23:13:44: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:27:02
+-----------------
+23:27:03: INFO: Dragon Blaze Game Library - Development Build
+23:27:05: ERROR: ERROR while compiling shader!
+23:27:05: INFO: 0(5) : error C1008: undefined variable "coord2d"
+
+23:27:05: WARNING: Attribute coord3d could not be found.
+23:27:05: WARNING: Attribute v_color could not be found.
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:27:45
+-----------------
+23:27:45: INFO: Dragon Blaze Game Library - Development Build
+23:27:47: ERROR: ERROR while compiling shader!
+23:27:47: INFO: 0(5) : error C1067: too little data in type constructor
+
+23:27:47: WARNING: Attribute coord3d could not be found.
+23:27:47: WARNING: Attribute v_color could not be found.
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:29:23
+-----------------
+23:29:23: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:40:37
+-----------------
+23:40:37: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:43:03
+-----------------
+23:43:03: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:45:46
+-----------------
+23:45:46: INFO: Dragon Blaze Game Library - Development Build
+23:51:34: DEBUG: MOUSE DRAGGED from 266,84 to 0,0
+23:51:34: DEBUG: KEY 1:
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:52:34
+-----------------
+23:52:34: INFO: Dragon Blaze Game Library - Development Build
+23:52:44: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:49: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:50: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:51: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:52: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+23:52:53: WARNING: Uniform m_transform could not be found.
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:59:16
+-----------------
+23:59:16: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-11.23:59:48
+-----------------
+23:59:48: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:00:41
+-----------------
+00:00:41: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:03:21
+-----------------
+00:03:21: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:03:33
+-----------------
+00:03:33: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:15:16
+-----------------
+00:15:16: INFO: Dragon Blaze Game Library - Development Build
+00:16:35: DEBUG: KEY 29:
+00:16:35: DEBUG: KEY 29:
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:18:35
+-----------------
+00:18:35: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:19:12
+-----------------
+00:19:12: INFO: Dragon Blaze Game Library - Development Build
+-----------------
+-----Logfile-----
+-----------------
+2013-08-12.00:19:31
+-----------------
+00:19:31: INFO: Dragon Blaze Game Library - Development Build

@@ -349,7 +349,7 @@ void ShaderProgram::setUniformFloatMatrix2Array(int handle, unsigned int count,
 void ShaderProgram::setUniformFloatMatrix3Array(int handle, unsigned int count,
 		bool transpose, float* values) const
 {
-	glUniformMatrix2fv(handle, count, transpose, values);
+	glUniformMatrix3fv(handle, count, transpose, values);
 }
 
 /**
@@ -361,7 +361,7 @@ void ShaderProgram::setUniformFloatMatrix3Array(int handle, unsigned int count,
 void ShaderProgram::setUniformFloatMatrix4Array(int handle, unsigned int count,
 		bool transpose, float* values) const
 {
-	glUniformMatrix2fv(handle, count, transpose, values);
+	glUniformMatrix4fv(handle, count, transpose, values);
 }
 
 /**
