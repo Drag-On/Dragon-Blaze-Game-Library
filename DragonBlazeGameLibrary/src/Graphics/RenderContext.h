@@ -22,6 +22,10 @@ namespace DBGL
 
 #define ATTRIBUTE_VERTEX "v_vertex"
 #define ATTRIBUTE_COLOR "v_color"
+#define UNIFORM_MODEL "m_model"
+#define UNIFORM_VIEW "m_view"
+#define UNIFORM_PROJECTION "m_projection"
+#define UNIFORM_MVP "m_mvp"
 
 class Mesh;
 
@@ -50,7 +54,7 @@ public:
 	 * @brief Renders a mesh to screen using the currently active shader program
 	 * @param mesh Mesh to render
 	 */
-	void render(Mesh* mesh) const;
+	void render(Mesh* mesh);
 
 	/**
 	 * @brief Sets the color that is used to clear the screen before rendering
@@ -72,14 +76,37 @@ public:
 	void swapBuffers() const;
 
 	/**
-	 * Sets the model matrix
+	 * @brief Sets the model matrix
 	 * @param modelMat New model matrix
 	 */
 	void setModelMatrix(glm::mat4 modelMat);
 
+	/**
+	 * @return The model matrix
+	 */
+	glm::mat4 getModelMatrix() const;
+
+	/**
+	 * @brief Sets the view matrix
+	 * @param viewMat New view matrix
+	 */
 	void setViewMatrix(glm::mat4 viewMat);
 
+	/**
+	 * @return The view matrix
+	 */
+	glm::mat4 getViewMatrix() const;
+
+	/**
+	 * @brief Sets the projection matrix
+	 * @param projectionMat New projection matrix
+	 */
 	void setProjectionMatrix(glm::mat4 projectionMat);
+
+	/**
+	 * @return The peojection matrix
+	 */
+	glm::mat4 getProjectionMatrix() const;
 
 	/**
 	 * @brief Creates a buffer on the graphics card

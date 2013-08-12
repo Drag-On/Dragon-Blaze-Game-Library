@@ -45,13 +45,13 @@ public:
 	 * @brief Gets called once a window is initialized
 	 * @param wnd Window that is being initialized
 	 */
-	virtual void init(BaseGameWindow* wnd);
+	virtual void init(BaseGameWindow* wnd, RenderContext* rc);
 
 	/**
 	 * @brief Gets called once a frame before rendering takes place
 	 * @param wnd Window that is being updated
 	 */
-	virtual void update(BaseGameWindow* wnd);
+	virtual void update(BaseGameWindow* wnd, RenderContext* rc);
 
 	/**
 	 * @brief Gets called once a frame after updating

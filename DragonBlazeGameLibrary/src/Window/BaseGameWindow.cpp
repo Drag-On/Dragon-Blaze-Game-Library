@@ -98,7 +98,7 @@ void BaseGameWindow::render()
 void BaseGameWindow::update()
 {
 	if (_game != NULL)
-		_game->update(this);
+		_game->update(this, _pRC);
 }
 
 /**
@@ -108,6 +108,7 @@ void BaseGameWindow::update()
  */
 void BaseGameWindow::resize(int width, int height)
 {
+	glViewport(0, 0, width, height);
 }
 
 /**

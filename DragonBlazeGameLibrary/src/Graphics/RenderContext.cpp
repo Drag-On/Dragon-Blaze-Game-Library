@@ -41,7 +41,7 @@ void RenderContext::useShader(ShaderProgram* shader)
  * @brief Renders a mesh to screen using the currently active shader program
  * @param mesh Mesh to render
  */
-void RenderContext::render(Mesh* mesh) const
+void RenderContext::render(Mesh* mesh)
 {
 	// Check if there is a shader in use
 	if (_pCurShader == NULL)
@@ -82,6 +82,33 @@ void RenderContext::render(Mesh* mesh) const
 				colorFormat->stride,// no extra data between each position
 				colorFormat->pointer// offset of first element
 		);
+	}
+
+	// Instruct shader with matrices
+	if(_pCurShader->checkUniformExists(UNIFORM_MODEL))
+	{
+		int uniformModelHandle = _pCurShader->getUniformHandle(UNIFORM_MODEL);
+		float* pModelMatrix = glm::value_ptr(_modelMat);
+		_pCurShader->setUniformFloatMatrix4Array(uniformModelHandle, 1, GL_FALSE, pModelMatrix);
+	}
+	if(_pCurShader->checkUniformExists(UNIFORM_VIEW))
+	{
+		int uniformViewHandle = _pCurShader->getUniformHandle(UNIFORM_VIEW);
+		float* pViewMatrix = glm::value_ptr(_viewMat);
+		_pCurShader->setUniformFloatMatrix4Array(uniformViewHandle, 1, GL_FALSE, pViewMatrix);
+	}
+	if(_pCurShader->checkUniformExists(UNIFORM_PROJECTION))
+	{
+		int uniformProjectionHandle = _pCurShader->getUniformHandle(UNIFORM_PROJECTION);
+		float* pProjectionMatrix = glm::value_ptr(_projectionMat);
+		_pCurShader->setUniformFloatMatrix4Array(uniformProjectionHandle, 1, GL_FALSE, pProjectionMatrix);
+	}
+	if(_pCurShader->checkUniformExists(UNIFORM_MVP))
+	{
+		int uniformMVPHandle = _pCurShader->getUniformHandle(UNIFORM_MVP);
+		glm::mat4 mvp = _projectionMat * _viewMat * _modelMat;
+		float* pMVPMatrix = glm::value_ptr(mvp);
+		_pCurShader->setUniformFloatMatrix4Array(uniformMVPHandle, 1, GL_FALSE, pMVPMatrix);
 	}
 
 	// Finally! Draw!
@@ -131,6 +158,57 @@ void RenderContext::clear() const
 void RenderContext::swapBuffers() const
 {
 	glutSwapBuffers();
+}
+
+/**
+ * @brief Sets the model matrix
+ * @param modelMat New model matrix
+ */
+void RenderContext::setModelMatrix(glm::mat4 modelMat)
+{
+	_modelMat = modelMat;
+}
+
+/**
+ * @return The model matrix
+ */
+glm::mat4 RenderContext::getModelMatrix() const
+{
+	return _modelMat;
+}
+
+/**
+ * @brief Sets the view matrix
+ * @param viewMat New view matrix
+ */
+void RenderContext::setViewMatrix(glm::mat4 viewMat)
+{
+	_viewMat = viewMat;
+}
+
+/**
+ * @return The view matrix
+ */
+glm::mat4 RenderContext::getViewMatrix() const
+{
+	return _viewMat;
+}
+
+/**
+ * @brief Sets the projection matrix
+ * @param projectionMat New projection matrix
+ */
+void RenderContext::setProjectionMatrix(glm::mat4 projectionMat)
+{
+	_projectionMat = projectionMat;
+}
+
+/**
+ * @return The peojection matrix
+ */
+glm::mat4 RenderContext::getProjectionMatrix() const
+{
+	return _projectionMat;
 }
 
 /**

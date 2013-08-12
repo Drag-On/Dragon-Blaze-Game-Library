@@ -108,7 +108,7 @@ GLuint Mesh::getElementIBOHandle() const
  */
 Mesh* Mesh::createCube()
 {
-// Define vertices
+	// Define vertices
 	GLfloat cubeVertices[] =
 	{ -1.0, -1.0, 1.0, //
 			1.0, -1.0, 1.0, //
@@ -127,7 +127,7 @@ Mesh* Mesh::createCube()
 	vertexFormat->pointer = 0;
 	Mesh* cube = new Mesh(cubeVertices, sizeof(cubeVertices), vertexFormat);
 
-// Define some colors
+	// Define some colors
 	GLfloat cubeColors[] =
 	{ 1.0, 0.0, 0.0, //
 			0.0, 1.0, 0.0, //
@@ -146,7 +146,7 @@ Mesh* Mesh::createCube()
 	colorFormat->pointer = 0;
 	cube->setColorData(cubeColors, sizeof(cubeColors), colorFormat);
 
-// Define elements
+	// Define elements
 	GLushort elements[] =
 	{ 0, 1, 2, // front
 			2, 3, 0, //

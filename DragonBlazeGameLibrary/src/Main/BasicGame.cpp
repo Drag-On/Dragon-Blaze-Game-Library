@@ -48,7 +48,7 @@ BasicGame::~BasicGame()
  * @brief Gets called once a window is initialized
  * @param wnd Window that is being initialized
  */
-void BasicGame::init(BaseGameWindow* wnd)
+void BasicGame::init(BaseGameWindow* wnd, RenderContext* rc)
 {
 }
 
@@ -56,7 +56,7 @@ void BasicGame::init(BaseGameWindow* wnd)
  * @brief Gets called once a frame before rendering takes place
  * @param wnd Window that is being updated
  */
-void BasicGame::update(BaseGameWindow* wnd)
+void BasicGame::update(BaseGameWindow* wnd, RenderContext* rc)
 {
 }
 
@@ -95,7 +95,7 @@ const void BasicGame::run()
 	glEnable(GL_DEPTH_TEST);
 
 	// Initialize
-	init(_pWnd);
+	init(_pWnd, _pWnd->_pRC);
 
 	// Run main loop
 	glutMainLoop();

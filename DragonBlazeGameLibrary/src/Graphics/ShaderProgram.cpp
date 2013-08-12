@@ -97,6 +97,16 @@ int ShaderProgram::getAttributeHandle(const char* name) const
 }
 
 /**
+ * @brief Checks, if an attribute with the specified name exists
+ * @param name Name of the shader attribute
+ * @return True in case the attribute exists, otherwise false
+ */
+bool ShaderProgram::checkAttributeExists(const char* name) const
+{
+	return glGetAttribLocation(_shaderProgram, name) >= 0;
+}
+
+/**
  * @brief Returns the handle for a shader uniform by it's name
  * @param name Name of the shader uniform
  * @return The uniform id
@@ -110,6 +120,16 @@ int ShaderProgram::getUniformHandle(const char* name) const
 		return -1;
 	}
 	return handle;
+}
+
+/**
+ * @brief Checks, if a uniform with the specified name exists
+ * @param name Name of the shader uniform
+ * @return True in case the uniform exists, otherwise false
+ */
+bool ShaderProgram::checkUniformExists(const char* name) const
+{
+	return glGetUniformLocation(_shaderProgram, name) >= 0;
 }
 
 /**
