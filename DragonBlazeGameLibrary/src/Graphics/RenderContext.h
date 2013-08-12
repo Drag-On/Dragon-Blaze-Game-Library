@@ -17,6 +17,9 @@
 namespace DBGL
 {
 
+#define ATTRIBUTE_VERTEX "v_vertex"
+#define ATTRIBUTE_COLOR "v_color"
+
 class Mesh;
 
 /**
@@ -66,15 +69,18 @@ public:
 	void swapBuffers() const;
 
 	/**
-	 * @brief Uploads some data to the graphics card
+	 * @brief Creates a buffer on the graphics card
 	 * @param data Raw data to push
 	 * @param length Length of the data array
-	 * @param vboHandle Handle of the vertex buffer to use. If this equals GL_INVALID_VALUE a new buffer is created.
-	 * @param usage Specifies the expected usage pattern
-	 * @return The handle of the vertex buffer the data has been uploaded to
+	 * @param bufferHandle Handle of a buffer to overwrite. If this equals GL_INVALID_VALUE a new buffer is created.
+	 * @param usage Specifies the expected usage pattern, defaults to GL_STATIC_DRAW
+	 * @param type Specifies buffer type, i.e. vertex buffer or index buffer, defaults to GL_ARRAY_BUFFER
+	 * @return The handle of the created buffer object
 	 */
-	static const GLuint createVBO(void* data, int length, GLuint vboHandle =
-	GL_INVALID_VALUE, GLenum usage = GL_STATIC_DRAW);
+	static const GLuint createBuffer(void* data, int length,
+			GLuint bufferHandle =
+			GL_INVALID_VALUE, GLenum usage = GL_STATIC_DRAW, int type =
+			GL_ARRAY_BUFFER);
 
 private:
 	ShaderProgram* _curShader; // Current "in use" shader

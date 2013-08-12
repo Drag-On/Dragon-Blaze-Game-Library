@@ -21,10 +21,12 @@ Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 {
 	_pVertices = vertices;
 	_pVertexFormat = attrFormat;
-	_vertexVBOHandle = RenderContext::createVBO(_pVertices, length);
+	_vertexVBOHandle = RenderContext::createBuffer(_pVertices, length);
 	_pColors = NULL;
 	_pColorFormat = NULL;
-	_colorVBOHandle = 0;
+	_colorVBOHandle = GL_INVALID_VALUE;
+	_pElements = NULL;
+	_elementIBOHandle = GL_INVALID_VALUE;
 }
 
 /**
@@ -45,6 +47,11 @@ Mesh::~Mesh()
 	delete _pColorFormat;
 	_pColorFormat = NULL;
 	glDeleteBuffers(1, &_colorVBOHandle);
+
+	// Delete element data
+	delete _pElements;
+	_pElements = NULL;
+	glDeleteBuffers(1, &_elementIBOHandle);
 }
 
 /**
@@ -83,7 +90,8 @@ void Mesh::setColorData(GLfloat* colorData, int length,
 {
 	_pColors = colorData;
 	_pColorFormat = attrFormat;
-	_colorVBOHandle = RenderContext::createVBO(_pColors, length);
+	_colorVBOHandle = RenderContext::createBuffer(_pColors, length,
+			_colorVBOHandle);
 }
 
 /**
@@ -108,6 +116,89 @@ Mesh::AttributeFormat* Mesh::getColorFormat() const
 GLuint Mesh::getColorVBOHandle() const
 {
 	return _colorVBOHandle;
+}
+
+/**
+ * @return Element data array
+ */
+GLushort* Mesh::getElementData() const
+{
+	return _pElements;
+}
+
+/**
+ * @return Handle of the IBO where the elements are stored
+ */
+GLuint Mesh::getElementIBOHandle() const
+{
+	return _elementIBOHandle;
+}
+
+/**
+ * Creates a new Mesh object that has all the necessary data to display a cube
+ * @return Pointer to the newly created mesh object
+ */
+Mesh* Mesh::createCube()
+{
+// Define vertices
+	GLfloat cubeVertices[] =
+	{ -1.0, -1.0, 1.0, //
+			1.0, -1.0, 1.0, //
+			1.0, 1.0, 1.0, //
+			-1.0, 1.0, 1.0, //
+			-1.0, -1.0, -1.0, //
+			1.0, -1.0, -1.0, //
+			1.0, 1.0, -1.0, //
+			-1.0, 1.0, -1.0, //
+			};
+	AttributeFormat* vertexFormat = new AttributeFormat();
+	vertexFormat->size = 3;
+	vertexFormat->type = GL_FLOAT;
+	vertexFormat->normalized = GL_FALSE;
+	vertexFormat->stride = 0;
+	vertexFormat->pointer = 0;
+	Mesh* cube = new Mesh(cubeVertices, sizeof(cubeVertices), vertexFormat);
+
+// Define some colors
+	GLfloat cubeColors[] =
+	{ 1.0, 0.0, 0.0, //
+			0.0, 1.0, 0.0, //
+			0.0, 0.0, 1.0, //
+			1.0, 1.0, 1.0, //
+			1.0, 0.0, 0.0, //
+			0.0, 1.0, 0.0, //
+			0.0, 0.0, 1.0, //
+			1.0, 1.0, 1.0, //
+			};
+	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
+	colorFormat->size = 3;
+	colorFormat->type = GL_FLOAT;
+	colorFormat->normalized = GL_FALSE;
+	colorFormat->stride = 0;
+	colorFormat->pointer = 0;
+	cube->setColorData(cubeColors, sizeof(cubeColors), colorFormat);
+
+// Define elements
+	GLushort elements[] =
+	{ 0, 1, 2, // front
+			2, 3, 0, //
+			3, 2, 6, // top
+			6, 7, 3, //
+			7, 6, 5, // back
+			5, 4, 7, //
+			4, 5, 1, // bottom
+			1, 0, 4, //
+			4, 0, 3, // left
+			3, 7, 4, //
+			1, 5, 6, // right
+			6, 2, 1, //
+			};
+	cube->_pElements = elements;
+	cube->_elementIBOHandle = RenderContext::createBuffer(elements,
+			sizeof(elements), GL_INVALID_VALUE,
+			GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER);
+
+	return cube;
 }
 
 } /* namespace DBGL */

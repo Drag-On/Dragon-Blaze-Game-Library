@@ -25,7 +25,6 @@ public:
 	 */
 	struct AttributeFormat
 	{
-		GLuint attributeHandle; // Handle of the dedicated attribute
 		GLint size; // Amount of elements per vertex
 		GLenum type; // Element type
 		GLsizei normalized; // True if data should be normalized
@@ -87,13 +86,31 @@ public:
 	 */
 	GLuint getColorVBOHandle() const;
 
+	/**
+	 * @return Element data array
+	 */
+	GLushort* getElementData() const;
+
+	/**
+	 * @return Handle of the IBO where the elements are stored
+	 */
+	GLuint getElementIBOHandle() const;
+
+	/**
+	 * Creates a new Mesh object that has all the necessary data to display a cube
+	 * @return Pointer to the newly created mesh object
+	 */
+	static Mesh* createCube();
+
 private:
 	GLfloat* _pVertices; // Vertex data
 	AttributeFormat* _pVertexFormat; // Attribute format used by vertex data
 	GLuint _vertexVBOHandle; // Handle of the vbo where the vertex data is stored
-	GLfloat* _pColors; // Albedo data
+	GLfloat* _pColors; // Color data
 	AttributeFormat* _pColorFormat; // Attribute format used by color data
 	GLuint _colorVBOHandle; // Handle of the vbo where the color data is stored
+	GLushort* _pElements; // Elements data
+	GLuint _elementIBOHandle; // Handle of the ibo where all elements are stored
 };
 
 } /* namespace DBGL */

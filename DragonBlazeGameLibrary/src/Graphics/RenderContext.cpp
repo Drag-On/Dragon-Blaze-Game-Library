@@ -7,8 +7,6 @@
 
 #include "RenderContext.h"
 
-#define ATTRIBUTE_VERTEX "a_vertex"
-
 namespace DBGL
 {
 
@@ -54,11 +52,12 @@ void RenderContext::render(Mesh* mesh) const
 
 	// Pass vertex data
 	Mesh::AttributeFormat* vertexFormat = mesh->getVertexFormat();
-	glEnableVertexAttribArray(vertexFormat->attributeHandle);
+	int vertexHandle = _curShader->getAttributeHandle(ATTRIBUTE_VERTEX);
+	glEnableVertexAttribArray(vertexHandle);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->getVertexVBOHandle());
 
 	// Describe the vertex array format
-	glVertexAttribPointer(vertexFormat->attributeHandle,// attribute
+	glVertexAttribPointer(vertexHandle,// attribute
 			vertexFormat->size,// number of elements per vertex
 			vertexFormat->type,// the type of each element
 			vertexFormat->normalized,// normalize?
@@ -68,14 +67,15 @@ void RenderContext::render(Mesh* mesh) const
 
 	// Pass color data
 	Mesh::AttributeFormat* colorFormat = NULL;
+	int colorHandle = _curShader->getAttributeHandle(ATTRIBUTE_COLOR);
 	if(mesh->getColorData() != NULL)
 	{
 		colorFormat = mesh->getColorFormat();
-		glEnableVertexAttribArray(colorFormat->attributeHandle);
+		glEnableVertexAttribArray(colorHandle);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->getColorVBOHandle());
 
 		// Describe the color array format
-		glVertexAttribPointer(colorFormat->attributeHandle,// attribute
+		glVertexAttribPointer(colorHandle,// attribute
 				colorFormat->size,// number of elements per vertex
 				colorFormat->type,// the type of each element
 				colorFormat->normalized,// normalize?
@@ -84,13 +84,25 @@ void RenderContext::render(Mesh* mesh) const
 		);
 	}
 
-	/* Push each element in buffer_vertices to the vertex shader */
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	// Finally! Draw!
+	if(mesh->getElementData() == NULL)
+	{
+		// Use old style rendering
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+	}
+	else
+	{
+		// Use elements for rendering
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->getElementIBOHandle());
+		int size;
+		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+		glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
+	}
 	if(colorFormat != NULL)
 	{
-		glDisableVertexAttribArray(colorFormat->attributeHandle);
+		glDisableVertexAttribArray(colorHandle);
 	}
-	glDisableVertexAttribArray(vertexFormat->attributeHandle);
+	glDisableVertexAttribArray(vertexHandle);
 }
 
 /**
@@ -110,7 +122,7 @@ void RenderContext::setClearColor(float r, float g, float b, float a) const
  */
 void RenderContext::clear() const
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 /**
@@ -122,26 +134,27 @@ void RenderContext::swapBuffers() const
 }
 
 /**
- * @brief Uploads some data to the graphics card
+ * @brief Creates a buffer on the graphics card
  * @param data Raw data to push
  * @param length Length of the data array
- * @param vboHandle Handle of the vertex buffer to use. If this equals GL_INVALID_VALUE a new buffer is created.
- * @param usage Specifies the expected usage pattern
- * @return The handle of the vertex buffer the data has been uploaded to
+ * @param bufferHandle Handle of a buffer to overwrite. If this equals GL_INVALID_VALUE a new buffer is created.
+ * @param usage Specifies the expected usage pattern, defaults to GL_STATIC_DRAW
+ * @param type Specifies buffer type, i.e. vertex buffer or index buffer, defaults to GL_ARRAY_BUFFER
+ * @return The handle of the created buffer object
  */
-const GLuint RenderContext::createVBO(void* data, int length, GLuint vboHandle,
-		GLenum usage)
+const GLuint RenderContext::createBuffer(void* data, int length,
+		GLuint bufferHandle, GLenum usage, int type)
 {
 	// Check, if a new buffer needs to be created
-	if (vboHandle == GL_INVALID_VALUE)
+	if (bufferHandle == GL_INVALID_VALUE)
 	{
-		glGenBuffers(1, &vboHandle);
+		glGenBuffers(1, &bufferHandle);
 	}
 	// Bind buffer, write data, unbind buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
-	glBufferData(GL_ARRAY_BUFFER, length, data, usage);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	return vboHandle;
+	glBindBuffer(type, bufferHandle);
+	glBufferData(type, length, data, usage);
+	glBindBuffer(type, 0);
+	return bufferHandle;
 }
 
 }

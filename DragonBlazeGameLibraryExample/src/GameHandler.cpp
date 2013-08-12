@@ -46,12 +46,12 @@ void GameHandler::init(BaseGameWindow* wnd)
 
 	// Create shader
 	const char* vert = "uniform mat4 m_transform;"
-			"attribute vec3 coord3d;"
+			"attribute vec3 v_vertex;"
 			"attribute vec3 v_color;"
 			"varying vec3 f_color;"
 			"void main(void)"
 			"{"
-			"	gl_Position = m_transform  * vec4(coord3d, 1.0);"
+			"	gl_Position = m_transform  * vec4(v_vertex, 1.0);"
 			"	f_color = v_color;"
 			"}";
 	const char* frag = "varying vec3 f_color;"
@@ -61,7 +61,6 @@ void GameHandler::init(BaseGameWindow* wnd)
 			"	gl_FragColor = vec4(f_color.r, f_color.g, f_color.b, fade);"
 			"}";
 	_pShaderProgram = new ShaderProgram(vert, frag);
-	int attributeHandle = _pShaderProgram->getAttributeHandle("coord3d");
 
 	// Mesh
 	GLfloat triangle_vertices[] =
@@ -69,7 +68,6 @@ void GameHandler::init(BaseGameWindow* wnd)
 			-0.8, -0.8, 0.0, //
 			0.8, -0.8, 0.0 };
 	Mesh::AttributeFormat* format = new Mesh::AttributeFormat();
-	format->attributeHandle = attributeHandle;
 	format->size = 3;
 	format->type = GL_FLOAT;
 	format->normalized = GL_FALSE;
@@ -84,8 +82,6 @@ void GameHandler::init(BaseGameWindow* wnd)
 			1.0, 0.0, 1.0, //
 			1.0, 0.0, 0.0, };
 	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
-	colorFormat->attributeHandle = _pShaderProgram->getAttributeHandle(
-			"v_color");
 	colorFormat->size = 3;
 	colorFormat->type = GL_FLOAT;
 	colorFormat->normalized = GL_FALSE;
