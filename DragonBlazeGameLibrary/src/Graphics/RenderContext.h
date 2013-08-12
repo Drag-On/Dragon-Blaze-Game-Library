@@ -10,6 +10,9 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 #include "../Main/Log.h"
 #include "ShaderProgram.h"
 #include "Mesh.h"
@@ -69,6 +72,16 @@ public:
 	void swapBuffers() const;
 
 	/**
+	 * Sets the model matrix
+	 * @param modelMat New model matrix
+	 */
+	void setModelMatrix(glm::mat4 modelMat);
+
+	void setViewMatrix(glm::mat4 viewMat);
+
+	void setProjectionMatrix(glm::mat4 projectionMat);
+
+	/**
 	 * @brief Creates a buffer on the graphics card
 	 * @param data Raw data to push
 	 * @param length Length of the data array
@@ -83,7 +96,10 @@ public:
 			GL_ARRAY_BUFFER);
 
 private:
-	ShaderProgram* _curShader; // Current "in use" shader
+	ShaderProgram* _pCurShader; // Current "in use" shader
+	glm::mat4 _modelMat; // Model matrix
+	glm::mat4 _viewMat; // View matrix
+	glm::mat4 _projectionMat; // Model matrix
 };
 
 } /* namespace DBGL */

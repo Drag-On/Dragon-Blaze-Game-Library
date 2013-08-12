@@ -15,17 +15,15 @@ namespace DBGL
  * @param vertices Array containing vertex position data.
  * @param length Length of the vertices array
  * @param attrFormat Format of the vertex array
- * @attention Both heap objects will be maintained by the Mesh class (includes deleting)
+ * @attention The attrFormat will be maintained by the Mesh class (includes deleting), the vertices pointer
+ * is used only temporarily (can be initialized on Stack)
  */
 Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 {
-	_pVertices = vertices;
 	_pVertexFormat = attrFormat;
-	_vertexVBOHandle = RenderContext::createBuffer(_pVertices, length);
-	_pColors = NULL;
+	_vertexVBOHandle = RenderContext::createBuffer(vertices, length);
 	_pColorFormat = NULL;
 	_colorVBOHandle = GL_INVALID_VALUE;
-	_pElements = NULL;
 	_elementIBOHandle = GL_INVALID_VALUE;
 }
 
@@ -35,8 +33,6 @@ Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 Mesh::~Mesh()
 {
 	// Delete vertex data
-	delete _pVertices;
-	_pVertices = NULL;
 	delete _pVertexFormat;
 	_pVertexFormat = NULL;
 	glDeleteBuffers(1, &_vertexVBOHandle);
@@ -44,22 +40,10 @@ Mesh::~Mesh()
 	// Delete color data
 	delete _pColorFormat;
 	_pColorFormat = NULL;
-	delete _pColorFormat;
-	_pColorFormat = NULL;
 	glDeleteBuffers(1, &_colorVBOHandle);
 
 	// Delete element data
-	delete _pElements;
-	_pElements = NULL;
 	glDeleteBuffers(1, &_elementIBOHandle);
-}
-
-/**
- * @return Vertex array
- */
-GLfloat* Mesh::getVertices() const
-{
-	return _pVertices;
 }
 
 /**
@@ -88,18 +72,10 @@ GLuint Mesh::getVertexVBOHandle() const
 void Mesh::setColorData(GLfloat* colorData, int length,
 		AttributeFormat* attrFormat)
 {
-	_pColors = colorData;
+	delete _pColorFormat;
 	_pColorFormat = attrFormat;
-	_colorVBOHandle = RenderContext::createBuffer(_pColors, length,
+	_colorVBOHandle = RenderContext::createBuffer(colorData, length,
 			_colorVBOHandle);
-}
-
-/**
- * @return Color data array
- */
-GLfloat* Mesh::getColorData() const
-{
-	return _pColors;
 }
 
 /**
@@ -116,14 +92,6 @@ Mesh::AttributeFormat* Mesh::getColorFormat() const
 GLuint Mesh::getColorVBOHandle() const
 {
 	return _colorVBOHandle;
-}
-
-/**
- * @return Element data array
- */
-GLushort* Mesh::getElementData() const
-{
-	return _pElements;
 }
 
 /**
@@ -193,7 +161,6 @@ Mesh* Mesh::createCube()
 			1, 5, 6, // right
 			6, 2, 1, //
 			};
-	cube->_pElements = elements;
 	cube->_elementIBOHandle = RenderContext::createBuffer(elements,
 			sizeof(elements), GL_INVALID_VALUE,
 			GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER);

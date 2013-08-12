@@ -47,11 +47,6 @@ public:
 	virtual ~Mesh();
 
 	/**
-	 * @return Vertex array
-	 */
-	GLfloat* getVertices() const;
-
-	/**
 	 * @return Attribute format of the vertex data
 	 */
 	AttributeFormat* getVertexFormat() const;
@@ -72,11 +67,6 @@ public:
 			AttributeFormat* attrFormat);
 
 	/**
-	 * @return Color data array
-	 */
-	GLfloat* getColorData() const;
-
-	/**
 	 * @return Attribute format of the color data
 	 */
 	AttributeFormat* getColorFormat() const;
@@ -85,11 +75,6 @@ public:
 	 * @return Handle of the VBO where the color data is stored
 	 */
 	GLuint getColorVBOHandle() const;
-
-	/**
-	 * @return Element data array
-	 */
-	GLushort* getElementData() const;
 
 	/**
 	 * @return Handle of the IBO where the elements are stored
@@ -103,13 +88,10 @@ public:
 	static Mesh* createCube();
 
 private:
-	GLfloat* _pVertices; // Vertex data
 	AttributeFormat* _pVertexFormat; // Attribute format used by vertex data
 	GLuint _vertexVBOHandle; // Handle of the vbo where the vertex data is stored
-	GLfloat* _pColors; // Color data
 	AttributeFormat* _pColorFormat; // Attribute format used by color data
 	GLuint _colorVBOHandle; // Handle of the vbo where the color data is stored
-	GLushort* _pElements; // Elements data
 	GLuint _elementIBOHandle; // Handle of the ibo where all elements are stored
 };
 

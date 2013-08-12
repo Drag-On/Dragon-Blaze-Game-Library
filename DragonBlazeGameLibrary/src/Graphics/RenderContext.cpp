@@ -15,7 +15,7 @@ namespace DBGL
  */
 RenderContext::RenderContext()
 {
-	_curShader = NULL;
+	_pCurShader = NULL;
 }
 
 /**
@@ -32,8 +32,8 @@ void RenderContext::useShader(ShaderProgram* shader)
 {
 	if (shader != NULL)
 	{
-		_curShader = shader;
-		glUseProgram(_curShader->getHandle());
+		_pCurShader = shader;
+		glUseProgram(_pCurShader->getHandle());
 	}
 }
 
@@ -44,7 +44,7 @@ void RenderContext::useShader(ShaderProgram* shader)
 void RenderContext::render(Mesh* mesh) const
 {
 	// Check if there is a shader in use
-	if (_curShader == NULL)
+	if (_pCurShader == NULL)
 	{
 		LOG->warning("Tried to render mesh without active shader program.");
 		return;
@@ -52,7 +52,7 @@ void RenderContext::render(Mesh* mesh) const
 
 	// Pass vertex data
 	Mesh::AttributeFormat* vertexFormat = mesh->getVertexFormat();
-	int vertexHandle = _curShader->getAttributeHandle(ATTRIBUTE_VERTEX);
+	int vertexHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_VERTEX);
 	glEnableVertexAttribArray(vertexHandle);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->getVertexVBOHandle());
 
@@ -67,8 +67,8 @@ void RenderContext::render(Mesh* mesh) const
 
 	// Pass color data
 	Mesh::AttributeFormat* colorFormat = NULL;
-	int colorHandle = _curShader->getAttributeHandle(ATTRIBUTE_COLOR);
-	if(mesh->getColorData() != NULL)
+	int colorHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_COLOR);
+	if(mesh->getColorVBOHandle() != GL_INVALID_VALUE)
 	{
 		colorFormat = mesh->getColorFormat();
 		glEnableVertexAttribArray(colorHandle);
@@ -85,7 +85,7 @@ void RenderContext::render(Mesh* mesh) const
 	}
 
 	// Finally! Draw!
-	if(mesh->getElementData() == NULL)
+	if(mesh->getElementIBOHandle() == GL_INVALID_VALUE)
 	{
 		// Use old style rendering
 		glDrawArrays(GL_TRIANGLES, 0, 3);

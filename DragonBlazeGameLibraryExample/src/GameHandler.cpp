@@ -63,31 +63,7 @@ void GameHandler::init(BaseGameWindow* wnd)
 	_pShaderProgram = new ShaderProgram(vert, frag);
 
 	// Mesh
-	GLfloat triangle_vertices[] =
-	{ 0.0, 0.8, 0.0, //
-			-0.8, -0.8, 0.0, //
-			0.8, -0.8, 0.0 };
-	Mesh::AttributeFormat* format = new Mesh::AttributeFormat();
-	format->size = 3;
-	format->type = GL_FLOAT;
-	format->normalized = GL_FALSE;
-	format->stride = 0;
-	format->pointer = 0;
-	_pMesh = new Mesh(triangle_vertices, sizeof(triangle_vertices), format);
-	// Don't delete vertices or format! Mesh does it.
-
-	// Add some color data
-	GLfloat triangle_colors[] =
-	{ 1.0, 1.0, 0.0, //
-			1.0, 0.0, 1.0, //
-			1.0, 0.0, 0.0, };
-	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
-	colorFormat->size = 3;
-	colorFormat->type = GL_FLOAT;
-	colorFormat->normalized = GL_FALSE;
-	colorFormat->stride = 0;
-	colorFormat->pointer = 0;
-	_pMesh->setColorData(triangle_colors, sizeof(triangle_colors), colorFormat);
+	_pMesh = Mesh::createCube();
 }
 
 /**
