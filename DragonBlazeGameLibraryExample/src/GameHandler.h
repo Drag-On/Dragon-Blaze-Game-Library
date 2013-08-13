@@ -62,6 +62,7 @@ public:
 private:
 	ShaderProgram* _pShaderProgram;
 	Mesh* _pMesh;
+	Mesh* _pMesh2;
 };
 
 #endif /* GAMEHANDLER_H_ */
