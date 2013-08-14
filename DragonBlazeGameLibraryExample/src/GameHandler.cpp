@@ -51,7 +51,7 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 			true);
 
 	// Mesh
-	_pMesh = Mesh::createCube();
+	_pMesh = Mesh::createPyramid();
 	_pMesh2 = Mesh::createCube();
 }
 

@@ -102,10 +102,16 @@ public:
 	GLuint getNormalVBOHandle() const;
 
 	/**
-	 * Creates a new Mesh object that has all the necessary data to display a cube
+	 * Creates a new Mesh object representing a cube
 	 * @return Pointer to the newly created mesh object
 	 */
 	static Mesh* createCube();
+
+	/**
+	 * Creates a new Mesh object representing a four-sided pyramid
+	 * @return Pointer to the newly created mesh object
+	 */
+	static Mesh* createPyramid();
 
 private:
 	AttributeFormat* _pVertexFormat; // Attribute format used by vertex data

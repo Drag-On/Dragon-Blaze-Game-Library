@@ -274,4 +274,113 @@ Mesh* Mesh::createCube()
 	return cube;
 }
 
+/**
+ * Creates a new Mesh object representing a four-sided pyramid
+ * @return Pointer to the newly created mesh object
+ */
+Mesh* Mesh::createPyramid()
+{
+	// Define vertices
+	GLfloat vertices[] =
+	{ -1, -1, 1, // Front lower left 0
+			1, -1, 1, // Front lower right 1
+			0, 1, 0, // Front top 2
+			1, -1, 1, // Right lower left 3
+			1, -1, -1, // Right lower right 4
+			0, 1, 0, // Right top 5
+			1, -1, -1, // Back lower left 6
+			-1, -1, -1, // Back lower right 7
+			0, 1, 0, // Back top 8
+			-1, -1, -1, // Left lower left 9
+			-1, -1, 1, // Left lower right 10
+			0, 1, 0, // Left top 11
+			-1, -1, 1, // Bottom front left 12
+			1, -1, 1, // Bottom front right 13
+			-1, -1, -1, // Bottom back left 14
+			1, -1, 1, // Bottom front right 15
+			1, -1, -1, // Bottom back right 16
+			-1, -1, -1, // Bottom back left 17
+			};
+	AttributeFormat* vertexFormat = new AttributeFormat();
+	vertexFormat->size = 3;
+	vertexFormat->type = GL_FLOAT;
+	vertexFormat->normalized = GL_FALSE;
+	vertexFormat->stride = 0;
+	vertexFormat->pointer = 0;
+	Mesh* mesh = new Mesh(vertices, sizeof(vertices), vertexFormat);
+
+	// Define some colors
+	GLfloat colors[] =
+	{ 0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			0.9, 0.9, 0.9, //
+			};
+	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
+	colorFormat->size = 3;
+	colorFormat->type = GL_FLOAT;
+	colorFormat->normalized = GL_FALSE;
+	colorFormat->stride = 0;
+	colorFormat->pointer = 0;
+	mesh->setColorData(colors, sizeof(colors), colorFormat);
+
+	// Define elements
+	GLushort elements[] =
+	{ 0, 1, 2, // front
+			3, 4, 5, // right
+			6, 7, 8, // back
+			9, 10, 11, // left
+			12, 13, 14, // bottom left
+			15, 16, 17, // bottom right
+			};
+	mesh->_elementIBOHandle = RenderContext::createBuffer(elements,
+			sizeof(elements), GL_INVALID_VALUE,
+			GL_STATIC_DRAW, GL_ELEMENT_ARRAY_BUFFER);
+
+	// Define normals
+	GLfloat normals[] =
+	{ 0, 0.4472, 0.8944, // front
+			0, 0.4472, 0.8944, // front
+			0, 0.4472, 0.8944, // front
+			0.8944, 0.4472, 0, // right
+			0.8944, 0.4472, 0, // right
+			0.8944, 0.4472, 0, // right
+			0, 0.4472, -0.8944, // back
+			0, 0.4472, -0.8944, // back
+			0, 0.4472, -0.8944, // back
+			-0.8944, 0.4472, 0, // left
+			-0.8944, 0.4472, 0, // left
+			-0.8944, 0.4472, 0, // left
+			0, -1, 0, // bottom
+			0, -1, 0, // bottom
+			0, -1, 0, // bottom
+			0, -1, 0, // bottom
+			0, -1, 0, // bottom
+			0, -1, 0, // bottom
+			};
+	Mesh::AttributeFormat* normalFormat = new Mesh::AttributeFormat();
+	normalFormat->size = 3;
+	normalFormat->type = GL_FLOAT;
+	normalFormat->normalized = GL_TRUE;
+	normalFormat->stride = 0;
+	normalFormat->pointer = 0;
+	mesh->setNormalData(normals, sizeof(normals), normalFormat);
+
+	return mesh;
+}
+
 } /* namespace DBGL */
