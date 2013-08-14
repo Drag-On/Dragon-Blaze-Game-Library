@@ -22,10 +22,12 @@ namespace DBGL
 
 #define ATTRIBUTE_VERTEX "v_vertex"
 #define ATTRIBUTE_COLOR "v_color"
+#define ATTRIBUTE_NORMAL "v_normal"
 #define UNIFORM_MODEL "m_model"
 #define UNIFORM_VIEW "m_view"
 #define UNIFORM_PROJECTION "m_projection"
 #define UNIFORM_MVP "m_mvp"
+#define UNIFORM_ITMV "m_itmv"
 
 class Mesh;
 

@@ -82,6 +82,26 @@ public:
 	GLuint getElementIBOHandle() const;
 
 	/**
+	 * @brief Adds some normal data to the mesh
+	 * @param normalData Raw normal data
+	 * @param length Length of the normalData array
+	 * @param attrFormat Format of the normalData array
+	 * @attention Both heap objects will be maintained by the Mesh class (includes delete)
+	 */
+	void setNormalData(GLfloat* normalData, int length,
+			AttributeFormat* attrFormat);
+
+	/**
+	 * @return Attribute format of the normal data
+	 */
+	AttributeFormat* getNormalFormat() const;
+
+	/**
+	 * @return Handle of the VBO where the normal data is stored
+	 */
+	GLuint getNormalVBOHandle() const;
+
+	/**
 	 * Creates a new Mesh object that has all the necessary data to display a cube
 	 * @return Pointer to the newly created mesh object
 	 */
@@ -93,6 +113,8 @@ private:
 	AttributeFormat* _pColorFormat; // Attribute format used by color data
 	GLuint _colorVBOHandle; // Handle of the vbo where the color data is stored
 	GLuint _elementIBOHandle; // Handle of the ibo where all elements are stored
+	AttributeFormat* _pNormalFormat; // Attribute format used by normal data
+	GLuint _normalVBOHandle; // Handle of the vbo where the normal data is stored
 };
 
 } /* namespace DBGL */

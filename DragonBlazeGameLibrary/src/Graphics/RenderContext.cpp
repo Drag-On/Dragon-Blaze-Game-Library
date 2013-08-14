@@ -84,6 +84,25 @@ void RenderContext::render(Mesh* mesh)
 		);
 	}
 
+	// Pass normal data
+	Mesh::AttributeFormat* normalFormat = NULL;
+	int normalHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_NORMAL);
+	if(mesh->getNormalVBOHandle() != GL_INVALID_VALUE)
+	{
+		normalFormat = mesh->getNormalFormat();
+		glEnableVertexAttribArray(normalHandle);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->getNormalVBOHandle());
+
+		// Describe the color array format
+		glVertexAttribPointer(normalHandle,// attribute
+				normalFormat->size,// number of elements per vertex
+				normalFormat->type,// the type of each element
+				normalFormat->normalized,// normalize?
+				normalFormat->stride,// no extra data between each position
+				normalFormat->pointer// offset of first element
+		);
+	}
+
 	// Instruct shader with matrices
 	if(_pCurShader->checkUniformExists(UNIFORM_MODEL))
 	{
@@ -110,6 +129,13 @@ void RenderContext::render(Mesh* mesh)
 		float* pMVPMatrix = glm::value_ptr(mvp);
 		_pCurShader->setUniformFloatMatrix4Array(uniformMVPHandle, 1, GL_FALSE, pMVPMatrix);
 	}
+	if(_pCurShader->checkUniformExists(UNIFORM_ITMV))
+	{
+		int uniformITMVHandle = _pCurShader->getUniformHandle(UNIFORM_ITMV);
+		glm::mat4 itmv = glm::transpose(glm::inverse(_viewMat * _modelMat));
+		float* pITMVMatrix = glm::value_ptr(itmv);
+		_pCurShader->setUniformFloatMatrix4Array(uniformITMVHandle, 1, GL_FALSE, pITMVMatrix);
+	}
 
 	// Finally! Draw!
 	if(mesh->getElementIBOHandle() == GL_INVALID_VALUE)
@@ -128,6 +154,10 @@ void RenderContext::render(Mesh* mesh)
 	if(colorFormat != NULL)
 	{
 		glDisableVertexAttribArray(colorHandle);
+	}
+	if(normalFormat != NULL)
+	{
+		glDisableVertexAttribArray(normalHandle);
 	}
 	glDisableVertexAttribArray(vertexHandle);
 }

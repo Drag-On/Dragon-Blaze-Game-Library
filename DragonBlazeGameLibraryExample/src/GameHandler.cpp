@@ -45,22 +45,10 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 	BasicGame::init(wnd, rc);
 
 	// Create shader
-	const char* vert = "uniform mat4 m_mvp;"
-			"attribute vec3 v_vertex;"
-			"attribute vec3 v_color;"
-			"varying vec3 f_color;"
-			"void main(void)"
-			"{"
-			"	gl_Position = m_mvp  * vec4(v_vertex, 1.0);"
-			"	f_color = v_color;"
-			"}";
-	const char* frag = "varying vec3 f_color;"
-			"uniform float fade;"
-			"void main(void)"
-			"{"
-			"	gl_FragColor = vec4(f_color.r, f_color.g, f_color.b, fade);"
-			"}";
-	_pShaderProgram = new ShaderProgram(vert, frag);
+	_pShaderProgram = new ShaderProgram(
+			"../DragonBlazeGameLibrary/src/Graphics/Shaders/SimpleDiffuse.vert",
+			"../DragonBlazeGameLibrary/src/Graphics/Shaders/SimpleDiffuse.frag",
+			true);
 
 	// Mesh
 	_pMesh = Mesh::createCube();
@@ -95,22 +83,15 @@ void GameHandler::render(BaseGameWindow* wnd, RenderContext* rc)
 			1.0f * glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT),
 			0.1f, 10.0f);
 
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -8.0));
+	glm::mat4 model = glm::translate(glm::mat4(1.0f),
+			glm::vec3(0.0, 0.0, -8.0));
 	rc->setModelMatrix(model);
-	_pShaderProgram->setUniformFloat(_pShaderProgram->getUniformHandle("fade"),
-			1.0);
 	rc->render(_pMesh2);
 
-	model = glm::translate(glm::mat4(1.0f),
-			glm::vec3(0.0, 0.0, -4.0));
+	model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
 	rc->setModelMatrix(model * anim);
 	rc->setViewMatrix(view);
 	rc->setProjectionMatrix(projection);
 
-	float curFade = sinf(glutGet(GLUT_ELAPSED_TIME) / 1000.0 * (2 * M_PI) / 5)
-			/ 2 + 0.5;
-	glm::vec3 axis_z(0, 0, 1);
-	_pShaderProgram->setUniformFloat(_pShaderProgram->getUniformHandle("fade"),
-			curFade);
 	rc->render(_pMesh);
 }

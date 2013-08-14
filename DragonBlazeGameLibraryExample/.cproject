@@ -47,7 +47,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.507292904" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1738266487" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.22134645" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/freeglut/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/glew-1.10.0/lib}&quot;"/>
 								</option>
@@ -74,7 +74,7 @@
 				<externalSettings containerId="DragonBlazeGameLibrary;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/DragonBlazeGameLibrary"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/DragonBlazeGameLibrary/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/DragonBlazeGameLibrary/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="DragonBlazeGameLibrary" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -126,7 +126,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.802015770" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.1617495845" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.paths.1054968503" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/freeglut/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/glew-1.10.0/lib}&quot;"/>
 								</option>
@@ -153,7 +153,7 @@
 				<externalSettings containerId="DragonBlazeGameLibrary;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/DragonBlazeGameLibrary"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/DragonBlazeGameLibrary/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/DragonBlazeGameLibrary/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="DragonBlazeGameLibrary" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
