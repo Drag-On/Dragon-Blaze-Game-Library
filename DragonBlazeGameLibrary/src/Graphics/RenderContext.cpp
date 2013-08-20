@@ -138,17 +138,17 @@ void RenderContext::render(Mesh* mesh)
 	}
 
 	// Finally! Draw!
+	int size;
+	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	if(mesh->getElementIBOHandle() == GL_INVALID_VALUE)
 	{
 		// Use old style rendering
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, size/sizeof(GLushort));
 	}
 	else
 	{
 		// Use elements for rendering
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->getElementIBOHandle());
-		int size;
-		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 		glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 	}
 	if(colorFormat != NULL)

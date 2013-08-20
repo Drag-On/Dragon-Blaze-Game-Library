@@ -9,6 +9,7 @@
 #define MESH_H_
 
 #include <GL/glew.h>
+#include <SOIL.h>
 #include "RenderContext.h"
 
 namespace DBGL
@@ -102,6 +103,25 @@ public:
 	GLuint getNormalVBOHandle() const;
 
 	/**
+	 * @brief Adds some UV coordinates to the mesh
+	 * @param uvData Raw uv coordinates
+	 * @param length Length of the uvData array
+	 * @param attrFormat Format of the uvData array
+	 * @attention Both heap objects will be maintained by the Mesh class (includes delete)
+	 */
+	void setUVData(GLfloat* uvData, int length, AttributeFormat* attrFormat);
+
+	/**
+	 * @return Attribute format of the UV coordinate data
+	 */
+	AttributeFormat* getUVFormat() const;
+
+	/**
+	 * @return Handle of the VBO where the UVs are stored
+	 */
+	GLuint getUVVBOHandle() const;
+
+	/**
 	 * Creates a new Mesh object representing a cube
 	 * @return Pointer to the newly created mesh object
 	 */
@@ -121,6 +141,8 @@ private:
 	GLuint _elementIBOHandle; // Handle of the ibo where all elements are stored
 	AttributeFormat* _pNormalFormat; // Attribute format used by normal data
 	GLuint _normalVBOHandle; // Handle of the vbo where the normal data is stored
+	AttributeFormat* _pUVFormat; // Attribute format used for UV data
+	GLuint _UVVBOHandle; // Handle of the vbo where the UV data is stored
 };
 
 } /* namespace DBGL */

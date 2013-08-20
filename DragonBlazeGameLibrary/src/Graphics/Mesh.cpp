@@ -27,6 +27,8 @@ Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 	_elementIBOHandle = GL_INVALID_VALUE;
 	_pNormalFormat = NULL;
 	_normalVBOHandle = GL_INVALID_VALUE;
+	_pUVFormat = NULL;
+	_UVVBOHandle = GL_INVALID_VALUE;
 }
 
 /**
@@ -48,6 +50,11 @@ Mesh::~Mesh()
 	delete _pNormalFormat;
 	_pNormalFormat = NULL;
 	glDeleteBuffers(1, &_normalVBOHandle);
+
+	// Delete uv data
+	delete _pUVFormat;
+	_pUVFormat = NULL;
+	glDeleteBuffers(1, &_UVVBOHandle);
 
 	// Delete element data
 	glDeleteBuffers(1, &_elementIBOHandle);
@@ -142,6 +149,36 @@ GLuint Mesh::getNormalVBOHandle() const
 }
 
 /**
+ * @brief Adds some UV coordinates to the mesh
+ * @param uvData Raw uv coordinates
+ * @param length Length of the uvData array
+ * @param attrFormat Format of the uvData array
+ * @attention Both heap objects will be maintained by the Mesh class (includes delete)
+ */
+void Mesh::setUVData(GLfloat* uvData, int length, AttributeFormat* attrFormat)
+{
+	delete _pUVFormat;
+	_pUVFormat = attrFormat;
+	_UVVBOHandle = RenderContext::createBuffer(uvData, length, _UVVBOHandle);
+}
+
+/**
+ * @return Attribute format of the UV coordinate data
+ */
+Mesh::AttributeFormat* Mesh::getUVFormat() const
+{
+	return _pUVFormat;
+}
+
+/**
+ * @return Handle of the VBO where the UVs are stored
+ */
+GLuint Mesh::getUVVBOHandle() const
+{
+	return _UVVBOHandle;
+}
+
+/**
  * Creates a new Mesh object that has all the necessary data to display a cube
  * @return Pointer to the newly created mesh object
  */
@@ -149,30 +186,30 @@ Mesh* Mesh::createCube()
 {
 	// Define vertices
 	GLfloat cubeVertices[] =
-	{ -1.0, -1.0, 1.0, // Front lower left = 0
-			1.0, -1.0, 1.0, // Front lower right = 1
-			1.0, 1.0, 1.0, // Front upper right = 2
-			-1.0, 1.0, 1.0, // Front upper left = 3
-			-1.0, -1.0, -1.0, // Back lower left = 4
-			1.0, -1.0, -1.0, // Back lower right = 5
-			1.0, 1.0, -1.0, // Back upper right = 6
-			-1.0, 1.0, -1.0, // Back upper left = 7
-			-1.0, -1.0, 1.0, // Front lower left = 8
-			1.0, -1.0, 1.0, // Front lower right = 9
-			1.0, 1.0, 1.0, // Front upper right = 10
-			-1.0, 1.0, 1.0, // Front upper left = 11
-			-1.0, -1.0, -1.0, // Back lower left = 12
-			1.0, -1.0, -1.0, // Back lower right = 13
-			1.0, 1.0, -1.0, // Back upper right = 13
-			-1.0, 1.0, -1.0, // Back upper left = 15
-			-1.0, -1.0, 1.0, // Front lower left = 16
-			1.0, -1.0, 1.0, // Front lower right = 17
-			1.0, 1.0, 1.0, // Front upper right = 18
-			-1.0, 1.0, 1.0, // Front upper left = 19
-			-1.0, -1.0, -1.0, // Back lower left = 20
-			1.0, -1.0, -1.0, // Back lower right = 21
-			1.0, 1.0, -1.0, // Back upper right = 22
-			-1.0, 1.0, -1.0, // Back upper left = 23
+	{ -1.0, -1.0, 1.0, // front
+			1.0, -1.0, 1.0, //
+			1.0, 1.0, 1.0, //
+			-1.0, 1.0, 1.0, //
+			-1.0, 1.0, 1.0, // top
+			1.0, 1.0, 1.0, //
+			1.0, 1.0, -1.0, //
+			-1.0, 1.0, -1.0, //
+			1.0, -1.0, -1.0, // back
+			-1.0, -1.0, -1.0, //
+			-1.0, 1.0, -1.0, //
+			1.0, 1.0, -1.0, //
+			-1.0, -1.0, -1.0, // bottom
+			1.0, -1.0, -1.0, //
+			1.0, -1.0, 1.0, //
+			-1.0, -1.0, 1.0, //
+			-1.0, -1.0, -1.0, // left
+			-1.0, -1.0, 1.0, //
+			-1.0, 1.0, 1.0, //
+			-1.0, 1.0, -1.0, //
+			1.0, -1.0, 1.0, // right
+			1.0, -1.0, -1.0, //
+			1.0, 1.0, -1.0, //
+			1.0, 1.0, 1.0, //
 			};
 	AttributeFormat* vertexFormat = new AttributeFormat();
 	vertexFormat->size = 3;
@@ -183,32 +220,9 @@ Mesh* Mesh::createCube()
 	Mesh* cube = new Mesh(cubeVertices, sizeof(cubeVertices), vertexFormat);
 
 	// Define some colors
-	GLfloat cubeColors[] =
-	{ 0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			};
+	GLfloat cubeColors[3 * 4 * 6];
+	for (int i = 0; i < 3 * 4 * 6; i++)
+		cubeColors[i] = 0.9f;
 	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
 	colorFormat->size = 3;
 	colorFormat->type = GL_FLOAT;
@@ -221,16 +235,16 @@ Mesh* Mesh::createCube()
 	GLushort elements[] =
 	{ 0, 1, 2, // front
 			2, 3, 0, //
-			11, 10, 14, // top
-			14, 15, 11, //
-			7, 6, 5, // back
-			5, 4, 7, //
-			12, 13, 9, // bottom
-			9, 8, 12, //
-			20, 16, 19, // left
-			19, 23, 20, //
-			17, 21, 22, // right
-			22, 18, 17, //
+			4, 5, 6, // top
+			6, 7, 4, //
+			8, 9, 10, // back
+			10, 11, 8, //
+			12, 13, 14, // bottom
+			14, 15, 12, //
+			16, 17, 18, // left
+			18, 19, 16, //
+			20, 21, 22, // right
+			22, 23, 20, //
 			};
 	cube->_elementIBOHandle = RenderContext::createBuffer(elements,
 			sizeof(elements), GL_INVALID_VALUE,
@@ -242,26 +256,26 @@ Mesh* Mesh::createCube()
 			0, 0, 1, // 1
 			0, 0, 1, // 2
 			0, 0, 1, // 3
+			0, 1, 0, // 10 Top
+			0, 1, 0, // 11
+			0, 1, 0, // 14
+			0, 1, 0, // 15
 			0, 0, -1, // 4 Back
 			0, 0, -1, // 5
 			0, 0, -1, // 6
 			0, 0, -1, // 7
 			0, -1, 0, // 8 Bottom
 			0, -1, 0, // 9
-			0, 1, 0, // 10 Top
-			0, 1, 0, // 11
-			0, -1, 0, // 12 Bottom
+			0, -1, 0, // 12
 			0, -1, 0, // 13
-			0, 1, 0, // 14 Top
-			0, 1, 0, // 15
 			-1, 0, 0, // 16 Left
-			1, 0, 0, // 17 Right
-			1, 0, 0, // 18
-			-1, 0, 0, // 19 Left
+			-1, 0, 0, // 19
 			-1, 0, 0, // 20
+			-1, 0, 0, // 23
 			1, 0, 0, // 21 Right
 			1, 0, 0, // 22
-			-1, 0, 0, // 23 Left
+			1, 0, 0, // 17
+			1, 0, 0, // 18
 			};
 	Mesh::AttributeFormat* normalFormat = new Mesh::AttributeFormat();
 	normalFormat->size = 3;
@@ -270,6 +284,23 @@ Mesh* Mesh::createCube()
 	normalFormat->stride = 0;
 	normalFormat->pointer = 0;
 	cube->setNormalData(normals, sizeof(normals), normalFormat);
+
+	// Define UVs
+	GLfloat uvs[2 * 4 * 6] =
+	{ 0.0, 0.0, // front
+			1.0, 0.0, //
+			1.0, 1.0, //
+			0.0, 1.0, //
+			};
+	for (int i = 1; i < 6; i++)
+		memcpy(&uvs[i * 4 * 2], &uvs[0], 2 * 4 * sizeof(GLfloat));
+	Mesh::AttributeFormat* uvFormat = new Mesh::AttributeFormat();
+	uvFormat->size = 2;
+	uvFormat->type = GL_FLOAT;
+	uvFormat->normalized = GL_TRUE;
+	uvFormat->stride = 0;
+	uvFormat->pointer = 0;
+	cube->setUVData(uvs, sizeof(uvs), uvFormat);
 
 	return cube;
 }
