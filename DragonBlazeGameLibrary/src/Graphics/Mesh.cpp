@@ -29,6 +29,7 @@ Mesh::Mesh(GLfloat* vertices, int length, Mesh::AttributeFormat* attrFormat)
 	_normalVBOHandle = GL_INVALID_VALUE;
 	_pUVFormat = NULL;
 	_UVVBOHandle = GL_INVALID_VALUE;
+	_pTexture = NULL;
 }
 
 /**
@@ -176,6 +177,24 @@ Mesh::AttributeFormat* Mesh::getUVFormat() const
 GLuint Mesh::getUVVBOHandle() const
 {
 	return _UVVBOHandle;
+}
+
+/**
+ * @brief Makes the mesh render using the passed texture
+ * @param tex Texture to use
+ * @attention You need to manage the passed texture by yourself!
+ */
+void Mesh::setTexture(Texture* tex)
+{
+	_pTexture = tex;
+}
+
+/**
+ * @return Texture used for rendering or NULL in case none
+ */
+Texture* Mesh::getTexture() const
+{
+	return _pTexture;
 }
 
 /**

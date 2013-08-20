@@ -11,6 +11,7 @@
 #include <GL/glew.h>
 #include <SOIL.h>
 #include "RenderContext.h"
+#include "Texture.h"
 
 namespace DBGL
 {
@@ -122,6 +123,18 @@ public:
 	GLuint getUVVBOHandle() const;
 
 	/**
+	 * @brief Makes the mesh render using the passed texture
+	 * @param tex Texture to use
+	 * @attention You need to manage the passed texture by yourself!
+	 */
+	void setTexture(Texture* tex);
+
+	/**
+	 * @return Texture used for rendering or NULL in case none
+	 */
+	Texture* getTexture() const;
+
+	/**
 	 * Creates a new Mesh object representing a cube
 	 * @return Pointer to the newly created mesh object
 	 */
@@ -143,6 +156,7 @@ private:
 	GLuint _normalVBOHandle; // Handle of the vbo where the normal data is stored
 	AttributeFormat* _pUVFormat; // Attribute format used for UV data
 	GLuint _UVVBOHandle; // Handle of the vbo where the UV data is stored
+	Texture* _pTexture; // Texture to display on the mesh
 };
 
 } /* namespace DBGL */

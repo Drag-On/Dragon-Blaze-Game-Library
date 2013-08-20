@@ -67,40 +67,80 @@ void RenderContext::render(Mesh* mesh)
 
 	// Pass color data
 	Mesh::AttributeFormat* colorFormat = NULL;
-	int colorHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_COLOR);
-	if(mesh->getColorVBOHandle() != GL_INVALID_VALUE)
+	int colorHandle = -1;
+	if(_pCurShader->checkAttributeExists(ATTRIBUTE_COLOR))
 	{
-		colorFormat = mesh->getColorFormat();
-		glEnableVertexAttribArray(colorHandle);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->getColorVBOHandle());
+		colorHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_COLOR);
+		if(mesh->getColorVBOHandle() != GL_INVALID_VALUE)
+		{
+			colorFormat = mesh->getColorFormat();
+			glEnableVertexAttribArray(colorHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->getColorVBOHandle());
 
-		// Describe the color array format
-		glVertexAttribPointer(colorHandle,// attribute
-				colorFormat->size,// number of elements per vertex
-				colorFormat->type,// the type of each element
-				colorFormat->normalized,// normalize?
-				colorFormat->stride,// no extra data between each position
-				colorFormat->pointer// offset of first element
-		);
+			// Describe the color array format
+			glVertexAttribPointer(colorHandle,// attribute
+					colorFormat->size,// number of elements per vertex
+					colorFormat->type,// the type of each element
+					colorFormat->normalized,// normalize?
+					colorFormat->stride,// no extra data between each position
+					colorFormat->pointer// offset of first element
+			);
+		}
 	}
 
 	// Pass normal data
 	Mesh::AttributeFormat* normalFormat = NULL;
-	int normalHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_NORMAL);
-	if(mesh->getNormalVBOHandle() != GL_INVALID_VALUE)
+	int normalHandle = -1;
+	if(_pCurShader->checkAttributeExists(ATTRIBUTE_NORMAL))
 	{
-		normalFormat = mesh->getNormalFormat();
-		glEnableVertexAttribArray(normalHandle);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->getNormalVBOHandle());
+		normalHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_NORMAL);
+		if(mesh->getNormalVBOHandle() != GL_INVALID_VALUE)
+		{
+			normalFormat = mesh->getNormalFormat();
+			glEnableVertexAttribArray(normalHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->getNormalVBOHandle());
 
-		// Describe the color array format
-		glVertexAttribPointer(normalHandle,// attribute
-				normalFormat->size,// number of elements per vertex
-				normalFormat->type,// the type of each element
-				normalFormat->normalized,// normalize?
-				normalFormat->stride,// no extra data between each position
-				normalFormat->pointer// offset of first element
-		);
+			// Describe the color array format
+			glVertexAttribPointer(normalHandle,// attribute
+					normalFormat->size,// number of elements per vertex
+					normalFormat->type,// the type of each element
+					normalFormat->normalized,// normalize?
+					normalFormat->stride,// no extra data between each position
+					normalFormat->pointer// offset of first element
+			);
+		}
+	}
+
+	// Pass uv data
+	Mesh::AttributeFormat* uvFormat = NULL;
+	int uvHandle = -1;
+	if(_pCurShader->checkAttributeExists(ATTRIBUTE_UV))
+	{
+		uvHandle = _pCurShader->getAttributeHandle(ATTRIBUTE_UV);
+		if(mesh->getUVVBOHandle() != GL_INVALID_VALUE)
+		{
+			uvFormat = mesh->getUVFormat();
+			glEnableVertexAttribArray(uvHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, mesh->getUVVBOHandle());
+
+			// Describe the color array format
+			glVertexAttribPointer(uvHandle,// attribute
+					uvFormat->size,// number of elements per vertex
+					uvFormat->type,// the type of each element
+					uvFormat->normalized,// normalize?
+					uvFormat->stride,// no extra data between each position
+					uvFormat->pointer// offset of first element
+			);
+		}
+	}
+
+	// Pass texture if any
+	Texture* tex = mesh->getTexture();
+	if(tex != NULL && _pCurShader->checkUniformExists(UNIFORM_TEXDIFFUSE))
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, tex->getTextureHandle());
+		_pCurShader->setUniformSampler(_pCurShader->getUniformHandle(UNIFORM_TEXDIFFUSE), 0);
 	}
 
 	// Instruct shader with matrices
@@ -158,6 +198,10 @@ void RenderContext::render(Mesh* mesh)
 	if(normalFormat != NULL)
 	{
 		glDisableVertexAttribArray(normalHandle);
+	}
+	if(uvFormat != NULL)
+	{
+		glDisableVertexAttribArray(uvHandle);
 	}
 	glDisableVertexAttribArray(vertexHandle);
 }

@@ -22,6 +22,8 @@ GameHandler::GameHandler(int argc, char* argv[], const char* title,
 {
 	_pShaderProgram = NULL;
 	_pMesh = NULL;
+	_pMesh2 = NULL;
+	_pTex = NULL;
 }
 
 /**
@@ -34,6 +36,12 @@ GameHandler::~GameHandler()
 
 	delete _pMesh;
 	_pMesh = NULL;
+
+	delete _pMesh2;
+	_pMesh2 = NULL;
+
+	delete _pTex;
+	_pTex = NULL;
 }
 
 /**
@@ -53,6 +61,8 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 	// Mesh
 	_pMesh = Mesh::createPyramid();
 	_pMesh2 = Mesh::createCube();
+	_pTex = new Texture("tex.jpg");
+	_pMesh2->setTexture(_pTex);
 }
 
 /**

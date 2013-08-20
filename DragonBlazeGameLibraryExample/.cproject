@@ -29,6 +29,7 @@
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.2077512425" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1089474734" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/Simple OpenGL Image Library/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/freeglut/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/glew-1.10.0/include}&quot;"/>
@@ -48,11 +49,13 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1738266487" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.22134645" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/Simple OpenGL Image Library/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/freeglut/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DragonBlazeGameLibrary/Libraries/glew-1.10.0/lib}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1607217760" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="DragonBlazeGameLibrary"/>
+									<listOptionValue builtIn="false" value="DragonBlazeGameLibrary"/>
+									<listOptionValue builtIn="false" value="soil"/>
 									<listOptionValue builtIn="false" value="freeglut"/>
 									<listOptionValue builtIn="false" value="glew32"/>
 									<listOptionValue builtIn="false" value="opengl32"/>

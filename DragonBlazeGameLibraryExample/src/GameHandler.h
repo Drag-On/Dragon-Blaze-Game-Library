@@ -12,6 +12,7 @@
 #include <Graphics/Mesh.h>
 #include <Graphics/ShaderProgram.h>
 #include <Graphics/RenderContext.h>
+#include <Graphics/Texture.h>
 #include <math.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -63,6 +64,7 @@ private:
 	ShaderProgram* _pShaderProgram;
 	Mesh* _pMesh;
 	Mesh* _pMesh2;
+	Texture* _pTex;
 };
 
 #endif /* GAMEHANDLER_H_ */
