@@ -30,6 +30,7 @@ namespace DBGL
 #define UNIFORM_MVP "m_mvp"
 #define UNIFORM_ITMV "m_itmv"
 #define UNIFORM_TEXDIFFUSE "texDiffuse"
+#define UNIFORM_TEXDIFFUSEFLAG "texDiffuseFlag"
 
 class Mesh;
 

@@ -136,6 +136,10 @@ void RenderContext::render(Mesh* mesh)
 
 	// Pass texture if any
 	Texture* tex = mesh->getTexture();
+	if(_pCurShader->checkUniformExists(UNIFORM_TEXDIFFUSEFLAG))
+	{
+		_pCurShader->setUniformBool(_pCurShader->getUniformHandle(UNIFORM_TEXDIFFUSEFLAG), tex != NULL);
+	}
 	if(tex != NULL && _pCurShader->checkUniformExists(UNIFORM_TEXDIFFUSE))
 	{
 		glActiveTexture(GL_TEXTURE0);
