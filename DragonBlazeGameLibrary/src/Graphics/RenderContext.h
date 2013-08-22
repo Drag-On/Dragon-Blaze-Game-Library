@@ -28,6 +28,7 @@ namespace DBGL
 #define UNIFORM_VIEW "m_view"
 #define UNIFORM_PROJECTION "m_projection"
 #define UNIFORM_MVP "m_mvp"
+#define UNIFORM_ITM "m_itm"
 #define UNIFORM_ITMV "m_itmv"
 #define UNIFORM_TEXDIFFUSE "texDiffuse"
 #define UNIFORM_TEXDIFFUSEFLAG "texDiffuseFlag"

@@ -173,6 +173,13 @@ void RenderContext::render(Mesh* mesh)
 		float* pMVPMatrix = glm::value_ptr(mvp);
 		_pCurShader->setUniformFloatMatrix4Array(uniformMVPHandle, 1, GL_FALSE, pMVPMatrix);
 	}
+	if(_pCurShader->checkUniformExists(UNIFORM_ITM))
+	{
+		int uniformITMHandle = _pCurShader->getUniformHandle(UNIFORM_ITM);
+		glm::mat4 itm = glm::transpose(glm::inverse(_modelMat));
+		float* pITMMatrix = glm::value_ptr(itm);
+		_pCurShader->setUniformFloatMatrix4Array(uniformITMHandle, 1, GL_FALSE, pITMMatrix);
+	}
 	if(_pCurShader->checkUniformExists(UNIFORM_ITMV))
 	{
 		int uniformITMVHandle = _pCurShader->getUniformHandle(UNIFORM_ITMV);
