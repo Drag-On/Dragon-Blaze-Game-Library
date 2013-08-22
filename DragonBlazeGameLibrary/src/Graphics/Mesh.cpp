@@ -347,9 +347,7 @@ Mesh* Mesh::createPyramid()
 			-1, -1, 1, // Bottom front left 12
 			1, -1, 1, // Bottom front right 13
 			-1, -1, -1, // Bottom back left 14
-			1, -1, 1, // Bottom front right 15
-			1, -1, -1, // Bottom back right 16
-			-1, -1, -1, // Bottom back left 17
+			1, -1, -1, // Bottom back right 15
 			};
 	AttributeFormat* vertexFormat = new AttributeFormat();
 	vertexFormat->size = 3;
@@ -360,26 +358,9 @@ Mesh* Mesh::createPyramid()
 	Mesh* mesh = new Mesh(vertices, sizeof(vertices), vertexFormat);
 
 	// Define some colors
-	GLfloat colors[] =
-	{ 0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			0.9, 0.9, 0.9, //
-			};
+	GLfloat colors[3 * 16];
+	for (int i = 0; i < 3 * 16; i++)
+		colors[i] = 0.9f;
 	Mesh::AttributeFormat* colorFormat = new Mesh::AttributeFormat();
 	colorFormat->size = 3;
 	colorFormat->type = GL_FLOAT;
@@ -394,8 +375,8 @@ Mesh* Mesh::createPyramid()
 			3, 4, 5, // right
 			6, 7, 8, // back
 			9, 10, 11, // left
-			12, 13, 14, // bottom left
-			15, 16, 17, // bottom right
+			12, 14, 13, // bottom left
+			14, 15, 13, // bottom right
 			};
 	mesh->_elementIBOHandle = RenderContext::createBuffer(elements,
 			sizeof(elements), GL_INVALID_VALUE,
@@ -419,8 +400,6 @@ Mesh* Mesh::createPyramid()
 			0, -1, 0, // bottom
 			0, -1, 0, // bottom
 			0, -1, 0, // bottom
-			0, -1, 0, // bottom
-			0, -1, 0, // bottom
 			};
 	Mesh::AttributeFormat* normalFormat = new Mesh::AttributeFormat();
 	normalFormat->size = 3;
@@ -429,6 +408,33 @@ Mesh* Mesh::createPyramid()
 	normalFormat->stride = 0;
 	normalFormat->pointer = 0;
 	mesh->setNormalData(normals, sizeof(normals), normalFormat);
+
+	// Define UVs
+	GLfloat uvs[2 * 16] =
+	{ 0.0, 0.0, // front
+			1.0, 0.0, //
+			0.5, 1.0, //
+			0.0, 0.0, // right
+			1.0, 0.0, //
+			0.5, 1.0, //
+			0.0, 0.0, // back
+			1.0, 0.0, //
+			0.5, 1.0, //
+			0.0, 0.0, // left
+			1.0, 0.0, //
+			0.5, 1.0, //
+			0.0, 0.0, // bottom
+			1.0, 0.0, //
+			1.0, 1.0, //
+			0.0, 1.0, //
+			};
+	Mesh::AttributeFormat* uvFormat = new Mesh::AttributeFormat();
+	uvFormat->size = 2;
+	uvFormat->type = GL_FLOAT;
+	uvFormat->normalized = GL_TRUE;
+	uvFormat->stride = 0;
+	uvFormat->pointer = 0;
+	mesh->setUVData(uvs, sizeof(uvs), uvFormat);
 
 	return mesh;
 }

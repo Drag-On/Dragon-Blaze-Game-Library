@@ -62,6 +62,7 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 	_pMesh = Mesh::createPyramid();
 	_pMesh2 = Mesh::createCube();
 	_pTex = new Texture("tex.jpg");
+	_pMesh->setTexture(_pTex);
 	_pMesh2->setTexture(_pTex);
 }
 
@@ -84,8 +85,12 @@ void GameHandler::render(BaseGameWindow* wnd, RenderContext* rc)
 
 	rc->useShader(_pShaderProgram);
 	float angle = glutGet(GLUT_ELAPSED_TIME) / 1000.0 * 45;
+
 	glm::vec3 axis_y(0.0, 1.0, 0.0);
-	glm::mat4 anim = glm::rotate(glm::mat4(1.0f), angle, axis_y);
+	glm::mat4 anim = glm::rotate(glm::mat4(1.0f), angle * 3.0f,
+			glm::vec3(1, 0, 0)) *  // X axis
+			glm::rotate(glm::mat4(1.0f), angle * 2.0f, glm::vec3(0, 1, 0)) * // Y axis
+			glm::rotate(glm::mat4(1.0f), angle * 4.0f, glm::vec3(0, 0, 1)); // Z axis
 
 	glm::mat4 view = glm::lookAt(glm::vec3(0.0, 2.0, 0.0),
 			glm::vec3(0.0, 0.0, -4.0), glm::vec3(0.0, 1.0, 0.0));
