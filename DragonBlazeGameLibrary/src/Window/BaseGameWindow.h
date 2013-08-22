@@ -52,6 +52,11 @@ public:
 	virtual ~BaseGameWindow();
 
 	/**
+	 * @brief Closes the window immediately
+	 */
+	void close();
+
+	/**
 	 * @brief Sets the current window position immediately
 	 * @param x X coordinate
 	 * @param y Y coordinate

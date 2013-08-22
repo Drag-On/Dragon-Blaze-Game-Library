@@ -102,6 +102,14 @@ const void BasicGame::run()
 }
 
 /**
+ * @brief Exits all game processes
+ */
+const void BasicGame::exit() const
+{
+	glutLeaveMainLoop();
+}
+
+/**
  * @brief Initializes the rendering process
  * @param wnd Window holding the rendering context
  */

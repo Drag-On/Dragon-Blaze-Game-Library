@@ -80,6 +80,10 @@ void GameHandler::update(BaseGameWindow* wnd, RenderContext* rc)
 		_pMesh = _pMesh2;
 		_pMesh2 = temp;
 	}
+	if(wnd->getInput()->isReleased(KEY_ESCAPE))
+	{
+		wnd->close();
+	}
 }
 
 /**

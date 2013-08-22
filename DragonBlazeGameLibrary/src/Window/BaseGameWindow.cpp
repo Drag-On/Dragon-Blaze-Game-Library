@@ -80,6 +80,14 @@ BaseGameWindow::~BaseGameWindow()
 }
 
 /**
+ * @brief Closes the window immediately
+ */
+void BaseGameWindow::close()
+{
+	glutDestroyWindow(getId());
+}
+
+/**
  * @brief Renders everything to screen
  */
 void BaseGameWindow::render()
@@ -116,7 +124,6 @@ void BaseGameWindow::resize(int width, int height)
  */
 void BaseGameWindow::keyPressed(KEY key, char character)
 {
-	LOG->debug("KEY %d:%c pressed", key, character);
 }
 
 /**
@@ -124,7 +131,6 @@ void BaseGameWindow::keyPressed(KEY key, char character)
  */
 void BaseGameWindow::keyReleased(KEY key, char character)
 {
-	LOG->debug("KEY %d:%c released", key, character);
 }
 
 /**
@@ -132,7 +138,6 @@ void BaseGameWindow::keyReleased(KEY key, char character)
  */
 void BaseGameWindow::mouseDragged(int x, int y, int lastX, int lastY)
 {
-	LOG->debug("MOUSE DRAGGED from %d,%d to %d,%d", x, y, lastX, lastY);
 }
 
 /**
@@ -140,7 +145,6 @@ void BaseGameWindow::mouseDragged(int x, int y, int lastX, int lastY)
  */
 void BaseGameWindow::mouseWheel(int change, int x, int y)
 {
-	LOG->debug("MOUSE WHEEL changed at %d", change);
 }
 
 /**

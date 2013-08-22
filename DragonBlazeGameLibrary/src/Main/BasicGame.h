@@ -68,6 +68,11 @@ public:
 	 */
 	const void run();
 
+	/**
+	 * @brief Exits all game processes
+	 */
+	const void exit() const;
+
 private:
 	BaseGameWindow* _pWnd; // Window holding the render context
 
