@@ -205,30 +205,30 @@ Mesh* Mesh::createCube()
 {
 	// Define vertices
 	GLfloat cubeVertices[] =
-	{ -1.0, -1.0, 1.0, // front
-			1.0, -1.0, 1.0, //
-			1.0, 1.0, 1.0, //
-			-1.0, 1.0, 1.0, //
-			-1.0, 1.0, 1.0, // top
-			1.0, 1.0, 1.0, //
-			1.0, 1.0, -1.0, //
-			-1.0, 1.0, -1.0, //
-			1.0, -1.0, -1.0, // back
-			-1.0, -1.0, -1.0, //
-			-1.0, 1.0, -1.0, //
-			1.0, 1.0, -1.0, //
-			-1.0, -1.0, -1.0, // bottom
-			1.0, -1.0, -1.0, //
-			1.0, -1.0, 1.0, //
-			-1.0, -1.0, 1.0, //
-			-1.0, -1.0, -1.0, // left
-			-1.0, -1.0, 1.0, //
-			-1.0, 1.0, 1.0, //
-			-1.0, 1.0, -1.0, //
-			1.0, -1.0, 1.0, // right
-			1.0, -1.0, -1.0, //
-			1.0, 1.0, -1.0, //
-			1.0, 1.0, 1.0, //
+	{ -1.0, -1.0, 1.0, // front 0
+			1.0, -1.0, 1.0, // 1
+			1.0, 1.0, 1.0, // 2
+			-1.0, 1.0, 1.0, // 3
+			-1.0, 1.0, 1.0, // top 4
+			1.0, 1.0, 1.0, // 5
+			1.0, 1.0, -1.0, // 6
+			-1.0, 1.0, -1.0, // 7
+			1.0, -1.0, -1.0, // back 8
+			-1.0, -1.0, -1.0, // 9
+			-1.0, 1.0, -1.0, // 10
+			1.0, 1.0, -1.0, // 11
+			-1.0, -1.0, -1.0, // bottom 12
+			1.0, -1.0, -1.0, // 13
+			1.0, -1.0, 1.0, // 14
+			-1.0, -1.0, 1.0, // 15
+			-1.0, -1.0, -1.0, // left 16
+			-1.0, -1.0, 1.0, // 17
+			-1.0, 1.0, 1.0, // 18
+			-1.0, 1.0, -1.0, // 19
+			1.0, -1.0, 1.0, // right 20
+			1.0, -1.0, -1.0, // 21
+			1.0, 1.0, -1.0, // 22
+			1.0, 1.0, 1.0, // 23
 			};
 	AttributeFormat* vertexFormat = new AttributeFormat();
 	vertexFormat->size = 3;
@@ -316,7 +316,7 @@ Mesh* Mesh::createCube()
 	Mesh::AttributeFormat* uvFormat = new Mesh::AttributeFormat();
 	uvFormat->size = 2;
 	uvFormat->type = GL_FLOAT;
-	uvFormat->normalized = GL_TRUE;
+	uvFormat->normalized = GL_FALSE;
 	uvFormat->stride = 0;
 	uvFormat->pointer = 0;
 	cube->setUVData(uvs, sizeof(uvs), uvFormat);
@@ -410,7 +410,7 @@ Mesh* Mesh::createPyramid()
 	mesh->setNormalData(normals, sizeof(normals), normalFormat);
 
 	// Define UVs
-	GLfloat uvs[2 * 16] =
+	GLfloat uvs[] =
 	{ 0.0, 0.0, // front
 			1.0, 0.0, //
 			0.5, 1.0, //
@@ -431,7 +431,7 @@ Mesh* Mesh::createPyramid()
 	Mesh::AttributeFormat* uvFormat = new Mesh::AttributeFormat();
 	uvFormat->size = 2;
 	uvFormat->type = GL_FLOAT;
-	uvFormat->normalized = GL_TRUE;
+	uvFormat->normalized = GL_FALSE;
 	uvFormat->stride = 0;
 	uvFormat->pointer = 0;
 	mesh->setUVData(uvs, sizeof(uvs), uvFormat);

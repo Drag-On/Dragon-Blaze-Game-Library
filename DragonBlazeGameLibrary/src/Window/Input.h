@@ -175,28 +175,28 @@ public:
 	 * @param key Key to check
 	 * @return true in case the key is pressed, otherwise false
 	 */
-	bool isDown(KEY key);
+	bool isDown(KEY key) const;
 
 	/**
 	 * @brief Checks, if a key is currently not pressed
 	 * @param key Key to check
 	 * @return true in case the key is not pressed, otherwise false
 	 */
-	bool isUp(KEY key);
+	bool isUp(KEY key) const;
 
 	/**
 	 * @brief Checks if a key was just pressed down
 	 * @param key Key to check
 	 * @return true in case the key was toggled, otherwise false
 	 */
-	bool isPressed(KEY key);
+	bool isPressed(KEY key) const;
 
 	/**
 	 * @brief Checks if a key was just released
 	 * @param key Key to check
 	 * @return true in case the key was toggled, otherwise false
 	 */
-	bool isReleased(KEY key);
+	bool isReleased(KEY key) const;
 
 	/**
 	 * @brief Sets the callback function for key press events

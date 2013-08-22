@@ -9,6 +9,7 @@
 #define GAMEHANDLER_H_
 
 #include <Main/BasicGame.h>
+#include <Window/Input.h>
 #include <Graphics/Mesh.h>
 #include <Graphics/ShaderProgram.h>
 #include <Graphics/RenderContext.h>

@@ -41,7 +41,7 @@ Input::~Input()
  * @param key Key to check
  * @return true in case the key is pressed, otherwise false
  */
-bool Input::isDown(KEY key)
+bool Input::isDown(KEY key) const
 {
 	std::map<KEY, KEYSTATE>::iterator iter;
 	iter = _pKeys->find(key);
@@ -54,7 +54,7 @@ bool Input::isDown(KEY key)
  * @param key Key to check
  * @return true in case the key is not pressed, otherwise false
  */
-bool Input::isUp(KEY key)
+bool Input::isUp(KEY key) const
 {
 	std::map<KEY, KEYSTATE>::iterator iter;
 	iter = _pKeys->find(key);
@@ -67,7 +67,7 @@ bool Input::isUp(KEY key)
  * @param key Key to check
  * @return true in case the key was toggled, otherwise false
  */
-bool Input::isPressed(KEY key)
+bool Input::isPressed(KEY key) const
 {
 	std::map<KEY, KEYSTATE>::iterator iter;
 	iter = _pKeys->find(key);
@@ -79,7 +79,7 @@ bool Input::isPressed(KEY key)
  * @param key Key to check
  * @return true in case the key was toggled, otherwise false
  */
-bool Input::isReleased(KEY key)
+bool Input::isReleased(KEY key) const
 {
 	std::map<KEY, KEYSTATE>::iterator iter;
 	iter = _pKeys->find(key);

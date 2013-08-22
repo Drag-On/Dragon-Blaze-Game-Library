@@ -59,8 +59,8 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 			true);
 
 	// Mesh
-	_pMesh = Mesh::createPyramid();
-	_pMesh2 = Mesh::createCube();
+	_pMesh = Mesh::createCube();
+	_pMesh2 = Mesh::createPyramid();
 	_pTex = new Texture("tex.jpg");
 	_pMesh->setTexture(_pTex);
 	_pMesh2->setTexture(_pTex);
@@ -73,6 +73,13 @@ void GameHandler::init(BaseGameWindow* wnd, RenderContext* rc)
 void GameHandler::update(BaseGameWindow* wnd, RenderContext* rc)
 {
 	BasicGame::update(wnd, rc);
+
+	if (wnd->getInput()->isReleased(KEY_F1))
+	{
+		Mesh* temp = _pMesh;
+		_pMesh = _pMesh2;
+		_pMesh2 = temp;
+	}
 }
 
 /**
@@ -100,8 +107,11 @@ void GameHandler::render(BaseGameWindow* wnd, RenderContext* rc)
 
 	glm::mat4 model = glm::translate(glm::mat4(1.0f),
 			glm::vec3(0.0, 0.0, -8.0));
-	rc->setModelMatrix(model);
-	rc->render(_pMesh2);
+	if (_pMesh2 != NULL)
+	{
+		rc->setModelMatrix(model);
+		rc->render(_pMesh2);
+	}
 
 	model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0, 0.0, -4.0));
 	rc->setModelMatrix(model * anim);

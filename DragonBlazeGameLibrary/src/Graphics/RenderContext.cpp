@@ -189,17 +189,29 @@ void RenderContext::render(Mesh* mesh)
 	}
 
 	// Finally! Draw!
-	int size;
-	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+	int size = 0;
 	if(mesh->getElementIBOHandle() == GL_INVALID_VALUE)
 	{
 		// Use old style rendering
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->getVertexVBOHandle());
+		glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+		if(size == 0)
+		{
+			LOG->error("Unable to determine buffer size on rendering. Error: %i", glGetError());
+			return;
+		}
 		glDrawArrays(GL_TRIANGLES, 0, size/sizeof(GLushort));
 	}
 	else
 	{
 		// Use elements for rendering
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->getElementIBOHandle());
+		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+		if(size == 0)
+		{
+			LOG->error("Unable to determine buffer size on rendering. Error: %i", glGetError());
+			return;
+		}
 		glDrawElements(GL_TRIANGLES, size/sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
 	}
 	if(colorFormat != NULL)
@@ -303,7 +315,7 @@ glm::mat4 RenderContext::getProjectionMatrix() const
  * @param bufferHandle Handle of a buffer to overwrite. If this equals GL_INVALID_VALUE a new buffer is created.
  * @param usage Specifies the expected usage pattern, defaults to GL_STATIC_DRAW
  * @param type Specifies buffer type, i.e. vertex buffer or index buffer, defaults to GL_ARRAY_BUFFER
- * @return The handle of the created buffer object
+ * @return The handle of the created buffer object or GL_INVALID_VALUE if an error occured
  */
 const GLuint RenderContext::createBuffer(void* data, int length,
 		GLuint bufferHandle, GLenum usage, int type)
@@ -317,6 +329,25 @@ const GLuint RenderContext::createBuffer(void* data, int length,
 	glBindBuffer(type, bufferHandle);
 	glBufferData(type, length, data, usage);
 	glBindBuffer(type, 0);
+
+	// Check for errors
+	if (bufferHandle == GL_INVALID_ENUM)
+	{
+		LOG->error("Invalid target or usage on creation of GL buffer!");
+	}
+	else if(bufferHandle == GL_INVALID_VALUE)
+	{
+		LOG->error("Invalid size on creation of GL buffer!");
+	}
+	else if(bufferHandle == GL_INVALID_OPERATION)
+	{
+		LOG->error("No GL buffer was bound on initialization!");
+	}
+	else if(bufferHandle == GL_OUT_OF_MEMORY)
+	{
+		LOG->error("Unable to create a GL buffer with a size of %d", length);
+	}
+
 	return bufferHandle;
 }
 
