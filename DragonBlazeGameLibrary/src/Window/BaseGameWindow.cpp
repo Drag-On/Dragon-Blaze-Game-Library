@@ -12,6 +12,11 @@ namespace DBGL
 
 // Initialize list of all game windows
 std::list<BaseGameWindow*> BaseGameWindow::windows;
+unsigned int BaseGameWindow::deltaTime = 0; // Time since last frame
+unsigned int BaseGameWindow::lastCumulativeTime = 0; // Cumulative time since application start
+unsigned int BaseGameWindow::fpsTimeBase = 0; // Time since application start when we last computed the frame rate
+unsigned int BaseGameWindow::fpsAmount = 0; // Amount of frames since last computation of frame rate
+unsigned int BaseGameWindow::fps = 0; // Current frame rate
 
 /**
  * Constructor
@@ -85,6 +90,14 @@ BaseGameWindow::~BaseGameWindow()
 void BaseGameWindow::close()
 {
 	glutDestroyWindow(getId());
+}
+
+/**
+ * @return Time in milliseconds since last frame
+ */
+unsigned int BaseGameWindow::getDeltaTime() const
+{
+	return BaseGameWindow::deltaTime;
 }
 
 /**
@@ -358,6 +371,20 @@ void BaseGameWindow::onMouseWheel(int button, int dir, int x, int y)
 void BaseGameWindow::onIdle()
 {
 	glutPostRedisplay();
+
+	// Calculate fps
+	int curTime = glutGet(GLUT_ELAPSED_TIME);
+	BaseGameWindow::fpsAmount++;
+	if (curTime - BaseGameWindow::lastCumulativeTime > 1000)
+	{
+		fps = BaseGameWindow::fpsAmount * 1000.0
+				/ (curTime - BaseGameWindow::lastCumulativeTime);
+		BaseGameWindow::fpsAmount = 0;
+	}
+
+	// Calculate time
+	BaseGameWindow::deltaTime = curTime - BaseGameWindow::lastCumulativeTime;
+	BaseGameWindow::lastCumulativeTime = curTime;
 }
 
 /**

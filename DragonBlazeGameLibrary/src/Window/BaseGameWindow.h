@@ -126,6 +126,11 @@ public:
 	 */
 	const RenderContext* getRC() const;
 
+	/**
+	 * @return Time in milliseconds since last frame
+	 */
+	unsigned int getDeltaTime() const;
+
 protected:
 	/**
 	 * @brief Renders everything to screen
@@ -166,6 +171,11 @@ protected:
 
 private:
 	static std::list<BaseGameWindow*> windows; // List of all windows
+	static unsigned int deltaTime; // Time since last frame
+	static unsigned int lastCumulativeTime; // Cumulative time since application start
+	static unsigned int fpsTimeBase; // Time since application start when we last computed the frame rate
+	static unsigned int fpsAmount; // Amount of frames since last computation of frame rate
+	static unsigned int fps; // Current frame rate
 
 	const char* _title; // Window title
 	unsigned int _id; // Window ID

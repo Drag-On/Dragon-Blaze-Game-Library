@@ -66,6 +66,7 @@ private:
 	Mesh* _pMesh;
 	Mesh* _pMesh2;
 	Texture* _pTex;
+	glm::vec3 _camPos;
 };
 
 #endif /* GAMEHANDLER_H_ */
