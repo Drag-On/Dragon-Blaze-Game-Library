@@ -13,10 +13,11 @@ namespace DBGL
 // Initialize list of all game windows
 std::list<BaseGameWindow*> BaseGameWindow::windows;
 unsigned int BaseGameWindow::deltaTime = 0; // Time since last frame
-unsigned int BaseGameWindow::lastCumulativeTime = 0; // Cumulative time since application start
-unsigned int BaseGameWindow::fpsTimeBase = 0; // Time since application start when we last computed the frame rate
+int BaseGameWindow::lastCumulativeTime = 0; // Cumulative time since application start
+int BaseGameWindow::fpsTimeBase = 0; // Time since application start when we last computed the frame rate
 unsigned int BaseGameWindow::fpsAmount = 0; // Amount of frames since last computation of frame rate
 unsigned int BaseGameWindow::fps = 0; // Current frame rate
+unsigned int BaseGameWindow::lastFps = 0; // Last frame rate
 
 /**
  * Constructor
@@ -28,10 +29,10 @@ unsigned int BaseGameWindow::fps = 0; // Current frame rate
 BaseGameWindow::BaseGameWindow(const char* title, unsigned int width,
 		unsigned int height, unsigned int displayMode)
 {
-	_title = title;
+	_pTitle = title;
 	_pInput = new Input();
 	_pRC = new RenderContext();
-	_game = NULL;
+	_pGame = NULL;
 
 	// Set input callback functions
 	Input::inputCallback keyPressedCallaback = std::tr1::bind(
@@ -56,7 +57,7 @@ BaseGameWindow::BaseGameWindow(const char* title, unsigned int width,
 	glutInitDisplayMode(displayMode);
 	glutInitWindowSize(width, height);
 
-	_id = glutCreateWindow(_title);
+	_id = glutCreateWindow(_pTitle);
 	glutReshapeFunc(onResize);
 	glutDisplayFunc(onDisplay);
 	glutKeyboardFunc(onKeyInput);
@@ -82,6 +83,15 @@ BaseGameWindow::~BaseGameWindow()
 
 	delete (_pInput);
 	_pInput = NULL;
+
+	delete[] (_pTitle);
+	_pTitle = NULL;
+
+	delete (_pGame);
+	_pGame = NULL;
+
+	delete (_pRC);
+	_pRC = NULL;
 }
 
 /**
@@ -101,15 +111,23 @@ unsigned int BaseGameWindow::getDeltaTime() const
 }
 
 /**
+ * @return Average frames per second for the last second
+ */
+unsigned int BaseGameWindow::getFPS() const
+{
+	return BaseGameWindow::fps;
+}
+
+/**
  * @brief Renders everything to screen
  */
 void BaseGameWindow::render()
 {
-	if (_game != NULL)
+	if (_pGame != NULL)
 	{
-		_game->preRender(this);
-		_game->render(this, _pRC);
-		_game->postRender(this);
+		_pGame->preRender(this);
+		_pGame->render(this, _pRC);
+		_pGame->postRender(this);
 	}
 }
 
@@ -118,8 +136,32 @@ void BaseGameWindow::render()
  */
 void BaseGameWindow::update()
 {
-	if (_game != NULL)
-		_game->update(this, _pRC);
+	// Update frame rate in window title
+	if (BaseGameWindow::fps != BaseGameWindow::lastFps)
+	{
+		const char* title = getTitle();
+		char* newTitle = new char[32];
+		int i = 0;
+		for (; i < 32 - 10 && title[i] != '\0'; i++)
+		{
+			newTitle[i] = title[i];
+		}
+		newTitle[i] = '|';
+		newTitle[i + 1] = 'F';
+		newTitle[i + 2] = 'P';
+		newTitle[i + 3] = 'S';
+		newTitle[i + 4] = ':';
+		char fpsString[5];
+		sprintf(fpsString, "%d", BaseGameWindow::fps);
+		for (int j = 0; j < 5; j++)
+			newTitle[i + 5 + j] = fpsString[j];
+		setActive();
+		glutSetWindowTitle(newTitle);
+	}
+
+	// Update game object
+	if (_pGame != NULL)
+		_pGame->update(this, _pRC);
 }
 
 /**
@@ -166,7 +208,7 @@ void BaseGameWindow::mouseWheel(int change, int x, int y)
  */
 void BaseGameWindow::setOwner(BasicGame* game)
 {
-	_game = game;
+	_pGame = game;
 }
 
 /**
@@ -174,6 +216,7 @@ void BaseGameWindow::setOwner(BasicGame* game)
  */
 void BaseGameWindow::onDisplay()
 {
+	// Update windows
 	for (std::list<BaseGameWindow*>::const_iterator iterator =
 			BaseGameWindow::windows.begin(), end =
 			BaseGameWindow::windows.end(); iterator != end; ++iterator)
@@ -370,21 +413,24 @@ void BaseGameWindow::onMouseWheel(int button, int dir, int x, int y)
  */
 void BaseGameWindow::onIdle()
 {
-	glutPostRedisplay();
-
 	// Calculate fps
 	int curTime = glutGet(GLUT_ELAPSED_TIME);
 	BaseGameWindow::fpsAmount++;
-	if (curTime - BaseGameWindow::lastCumulativeTime > 1000)
+	if ((int) (curTime - BaseGameWindow::fpsTimeBase) > 1000)
 	{
-		fps = BaseGameWindow::fpsAmount * 1000.0
-				/ (curTime - BaseGameWindow::lastCumulativeTime);
+		BaseGameWindow::lastFps = BaseGameWindow::fps;
+		BaseGameWindow::fps = BaseGameWindow::fpsAmount * 1000.0
+				/ (curTime - BaseGameWindow::fpsTimeBase);
 		BaseGameWindow::fpsAmount = 0;
+		BaseGameWindow::fpsTimeBase = curTime;
 	}
 
 	// Calculate time
 	BaseGameWindow::deltaTime = curTime - BaseGameWindow::lastCumulativeTime;
 	BaseGameWindow::lastCumulativeTime = curTime;
+
+	// Redraw
+	glutPostRedisplay();
 }
 
 /**
@@ -489,6 +535,25 @@ void BaseGameWindow::setActive() const
 bool BaseGameWindow::isActive() const
 {
 	return getId() == glutGetWindow();
+}
+
+/**
+ * @param newTitle Sets a new title for this window
+ */
+void BaseGameWindow::setTitle(const char* newTitle)
+{
+	delete[] _pTitle;
+	_pTitle = newTitle;
+	setActive();
+	glutSetWindowTitle(_pTitle);
+}
+
+/**
+ * @return Title of the window
+ */
+const char* BaseGameWindow::getTitle() const
+{
+	return _pTitle;
 }
 
 /**

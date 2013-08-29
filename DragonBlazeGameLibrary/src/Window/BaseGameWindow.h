@@ -112,6 +112,16 @@ public:
 	bool isActive() const;
 
 	/**
+	 * @param newTitle Sets a new title for this window
+	 */
+	void setTitle(const char* newTitle);
+
+	/**
+	 * @return Title of the window
+	 */
+	const char* getTitle() const;
+
+	/**
 	 * @return ID of this window
 	 */
 	int getId() const;
@@ -130,6 +140,11 @@ public:
 	 * @return Time in milliseconds since last frame
 	 */
 	unsigned int getDeltaTime() const;
+
+	/**
+	 * @return Average frames per second for the last second
+	 */
+	unsigned int getFPS() const;
 
 protected:
 	/**
@@ -172,16 +187,17 @@ protected:
 private:
 	static std::list<BaseGameWindow*> windows; // List of all windows
 	static unsigned int deltaTime; // Time since last frame
-	static unsigned int lastCumulativeTime; // Cumulative time since application start
-	static unsigned int fpsTimeBase; // Time since application start when we last computed the frame rate
+	static int lastCumulativeTime; // Cumulative time since application start
+	static int fpsTimeBase; // Time since application start when we last computed the frame rate
 	static unsigned int fpsAmount; // Amount of frames since last computation of frame rate
 	static unsigned int fps; // Current frame rate
+	static unsigned int lastFps; // Last frame rate
 
-	const char* _title; // Window title
+	const char* _pTitle; // Window title
 	unsigned int _id; // Window ID
 	Input* _pInput; // Input handler
 	RenderContext* _pRC; // Render context
-	BasicGame* _game; // Game handler that owns this window
+	BasicGame* _pGame; // Game handler that owns this window
 
 	/**
 	 * @brief Sets the owner of this window
