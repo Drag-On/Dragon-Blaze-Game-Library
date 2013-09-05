@@ -123,7 +123,7 @@ unsigned int BaseGameWindow::getFPS() const
  */
 void BaseGameWindow::render()
 {
-	if (_pGame != NULL)
+	if (_pGame != NULL &&  glutGetWindow() != 0)
 	{
 		_pGame->preRender(this);
 		_pGame->render(this, _pRC);
