@@ -13,6 +13,7 @@
 
 #include <cstdio>
 #include <cassert>
+#include "Log/Log.h"
 #include "Math/Matrix.h"
 #include "Math/Vector.h"
 
@@ -20,8 +21,8 @@ using namespace dbgl;
 
 int testMatrix()
 {
-	printf("Starting Matrix test suite...\n");
-	printf("Constructors... ");
+	LOG->info("Starting Matrix test suite...");
+	LOG->info("Constructors... ");
 	// Default
 	Matrix<float,3,2> mat;
 	assert(mat[0][0] == 1);
@@ -34,8 +35,8 @@ int testMatrix()
 	mat2[0][1] = 2;
 	Matrix<float,3,2> mat3(mat2);
 	assert(mat3[0][0] == 3 && mat3[0][1] == 2);
-	printf("OK!\n");
-	printf("Methods... ");
+	LOG->info("OK!");
+	LOG->info("Methods... ");
 	// getWidth / height
 	assert(mat.getWidth() == 3);
 	assert(mat.getHeight() == 2);
@@ -46,8 +47,8 @@ int testMatrix()
 	assert(!mat.isZero());
 	// isIdentity
 	assert(mat.isIdentity());
-	printf("OK!\n");
-	printf("Operators... ");
+	LOG->info("OK!");
+	LOG->info("Operators... ");
 	// =
 	mat = mat2;
 	assert(mat == mat2);
@@ -98,8 +99,8 @@ int testMatrix()
 	// []
 	mat3 = Matrix<float,3,2>();
 	assert(mat3[0][0] == 1 && mat3[1][0] == 0);
-	printf("OK!\n");
-	printf("Done!\n");
+	LOG->info("OK!");
+	LOG->info("Done!");
 	return 0;
 }
 

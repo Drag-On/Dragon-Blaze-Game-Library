@@ -21,5 +21,13 @@ file(GLOB_RECURSE Base_Src
     "include/*.h"
     "src/*.cpp"
 )
+
+# include the right directory
+include_directories("${PROJECT_SOURCE_DIR}/include")
+
+# OpenGL
+find_package(OpenGL)
+
 add_library(DBGL_Base ${Base_Src})
+TARGET_LINK_LIBRARIES(DBGL_Base ${OPENGL_LIBRARIES})
 set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)

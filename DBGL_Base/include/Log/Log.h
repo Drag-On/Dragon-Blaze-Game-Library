@@ -17,9 +17,9 @@
 #include <string.h>
 #include <time.h>
 
-#define LOG DBGL::Log::get()
+#define LOG dbgl::Log::get()
 
-namespace DBGL
+namespace dbgl
 {
 
     /**
@@ -110,7 +110,7 @@ namespace DBGL
 	    const char* getCurTime(bool date = false);
     };
 
-} /* namespace DBGL */
+} /* namespace dbgl */
 
 #endif /* LOG_H_ */
 

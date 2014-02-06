@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include "DBGL_Base_Config.h"
+#include "Log/Log.h"
 
 int testVector2();
 int testVector3();
@@ -22,7 +23,8 @@ int testMatrix();
 
 int main()
 {
-	printf("DBGL Version %d.%d\n", DBGL_VERSION_MAJOR, DBGL_VERSION_MINOR);
+	LOG->setLogLevel((int)dbgl::LOGLEVEL::INFO);
+	LOG->info("DBGL Version %d.%d", DBGL_VERSION_MAJOR, DBGL_VERSION_MINOR);
 
 	testVector2();
 	testVector3();
@@ -33,6 +35,6 @@ int main()
 	testMatrix4x4();
 	testMatrix();
 
-	printf("Tests done!\n");
+	LOG->info("Tests done!");
 	return 0;
 }

@@ -13,6 +13,7 @@
 
 #include <cstdio>
 #include <cassert>
+#include "Log/Log.h"
 #include "Math/Matrix4x4.h"
 #include "Math/Vector4.h"
 
@@ -20,8 +21,8 @@ using namespace dbgl;
 
 int testMatrix4x4()
 {
-	printf("Starting Matrix4x4 test suite...\n");
-	printf("Constructors... ");
+	LOG->info("Starting Matrix4x4 test suite...");
+	LOG->info("Constructors... ");
 	// Default
 	Matrix4x4<float> mat;
 	assert(mat[0][0] == 1);
@@ -34,8 +35,8 @@ int testMatrix4x4()
 	mat2[0][1] = 2;
 	Matrix4x4<float> mat3(mat2);
 	assert(mat3[0][0] == 3 && mat3[0][1] == 2);
-	printf("OK!\n");
-	printf("Methods... ");
+	LOG->info("OK!");
+	LOG->info("Methods... ");
 	// getWidth / height
 	assert(mat.getWidth() == 4);
 	assert(mat.getHeight() == 4);
@@ -57,8 +58,8 @@ int testMatrix4x4()
 	assert(!mat.isZero());
 	// isIdentity
 	assert(mat.isIdentity());
-	printf("OK!\n");
-	printf("Operators... ");
+	LOG->info("OK!");
+	LOG->info("Operators... ");
 	// =
 	mat = mat2;
 	assert(mat == mat2);
@@ -105,8 +106,8 @@ int testMatrix4x4()
 	// []
 	mat3 = Matrix4x4<float>();
 	assert(mat3[0][0] == 1 && mat3[1][0] == 0);
-	printf("OK!\n");
-	printf("Done!\n");
+	LOG->info("OK!");
+	LOG->info("Done!");
 	return 0;
 }
 

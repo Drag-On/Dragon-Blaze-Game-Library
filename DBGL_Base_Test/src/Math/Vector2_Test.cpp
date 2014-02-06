@@ -14,14 +14,15 @@
 #include <cstdio>
 #include <cassert>
 #include <cmath>
+#include "Log/Log.h"
 #include "Math/Vector2.h"
 
 using namespace dbgl;
 
 int testVector2()
 {
-	printf("Starting Vector2 test suite...\n");
-	printf("Constructors... ");
+	LOG->info("Starting Vector2 test suite...");
+	LOG->info("Constructors... ");
 	Vector2<float> vec;
 	assert(vec[0] == 0);
 	assert(vec[1] == 0);
@@ -31,8 +32,8 @@ int testVector2()
 	Vector2<float> vec3(vec2);
 	assert(vec3[0] == -1.5f);
 	assert(vec3[1] == 3);
-	printf("OK!\n");
-	printf("Methods... ");
+	LOG->info("OK!");
+	LOG->info("Methods... ");
 	// getDimension()
 	assert(vec.getDimension() == 2);
 	// getX()
@@ -57,8 +58,8 @@ int testVector2()
 	// isZero
 	assert(vec.isZero());
 	assert(!vec2.isZero());
-	printf("OK!\n");
-	printf("Operators... ");
+	LOG->info("OK!");
+	LOG->info("Operators... ");
 	vec2[0] = -1.5;
 	vec2[1] = 3;
 	// =
@@ -124,8 +125,8 @@ int testVector2()
 	vec3 /= 0.5;
 	assert(vec3[0] == -3);
 	assert(vec3[1] == 6);
-	printf("OK!\n");
-	printf("Done!\n");
+	LOG->info("OK!");
+	LOG->info("Done!");
 	return 0;
 }
 

@@ -10,7 +10,7 @@
 
 #include "Log/Log.h"
 
-namespace DBGL
+namespace dbgl
 {
 
     // Init static variable
