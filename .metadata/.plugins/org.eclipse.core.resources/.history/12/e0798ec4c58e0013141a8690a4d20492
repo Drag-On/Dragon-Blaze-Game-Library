@@ -1,0 +1,68 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef VECTOR3_H_
+#define VECTOR3_H_
+
+#include<cstddef>
+#include<cmath>
+
+namespace dbgl
+{
+	template<typename T> class Vector3
+	{
+	public:
+		// Constructors
+		Vector3();
+		Vector3(T x, T y, T z);
+		Vector3(const Vector3<T> &other);
+		// Destructors
+		~Vector3();
+		// Methods
+		std::size_t getDimension() const;
+		T getX() const;
+		T getY() const;
+		T getZ() const;
+		T getSquaredLength() const;
+		T getLength() const;
+		void normalize();
+		Vector3<T> getNormalized() const;
+		Vector3<T> getCrossProduct(Vector3<T> rhs);
+		bool isZero();
+		// Operators
+		Vector3<T>& operator=(Vector3<T> const& rhs);
+		const Vector3<T> operator+(Vector3<T> const& rhs);
+		Vector3<T>& operator+=(Vector3<T> const& rhs);
+		const Vector3<T> operator-(Vector3<T> const& rhs);
+		Vector3<T>& operator-=(Vector3<T> const& rhs);
+		const T operator*(Vector3<T> const& rhs);
+		const Vector3<T> operator*(T const& rhs);
+		Vector3<T>& operator*=(T const& rhs);
+		Vector3<T>& operator*=(Vector3<T> const& rhs);
+		const Vector3<T> operator/(T const& rhs);
+		Vector3<T>& operator/=(T const& rhs);
+		Vector3<T> operator-() const;
+		bool operator==(Vector3<T> const& rhs);
+		bool operator!=(Vector3<T> const& rhs);
+		bool operator<(Vector3<T> const& rhs);
+		bool operator>(Vector3<T> const& rhs);
+		bool operator<=(Vector3<T> const& rhs);
+		bool operator>=(Vector3<T> const& rhs);
+		T& operator[](std::size_t const& index);
+		const T& operator[](std::size_t const& index) const;
+
+	private:
+		T _x, _y, _z;
+	};
+}
+
+#include "Vector3.imp"
+
+#endif /* VECTOR3_H_ */

@@ -1,0 +1,23 @@
+01:37:21 **** Incremental Build of configuration Debug for project DBGL_Base ****
+make -C "D:/Eigene Dateien/workspace/DBGL_Base/Debug" VERBOSE=1 -j4 all 
+make: Entering directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+"/D/Programme/CMake 2.8/bin/cmake.exe" -H"/D/Eigene Dateien/workspace/DBGL_Base" -B"/D/Eigene Dateien/workspace/DBGL_Base/Debug" --check-build-system CMakeFiles/Makefile.cmake 0
+"/D/Programme/CMake 2.8/bin/cmake.exe" -E cmake_progress_start "/D/Eigene Dateien/workspace/DBGL_Base/Debug/CMakeFiles" "/D/Eigene Dateien/workspace/DBGL_Base/Debug/CMakeFiles/progress.marks"
+make -f CMakeFiles/Makefile2 all
+make[1]: Entering directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+make -f CMakeFiles/DBGL_Base.dir/build.make CMakeFiles/DBGL_Base.dir/depend
+make[2]: Entering directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+"/D/Programme/CMake 2.8/bin/cmake.exe" -E cmake_depends "MSYS Makefiles" "/D/Eigene Dateien/workspace/DBGL_Base" "/D/Eigene Dateien/workspace/DBGL_Base" "/D/Eigene Dateien/workspace/DBGL_Base/Debug" "/D/Eigene Dateien/workspace/DBGL_Base/Debug" "/D/Eigene Dateien/workspace/DBGL_Base/Debug/CMakeFiles/DBGL_Base.dir/DependInfo.cmake" --color=
+make[2]: Leaving directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+make -f CMakeFiles/DBGL_Base.dir/build.make CMakeFiles/DBGL_Base.dir/build
+make[2]: Entering directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+make[2]: Nothing to be done for `CMakeFiles/DBGL_Base.dir/build'.
+make[2]: Leaving directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+"/D/Programme/CMake 2.8/bin/cmake.exe" -E cmake_progress_report "/D/Eigene Dateien/workspace/DBGL_Base/Debug/CMakeFiles" 
+Built target DBGL_Base
+make[1]: Leaving directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+"/D/Programme/CMake 2.8/bin/cmake.exe" -E cmake_progress_start "/D/Eigene Dateien/workspace/DBGL_Base/Debug/CMakeFiles" 0
+make: Leaving directory `/d/Eigene Dateien/workspace/DBGL_Base/Debug'
+
+01:37:22 Build Finished (took 618ms)
+

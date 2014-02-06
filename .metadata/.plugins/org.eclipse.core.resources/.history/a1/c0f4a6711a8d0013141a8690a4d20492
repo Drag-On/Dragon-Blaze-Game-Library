@@ -1,0 +1,198 @@
+//#include "../../include/Math/Vector2.h"
+#include <cstring>
+
+namespace dbgl
+{
+	template<typename T> Vector2<T>::Vector2() : _x(0), _y(0)
+	{
+	}
+	
+	template<typename T> Vector2<T>::Vector2(T x, T y) : _x(x), _y(y)
+	{
+	}
+	
+	template<typename T> Vector2<T>::Vector2(const Vector2<T> &other) :_x(other[0]), _y(other[1])
+	{
+	}
+
+	template<typename T> Vector2<T>::~Vector2()
+	{
+	}
+	
+	template<typename T> std::size_t Vector2<T>::getDimension() const
+	{
+		return 2;
+	}
+	
+	template<typename T> T Vector2<T>::getX() const
+	{
+		return _x;
+	}
+	
+	template<typename T> T Vector2<T>::getY() const
+	{
+		return _y;
+	}
+	
+	template<typename T> T Vector2<T>::getSquaredLength() const
+	{
+		T sqlen;
+		for(int i = 0; i < getDimension(); i++)
+			sqlen += (*this)[i] * (*this)[i];
+		return sqlen;
+	}
+	
+	template<typename T> T Vector2<T>::getLength() const
+	{
+		return (T)std::sqrt(static_cast<double>getSquaredLength());
+	}
+	
+	template<typename T> void Vector2<T>::normalize()
+	{
+		T length = getLength();
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] /= length;
+	}
+	
+	template<typename T> Vector2<T> Vector2<T>::getNormalized() const
+	{
+		Vector2<T> copy(*this);
+		copy.normalize();
+		return copy;
+	}
+	
+	template<typename T> Vector2<T>& Vector2<T>::operator=(Vector2<T> const& rhs) 
+	{ 
+		if (*this != rhs)
+		{ 
+			for(int i = 0; i < getDimension(); i++)
+				(*this)[i] = rhs[i];
+		} 
+		return *this;
+	}
+	
+	template<typename T> const Vector2<T> Vector2<T>::operator+(Vector2<T> const& rhs) 
+	{ 
+		Vector2<T> tmp(*this);
+		tmp += rhs;
+		return tmp;
+	}
+	
+	template<typename T> Vector2<T>& Vector2<T>::operator+=(Vector2<T> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] += rhs[i];
+		return *this;
+	}
+	
+	template<typename T> const Vector2<T> Vector2<T>::operator-(Vector2<T> const& rhs) 
+	{ 
+		Vector2<T> tmp(*this);
+		tmp -= rhs;
+		return tmp;
+	}
+		
+	template<typename T> Vector2<T>& Vector2<T>::operator-=(Vector2<T> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] -= rhs[i];
+		return *this;
+	}
+	
+	template<typename T> const T Vector2<T>::operator*(Vector2<T> const& rhs) 
+	{
+		T dotProd;
+		for(int i = 0; i < getDimension(); i++)
+			dotProd += (*this)[i] * rhs[i];
+		return dotProd;
+	}
+	
+	template<typename T> const Vector2<T> Vector2<T>::operator*(T const& rhs) 
+	{ 
+		Vector2<T> tmp(*this);
+		tmp *= rhs;
+		return tmp;
+	}
+		
+	template<typename T> Vector2<T>& Vector2<T>::operator*=(T const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] *= rhs;
+		return *this;
+	}
+	
+	template<typename T> const T Vector2<T>::operator/(Vector2<T> const& rhs) 
+	{
+		T dotProd;
+		for(int i = 0; i < getDimension(); i++)
+			dotProd += (*this)[i] / rhs[i];
+		return dotProd;
+	}
+	
+	template<typename T> const Vector2<T> Vector2<T>::operator/(T const& rhs) 
+	{ 
+		Vector2<T> tmp(*this);
+		tmp /= rhs;
+		return tmp;
+	}
+		
+	template<typename T> Vector2<T>& Vector2<T>::operator/=(T const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] /= rhs;
+		return *this;
+	}
+	
+	template<typename T> Vector2<T> Vector2<T>::operator-() const
+	{
+		Vector2<T> tmp(*this);
+		for(int i = 0; i < getDimension(); i++)
+			tmp[i] = -(*this)[i];
+		return tmp;
+	}
+	
+	template<typename T> bool Vector2<T>::operator==(Vector2<T> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			if((*this)[i] != rhs[i])
+				return false;
+		return true;
+	}
+	
+	template<typename T> bool Vector2<T>::operator!=(Vector2<T> const& rhs)
+	{
+		return !(*this == rhs);
+	}
+	
+	template<typename T> bool Vector2<T>::operator<(Vector2<T> const& rhs)
+	{
+		return this->getLength() < rhs.getLength();
+	}
+	
+	template<typename T> bool Vector2<T>::operator>(Vector2<T> const& rhs)
+	{
+		return this->getLength() > rhs.getLength();
+	}
+	
+	template<typename T> bool Vector2<T>::operator<=(Vector2<T> const& rhs)
+	{
+		return this->getLength() <= rhs.getLength();
+	}
+	
+	template<typename T> bool Vector2<T>::operator>=(Vector2<T> const& rhs)
+	{
+		return this->getLength() >= rhs.getLength();
+	}
+
+	template<typename T> T& Vector2<T>::operator[](std::size_t const& index)
+	{
+		assert(index < getDimension());
+		return (&_x)[index];
+	}
+	
+	template<typename T> const T& Vector2<T>::operator[](std::size_t const& index) const
+	{
+		assert(index < getDimension());
+		return (&_x)[index];
+	}
+}

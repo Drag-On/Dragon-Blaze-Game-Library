@@ -1,0 +1,71 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef MATRIX2X2_H_
+#define MATRIX2X2_H_
+
+#include "Vector2.h"
+
+namespace dbgl
+{
+	/// <summary>
+    	/// @brief Matrix of size 2 by 2
+    	/// @author Jan Moeller
+    	/// </summary>
+	template<typename T> class Matrix2x2
+	{
+	public:
+		// Constructors
+		/// <summary>
+		/// @brief Constructs a 2x2 identity matrix
+		/// </summary>
+		Matrix2x2();
+		/// <summary>
+		/// @brief Copies another 2x2 matrix
+		/// </summary>
+		Matrix2x2(const Matrix2x2<T> &other);
+		// Destructors
+		~Matrix2x2();
+		// Methods
+		int getWidth() const;
+		int getHeight() const;
+		void transpose();
+		Matrix2x2<T> getTransposed() const;
+		void invert();
+		Matrix2x2<T> getInverted() const;
+		bool isZero();
+		bool isIdentity();
+		// Operators
+		Matrix2x2<T>& operator=(Matrix2x2<T> const& rhs);
+		const Matrix2x2<T> operator+(Matrix2x2<T> const& rhs);
+		Matrix2x2<T>& operator+=(Matrix2x2<T> const& rhs);
+		const Matrix2x2<T> operator-(Matrix2x2<T> const& rhs);
+		Matrix2x2<T>& operator-=(Matrix2x2<T> const& rhs);
+		const Matrix2x2<T> operator*(Matrix2x2<T> const& rhs);
+		const Vector2<T> operator*(Vector2<T> const& rhs);
+		const Matrix2x2<T> operator*(T const& rhs);
+		Matrix2x2<T>& operator*=(Matrix2x2<T> const& rhs);
+		Matrix2x2<T>& operator*=(T const& rhs);
+		const Matrix2x2<T> operator/(T const& rhs);
+		Matrix2x2<T>& operator/=(T const& rhs);
+		Matrix2x2<T> operator-() const;
+		bool operator==(Matrix2x2<T> const& rhs);
+		bool operator!=(Matrix2x2<T> const& rhs);
+		Vector2<T>& operator[](std::size_t const& index);
+		const Vector2<T>& operator[](std::size_t const& index) const;
+
+	private:
+		Vector2<T> _columns[2];
+	};
+}
+
+#include "Matrix2x2.imp"
+
+#endif /* MATRIX2X2_H_ */

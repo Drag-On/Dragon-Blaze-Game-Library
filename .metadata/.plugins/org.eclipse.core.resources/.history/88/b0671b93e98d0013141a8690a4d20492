@@ -1,0 +1,54 @@
+#ifndef MATRIX_H_
+#define MATRIX_H_
+
+#include "Vector.h"
+
+namespace dbgl
+{
+	/// <summary>
+	/// Matrix of arbitrary size
+	/// </summary>
+	template<typename T, unsigned int N, unsigned int M> class Matrix
+	{
+	public:
+		// Constructors
+		Matrix();
+		Matrix(const Matrix<T> &other);
+		// Destructors
+		~Matrix();
+		// Methods
+		int getWidth() const;
+		int getHeight() const;
+		void transpose();
+		Matrix<T> getTransposed() const;
+		void invert();
+		Matrix<T> getInverted() const;
+		bool isZero();
+		bool isIdentity();
+		// Operators
+		Matrix<T>& operator=(Matrix<T> const& rhs);
+		const Matrix<T> operator+(Matrix<T> const& rhs);
+		Matrix<T>& operator+=(Matrix<T> const& rhs);
+		const Matrix<T> operator-(Matrix<T> const& rhs);
+		Matrix<T>& operator-=(Matrix<T> const& rhs);
+		const Matrix<T> operator*(Matrix<T> const& rhs);
+		const Vector<T> operator*(Vector<T> const& rhs);
+		const Matrix<T> operator*(T const& rhs);
+		Matrix<T>& operator*=(Matrix<T> const& rhs);
+		Matrix<T>& operator*=(T const& rhs);
+		const Matrix<T> operator/(T const& rhs);
+		Matrix<T>& operator/=(T const& rhs);
+		Matrix<T> operator-() const;
+		bool operator==(Matrix<T> const& rhs);
+		bool operator!=(Matrix<T> const& rhs);
+		Vector<T>& operator[](std::size_t const& index);
+		const Vector<T>& operator[](std::size_t const& index) const;
+
+	private:
+		Vector<T, M> _columns[N];
+	};
+}
+
+#include "Matrix.imp"
+
+#endif /* MATRIX_H_ */

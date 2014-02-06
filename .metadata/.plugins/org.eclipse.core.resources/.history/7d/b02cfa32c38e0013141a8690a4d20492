@@ -1,0 +1,3 @@
+// Version info
+#define DBGL_VERSION_MAJOR 0
+#define DBGL_VERSION_MINOR 1

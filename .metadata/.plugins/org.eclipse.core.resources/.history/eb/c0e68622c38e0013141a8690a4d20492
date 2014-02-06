@@ -1,0 +1,216 @@
+namespace dbgl
+{
+	template<typename T> Matrix2x2<T>::Matrix2x2()
+	{
+		_columns[0] = Vector2<T>(1,0);
+		_columns[1] = Vector2<T>(0,1);
+	}
+	
+	template<typename T> Matrix2x2<T>::Matrix2x2(const Matrix2x2<T> &other)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				_columns[x][y] = other[x][y];
+	}
+
+	template<typename T> Matrix2x2<T>::~Matrix2x2()
+	{
+	}
+	
+	template<typename T> int Matrix2x2<T>::getWidth() const
+	{
+		return 2;
+	}
+	
+	template<typename T> int Matrix2x2<T>::getHeight() const
+	{
+		return 2;
+	}
+	
+	template<typename T> void Matrix2x2<T>::transpose()
+	{
+		Matrix2x2<T> copy(*this); // Need old values
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				(*this)[x][y] = copy[y][x];
+	}
+	
+	template<typename T> Matrix2x2<T> Matrix2x2<T>::getTransposed() const
+	{
+		Matrix2x2<T> copy(*this);
+		copy.transpose();
+		return copy;
+	}
+	
+	template<typename T> void Matrix2x2<T>::invert()
+	{
+		Matrix2x2<T> copy(*this);
+		T determinant = copy[0][0] * copy[1][1] - copy[1][0] * copy[0][1];
+		assert(determinant != 0);
+		(*this)[0][0] = copy[1][1];
+		(*this)[1][0] = -copy[1][0];
+		(*this)[0][1] = -copy[0][1];
+		(*this)[1][1] = copy[0][0];
+		(*this) *= 1 / determinant;
+	}
+	
+	template<typename T> Matrix2x2<T> Matrix2x2<T>::getInverted() const
+	{
+		Matrix2x2<T> copy(*this);
+		copy.invert();
+		return copy;
+	}
+	
+	template<typename T> bool Matrix2x2<T>::isZero()
+	{
+		for(int i = 0; i < getWidth(); i++)
+			if(!(*this)[i].isZero())
+				return false;
+		return true;
+	}
+	
+	template<typename T> bool Matrix2x2<T>::isIdentity()
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+			{
+				if(x == y && (*this)[x][y] != 1)
+					return false;
+				if(x != y && (*this)[x][y] != 0)
+					return false;
+			}
+		return true;
+	}
+	
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator=(Matrix2x2<T> const& rhs) 
+	{ 
+		if (*this != rhs)
+		{ 
+			for(int i = 0; i < getWidth(); i++)
+				(*this)[i] = rhs[i];
+		} 
+		return *this;
+	}
+	
+	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator+(Matrix2x2<T> const& rhs) 
+	{ 
+		Matrix2x2<T> tmp(*this);
+		tmp += rhs;
+		return tmp;
+	}
+	
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator+=(Matrix2x2<T> const& rhs)
+	{
+		for(int i = 0; i < getWidth(); i++)
+			(*this)[i] += rhs[i];
+		return *this;
+	}
+	
+	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator-(Matrix2x2<T> const& rhs) 
+	{ 
+		Matrix2x2<T> tmp(*this);
+		tmp -= rhs;
+		return tmp;
+	}
+		
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator-=(Matrix2x2<T> const& rhs)
+	{
+		for(int i = 0; i < getWidth(); i++)
+			(*this)[i] -= rhs[i];
+		return *this;
+	}
+	
+	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator*(Matrix2x2<T> const& rhs) 
+	{
+		Matrix2x2<T> copy(*this);
+		copy *= rhs;
+		return copy;
+	}
+	
+	template<typename T> const Vector2<T> Matrix2x2<T>::operator*(Vector2<T> const& rhs)
+	{
+		Vector2<T> vec;
+		for(int y = 0; y < getHeight(); y++)
+			for(int x = 0; x < getWidth(); x++)
+				vec[y] += (*this)[x][y] * rhs[x];
+		return vec;
+	}
+	
+	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator*(T const& rhs) 
+	{ 
+		Matrix2x2<T> tmp(*this);
+		tmp *= rhs;
+		return tmp;
+	}
+	
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator*=(Matrix2x2<T> const& rhs) 
+	{
+		Matrix2x2<T> copy(*this);
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+			{
+				(*this)[x][y] = 0;
+				for(int i = 0; i < getHeight(); i++)
+					(*this)[x][y] += copy[i][y] * rhs[x][i];
+			}
+		return *this;
+	}
+		
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator*=(T const& rhs)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				(*this)[x][y] *= rhs;
+		return *this;
+	}
+	
+	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator/(T const& rhs) 
+	{ 
+		Matrix2x2<T> tmp(*this);
+		tmp /= rhs;
+		return tmp;
+	}
+		
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator/=(T const& rhs)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				(*this)[x][y] /= rhs;
+		return *this;
+	}
+	
+	template<typename T> Matrix2x2<T> Matrix2x2<T>::operator-() const
+	{
+		Matrix2x2<T> tmp(*this);
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				tmp[x][y] = -(*this)[x][y];
+		return tmp;
+	}
+	
+	template<typename T> bool Matrix2x2<T>::operator==(Matrix2x2<T> const& rhs)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				if((*this)[x][y] != rhs[x][y])
+					return false;
+		return true;
+	}
+	
+	template<typename T> bool Matrix2x2<T>::operator!=(Matrix2x2<T> const& rhs)
+	{
+		return !(*this == rhs);
+	}
+
+	template<typename T> Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index)
+	{
+		assert(index < getWidth());
+		return _columns[index];
+	}
+	
+	template<typename T> const Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index) const
+	{
+		assert(index < getWidth());
+		return _columns[index];
+	}
+}

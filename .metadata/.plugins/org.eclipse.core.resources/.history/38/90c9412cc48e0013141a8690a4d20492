@@ -1,0 +1,71 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef MATRIX4X4_H_
+#define MATRIX4X4_H_
+
+#include "Vector4.h"
+
+namespace dbgl
+{
+	/// <summary>
+	/// @brief Matrix of size 4 by 4
+	/// @author Jan Moeller
+	/// </summary>
+	template<typename T> class Matrix4x4
+	{
+	public:
+		// Constructors
+		/// <summary>
+		/// @brief Constructs a 3x3 identity matrix
+		/// </summary>
+		Matrix4x4();
+		/// <summary>
+		/// @brief Copies another 3x3 matrix
+		/// </summary>
+		Matrix4x4(const Matrix4x4<T> &other);
+		// Destructors
+		~Matrix4x4();
+		// Methods
+		int getWidth() const;
+		int getHeight() const;
+		void transpose();
+		Matrix4x4<T> getTransposed() const;
+		void invert();
+		Matrix4x4<T> getInverted() const;
+		bool isZero();
+		bool isIdentity();
+		// Operators
+		Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
+		const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs);
+		Matrix4x4<T>& operator+=(Matrix4x4<T> const& rhs);
+		const Matrix4x4<T> operator-(Matrix4x4<T> const& rhs);
+		Matrix4x4<T>& operator-=(Matrix4x4<T> const& rhs);
+		const Matrix4x4<T> operator*(Matrix4x4<T> const& rhs);
+		const Vector4<T> operator*(Vector4<T> const& rhs);
+		const Matrix4x4<T> operator*(T const& rhs);
+		Matrix4x4<T>& operator*=(Matrix4x4<T> const& rhs);
+		Matrix4x4<T>& operator*=(T const& rhs);
+		const Matrix4x4<T> operator/(T const& rhs);
+		Matrix4x4<T>& operator/=(T const& rhs);
+		Matrix4x4<T> operator-() const;
+		bool operator==(Matrix4x4<T> const& rhs);
+		bool operator!=(Matrix4x4<T> const& rhs);
+		Vector4<T>& operator[](std::size_t const& index);
+		const Vector4<T>& operator[](std::size_t const& index) const;
+
+	private:
+		Vector4<T> _columns[4];
+	};
+}
+
+#include "Matrix4x4.imp"
+
+#endif /* MATRIX4X4_H_ */

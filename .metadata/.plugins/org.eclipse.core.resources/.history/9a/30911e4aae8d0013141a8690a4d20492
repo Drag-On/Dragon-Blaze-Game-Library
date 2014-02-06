@@ -1,0 +1,80 @@
+#ifndef MATRIX2_TEST_CPP
+#define MATRIX2_TEST_CPP
+
+#include <cstdio>
+#include <cassert>
+#include "Math/Matrix2x2.h"
+#include "Math/Vector2.h"
+
+using namespace dbgl;
+
+int testMatrix2x2()
+{
+	printf("Starting Matrix2x2 test suite...\n");
+	printf("Constructors... ");
+	// Default
+	Matrix2x2<float> mat;
+	assert(mat[0][0] == 1);
+	assert(mat[0][1] == 0);
+	assert(mat[1][0] == 0);
+	assert(mat[1][1] == 1);
+	// Copy
+	Matrix2x2<float> mat2;
+	mat2[0][0] = 3;
+	mat2[0][1] = 2;
+	Matrix2x2<float> mat3(mat2);
+	assert(mat3[0][0] == 3 && mat3[0][1] == 2);
+	printf("OK!\n");
+	printf("Methods... ");
+	// getWidth / height
+	assert(mat.getWidth() == 2);
+	assert(mat.getHeight() == 2);
+	// transpose
+	auto temp = Matrix2x2<float>(mat3);
+	temp.transpose();
+	assert(temp[0][0] == mat3[0][0] && temp[0][1] == mat3[1][0] && temp[1][0] == mat3[0][1] && temp[1][1] == mat3[1][1]);
+	// getTransposed
+	assert(temp.getTransposed() == mat3);
+	// invert
+	temp = mat3;
+	mat3.invert();
+	temp = temp * mat3;
+	printf("(%f %f)\n(%f %f)\n", temp[0][0], temp[1][0], temp[0][1], temp[1][1]);
+	//assert(temp[0][0] == 1 && temp[0][1] == 0 && temp[1][0] == 0 && temp[1][1] == 1);
+	// getInverted
+	//assert(temp.getInverted() == mat3);
+	// isZero
+	assert(!mat.isZero());
+	printf("OK!\n");
+	printf("Operators... ");
+	// =
+	mat = mat2;
+	assert(mat == mat2);
+	// +
+	temp = mat + mat2;
+	assert(temp[0] == mat[0] + mat2[0] && temp[1] == mat[1] + mat2[1]);
+	// +=
+	mat += temp;
+	assert(mat[0] == temp[0] + mat2[0] && mat[1] == temp[1] + mat2[1]);
+	// -
+	temp = mat - mat2;
+	assert(temp[0] == mat[0] - mat2[0] && temp[1] == mat[1] - mat2[1]);
+	// -=
+	mat = mat2;
+	mat -= temp;
+	assert(mat[0] == mat2[0] - temp[0] && mat[1] == mat2[1] - temp[1]);
+	// *
+	temp = mat * mat2;
+	// *=
+	// /
+	// /=
+	// -(unary)
+	// ==
+	// !=
+	// []
+	printf("OK!\n");
+	printf("Done!\n");
+	return 0;
+}
+
+#endif

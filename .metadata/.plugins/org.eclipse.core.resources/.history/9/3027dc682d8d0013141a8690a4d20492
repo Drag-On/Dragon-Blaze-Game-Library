@@ -1,0 +1,205 @@
+namespace dbgl
+{
+	template<typename T, int dimension> Vector<T, int>::Vector()
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] = 0;
+	}
+	
+	template<typename T, int dimension> Vector<T, int>::Vector(const Vector<T, int> &other)
+	{
+		assert(this->getDimension() == other.getDimension());
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] = other[i];
+	}
+
+	template<typename T, int dimension> Vector<T, int>::~Vector()
+	{
+	}
+	
+	template<typename T, int dimension> std::size_t Vector<T, int>::getDimension() const
+	{
+		return dimension;
+	}
+	
+	template<typename T, int dimension> T Vector<T, int>::getSquaredLength() const
+	{
+		T sqlen = 0;
+		for(int i = 0; i < getDimension(); i++)
+			sqlen += (*this)[i] * (*this)[i];
+		return sqlen;
+	}
+	
+	template<typename T, int dimension> T Vector<T, int>::getLength() const
+	{
+		return static_cast<T>(std::sqrt(static_cast<double>(getSquaredLength())));
+	}
+	
+	template<typename T, int dimension> void Vector<T, int>::normalize()
+	{
+		T length = getLength();
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] /= length;
+	}
+	
+	template<typename T, int dimension> Vector<T, int> Vector<T, int>::getNormalized() const
+	{
+		Vector<T, int> copy(*this);
+		copy.normalize();
+		return copy;
+	}
+	
+	template<typename T, int dimension> Vector<T, int> Vector<T, int>::getCrossProduct(Vector<T, int> rhs)
+	{
+		Vector<T, int> copy(*this);
+		copy *= rhs;
+		return copy;
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::isZero()
+	{
+		for(int i = 0; i < getDimension(); i++)
+			if((*this)[i] != 0)
+				return false;
+		return true;
+	}
+	
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator=(Vector<T, int> const& rhs) 
+	{ 
+		if (*this != rhs)
+		{ 
+			for(int i = 0; i < getDimension(); i++)
+				(*this)[i] = rhs[i];
+		} 
+		return *this;
+	}
+	
+	template<typename T, int dimension> const Vector<T, int> Vector<T, int>::operator+(Vector<T, int> const& rhs) 
+	{ 
+		Vector<T, int> tmp(*this);
+		tmp += rhs;
+		return tmp;
+	}
+	
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator+=(Vector<T, int> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] += rhs[i];
+		return *this;
+	}
+	
+	template<typename T, int dimension> const Vector<T, int> Vector<T, int>::operator-(Vector<T, int> const& rhs) 
+	{ 
+		Vector<T, int> tmp(*this);
+		tmp -= rhs;
+		return tmp;
+	}
+		
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator-=(Vector<T, int> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] -= rhs[i];
+		return *this;
+	}
+	
+	template<typename T, int dimension> const T Vector<T, int>::operator*(Vector<T, int> const& rhs) 
+	{
+		T dotProd = 0;
+		for(int i = 0; i < getDimension(); i++)
+			dotProd += (*this)[i] * rhs[i];
+		return dotProd;
+	}
+	
+	template<typename T, int dimension> const Vector<T, int> Vector<T, int>::operator*(T const& rhs) 
+	{ 
+		Vector<T, int> tmp(*this);
+		tmp *= rhs;
+		return tmp;
+	}
+		
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator*=(T const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] *= rhs;
+		return *this;
+	}
+	
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator*=(Vector<T, int> const& rhs)
+	{
+		auto temp(*this); // Need copy of unmodified data
+		for(int i = 0; i < getDimension(); i++)
+		{
+			int i1 = (i+1) % getDimension();
+			int i2 = (i+2) % getDimension();
+			(*this)[i] = temp[i1]*rhs[i2] - temp[i2]*rhs[i1];
+		}
+		return *this;
+	}
+	
+	template<typename T, int dimension> const Vector<T, int> Vector<T, int>::operator/(T const& rhs) 
+	{ 
+		Vector<T, int> tmp(*this);
+		tmp /= rhs;
+		return tmp;
+	}
+		
+	template<typename T, int dimension> Vector<T, int>& Vector<T, int>::operator/=(T const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			(*this)[i] /= rhs;
+		return *this;
+	}
+	
+	template<typename T, int dimension> Vector<T, int> Vector<T, int>::operator-() const
+	{
+		Vector<T, int> tmp(*this);
+		for(int i = 0; i < getDimension(); i++)
+			tmp[i] = -(*this)[i];
+		return tmp;
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator==(Vector<T, int> const& rhs)
+	{
+		for(int i = 0; i < getDimension(); i++)
+			if((*this)[i] != rhs[i])
+				return false;
+		return true;
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator!=(Vector<T, int> const& rhs)
+	{
+		return !(*this == rhs);
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator<(Vector<T, int> const& rhs)
+	{
+		return this->getLength() < rhs.getLength();
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator>(Vector<T, int> const& rhs)
+	{
+		return this->getLength() > rhs.getLength();
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator<=(Vector<T, int> const& rhs)
+	{
+		return this->getLength() <= rhs.getLength();
+	}
+	
+	template<typename T, int dimension> bool Vector<T, int>::operator>=(Vector<T, int> const& rhs)
+	{
+		return this->getLength() >= rhs.getLength();
+	}
+
+	template<typename T, int dimension> T& Vector<T, int>::operator[](std::size_t const& index)
+	{
+		assert(index < getDimension());
+		return _elements[index];
+	}
+	
+	template<typename T, int dimension> const T& Vector<T, int>::operator[](std::size_t const& index) const
+	{
+		assert(index < getDimension());
+		return _elements[index];
+	}
+}

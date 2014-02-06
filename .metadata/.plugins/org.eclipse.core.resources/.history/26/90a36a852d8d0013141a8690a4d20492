@@ -1,0 +1,54 @@
+#ifndef VECTOR_H_
+#define VECTOR_H_
+
+#include<cstddef>
+#include<cmath>
+
+namespace dbgl
+{
+	template<typename T, unsigned int N> class Vector
+	{
+	public:
+		// Constructors
+		Vector();
+		Vector(const Vector<T, int> &other);
+		// Destructors
+		~Vector();
+		// Methods
+		std::size_t getDimension() const;
+		T getSquaredLength() const;
+		T getLength() const;
+		void normalize();
+		Vector<T, int> getNormalized() const;
+		Vector<T, int> getCrossProduct(Vector<T, int> rhs);
+		bool isZero();
+		// Operators
+		Vector<T, int>& operator=(Vector<T, int> const& rhs);
+		const Vector<T, int> operator+(Vector<T, int> const& rhs);
+		Vector<T, int>& operator+=(Vector<T, int> const& rhs);
+		const Vector<T, int> operator-(Vector<T, int> const& rhs);
+		Vector<T, int>& operator-=(Vector<T, int> const& rhs);
+		const T operator*(Vector<T, int> const& rhs);
+		const Vector<T, int> operator*(T const& rhs);
+		Vector<T, int>& operator*=(T const& rhs);
+		Vector<T, int>& operator*=(Vector<T, int> const& rhs);
+		const Vector<T, int> operator/(T const& rhs);
+		Vector<T, int>& operator/=(T const& rhs);
+		Vector<T, int> operator-() const;
+		bool operator==(Vector<T, int> const& rhs);
+		bool operator!=(Vector<T, int> const& rhs);
+		bool operator<(Vector<T, int> const& rhs);
+		bool operator>(Vector<T, int> const& rhs);
+		bool operator<=(Vector<T, int> const& rhs);
+		bool operator>=(Vector<T, int> const& rhs);
+		T& operator[](std::size_t const& index);
+		const T& operator[](std::size_t const& index) const;
+
+	private:
+		T _elements[N];
+	};
+}
+
+#include "Vector.imp"
+
+#endif /* VECTOR_H_ */

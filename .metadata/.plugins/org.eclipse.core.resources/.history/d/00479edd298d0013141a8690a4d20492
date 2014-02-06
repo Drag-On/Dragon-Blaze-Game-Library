@@ -1,0 +1,55 @@
+#ifndef VECTOR4_H_
+#define VECTOR4_H_
+
+#include<cstddef>
+#include<cmath>
+
+namespace dbgl
+{
+	template<typename T, int dimension> class Vector4
+	{
+	public:
+		// Constructors
+		Vector4();
+		Vector4(T x, T y, T z, T w);
+		Vector4(const Vector4<typename T, int dimension> &other);
+		// Destructors
+		~Vector4();
+		// Methods
+		std::size_t getDimension() const;
+		T getSquaredLength() const;
+		T getLength() const;
+		void normalize();
+		Vector4<T> getNormalized() const;
+		Vector4<T> getCrossProduct(Vector4<T> rhs);
+		bool isZero();
+		// Operators
+		Vector4<T>& operator=(Vector4<T> const& rhs);
+		const Vector4<T> operator+(Vector4<T> const& rhs);
+		Vector4<T>& operator+=(Vector4<T> const& rhs);
+		const Vector4<T> operator-(Vector4<T> const& rhs);
+		Vector4<T>& operator-=(Vector4<T> const& rhs);
+		const T operator*(Vector4<T> const& rhs);
+		const Vector4<T> operator*(T const& rhs);
+		Vector4<T>& operator*=(T const& rhs);
+		Vector4<T>& operator*=(Vector4<T> const& rhs);
+		const Vector4<T> operator/(T const& rhs);
+		Vector4<T>& operator/=(T const& rhs);
+		Vector4<T> operator-() const;
+		bool operator==(Vector4<T> const& rhs);
+		bool operator!=(Vector4<T> const& rhs);
+		bool operator<(Vector4<T> const& rhs);
+		bool operator>(Vector4<T> const& rhs);
+		bool operator<=(Vector4<T> const& rhs);
+		bool operator>=(Vector4<T> const& rhs);
+		T& operator[](std::size_t const& index);
+		const T& operator[](std::size_t const& index) const;
+
+	private:
+		T _elements[];
+	};
+}
+
+#include "Vector4.imp"
+
+#endif /* VECTOR4_H_ */

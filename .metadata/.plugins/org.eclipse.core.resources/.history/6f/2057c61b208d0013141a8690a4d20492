@@ -1,0 +1,57 @@
+#ifndef VECTOR2_H_
+#define VECTOR2_H_
+
+#include<cstddef>
+#include<limits>
+#include<cmath>
+
+namespace dbgl
+{
+	template<typename T> class Vector2
+	{
+	public:
+		// Constructors
+		Vector2();
+		Vector2(T x, T y);
+		Vector2(const Vector2<T> &other);
+		// Destructors
+		~Vector2();
+		// Methods
+		std::size_t getDimension() const;
+		T getX() const;
+		T getY() const;
+		T getSquaredLength() const;
+		T getLength() const;
+		void normalize();
+		Vector2<T> getNormalized() const;
+		// Operators
+		Vector2<T>& operator=(Vector2<T> const& rhs);
+		const Vector2<T> operator+(Vector2<T> const& rhs);
+		Vector2<T>& operator+=(Vector2<T> const& rhs);
+		const Vector2<T> operator-(Vector2<T> const& rhs);
+		Vector2<T>& operator-=(Vector2<T> const& rhs);
+		const T operator*(Vector2<T> const& rhs);
+		const Vector2<T> operator*(T const& rhs);
+		Vector2<T>& operator*=(T const& rhs);
+		Vector2<T>& operator*=(Vector2<T> const& rhs);
+		const T operator/(Vector2<T> const& rhs);
+		const Vector2<T> operator/(T const& rhs);
+		Vector2<T>& operator/=(T const& rhs);
+		Vector2<T> operator-() const;
+		bool operator==(Vector2<T> const& rhs);
+		bool operator!=(Vector2<T> const& rhs);
+		bool operator<(Vector2<T> const& rhs);
+		bool operator>(Vector2<T> const& rhs);
+		bool operator<=(Vector2<T> const& rhs);
+		bool operator>=(Vector2<T> const& rhs);
+		T& operator[](std::size_t const& index);
+		const T& operator[](std::size_t const& index) const;
+
+	private:
+		T _x, _y;
+	};
+}
+
+#include "Vector2.imp"
+
+#endif /* VECTOR2_H_ */

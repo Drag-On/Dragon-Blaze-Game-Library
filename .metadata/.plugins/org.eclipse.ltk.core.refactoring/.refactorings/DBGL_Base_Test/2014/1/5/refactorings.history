@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;DBGL_Base_Test/src/Math/Matrix2.cpp&apos; to &apos;Matrix2_Test.cpp&apos;" description="Rename resource &apos;Matrix2.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/Math/Matrix2.cpp" name="Matrix2_Test.cpp" stamp="1391003509602" updateReferences="true"/>
+</session>

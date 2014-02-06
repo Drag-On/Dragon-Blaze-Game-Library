@@ -1,0 +1,54 @@
+#ifndef MATRIX3X3_H_
+#define MATRIX3X3_H_
+
+#include "Vector3.h"
+
+namespace dbgl
+{
+	/// <summary>
+	/// Matrix of size 3 by 3
+	/// </summary>
+	template<typename T> class Matrix3x3
+	{
+	public:
+		// Constructors
+		Matrix3x3();
+		Matrix3x3(const Matrix3x3<T> &other);
+		// Destructors
+		~Matrix3x3();
+		// Methods
+		int getWidth() const;
+		int getHeight() const;
+		void transpose();
+		Matrix3x3<T> getTransposed() const;
+		void invert();
+		Matrix3x3<T> getInverted() const;
+		bool isZero();
+		bool isIdentity();
+		// Operators
+		Matrix3x3<T>& operator=(Matrix3x3<T> const& rhs);
+		const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs);
+		Matrix3x3<T>& operator+=(Matrix3x3<T> const& rhs);
+		const Matrix3x3<T> operator-(Matrix3x3<T> const& rhs);
+		Matrix3x3<T>& operator-=(Matrix3x3<T> const& rhs);
+		const Matrix3x3<T> operator*(Matrix3x3<T> const& rhs);
+		const Vector3<T> operator*(Vector3<T> const& rhs);
+		const Matrix3x3<T> operator*(T const& rhs);
+		Matrix3x3<T>& operator*=(Matrix3x3<T> const& rhs);
+		Matrix3x3<T>& operator*=(T const& rhs);
+		const Matrix3x3<T> operator/(T const& rhs);
+		Matrix3x3<T>& operator/=(T const& rhs);
+		Matrix3x3<T> operator-() const;
+		bool operator==(Matrix3x3<T> const& rhs);
+		bool operator!=(Matrix3x3<T> const& rhs);
+		Vector3<T>& operator[](std::size_t const& index);
+		const Vector3<T>& operator[](std::size_t const& index) const;
+
+	private:
+		Vector3<T> _columns[3];
+	};
+}
+
+#include "Matrix3x3.imp"
+
+#endif /* MATRIX3X3_H_ */
