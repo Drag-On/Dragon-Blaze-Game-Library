@@ -1,6 +1,0 @@
-14:46:43 **** Incremental Build of configuration Debug for project DBGL_Base_2 ****
-Info: Internal Builder is used for build
-g++ -shared -o libDBGL_Base_2.dll "src\\Math\\Vector2.o" "src\\Math\\Matrix2.o" 
-
-14:46:43 Build Finished (took 146ms)
-
