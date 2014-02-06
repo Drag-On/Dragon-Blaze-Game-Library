@@ -216,6 +216,64 @@ namespace dbgl
 		return true;
 	}
 	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationX(T angle)
+	{
+		Matrix4x4 mat;
+		T cosAngle = cos(angle);
+		T sinAngle = sin(angle);
+		mat[1][1] = cosAngle;
+		mat[2][1] = -sinAngle;
+		mat[1][2] = sinAngle;
+		mat[2][2] = cosAngle;
+		return mat;
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationY(T angle)
+	{
+		Matrix4x4 mat;
+		T cosAngle = cos(angle);
+		T sinAngle = sin(angle);
+		mat[0][0] = cosAngle;
+		mat[2][0] = sinAngle;
+		mat[0][2] = -sinAngle;
+		mat[2][2] = cosAngle;
+		return mat;
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationZ(T angle)
+	{
+		Matrix4x4 mat;
+		T cosAngle = cos(angle);
+		T sinAngle = sin(angle);
+		mat[0][0] = cosAngle;
+		mat[1][0] = -sinAngle;
+		mat[0][1] = sinAngle;
+		mat[1][1] = cosAngle;
+		return mat;
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(T xAngle, T yAngle, T zAngle)
+	{
+	    return makeRotationX(xAngle) * makeRotationY(yAngle) * makeRotationZ(zAngle);
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(Vector4<T> vec, T angle)
+	{
+		Matrix4x4<T> mat;
+		T cosAngle = cos(angle);
+		T sinAngle = sin(angle);
+		mat[0][0] = vec[0] * vec[0] * (1 - cosAngle) + cosAngle;
+		mat[1][0] = vec[0] * vec[1] * (1 - cosAngle) - vec[2] * sinAngle;
+		mat[2][0] = vec[0] * vec[2] * (1 - cosAngle) + vec[1] * sinAngle;
+		mat[0][1] = vec[1] * vec[0] * (1 - cosAngle) + vec[2] * sinAngle;
+		mat[1][1] = vec[1] * vec[1] * (1 - cosAngle) + cosAngle;
+		mat[2][1] = vec[1] * vec[2] * (1 - cosAngle) - vec[0] * sinAngle;
+		mat[0][2] = vec[2] * vec[0] * (1 - cosAngle) - vec[1] * sinAngle;
+		mat[1][2] = vec[2] * vec[1] * (1 - cosAngle) + vec[0] * sinAngle;
+		mat[2][2] = vec[2] * vec[2] * (1 - cosAngle) + cosAngle;
+		return mat;
+	}
+	
 	template<typename T> Matrix4x4<T>& Matrix4x4<T>::operator=(Matrix4x4<T> const& rhs) 
 	{ 
 		if (*this != rhs)

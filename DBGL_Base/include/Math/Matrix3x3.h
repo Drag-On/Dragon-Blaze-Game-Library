@@ -69,6 +69,34 @@ namespace dbgl
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
 	    bool isIdentity();
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angle
+	    /// @param angle Angle to rotate around the x axis
+	    /// </summary>
+	    static Matrix3x3<T> makeRotationX(T angle);
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angle
+	    /// @param angle Angle to rotate around the y axis
+	    /// </summary>
+	    static Matrix3x3<T> makeRotationY(T angle);
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angle
+	    /// @param angle Angle to rotate around the z axis
+	    /// </summary>
+	    static Matrix3x3<T> makeRotationZ(T angle);
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angles
+	    /// @param xAngle Angle to rotate around the x axis
+	    /// @param yAngle Angle to rotate around the y axis
+	    /// @param zAngle Angle to rotate around the z axis
+	    /// </summary>
+	    static Matrix3x3<T> makeRotation(T xAngle, T yAngle, T zAngle);
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angles and vectors
+	    /// @param vec Vector to rotate around
+	    /// @param angle Angle to rotate around the x axis
+	    /// </summary>
+	    static Matrix3x3<T> makeRotation(Vector3<T> vec, T angle);
 	    // Operators
 	    Matrix3x3<T>& operator=(Matrix3x3<T> const& rhs);
 	    const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs);
