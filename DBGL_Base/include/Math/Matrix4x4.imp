@@ -259,6 +259,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(Vector4<T> vec, T angle)
 	{
+		vec.normalize();
 		Matrix4x4<T> mat;
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);

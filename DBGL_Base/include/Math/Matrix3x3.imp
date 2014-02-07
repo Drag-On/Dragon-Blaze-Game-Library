@@ -143,6 +143,7 @@ namespace dbgl
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotation(Vector3<T> vec, T angle)
 	{
+		vec.normalize();
 		Matrix3x3<T> mat;
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
