@@ -97,6 +97,18 @@ namespace dbgl
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>
 	    static Matrix3x3<T> makeRotation(Vector3<T> vec, T angle);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factor
+	    /// @param factor Factor to scale by
+	    /// </summary>
+	    static Matrix3x3<T> makeScale(T factor);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factors
+	    /// @param x Factor to scale by in x direction
+	    /// @param y Factor to scale by in y direction
+	    /// @param z Factor to scale by in z direction
+	    /// </summary>
+	    static Matrix3x3<T> makeScale(T x, T y, T z);
 	    // Operators
 	    Matrix3x3<T>& operator=(Matrix3x3<T> const& rhs);
 	    const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs);

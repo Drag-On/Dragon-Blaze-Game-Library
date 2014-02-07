@@ -63,6 +63,13 @@ int testMatrix2x2()
     auto res = (Matrix2x2<float>::makeRotation(1.57079633f) * Vector2<float>(1, 0));// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 1) <= 0.01);
+    // makeScale
+    res = (Mat2f::makeScale(2) * Vector2<float>(1, 0));
+    assert(std::abs(res[0] - 2) <= 0.01);
+    assert(std::abs(res[1] - 0) <= 0.01);
+    res = (Mat2f::makeScale(2, 0.5) * Vector2<float>(1, 1));
+    assert(std::abs(res[0] - 2) <= 0.01);
+    assert(std::abs(res[1] - 0.5) <= 0.01);
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =

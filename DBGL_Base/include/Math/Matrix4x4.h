@@ -105,6 +105,19 @@ namespace dbgl
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>
 	    static Matrix4x4<T> makeRotation(Vector4<T> vec, T angle);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factor
+	    /// @param factor Factor to scale by
+	    /// </summary>
+	    static Matrix4x4<T> makeScale(T factor);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factors
+	    /// @param x Factor to scale by in x direction
+	    /// @param y Factor to scale by in y direction
+	    /// @param z Factor to scale by in z direction
+	    /// @param w Factor to scale by in w direction
+	    /// </summary>
+	    static Matrix4x4<T> makeScale(T x, T y, T z, T w);
 	    // Operators
 	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
 	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs);

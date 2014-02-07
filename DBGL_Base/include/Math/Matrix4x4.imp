@@ -284,6 +284,23 @@ namespace dbgl
 		return mat;
 	}
 	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T factor)
+	{
+		Matrix4x4<T> mat;
+		mat *= factor;
+		return mat;
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T x, T y, T z, T w)
+	{
+		Matrix4x4<T> mat;
+		mat[0][0] *= x;
+		mat[1][1] *= y;
+		mat[2][2] *= z;
+		mat[3][3] *= w;
+		return mat;
+	}
+	
 	template<typename T> Matrix4x4<T>& Matrix4x4<T>::operator=(Matrix4x4<T> const& rhs) 
 	{ 
 		if (*this != rhs)

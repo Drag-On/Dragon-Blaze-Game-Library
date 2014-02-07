@@ -93,6 +93,15 @@ int testMatrix3x3()
     assert(std::abs(res[0] - 0.5) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] + 0.7) <= 0.01);
+    // makeScale
+    res = (Mat3f::makeScale(2) * Vec3f(1, 0, 0));
+    assert(std::abs(res[0] - 2) <= 0.01);
+    assert(std::abs(res[1] - 0) <= 0.01);
+    assert(std::abs(res[2] - 0) <= 0.01);
+    res = (Mat3f::makeScale(2, 0.5, -3) * Vec3f(1, 1, -2));
+    assert(std::abs(res[0] - 2) <= 0.01);
+    assert(std::abs(res[1] - 0.5) <= 0.01);
+    assert(std::abs(res[2] - 6) <= 0.01);
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =

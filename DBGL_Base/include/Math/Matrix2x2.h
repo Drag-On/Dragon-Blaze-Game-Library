@@ -74,6 +74,17 @@ namespace dbgl
 	    /// @param angle Angle to rotate around
 	    /// </summary>
 	    static Matrix2x2<T> makeRotation(T angle);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factor
+	    /// @param factor Factor to scale by
+	    /// </summary>
+	    static Matrix2x2<T> makeScale(T factor);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factors
+	    /// @param x Factor to scale by in x direction
+	    /// @param y Factor to scale by in y direction
+	    /// </summary>
+	    static Matrix2x2<T> makeScale(T x, T y);
 	    // Operators
 	    Matrix2x2<T>& operator=(Matrix2x2<T> const& rhs);
 	    const Matrix2x2<T> operator+(Matrix2x2<T> const& rhs);

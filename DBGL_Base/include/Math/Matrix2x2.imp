@@ -104,6 +104,21 @@ namespace dbgl
 		return mat;
 	}
 	
+	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T factor)
+	{
+		Matrix2x2 mat;
+		mat *= factor;
+		return mat;
+	}
+	
+	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T x, T y)
+	{
+		Matrix2x2<T> mat;
+		mat[0][0] *= x;
+		mat[1][1] *= y;
+		return mat;
+	}
+	
 	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator=(Matrix2x2<T> const& rhs) 
 	{ 
 		if (*this != rhs)
