@@ -69,6 +69,11 @@ namespace dbgl
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
 	    bool isIdentity();
+	    /// <summary>
+	    /// @brief Constructs a rotation matrix from the given angle
+	    /// @param angle Angle to rotate around
+	    /// </summary>
+	    static Matrix2x2<T> makeRotation(T angle);
 	    // Operators
 	    Matrix2x2<T>& operator=(Matrix2x2<T> const& rhs);
 	    const Matrix2x2<T> operator+(Matrix2x2<T> const& rhs);
