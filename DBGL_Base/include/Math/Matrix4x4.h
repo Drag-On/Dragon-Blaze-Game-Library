@@ -12,6 +12,7 @@
 #define MATRIX4X4_H_
 
 #include<cmath>
+#include"Vector3.h"
 #include"Vector4.h"
 
 namespace dbgl
@@ -118,6 +119,13 @@ namespace dbgl
 	    /// @param w Factor to scale by in w direction
 	    /// </summary>
 	    static Matrix4x4<T> makeScale(T x, T y, T z, T w);
+	    /// <summary>
+	    /// @brief Constructs a camera matrix from the given data
+	    /// @param pos Position of the camera in 3D space
+	    /// @param target Position the camera aims at
+	    /// @param up Vector that defines the camera up direction
+	    /// </summary>
+	    static Matrix4x4<T> makeCamera(Vector3<T> pos, Vector3<T> target, Vector3<T> up);
 	    // Operators
 	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
 	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs);

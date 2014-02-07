@@ -108,6 +108,12 @@ int testMatrix4x4()
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] - 6) <= 0.01);
     assert(std::abs(res[3] - 44) <= 0.01);
+    // makeCamera
+    res = (Mat4f::makeCamera(Vec3f(-1, 0, 0), Vec3f(0, 0, 0), Vec3f(0, 1, 0)) * Vec4f(0, 0, 0, 1));
+    assert(std::abs(res[0] - 0) <= 0.01);
+    assert(std::abs(res[1] - 0) <= 0.01);
+    assert(std::abs(res[2] + 1) <= 0.01);
+    assert(std::abs(res[3] - 1) <= 0.01);
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =

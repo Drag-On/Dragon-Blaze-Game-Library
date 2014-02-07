@@ -301,6 +301,27 @@ namespace dbgl
 		return mat;
 	}
 	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeCamera(Vector3<T> pos, Vector3<T> target, Vector3<T> up)
+	{
+		auto zAxis = (pos - target).getNormalized();
+		auto xAxis = (up.getCrossProduct(zAxis)).getNormalized();
+		auto yAxis = zAxis.getCrossProduct(xAxis);
+		Matrix4x4<T> mat;
+		mat[0][0] = xAxis.getX();
+		mat[1][0] = yAxis.getX();
+		mat[2][0] = zAxis.getX();
+		mat[3][0] = -(xAxis * pos);
+		mat[0][1] = xAxis.getY();
+		mat[1][1] = yAxis.getY();
+		mat[2][1] = zAxis.getY();
+		mat[3][1] = -(yAxis * pos);
+		mat[0][2] = xAxis.getZ();
+		mat[1][2] = yAxis.getZ();
+		mat[2][2] = zAxis.getZ();
+		mat[3][2] = -(zAxis * pos);
+		return mat;
+	}
+	
 	template<typename T> Matrix4x4<T>& Matrix4x4<T>::operator=(Matrix4x4<T> const& rhs) 
 	{ 
 		if (*this != rhs)

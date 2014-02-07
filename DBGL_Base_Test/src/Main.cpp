@@ -36,5 +36,6 @@ int main()
 	testMatrix();
 
 	LOG->info("Tests done!");
+	LOG->del();
 	return 0;
 }
