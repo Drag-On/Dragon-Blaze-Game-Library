@@ -116,6 +116,9 @@ int testMatrix4x4()
     assert(std::abs(res[3] - 1) <= 0.01);
     LOG->info("OK!");
     LOG->info("Operators... ");
+    // makeProjection
+    auto proj = Mat4f::makeProjection(1.57079633f, 4.0/3.0, 1, 10);
+    assert((proj * Vec4f(0, 0, -2, 1))[2] < (proj * Vec4f(0, 0, -5, 1))[2]);
     // =
     mat = mat2;
     assert(mat == mat2);
