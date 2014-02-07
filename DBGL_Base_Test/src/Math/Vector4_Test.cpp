@@ -77,6 +77,10 @@ int testVector4()
 	// isZero
 	assert(vec.isZero());
 	assert(!vec2.isZero());
+	// translate
+	auto test = Vector4<float>(1, 0, -4.11, 3.1);
+	test.translate(-4, 2, 42, 1337);
+	assert(test == Vector4<float>(-3, 2, 37.89, 1340.1));
 	LOG->info("OK!");
 	LOG->info("Operators... ");
 	vec2[0] = -1.5;

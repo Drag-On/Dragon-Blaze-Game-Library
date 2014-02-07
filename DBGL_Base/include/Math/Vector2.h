@@ -70,7 +70,7 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Normalizes this vector so it has the length 1
 	    /// </summary>
-	    void normalize();
+	    Vector2<T>& normalize();
 	    /// <summary>
 	    /// @brief Returns a normalized copy of this vector of length 1
 	    /// </summary>
@@ -84,6 +84,10 @@ namespace dbgl
 	    /// @brief Checks if all components are zero
 	    /// </summary>
 	    bool isZero();
+	    /// <summary>
+	    /// @brief Translates this vector by the specified amount
+	    /// </summary>
+	    Vector2<T>& translate(T x, T y);
 	    // Operators
 	    Vector2<T>& operator=(Vector2<T> const& rhs);
 	    const Vector2<T> operator+(Vector2<T> const& rhs);
@@ -109,6 +113,11 @@ namespace dbgl
 	private:
 	    T _x, _y;
     };
+
+    // Some default types
+    using Vec2i = Vector2<int>;
+    using Vec2f = Vector2<float>;
+    using Vec2d = Vector2<double>;
 }
 
 #include "Vector2.imp"

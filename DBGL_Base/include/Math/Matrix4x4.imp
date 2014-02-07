@@ -216,9 +216,18 @@ namespace dbgl
 		return true;
 	}
 	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeTranslation(T x, T y, T z)
+	{
+		Matrix4x4<T> mat;
+		mat[3][0] = x;
+		mat[3][1] = y;
+		mat[3][2] = z;
+		return mat;
+	}
+	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationX(T angle)
 	{
-		Matrix4x4 mat;
+		Matrix4x4<T> mat;
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[1][1] = cosAngle;
@@ -230,7 +239,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationY(T angle)
 	{
-		Matrix4x4 mat;
+		Matrix4x4<T> mat;
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -242,7 +251,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationZ(T angle)
 	{
-		Matrix4x4 mat;
+		Matrix4x4<T> mat;
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;

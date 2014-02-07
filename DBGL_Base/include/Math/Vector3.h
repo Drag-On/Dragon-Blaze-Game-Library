@@ -74,7 +74,7 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Normalizes this vector so it has the length 1
 	    /// </summary>
-	    void normalize();
+	    Vector3<T>& normalize();
 	    /// <summary>
 	    /// @brief Returns a normalized copy of this vector of length 1
 	    /// </summary>
@@ -88,6 +88,10 @@ namespace dbgl
 	    /// @brief Checks if all components are zero
 	    /// </summary>
 	    bool isZero();
+	    /// <summary>
+	    /// @brief Translates this vector by the specified amount
+	    /// </summary>
+	    Vector3<T>& translate(T x, T y, T z);
 	    // Operators
 	    Vector3<T>& operator=(Vector3<T> const& rhs);
 	    const Vector3<T> operator+(Vector3<T> const& rhs);
@@ -113,6 +117,11 @@ namespace dbgl
 	private:
 	    T _x, _y, _z;
     };
+
+    // Some default types
+    using Vec3i = Vector3<int>;
+    using Vec3f = Vector3<float>;
+    using Vec3d = Vector3<double>;
 }
 
 #include "Vector3.imp"

@@ -78,7 +78,7 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Normalizes this vector so it has the length 1
 	    /// </summary>
-	    void normalize();
+	    Vector4<T>& normalize();
 	    /// <summary>
 	    /// @brief Returns a normalized copy of this vector of length 1
 	    /// </summary>
@@ -92,6 +92,10 @@ namespace dbgl
 	    /// @brief Checks if all components are zero
 	    /// </summary>
 	    bool isZero();
+	    /// <summary>
+	    /// @brief Translates this vector by the specified amount
+	    /// </summary>
+	    Vector4<T>& translate(T x, T y, T z, T w);
 	    // Operators
 	    Vector4<T>& operator=(Vector4<T> const& rhs);
 	    const Vector4<T> operator+(Vector4<T> const& rhs);
@@ -117,6 +121,11 @@ namespace dbgl
 	private:
 	    T _x, _y, _z, _w;
     };
+
+    // Some default types
+    using Vec4i = Vector4<int>;
+    using Vec4f = Vector4<float>;
+    using Vec4d = Vector4<double>;
 }
 
 #include "Vector4.imp"

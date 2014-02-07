@@ -25,7 +25,7 @@ int testMatrix2x2()
     LOG->info("Starting Matrix2x2 test suite...");
     LOG->info("Constructors... ");
     // Default
-    Matrix2x2<float> mat;
+    Mat2f mat;
     assert(mat[0][0] == 1);
     assert(mat[0][1] == 0);
     assert(mat[1][0] == 0);

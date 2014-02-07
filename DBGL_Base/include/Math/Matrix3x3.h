@@ -119,6 +119,11 @@ namespace dbgl
 	private:
 	    Vector3<T> _columns[3];
     };
+
+    // Some default types
+    using Mat3i = Matrix3x3<int>;
+    using Mat3f = Matrix3x3<float>;
+    using Mat3d = Matrix3x3<double>;
 }
 
 #include "Matrix3x3.imp"

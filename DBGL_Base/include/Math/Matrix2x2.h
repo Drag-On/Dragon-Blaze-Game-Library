@@ -96,6 +96,11 @@ namespace dbgl
 	private:
 	    Vector2<T> _columns[2];
     };
+
+    // Some default types
+    using Mat2i = Matrix2x2<int>;
+    using Mat2f = Matrix2x2<float>;
+    using Mat2d = Matrix2x2<double>;
 }
 
 #include "Matrix2x2.imp"

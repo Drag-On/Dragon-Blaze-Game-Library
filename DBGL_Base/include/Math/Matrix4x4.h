@@ -12,7 +12,7 @@
 #define MATRIX4X4_H_
 
 #include<cmath>
-#include "Vector4.h"
+#include"Vector4.h"
 
 namespace dbgl
 {
@@ -71,6 +71,13 @@ namespace dbgl
 	    /// </summary>
 	    bool isIdentity();
 	    /// <summary>
+	    /// @brief Constructs a translation matrix from the given translation values
+	    /// @param x Amount to translate on the x axis
+	    /// @param y Amount to translate on the y axis
+	    /// @param z Amount to translate on the z axis
+	    /// </summary>
+	    static Matrix4x4<T> makeTranslation(T x, T y, T z);
+	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>
@@ -120,6 +127,11 @@ namespace dbgl
 	private:
 	    Vector4<T> _columns[4];
     };
+
+    // Some default types
+    using Mat4i = Matrix4x4<int>;
+    using Mat4f = Matrix4x4<float>;
+    using Mat4d = Matrix4x4<double>;
 }
 
 #include "Matrix4x4.imp"

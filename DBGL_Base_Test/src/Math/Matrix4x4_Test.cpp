@@ -58,9 +58,14 @@ int testMatrix4x4()
     assert(!mat.isZero());
     // isIdentity
     assert(mat.isIdentity());
+    // makeTranslation
+    auto res = (Matrix4x4<float>::makeTranslation(1.5, 0.4, -42) * Vector4<float>(1, 0, -1, 1));
+    assert(std::abs(res[0] - 2.5) <= 0.01);
+    assert(std::abs(res[1] - 0.4) <= 0.01);
+    assert(std::abs(res[2] + 43) <= 0.01);
     // makeRotationX
     Vector4<float> testVec(0, 1, 0, 1);
-    auto res = (Matrix4x4<float>::makeRotationX(1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotationX(1.57079633f) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] - 1) <= 0.01);
