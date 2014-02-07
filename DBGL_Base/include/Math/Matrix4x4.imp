@@ -303,9 +303,13 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeCamera(Vector3<T> pos, Vector3<T> target, Vector3<T> up)
 	{
-		auto zAxis = (pos - target).getNormalized();
-		auto xAxis = (up.getCrossProduct(zAxis)).getNormalized();
-		auto yAxis = zAxis.getCrossProduct(xAxis);
+		auto zAxis = pos - target;
+		zAxis.normalize();
+		auto xAxis = up;
+		xAxis *= zAxis;
+		xAxis.normalize();
+		auto yAxis = zAxis;
+		yAxis *= xAxis;
 		Matrix4x4<T> mat;
 		mat[0][0] = xAxis.getX();
 		mat[1][0] = yAxis.getX();
@@ -324,7 +328,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeProjection(T fieldOfView, T aspectRatio, T near, T far)
 	{
-		T h = 1.0/std::tan(fieldOfView / 2);
+		T h = std::tan(pi_2() - fieldOfView / 2);
 		T w = h / aspectRatio;
 		Matrix4x4<T> mat;
 		mat[0][0] = w;
