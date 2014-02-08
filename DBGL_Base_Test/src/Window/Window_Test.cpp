@@ -13,7 +13,7 @@
 
 #include <cassert>
 #include "Log/Log.h"
-#include "Window/Window.h"
+#include "Window/SimpleWindow.h"
 
 using namespace dbgl;
 
@@ -21,10 +21,10 @@ int testWindow()
 {
     LOG->info("Starting Window test suite...");
     LOG->info("Constructors... ");
-    Window wnd;
+    SimpleWindow wnd;
     LOG->info("OK!");
     LOG->info("Methods... ");
-    wnd.open();
+    //wnd.show();
     LOG->info("OK!");
     LOG->info("Operators... ");
     LOG->info("OK!");
