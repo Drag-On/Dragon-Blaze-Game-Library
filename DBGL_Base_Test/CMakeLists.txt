@@ -6,22 +6,42 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
  
-# add the library
+# add the source code
 file(GLOB_RECURSE Base_Src
     "include/*.h"
     "src/*.cpp"
 )
 
-# Copy library over
-add_custom_command(	OUTPUT "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.a"
-					COMMAND ${CMAKE_COMMAND} -E copy_if_different
-					"${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.a"
-					"${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.a"
-					)
-set_property(SOURCE ${Base_Src} APPEND PROPERTY OBJECT_DEPENDS libDBGL_Base.a)
+# create a list of files to copy
+set(LIBRARIES2COPY
+   "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.a"
+   "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libglfw3.a"
+)
+
+# OpenGL
+find_package(OpenGL)
+if (OPENGL_FOUND)
+	MESSAGE("OpenGL Correctly Found")
+	include_directories(${OPENGL_INCLUDE_DIR})
+else (OPENGL_FOUND)
+	MESSAGE("OpenGL environment missing")
+endif (OPENGL_FOUND)
 
 add_executable(DBGL_Base_Test ${Base_Src})
 #set_target_properties(DBGL_Base_Test PROPERTIES LINKER_LANGUAGE CXX)
 
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/include/")
-target_link_libraries (DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.a")
+include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
+target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.a")
+target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libglfw3.a")
+target_link_libraries(DBGL_Base_Test ${OPENGL_LIBRARIES})
+
+# do the copying
+foreach(file_i ${LIBRARIES2COPY})
+    add_custom_command(
+		TARGET DBGL_Base_Test
+		PRE_BUILD
+		COMMAND ${CMAKE_COMMAND}
+		ARGS -E copy_if_different ${file_i} "${PROJECT_SOURCE_DIR}/Debug/"
+	)
+endforeach(file_i)

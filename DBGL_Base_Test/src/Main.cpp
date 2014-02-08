@@ -20,6 +20,7 @@ int testMatrix2x2();
 int testMatrix3x3();
 int testMatrix4x4();
 int testMatrix();
+int testWindow();
 
 int main()
 {
@@ -34,6 +35,7 @@ int main()
 	testMatrix3x3();
 	testMatrix4x4();
 	testMatrix();
+	testWindow();
 
 	LOG->info("Tests done!");
 	LOG->del();
