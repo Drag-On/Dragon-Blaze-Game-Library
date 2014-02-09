@@ -67,95 +67,87 @@ namespace dbgl
 
     void WindowManager::closeCallback(GLFWwindow* window)
     {
-	windows[window]->closeCallback();
+	windows[window]->_closeCallback();
     }
 
     void WindowManager::focusCallback(GLFWwindow* window, int focused)
     {
-	windows[window]->focusCallback(focused);
+	windows[window]->_focusCallback(focused);
     }
 
     void WindowManager::iconifiedCallback(GLFWwindow* window, int iconified)
     {
-	windows[window]->iconifiedCallback(iconified);
+	windows[window]->_iconifiedCallback(iconified);
     }
 
     void WindowManager::refreshCallback(GLFWwindow* window)
     {
-	windows[window]->refreshCallback();
+	windows[window]->_refreshCallback();
     }
 
-    void WindowManager::sizeCallback(GLFWwindow* window, int width, int height)
-    {
-	windows[window]->sizeCallback(width, height);
-    }
-
-    void WindowManager::framebufferSizeCallback(GLFWwindow* window, int width,
+    void WindowManager::resizeCallback(GLFWwindow* window, int width,
 	    int height)
     {
-	windows[window]->framebufferSizeCallback(width, height);
+	windows[window]->_resizeCallback(width, height);
+    }
+
+    void WindowManager::framebufferResizeCallback(GLFWwindow* window, int width,
+	    int height)
+    {
+	windows[window]->_framebufferResizeCallback(width, height);
     }
 
     void WindowManager::positionCallback(GLFWwindow* window, int xpos, int ypos)
     {
-	windows[window]->windowPosCallback(xpos, ypos);
+	windows[window]->_positionCallback(xpos, ypos);
     }
 
     void WindowManager::characterCallback(GLFWwindow* window,
 	    unsigned int codepoint)
     {
-	windows[window]->characterCallback(codepoint);
+	windows[window]->_characterCallback(codepoint);
     }
 
     void WindowManager::cursorEnterCallback(GLFWwindow* window, int entered)
     {
-	windows[window]->cursorEnterCallback(entered);
+	windows[window]->_cursorEnterCallback(entered);
     }
 
     void WindowManager::cursorCallback(GLFWwindow* window, double x, double y)
     {
-	windows[window]->cursorCallback(x, y);
+	windows[window]->_cursorCallback(x, y);
     }
 
     void WindowManager::mouseButtonCallback(GLFWwindow* window, int button,
 	    int action, int mods)
     {
-	windows[window]->mouseButtonCallback(button, action, mods);
+	windows[window]->_mouseButtonCallback(button, action, mods);
     }
 
     void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
 	    double yOffset)
     {
-	windows[window]->scrollCallback(xOffset, yOffset);
+	windows[window]->_scrollCallback(xOffset, yOffset);
     }
 
     void WindowManager::keyCallback(GLFWwindow* window, int key, int scancode,
 	    int action, int mods)
     {
-	windows[window]->keyCallback(key, scancode, action, mods);
+	windows[window]->_keyCallback(key, scancode, action, mods);
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
 
-    void WindowManager::add(GLFWwindow* wndH, AbstractWindow* window)
+    void WindowManager::updateHandle(GLFWwindow* oldHandle,
+	    GLFWwindow* newHandle)
     {
-	windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wndH, window));
-
-	// TODO: Add other callbacks
-	glfwSetCharCallback(wndH, characterCallback);
-	glfwSetCursorEnterCallback(wndH, cursorEnterCallback);
-	glfwSetCursorPosCallback(wndH, cursorCallback);
-	//glfwSetDropCallback();
-	glfwSetFramebufferSizeCallback(wndH, framebufferSizeCallback);
-	glfwSetKeyCallback(wndH, keyCallback);
-	//glfwSetMonitorCallback(monitorCallback);
-	glfwSetMouseButtonCallback(wndH, mouseButtonCallback);
-	glfwSetScrollCallback(wndH, scrollCallback);
-	glfwSetWindowCloseCallback(wndH, closeCallback);
-	glfwSetWindowFocusCallback(wndH, focusCallback);
-	glfwSetWindowIconifyCallback(wndH, iconifiedCallback);
-	glfwSetWindowPosCallback(wndH, positionCallback);
-	glfwSetWindowRefreshCallback(wndH, refreshCallback);
-	glfwSetWindowSizeCallback(wndH, sizeCallback);
+	if (oldHandle != newHandle)
+	{
+	    auto i = windows.find(oldHandle);
+	    auto temp = i->second;
+	    windows.erase(i);
+	    windows.insert(
+		    std::pair<GLFWwindow*, AbstractWindow*>(newHandle, temp));
+	}
     }
 }

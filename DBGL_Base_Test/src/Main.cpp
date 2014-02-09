@@ -24,7 +24,7 @@ int testWindow();
 
 int main()
 {
-	LOG->setLogLevel((int)dbgl::LOGLEVEL::INFO);
+	LOG->setLogLevel((int)dbgl::LOGLEVEL::DBG);
 	LOG->info("DBGL Version %d.%d", DBGL_VERSION_MAJOR, DBGL_VERSION_MINOR);
 
 	testVector2();

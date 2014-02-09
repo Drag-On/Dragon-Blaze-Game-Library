@@ -13,8 +13,10 @@
 
 #include <stdlib.h>
 #include <string>
+#include <functional>
 #include "GLFW/glfw3.h"
 #include "Log/Log.h"
+#include "WindowManager.h"
 
 namespace dbgl
 {
@@ -124,6 +126,83 @@ namespace dbgl
 	     */
 	    virtual void setFullscreen(bool fullscreen) final;
 	    /**
+	     * @brief Registers a function as callback for close events
+	     * @param callback Function to be called when this window is getting closed
+	     */
+	    virtual void addCloseCallback(std::function<void()> callback) final;
+	    /**
+	     * @brief Registers a function as callback for focus events
+	     * @param callback Function to be called when this window's focus state changes
+	     */
+	    virtual void addFocusCallback(
+		    std::function<void(int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for iconified events
+	     * @param callback Function to be called when this window is getting iconified or restored
+	     */
+	    virtual void addIconifiedCallback(
+		    std::function<void(int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for refresh events
+	     * @param callback Function to be called when this window needs to be refreshed
+	     */
+	    virtual void addRefreshCallback(
+		    std::function<void()> callback) final;
+	    /**
+	     * @brief Registers a function as callback for resize events
+	     * @param callback Function to be called when this window is getting resized
+	     */
+	    virtual void addResizeCallback(
+		    std::function<void(int, int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for framebuffer resize events
+	     * @param callback Function to be called when this window's framebuffer needs a resize
+	     */
+	    virtual void addFramebufferResizeCallback(
+		    std::function<void(int, int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for window move events
+	     * @param callback Function to be called when this window is getting moved
+	     */
+	    virtual void addPositionCallback(
+		    std::function<void(int, int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for unicode character events
+	     * @param callback Function to be called when a character is typed into this window
+	     */
+	    virtual void addCharacterCallback(
+		    std::function<void(unsigned int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for cursor enter events
+	     * @param callback Function to be called when the cursor enters or leaves this window
+	     */
+	    virtual void addCursorEnterCallback(
+		    std::function<void(int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for cursor move events
+	     * @param callback Function to be called when the cursor is moved inside this window
+	     */
+	    virtual void addCursorCallback(
+		    std::function<void(double, double)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for mouse button events
+	     * @param callback Function to be called when a mouse button state changes
+	     */
+	    virtual void addMouseButtonCallback(
+		    std::function<void(int, int, int)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for scroll events
+	     * @param callback Function to be called when the mouse wheel is scrolled
+	     */
+	    virtual void addScrollCallback(
+		    std::function<void(double, double)> callback) final;
+	    /**
+	     * @brief Registers a function as callback for key events
+	     * @param callback Function to be called when a key state changes
+	     */
+	    virtual void addKeyCallback(
+		    std::function<void(int, int, int, int)> callback) final;
+	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
 	    virtual void preUpdate();
@@ -175,87 +254,30 @@ namespace dbgl
 	     */
 	    AbstractWindow(const char* title, int width, int height,
 		    bool fullscreen);
-	    // Callbacks
+
+
 	    /**
-	     * @brief Called when the window is closed
+	     * GLFW window handle
 	     */
-	    virtual void closeCallback() = 0;
-	    /**
-	     * @brief Called when the focus state changes
-	     * @param focused True if the window got focused, otherwise false
-	     */
-	    virtual void focusCallback(int focused) = 0;
-	    /**
-	     * @brief Called when the iconified state changes
-	     * @param iconified True if the window got iconified, otherwise false
-	     */
-	    virtual void iconifiedCallback(int iconified) = 0;
-	    /**
-	     * @brief Called when the window needs to be refreshed
-	     */
-	    virtual void refreshCallback() = 0;
-	    /**
-	     * @brief Called when the window was resized
-	     * @param width New width
-	     * @param height New height
-	     */
-	    virtual void sizeCallback(int width, int height) = 0;
-	    /**
-	     * @brief Called when the rendering plane was resized
-	     * @param width New width
-	     * @param height New height
-	     */
-	    virtual void framebufferSizeCallback(int width, int height) = 0;
-	    /**
-	     * @brief Called whe the window was moved
-	     * @param xpos New x coordinate
-	     * @param ypos New y coordinate
-	     */
-	    virtual void windowPosCallback(int xpos, int ypos) = 0;
-	    /**
-	     * @brief Called when a unicode character was typed in
-	     * @param codepoint Unicode code point of the character
-	     */
-	    virtual void characterCallback(unsigned int codepoint) = 0;
-	    /**
-	     * @brief Called when the cursor enters or exits the window
-	     * @param entered True if the cursor entered the window, otherwise false
-	     */
-	    virtual void cursorEnterCallback(int entered) = 0;
-	    /**
-	     * @brief Called when the cursor was moved
-	     * @param x New x coordinate
-	     * @param y New y coordinate
-	     */
-	    virtual void cursorCallback(double x, double y) = 0;
-	    /**
-	     * @brief Called when a mouse button was pressed
-	     * @param button Button that was pressed
-	     * @param action GLFW_PRESS or GLFW_RELEASE
-	     * @param mods Bit field of modifier keys
-	     */
-	    virtual void mouseButtonCallback(int button, int action,
-		    int mods) = 0;
-	    /**
-	     * @brief Called when the scroll wheel was used
-	     * @param xOffset Scroll amount in x direction
-	     * @param yOffset Scroll amount in y direction
-	     */
-	    virtual void scrollCallback(double xOffset, double yOffset) = 0;
-	    /**
-	     * @brief Called when a key was pressed
-	     * @param key Key that was pressed
-	     * @param scancode System-specific scancode
-	     * @param action GLFW_PRESS or GLFW_RELEASE or GLFW_REPEAT
-	     * @param mods Bit field of modifier keys
-	     */
-	    virtual void keyCallback(int key, int scancode, int action,
-		    int mods) = 0;
+	    GLFWwindow* _pWndHandle = NULL;
 
 	private:
 	    static void errorCallback(int error, const char* description);
 
-	    GLFWwindow* _pWndHandle = NULL;
+	    std::function<void()> _closeCallback;
+	    std::function<void(int)> _focusCallback;
+	    std::function<void(int)> _iconifiedCallback;
+	    std::function<void()> _refreshCallback;
+	    std::function<void(int, int)> _resizeCallback;
+	    std::function<void(int, int)> _framebufferResizeCallback;
+	    std::function<void(int, int)> _positionCallback;
+	    std::function<void(unsigned int)> _characterCallback;
+	    std::function<void(int)> _cursorEnterCallback;
+	    std::function<void(double, double)> _cursorCallback;
+	    std::function<void(int, int, int)> _mouseButtonCallback;
+	    std::function<void(double, double)> _scrollCallback;
+	    std::function<void(int, int, int, int)> _keyCallback;
+
 	    std::string _title;
 	    bool _isFullscreen;
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen

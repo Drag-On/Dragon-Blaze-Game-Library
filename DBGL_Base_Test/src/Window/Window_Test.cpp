@@ -18,6 +18,31 @@
 
 using namespace dbgl;
 
+class TestWindow: public SimpleWindow
+{
+    protected:
+	// Constructors
+	TestWindow();
+	TestWindow(const char* title);
+	TestWindow(const char* title, int width, int height);
+	TestWindow(const char* title, int width, int height,
+		bool fullscreen);
+	// Callbacks
+	virtual void closeCallback();
+	virtual void focusCallback(int focused);
+	virtual void iconifiedCallback(int iconified);
+	virtual void refreshCallback();
+	virtual void sizeCallback(int width, int height);
+	virtual void framebufferSizeCallback(int width, int height);
+	virtual void windowPosCallback(int xpos, int ypos);
+	virtual void characterCallback(unsigned int codepoint);
+	virtual void cursorEnterCallback(int entered);
+	virtual void cursorCallback(double x, double y);
+	virtual void mouseButtonCallback(int button, int action, int mods);
+	virtual void scrollCallback(double xOffset, double yOffset);
+	virtual void keyCallback(int key, int scancode, int action, int mods);
+};
+
 int testWindow()
 {
     LOG->info("Starting Window test suite...");

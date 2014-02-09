@@ -11,6 +11,7 @@
 #ifndef SIMPLEWINDOW_H_
 #define SIMPLEWINDOW_H_
 
+#include "GLFW/glfw3.h"
 #include "AbstractWindow.h"
 
 namespace dbgl
@@ -42,18 +43,7 @@ namespace dbgl
 	    SimpleWindow(const char* title, int width, int height,
 		    bool fullscreen);
 	    // Callbacks
-	    virtual void closeCallback();
-	    virtual void focusCallback(int focused);
-	    virtual void iconifiedCallback(int iconified);
-	    virtual void refreshCallback();
-	    virtual void sizeCallback(int width, int height);
-	    virtual void framebufferSizeCallback(int width, int height);
-	    virtual void windowPosCallback(int xpos, int ypos);
-	    virtual void characterCallback(unsigned int codepoint);
-	    virtual void cursorEnterCallback(int entered);
-	    virtual void cursorCallback(double x, double y);
-	    virtual void mouseButtonCallback(int button, int action, int mods);
-	    virtual void scrollCallback(double xOffset, double yOffset);
+	    virtual void framebufferResizeCallback(int width, int height);
 	    virtual void keyCallback(int key, int scancode, int action,
 		    int mods);
 

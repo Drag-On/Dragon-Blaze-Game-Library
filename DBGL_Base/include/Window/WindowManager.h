@@ -36,7 +36,7 @@ namespace dbgl
 	    template<typename T> T* createWindow()
 	    {
 		auto wnd = new T();
-		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -47,7 +47,7 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title)
 	    {
 		auto wnd = new T(title);
-		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -61,7 +61,7 @@ namespace dbgl
 		    int height)
 	    {
 		auto wnd = new T(title, width, height);
-		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -77,7 +77,7 @@ namespace dbgl
 		    int height, bool fullscreen)
 	    {
 		auto wnd = new T(title, width, height, fullscreen);
-		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -100,8 +100,8 @@ namespace dbgl
 	    static void focusCallback(GLFWwindow* window, int focused);
 	    static void iconifiedCallback(GLFWwindow* window, int iconified);
 	    static void refreshCallback(GLFWwindow* window);
-	    static void sizeCallback(GLFWwindow* window, int width, int height);
-	    static void framebufferSizeCallback(GLFWwindow* window, int width,
+	    static void resizeCallback(GLFWwindow* window, int width, int height);
+	    static void framebufferResizeCallback(GLFWwindow* window, int width,
 		    int height);
 	    static void positionCallback(GLFWwindow* window, int xpos,
 		    int ypos);
@@ -117,10 +117,12 @@ namespace dbgl
 		    int action, int mods);
 	    //static void monitorCallback(GLFWmonitor* monitor, int event);
 
-	    void add(GLFWwindow* wndH, AbstractWindow* window);
+	    void updateHandle(GLFWwindow* oldHandle, GLFWwindow* newHandle);
 
 	    static std::map<GLFWwindow*, AbstractWindow*> windows; // TODO: unordered_map?
 	    static WindowManager instance;
+
+	    friend class AbstractWindow;
     };
 }
 

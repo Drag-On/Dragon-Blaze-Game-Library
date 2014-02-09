@@ -13,17 +13,17 @@
 namespace dbgl
 {
     SimpleWindow::SimpleWindow() :
-	    AbstractWindow()
+	    SimpleWindow("Dragon Blaze Game Library")
     {
     }
 
     SimpleWindow::SimpleWindow(const char* title) :
-	    AbstractWindow(title)
+	    SimpleWindow(title, 800, 600)
     {
     }
 
     SimpleWindow::SimpleWindow(const char* title, int width, int height) :
-	    AbstractWindow(title, width, height)
+	    SimpleWindow(title, width, height, false)
     {
     }
 
@@ -31,6 +31,14 @@ namespace dbgl
 	    bool fullscreen) :
 	    AbstractWindow(title, width, height, fullscreen)
     {
+	// Add callbacks for framebuffer and keyboard input
+	addFramebufferResizeCallback(
+		std::bind(&SimpleWindow::framebufferResizeCallback, this,
+			std::placeholders::_1, std::placeholders::_2));
+	addKeyCallback(
+		std::bind(&SimpleWindow::keyCallback, this,
+			std::placeholders::_1, std::placeholders::_2,
+			std::placeholders::_3, std::placeholders::_4));
     }
 
     SimpleWindow::~SimpleWindow()
@@ -48,69 +56,22 @@ namespace dbgl
 
     }
 
-    void SimpleWindow::closeCallback()
+    void SimpleWindow::framebufferResizeCallback(int width, int height)
     {
-
-    }
-
-    void SimpleWindow::focusCallback(int focused)
-    {
-
-    }
-
-    void SimpleWindow::iconifiedCallback(int iconified)
-    {
-
-    }
-
-    void SimpleWindow::refreshCallback()
-    {
-
-    }
-
-    void SimpleWindow::sizeCallback(int width, int height)
-    {
-
-    }
-
-    void SimpleWindow::framebufferSizeCallback(int width, int height)
-    {
-
-    }
-
-    void SimpleWindow::windowPosCallback(int xpos, int ypos)
-    {
-
-    }
-
-    void SimpleWindow::characterCallback(unsigned int codepoint)
-    {
-
-    }
-
-    void SimpleWindow::cursorEnterCallback(int entered)
-    {
-
-    }
-
-    void SimpleWindow::cursorCallback(double x, double y)
-    {
-
-    }
-
-    void SimpleWindow::mouseButtonCallback(int button, int action, int mods)
-    {
-
-    }
-
-    void SimpleWindow::scrollCallback(double xOffset, double yOffset)
-    {
-
+	// Change viewport
+	glViewport(0, 0, width, height);
     }
 
     void SimpleWindow::keyCallback(int key, int scancode, int action, int mods)
     {
+	// Close on escape
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	    close();
 
+	// Switch to fullscreen on alt + enter
+	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS
+		&& (mods & (1 << GLFW_MOD_ALT)) == 0)
+	    setFullscreen(!isFullscreen());
     }
 }
 
