@@ -17,24 +17,46 @@ namespace dbgl
 {
     class AbstractWindow;
 
+    /**
+     * @brief Handles all open windows
+     * @details Is implemented as a singleton, so the only instance needs to be
+     * 		acquired by calling the static get() method.
+     */
     class WindowManager
     {
 	public:
+	    /**
+	     * @return The only instance of this class
+	     */
 	    static WindowManager* get();
+	    /**
+	     * @brief Constructs a new window
+	     * @return A new window of the specified type with default initialization
+	     */
 	    template<typename T> T* createWindow()
 	    {
 		auto wnd = new T();
 		WindowManager::get()->add(wnd->_pWndHandle, wnd);
 		return wnd;
 	    }
-
+	    /**
+	     * @brief Constructs a new window
+	     * @param title Window title
+	     * @return A new window of the specified type with default initialization
+	     */
 	    template<typename T> T* createWindow(const char* title)
 	    {
 		auto wnd = new T(title);
 		WindowManager::get()->add(wnd->_pWndHandle, wnd);
 		return wnd;
 	    }
-
+	    /**
+	     * @brief Constructs a new window
+	     * @param title Window title
+	     * @param width Window width
+	     * @param height Window height
+	     * @return A new window of the specified type
+	     */
 	    template<typename T> T* createWindow(const char* title, int width,
 		    int height)
 	    {
@@ -42,7 +64,15 @@ namespace dbgl
 		WindowManager::get()->add(wnd->_pWndHandle, wnd);
 		return wnd;
 	    }
-
+	    /**
+	     * @brief Constructs a new window
+	     * @param title Window title
+	     * @param width Window width
+	     * @param height Window height
+	     * @param fullscreen True if the window shall be opened fullscreen,
+	     * 			 otherwise false
+	     * @return A new window of the specified type
+	     */
 	    template<typename T> T* createWindow(const char* title, int width,
 		    int height, bool fullscreen)
 	    {
@@ -50,8 +80,18 @@ namespace dbgl
 		WindowManager::get()->add(wnd->_pWndHandle, wnd);
 		return wnd;
 	    }
+	    /**
+	     * @brief Updates and renders all windows for one frame
+	     */
 	    void update();
+	    /**
+	     * @brief Terminates all windows.
+	     * @warning Needs to be called before exiting the program!
+	     */
 	    void terminate();
+	    /**
+	     * @return True in case there are still windows open, otherwise false
+	     */
 	    bool isRunning();
 	private:
 	    WindowManager();

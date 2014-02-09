@@ -15,11 +15,23 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Simple default window with often used properties
+     */
     class SimpleWindow: public AbstractWindow
     {
 	public:
+	    /**
+	     * @brief Frees all memory allocated to this window
+	     */
 	    ~SimpleWindow();
+	    /**
+	     * @brief Gets called once a frame and should update everything
+	     */
 	    virtual void update();
+	    /**
+	     * @brief Gets called once a frame and should render everything
+	     */
 	    virtual void render();
 
 	protected:
