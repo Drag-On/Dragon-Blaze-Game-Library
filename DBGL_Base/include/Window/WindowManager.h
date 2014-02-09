@@ -11,19 +11,48 @@
 #ifndef WINDOWMANAGER_H_
 #define WINDOWMANAGER_H_
 
-#include <map>//#include <unordered_map>#include "GLFW/glfw3.h"#include "AbstractWindow.h"
-#include "Log/Log.h"
-
+#include <stdlib.h>
+#include <map>//#include <unordered_map>#include "GLFW/glfw3.h"#include "AbstractWindow.h"#include "Log/Log.h"
 namespace dbgl
 {
     class AbstractWindow;
 
     class WindowManager
     {
-	    friend class AbstractWindow; // For creation/destruction notification
-
 	public:
 	    static WindowManager* get();
+	    template<typename T> T* createWindow()
+	    {
+		auto wnd = new T();
+		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		return wnd;
+	    }
+
+	    template<typename T> T* createWindow(const char* title)
+	    {
+		auto wnd = new T(title);
+		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		return wnd;
+	    }
+
+	    template<typename T> T* createWindow(const char* title, int width,
+		    int height)
+	    {
+		auto wnd = new T(title, width, height);
+		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		return wnd;
+	    }
+
+	    template<typename T> T* createWindow(const char* title, int width,
+		    int height, bool fullscreen)
+	    {
+		auto wnd = new T(title, width, height, fullscreen);
+		WindowManager::get()->add(wnd->_pWndHandle, wnd);
+		return wnd;
+	    }
+	    void update();
+	    void terminate();
+	    bool isRunning();
 	private:
 	    WindowManager();
 	    ~WindowManager();
@@ -49,8 +78,6 @@ namespace dbgl
 	    //static void monitorCallback(GLFWmonitor* monitor, int event);
 
 	    void add(GLFWwindow* wndH, AbstractWindow* window);
-	    void remove(GLFWwindow* wndH);
-
 
 	    static std::map<GLFWwindow*, AbstractWindow*> windows; // TODO: unordered_map?
 	    static WindowManager instance;

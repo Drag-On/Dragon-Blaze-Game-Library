@@ -18,12 +18,17 @@ namespace dbgl
     class SimpleWindow: public AbstractWindow
     {
 	public:
-	    SimpleWindow();
 	    ~SimpleWindow();
 	    virtual void update();
 	    virtual void render();
 
 	protected:
+	    // Constructors
+	    SimpleWindow();
+	    SimpleWindow(const char* title);
+	    SimpleWindow(const char* title, int width, int height);
+	    SimpleWindow(const char* title, int width, int height,
+		    bool fullscreen);
 	    // Callbacks
 	    virtual void closeCallback();
 	    virtual void focusCallback(int focused);
@@ -41,6 +46,7 @@ namespace dbgl
 		    int mods);
 
 	private:
+	    friend class WindowManager;
     };
 }
 

@@ -21,6 +21,40 @@ namespace dbgl
 	return &instance;
     }
 
+    void WindowManager::update()
+    {
+	// Poll events
+	glfwPollEvents();
+	// Update and render all windows
+	for (auto wnd = windows.begin(); wnd != windows.end();)
+	{
+	    wnd->second->preUpdate();
+	    wnd->second->update();
+	    wnd->second->postUpdate();
+	    wnd->second->preRender();
+	    wnd->second->render();
+	    wnd->second->postRender();
+	    if (glfwWindowShouldClose(wnd->first))
+	    {
+		delete (wnd->second);
+		wnd->second = NULL;
+		wnd = windows.erase(wnd);
+	    }
+	    else
+		++wnd;
+	}
+    }
+
+    void WindowManager::terminate()
+    {
+	glfwTerminate();
+    }
+
+    bool WindowManager::isRunning()
+    {
+	return !WindowManager::windows.empty();
+    }
+
     WindowManager::WindowManager()
     {
 
@@ -123,10 +157,5 @@ namespace dbgl
 	glfwSetWindowPosCallback(wndH, positionCallback);
 	glfwSetWindowRefreshCallback(wndH, refreshCallback);
 	glfwSetWindowSizeCallback(wndH, sizeCallback);
-    }
-
-    void WindowManager::remove(GLFWwindow* wndH)
-    {
-	windows.erase(wndH);
     }
 }

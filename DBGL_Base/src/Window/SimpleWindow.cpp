@@ -12,9 +12,25 @@
 
 namespace dbgl
 {
-    SimpleWindow::SimpleWindow()
+    SimpleWindow::SimpleWindow() :
+	    AbstractWindow()
     {
+    }
 
+    SimpleWindow::SimpleWindow(const char* title) :
+	    AbstractWindow(title)
+    {
+    }
+
+    SimpleWindow::SimpleWindow(const char* title, int width, int height) :
+	    AbstractWindow(title, width, height)
+    {
+    }
+
+    SimpleWindow::SimpleWindow(const char* title, int width, int height,
+	    bool fullscreen) :
+	    AbstractWindow(title, width, height, fullscreen)
+    {
     }
 
     SimpleWindow::~SimpleWindow()

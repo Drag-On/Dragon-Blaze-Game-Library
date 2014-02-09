@@ -12,7 +12,23 @@
 
 namespace dbgl
 {
-    AbstractWindow::AbstractWindow()
+    AbstractWindow::AbstractWindow() :
+	    AbstractWindow("Dragon Blaze Game Library")
+    {
+    }
+
+    AbstractWindow::AbstractWindow(const char* title) :
+	    AbstractWindow(title, 800, 600)
+    {
+    }
+
+    AbstractWindow::AbstractWindow(const char* title, int width, int height) :
+	    AbstractWindow(title, width, height, false)
+    {
+    }
+
+    AbstractWindow::AbstractWindow(const char* title, int width, int height,
+	    bool fullscreen)
     {
 	if (!glfwInit())
 	{
@@ -21,34 +37,46 @@ namespace dbgl
 	}
 	glfwSetErrorCallback(errorCallback);
 
-	// Initialize window to default values
-	_windowedWidth = 800;
-	_windowedHeight = 600;
-	// Initialize fullscreen resolution to screen resolution
-	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	_fullscreenWidth = mode->width;
-	_fullscreenHeight = mode->height;
-	_isFullscreen = false;
+	if(fullscreen)
+	{
+	    // Initialize window to default values
+	    _windowedWidth = 800;
+	    _windowedHeight = 600;
+	    // Initialize fullscreen resolution
+	    _fullscreenWidth = width;
+	    _fullscreenHeight = height;
+	    _isFullscreen = true;
+	}
+	else
+	{
+	    // Initialize window to default values
+	    _windowedWidth = width;
+	    _windowedHeight = height;
+	    // Initialize fullscreen resolution to screen resolution
+	    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	    _fullscreenWidth = mode->width;
+	    _fullscreenHeight = mode->height;
+	    _isFullscreen = false;
+	}
 
 	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	_pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight, "Dragon Blaze Game Library", NULL, NULL);
+	if(fullscreen)
+	_pWndHandle = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, title, glfwGetPrimaryMonitor(), NULL);
+	else
+	_pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight, title, NULL, NULL);
 	if (!_pWndHandle)
 	{
 	    LOG->error("Failed to create new window!");
 	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
-
-	// Tell window manager
-	WindowManager::get()->add(_pWndHandle, this);
     }
 
     AbstractWindow::~AbstractWindow()
     {
-	WindowManager::get()->remove(_pWndHandle);
 	glfwDestroyWindow(_pWndHandle);
     }
 
