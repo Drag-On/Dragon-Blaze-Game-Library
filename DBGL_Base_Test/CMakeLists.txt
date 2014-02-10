@@ -14,8 +14,7 @@ file(GLOB_RECURSE Base_Src
 
 # create a list of files to copy
 set(LIBRARIES2COPY
-   "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.a"
-   "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libglfw3.a"
+   "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.dll"
 )
 
 # OpenGL
@@ -28,13 +27,10 @@ else (OPENGL_FOUND)
 endif (OPENGL_FOUND)
 
 add_executable(DBGL_Base_Test ${Base_Src})
-#set_target_properties(DBGL_Base_Test PROPERTIES LINKER_LANGUAGE CXX)
 
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/include/")
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
-target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.a")
-target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libglfw3.a")
-target_link_libraries(DBGL_Base_Test ${OPENGL_LIBRARIES})
+target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.dll")
 
 # do the copying
 foreach(file_i ${LIBRARIES2COPY})

@@ -35,7 +35,7 @@ else (OPENGL_FOUND)
 	message("OpenGL environment missing")
 endif (OPENGL_FOUND)
 
-add_library(DBGL_Base ${Base_Src})
+add_library(DBGL_Base SHARED ${Base_Src})
 target_link_libraries(DBGL_Base "${PROJECT_SOURCE_DIR}/Debug/libglfw3.a")
 target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
 set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
