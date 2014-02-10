@@ -47,6 +47,12 @@ namespace dbgl
 
     void WindowManager::terminate()
     {
+	// Delete windows that are still open
+	if(!windows.empty())
+	    for (auto wnd = windows.begin(); wnd != windows.end();)
+		delete (wnd->second);
+
+	// Terminate glfw context
 	glfwTerminate();
     }
 
