@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string>
 #include <functional>
+#include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "Log/Log.h"
 #include "WindowManager.h"

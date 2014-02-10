@@ -74,6 +74,15 @@ namespace dbgl
 	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
+	glfwMakeContextCurrent(_pWndHandle);
+
+	// Initialize GLEW
+	glewExperimental = true; // For core profile
+	if (glewInit() != GLEW_OK)
+	{
+	    LOG->error("Failed to initialize GLEW!");
+	    exit(EXIT_FAILURE);
+	}
     }
 
     AbstractWindow::~AbstractWindow()
@@ -255,11 +264,11 @@ namespace dbgl
 	    addKeyCallback(_keyCallback);
 	if (_positionCallback)
 	    addPositionCallback(_positionCallback);
-	if(_refreshCallback)
+	if (_refreshCallback)
 	    addRefreshCallback(_refreshCallback);
-	if(_resizeCallback)
+	if (_resizeCallback)
 	    addResizeCallback(_resizeCallback);
-	if(_scrollCallback)
+	if (_scrollCallback)
 	    addScrollCallback(_scrollCallback);
     }
 

@@ -11,7 +11,6 @@
 #ifndef SIMPLEWINDOW_H_
 #define SIMPLEWINDOW_H_
 
-#include "GLFW/glfw3.h"
 #include "AbstractWindow.h"
 
 namespace dbgl

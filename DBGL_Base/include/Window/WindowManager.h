@@ -12,7 +12,8 @@
 #define WINDOWMANAGER_H_
 
 #include <stdlib.h>
-#include <map>//#include <unordered_map>#include "GLFW/glfw3.h"#include "AbstractWindow.h"#include "Log/Log.h"
+#include <map>//#include <unordered_map>#include "AbstractWindow.h"#include "Log/Log.h"#include "GLFW/glfw3.h"
+
 namespace dbgl
 {
     class AbstractWindow;
@@ -36,7 +37,9 @@ namespace dbgl
 	    template<typename T> T* createWindow()
 	    {
 		auto wnd = new T();
-		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
+		windows.insert(
+			std::pair<GLFWwindow*, AbstractWindow*>(
+				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -47,7 +50,9 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title)
 	    {
 		auto wnd = new T(title);
-		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
+		windows.insert(
+			std::pair<GLFWwindow*, AbstractWindow*>(
+				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -61,7 +66,9 @@ namespace dbgl
 		    int height)
 	    {
 		auto wnd = new T(title, width, height);
-		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
+		windows.insert(
+			std::pair<GLFWwindow*, AbstractWindow*>(
+				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -77,7 +84,9 @@ namespace dbgl
 		    int height, bool fullscreen)
 	    {
 		auto wnd = new T(title, width, height, fullscreen);
-		windows.insert(std::pair<GLFWwindow*, AbstractWindow*>(wnd->_pWndHandle, wnd));
+		windows.insert(
+			std::pair<GLFWwindow*, AbstractWindow*>(
+				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -100,7 +109,8 @@ namespace dbgl
 	    static void focusCallback(GLFWwindow* window, int focused);
 	    static void iconifiedCallback(GLFWwindow* window, int iconified);
 	    static void refreshCallback(GLFWwindow* window);
-	    static void resizeCallback(GLFWwindow* window, int width, int height);
+	    static void resizeCallback(GLFWwindow* window, int width,
+		    int height);
 	    static void framebufferResizeCallback(GLFWwindow* window, int width,
 		    int height);
 	    static void positionCallback(GLFWwindow* window, int xpos,

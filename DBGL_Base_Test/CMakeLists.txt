@@ -15,6 +15,7 @@ file(GLOB_RECURSE Base_Src
 # create a list of files to copy
 set(LIBRARIES2COPY
    "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.dll"
+   "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/lib/glew32.dll"
 )
 
 # OpenGL
@@ -30,6 +31,8 @@ add_executable(DBGL_Base_Test ${Base_Src})
 
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/include/")
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
+include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/include")
+
 target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.dll")
 
 # do the copying
