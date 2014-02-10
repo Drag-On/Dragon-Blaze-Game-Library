@@ -1,6 +1,8 @@
 [submodule "DBGL_Base/lib/glfw"]
 	path = DBGL_Base/lib/glfw
 	url = git://github.com/glfw/glfw.git
+	ignore = dirty
 [submodule "DBGL_Base/lib/glew"]
 	path = DBGL_Base/lib/glew
 	url = git://github.com/nigels-com/glew.git
+	ignore = dirty
