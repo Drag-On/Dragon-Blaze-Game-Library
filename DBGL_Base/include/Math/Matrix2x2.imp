@@ -241,13 +241,23 @@ namespace dbgl
 
 	template<typename T> Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index)
 	{
-		assert(index < getWidth());
-		return _columns[index];
+		if(index < getWidth())
+			return _columns[index];
+		else
+		{
+			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
 	}
 	
 	template<typename T> const Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index) const
 	{
-		assert(index < getWidth());
-		return _columns[index];
+		if(index < getWidth())
+			return _columns[index];
+		else
+		{
+			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
 	}
 }

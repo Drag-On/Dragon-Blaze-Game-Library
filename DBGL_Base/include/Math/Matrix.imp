@@ -188,13 +188,23 @@ namespace dbgl
 
 	template<typename T, unsigned int N, unsigned int M> Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index)
 	{
-		assert(index < getWidth());
-		return _columns[index];
+		if(index < getWidth())
+			return _columns[index];
+		else
+		{
+			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
 	}
 	
 	template<typename T, unsigned int N, unsigned int M> const Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index) const
 	{
-		assert(index < getWidth());
-		return _columns[index];
+		if(index < getWidth())
+			return _columns[index];
+		else
+		{
+			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
 	}
 }

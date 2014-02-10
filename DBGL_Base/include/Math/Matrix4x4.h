@@ -12,6 +12,7 @@
 #define MATRIX4X4_H_
 
 #include<cmath>
+#include"Log/Log.h"
 #include"Vector3.h"
 #include"Vector4.h"
 #include"Constants.h"
@@ -135,7 +136,8 @@ namespace dbgl
 	    /// @param near Near clipping plane
 	    /// @param far Far clipping plane
 	    /// </summary>
-	    static Matrix4x4<T> makeProjection(T fieldOfView, T aspectRatio, T near, T far);
+	    static Matrix4x4<T> makeProjection(T fieldOfView, T aspectRatio,
+		    T near, T far);
 	    // Operators
 	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
 	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs);

@@ -14,10 +14,11 @@
 #include <stdlib.h>
 #include <string>
 #include <functional>
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+#include <GL/glew.h>
+#include "Math/Vector3.h"
 #include "Log/Log.h"
 #include "WindowManager.h"
+#include <GLFW/glfw3.h>
 
 namespace dbgl
 {
@@ -283,6 +284,7 @@ namespace dbgl
 	    bool _isFullscreen;
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
+	    Vec3f _clearColor = Vec3f(0, 0, 0);
 
 	    friend class WindowManager;
     };

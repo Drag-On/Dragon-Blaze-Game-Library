@@ -11,8 +11,10 @@
 #ifndef VECTOR4_H_
 #define VECTOR4_H_
 
+#include<cstdlib>
 #include<cstddef>
 #include<cmath>
+#include"Log/Log.h"
 
 namespace dbgl
 {

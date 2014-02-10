@@ -232,13 +232,23 @@ namespace dbgl
 
 	template<typename T> T& Vector4<T>::operator[](std::size_t const& index)
 	{
-		assert(index < getDimension());
-		return (&_x)[index];
+		if(index < getDimension())
+			return (&_x)[index];
+		else
+		{
+			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
+			exit(EXIT_FAILURE);
+		}
 	}
 	
 	template<typename T> const T& Vector4<T>::operator[](std::size_t const& index) const
 	{
-		assert(index < getDimension());
-		return (&_x)[index];
+		if(index < getDimension())
+			return (&_x)[index];
+		else
+		{
+			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
+			exit(EXIT_FAILURE);
+		}
 	}
 }
