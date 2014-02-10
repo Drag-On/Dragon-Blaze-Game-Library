@@ -65,11 +65,11 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Checks if all elements are zero
 	    /// </summary>
-	    bool isZero();
+	    bool isZero() const;
 	    /// <summary>
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
-	    bool isIdentity();
+	    bool isIdentity() const;
 	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around
@@ -88,20 +88,20 @@ namespace dbgl
 	    static Matrix2x2<T> makeScale(T x, T y);
 	    // Operators
 	    Matrix2x2<T>& operator=(Matrix2x2<T> const& rhs);
-	    const Matrix2x2<T> operator+(Matrix2x2<T> const& rhs);
+	    const Matrix2x2<T> operator+(Matrix2x2<T> const& rhs) const;
 	    Matrix2x2<T>& operator+=(Matrix2x2<T> const& rhs);
-	    const Matrix2x2<T> operator-(Matrix2x2<T> const& rhs);
+	    const Matrix2x2<T> operator-(Matrix2x2<T> const& rhs) const;
 	    Matrix2x2<T>& operator-=(Matrix2x2<T> const& rhs);
-	    const Matrix2x2<T> operator*(Matrix2x2<T> const& rhs);
-	    const Vector2<T> operator*(Vector2<T> const& rhs);
-	    const Matrix2x2<T> operator*(T const& rhs);
+	    const Matrix2x2<T> operator*(Matrix2x2<T> const& rhs) const;
+	    const Vector2<T> operator*(Vector2<T> const& rhs) const;
+	    const Matrix2x2<T> operator*(T const& rhs) const;
 	    Matrix2x2<T>& operator*=(Matrix2x2<T> const& rhs);
 	    Matrix2x2<T>& operator*=(T const& rhs);
-	    const Matrix2x2<T> operator/(T const& rhs);
+	    const Matrix2x2<T> operator/(T const& rhs) const;
 	    Matrix2x2<T>& operator/=(T const& rhs);
 	    Matrix2x2<T> operator-() const;
-	    bool operator==(Matrix2x2<T> const& rhs);
-	    bool operator!=(Matrix2x2<T> const& rhs);
+	    bool operator==(Matrix2x2<T> const& rhs) const;
+	    bool operator!=(Matrix2x2<T> const& rhs) const;
 	    Vector2<T>& operator[](std::size_t const& index);
 	    const Vector2<T>& operator[](std::size_t const& index) const;
 

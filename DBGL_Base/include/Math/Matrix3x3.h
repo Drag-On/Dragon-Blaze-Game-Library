@@ -65,11 +65,11 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Checks if all elements are zero
 	    /// </summary>
-	    bool isZero();
+	    bool isZero() const;
 	    /// <summary>
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
-	    bool isIdentity();
+	    bool isIdentity() const;
 	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around the x axis
@@ -112,20 +112,20 @@ namespace dbgl
 	    static Matrix3x3<T> makeScale(T x, T y, T z);
 	    // Operators
 	    Matrix3x3<T>& operator=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs);
+	    const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs) const;
 	    Matrix3x3<T>& operator+=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator-(Matrix3x3<T> const& rhs);
+	    const Matrix3x3<T> operator-(Matrix3x3<T> const& rhs) const;
 	    Matrix3x3<T>& operator-=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator*(Matrix3x3<T> const& rhs);
-	    const Vector3<T> operator*(Vector3<T> const& rhs);
-	    const Matrix3x3<T> operator*(T const& rhs);
+	    const Matrix3x3<T> operator*(Matrix3x3<T> const& rhs) const;
+	    const Vector3<T> operator*(Vector3<T> const& rhs) const;
+	    const Matrix3x3<T> operator*(T const& rhs) const;
 	    Matrix3x3<T>& operator*=(Matrix3x3<T> const& rhs);
 	    Matrix3x3<T>& operator*=(T const& rhs);
-	    const Matrix3x3<T> operator/(T const& rhs);
+	    const Matrix3x3<T> operator/(T const& rhs) const;
 	    Matrix3x3<T>& operator/=(T const& rhs);
 	    Matrix3x3<T> operator-() const;
-	    bool operator==(Matrix3x3<T> const& rhs);
-	    bool operator!=(Matrix3x3<T> const& rhs);
+	    bool operator==(Matrix3x3<T> const& rhs) const;
+	    bool operator!=(Matrix3x3<T> const& rhs) const;
 	    Vector3<T>& operator[](std::size_t const& index);
 	    const Vector3<T>& operator[](std::size_t const& index) const;
 

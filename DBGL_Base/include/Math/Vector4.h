@@ -89,34 +89,34 @@ namespace dbgl
 	    /// @brief Returns a new vector that is the cross product of
 	    ///	       this vector and the passed vector
 	    /// </summary>
-	    Vector4<T> getCrossProduct(Vector4<T> rhs);
+	    Vector4<T> getCrossProduct(Vector4<T> const& rhs) const;
 	    /// <summary>
 	    /// @brief Checks if all components are zero
 	    /// </summary>
-	    bool isZero();
+	    bool isZero() const;
 	    /// <summary>
 	    /// @brief Translates this vector by the specified amount
 	    /// </summary>
 	    Vector4<T>& translate(T x, T y, T z, T w);
 	    // Operators
 	    Vector4<T>& operator=(Vector4<T> const& rhs);
-	    const Vector4<T> operator+(Vector4<T> const& rhs);
+	    const Vector4<T> operator+(Vector4<T> const& rhs) const;
 	    Vector4<T>& operator+=(Vector4<T> const& rhs);
-	    const Vector4<T> operator-(Vector4<T> const& rhs);
+	    const Vector4<T> operator-(Vector4<T> const& rhs) const;
 	    Vector4<T>& operator-=(Vector4<T> const& rhs);
-	    const T operator*(Vector4<T> const& rhs);
-	    const Vector4<T> operator*(T const& rhs);
+	    const T operator*(Vector4<T> const& rhs) const;
+	    const Vector4<T> operator*(T const& rhs) const;
 	    Vector4<T>& operator*=(T const& rhs);
 	    Vector4<T>& operator*=(Vector4<T> const& rhs);
-	    const Vector4<T> operator/(T const& rhs);
+	    const Vector4<T> operator/(T const& rhs) const;
 	    Vector4<T>& operator/=(T const& rhs);
 	    Vector4<T> operator-() const;
-	    bool operator==(Vector4<T> const& rhs);
-	    bool operator!=(Vector4<T> const& rhs);
-	    bool operator<(Vector4<T> const& rhs);
-	    bool operator>(Vector4<T> const& rhs);
-	    bool operator<=(Vector4<T> const& rhs);
-	    bool operator>=(Vector4<T> const& rhs);
+	    bool operator==(Vector4<T> const& rhs) const;
+	    bool operator!=(Vector4<T> const& rhs) const;
+	    bool operator<(Vector4<T> const& rhs) const;
+	    bool operator>(Vector4<T> const& rhs) const;
+	    bool operator<=(Vector4<T> const& rhs) const;
+	    bool operator>=(Vector4<T> const& rhs) const;
 	    T& operator[](std::size_t const& index);
 	    const T& operator[](std::size_t const& index) const;
 

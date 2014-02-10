@@ -59,14 +59,14 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T, unsigned int N> Vector<T,N> Vector<T,N>::getCrossProduct(Vector<T,N> rhs)
+	template<typename T, unsigned int N> Vector<T,N> Vector<T,N>::getCrossProduct(Vector<T,N> const& rhs) const
 	{
 		Vector<T,N> copy(*this);
 		copy *= rhs;
 		return copy;
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::isZero()
+	template<typename T, unsigned int N> bool Vector<T,N>::isZero() const
 	{
 		for(int i = 0; i < getDimension(); i++)
 			if((*this)[i] != 0)
@@ -84,7 +84,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator+(Vector<T,N> const& rhs) 
+	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator+(Vector<T,N> const& rhs) const
 	{ 
 		Vector<T,N> tmp(*this);
 		tmp += rhs;
@@ -98,7 +98,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator-(Vector<T,N> const& rhs) 
+	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator-(Vector<T,N> const& rhs) const
 	{ 
 		Vector<T,N> tmp(*this);
 		tmp -= rhs;
@@ -112,7 +112,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N> const T Vector<T,N>::operator*(Vector<T,N> const& rhs) 
+	template<typename T, unsigned int N> const T Vector<T,N>::operator*(Vector<T,N> const& rhs) const
 	{
 		T dotProd = 0;
 		for(int i = 0; i < getDimension(); i++)
@@ -120,7 +120,7 @@ namespace dbgl
 		return dotProd;
 	}
 	
-	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator*(T const& rhs) 
+	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator*(T const& rhs) const
 	{ 
 		Vector<T,N> tmp(*this);
 		tmp *= rhs;
@@ -146,7 +146,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator/(T const& rhs) 
+	template<typename T, unsigned int N> const Vector<T,N> Vector<T,N>::operator/(T const& rhs) const
 	{ 
 		Vector<T,N> tmp(*this);
 		tmp /= rhs;
@@ -168,7 +168,7 @@ namespace dbgl
 		return tmp;
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator==(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator==(Vector<T,N> const& rhs) const
 	{
 		for(int i = 0; i < getDimension(); i++)
 			if((*this)[i] != rhs[i])
@@ -176,27 +176,27 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator!=(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator!=(Vector<T,N> const& rhs) const
 	{
 		return !(*this == rhs);
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator<(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator<(Vector<T,N> const& rhs) const
 	{
 		return this->getLength() < rhs.getLength();
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator>(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator>(Vector<T,N> const& rhs) const
 	{
 		return this->getLength() > rhs.getLength();
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator<=(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator<=(Vector<T,N> const& rhs) const
 	{
 		return this->getLength() <= rhs.getLength();
 	}
 	
-	template<typename T, unsigned int N> bool Vector<T,N>::operator>=(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N> bool Vector<T,N>::operator>=(Vector<T,N> const& rhs) const
 	{
 		return this->getLength() >= rhs.getLength();
 	}

@@ -79,7 +79,7 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T> bool Matrix3x3<T>::isZero()
+	template<typename T> bool Matrix3x3<T>::isZero() const
 	{
 		for(int i = 0; i < getWidth(); i++)
 			if(!(*this)[i].isZero())
@@ -87,7 +87,7 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T> bool Matrix3x3<T>::isIdentity()
+	template<typename T> bool Matrix3x3<T>::isIdentity() const
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
@@ -185,7 +185,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator+(Matrix3x3<T> const& rhs) 
+	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator+(Matrix3x3<T> const& rhs) const
 	{ 
 		Matrix3x3<T> tmp(*this);
 		tmp += rhs;
@@ -199,7 +199,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator-(Matrix3x3<T> const& rhs) 
+	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator-(Matrix3x3<T> const& rhs) const
 	{ 
 		Matrix3x3<T> tmp(*this);
 		tmp -= rhs;
@@ -213,14 +213,14 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator*(Matrix3x3<T> const& rhs) 
+	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator*(Matrix3x3<T> const& rhs) const
 	{
 		Matrix3x3<T> copy(*this);
 		copy *= rhs;
 		return copy;
 	}
 	
-	template<typename T> const Vector3<T> Matrix3x3<T>::operator*(Vector3<T> const& rhs)
+	template<typename T> const Vector3<T> Matrix3x3<T>::operator*(Vector3<T> const& rhs) const
 	{
 		Vector3<T> vec;
 		for(int y = 0; y < getHeight(); y++)
@@ -229,7 +229,7 @@ namespace dbgl
 		return vec;
 	}
 	
-	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator*(T const& rhs) 
+	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator*(T const& rhs) const
 	{ 
 		Matrix3x3<T> tmp(*this);
 		tmp *= rhs;
@@ -257,7 +257,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator/(T const& rhs) 
+	template<typename T> const Matrix3x3<T> Matrix3x3<T>::operator/(T const& rhs) const
 	{ 
 		Matrix3x3<T> tmp(*this);
 		tmp /= rhs;
@@ -281,7 +281,7 @@ namespace dbgl
 		return tmp;
 	}
 	
-	template<typename T> bool Matrix3x3<T>::operator==(Matrix3x3<T> const& rhs)
+	template<typename T> bool Matrix3x3<T>::operator==(Matrix3x3<T> const& rhs) const
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
@@ -290,7 +290,7 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T> bool Matrix3x3<T>::operator!=(Matrix3x3<T> const& rhs)
+	template<typename T> bool Matrix3x3<T>::operator!=(Matrix3x3<T> const& rhs) const
 	{
 		return !(*this == rhs);
 	}

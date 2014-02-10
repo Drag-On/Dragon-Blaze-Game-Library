@@ -79,14 +79,14 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T> Vector4<T> Vector4<T>::getCrossProduct(Vector4<T> rhs)
+	template<typename T> Vector4<T> Vector4<T>::getCrossProduct(Vector4<T> const& rhs) const
 	{
 		Vector4<T> copy(*this);
 		copy *= rhs;
 		return copy;
 	}
 	
-	template<typename T> bool Vector4<T>::isZero()
+	template<typename T> bool Vector4<T>::isZero() const
 	{
 		for(int i = 0; i < getDimension(); i++)
 			if((*this)[i] != 0)
@@ -113,7 +113,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Vector4<T> Vector4<T>::operator+(Vector4<T> const& rhs) 
+	template<typename T> const Vector4<T> Vector4<T>::operator+(Vector4<T> const& rhs) const
 	{ 
 		Vector4<T> tmp(*this);
 		tmp += rhs;
@@ -127,7 +127,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Vector4<T> Vector4<T>::operator-(Vector4<T> const& rhs) 
+	template<typename T> const Vector4<T> Vector4<T>::operator-(Vector4<T> const& rhs) const
 	{ 
 		Vector4<T> tmp(*this);
 		tmp -= rhs;
@@ -141,7 +141,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const T Vector4<T>::operator*(Vector4<T> const& rhs) 
+	template<typename T> const T Vector4<T>::operator*(Vector4<T> const& rhs) const
 	{
 		T dotProd = 0;
 		for(int i = 0; i < getDimension(); i++)
@@ -149,7 +149,7 @@ namespace dbgl
 		return dotProd;
 	}
 	
-	template<typename T> const Vector4<T> Vector4<T>::operator*(T const& rhs) 
+	template<typename T> const Vector4<T> Vector4<T>::operator*(T const& rhs) const
 	{ 
 		Vector4<T> tmp(*this);
 		tmp *= rhs;
@@ -175,7 +175,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T> const Vector4<T> Vector4<T>::operator/(T const& rhs) 
+	template<typename T> const Vector4<T> Vector4<T>::operator/(T const& rhs) const
 	{ 
 		Vector4<T> tmp(*this);
 		tmp /= rhs;
@@ -197,7 +197,7 @@ namespace dbgl
 		return tmp;
 	}
 	
-	template<typename T> bool Vector4<T>::operator==(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator==(Vector4<T> const& rhs) const
 	{
 		for(int i = 0; i < getDimension(); i++)
 			if((*this)[i] != rhs[i])
@@ -205,27 +205,27 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T> bool Vector4<T>::operator!=(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator!=(Vector4<T> const& rhs) const
 	{
 		return !(*this == rhs);
 	}
 	
-	template<typename T> bool Vector4<T>::operator<(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator<(Vector4<T> const& rhs) const
 	{
 		return this->getLength() < rhs.getLength();
 	}
 	
-	template<typename T> bool Vector4<T>::operator>(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator>(Vector4<T> const& rhs) const
 	{
 		return this->getLength() > rhs.getLength();
 	}
 	
-	template<typename T> bool Vector4<T>::operator<=(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator<=(Vector4<T> const& rhs) const
 	{
 		return this->getLength() <= rhs.getLength();
 	}
 	
-	template<typename T> bool Vector4<T>::operator>=(Vector4<T> const& rhs)
+	template<typename T> bool Vector4<T>::operator>=(Vector4<T> const& rhs) const
 	{
 		return this->getLength() >= rhs.getLength();
 	}

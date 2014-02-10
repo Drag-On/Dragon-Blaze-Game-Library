@@ -68,11 +68,11 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Checks if all elements are zero
 	    /// </summary>
-	    bool isZero();
+	    bool isZero() const;
 	    /// <summary>
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
-	    bool isIdentity();
+	    bool isIdentity() const;
 	    /// <summary>
 	    /// @brief Constructs a translation matrix from the given translation values
 	    /// @param x Amount to translate on the x axis
@@ -127,8 +127,8 @@ namespace dbgl
 	    /// @param target Position the camera aims at
 	    /// @param up Vector that defines the camera up direction
 	    /// </summary>
-	    static Matrix4x4<T> makeCamera(Vector3<T> pos, Vector3<T> target,
-		    Vector3<T> up);
+	    static Matrix4x4<T> makeCamera(Vector3<T> const& pos, Vector3<T> const& target,
+		    Vector3<T> const& up);
 	    /// <summary>
 	    /// @brief Constructs a projection matrix from the given data
 	    /// @param fieldOfView Angle of aperture
@@ -140,20 +140,20 @@ namespace dbgl
 		    T near, T far);
 	    // Operators
 	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs);
+	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs) const;
 	    Matrix4x4<T>& operator+=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator-(Matrix4x4<T> const& rhs);
+	    const Matrix4x4<T> operator-(Matrix4x4<T> const& rhs) const;
 	    Matrix4x4<T>& operator-=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator*(Matrix4x4<T> const& rhs);
-	    const Vector4<T> operator*(Vector4<T> const& rhs);
-	    const Matrix4x4<T> operator*(T const& rhs);
+	    const Matrix4x4<T> operator*(Matrix4x4<T> const& rhs) const;
+	    const Vector4<T> operator*(Vector4<T> const& rhs) const;
+	    const Matrix4x4<T> operator*(T const& rhs) const;
 	    Matrix4x4<T>& operator*=(Matrix4x4<T> const& rhs);
 	    Matrix4x4<T>& operator*=(T const& rhs);
-	    const Matrix4x4<T> operator/(T const& rhs);
+	    const Matrix4x4<T> operator/(T const& rhs) const;
 	    Matrix4x4<T>& operator/=(T const& rhs);
 	    Matrix4x4<T> operator-() const;
-	    bool operator==(Matrix4x4<T> const& rhs);
-	    bool operator!=(Matrix4x4<T> const& rhs);
+	    bool operator==(Matrix4x4<T> const& rhs) const;
+	    bool operator!=(Matrix4x4<T> const& rhs) const;
 	    Vector4<T>& operator[](std::size_t const& index);
 	    const Vector4<T>& operator[](std::size_t const& index) const;
 

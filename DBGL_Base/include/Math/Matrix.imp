@@ -52,7 +52,7 @@ namespace dbgl
 		return transposed;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isZero()
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isZero() const
 	{
 		for(int i = 0; i < getWidth(); i++)
 			if(!(*this)[i].isZero())
@@ -60,7 +60,7 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isIdentity()
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isIdentity() const
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
@@ -83,7 +83,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator+(Matrix<T,N,M> const& rhs) 
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator+(Matrix<T,N,M> const& rhs) const
 	{ 
 		Matrix<T,N,M> tmp(*this);
 		tmp += rhs;
@@ -97,7 +97,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator-(Matrix<T,N,M> const& rhs) 
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator-(Matrix<T,N,M> const& rhs) const
 	{ 
 		Matrix<T,N,M> tmp(*this);
 		tmp -= rhs;
@@ -111,7 +111,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> template <unsigned int O> const Matrix<T,M,O> Matrix<T,N,M>::operator*(Matrix<T,O,N> const& rhs) 
+	template<typename T, unsigned int N, unsigned int M> template <unsigned int O> const Matrix<T,M,O> Matrix<T,N,M>::operator*(Matrix<T,O,N> const& rhs) const
 	{
 		Matrix<T,M,O> mat;
 		for(int x = 0; x < M; x++)
@@ -124,7 +124,7 @@ namespace dbgl
 		return mat;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> const Vector<T,M> Matrix<T,N,M>::operator*(Vector<T,N> const& rhs)
+	template<typename T, unsigned int N, unsigned int M> const Vector<T,M> Matrix<T,N,M>::operator*(Vector<T,N> const& rhs) const
 	{
 		Vector<T,M> vec;
 		for(int y = 0; y < getHeight(); y++)
@@ -133,7 +133,7 @@ namespace dbgl
 		return vec;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator*(T const& rhs) 
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator*(T const& rhs) const
 	{ 
 		Matrix<T,N,M> tmp(*this);
 		tmp *= rhs;
@@ -148,7 +148,7 @@ namespace dbgl
 		return *this;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator/(T const& rhs) 
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator/(T const& rhs) const
 	{ 
 		Matrix<T,N,M> tmp(*this);
 		tmp /= rhs;
@@ -172,7 +172,7 @@ namespace dbgl
 		return tmp;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator==(Matrix<T,N,M> const& rhs)
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator==(Matrix<T,N,M> const& rhs) const
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
@@ -181,7 +181,7 @@ namespace dbgl
 		return true;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator!=(Matrix<T,N,M> const& rhs)
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator!=(Matrix<T,N,M> const& rhs) const
 	{
 		return !(*this == rhs);
 	}

@@ -50,27 +50,27 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Checks if all elements are zero
 	    /// </summary>
-	    bool isZero();
+	    bool isZero() const;
 	    /// <summary>
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
-	    bool isIdentity();
+	    bool isIdentity() const;
 	    // Operators
 	    Matrix<T, N, M>& operator=(Matrix<T, N, M> const& rhs);
-	    const Matrix<T, N, M> operator+(Matrix<T, N, M> const& rhs);
+	    const Matrix<T, N, M> operator+(Matrix<T, N, M> const& rhs) const;
 	    Matrix<T, N, M>& operator+=(Matrix<T, N, M> const& rhs);
-	    const Matrix<T, N, M> operator-(Matrix<T, N, M> const& rhs);
+	    const Matrix<T, N, M> operator-(Matrix<T, N, M> const& rhs) const;
 	    Matrix<T, N, M>& operator-=(Matrix<T, N, M> const& rhs);
 	    template<unsigned int O> const Matrix<T, M, O> operator*(
-		    Matrix<T, O, N> const& rhs);
-	    const Vector<T, M> operator*(Vector<T, N> const& rhs);
-	    const Matrix<T, N, M> operator*(T const& rhs);
+		    Matrix<T, O, N> const& rhs) const;
+	    const Vector<T, M> operator*(Vector<T, N> const& rhs) const;
+	    const Matrix<T, N, M> operator*(T const& rhs) const;
 	    Matrix<T, N, M>& operator*=(T const& rhs);
-	    const Matrix<T, N, M> operator/(T const& rhs);
+	    const Matrix<T, N, M> operator/(T const& rhs) const;
 	    Matrix<T, N, M>& operator/=(T const& rhs);
 	    Matrix<T, N, M> operator-() const;
-	    bool operator==(Matrix<T, N, M> const& rhs);
-	    bool operator!=(Matrix<T, N, M> const& rhs);
+	    bool operator==(Matrix<T, N, M> const& rhs) const;
+	    bool operator!=(Matrix<T, N, M> const& rhs) const;
 	    Vector<T, M>& operator[](std::size_t const& index);
 	    const Vector<T, M>& operator[](std::size_t const& index) const;
 
