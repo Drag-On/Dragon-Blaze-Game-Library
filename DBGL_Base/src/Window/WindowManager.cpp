@@ -56,7 +56,7 @@ namespace dbgl
 	glfwTerminate();
     }
 
-    bool WindowManager::isRunning()
+    bool WindowManager::isRunning() const
     {
 	return !WindowManager::windows.empty();
     }

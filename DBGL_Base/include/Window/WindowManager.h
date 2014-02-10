@@ -101,7 +101,7 @@ namespace dbgl
 	    /**
 	     * @return True in case there are still windows open, otherwise false
 	     */
-	    bool isRunning();
+	    bool isRunning() const;
 	private:
 	    WindowManager();
 	    ~WindowManager();
