@@ -25,6 +25,7 @@ file(GLOB_RECURSE Base_Src
 # include the right directory
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}/lib/glfw/include")
+include_directories("${PROJECT_SOURCE_DIR}/lib/glew/include")
 
 # OpenGL
 find_package(OpenGL)
@@ -36,6 +37,7 @@ else (OPENGL_FOUND)
 endif (OPENGL_FOUND)
 
 add_library(DBGL_Base SHARED ${Base_Src})
-target_link_libraries(DBGL_Base "${PROJECT_SOURCE_DIR}/Debug/libglfw3.a")
+target_link_libraries(DBGL_Base "${PROJECT_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a")
+target_link_libraries(DBGL_Base "${PROJECT_SOURCE_DIR}/lib/glfw/src/libglfw3.a")
 target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
 set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
