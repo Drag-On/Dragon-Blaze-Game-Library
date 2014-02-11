@@ -105,6 +105,7 @@ namespace dbgl
 	private:
 	    WindowManager();
 	    ~WindowManager();
+	    static void errorCallback(int error, const char* description);
 	    static void closeCallback(GLFWwindow* window);
 	    static void focusCallback(GLFWwindow* window, int focused);
 	    static void iconifiedCallback(GLFWwindow* window, int iconified);

@@ -71,6 +71,11 @@ namespace dbgl
 
     }
 
+    void WindowManager::errorCallback(int error, const char* description)
+    {
+	LOG->error("Error %d: %s!", error, description);
+    }
+
     void WindowManager::closeCallback(GLFWwindow* window)
     {
 	windows[window]->_closeCallback();
@@ -152,8 +157,7 @@ namespace dbgl
 	    auto i = windows.find(oldHandle);
 	    auto temp = i->second;
 	    windows.erase(i);
-	    windows.insert(
-		    std::pair<GLFWwindow*, Window*>(newHandle, temp));
+	    windows.insert(std::pair<GLFWwindow*, Window*>(newHandle, temp));
 	}
     }
 }

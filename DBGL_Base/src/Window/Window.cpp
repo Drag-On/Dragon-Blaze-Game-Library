@@ -35,7 +35,7 @@ namespace dbgl
 	    LOG->error("Failed to initialize GLFW!");
 	    exit(EXIT_FAILURE);
 	}
-	glfwSetErrorCallback(errorCallback);
+	glfwSetErrorCallback(WindowManager::errorCallback);
 
 	_title = title;
 	if(fullscreen)
@@ -419,11 +419,6 @@ namespace dbgl
     void Window::postRender()
     {
 	glfwSwapBuffers(_pWndHandle);
-    }
-
-    void Window::errorCallback(int error, const char* description)
-    {
-	LOG->error("Error %d: %s!", error, description);
     }
 }
 

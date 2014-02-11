@@ -279,8 +279,6 @@ namespace dbgl
 	    GLFWwindow* _pWndHandle = NULL;
 
 	private:
-	    static void errorCallback(int error, const char* description);
-
 	    std::function<void()> _closeCallback;
 	    std::function<void(int)> _focusCallback;
 	    std::function<void(int)> _iconifiedCallback;
