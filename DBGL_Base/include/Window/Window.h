@@ -15,10 +15,11 @@
 #include <string>
 #include <functional>
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "Math/Vector3.h"
 #include "Log/Log.h"
 #include "WindowManager.h"
-#include <GLFW/glfw3.h>
+#include "Rendering/RenderContext.h"
 
 namespace dbgl
 {
@@ -41,190 +42,185 @@ namespace dbgl
 	    /**
 	     * @brief Makes this window show
 	     */
-	    virtual void show() final;
+	    void show();
 	    /**
 	     * @brief Hides the window
 	     */
-	    virtual void hide() final;
+	    void hide();
 	    /**
 	     * @brief Closes the window permanently
 	     */
-	    virtual void close() final;
+	    void close();
 	    /**
 	     * @return True in case the window is currently in focus, otherwise false
 	     */
-	    virtual bool hasFocus() const final;
+	    bool hasFocus() const;
 	    /**
 	     * @return True in case the window is currently iconified, otherwise false
 	     */
-	    virtual bool isIconified() const final;
+	    bool isIconified() const;
 	    /**
 	     * @return True in case the window is currently visible, otherwise false
 	     */
-	    virtual bool isVisible() const final;
+	    bool isVisible() const;
 	    /**
 	     * @return True in case the window is resizable, otherwise false
 	     */
-	    virtual bool isResizable() const final;
+	    bool isResizable() const;
 	    /**
 	     * @return True in case the window has decorations (i.e. borders etc.),
 	     * 		otherwise false
 	     */
-	    virtual bool isDecorated() const final;
+	    bool isDecorated() const;
 	    /**
 	     * @return The window's title
 	     */
-	    virtual const char* getTitle() const final;
+	    const char* getTitle() const;
 	    /**
 	     * @param title The new title to set
 	     */
-	    virtual void setTitle(const char* title) final;
+	    void setTitle(const char* title);
 	    /**
 	     * @return Width of the window in screen dimensions
 	     */
-	    virtual int getWidth() const final;
+	    int getWidth() const;
 	    /**
 	     * @return Height of the window in screen dimensions
 	     */
-	    virtual int getHeight() const final;
+	    int getHeight() const;
 	    /**
 	     * @brief Sets a new window size
 	     * @param width New width
 	     * @param height New height
 	     */
-	    virtual void setSize(int width, int height) final;
+	    void setSize(int width, int height);
 	    /**
 	     * @return Width of the actual rendering space in pixels
 	     */
-	    virtual int getFrameWidth() const final;
+	    int getFrameWidth() const;
 	    /**
 	     * @return Height of the actual rendering space in pixels
 	     */
-	    virtual int getFrameHeight() const final;
+	    int getFrameHeight() const;
 	    /**
 	     * @return X coordinate on screen
 	     */
-	    virtual int getX() const final;
+	    int getX() const;
 	    /**
 	     * @return Y coordinate on screen
 	     */
-	    virtual int getY() const final;
+	    int getY() const;
 	    /**
 	     * @brief Moves the window to a new location on screen
 	     * @param x New x coordinate
 	     * @param y New y coordinate
 	     */
-	    virtual void setPos(int x, int y) final;
+	    void setPos(int x, int y);
 	    /**
 	     * @return True in case the window is in fullscreen mode,
 	     * 		otherwise false
 	     */
-	    virtual bool isFullscreen() const final;
+	    bool isFullscreen() const;
 	    /**
 	     * @brief Provides the possibility to switch between fullscreen
 	     * 	      and window mode
 	     * @param fullscreen Indicates if window should switch to fullscreen
 	     * 			 or back to window
 	     */
-	    virtual void setFullscreen(bool fullscreen) final;
+	    void setFullscreen(bool fullscreen);
 	    /**
 	     * @return The currently set clear color
 	     */
-	    virtual Vec3f getClearColor() const final;
+	    Vec3f getClearColor() const;
 	    /**
 	     * @param color New clear color to use
 	     */
-	    virtual void setClearColor(Vec3f const& color) final;
+	    void setClearColor(Vector3<GLclampf> const& color);
 	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    virtual void addCloseCallback(
-		    std::function<void()> const& callback) final;
+	    void addCloseCallback(std::function<void()> const& callback);
 	    /**
 	     * @brief Registers a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
 	     */
-	    virtual void addFocusCallback(
-		    std::function<void(int)> const& callback) final;
+	    void addFocusCallback(std::function<void(int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for iconified events
 	     * @param callback Function to be called when this window is getting iconified or restored
 	     */
-	    virtual void addIconifiedCallback(
-		    std::function<void(int)> const& callback) final;
+	    void addIconifiedCallback(std::function<void(int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for refresh events
 	     * @param callback Function to be called when this window needs to be refreshed
 	     */
-	    virtual void addRefreshCallback(
-		    std::function<void()> const& callback) final;
+	    void addRefreshCallback(std::function<void()> const& callback);
 	    /**
 	     * @brief Registers a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
-	    virtual void addResizeCallback(
-		    std::function<void(int, int)> const& callback) final;
+	    void addResizeCallback(
+		    std::function<void(int, int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for framebuffer resize events
 	     * @param callback Function to be called when this window's framebuffer needs a resize
 	     */
-	    virtual void addFramebufferResizeCallback(
-		    std::function<void(int, int)> const& callback) final;
+	    void addFramebufferResizeCallback(
+		    std::function<void(int, int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for window move events
 	     * @param callback Function to be called when this window is getting moved
 	     */
-	    virtual void addPositionCallback(
-		    std::function<void(int, int)> const& callback) final;
+	    void addPositionCallback(
+		    std::function<void(int, int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for unicode character events
 	     * @param callback Function to be called when a character is typed into this window
 	     */
-	    virtual void addCharacterCallback(
-		    std::function<void(unsigned int)> const& callback) final;
+	    void addCharacterCallback(
+		    std::function<void(unsigned int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
-	    virtual void addCursorEnterCallback(
-		    std::function<void(int)> const& callback) final;
+	    void addCursorEnterCallback(
+		    std::function<void(int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor move events
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
-	    virtual void addCursorCallback(
-		    std::function<void(double, double)> const& callback) final;
+	    void addCursorCallback(
+		    std::function<void(double, double)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for mouse button events
 	     * @param callback Function to be called when a mouse button state changes
 	     */
-	    virtual void addMouseButtonCallback(
-		    std::function<void(int, int, int)> const& callback) final;
+	    void addMouseButtonCallback(
+		    std::function<void(int, int, int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
 	     */
-	    virtual void addScrollCallback(
-		    std::function<void(double, double)> const& callback) final;
+	    void addScrollCallback(
+		    std::function<void(double, double)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for key events
 	     * @param callback Function to be called when a key state changes
 	     */
-	    virtual void addKeyCallback(
-		    std::function<void(int, int, int, int)> const& callback) final;
+	    void addKeyCallback(
+		    std::function<void(int, int, int, int)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    virtual void addUpdateCallback(
-		    std::function<void()> const& callback) final;
+	    void addUpdateCallback(std::function<void()> const& callback);
 	    /**
 	     * @brief Registers a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
 	     */
-	    virtual void addRenderCallback(
-		    std::function<void()> const& callback) final;
+	    void addRenderCallback(
+		    std::function<void(const RenderContext*)> const& callback);
 	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
@@ -275,8 +271,7 @@ namespace dbgl
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    Window(const char* title, int width, int height,
-		    bool fullscreen);
+	    Window(const char* title, int width, int height, bool fullscreen);
 
 	    /**
 	     * GLFW window handle
@@ -300,13 +295,14 @@ namespace dbgl
 	    std::function<void(double, double)> _scrollCallback;
 	    std::function<void(int, int, int, int)> _keyCallback;
 	    std::function<void()> _updateCallback;
-	    std::function<void()> _renderCallback;
+	    std::function<void(const RenderContext* rc)> _renderCallback;
 
 	    std::string _title;
 	    bool _isFullscreen;
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
-	    Vec3f _clearColor = Vec3f(0, 0, 0);
+	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0, 0, 0);
+	    RenderContext _renderContext;
 
 	    friend class WindowManager;
     };

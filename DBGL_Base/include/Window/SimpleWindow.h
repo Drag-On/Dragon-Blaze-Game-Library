@@ -34,8 +34,8 @@ namespace dbgl
 	    SimpleWindow(const char* title, int width, int height,
 		    bool fullscreen);
 	    // Callbacks
-	    virtual void framebufferResizeCallback(int width, int height);
-	    virtual void keyCallback(int key, int scancode, int action,
+	    void framebufferResizeCallback(int width, int height);
+	    void keyCallback(int key, int scancode, int action,
 		    int mods);
 
 	private:

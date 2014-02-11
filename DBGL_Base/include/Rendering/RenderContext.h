@@ -15,7 +15,6 @@
 #include <vector>
 #include "Mesh.h"
 #include "Viewport.h"
-#include "Math/Vector3.h"
 
 namespace dbgl
 {
@@ -23,8 +22,7 @@ namespace dbgl
      * @brief The RenderContext serves as the main rendering authority.
      * @details All objects that are supposed to be displayed need to be passed to an instance
      * 		of this class. It will then take care of the model and render it to all
-     * 		viewports where it is visible. Typically there will be one RenderContext per
-     * 		window, but it's also possible to have one context manage multiple windows.
+     * 		viewports where it is visible.
      */
     class RenderContext
     {

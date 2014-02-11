@@ -277,7 +277,7 @@ namespace dbgl
 	return _clearColor;
     }
 
-    void Window::setClearColor(Vec3f const& color)
+    void Window::setClearColor(Vector3<GLclampf> const& color)
     {
 	_clearColor = color;
     }
@@ -384,7 +384,7 @@ namespace dbgl
     }
 
     void Window::addRenderCallback(
-	    std::function<void()> const& callback)
+	    std::function<void(const RenderContext*)> const& callback)
     {
 	_renderCallback = callback;
     }
@@ -406,12 +406,14 @@ namespace dbgl
     void Window::preRender()
     {
 	glfwMakeContextCurrent(_pWndHandle);
+	glClearColor(_clearColor[0], _clearColor[1], _clearColor[2], 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void Window::render()
     {
 	if(_renderCallback)
-	    _renderCallback();
+	    _renderCallback(&_renderContext);
     }
 
     void Window::postRender()
