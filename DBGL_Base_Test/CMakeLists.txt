@@ -34,6 +34,9 @@ include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
 include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/include")
 
 target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.dll")
+#target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a")
+#target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glfw/src/libglfw3.a")
+target_link_libraries(DBGL_Base_Test "${OPENGL_LIBRARIES}")
 
 # do the copying
 foreach(file_i ${LIBRARIES2COPY})

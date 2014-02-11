@@ -8,26 +8,26 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "Window/AbstractWindow.h"
+#include "Window/Window.h"
 
 namespace dbgl
 {
-    AbstractWindow::AbstractWindow() :
-	    AbstractWindow("Dragon Blaze Game Library")
+    Window::Window() :
+	    Window("Dragon Blaze Game Library")
     {
     }
 
-    AbstractWindow::AbstractWindow(const char* title) :
-	    AbstractWindow(title, 800, 600)
+    Window::Window(const char* title) :
+	    Window(title, 800, 600)
     {
     }
 
-    AbstractWindow::AbstractWindow(const char* title, int width, int height) :
-	    AbstractWindow(title, width, height, false)
+    Window::Window(const char* title, int width, int height) :
+	    Window(title, width, height, false)
     {
     }
 
-    AbstractWindow::AbstractWindow(const char* title, int width, int height,
+    Window::Window(const char* title, int width, int height,
 	    bool fullscreen)
     {
 	if (!glfwInit())
@@ -85,120 +85,120 @@ namespace dbgl
 	}
     }
 
-    AbstractWindow::~AbstractWindow()
+    Window::~Window()
     {
 	glfwDestroyWindow(_pWndHandle);
     }
 
-    void AbstractWindow::show()
+    void Window::show()
     {
 	glfwShowWindow(_pWndHandle);
     }
 
-    void AbstractWindow::hide()
+    void Window::hide()
     {
 	glfwHideWindow(_pWndHandle);
     }
 
-    void AbstractWindow::close()
+    void Window::close()
     {
 	glfwSetWindowShouldClose(_pWndHandle, true);
     }
 
-    bool AbstractWindow::hasFocus() const
+    bool Window::hasFocus() const
     {
 	return glfwGetWindowAttrib(_pWndHandle, GLFW_FOCUSED);
     }
 
-    bool AbstractWindow::isIconified() const
+    bool Window::isIconified() const
     {
 	return glfwGetWindowAttrib(_pWndHandle, GLFW_ICONIFIED);
     }
 
-    bool AbstractWindow::isVisible() const
+    bool Window::isVisible() const
     {
 	return glfwGetWindowAttrib(_pWndHandle, GLFW_VISIBLE);
     }
 
-    bool AbstractWindow::isResizable() const
+    bool Window::isResizable() const
     {
 	return glfwGetWindowAttrib(_pWndHandle, GLFW_RESIZABLE);
     }
 
-    bool AbstractWindow::isDecorated() const
+    bool Window::isDecorated() const
     {
 	return glfwGetWindowAttrib(_pWndHandle, GLFW_DECORATED);
     }
 
-    const char* AbstractWindow::getTitle() const
+    const char* Window::getTitle() const
     {
 	return _title.c_str();
     }
 
-    void AbstractWindow::setTitle(const char* title)
+    void Window::setTitle(const char* title)
     {
 	_title.assign(title);
 	glfwSetWindowTitle(_pWndHandle, title);
     }
 
-    int AbstractWindow::getWidth() const
+    int Window::getWidth() const
     {
 	int width, height;
 	glfwGetWindowSize(_pWndHandle, &width, &height);
 	return width;
     }
 
-    int AbstractWindow::getHeight() const
+    int Window::getHeight() const
     {
 	int width, height;
 	glfwGetWindowSize(_pWndHandle, &width, &height);
 	return height;
     }
 
-    void AbstractWindow::setSize(int width, int height)
+    void Window::setSize(int width, int height)
     {
 	glfwSetWindowSize(_pWndHandle, width, height);
     }
 
-    int AbstractWindow::getFrameWidth() const
+    int Window::getFrameWidth() const
     {
 	int width, height;
 	glfwGetFramebufferSize(_pWndHandle, &width, &height);
 	return width;
     }
 
-    int AbstractWindow::getFrameHeight() const
+    int Window::getFrameHeight() const
     {
 	int width, height;
 	glfwGetFramebufferSize(_pWndHandle, &width, &height);
 	return height;
     }
 
-    int AbstractWindow::getX() const
+    int Window::getX() const
     {
 	int x, y;
 	glfwGetWindowPos(_pWndHandle, &x, &y);
 	return x;
     }
 
-    int AbstractWindow::getY() const
+    int Window::getY() const
     {
 	int x, y;
 	glfwGetWindowPos(_pWndHandle, &x, &y);
 	return y;
     }
 
-    void AbstractWindow::setPos(int x, int y)
+    void Window::setPos(int x, int y)
     {
 	glfwSetWindowPos(_pWndHandle, x, y);
     }
 
-    bool AbstractWindow::isFullscreen() const
+    bool Window::isFullscreen() const
     {
 	return _isFullscreen;
     }
 
-    void AbstractWindow::setFullscreen(bool fullscreen)
+    void Window::setFullscreen(bool fullscreen)
     {
 	auto oldHandle = _pWndHandle;
 	if (isFullscreen() && !fullscreen)
@@ -272,50 +272,53 @@ namespace dbgl
 	    addScrollCallback(_scrollCallback);
     }
 
-    Vec3f AbstractWindow::getClearColor() const
+    Vec3f Window::getClearColor() const
     {
 	return _clearColor;
     }
 
-    void AbstractWindow::setClearColor(Vec3f const& color)
+    void Window::setClearColor(Vec3f const& color)
     {
 	_clearColor = color;
     }
 
-    void AbstractWindow::addCloseCallback(std::function<void()> const& callback)
+    void Window::addCloseCallback(std::function<void()> const& callback)
     {
 	_closeCallback = callback;
 	glfwSetWindowCloseCallback(_pWndHandle, WindowManager::closeCallback);
     }
 
-    void AbstractWindow::addFocusCallback(std::function<void(int)> const& callback)
+    void Window::addFocusCallback(
+	    std::function<void(int)> const& callback)
     {
 	_focusCallback = callback;
 	glfwSetWindowFocusCallback(_pWndHandle, WindowManager::focusCallback);
     }
 
-    void AbstractWindow::addIconifiedCallback(std::function<void(int)> const& callback)
+    void Window::addIconifiedCallback(
+	    std::function<void(int)> const& callback)
     {
 	_iconifiedCallback = callback;
 	glfwSetWindowIconifyCallback(_pWndHandle,
 		WindowManager::iconifiedCallback);
     }
 
-    void AbstractWindow::addRefreshCallback(std::function<void()> const& callback)
+    void Window::addRefreshCallback(
+	    std::function<void()> const& callback)
     {
 	_refreshCallback = callback;
 	glfwSetWindowRefreshCallback(_pWndHandle,
 		WindowManager::refreshCallback);
     }
 
-    void AbstractWindow::addResizeCallback(
+    void Window::addResizeCallback(
 	    std::function<void(int, int)> const& callback)
     {
 	_resizeCallback = callback;
 	glfwSetWindowSizeCallback(_pWndHandle, WindowManager::resizeCallback);
     }
 
-    void AbstractWindow::addFramebufferResizeCallback(
+    void Window::addFramebufferResizeCallback(
 	    std::function<void(int, int)> const& callback)
     {
 	_framebufferResizeCallback = callback;
@@ -323,21 +326,21 @@ namespace dbgl
 		WindowManager::framebufferResizeCallback);
     }
 
-    void AbstractWindow::addPositionCallback(
+    void Window::addPositionCallback(
 	    std::function<void(int, int)> const& callback)
     {
 	_positionCallback = callback;
 	glfwSetWindowPosCallback(_pWndHandle, WindowManager::positionCallback);
     }
 
-    void AbstractWindow::addCharacterCallback(
+    void Window::addCharacterCallback(
 	    std::function<void(unsigned int)> const& callback)
     {
 	_characterCallback = callback;
 	glfwSetCharCallback(_pWndHandle, WindowManager::characterCallback);
     }
 
-    void AbstractWindow::addCursorEnterCallback(
+    void Window::addCursorEnterCallback(
 	    std::function<void(int)> const& callback)
     {
 	_cursorEnterCallback = callback;
@@ -345,14 +348,14 @@ namespace dbgl
 		WindowManager::cursorEnterCallback);
     }
 
-    void AbstractWindow::addCursorCallback(
+    void Window::addCursorCallback(
 	    std::function<void(double, double)> const& callback)
     {
 	_cursorCallback = callback;
 	glfwSetCursorPosCallback(_pWndHandle, WindowManager::cursorCallback);
     }
 
-    void AbstractWindow::addMouseButtonCallback(
+    void Window::addMouseButtonCallback(
 	    std::function<void(int, int, int)> const& callback)
     {
 	_mouseButtonCallback = callback;
@@ -360,41 +363,65 @@ namespace dbgl
 		WindowManager::mouseButtonCallback);
     }
 
-    void AbstractWindow::addScrollCallback(
+    void Window::addScrollCallback(
 	    std::function<void(double, double)> const& callback)
     {
 	_scrollCallback = callback;
 	glfwSetScrollCallback(_pWndHandle, WindowManager::scrollCallback);
     }
 
-    void AbstractWindow::addKeyCallback(
+    void Window::addKeyCallback(
 	    std::function<void(int, int, int, int)> const& callback)
     {
 	_keyCallback = callback;
 	glfwSetKeyCallback(_pWndHandle, WindowManager::keyCallback);
     }
 
-    void AbstractWindow::preUpdate()
+    void Window::addUpdateCallback(
+	    std::function<void()> const& callback)
+    {
+	_updateCallback = callback;
+    }
+
+    void Window::addRenderCallback(
+	    std::function<void()> const& callback)
+    {
+	_renderCallback = callback;
+    }
+
+    void Window::preUpdate()
     {
     }
 
-    void AbstractWindow::postUpdate()
+    void Window::update()
+    {
+	if (_updateCallback)
+	    _updateCallback();
+    }
+
+    void Window::postUpdate()
     {
     }
 
-    void AbstractWindow::preRender()
+    void Window::preRender()
     {
 	glfwMakeContextCurrent(_pWndHandle);
     }
 
-    void AbstractWindow::postRender()
+    void Window::render()
+    {
+	if(_renderCallback)
+	    _renderCallback();
+    }
+
+    void Window::postRender()
     {
 	glfwSwapBuffers(_pWndHandle);
     }
 
-    void AbstractWindow::errorCallback(int error, const char* description)
+    void Window::errorCallback(int error, const char* description)
     {
 	LOG->error("Error %d: %s!", error, description);
-}
+    }
 }
 

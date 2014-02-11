@@ -11,8 +11,6 @@
 #ifndef VIEWPORT_H_
 #define VIEWPORT_H_
 
-#include "Window/AbstractWindow.h"
-
 namespace dbgl
 {
     class Viewport
@@ -20,7 +18,6 @@ namespace dbgl
 	private:
 	    unsigned int _x, _y;
 	    unsigned int _width, _height;
-	    AbstractWindow* _pWindow;
     };
 }
 

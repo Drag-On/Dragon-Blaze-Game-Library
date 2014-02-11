@@ -12,11 +12,11 @@
 #define WINDOWMANAGER_H_
 
 #include <stdlib.h>
-#include <map>//#include <unordered_map>#include "AbstractWindow.h"#include "Log/Log.h"#include "GLFW/glfw3.h"
+#include <map>//#include <unordered_map>#include "Window.h"#include "Log/Log.h"#include "GLFW/glfw3.h"
 
 namespace dbgl
 {
-    class AbstractWindow;
+    class Window;
 
     /**
      * @brief Handles all open windows
@@ -38,7 +38,7 @@ namespace dbgl
 	    {
 		auto wnd = new T();
 		windows.insert(
-			std::pair<GLFWwindow*, AbstractWindow*>(
+			std::pair<GLFWwindow*, Window*>(
 				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
@@ -51,7 +51,7 @@ namespace dbgl
 	    {
 		auto wnd = new T(title);
 		windows.insert(
-			std::pair<GLFWwindow*, AbstractWindow*>(
+			std::pair<GLFWwindow*, Window*>(
 				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
@@ -67,7 +67,7 @@ namespace dbgl
 	    {
 		auto wnd = new T(title, width, height);
 		windows.insert(
-			std::pair<GLFWwindow*, AbstractWindow*>(
+			std::pair<GLFWwindow*, Window*>(
 				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
@@ -85,7 +85,7 @@ namespace dbgl
 	    {
 		auto wnd = new T(title, width, height, fullscreen);
 		windows.insert(
-			std::pair<GLFWwindow*, AbstractWindow*>(
+			std::pair<GLFWwindow*, Window*>(
 				wnd->_pWndHandle, wnd));
 		return wnd;
 	    }
@@ -129,10 +129,10 @@ namespace dbgl
 
 	    void updateHandle(GLFWwindow* oldHandle, GLFWwindow* newHandle);
 
-	    static std::map<GLFWwindow*, AbstractWindow*> windows; // TODO: unordered_map?
+	    static std::map<GLFWwindow*, Window*> windows; // TODO: unordered_map?
 	    static WindowManager instance;
 
-	    friend class AbstractWindow;
+	    friend class Window;
     };
 }
 

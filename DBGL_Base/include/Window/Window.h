@@ -8,8 +8,8 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef ABSTRACTWINDOW_H_
-#define ABSTRACTWINDOW_H_
+#ifndef WINDOW_H_
+#define WINDOW_H_
 
 #include <stdlib.h>
 #include <string>
@@ -27,17 +27,17 @@ namespace dbgl
      * @details Windows need to be constructed by the @see WindowManager and
      * 		will automatically taken care of by it. This includes freeing
      * 		all memory after the window has been closed.
-     * 		All classes that derive from AbstractWindow need to add
+     * 		All classes that derive from Window need to add
      * 		WindowManager as their friend, otherwise construction will
      * 		not work properly.
      */
-    class AbstractWindow
+    class Window
     {
 	public:
 	    /**
 	     * @brief Frees all memory allocated to this window
 	     */
-	    virtual ~AbstractWindow();
+	    virtual ~Window();
 	    /**
 	     * @brief Makes this window show
 	     */
@@ -139,7 +139,8 @@ namespace dbgl
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    virtual void addCloseCallback(std::function<void()> const& callback) final;
+	    virtual void addCloseCallback(
+		    std::function<void()> const& callback) final;
 	    /**
 	     * @brief Registers a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
@@ -213,13 +214,25 @@ namespace dbgl
 	    virtual void addKeyCallback(
 		    std::function<void(int, int, int, int)> const& callback) final;
 	    /**
+	     * @brief Registers a function as callback for update events
+	     * @param callback Function to be called when the window is being updated
+	     */
+	    virtual void addUpdateCallback(
+		    std::function<void()> const& callback) final;
+	    /**
+	     * @brief Registers a function as callback for render events
+	     * @param callback Function to be called when the window is being rendered
+	     */
+	    virtual void addRenderCallback(
+		    std::function<void()> const& callback) final;
+	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
 	    virtual void preUpdate();
 	    /**
 	     * @brief Gets called once a frame and should update everything
 	     */
-	    virtual void update() = 0;
+	    virtual void update();
 	    /**
 	     * @brief Gets called once a frame after @see update
 	     */
@@ -231,7 +244,7 @@ namespace dbgl
 	    /**
 	     * @brief Gets called once a frame and should render everything
 	     */
-	    virtual void render() = 0;
+	    virtual void render();
 	    /**
 	     * @brief Gets called once a frame after @see update
 	     */
@@ -242,19 +255,19 @@ namespace dbgl
 	    /**
 	     * @brief Constructs a window of size 800x600 with a standard title
 	     */
-	    AbstractWindow();
+	    Window();
 	    /**
 	     * @brief Constructs a window of size 800x600
 	     * @param title Title of the window
 	     */
-	    AbstractWindow(const char* title);
+	    Window(const char* title);
 	    /**
 	     * @brief Constructs a window
 	     * @param title Title of the window
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
 	     */
-	    AbstractWindow(const char* title, int width, int height);
+	    Window(const char* title, int width, int height);
 	    /**
 	     * @brief Constructs a window
 	     * @param title Title of the window
@@ -262,9 +275,8 @@ namespace dbgl
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    AbstractWindow(const char* title, int width, int height,
+	    Window(const char* title, int width, int height,
 		    bool fullscreen);
-
 
 	    /**
 	     * GLFW window handle
@@ -287,6 +299,8 @@ namespace dbgl
 	    std::function<void(int, int, int)> _mouseButtonCallback;
 	    std::function<void(double, double)> _scrollCallback;
 	    std::function<void(int, int, int, int)> _keyCallback;
+	    std::function<void()> _updateCallback;
+	    std::function<void()> _renderCallback;
 
 	    std::string _title;
 	    bool _isFullscreen;
@@ -298,4 +312,4 @@ namespace dbgl
     };
 }
 
-#endif /* ABSTRACTWINDOW_H_ */
+#endif /* WINDOW_H_ */

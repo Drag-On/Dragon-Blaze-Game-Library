@@ -29,7 +29,7 @@ namespace dbgl
 
     SimpleWindow::SimpleWindow(const char* title, int width, int height,
 	    bool fullscreen) :
-	    AbstractWindow(title, width, height, fullscreen)
+	    Window(title, width, height, fullscreen)
     {
 	// Add callbacks for framebuffer and keyboard input
 	addFramebufferResizeCallback(
@@ -42,16 +42,6 @@ namespace dbgl
     }
 
     SimpleWindow::~SimpleWindow()
-    {
-
-    }
-
-    void SimpleWindow::update()
-    {
-
-    }
-
-    void SimpleWindow::render()
     {
 
     }

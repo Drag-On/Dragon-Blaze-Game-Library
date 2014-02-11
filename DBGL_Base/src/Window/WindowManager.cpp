@@ -13,8 +13,8 @@
 namespace dbgl
 {
     WindowManager WindowManager::instance = WindowManager();
-    std::map<GLFWwindow*, AbstractWindow*> WindowManager::windows = std::map<
-	    GLFWwindow*, AbstractWindow*>();
+    std::map<GLFWwindow*, Window*> WindowManager::windows = std::map<
+	    GLFWwindow*, Window*>();
 
     WindowManager* WindowManager::get()
     {
@@ -48,7 +48,7 @@ namespace dbgl
     void WindowManager::terminate()
     {
 	// Delete windows that are still open
-	if(!windows.empty())
+	if (!windows.empty())
 	    for (auto wnd = windows.begin(); wnd != windows.end();)
 		delete (wnd->second);
 
@@ -153,7 +153,7 @@ namespace dbgl
 	    auto temp = i->second;
 	    windows.erase(i);
 	    windows.insert(
-		    std::pair<GLFWwindow*, AbstractWindow*>(newHandle, temp));
+		    std::pair<GLFWwindow*, Window*>(newHandle, temp));
 	}
     }
 }

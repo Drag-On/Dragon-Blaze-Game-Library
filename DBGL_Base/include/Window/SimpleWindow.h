@@ -11,28 +11,20 @@
 #ifndef SIMPLEWINDOW_H_
 #define SIMPLEWINDOW_H_
 
-#include "AbstractWindow.h"
+#include "Window.h"
 
 namespace dbgl
 {
     /**
      * @brief Simple default window with often used properties
      */
-    class SimpleWindow: public AbstractWindow
+    class SimpleWindow: public Window
     {
 	public:
 	    /**
 	     * @brief Frees all memory allocated to this window
 	     */
 	    ~SimpleWindow();
-	    /**
-	     * @brief Gets called once a frame and should update everything
-	     */
-	    virtual void update();
-	    /**
-	     * @brief Gets called once a frame and should render everything
-	     */
-	    virtual void render();
 
 	protected:
 	    // Constructors
