@@ -91,7 +91,7 @@ namespace dbgl
 		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
 		GL_STATIC_DRAW);
 	mesh->_indices =
-	{   0, 1, 2, 0, 2, 3};
+	{   0, 2, 1, 0, 3, 2};
 	mesh->_indexBuffer = generateBuffer();
 	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
 		mesh->_indices.size() * sizeof(unsigned short),

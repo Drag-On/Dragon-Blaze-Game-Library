@@ -49,19 +49,6 @@ namespace dbgl
 	     * @param mesh
 	     */
 	    void draw(const Mesh* mesh) const;
-	    /**
-	     * @brief Initializes the general OpenGL context. Needs to be called once
-	     * 	      after starup!
-	     * @param depthTest Indicates if depth testing should be enabled
-	     * @param faceCulling Indicates if faces that are not facing the camera
-	     * 	      should be culled
-	     */
-	    static void init(bool depthTest = true, bool faceCulling = true);
-	    /**
-	     * @brief Destroys the OpenGL context. Needs to be called once before
-	     * 	      exiting the application!
-	     */
-	    static void destroy();
 	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
@@ -73,7 +60,6 @@ namespace dbgl
 	    void renderMesh(const Mesh* mesh) const;
 
 	    std::vector<Viewport> _viewports;
-	    static GLuint vertexArrayId;
     };
 }
 

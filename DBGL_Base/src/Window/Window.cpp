@@ -27,15 +27,13 @@ namespace dbgl
     {
     }
 
-    Window::Window(const char* title, int width, int height,
-	    bool fullscreen)
+    Window::Window(const char* title, int width, int height, bool fullscreen)
     {
 	if (!glfwInit())
 	{
 	    LOG->error("Failed to initialize GLFW!");
 	    exit(EXIT_FAILURE);
 	}
-	glfwSetErrorCallback(WindowManager::errorCallback);
 
 	_title = title;
 	if(fullscreen)
@@ -74,7 +72,8 @@ namespace dbgl
 	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
-	glfwMakeContextCurrent(_pWndHandle);
+
+	makeCurrent();
 
 	// Initialize GLEW
 	glewExperimental = true;// For core profile
@@ -87,7 +86,29 @@ namespace dbgl
 
     Window::~Window()
     {
+	makeCurrent();
+	glDeleteVertexArrays(1, &_vertexArrayId);
 	glfwDestroyWindow(_pWndHandle);
+    }
+
+    void Window::init(bool depthTest, bool faceCulling)
+    {
+	makeCurrent();
+
+	// Enable depth test?
+	if (depthTest)
+	{
+	    glEnable(GL_DEPTH_TEST);
+	    glDepthFunc(GL_LESS);
+	}
+
+	// Cull triangles that are not facing the camera?
+	if (faceCulling)
+	    glEnable(GL_CULL_FACE);
+
+	// Create vertex array
+	glGenVertexArrays(1, &_vertexArrayId);
+	glBindVertexArray(_vertexArrayId);
     }
 
     void Window::show()
@@ -282,29 +303,31 @@ namespace dbgl
 	_clearColor = color;
     }
 
+    void Window::makeCurrent()
+    {
+	glfwMakeContextCurrent(_pWndHandle);
+    }
+
     void Window::addCloseCallback(std::function<void()> const& callback)
     {
 	_closeCallback = callback;
 	glfwSetWindowCloseCallback(_pWndHandle, WindowManager::closeCallback);
     }
 
-    void Window::addFocusCallback(
-	    std::function<void(int)> const& callback)
+    void Window::addFocusCallback(std::function<void(int)> const& callback)
     {
 	_focusCallback = callback;
 	glfwSetWindowFocusCallback(_pWndHandle, WindowManager::focusCallback);
     }
 
-    void Window::addIconifiedCallback(
-	    std::function<void(int)> const& callback)
+    void Window::addIconifiedCallback(std::function<void(int)> const& callback)
     {
 	_iconifiedCallback = callback;
 	glfwSetWindowIconifyCallback(_pWndHandle,
 		WindowManager::iconifiedCallback);
     }
 
-    void Window::addRefreshCallback(
-	    std::function<void()> const& callback)
+    void Window::addRefreshCallback(std::function<void()> const& callback)
     {
 	_refreshCallback = callback;
 	glfwSetWindowRefreshCallback(_pWndHandle,
@@ -377,8 +400,7 @@ namespace dbgl
 	glfwSetKeyCallback(_pWndHandle, WindowManager::keyCallback);
     }
 
-    void Window::addUpdateCallback(
-	    std::function<void()> const& callback)
+    void Window::addUpdateCallback(std::function<void()> const& callback)
     {
 	_updateCallback = callback;
     }
@@ -405,14 +427,14 @@ namespace dbgl
 
     void Window::preRender()
     {
-	glfwMakeContextCurrent(_pWndHandle);
+	makeCurrent();
 	glClearColor(_clearColor[0], _clearColor[1], _clearColor[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void Window::render()
     {
-	if(_renderCallback)
+	if (_renderCallback)
 	    _renderCallback(&_renderContext);
     }
 

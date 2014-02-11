@@ -63,7 +63,7 @@ namespace dbgl
 
     WindowManager::WindowManager()
     {
-
+	glfwSetErrorCallback(WindowManager::errorCallback);
     }
 
     WindowManager::~WindowManager()

@@ -12,8 +12,6 @@
 
 namespace dbgl
 {
-    GLuint RenderContext::vertexArrayId; // Actual static definition
-
     RenderContext::RenderContext()
     {
     }
@@ -32,29 +30,6 @@ namespace dbgl
 	// TODO: Check viewports
 	// TODO: Matrices...
 	renderMesh(mesh);
-    }
-
-    void RenderContext::init(bool depthTest, bool faceCulling)
-    {
-	// Enable depth test?
-	if (depthTest)
-	{
-	    glEnable(GL_DEPTH_TEST);
-	    glDepthFunc(GL_LESS);
-	}
-
-	// Cull triangles that are not facing the camera?
-	if (faceCulling)
-	    glEnable(GL_CULL_FACE);
-
-	// Create vertex array
-	glGenVertexArrays(1, &RenderContext::vertexArrayId);
-	glBindVertexArray(RenderContext::vertexArrayId);
-    }
-
-    void RenderContext::destroy()
-    {
-	glDeleteVertexArrays(1, &RenderContext::vertexArrayId);
     }
 
     void RenderContext::renderMesh(const Mesh* mesh) const

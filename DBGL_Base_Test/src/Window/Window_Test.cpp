@@ -97,6 +97,7 @@ class TestWindow: public SimpleWindow
     };
 
 ShaderProgram* shader;
+ShaderProgram* shader2;
 Mesh* pMesh;
 Mesh* pMesh2;
 
@@ -108,7 +109,7 @@ void renderCallbackWin3(const RenderContext* rc)
 
 void renderCallbackWin4(const RenderContext* rc)
 {
-    shader->use();
+    shader2->use();
     rc->draw(pMesh2);
 }
 
@@ -119,13 +120,17 @@ int testWindow()
     TestWindow* wnd = WindowManager::get()->createWindow<TestWindow>();
     SimpleWindow* wnd2 = WindowManager::get()->createWindow<SimpleWindow>("Window 2");
     SimpleWindow* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
+    wnd3->init();
     SimpleWindow* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
+    wnd4->init();
     LOG->info("OK!");
     LOG->info("Methods... ");
-    RenderContext::init(false, false);
+    wnd3->makeCurrent();
     pMesh = Mesh::makePlane();
-    pMesh2 = Mesh::makeTriangle();
     shader = ShaderProgram::createSimpleShader();
+    wnd4->makeCurrent();
+    pMesh2 = Mesh::makeTriangle();
+    shader2 = ShaderProgram::createSimpleShader();
     wnd->show();
     wnd2->show();
     wnd3->show();
@@ -136,14 +141,16 @@ int testWindow()
     {
 	WindowManager::get()->update();
     }
+    wnd3->makeCurrent();
     delete pMesh;
-    delete pMesh2;
     delete shader;
-    RenderContext::destroy();
+    wnd4->makeCurrent();
+    delete pMesh2;
+    delete shader2;
     WindowManager::get()->terminate();
     LOG->info("OK!");
-    //LOG->info("Operators... ");
-    //LOG->info("OK!");
+    LOG->info("Operators... ");
+    LOG->info("OK!");
     LOG->info("Done!");
     return 0;
 }

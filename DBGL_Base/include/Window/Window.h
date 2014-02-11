@@ -40,6 +40,14 @@ namespace dbgl
 	     */
 	    virtual ~Window();
 	    /**
+	     * @brief Initializes the window
+	     * @warning Must be called exactly once!
+	     * @param depthTest Indicates if depth testing should be enabled
+	     * @param faceCulling Indicates if faces that are not facing the camera
+	     * 	      should be culled
+	     */
+	    void init(bool depthTest = true, bool faceCulling = true);
+	    /**
 	     * @brief Makes this window show
 	     */
 	    void show();
@@ -136,6 +144,10 @@ namespace dbgl
 	     * @param color New clear color to use
 	     */
 	    void setClearColor(Vector3<GLclampf> const& color);
+	    /**
+	     * @brief Makes this window the current one
+	     */
+	    void makeCurrent();
 	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
@@ -301,6 +313,7 @@ namespace dbgl
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
 	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0.1, 0.1, 0.1);
 	    RenderContext _renderContext;
+	    GLuint _vertexArrayId;
 
 	    friend class WindowManager;
     };
