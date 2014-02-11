@@ -15,6 +15,7 @@
 #include <vector>
 #include "Mesh.h"
 #include "Viewport.h"
+#include "Log/Log.h"
 
 namespace dbgl
 {

@@ -21,6 +21,7 @@ namespace dbgl
     ShaderProgram::ShaderProgram(const char* vert, const char* frag,
 	    bool isFiles)
     {
+	LOG->info("Creating shader program...");
 	std::string vertCode, fragCode;
 	if (isFiles)
 	{
@@ -38,8 +39,8 @@ namespace dbgl
 
 	// Compile shaders
 	GLuint vsId, fsId;
-	const char* vertFileName = isFiles?vert:"";
-	const char* fragFileName = isFiles?frag:"";
+	const char* vertFileName = isFiles ? vert : "";
+	const char* fragFileName = isFiles ? frag : "";
 	vsId = compile(vertCode.c_str(), GL_VERTEX_SHADER, vertFileName);
 	fsId = compile(fragCode.c_str(), GL_FRAGMENT_SHADER, fragFileName);
 
@@ -62,6 +63,14 @@ namespace dbgl
     ShaderProgram::~ShaderProgram()
     {
 	glDeleteProgram(_shaderProgram);
+    }
+
+    /**
+     * @brief Sets this shader as the current one
+     */
+    void ShaderProgram::use()
+    {
+	glUseProgram(_shaderProgram);
     }
 
     /**
@@ -386,6 +395,21 @@ namespace dbgl
 	return _shaderProgram;
     }
 
+    ShaderProgram* ShaderProgram::createSimpleShader()
+    {
+	const char* vertexShader = "#version 330 core\n"
+		"layout(location = 0) in vec4 vertexPos;\n"
+		"void main(){\n"
+		"gl_Position = vertexPos;\n"
+		"}";
+	const char* fragmentShader = "#version 330 core\n"
+		"out vec4 color;\n"
+		"void main(){\n"
+		"color = vec4(1,0,0,1);\n"
+		"}";
+	return new ShaderProgram(vertexShader, fragmentShader, false);
+    }
+
     /**
      * @brief Reads in a text file
      * @param path Path of the file to read
@@ -427,7 +451,7 @@ namespace dbgl
 		    "Tried to print compile log for an object that is not a shader or program.");
 	    return;
 	}
-	if(logLength > 0)
+	if (logLength > 0)
 	{
 	    char* msg = new char[logLength];
 
@@ -436,6 +460,9 @@ namespace dbgl
 		glGetShaderInfoLog(object, logLength, NULL, msg);
 	    else if (glIsProgram(object))
 		glGetProgramInfoLog(object, logLength, NULL, msg);
+
+	    if(msg[logLength-2] == '\n')
+	    	msg[logLength-2] = 0;
 
 	    if (ok)
 		LOG->info(msg);
@@ -453,28 +480,29 @@ namespace dbgl
      * @param fileName Name of the file if the shader is compiled from a file
      * @return The compiled shader or -1 in case something went wrong
      */
-    GLuint ShaderProgram::compile(const char* code, GLenum type, const char* fileName)
+    GLuint ShaderProgram::compile(const char* code, GLenum type,
+	    const char* fileName)
     {
 	if (code == NULL)
 	{
 	    LOG->error("Error compiling NULL shader");
-	    return -1;
-	}
-
-	// Create shader object
-	GLuint id = glCreateShader(type);
-
-	// Compile
-	glShaderSource(id, 1, &code , NULL);
-	glCompileShader(id);
-
-	// Check if everything went right
-	GLint result = GL_FALSE;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if(result == GL_FALSE)
-	    LOG->error("Error while compiling shader %s", fileName);
-	printLog(id, result);
-	return id;
+	return -1;
     }
+
+    // Create shader object
+    GLuint id = glCreateShader(type);
+
+    // Compile
+    glShaderSource(id, 1, &code , NULL);
+    glCompileShader(id);
+
+    // Check if everything went right
+    GLint result = GL_FALSE;
+    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+    if(result == GL_FALSE)
+    LOG->error("Error while compiling shader %s", fileName);
+    printLog(id, result);
+    return id;
+}
 
 }

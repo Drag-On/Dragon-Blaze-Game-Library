@@ -41,6 +41,11 @@ namespace dbgl
 	    virtual ~ShaderProgram();
 
 	    /**
+	     * @brief Sets this shader as the current one
+	     */
+	    void use();
+
+	    /**
 	     * @brief Returns the handle for a shader attribute by it's name
 	     * @param name Name of the shader attribute
 	     * @return The attributes id
@@ -263,6 +268,14 @@ namespace dbgl
 	     */
 	    GLuint getHandle() const;
 
+	    /**
+	     * @brief Creates a very simple shader program, mainly intended
+	     * 	      for testing purposes
+	     * @warning The generated memory needs to be deallocated manually!
+	     * @return The newly created shader program
+	     */
+	    static ShaderProgram* createSimpleShader();
+
 	private:
 	    GLuint _shaderProgram; // GL shader program handle
 
@@ -287,7 +300,8 @@ namespace dbgl
 	     * @param fileName Name of the file if the shader is compiled from a file
 	     * @return The compiled shader or 0 in case something went wrong
 	     */
-	    GLuint compile(const char* code, GLenum type, const char* fileName = "");
+	    GLuint compile(const char* code, GLenum type, const char* fileName =
+		    "");
     };
 }
 

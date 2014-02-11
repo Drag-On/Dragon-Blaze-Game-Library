@@ -27,34 +27,75 @@ namespace dbgl
 	    glDeleteBuffers(1, &_uvBuffer);
     }
 
+    Mesh* Mesh::makeTriangle()
+    {
+	Mesh* mesh = new Mesh();
+	mesh->_vertices =
+	{   -1, -1, 0, 1, -1, 0, 0, 1, 0};
+	mesh->_vertexBuffer = generateBuffer();
+	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
+		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
+		GL_STATIC_DRAW);
+	mesh->_normals =
+	{   0, 0, 1, 0, 0, 1, 0, 0, 1};
+	mesh->_normalBuffer = generateBuffer();
+	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
+		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
+		GL_STATIC_DRAW);
+	mesh->_color =
+	{   1, 1, 1, 1, 1, 1, 1, 1, 1};
+	mesh->_colorBuffer = generateBuffer();
+	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
+		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
+		GL_STATIC_DRAW);
+	mesh->_uv =
+	{   -1, -1, -1, 1, 1, 0};
+	mesh->_uvBuffer = generateBuffer();
+	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
+		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
+		GL_STATIC_DRAW);
+	mesh->_indices =
+	{   0, 1, 2};
+	mesh->_indexBuffer = generateBuffer();
+	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
+		mesh->_indices.size() * sizeof(unsigned short),
+		&mesh->_indices[0], GL_STATIC_DRAW);
+	return mesh;
+    }
+
     Mesh* Mesh::makePlane()
     {
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
 	{   -1, -1, 0, -1, 1, 0, 1, 1, 0, 1, -1, 0};
 	mesh->_vertexBuffer = generateBuffer();
-	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER, mesh->_vertices.size(),
-		&mesh->_vertices[0], GL_STATIC_DRAW);
+	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
+		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
+		GL_STATIC_DRAW);
 	mesh->_normals =
 	{   0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
 	mesh->_normalBuffer = generateBuffer();
-	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER, mesh->_normals.size(),
-		&mesh->_normals[0], GL_STATIC_DRAW);
+	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
+		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
+		GL_STATIC_DRAW);
 	mesh->_color =
 	{   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	mesh->_colorBuffer = generateBuffer();
-	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER, mesh->_color.size(),
-		&mesh->_color[0], GL_STATIC_DRAW);
+	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
+		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
+		GL_STATIC_DRAW);
 	mesh->_uv =
 	{   -1, -1, -1, 1, 1, 1, 1, -1};
 	mesh->_uvBuffer = generateBuffer();
-	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER, mesh->_uv.size(),
-		&mesh->_uv[0], GL_STATIC_DRAW);
+	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
+		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
+		GL_STATIC_DRAW);
 	mesh->_indices =
 	{   0, 1, 2, 0, 2, 3};
 	mesh->_indexBuffer = generateBuffer();
 	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		mesh->_indices.size(), &mesh->_indices[0], GL_STATIC_DRAW);
+		mesh->_indices.size() * sizeof(unsigned short),
+		&mesh->_indices[0], GL_STATIC_DRAW);
 	return mesh;
     }
 

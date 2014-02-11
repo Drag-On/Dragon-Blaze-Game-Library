@@ -18,6 +18,7 @@
 #include "Window/SimpleWindow.h"
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
+#include "Rendering/ShaderProgram.h"
 
 using namespace dbgl;
 
@@ -95,11 +96,20 @@ class TestWindow: public SimpleWindow
 	{   LOG->info("keyCallback called: %d,%d,%d,%d!", key, scancode, action, mods);};
     };
 
+ShaderProgram* shader;
 Mesh* pMesh;
+Mesh* pMesh2;
 
-void renderCallback(const RenderContext* rc)
+void renderCallbackWin3(const RenderContext* rc)
 {
+    shader->use();
     rc->draw(pMesh);
+}
+
+void renderCallbackWin4(const RenderContext* rc)
+{
+    shader->use();
+    rc->draw(pMesh2);
 }
 
 int testWindow()
@@ -112,18 +122,23 @@ int testWindow()
     SimpleWindow* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
     LOG->info("OK!");
     LOG->info("Methods... ");
-    RenderContext::init();
+    RenderContext::init(false, false);
     pMesh = Mesh::makePlane();
+    pMesh2 = Mesh::makeTriangle();
+    shader = ShaderProgram::createSimpleShader();
     wnd->show();
     wnd2->show();
     wnd3->show();
+    wnd3->addRenderCallback(std::bind(&renderCallbackWin3, std::placeholders::_1));
     wnd4->show();
-    wnd4->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
+    wnd4->addRenderCallback(std::bind(&renderCallbackWin4, std::placeholders::_1));
     while(WindowManager::get()->isRunning())
     {
 	WindowManager::get()->update();
     }
     delete pMesh;
+    delete pMesh2;
+    delete shader;
     RenderContext::destroy();
     WindowManager::get()->terminate();
     LOG->info("OK!");

@@ -299,7 +299,7 @@ namespace dbgl
 	    bool _isFullscreen;
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
-	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0, 0, 0);
+	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0.1, 0.1, 0.1);
 	    RenderContext _renderContext;
 
 	    friend class WindowManager;

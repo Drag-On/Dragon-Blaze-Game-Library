@@ -27,6 +27,12 @@ namespace dbgl
 	     */
 	    ~Mesh();
 	    /**
+	     * @brief Creates a mesh that represents a simple triangle
+	     * @warning The allocated memory needs to be freed manually!
+	     * @return The triangle mesh
+	     */
+	    static Mesh* makeTriangle();
+	    /**
 	     * @brief Creates a mesh that represents a simple plane
 	     * @warning The allocated memory needs to be freed manually!
 	     * @return The plane mesh
@@ -66,7 +72,8 @@ namespace dbgl
 	    std::vector<GLfloat> _uv;
 	    GLuint _uvBuffer; // = GL_INVALID_VALUE
 
-	    friend class RenderContext; // So the render context can render
+	    friend class RenderContext;
+	    // So the render context can render
     };
 }
 
