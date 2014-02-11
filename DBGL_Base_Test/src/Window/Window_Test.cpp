@@ -97,9 +97,9 @@ class TestWindow: public SimpleWindow
 
 Mesh* pMesh;
 
-void renderCallback()
+void renderCallback(const RenderContext* rc)
 {
-    pMesh->render();
+    rc->draw(pMesh);
 }
 
 int testWindow()
@@ -118,7 +118,7 @@ int testWindow()
     wnd2->show();
     wnd3->show();
     wnd4->show();
-    wnd4->addRenderCallback(std::bind(&renderCallback));
+    wnd4->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     while(WindowManager::get()->isRunning())
     {
 	WindowManager::get()->update();

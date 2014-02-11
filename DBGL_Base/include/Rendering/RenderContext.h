@@ -47,7 +47,7 @@ namespace dbgl
 	     * @note Currently being implemented
 	     * @param mesh
 	     */
-	    template<typename T> void draw(Mesh const& mesh);
+	    void draw(const Mesh* mesh) const;
 	    /**
 	     * @brief Initializes the general OpenGL context. Needs to be called once
 	     * 	      after starup!
@@ -62,6 +62,15 @@ namespace dbgl
 	     */
 	    static void destroy();
 	private:
+	    /**
+	     * @brief Renders a mesh to the current context, assuming everything has
+	     * 	      been set up accordingly. This method does not touch any matrices,
+	     * 	      shaders, or other stuff. It just renders the mesh to whatever has
+	     * 	      been set up before.
+	     * @param mesh Pointer to the mesh to render
+	     */
+	    void renderMesh(const Mesh* mesh) const;
+
 	    std::vector<Viewport> _viewports;
 	    static GLuint vertexArrayId;
     };
