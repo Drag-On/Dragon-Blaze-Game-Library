@@ -28,15 +28,15 @@ namespace dbgl
 
 	protected:
 	    // Constructors
-	    SimpleWindow();
-	    SimpleWindow(const char* title);
-	    SimpleWindow(const char* title, int width, int height);
-	    SimpleWindow(const char* title, int width, int height,
-		    bool fullscreen);
+	    SimpleWindow(GLFWwindow* share);
+	    SimpleWindow(GLFWwindow* share, const char* title);
+	    SimpleWindow(GLFWwindow* share, const char* title, int width,
+		    int height);
+	    SimpleWindow(GLFWwindow* share, const char* title, int width,
+		    int height, bool fullscreen);
 	    // Callbacks
 	    void framebufferResizeCallback(int width, int height);
-	    void keyCallback(int key, int scancode, int action,
-		    int mods);
+	    void keyCallback(int key, int scancode, int action, int mods);
 
 	private:
 	    friend class WindowManager;

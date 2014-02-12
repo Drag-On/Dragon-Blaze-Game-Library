@@ -26,8 +26,8 @@ class TestWindow: public SimpleWindow
 {
 	friend class dbgl::WindowManager;
     protected:
-	TestWindow() :
-		SimpleWindow()
+	TestWindow(GLFWwindow* share) :
+		SimpleWindow(share)
 	{
 	    addCloseCallback(std::bind(&TestWindow::closeCallback, this));
 	    addFocusCallback(
@@ -97,7 +97,6 @@ class TestWindow: public SimpleWindow
     };
 
 ShaderProgram* shader;
-ShaderProgram* shader2;
 Mesh* pMesh;
 Mesh* pMesh2;
 
@@ -109,7 +108,7 @@ void renderCallbackWin3(const RenderContext* rc)
 
 void renderCallbackWin4(const RenderContext* rc)
 {
-    shader2->use();
+    shader->use();
     rc->draw(pMesh2);
 }
 
@@ -125,28 +124,25 @@ int testWindow()
     wnd4->init();
     LOG->info("OK!");
     LOG->info("Methods... ");
-    wnd3->makeCurrent();
+    // Load meshes and shader
     pMesh = Mesh::makePlane();
-    shader = ShaderProgram::createSimpleShader();
-    wnd4->makeCurrent();
     pMesh2 = Mesh::makeTriangle();
-    shader2 = ShaderProgram::createSimpleShader();
+    shader = ShaderProgram::createSimpleShader();
+    // Show windows
     wnd->show();
     wnd2->show();
     wnd3->show();
     wnd3->addRenderCallback(std::bind(&renderCallbackWin3, std::placeholders::_1));
     wnd4->show();
     wnd4->addRenderCallback(std::bind(&renderCallbackWin4, std::placeholders::_1));
+    // Run update loop
     while(WindowManager::get()->isRunning())
     {
 	WindowManager::get()->update();
     }
-    wnd3->makeCurrent();
     delete pMesh;
-    delete shader;
-    wnd4->makeCurrent();
     delete pMesh2;
-    delete shader2;
+    delete shader;
     WindowManager::get()->terminate();
     LOG->info("OK!");
     LOG->info("Operators... ");

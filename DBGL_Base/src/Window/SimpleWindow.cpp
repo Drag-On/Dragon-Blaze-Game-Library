@@ -12,24 +12,25 @@
 
 namespace dbgl
 {
-    SimpleWindow::SimpleWindow() :
-	    SimpleWindow("Dragon Blaze Game Library")
+    SimpleWindow::SimpleWindow(GLFWwindow* share) :
+	    SimpleWindow(share, "Dragon Blaze Game Library")
     {
     }
 
-    SimpleWindow::SimpleWindow(const char* title) :
-	    SimpleWindow(title, 800, 600)
+    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title) :
+	    SimpleWindow(share, title, 800, 600)
     {
     }
 
-    SimpleWindow::SimpleWindow(const char* title, int width, int height) :
-	    SimpleWindow(title, width, height, false)
+    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title, int width,
+	    int height) :
+	    SimpleWindow(share, title, width, height, false)
     {
     }
 
-    SimpleWindow::SimpleWindow(const char* title, int width, int height,
-	    bool fullscreen) :
-	    Window(title, width, height, fullscreen)
+    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title, int width,
+	    int height, bool fullscreen) :
+	    Window(share, title, width, height, fullscreen)
     {
 	// Add callbacks for framebuffer and keyboard input
 	addFramebufferResizeCallback(

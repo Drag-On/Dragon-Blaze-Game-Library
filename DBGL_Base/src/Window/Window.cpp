@@ -12,22 +12,22 @@
 
 namespace dbgl
 {
-    Window::Window() :
-	    Window("Dragon Blaze Game Library")
+    Window::Window(GLFWwindow* share) :
+	    Window(share, "Dragon Blaze Game Library")
     {
     }
 
-    Window::Window(const char* title) :
-	    Window(title, 800, 600)
+    Window::Window(GLFWwindow* share, const char* title) :
+	    Window(share, title, 800, 600)
     {
     }
 
-    Window::Window(const char* title, int width, int height) :
-	    Window(title, width, height, false)
+    Window::Window(GLFWwindow* share, const char* title, int width, int height) :
+	    Window(share, title, width, height, false)
     {
     }
 
-    Window::Window(const char* title, int width, int height, bool fullscreen)
+    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen)
     {
 	if (!glfwInit())
 	{
@@ -63,9 +63,9 @@ namespace dbgl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	if(fullscreen)
-	_pWndHandle = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, title, glfwGetPrimaryMonitor(), NULL);
+	_pWndHandle = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
-	_pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight, title, NULL, NULL);
+	_pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight, title, NULL, share);
 	if (!_pWndHandle)
 	{
 	    LOG->error("Failed to create new window!");

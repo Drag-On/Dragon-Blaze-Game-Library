@@ -262,28 +262,32 @@ namespace dbgl
 	    // Constructors
 	    /**
 	     * @brief Constructs a window of size 800x600 with a standard title
+	     * @param share Window to share resources with or NULL if none
 	     */
-	    Window();
+	    Window(GLFWwindow* share);
 	    /**
 	     * @brief Constructs a window of size 800x600
+	     * @param share Window to share resources with or NULL if none
 	     * @param title Title of the window
 	     */
-	    Window(const char* title);
+	    Window(GLFWwindow* share, const char* title);
 	    /**
 	     * @brief Constructs a window
+	     * @param share Window to share resources with or NULL if none
 	     * @param title Title of the window
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
 	     */
-	    Window(const char* title, int width, int height);
+	    Window(GLFWwindow* share, const char* title, int width, int height);
 	    /**
 	     * @brief Constructs a window
+	     * @param share Window to share resources with or NULL if none
 	     * @param title Title of the window
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    Window(const char* title, int width, int height, bool fullscreen);
+	    Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen);
 
 	    /**
 	     * GLFW window handle
