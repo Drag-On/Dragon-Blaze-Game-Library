@@ -13,7 +13,9 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <algorithm>
 #include "Mesh.h"
+#include "Camera.h"
 #include "Viewport.h"
 #include "Log/Log.h"
 
@@ -38,11 +40,15 @@ namespace dbgl
 	    ~RenderContext();
 	    /**
 	     * @brief Adds a new viewport to this context which will then be drawn to
-	     * @details The viewport may point to any open window. Without a viewport
-	     * 		you won't see anything!
+	     * @details Without a viewport you won't see anything!
 	     * @param viewport New viewport object to add
 	     */
-	    void addViewport(Viewport const& viewport);
+	    void addViewport(Viewport* viewport);
+	    /**
+	     * @brief Removes the passed viewport from this render context
+	     * @param viewport Viewport to remove
+	     */
+	    void removeViewport(Viewport* viewport);
 	    /**
 	     * @brief Draws a mesh to all viewports where it is visible
 	     * @note Currently being implemented
@@ -59,7 +65,7 @@ namespace dbgl
 	     */
 	    void renderMesh(const Mesh* mesh) const;
 
-	    std::vector<Viewport> _viewports;
+	    std::vector<Viewport*> _viewports;
     };
 }
 

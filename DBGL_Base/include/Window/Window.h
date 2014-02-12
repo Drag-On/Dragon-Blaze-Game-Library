@@ -145,6 +145,10 @@ namespace dbgl
 	     */
 	    void setClearColor(Vector3<GLclampf> const& color);
 	    /**
+	     * @return A pointer to the used render context
+	     */
+	    RenderContext* getRenderContext() const;
+	    /**
 	     * @brief Makes this window the current one
 	     */
 	    void makeCurrent();
@@ -315,9 +319,9 @@ namespace dbgl
 	    bool _isFullscreen;
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
-	    unsigned int _windowedX, _windowedY; // Last window position beore entering fullscreen mode
+	    unsigned int _windowedX, _windowedY; // Last window position before entering fullscreen mode
 	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0.1, 0.1, 0.1);
-	    RenderContext _renderContext;
+	    RenderContext* _pRenderContext;
 	    GLuint _vertexArrayId;
 
 	    friend class WindowManager;

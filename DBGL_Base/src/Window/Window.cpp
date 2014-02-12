@@ -76,6 +76,9 @@ namespace dbgl
 	_windowedX = getX();
 	_windowedY = getY();
 
+	// Create render context object
+	_pRenderContext = new RenderContext();
+
 	makeCurrent();
 
 	// Initialize GLEW
@@ -89,6 +92,9 @@ namespace dbgl
 
     Window::~Window()
     {
+	delete _pRenderContext;
+	_pRenderContext = NULL;
+
 	makeCurrent();
 	glDeleteVertexArrays(1, &_vertexArrayId);
 	glfwDestroyWindow(_pWndHandle);
@@ -251,6 +257,11 @@ namespace dbgl
 	_clearColor = color;
     }
 
+    RenderContext* Window::getRenderContext() const
+    {
+	return _pRenderContext;
+    }
+
     void Window::makeCurrent()
     {
 	glfwMakeContextCurrent(_pWndHandle);
@@ -383,7 +394,7 @@ namespace dbgl
     void Window::render()
     {
 	if (_renderCallback)
-	    _renderCallback(&_renderContext);
+	    _renderCallback(_pRenderContext);
     }
 
     void Window::postRender()

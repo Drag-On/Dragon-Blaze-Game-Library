@@ -20,16 +20,37 @@ namespace dbgl
     {
     }
 
-    void RenderContext::addViewport(Viewport const& viewport)
+    void RenderContext::addViewport(Viewport* viewport)
     {
 	_viewports.push_back(viewport);
     }
 
+    void RenderContext::removeViewport(Viewport* viewport)
+    {
+	_viewports.erase(
+		std::remove(_viewports.begin(), _viewports.end(), viewport),
+		_viewports.end());
+    }
+
     void RenderContext::draw(const Mesh* mesh) const
     {
-	// TODO: Check viewports
-	// TODO: Matrices...
-	renderMesh(mesh);
+	for (auto &viewport : _viewports)
+	{
+	    // TODO: Frustrum culling
+	    if (viewport->getCamera() != NULL)
+	    {
+		viewport->getCamera()->update(
+			viewport->getWidth() / viewport->getHeight());
+		// TODO: Send matrices to shader
+		viewport->getCamera()->getViewMat();
+		viewport->getCamera()->getProjectionMat();
+	    }
+	    // Set viewport
+	    glViewport(viewport->getX(), viewport->getY(), viewport->getWidth(),
+		    viewport->getHeight());
+	    // Render mesh
+	    renderMesh(mesh);
+	}
     }
 
     void RenderContext::renderMesh(const Mesh* mesh) const

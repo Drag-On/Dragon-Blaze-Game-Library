@@ -120,8 +120,12 @@ int testWindow()
     SimpleWindow* wnd2 = WindowManager::get()->createWindow<SimpleWindow>("Window 2");
     SimpleWindow* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
     wnd3->init();
+    Viewport* viewport3 = new Viewport(0, 0, wnd3->getFrameWidth()/2, wnd3->getFrameHeight()/2);
+    wnd3->getRenderContext()->addViewport(viewport3);
     SimpleWindow* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
     wnd4->init();
+    Viewport* viewport4 = new Viewport(0, 0, wnd4->getFrameWidth(), wnd4->getFrameHeight());
+    wnd4->getRenderContext()->addViewport(viewport4);
     LOG->info("OK!");
     LOG->info("Methods... ");
     // Load meshes and shader
@@ -143,6 +147,8 @@ int testWindow()
     delete pMesh;
     delete pMesh2;
     delete shader;
+    delete viewport3;
+    delete viewport4;
     WindowManager::get()->terminate();
     LOG->info("OK!");
     LOG->info("Operators... ");
