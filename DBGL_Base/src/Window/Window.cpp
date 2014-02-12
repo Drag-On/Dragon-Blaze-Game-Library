@@ -73,6 +73,9 @@ namespace dbgl
 	    exit(EXIT_FAILURE);
 	}
 
+	_windowedX = getX();
+	_windowedY = getY();
+
 	makeCurrent();
 
 	// Initialize GLEW
@@ -221,76 +224,21 @@ namespace dbgl
 
     void Window::setFullscreen(bool fullscreen)
     {
-	auto oldHandle = _pWndHandle;
 	if (isFullscreen() && !fullscreen)
 	{
-	    // Destroy window
-	    glfwDestroyWindow(_pWndHandle);
-
-	    // Recreate
-	    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	    _pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight,
-		    _title.c_str(), NULL, NULL);
-	    if (!_pWndHandle)
-	    {
-		LOG->error("Failed to enter windowed mode!");
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	    }
+	    this->setPos(_windowedX, _windowedY);
+	    this->setSize(_windowedWidth, _windowedHeight);
 	}
 	else if (!isFullscreen() && fullscreen)
 	{
 	    _windowedWidth = getFrameWidth();
 	    _windowedHeight = getFrameHeight();
-
-	    // Destroy window
-	    glfwDestroyWindow(_pWndHandle);
-
-	    // Recreate
-	    glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	    _pWndHandle = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight,
-		    _title.c_str(), glfwGetPrimaryMonitor(), NULL);
-	    if (!_pWndHandle)
-	    {
-		LOG->error("Failed to enter fullscreen mode!");
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	    }
+	    _windowedX = getX();
+	    _windowedY = getY();
+	    this->setPos(0, 0);
+	    this->setSize(_fullscreenWidth, _fullscreenHeight);
 	}
 	_isFullscreen = fullscreen;
-	WindowManager::get()->updateHandle(oldHandle, _pWndHandle);
-
-	// Re-add callbacks
-	if (_characterCallback)
-	    addCharacterCallback(_characterCallback);
-	if (_closeCallback)
-	    addCloseCallback(_closeCallback);
-	if (_cursorCallback)
-	    addCursorCallback(_cursorCallback);
-	if (_cursorEnterCallback)
-	    addCursorEnterCallback(_cursorEnterCallback);
-	if (_focusCallback)
-	    addFocusCallback(_focusCallback);
-	if (_framebufferResizeCallback)
-	    addFramebufferResizeCallback(_framebufferResizeCallback);
-	if (_iconifiedCallback)
-	    addIconifiedCallback(_iconifiedCallback);
-	if (_keyCallback)
-	    addKeyCallback(_keyCallback);
-	if (_positionCallback)
-	    addPositionCallback(_positionCallback);
-	if (_refreshCallback)
-	    addRefreshCallback(_refreshCallback);
-	if (_resizeCallback)
-	    addResizeCallback(_resizeCallback);
-	if (_scrollCallback)
-	    addScrollCallback(_scrollCallback);
     }
 
     Vec3f Window::getClearColor() const
