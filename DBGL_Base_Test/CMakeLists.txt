@@ -1,49 +1,51 @@
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_Base_Test C CXX)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
+PROJECT (DBGL_Base_Test C CXX)
 
 # enable C++11
-if(CMAKE_COMPILER_IS_GNUCXX)
+IF(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
+ENDIF()
  
 # add the source code
-file(GLOB_RECURSE Base_Src
+FILE(GLOB_RECURSE Base_Src
     "include/*.h"
     "src/*.cpp"
 )
 
 # create a list of files to copy
-set(LIBRARIES2COPY
+SET(Libraries2Copy
    "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.dll"
    "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/lib/glew32.dll"
 )
 
 # OpenGL
-find_package(OpenGL)
-if (OPENGL_FOUND)
+FIND_PACKAGE(OpenGL)
+IF (OPENGL_FOUND)
 	MESSAGE("OpenGL Correctly Found")
-	include_directories(${OPENGL_INCLUDE_DIR})
-else (OPENGL_FOUND)
+	INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+ELSE (OPENGL_FOUND)
 	MESSAGE("OpenGL environment missing")
-endif (OPENGL_FOUND)
+ENDIF (OPENGL_FOUND)
 
-add_executable(DBGL_Base_Test ${Base_Src})
+ADD_EXECUTABLE(DBGL_Base_Test ${Base_Src})
 
-include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/include/")
-include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
-include_directories("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../DBGL_Base/include/")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include")
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/include")
 
-target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.dll")
-#target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a")
-#target_link_libraries(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glfw/src/libglfw3.a")
-target_link_libraries(DBGL_Base_Test "${OPENGL_LIBRARIES}")
+TARGET_LINK_LIBRARIES(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/Debug/libDBGL_Base.dll")
+#TARGET_LINK_LIBRARIES(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a")
+#TARGET_LINK_LIBRARIES(DBGL_Base_Test "${PROJECT_SOURCE_DIR}/lib/glfw/src/libglfw3.a")
+TARGET_LINK_LIBRARIES(DBGL_Base_Test "${OPENGL_LIBRARIES}")
+
+ADD_CUSTOM_TARGET(Always_execute ALL)
+ADD_DEPENDENCIES(DBGL_Base_Test Always_execute)
 
 # do the copying
-foreach(file_i ${LIBRARIES2COPY})
-    add_custom_command(
-		TARGET DBGL_Base_Test
-		PRE_BUILD
-		COMMAND ${CMAKE_COMMAND}
-		ARGS -E copy_if_different ${file_i} "${PROJECT_SOURCE_DIR}/Debug/"
-	)
-endforeach(file_i)
+FOREACH(file_i ${Libraries2Copy})
+	ADD_CUSTOM_COMMAND(TARGET Always_execute
+                        PRE_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_SOURCE_DIR}/Debug/"
+                        DEPENDS ${file_i}
+                        )
+ENDFOREACH(file_i)
