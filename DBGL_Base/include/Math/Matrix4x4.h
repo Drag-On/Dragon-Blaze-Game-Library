@@ -127,7 +127,15 @@ namespace dbgl
 	    /// @param target Position the camera aims at
 	    /// @param up Vector that defines the camera up direction
 	    /// </summary>
-	    static Matrix4x4<T> makeCamera(Vector3<T> const& pos, Vector3<T> const& target,
+	    static Matrix4x4<T> makeView(Vector3<T> const& pos,
+		    Vector3<T> const& target, Vector3<T> const& up);
+	    /// <summary>
+	    /// @brief Makes this matrix a camera matrix from the given data
+	    /// @param pos Position of the camera in 3D space
+	    /// @param target Position the camera aims at
+	    /// @param up Vector that defines the camera up direction
+	    /// </summary>
+	    void view(Vector3<T> const& pos, Vector3<T> const& target,
 		    Vector3<T> const& up);
 	    /// <summary>
 	    /// @brief Constructs a projection matrix from the given data
@@ -138,6 +146,14 @@ namespace dbgl
 	    /// </summary>
 	    static Matrix4x4<T> makeProjection(T fieldOfView, T aspectRatio,
 		    T near, T far);
+	    /// <summary>
+	    /// @brief Makes this matrix a projection matrix from the given data
+	    /// @param fieldOfView Angle of aperture
+	    /// @param aspectRatio Aspect ratio of the display
+	    /// @param near Near clipping plane
+	    /// @param far Far clipping plane
+	    /// </summary>
+	    void projection(T fieldOfView, T aspectRatio, T near, T far);
 	    // Operators
 	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
 	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs) const;

@@ -301,7 +301,7 @@ namespace dbgl
 		return mat;
 	}
 	
-	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeCamera(Vector3<T> const& pos, Vector3<T> const& target, Vector3<T> const& up)
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeView(Vector3<T> const& pos, Vector3<T> const& target, Vector3<T> const& up)
 	{
 		auto zAxis = pos - target;
 		zAxis.normalize();
@@ -311,19 +311,31 @@ namespace dbgl
 		auto yAxis = zAxis;
 		yAxis *= xAxis;
 		Matrix4x4<T> mat;
-		mat[0][0] = xAxis.getX();
-		mat[1][0] = yAxis.getX();
-		mat[2][0] = zAxis.getX();
-		mat[3][0] = -(xAxis * pos);
-		mat[0][1] = xAxis.getY();
-		mat[1][1] = yAxis.getY();
-		mat[2][1] = zAxis.getY();
-		mat[3][1] = -(yAxis * pos);
-		mat[0][2] = xAxis.getZ();
-		mat[1][2] = yAxis.getZ();
-		mat[2][2] = zAxis.getZ();
-		mat[3][2] = -(zAxis * pos);
+		mat.view(pos, target, up);
 		return mat;
+	}
+	
+	template<typename T> void Matrix4x4<T>::view(Vector3<T> const& pos, Vector3<T> const& target, Vector3<T> const& up)
+	{
+		auto zAxis = pos - target;
+		zAxis.normalize();
+		auto xAxis = up;
+		xAxis *= zAxis;
+		xAxis.normalize();
+		auto yAxis = zAxis;
+		yAxis *= xAxis;
+		(*this)[0][0] = xAxis.getX();
+		(*this)[1][0] = yAxis.getX();
+		(*this)[2][0] = zAxis.getX();
+		(*this)[3][0] = -(xAxis * pos);
+		(*this)[0][1] = xAxis.getY();
+		(*this)[1][1] = yAxis.getY();
+		(*this)[2][1] = zAxis.getY();
+		(*this)[3][1] = -(yAxis * pos);
+		(*this)[0][2] = xAxis.getZ();
+		(*this)[1][2] = yAxis.getZ();
+		(*this)[2][2] = zAxis.getZ();
+		(*this)[3][2] = -(zAxis * pos);
 	}
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeProjection(T fieldOfView, T aspectRatio, T near, T far)
@@ -331,13 +343,20 @@ namespace dbgl
 		T h = std::tan(pi_2() - fieldOfView / 2);
 		T w = h / aspectRatio;
 		Matrix4x4<T> mat;
-		mat[0][0] = w;
-		mat[1][1] = h;
-		mat[2][2] = far/(near - far);
-		mat[3][2] = (near * far)/(near - far);
-		mat[2][3] = -1;
-		mat[3][3] = 0;
+		mat.projection(fieldOfView, aspectRatio, near, far);
 		return mat;
+	}
+	
+	template<typename T> void Matrix4x4<T>::projection(T fieldOfView, T aspectRatio, T near, T far)
+	{
+		T h = std::tan(pi_2() - fieldOfView / 2);
+		T w = h / aspectRatio;
+		(*this)[0][0] = w;
+		(*this)[1][1] = h;
+		(*this)[2][2] = far/(near - far);
+		(*this)[3][2] = (near * far)/(near - far);
+		(*this)[2][3] = -1;
+		(*this)[3][3] = 0;
 	}
 	
 	template<typename T> Matrix4x4<T>& Matrix4x4<T>::operator=(Matrix4x4<T> const& rhs) 
