@@ -43,7 +43,7 @@ namespace dbgl
 		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
 		GL_STATIC_DRAW);
 	mesh->_color =
-	{   1, 1, 1, 1, 1, 1, 1, 1, 1};
+	{   0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f};
 	mesh->_colorBuffer = generateBuffer();
 	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
 		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
@@ -79,7 +79,7 @@ namespace dbgl
 		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
 		GL_STATIC_DRAW);
 	mesh->_color =
-	{   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	{   0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f};
 	mesh->_colorBuffer = generateBuffer();
 	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
 		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
@@ -96,6 +96,123 @@ namespace dbgl
 	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
 		mesh->_indices.size() * sizeof(unsigned short),
 		&mesh->_indices[0], GL_STATIC_DRAW);
+	return mesh;
+    }
+
+    Mesh* Mesh::makeCube()
+    {
+	Mesh* mesh = new Mesh();
+
+	// Define vertices
+	mesh->_vertices =
+	{
+	    -1.0, -1.0, 1.0, // front 0
+	    1.0, -1.0, 1.0,// 1
+	    1.0, 1.0, 1.0,// 2
+	    -1.0, 1.0, 1.0,// 3
+	    -1.0, 1.0, 1.0,// top 4
+	    1.0, 1.0, 1.0,// 5
+	    1.0, 1.0, -1.0,// 6
+	    -1.0, 1.0, -1.0,// 7
+	    1.0, -1.0, -1.0,// back 8
+	    -1.0, -1.0, -1.0,// 9
+	    -1.0, 1.0, -1.0,// 10
+	    1.0, 1.0, -1.0,// 11
+	    -1.0, -1.0, -1.0,// bottom 12
+	    1.0, -1.0, -1.0,// 13
+	    1.0, -1.0, 1.0,// 14
+	    -1.0, -1.0, 1.0,// 15
+	    -1.0, -1.0, -1.0,// left 16
+	    -1.0, -1.0, 1.0,// 17
+	    -1.0, 1.0, 1.0,// 18
+	    -1.0, 1.0, -1.0,// 19
+	    1.0, -1.0, 1.0,// right 20
+	    1.0, -1.0, -1.0,// 21
+	    1.0, 1.0, -1.0,// 22
+	    1.0, 1.0, 1.0,// 23
+	};
+	mesh->_vertexBuffer = generateBuffer();
+	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
+		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
+		GL_STATIC_DRAW);
+
+	// Define some colors
+	for (int i = 0; i < 3 * 4 * 6; i++)
+	    mesh->_color.push_back(0.9f);
+	mesh->_colorBuffer = generateBuffer();
+	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
+		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
+		GL_STATIC_DRAW);
+
+	// Define elements
+	mesh->_indices =
+	{
+	    0, 1, 2, // front
+	    2, 3, 0,//
+	    4, 5, 6,// top
+	    6, 7, 4,//
+	    8, 9, 10,// back
+	    10, 11, 8,//
+	    12, 13, 14,// bottom
+	    14, 15, 12,//
+	    16, 17, 18,// left
+	    18, 19, 16,//
+	    20, 21, 22,// right
+	    22, 23, 20,//
+	};
+	mesh->_indexBuffer = generateBuffer();
+	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
+		mesh->_indices.size() * sizeof(unsigned short),
+		&mesh->_indices[0], GL_STATIC_DRAW);
+
+	// Define normals
+	mesh->_normals =
+	{
+	    0, 0, 1, // 0 Front
+	    0, 0, 1,// 1
+	    0, 0, 1,// 2
+	    0, 0, 1,// 3
+	    0, 1, 0,// 10 Top
+	    0, 1, 0,// 11
+	    0, 1, 0,// 14
+	    0, 1, 0,// 15
+	    0, 0, -1,// 4 Back
+	    0, 0, -1,// 5
+	    0, 0, -1,// 6
+	    0, 0, -1,// 7
+	    0, -1, 0,// 8 Bottom
+	    0, -1, 0,// 9
+	    0, -1, 0,// 12
+	    0, -1, 0,// 13
+	    -1, 0, 0,// 16 Left
+	    -1, 0, 0,// 19
+	    -1, 0, 0,// 20
+	    -1, 0, 0,// 23
+	    1, 0, 0,// 21 Right
+	    1, 0, 0,// 22
+	    1, 0, 0,// 17
+	    1, 0, 0,// 18
+	};
+	mesh->_normalBuffer = generateBuffer();
+	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
+		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
+		GL_STATIC_DRAW);
+
+	// Define UVs
+	GLfloat uvs[2 * 4 * 6] = {
+	0.0, 0.0, // front
+	1.0, 0.0, //
+	1.0, 1.0, //
+	0.0, 1.0,
+	};
+	for (int i = 1; i < 6; i++)
+	    memcpy(&uvs[i * 4 * 2], &uvs[0], 2 * 4 * sizeof(GLfloat));
+	mesh->_uv.insert(mesh->_uv.begin(), std::begin(uvs), std::end(uvs));
+	mesh->_uvBuffer = generateBuffer();
+	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
+		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
+		GL_STATIC_DRAW);
+
 	return mesh;
     }
 

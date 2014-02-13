@@ -99,19 +99,26 @@ class TestWindow: public SimpleWindow
     };
 
 ShaderProgram* shader;
-Mesh* pMesh;
 Mesh* pMesh2;
+Mesh* pMesh3;
+Mesh* pMesh4;
+
+void renderCallbackWin2(const RenderContext* rc)
+{
+    shader->use();
+    rc->draw(pMesh2, shader);
+}
 
 void renderCallbackWin3(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh, shader);
+    rc->draw(pMesh3, shader);
 }
 
 void renderCallbackWin4(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh2, shader);
+    rc->draw(pMesh4, shader);
 }
 
 int testWindow()
@@ -120,6 +127,11 @@ int testWindow()
     LOG->info("Constructors... ");
     TestWindow* wnd = WindowManager::get()->createWindow<TestWindow>();
     SimpleWindow* wnd2 = WindowManager::get()->createWindow<SimpleWindow>("Window 2");
+    wnd2->init();
+    Viewport* viewport2 = new Viewport(0, 0, 1, 1);
+    Camera* cam2 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
+    viewport2->setCamera(cam2);
+    wnd2->getRenderContext()->addViewport(viewport2);
     SimpleWindow* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
     wnd3->init();
     Viewport* viewport3 = new Viewport(0.5, 0, 1, 1);
@@ -135,12 +147,14 @@ int testWindow()
     LOG->info("OK!");
     LOG->info("Methods... ");
     // Load meshes and shader
-    pMesh = Mesh::makePlane();
-    pMesh2 = Mesh::makeTriangle();
+    pMesh2 = Mesh::makeCube();
+    pMesh3 = Mesh::makePlane();
+    pMesh4 = Mesh::makeTriangle();
     shader = ShaderProgram::createSimpleShader();
     // Show windows
     wnd->show();
     wnd2->show();
+    wnd2->addRenderCallback(std::bind(&renderCallbackWin2, std::placeholders::_1));
     wnd3->show();
     wnd3->addRenderCallback(std::bind(&renderCallbackWin3, std::placeholders::_1));
     wnd4->show();
@@ -150,11 +164,14 @@ int testWindow()
     {
 	WindowManager::get()->update();
     }
-    delete pMesh;
     delete pMesh2;
+    delete pMesh3;
+    delete pMesh4;
     delete shader;
+    delete cam2;
     delete cam3;
     delete cam4;
+    delete viewport2;
     delete viewport3;
     delete viewport4;
     WindowManager::get()->terminate();

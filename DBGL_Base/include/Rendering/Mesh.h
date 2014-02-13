@@ -11,6 +11,7 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include <cstring>
 #include <vector>
 #include <GL/glew.h>
 
@@ -38,6 +39,18 @@ namespace dbgl
 	     * @return The plane mesh
 	     */
 	    static Mesh* makePlane();
+	    /**
+	     * @brief Creates a mesh that represents a cube
+	     * @warning The allocated memory needs to be freed manually!
+	     * @return The cube mesh
+	     */
+	    static Mesh* makeCube();
+	    /**
+	     * @brief Creates a mesh that represents a four-sided pyramid
+	     * @warning The allocated memory needs to be freed manually!
+	     * @return The pyramid mesh
+	     */
+	    static Mesh* makePyramid();
 	private:
 	    /**
 	     * @brief Private constructor; use factory methods!
