@@ -17,6 +17,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "Viewport.h"
+#include "ShaderProgram.h"
 #include "Log/Log.h"
 
 namespace dbgl
@@ -55,8 +56,9 @@ namespace dbgl
 	     * @brief Draws a mesh to all viewports where it is visible
 	     * @note Currently being implemented
 	     * @param mesh
+	     * @param shader
 	     */
-	    void draw(const Mesh* mesh) const;
+	    void draw(const Mesh* mesh, ShaderProgram* shader) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer

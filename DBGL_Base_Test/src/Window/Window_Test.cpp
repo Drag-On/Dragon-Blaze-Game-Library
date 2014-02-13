@@ -19,6 +19,8 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
+#include "Rendering/Camera.h"
+#include "Math/Constants.h"
 
 using namespace dbgl;
 
@@ -103,13 +105,13 @@ Mesh* pMesh2;
 void renderCallbackWin3(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh);
+    rc->draw(pMesh, shader);
 }
 
 void renderCallbackWin4(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh2);
+    rc->draw(pMesh2, shader);
 }
 
 int testWindow()
@@ -121,10 +123,14 @@ int testWindow()
     SimpleWindow* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
     wnd3->init();
     Viewport* viewport3 = new Viewport(0.5, 0, 1, 1);
+    Camera* cam3 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
+    viewport3->setCamera(cam3);
     wnd3->getRenderContext()->addViewport(viewport3);
     SimpleWindow* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
     wnd4->init();
     Viewport* viewport4 = new Viewport(0, 0, 1, 1);
+    Camera* cam4 = new Camera(Vec3f(-1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 1, 0.1, 10);
+    viewport4->setCamera(cam4);
     wnd4->getRenderContext()->addViewport(viewport4);
     LOG->info("OK!");
     LOG->info("Methods... ");
@@ -147,6 +153,8 @@ int testWindow()
     delete pMesh;
     delete pMesh2;
     delete shader;
+    delete cam3;
+    delete cam4;
     delete viewport3;
     delete viewport4;
     WindowManager::get()->terminate();

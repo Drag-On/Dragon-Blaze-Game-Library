@@ -34,23 +34,37 @@ namespace dbgl
 		_viewports.end());
     }
 
-    void RenderContext::draw(const Mesh* mesh) const
+    void RenderContext::draw(const Mesh* mesh, ShaderProgram* shader) const
     {
+	// Check all viewports
 	for (auto &viewport : _viewports)
 	{
+	    // Calculate absolute viewport values
 	    int viewportX = viewport->getXRatio() * _frameWidth;
 	    int viewportY = viewport->getYRatio() * _frameHeight;
 	    int viewportWidth = viewport->getWidthRatio()
 		    * (_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
 		    * (_frameHeight - viewportY);
-	    // TODO: Frustrum culling
+	    // If the viewport has a camera attached send matrices to shader
 	    if (viewport->getCamera() != NULL)
 	    {
-		viewport->getCamera()->update(viewportWidth / viewportHeight);
-		// TODO: Send matrices to shader
-		viewport->getCamera()->getViewMat();
-		viewport->getCamera()->getProjectionMat();
+		// Update camera in case the window has been resized
+		viewport->getCamera()->update(
+			(float) viewportWidth / viewportHeight);
+		// TODO: Frustrum culling
+		// Send view matrix if the shader needs it
+		GLint view = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::VIEW);
+		if (view >= 0)
+		    shader->setUniformFloatMatrix4Array(view, 1, GL_FALSE,
+			    &viewport->getCamera()->getViewMat()[0][0]);
+		// Send projection matrix if the shader needs it
+		GLint projection = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::PROJECTION);
+		if (projection >= 0)
+		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
+			    &viewport->getCamera()->getProjectionMat()[0][0]);
 	    }
 	    // Set viewport
 	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);

@@ -52,12 +52,15 @@ namespace dbgl
 	glLinkProgram(_shaderProgram);
 	glGetProgramiv(_shaderProgram, GL_LINK_STATUS, &linkOk);
 	if (!linkOk)
-	    LOG->error("Error while linking shaders.");
+	LOG->error("Error while linking shaders.");
 	printLog(_shaderProgram, linkOk);
 
 	// Delete vertex- and fragment shader objects again
 	glDeleteShader(vsId);
 	glDeleteShader(fsId);
+
+	// Check for common uniform names
+	checkUniforms();
     }
 
     ShaderProgram::~ShaderProgram()
@@ -78,51 +81,19 @@ namespace dbgl
      * @param name Name of the shader attribute
      * @return The attributes id or -1 in case the attribute could not be found
      */
-    int ShaderProgram::getAttributeHandle(const char* name) const
+    GLint ShaderProgram::getAttributeHandle(const char* name) const
     {
-	GLint handle = glGetAttribLocation(_shaderProgram, name);
-	if (handle < 0)
-	{
-	    LOG->warning("Attribute %s could not be found.", name);
-	    return -1;
-	}
-	return handle;
-    }
-
-    /**
-     * @brief Checks, if an attribute with the specified name exists
-     * @param name Name of the shader attribute
-     * @return True in case the attribute exists, otherwise false
-     */
-    bool ShaderProgram::checkAttributeExists(const char* name) const
-    {
-	return glGetAttribLocation(_shaderProgram, name) >= 0;
+	return glGetAttribLocation(_shaderProgram, name);
     }
 
     /**
      * @brief Returns the handle for a shader uniform by it's name
      * @param name Name of the shader uniform
-     * @return The uniform id
+     * @return The uniform id or -1 in case the uniform could not be found
      */
-    int ShaderProgram::getUniformHandle(const char* name) const
+    GLint ShaderProgram::getUniformHandle(const char* name) const
     {
-	GLint handle = glGetUniformLocation(_shaderProgram, name);
-	if (handle < 0)
-	{
-	    LOG->warning("Uniform %s could not be found.", name);
-	    return -1;
-	}
-	return handle;
-    }
-
-    /**
-     * @brief Checks, if a uniform with the specified name exists
-     * @param name Name of the shader uniform
-     * @return True in case the uniform exists, otherwise false
-     */
-    bool ShaderProgram::checkUniformExists(const char* name) const
-    {
-	return glGetUniformLocation(_shaderProgram, name) >= 0;
+	return glGetUniformLocation(_shaderProgram, name);
     }
 
     /**
@@ -130,7 +101,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformFloat(int handle, float value) const
+    void ShaderProgram::setUniformFloat(GLint handle, const float value) const
     {
 	glUniform1f(handle, value);
     }
@@ -140,7 +111,8 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformFloat2(int handle, float value[2]) const
+    void ShaderProgram::setUniformFloat2(GLint handle,
+	    const float value[2]) const
     {
 	glUniform2f(handle, value[0], value[1]);
     }
@@ -150,7 +122,8 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformFloat3(int handle, float value[3]) const
+    void ShaderProgram::setUniformFloat3(GLint handle,
+	    const float value[3]) const
     {
 	glUniform3f(handle, value[0], value[1], value[2]);
     }
@@ -160,7 +133,8 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformFloat4(int handle, float value[4]) const
+    void ShaderProgram::setUniformFloat4(GLint handle,
+	    const float value[4]) const
     {
 	glUniform4f(handle, value[0], value[1], value[2], value[3]);
     }
@@ -170,7 +144,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformInt(int handle, int value) const
+    void ShaderProgram::setUniformInt(GLint handle, const int value) const
     {
 	glUniform1i(handle, value);
     }
@@ -180,7 +154,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformInt2(int handle, int value[2]) const
+    void ShaderProgram::setUniformInt2(GLint handle, const int value[2]) const
     {
 	glUniform2i(handle, value[0], value[1]);
     }
@@ -190,7 +164,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformInt3(int handle, int value[3]) const
+    void ShaderProgram::setUniformInt3(GLint handle, const int value[3]) const
     {
 	glUniform3i(handle, value[0], value[1], value[2]);
     }
@@ -200,7 +174,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformInt4(int handle, int value[4]) const
+    void ShaderProgram::setUniformInt4(GLint handle, const int value[4]) const
     {
 	glUniform4i(handle, value[0], value[1], value[2], value[3]);
     }
@@ -210,7 +184,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformBool(int handle, bool value) const
+    void ShaderProgram::setUniformBool(GLint handle, const bool value) const
     {
 	glUniform1i(handle, value);
     }
@@ -220,7 +194,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformBool2(int handle, bool value[2]) const
+    void ShaderProgram::setUniformBool2(GLint handle, const bool value[2]) const
     {
 	glUniform2i(handle, value[0], value[1]);
     }
@@ -230,7 +204,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformBool3(int handle, bool value[3]) const
+    void ShaderProgram::setUniformBool3(GLint handle, const bool value[3]) const
     {
 	glUniform3i(handle, value[0], value[1], value[2]);
     }
@@ -240,7 +214,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformBool4(int handle, bool value[4]) const
+    void ShaderProgram::setUniformBool4(GLint handle, const bool value[4]) const
     {
 	glUniform4i(handle, value[0], value[1], value[2], value[3]);
     }
@@ -251,8 +225,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloatArray(int handle, unsigned int count,
-	    float* values) const
+    void ShaderProgram::setUniformFloatArray(GLint handle, unsigned int count,
+	    const float* values) const
     {
 	glUniform1fv(handle, count, values);
     }
@@ -263,8 +237,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloat2Array(int handle, unsigned int count,
-	    float* values) const
+    void ShaderProgram::setUniformFloat2Array(GLint handle, unsigned int count,
+	    const float* values) const
     {
 	glUniform2fv(handle, count, values);
     }
@@ -275,8 +249,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloat3Array(int handle, unsigned int count,
-	    float* values) const
+    void ShaderProgram::setUniformFloat3Array(GLint handle, unsigned int count,
+	    const float* values) const
     {
 	glUniform3fv(handle, count, values);
     }
@@ -287,8 +261,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloat4Array(int handle, unsigned int count,
-	    float* values) const
+    void ShaderProgram::setUniformFloat4Array(GLint handle, unsigned int count,
+	    const float* values) const
     {
 	glUniform4fv(handle, count, values);
     }
@@ -299,8 +273,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformIntArray(int handle, unsigned int count,
-	    int* values) const
+    void ShaderProgram::setUniformIntArray(GLint handle, unsigned int count,
+	    const int* values) const
     {
 	glUniform1iv(handle, count, values);
     }
@@ -311,8 +285,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformInt2Array(int handle, unsigned int count,
-	    int* values) const
+    void ShaderProgram::setUniformInt2Array(GLint handle, unsigned int count,
+	    const int* values) const
     {
 	glUniform2iv(handle, count, values);
     }
@@ -323,8 +297,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformInt3Array(int handle, unsigned int count,
-	    int* values) const
+    void ShaderProgram::setUniformInt3Array(GLint handle, unsigned int count,
+	    const int* values) const
     {
 	glUniform3iv(handle, count, values);
     }
@@ -335,8 +309,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformInt4Array(int handle, unsigned int count,
-	    int* values) const
+    void ShaderProgram::setUniformInt4Array(GLint handle, unsigned int count,
+	    const int* values) const
     {
 	glUniform4iv(handle, count, values);
     }
@@ -347,8 +321,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloatMatrix2Array(int handle,
-	    unsigned int count, bool transpose, float* values) const
+    void ShaderProgram::setUniformFloatMatrix2Array(GLint handle,
+	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix2fv(handle, count, transpose, values);
     }
@@ -359,8 +333,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloatMatrix3Array(int handle,
-	    unsigned int count, bool transpose, float* values) const
+    void ShaderProgram::setUniformFloatMatrix3Array(GLint handle,
+	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix3fv(handle, count, transpose, values);
     }
@@ -371,8 +345,8 @@ namespace dbgl
      * @param count Amount of elements of the uniform array
      * @param values Pointer to array with count values
      */
-    void ShaderProgram::setUniformFloatMatrix4Array(int handle,
-	    unsigned int count, bool transpose, float* values) const
+    void ShaderProgram::setUniformFloatMatrix4Array(GLint handle,
+	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix4fv(handle, count, transpose, values);
     }
@@ -382,7 +356,7 @@ namespace dbgl
      * @param handle Uniform handle
      * @param value New value
      */
-    void ShaderProgram::setUniformSampler(int handle, int value) const
+    void ShaderProgram::setUniformSampler(GLint handle, const int value) const
     {
 	glUniform1i(handle, value);
     }
@@ -395,12 +369,19 @@ namespace dbgl
 	return _shaderProgram;
     }
 
+    GLint ShaderProgram::getDefaultUniformHandle(Uniform uniform) const
+    {
+	return _uniformHandles.find(uniform)->second;
+    }
+
     ShaderProgram* ShaderProgram::createSimpleShader()
     {
 	const char* vertexShader = "#version 330 core\n"
 		"layout(location = 0) in vec4 vertexPos;\n"
+		"uniform mat4 m_view;\n"
+		"uniform mat4 m_projection;\n"
 		"void main(){\n"
-		"gl_Position = vertexPos;\n"
+		"gl_Position = m_projection * m_view * vertexPos;\n"
 		"}";
 	const char* fragmentShader = "#version 330 core\n"
 		"out vec4 color;\n"
@@ -408,6 +389,21 @@ namespace dbgl
 		"color = vec4(1,0,0,1);\n"
 		"}";
 	return new ShaderProgram(vertexShader, fragmentShader, false);
+    }
+
+    void ShaderProgram::checkUniforms()
+    {
+	use();
+	// Iterate over uniform enum... not nice, but handy!
+	for (int val = MODEL; val != TEX_DIFFUSE_FLAG; val++)
+	{
+	    Uniform uniform = static_cast<Uniform>(val);
+	    auto foo = uniformNames.find(uniform);
+	    std::string name = foo->second;
+	    const char* nameCstr = name.c_str();
+	    GLint handle = getUniformHandle(nameCstr);
+	    _uniformHandles[uniform] = handle;
+	}
     }
 
     /**
@@ -461,12 +457,12 @@ namespace dbgl
 	    else if (glIsProgram(object))
 		glGetProgramInfoLog(object, logLength, NULL, msg);
 
-	    if(msg[logLength-2] == '\n')
-	    	msg[logLength-2] = 0;
+	    if (msg[logLength - 2] == '\n')
+		msg[logLength - 2] = 0;
 
 	    if (ok)
 		LOG->info(msg);
-	    else
+		else
 		LOG->error(msg);
 	    delete (msg);
 	}
@@ -486,23 +482,44 @@ namespace dbgl
 	if (code == NULL)
 	{
 	    LOG->error("Error compiling NULL shader");
-	return -1;
+	    return -1;
+	}
+
+	// Create shader object
+	GLuint id = glCreateShader(type);
+
+	// Compile
+	glShaderSource(id, 1, &code , NULL);
+	glCompileShader(id);
+
+	// Check if everything went right
+	GLint result = GL_FALSE;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	if(result == GL_FALSE)
+	LOG->error("Error while compiling shader %s", fileName);
+	printLog(id, result);
+	return id;
     }
 
-    // Create shader object
-    GLuint id = glCreateShader(type);
-
-    // Compile
-    glShaderSource(id, 1, &code , NULL);
-    glCompileShader(id);
-
-    // Check if everything went right
-    GLint result = GL_FALSE;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if(result == GL_FALSE)
-    LOG->error("Error while compiling shader %s", fileName);
-    printLog(id, result);
-    return id;
-}
-
+    // Initialize static variable
+    std::map<ShaderProgram::Uniform, std::string> ShaderProgram::uniformNames =
+	    {
+	    {
+	    ShaderProgram::MODEL, "m_model"
+	    }, {
+	    ShaderProgram::VIEW, "m_view"
+	    }, {
+	    ShaderProgram::PROJECTION, "m_projection"
+	    }, {
+	    ShaderProgram::MVP, "m_mvp"
+	    }, {
+	    ShaderProgram::ITM, "m_itm"
+	    }, {
+	    ShaderProgram::ITMV, "m_itmv"
+	    }, {
+	    ShaderProgram::TEX_DIFFUSE, "s_texDiffuse"
+	    }, {
+	    ShaderProgram::TEX_DIFFUSE_FLAG, "b_texDiffuseFlag"
+	    },
+	    };
 }
