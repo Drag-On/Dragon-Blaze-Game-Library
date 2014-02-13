@@ -12,7 +12,9 @@
 
 namespace dbgl
 {
-    RenderContext::RenderContext()
+    RenderContext::RenderContext(unsigned int frameWidth,
+	    unsigned int frameHeight) :
+	    _frameWidth(frameWidth), _frameHeight(frameHeight)
     {
     }
 
@@ -36,21 +38,31 @@ namespace dbgl
     {
 	for (auto &viewport : _viewports)
 	{
+	    int viewportX = viewport->getXRatio() * _frameWidth;
+	    int viewportY = viewport->getYRatio() * _frameHeight;
+	    int viewportWidth = viewport->getWidthRatio()
+		    * (_frameWidth - viewportX);
+	    int viewportHeight = viewport->getHeightRatio()
+		    * (_frameHeight - viewportY);
 	    // TODO: Frustrum culling
 	    if (viewport->getCamera() != NULL)
 	    {
-		viewport->getCamera()->update(
-			viewport->getWidth() / viewport->getHeight());
+		viewport->getCamera()->update(viewportWidth / viewportHeight);
 		// TODO: Send matrices to shader
 		viewport->getCamera()->getViewMat();
 		viewport->getCamera()->getProjectionMat();
 	    }
 	    // Set viewport
-	    glViewport(viewport->getX(), viewport->getY(), viewport->getWidth(),
-		    viewport->getHeight());
+	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 	    // Render mesh
 	    renderMesh(mesh);
 	}
+    }
+
+    void RenderContext::update(unsigned int width, unsigned int height)
+    {
+	_frameWidth = width;
+	_frameHeight = height;
     }
 
     void RenderContext::renderMesh(const Mesh* mesh) const

@@ -12,9 +12,10 @@
 
 namespace dbgl
 {
-    Viewport::Viewport(unsigned int x, unsigned int y, unsigned int width,
-	    unsigned int height) :
-	    _x(x), _y(y), _width(width), _height(height), _camera(NULL)
+    Viewport::Viewport(float xRatio, float yRatio, float widthRatio,
+	    float heightRatio) :
+	    _xRatio(xRatio), _yRatio(yRatio), _widthRatio(widthRatio), _heightRatio(
+		    heightRatio), _camera(NULL)
     {
     }
 
@@ -22,36 +23,36 @@ namespace dbgl
     {
     }
 
-    unsigned int Viewport::getX() const
+    float Viewport::getXRatio() const
     {
-	return _x;
+	return _xRatio;
     }
 
-    unsigned int Viewport::getY() const
+    float Viewport::getYRatio() const
     {
-	return _y;
+	return _yRatio;
     }
 
-    unsigned int Viewport::getWidth() const
+    float Viewport::getWidthRatio() const
     {
-	return _width;
+	return _widthRatio;
     }
 
-    unsigned int Viewport::getHeight() const
+    float Viewport::getHeightRatio() const
     {
-	return _height;
+	return _heightRatio;
     }
 
-    void Viewport::setPos(unsigned int x, unsigned int y)
+    void Viewport::setPosRatio(float xRatio, float yRatio)
     {
-	_x = x;
-	_y = y;
+	_xRatio = xRatio;
+	_yRatio = yRatio;
     }
 
-    void Viewport::setSize(unsigned int width, unsigned int height)
+    void Viewport::setSizeRatio(float widthRatio, float heightRatio)
     {
-	_width = width;
-	_height = height;
+	_widthRatio = widthRatio;
+	_heightRatio = heightRatio;
     }
 
     Camera* Viewport::getCamera() const

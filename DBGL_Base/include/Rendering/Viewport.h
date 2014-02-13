@@ -24,40 +24,60 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Constructor
-	     * @param x X coordinate in window
-	     * @param y Y coordinate in window
-	     * @param width Viewport width
-	     * @param height Viewport height
+	     * @param xRatio Percentage of the frame buffer where this viewport
+	     * 		     should start in x direction
+	     * @param yRatio Percentage of the frame buffer where this viewport
+	     * 		     should start in y direction
+	     * @param widthRatio Percentage of the remaining part of the frame
+	     * 			 buffer to claim for this viewport
+	     * @param heightRatio Percentage of the remaining part of the frame
+	     * 			  buffer to claim for this viewport
+	     * @details A viewport with xRatio and yRatio both set to 0.5 and
+	     * 		both widthRatio and heightRatio set to 1 will range from
+	     * 		the center of the window to the bottom right corner
 	     */
-	    Viewport(unsigned int x, unsigned int y, unsigned int width,
-		    unsigned int height);
+	    Viewport(float xRatio, float yRatio, float widthRatio,
+		    float heightRatio);
 	    ~Viewport();
 	    /**
 	     * @return X coordinate of frame
 	     */
-	    unsigned int getX() const;
+	    float getXRatio() const;
 	    /**
 	     * @return Y coordinate of frame
 	     */
-	    unsigned int getY() const;
+	    float getYRatio() const;
 	    /**
-	     * @return Frame width
+	     * @return Frame width percentage
+	     * @details This describes the amount of the framebuffer right and
+	     * 		below of the viewport's coordinates should be used, i.e.
+	     * 		if the viewport has the coordinates
 	     */
-	    unsigned int getWidth() const;
+	    float getWidthRatio() const;
 	    /**
-	     * @return Frame height
+	     * @return Frame height percentage
 	     */
-	    unsigned int getHeight() const;
+	    float getHeightRatio() const;
 	    /**
-	     * @param x New frame x coordinate
-	     * @param y New frame y coordinate
+	     * @param xRatio Percentage of the frame buffer where this viewport
+	     * 		     should start in x direction
+	     * @param yRatio Percentage of the frame buffer where this viewport
+	     * 		     should start in y direction
+	     * @details A viewport with xRatio and yRatio both set to 0.5 will
+	     * 		range from the center of the screen to the coordinate
+	     * 		defined by the size ratio
 	     */
-	    void setPos(unsigned int x, unsigned int y);
+	    void setPosRatio(float xRatio, float yRatio);
 	    /**
-	     * @param width New frame width
-	     * @param height New frame height
+	     * @param widthRatio Percentage of the remaining part of the frame
+	     * 			 buffer to claim for this viewport
+	     * @param heightRatio Percentage of the remaining part of the frame
+	     * 			  buffer to claim for this viewport
+	     * @details A viewport with both widthRatio and heightRatio set to 1
+	     * 		will range from the position defined by the position ratio
+	     * 		to the bottom right corner
 	     */
-	    void setSize(unsigned int width, unsigned int height);
+	    void setSizeRatio(float widthRatio, float heightRatio);
 	    /**
 	     * @return Pointer to the camera currently associated with this viewport
 	     */
@@ -68,8 +88,8 @@ namespace dbgl
 	     */
 	    void setCamera(Camera* camera);
 	private:
-	    unsigned int _x, _y;
-	    unsigned int _width, _height;
+	    float _xRatio, _yRatio;
+	    float _widthRatio, _heightRatio;
 	    Camera* _camera;
     };
 }

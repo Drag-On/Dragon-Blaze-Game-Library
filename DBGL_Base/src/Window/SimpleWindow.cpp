@@ -50,7 +50,7 @@ namespace dbgl
     void SimpleWindow::framebufferResizeCallback(int width, int height)
     {
 	// Change viewport
-	glViewport(0, 0, width, height);
+	_pRenderContext->update(width, height);
     }
 
     void SimpleWindow::keyCallback(int key, int scancode, int action, int mods)

@@ -77,7 +77,7 @@ namespace dbgl
 	_windowedY = getY();
 
 	// Create render context object
-	_pRenderContext = new RenderContext();
+	_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
 
 	makeCurrent();
 

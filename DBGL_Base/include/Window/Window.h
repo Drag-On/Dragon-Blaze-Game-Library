@@ -297,6 +297,7 @@ namespace dbgl
 	     * GLFW window handle
 	     */
 	    GLFWwindow* _pWndHandle = NULL;
+	    RenderContext* _pRenderContext;
 
 	private:
 	    std::function<void()> _closeCallback;
@@ -321,7 +322,6 @@ namespace dbgl
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
 	    unsigned int _windowedX, _windowedY; // Last window position before entering fullscreen mode
 	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0.1, 0.1, 0.1);
-	    RenderContext* _pRenderContext;
 	    GLuint _vertexArrayId;
 
 	    friend class WindowManager;

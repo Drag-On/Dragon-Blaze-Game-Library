@@ -32,8 +32,10 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Creates a new render context
+	     * @param width New width of of the framebuffer
+	     * @param height New height of the framebuffer
 	     */
-	    RenderContext();
+	    RenderContext(unsigned int frameWidth, unsigned int frameHeight);
 	    /**
 	     * @brief Cleans up memory
 	     */
@@ -55,6 +57,12 @@ namespace dbgl
 	     * @param mesh
 	     */
 	    void draw(const Mesh* mesh) const;
+	    /**
+	     * @brief Updates this render context
+	     * @param width New width of of the framebuffer
+	     * @param height New height of the framebuffer
+	     */
+	    void update(unsigned int width, unsigned int height);
 	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
@@ -65,6 +73,7 @@ namespace dbgl
 	     */
 	    void renderMesh(const Mesh* mesh) const;
 
+	    unsigned int _frameWidth, _frameHeight;
 	    std::vector<Viewport*> _viewports;
     };
 }
