@@ -62,6 +62,9 @@ int testVector2()
     auto test = Vector2<float>(1, 0);
     test.translate(-4, 2);
     assert(test == Vector2<float>(-3, 2));
+    // getDataPointer
+    for(unsigned int i = 0; i < test.getDimension(); i++)
+    assert(test.getDataPointer()[i] == test[i]);
     LOG->info("OK!");
     LOG->info("Operators... ");
     vec2[0] = -1.5;

@@ -59,6 +59,11 @@ int testMatrix3x3()
     assert(!mat.isZero());
     // isIdentity
     assert(mat.isIdentity());
+    // getDataPointer
+    for(int i = 0; i < mat3.getWidth() * mat3.getHeight(); i++)
+    {
+	assert(mat3.getDataPointer()[i] == mat3[i / mat3.getWidth()][i % mat3.getWidth()]);
+    }
     // makeRotationX
     Vector3<float> testVec(0, 1, 0);
     auto res = (Matrix3x3<float>::makeRotationX(1.57079633f) * testVec);// 90°

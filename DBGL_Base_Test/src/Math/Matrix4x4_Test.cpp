@@ -58,6 +58,11 @@ int testMatrix4x4()
     assert(!mat.isZero());
     // isIdentity
     assert(mat.isIdentity());
+    // getDataPointer
+    for(int i = 0; i < mat3.getWidth() * mat3.getHeight(); i++)
+    {
+	assert(mat3.getDataPointer()[i] == mat3[i / mat3.getWidth()][i % mat3.getWidth()]);
+    }
     // makeTranslation
     auto res = (Matrix4x4<float>::makeTranslation(1.5, 0.4, -42) * Vector4<float>(1, 0, -1, 1));
     assert(std::abs(res[0] - 2.5) <= 0.01);

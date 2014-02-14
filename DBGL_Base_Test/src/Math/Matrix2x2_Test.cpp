@@ -59,6 +59,11 @@ int testMatrix2x2()
     assert(!mat.isZero());
     // isIdentity
     assert(mat.isIdentity());
+    // getDataPointer
+    for(int i = 0; i < mat3.getWidth() * mat3.getHeight(); i++)
+    {
+	assert(mat3.getDataPointer()[i] == mat3[i / mat3.getWidth()][i % mat3.getWidth()]);
+    }
     // makeRotation
     auto res = (Matrix2x2<float>::makeRotation(1.57079633f) * Vector2<float>(1, 0));// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
