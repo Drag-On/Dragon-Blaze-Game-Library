@@ -32,9 +32,8 @@ namespace dbgl
 	     * @param near Near clipping plane
 	     * @param far Far clipping plane
 	     */
-	    Camera(Vec3f const& position, Vec3f const& target, Vec3f const& up,
-		    float fieldOfView, float aspectRatio, float near,
-		    float far);
+	    Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView,
+		    float aspectRatio, float near, float far);
 	    ~Camera();
 	    /**
 	     * @brief Updates the matrices, must be called once a frame

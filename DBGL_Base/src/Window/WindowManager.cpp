@@ -37,7 +37,6 @@ namespace dbgl
 	    if (glfwWindowShouldClose(wnd->first))
 	    {
 		delete (wnd->second);
-		wnd->second = NULL;
 		wnd = windows.erase(wnd);
 	    }
 	    else

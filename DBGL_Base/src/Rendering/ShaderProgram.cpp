@@ -71,7 +71,7 @@ namespace dbgl
     /**
      * @brief Sets this shader as the current one
      */
-    void ShaderProgram::use()
+    void ShaderProgram::use() const
     {
 	glUseProgram(_shaderProgram);
     }

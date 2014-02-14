@@ -56,7 +56,7 @@ namespace dbgl
 	    /**
 	     * @brief Sets this shader as the current one
 	     */
-	    void use();
+	    void use() const;
 
 	    /**
 	     * @brief Returns the handle for a shader attribute by it's name

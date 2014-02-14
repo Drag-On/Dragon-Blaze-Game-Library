@@ -99,9 +99,16 @@ class TestWindow: public SimpleWindow
     };
 
 ShaderProgram* shader;
+Mesh* pMesh;
 Mesh* pMesh2;
 Mesh* pMesh3;
 Mesh* pMesh4;
+
+void renderCallbackWin(const RenderContext* rc)
+{
+    shader->use();
+    rc->draw(pMesh, shader);
+}
 
 void renderCallbackWin2(const RenderContext* rc)
 {
@@ -125,34 +132,47 @@ int testWindow()
 {
     LOG->info("Starting Window test suite...");
     LOG->info("Constructors... ");
-    TestWindow* wnd = WindowManager::get()->createWindow<TestWindow>();
-    SimpleWindow* wnd2 = WindowManager::get()->createWindow<SimpleWindow>("Window 2");
+    Window* wnd = WindowManager::get()->createWindow<SimpleWindow>();
+    Window* wnd2 = WindowManager::get()->createWindow<SimpleWindow>("Window 2");
+    Window* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
+    Window* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
+    LOG->info("OK!");
+    LOG->info("Methods... ");
+    // Init
+    wnd->init();
+    Viewport* viewport = new Viewport(0, 0, 1, 1);
+    Camera* cam = new Camera(Vec3f(0, 2, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
+    viewport->setCamera(cam);
+    wnd->getRenderContext()->addViewport(viewport);
     wnd2->init();
     Viewport* viewport2 = new Viewport(0, 0, 1, 1);
     Camera* cam2 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
     viewport2->setCamera(cam2);
     wnd2->getRenderContext()->addViewport(viewport2);
-    SimpleWindow* wnd3 = WindowManager::get()->createWindow<SimpleWindow>("Window 3", 640, 480);
     wnd3->init();
-    Viewport* viewport3 = new Viewport(0.5, 0, 1, 1);
-    Camera* cam3 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
-    viewport3->setCamera(cam3);
-    wnd3->getRenderContext()->addViewport(viewport3);
-    SimpleWindow* wnd4 = WindowManager::get()->createWindow<SimpleWindow>("Window 4", 640, 640, false);
+    Viewport* viewport3_1 = new Viewport(0, 0, 0.5, 1);
+    Viewport* viewport3_2 = new Viewport(0.5, 0, 1, 1);
+    Camera* cam3_1 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
+    Camera* cam3_2 = new Camera(Vec3f(-5, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
+    viewport3_1->setCamera(cam3_1);
+    viewport3_2->setCamera(cam3_2);
+    wnd3->getRenderContext()->addViewport(viewport3_1);
+    wnd3->getRenderContext()->addViewport(viewport3_2);
     wnd4->init();
     Viewport* viewport4 = new Viewport(0, 0, 1, 1);
     Camera* cam4 = new Camera(Vec3f(-1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 1, 0.1, 10);
     viewport4->setCamera(cam4);
     wnd4->getRenderContext()->addViewport(viewport4);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
     // Load meshes and shader
+    //wnd->makeCurrent();
+    pMesh = Mesh::makePyramid();
     pMesh2 = Mesh::makeCube();
     pMesh3 = Mesh::makePlane();
     pMesh4 = Mesh::makeTriangle();
     shader = ShaderProgram::createSimpleShader();
     // Show windows
     wnd->show();
+    wnd->addRenderCallback(std::bind(&renderCallbackWin, std::placeholders::_1));
     wnd2->show();
     wnd2->addRenderCallback(std::bind(&renderCallbackWin2, std::placeholders::_1));
     wnd3->show();
@@ -164,15 +184,18 @@ int testWindow()
     {
 	WindowManager::get()->update();
     }
+    delete pMesh;
     delete pMesh2;
     delete pMesh3;
     delete pMesh4;
     delete shader;
     delete cam2;
-    delete cam3;
+    delete cam3_1;
+    delete cam3_2;
     delete cam4;
     delete viewport2;
-    delete viewport3;
+    delete viewport3_1;
+    delete viewport3_2;
     delete viewport4;
     WindowManager::get()->terminate();
     LOG->info("OK!");

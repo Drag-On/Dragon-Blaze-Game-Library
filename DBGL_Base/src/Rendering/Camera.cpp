@@ -13,8 +13,8 @@
 namespace dbgl
 {
 
-    Camera::Camera(Vec3f const& position, Vec3f const& target, Vec3f const& up,
-	    float fieldOfView, float aspectRatio, float near, float far)
+    Camera::Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView,
+	    float aspectRatio, float near, float far)
     {
 	_position = position;
 	_target = target;

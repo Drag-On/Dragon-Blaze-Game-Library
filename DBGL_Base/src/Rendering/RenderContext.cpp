@@ -57,14 +57,18 @@ namespace dbgl
 		GLint view = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::VIEW);
 		if (view >= 0)
+		{
 		    shader->setUniformFloatMatrix4Array(view, 1, GL_FALSE,
-			    &viewport->getCamera()->getViewMat()[0][0]);
+			    viewport->getCamera()->getViewMat().getDataPointer());
+		}
 		// Send projection matrix if the shader needs it
 		GLint projection = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::PROJECTION);
 		if (projection >= 0)
+		{
 		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
-			    &viewport->getCamera()->getProjectionMat()[0][0]);
+			    viewport->getCamera()->getProjectionMat().getDataPointer());
+		}
 	    }
 	    // Set viewport
 	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);

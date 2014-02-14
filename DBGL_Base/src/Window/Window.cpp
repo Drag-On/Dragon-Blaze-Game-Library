@@ -27,7 +27,8 @@ namespace dbgl
     {
     }
 
-    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen)
+    Window::Window(GLFWwindow* share, const char* title, int width, int height,
+	    bool fullscreen)
     {
 	if (!glfwInit())
 	{
@@ -92,12 +93,12 @@ namespace dbgl
 
     Window::~Window()
     {
-	delete _pRenderContext;
-	_pRenderContext = NULL;
-
 	makeCurrent();
 	glDeleteVertexArrays(1, &_vertexArrayId);
 	glfwDestroyWindow(_pWndHandle);
+
+	delete _pRenderContext;
+	_pRenderContext = NULL;
     }
 
     void Window::init(bool depthTest, bool faceCulling)
