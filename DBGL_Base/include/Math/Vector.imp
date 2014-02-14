@@ -74,6 +74,11 @@ namespace dbgl
 		return true;
 	}
 	
+	template<typename T, unsigned int N> const T* Vector<T,N>::getDataPointer() const
+	{
+		return &((*this)[0]);
+	}
+	
 	template<typename T, unsigned int N> Vector<T,N>& Vector<T,N>::operator=(Vector<T,N> const& rhs) 
 	{ 
 		if (*this != rhs)

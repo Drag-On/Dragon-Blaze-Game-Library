@@ -74,6 +74,11 @@ namespace dbgl
 	    /// </summary>
 	    bool isIdentity() const;
 	    /// <summary>
+	    /// @brief Grants access to the internal memory
+	    /// @return A pointer to the first element of this matrix
+	    /// </summary>
+	    const T* getDataPointer() const;
+	    /// <summary>
 	    /// @brief Constructs a translation matrix from the given translation values
 	    /// @param x Amount to translate on the x axis
 	    /// @param y Amount to translate on the y axis

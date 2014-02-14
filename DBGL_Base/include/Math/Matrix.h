@@ -55,6 +55,11 @@ namespace dbgl
 	    /// @brief Checks if this matrix is an identity matrix
 	    /// </summary>
 	    bool isIdentity() const;
+	    /// <summary>
+	    /// @brief Grants access to the internal memory
+	    /// @return A pointer to the first element of this matrix
+	    /// </summary>
+	    const T* getDataPointer() const;
 	    // Operators
 	    Matrix<T, N, M>& operator=(Matrix<T, N, M> const& rhs);
 	    const Matrix<T, N, M> operator+(Matrix<T, N, M> const& rhs) const;

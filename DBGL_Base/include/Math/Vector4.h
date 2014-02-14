@@ -98,6 +98,11 @@ namespace dbgl
 	    /// @brief Translates this vector by the specified amount
 	    /// </summary>
 	    Vector4<T>& translate(T x, T y, T z, T w);
+	    /// <summary>
+	    /// @brief Grants access to the internal memory
+	    /// @return A pointer to the first element of this vector
+	    /// </summary>
+	    const T* getDataPointer() const;
 	    // Operators
 	    Vector4<T>& operator=(Vector4<T> const& rhs);
 	    const Vector4<T> operator+(Vector4<T> const& rhs) const;

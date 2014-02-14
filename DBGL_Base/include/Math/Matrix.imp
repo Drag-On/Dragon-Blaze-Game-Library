@@ -73,6 +73,11 @@ namespace dbgl
 		return true;
 	}
 	
+	template<typename T, unsigned int N, unsigned int M> const T* Matrix<T,N,M>::getDataPointer() const
+	{
+		return &((*this)[0][0]);
+	}
+	
 	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator=(Matrix<T,N,M> const& rhs) 
 	{ 
 		if (*this != rhs)

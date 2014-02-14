@@ -74,6 +74,11 @@ namespace dbgl
 	    /// @brief Checks if all components are zero
 	    /// </summary>
 	    bool isZero() const;
+	    /// <summary>
+	    /// @brief Grants access to the internal memory
+	    /// @return A pointer to the first element of this vector
+	    /// </summary>
+	    const T* getDataPointer() const;
 	    // Operators
 	    Vector<T, N>& operator=(Vector<T, N> const& rhs);
 	    const Vector<T, N> operator+(Vector<T, N> const& rhs) const;

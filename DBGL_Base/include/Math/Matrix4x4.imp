@@ -216,6 +216,11 @@ namespace dbgl
 		return true;
 	}
 	
+	template<typename T> const T* Matrix4x4<T>::getDataPointer() const
+	{
+		return &((*this)[0][0]);
+	}
+	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeTranslation(T x, T y, T z)
 	{
 		Matrix4x4<T> mat;
@@ -340,8 +345,6 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeProjection(T fieldOfView, T aspectRatio, T near, T far)
 	{
-		T h = std::tan(pi_2() - fieldOfView / 2);
-		T w = h / aspectRatio;
 		Matrix4x4<T> mat;
 		mat.projection(fieldOfView, aspectRatio, near, far);
 		return mat;

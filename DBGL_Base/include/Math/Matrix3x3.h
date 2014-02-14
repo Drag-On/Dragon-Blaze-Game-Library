@@ -71,6 +71,11 @@ namespace dbgl
 	    /// </summary>
 	    bool isIdentity() const;
 	    /// <summary>
+	    /// @brief Grants access to the internal memory
+	    /// @return A pointer to the first element of this matrix
+	    /// </summary>
+	    const T* getDataPointer() const;
+	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>

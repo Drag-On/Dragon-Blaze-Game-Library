@@ -103,6 +103,11 @@ namespace dbgl
 		return *this;
 	}
 	
+	template<typename T> const T* Vector4<T>::getDataPointer() const
+	{
+		return &((*this)[0]);
+	}
+	
 	template<typename T> Vector4<T>& Vector4<T>::operator=(Vector4<T> const& rhs) 
 	{ 
 		if (*this != rhs)
