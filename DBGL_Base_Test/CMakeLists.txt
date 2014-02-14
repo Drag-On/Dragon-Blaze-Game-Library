@@ -16,6 +16,7 @@ FILE(GLOB_RECURSE Base_Src
 SET(Libraries2Copy
    "${PROJECT_SOURCE_DIR}/../DBGL_Base/Debug/libDBGL_Base.dll"
    "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/lib/glew32.dll"
+   "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/src/glfw3.dll"
 )
 
 # OpenGL
