@@ -377,23 +377,26 @@ namespace dbgl
     ShaderProgram* ShaderProgram::createSimpleShader()
     {
 	const char* vertexShader = "#version 330 core\n"
-		"layout(location = 0) in vec4 vertexPos;\n"
-		"layout(location = 2) in vec4 normal;\n"
+		"layout(location = 0) in vec3 vertexPos;\n"
+		"layout(location = 2) in vec3 normal;\n"
+		"layout(location = 3) in vec3 color;\n"
 		"out vec3 normal_cam;\n"
+		"out vec3 color_model;\n"
 		"uniform mat4 m_view;\n"
 		"uniform mat4 m_projection;\n"
 		"uniform mat4 m_itmv;\n"
 		"void main(){\n"
-		"gl_Position = m_projection * m_view * vertexPos;\n"
-		"normal_cam = normalize((m_itmv * normal).xyz);\n"
-		//"normal_cam = (m_view * m_projection * vec4(normal_cam, 0)).xyz;\n"
+		"gl_Position = m_projection * m_view * vec4(vertexPos, 1);\n"
+		"normal_cam = normalize((m_itmv * vec4(normal, 0)).xyz);\n"
+		"color_model = color;\n"
 		"}";
 	const char* fragmentShader = "#version 330 core\n"
-		"out vec3 color;\n"
 		"in vec3 normal_cam;\n"
+		"in vec3 color_model;\n"
+		"out vec3 color;\n"
 		"void main(){\n"
 		"float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));\n"
-		"color = vec3(variance,0,0);\n"
+		"color = color_model * variance;\n"
 		"}";
 	return new ShaderProgram(vertexShader, fragmentShader, false);
     }
