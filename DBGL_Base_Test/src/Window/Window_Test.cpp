@@ -146,7 +146,7 @@ int testWindow()
     wnd->getRenderContext()->addViewport(viewport);
     wnd2->init();
     Viewport* viewport2 = new Viewport(0, 0, 1, 1);
-    Camera* cam2 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
+    Camera* cam2 = new Camera(Vec3f(5, 5, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
     viewport2->setCamera(cam2);
     wnd2->getRenderContext()->addViewport(viewport2);
     wnd3->init();

@@ -53,6 +53,16 @@ namespace dbgl
 		viewport->getCamera()->update(
 			(float) viewportWidth / viewportHeight);
 		// TODO: Frustrum culling
+		// TODO: Don't recalculate matrices for every model
+		// Send model matrix if the shader needs it
+		GLint model = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::MODEL);
+		if (model >= 0)
+		{
+		    // TODO: Replace with real matrix
+		    shader->setUniformFloatMatrix4Array(model, 1, GL_FALSE,
+			    Mat4f().getDataPointer());
+		}
 		// Send view matrix if the shader needs it
 		GLint view = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::VIEW);
@@ -68,6 +78,16 @@ namespace dbgl
 		{
 		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
 			    viewport->getCamera()->getProjectionMat().getDataPointer());
+		}
+		// Send itmv matrix if the shader needs it
+		GLint itmv = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::ITMV);
+		if (itmv >= 0)
+		{
+		    auto itmvMat =
+			    viewport->getCamera()->getViewMat().getInverted().getTransposed();
+		    shader->setUniformFloatMatrix4Array(itmv, 1, GL_FALSE,
+			    itmvMat.getDataPointer());
 		}
 	    }
 	    // Set viewport
