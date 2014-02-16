@@ -141,26 +141,26 @@ int testWindow()
     // Init
     wnd->init();
     Viewport* viewport = new Viewport(0, 0, 1, 1);
-    Camera* cam = new Camera(Vec3f(0, 2, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
+    Camera* cam = new Camera(Vec3f(-2, 2, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 0.1, 10);
     viewport->setCamera(cam);
     wnd->getRenderContext()->addViewport(viewport);
     wnd2->init();
     Viewport* viewport2 = new Viewport(0, 0, 1, 1);
-    Camera* cam2 = new Camera(Vec3f(5, 5, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 800/600, 0.1, 10);
+    Camera* cam2 = new Camera(Vec3f(3, 2, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 0.1, 10);
     viewport2->setCamera(cam2);
     wnd2->getRenderContext()->addViewport(viewport2);
     wnd3->init();
     Viewport* viewport3_1 = new Viewport(0, 0, 0.5, 1);
     Viewport* viewport3_2 = new Viewport(0.5, 0, 1, 1);
-    Camera* cam3_1 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
-    Camera* cam3_2 = new Camera(Vec3f(-5, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), (640/2)/480, 0.1, 10);
+    Camera* cam3_1 = new Camera(Vec3f(1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 0.1, 10);
+    Camera* cam3_2 = new Camera(Vec3f(-5, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 0.1, 10);
     viewport3_1->setCamera(cam3_1);
     viewport3_2->setCamera(cam3_2);
     wnd3->getRenderContext()->addViewport(viewport3_1);
     wnd3->getRenderContext()->addViewport(viewport3_2);
     wnd4->init();
     Viewport* viewport4 = new Viewport(0, 0, 1, 1);
-    Camera* cam4 = new Camera(Vec3f(-1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 1, 0.1, 10);
+    Camera* cam4 = new Camera(Vec3f(-1, 1, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0), pi_4(), 0.1, 10);
     viewport4->setCamera(cam4);
     wnd4->getRenderContext()->addViewport(viewport4);
     // Load meshes and shader
