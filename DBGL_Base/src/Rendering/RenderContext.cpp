@@ -80,10 +80,9 @@ namespace dbgl
 			ShaderProgram::Uniform::ITMV);
 		if (itmv >= 0)
 		{
-		    auto itmvMat =
-			    viewport->getViewMat().getInverted().getTransposed();
+		    // TODO: multiply model mat
 		    shader->setUniformFloatMatrix4Array(itmv, 1, GL_FALSE,
-			    itmvMat.getDataPointer());
+			    viewport->getITViewMat().getDataPointer());
 		}
 	    }
 	    // Set viewport

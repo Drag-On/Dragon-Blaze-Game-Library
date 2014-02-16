@@ -104,11 +104,16 @@ namespace dbgl
 	     * @warning Needs to be updated using update() first!
 	     */
 	    Mat4f const& getProjectionMat() const;
+	    /**
+	     * @return The (cached) inverted transposed view matrix
+	     * @warning Needs to be updated using update() first!
+	     */
+	    Mat4f const& getITViewMat() const;
 
 	    float _xRatio, _yRatio;
 	    float _widthRatio, _heightRatio;
 	    Camera* _camera;
-	    Mat4f _viewMat, _projectionMat; // Cached matrizes
+	    Mat4f _viewMat, _projectionMat, _itView; // Cached matrizes
 
 	    friend class RenderContext;
     };
