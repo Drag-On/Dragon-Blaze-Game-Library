@@ -324,25 +324,26 @@ namespace dbgl
 	
 	template<typename T> void Matrix4x4<T>::view(Vector3<T> const& pos, Vector3<T> const& target, Vector3<T> const& up)
 	{
-		auto zAxis = pos - target;
-		zAxis.normalize();
-		auto xAxis = up;
-		xAxis *= zAxis;
-		xAxis.normalize();
-		auto yAxis = zAxis;
-		yAxis *= xAxis;
-		(*this)[0][0] = xAxis.getX();
-		(*this)[1][0] = yAxis.getX();
-		(*this)[2][0] = zAxis.getX();
-		(*this)[3][0] = -(xAxis * pos);
-		(*this)[0][1] = xAxis.getY();
-		(*this)[1][1] = yAxis.getY();
-		(*this)[2][1] = zAxis.getY();
-		(*this)[3][1] = -(yAxis * pos);
-		(*this)[0][2] = xAxis.getZ();
-		(*this)[1][2] = yAxis.getZ();
-		(*this)[2][2] = zAxis.getZ();
-		(*this)[3][2] = -(zAxis * pos);
+		auto f = target - pos;
+		f.normalize();
+		auto u = up;
+		u.normalize();
+		auto s = f.getCrossProduct(u);
+		s.normalize();
+		u = s.getCrossProduct(f);
+
+		(*this)[0][0] = s[0];
+		(*this)[1][0] = s[1];
+		(*this)[2][0] = s[2];
+		(*this)[3][0] = -s * pos;
+		(*this)[0][1] = u[0];
+		(*this)[1][1] = u[1];
+		(*this)[2][1] = u[2];
+		(*this)[3][1] = -u * pos;
+		(*this)[0][2] = -f[0];
+		(*this)[1][2] = -f[1];
+		(*this)[2][2] = -f[2];
+		(*this)[3][2] = f * pos;
 	}
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeProjection(T fieldOfView, T aspectRatio, T near, T far)
