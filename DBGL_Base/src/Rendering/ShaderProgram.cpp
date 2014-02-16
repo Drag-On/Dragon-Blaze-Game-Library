@@ -382,11 +382,10 @@ namespace dbgl
 		"layout(location = 3) in vec3 color;\n"
 		"out vec3 normal_cam;\n"
 		"out vec3 color_model;\n"
-		"uniform mat4 m_view;\n"
-		"uniform mat4 m_projection;\n"
+		"uniform mat4 m_mvp;\n"
 		"uniform mat4 m_itmv;\n"
 		"void main(){\n"
-		"gl_Position = m_projection * m_view * vec4(vertexPos, 1);\n"
+		"gl_Position = m_mvp * vec4(vertexPos, 1);\n"
 		"normal_cam = normalize((m_itmv * vec4(normal, 0)).xyz);\n"
 		"color_model = color;\n"
 		"}";

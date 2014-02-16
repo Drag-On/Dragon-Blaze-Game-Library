@@ -75,14 +75,29 @@ namespace dbgl
 		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
 			    viewport->getProjectionMat().getDataPointer());
 		}
+		// Send mvp matrix if the shader needs it
+		GLint mvp = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::MVP);
+		if (mvp >= 0)
+		{
+		    shader->setUniformFloatMatrix4Array(mvp, 1, GL_FALSE,
+			    (viewport->getViewProjectionMat() * modelMat).getDataPointer());
+		}
+		// Send itm matrix if the shader needs it
+		GLint itm = shader->getDefaultUniformHandle(
+			ShaderProgram::Uniform::ITM);
+		if (itm >= 0)
+		{
+		    shader->setUniformFloatMatrix4Array(itm, 1, GL_FALSE,
+			    modelMat.getInverted().transpose().getDataPointer());
+		}
 		// Send itmv matrix if the shader needs it
 		GLint itmv = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::ITMV);
 		if (itmv >= 0)
 		{
-		    // TODO: multiply model mat
 		    shader->setUniformFloatMatrix4Array(itmv, 1, GL_FALSE,
-			    viewport->getITViewMat().getDataPointer());
+			    (viewport->getITViewMat() * modelMat).getDataPointer());
 		}
 	    }
 	    // Set viewport

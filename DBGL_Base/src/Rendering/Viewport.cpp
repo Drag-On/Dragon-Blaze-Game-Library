@@ -75,6 +75,7 @@ namespace dbgl
 		    (frameWidth * (_widthRatio - _xRatio))
 			    / (frameHeight * (_heightRatio - _yRatio)),
 		    _camera->getNear(), _camera->getFar());
+	    _viewProjectionMat = _projectionMat * _viewMat;
 	    _itView = _viewMat;
 	    _itView.invert();
 	    _itView.transpose();
@@ -89,6 +90,11 @@ namespace dbgl
     Mat4f const& Viewport::getProjectionMat() const
     {
 	return _projectionMat;
+    }
+
+    Mat4f const& Viewport::getViewProjectionMat() const
+    {
+	return _viewProjectionMat;
     }
 
     Mat4f const& Viewport::getITViewMat() const
