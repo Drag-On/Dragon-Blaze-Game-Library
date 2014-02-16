@@ -39,7 +39,7 @@ int main()
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
     Camera* cam = new Camera(Vec3f(0, 2, 5), Vec3f(0, 0, 0), Vec3f(0, 1, 0),
-	    pi_4(), 800 / 600, 0.1, 10);
+	    pi_4(), 0.1, 10);
     viewport->setCamera(cam);
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);

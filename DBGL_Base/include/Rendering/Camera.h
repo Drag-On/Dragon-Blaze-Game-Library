@@ -27,19 +27,12 @@ namespace dbgl
 	     * @param position Camera position
 	     * @param target Target position to focus
 	     * @param up Vector defining where "up" is
-	     * @param fieldOfView Openening angle
-	     * @param aspectRatio Aspect ratio of the viewport to render in
+	     * @param fieldOfView Opening angle
 	     * @param near Near clipping plane
 	     * @param far Far clipping plane
 	     */
-	    Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView,
-		    float aspectRatio, float near, float far);
+	    Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView, float near, float far);
 	    ~Camera();
-	    /**
-	     * @brief Updates the matrices, must be called once a frame
-	     * @param aspectRatio Aspect ratio of the viewport to render in
-	     */
-	    void update(float aspectRatio);
 	    /**
 	     * @return Position
 	     */
@@ -76,20 +69,9 @@ namespace dbgl
 	     * @param far New far clipping plane
 	     */
 	    void setFar(float far);
-	    /**
-	     * @return The (cached) view matrix
-	     * @warning Needs to be updated using update() first!
-	     */
-	    Mat4f const& getViewMat() const;
-	    /**
-	     * @return The (cached) projection matrix
-	     * @warning Needs to be updated using update() first!
-	     */
-	    Mat4f const& getProjectionMat() const;
 	private:
 	    Vec3f _position, _target, _up;
 	    float _fieldOfView, _near, _far;
-	    Mat4f _viewMat, _projectionMat;
     };
 }
 

@@ -64,5 +64,28 @@ namespace dbgl
     {
 	_camera = camera;
     }
+
+    void Viewport::update(float frameWidth, float frameHeight)
+    {
+	if (_camera != NULL)
+	{
+	    _viewMat.view(_camera->position(), _camera->target(),
+		    _camera->up());
+	    _projectionMat.projection(_camera->getFieldOfView(),
+		    (frameWidth * (_widthRatio - _xRatio))
+			    / (frameHeight * (_heightRatio - _yRatio)),
+		    _camera->getNear(), _camera->getFar());
+	}
+    }
+
+    Mat4f const& Viewport::getViewMat() const
+    {
+	return _viewMat;
+    }
+
+    Mat4f const& Viewport::getProjectionMat() const
+    {
+	return _projectionMat;
+    }
 }
 

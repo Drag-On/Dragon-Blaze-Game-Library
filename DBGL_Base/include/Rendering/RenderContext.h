@@ -22,6 +22,8 @@
 
 namespace dbgl
 {
+    class Window;
+
     /**
      * @brief The RenderContext serves as the main rendering authority.
      * @details All objects that are supposed to be displayed need to be passed to an instance
@@ -64,7 +66,7 @@ namespace dbgl
 	     * @param width New width of of the framebuffer
 	     * @param height New height of the framebuffer
 	     */
-	    void update(unsigned int width, unsigned int height);
+	    void changeSize(unsigned int width, unsigned int height);
 	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
@@ -74,9 +76,16 @@ namespace dbgl
 	     * @param mesh Pointer to the mesh to render
 	     */
 	    void renderMesh(const Mesh* mesh) const;
+	    /**
+	     * @brief Updates the render context's cached values, needed once per frame
+	     */
+	    void update();
 
 	    unsigned int _frameWidth, _frameHeight;
 	    std::vector<Viewport*> _viewports;
+
+	    // Window::preRender can access internals - only for update() method
+	    friend class Window;
     };
 }
 

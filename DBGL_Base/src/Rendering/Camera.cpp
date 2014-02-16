@@ -14,7 +14,7 @@ namespace dbgl
 {
 
     Camera::Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView,
-	    float aspectRatio, float near, float far)
+	    float near, float far)
     {
 	_position = position;
 	_target = target;
@@ -22,19 +22,10 @@ namespace dbgl
 	_fieldOfView = fieldOfView;
 	_near = near;
 	_far = far;
-	_viewMat = Mat4f::makeView(_position, _target, _up);
-	_projectionMat = Mat4f::makeProjection(_fieldOfView, aspectRatio, _near,
-		_far);
     }
 
     Camera::~Camera()
     {
-    }
-
-    void Camera::update(float aspectRatio)
-    {
-	_viewMat.view(_position, _target, _up);
-	_projectionMat.projection(_fieldOfView, aspectRatio, _near, _far);
     }
 
     Vec3f& Camera::position()
@@ -80,16 +71,6 @@ namespace dbgl
     void Camera::setFar(float far)
     {
 	_far = far;
-    }
-
-    Mat4f const& Camera::getViewMat() const
-    {
-	return _viewMat;
-    }
-
-    Mat4f const& Camera::getProjectionMat() const
-    {
-	return _projectionMat;
     }
 }
 

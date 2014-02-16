@@ -88,9 +88,29 @@ namespace dbgl
 	     */
 	    void setCamera(Camera* camera);
 	private:
+	    /**
+	     * @brief Updates the matrices, must be called once a frame
+	     * @param frameWidth Width of the full window
+	     * @param frameHeight Height of the full window
+	     */
+	    void update(float frameWidth, float frameHeight);
+	    /**
+	     * @return The (cached) view matrix
+	     * @warning Needs to be updated using update() first!
+	     */
+	    Mat4f const& getViewMat() const;
+	    /**
+	     * @return The (cached) projection matrix
+	     * @warning Needs to be updated using update() first!
+	     */
+	    Mat4f const& getProjectionMat() const;
+
 	    float _xRatio, _yRatio;
 	    float _widthRatio, _heightRatio;
 	    Camera* _camera;
+	    Mat4f _viewMat, _projectionMat; // Cached matrizes
+
+	    friend class RenderContext;
     };
 }
 

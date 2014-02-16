@@ -49,11 +49,7 @@ namespace dbgl
 	    // If the viewport has a camera attached send matrices to shader
 	    if (viewport->getCamera() != NULL)
 	    {
-		// Update camera in case the window has been resized
-		viewport->getCamera()->update(
-			(float) viewportWidth / viewportHeight);
 		// TODO: Frustrum culling
-		// TODO: Don't recalculate matrices for every model
 		// Send model matrix if the shader needs it
 		GLint model = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::MODEL);
@@ -69,7 +65,7 @@ namespace dbgl
 		if (view >= 0)
 		{
 		    shader->setUniformFloatMatrix4Array(view, 1, GL_FALSE,
-			    viewport->getCamera()->getViewMat().getDataPointer());
+			    viewport->getViewMat().getDataPointer());
 		}
 		// Send projection matrix if the shader needs it
 		GLint projection = shader->getDefaultUniformHandle(
@@ -77,7 +73,7 @@ namespace dbgl
 		if (projection >= 0)
 		{
 		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
-			    viewport->getCamera()->getProjectionMat().getDataPointer());
+			    viewport->getProjectionMat().getDataPointer());
 		}
 		// Send itmv matrix if the shader needs it
 		GLint itmv = shader->getDefaultUniformHandle(
@@ -85,7 +81,7 @@ namespace dbgl
 		if (itmv >= 0)
 		{
 		    auto itmvMat =
-			    viewport->getCamera()->getViewMat().getInverted().getTransposed();
+			    viewport->getViewMat().getInverted().getTransposed();
 		    shader->setUniformFloatMatrix4Array(itmv, 1, GL_FALSE,
 			    itmvMat.getDataPointer());
 		}
@@ -97,7 +93,7 @@ namespace dbgl
 	}
     }
 
-    void RenderContext::update(unsigned int width, unsigned int height)
+    void RenderContext::changeSize(unsigned int width, unsigned int height)
     {
 	_frameWidth = width;
 	_frameHeight = height;
@@ -159,6 +155,15 @@ namespace dbgl
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(3);
+    }
+
+    void RenderContext::update()
+    {
+	// Update all viewports
+	for (auto &viewport : _viewports)
+	{
+	    viewport->update(_frameWidth, _frameHeight);
+	}
     }
 }
 

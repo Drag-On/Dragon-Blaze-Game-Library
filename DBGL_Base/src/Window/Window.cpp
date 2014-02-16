@@ -390,6 +390,7 @@ namespace dbgl
 	makeCurrent();
 	glClearColor(_clearColor[0], _clearColor[1], _clearColor[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_pRenderContext->update();
     }
 
     void Window::render()
