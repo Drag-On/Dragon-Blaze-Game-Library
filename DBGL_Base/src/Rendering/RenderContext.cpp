@@ -34,7 +34,8 @@ namespace dbgl
 		_viewports.end());
     }
 
-    void RenderContext::draw(const Mesh* mesh, ShaderProgram* shader) const
+    void RenderContext::draw(const Mesh* mesh, Mat4f const& modelMat,
+	    ShaderProgram* shader) const
     {
 	// Check all viewports
 	for (auto &viewport : _viewports)
@@ -46,19 +47,18 @@ namespace dbgl
 		    * (_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
 		    * (_frameHeight - viewportY);
+	    // Send model matrix if the shader needs it
+	    GLint model = shader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::MODEL);
+	    if (model >= 0)
+	    {
+		shader->setUniformFloatMatrix4Array(model, 1, GL_FALSE,
+			modelMat.getDataPointer());
+	    }
 	    // If the viewport has a camera attached send matrices to shader
 	    if (viewport->getCamera() != NULL)
 	    {
-		// TODO: Frustrum culling
-		// Send model matrix if the shader needs it
-		GLint model = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::MODEL);
-		if (model >= 0)
-		{
-		    // TODO: Replace with real matrix
-		    shader->setUniformFloatMatrix4Array(model, 1, GL_FALSE,
-			    Mat4f().getDataPointer());
-		}
+		// TODO: Frustum culling
 		// Send view matrix if the shader needs it
 		GLint view = shader->getDefaultUniformHandle(
 			ShaderProgram::Uniform::VIEW);

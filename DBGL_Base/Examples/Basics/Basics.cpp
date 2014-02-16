@@ -22,11 +22,12 @@ using namespace dbgl;
 
 Mesh* pMesh;
 ShaderProgram* pShader;
+Mat4f modelMat;
 
 void renderCallback(const RenderContext* rc)
 {
     pShader->use();
-    rc->draw(pMesh, pShader);
+    rc->draw(pMesh, modelMat, pShader);
 }
 
 int main()
@@ -38,7 +39,7 @@ int main()
     // Create a viewport over the whole window space
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
-    Camera* cam = new Camera(Vec3f(-1, 2, 0), Vec3f(0, 0, 0), Vec3f(0, 1, 0),
+    Camera* cam = new Camera(Vec3f(-1, 2, 3), Vec3f(0, -0.5, 0), Vec3f(0, 1, 0),
 	    pi_4(), 0.1, 10);
     viewport->setCamera(cam);
     // Tell the render context about the new viewport

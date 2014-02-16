@@ -107,25 +107,25 @@ Mesh* pMesh4;
 void renderCallbackWin(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh, shader);
+    rc->draw(pMesh, Mat4f(), shader);
 }
 
 void renderCallbackWin2(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh2, shader);
+    rc->draw(pMesh2, Mat4f(), shader);
 }
 
 void renderCallbackWin3(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh3, shader);
+    rc->draw(pMesh3, Mat4f(), shader);
 }
 
 void renderCallbackWin4(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh4, shader);
+    rc->draw(pMesh4, Mat4f(), shader);
 }
 
 int testWindow()

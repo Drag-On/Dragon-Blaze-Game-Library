@@ -56,11 +56,14 @@ namespace dbgl
 	    void removeViewport(Viewport* viewport);
 	    /**
 	     * @brief Draws a mesh to all viewports where it is visible
-	     * @note Currently being implemented
-	     * @param mesh
-	     * @param shader
+	     * @param mesh Mesh to render
+	     * @param modelMat Model matrix
+	     * @param shader Shader to use for the render process. This method
+	     * 		     does not set the shader in use! Call use() on it
+	     * 		     before calling this method.
 	     */
-	    void draw(const Mesh* mesh, ShaderProgram* shader) const;
+	    void draw(const Mesh* mesh, Mat4f const& modelMat,
+		    ShaderProgram* shader) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer
