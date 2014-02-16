@@ -189,10 +189,12 @@ int testWindow()
     delete pMesh3;
     delete pMesh4;
     delete shader;
+    delete cam;
     delete cam2;
     delete cam3_1;
     delete cam3_2;
     delete cam4;
+    delete viewport;
     delete viewport2;
     delete viewport3_1;
     delete viewport3_2;

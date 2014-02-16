@@ -1,6 +1,12 @@
 Debug
 .metadata
 /RemoteSystemsTempFiles
-/DBGL_Base_Test/Logfile.txt
 .cproject
 .settings
+CMakeFiles
+Makefile
+*.cmake
+CMakeCache.txt
+*.dll
+*.exe
+Logfile.txt
