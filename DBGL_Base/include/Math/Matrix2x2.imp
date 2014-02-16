@@ -37,12 +37,13 @@ namespace dbgl
 		return 2;
 	}
 	
-	template<typename T> void Matrix2x2<T>::transpose()
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::transpose()
 	{
 		Matrix2x2<T> copy(*this); // Need old values
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
 				(*this)[x][y] = copy[y][x];
+		return *this;
 	}
 	
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::getTransposed() const
@@ -52,7 +53,7 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T> void Matrix2x2<T>::invert()
+	template<typename T> Matrix2x2<T>& Matrix2x2<T>::invert()
 	{
 		Matrix2x2<T> copy(*this);
 		T determinant = copy[0][0] * copy[1][1] - copy[1][0] * copy[0][1];
@@ -62,6 +63,7 @@ namespace dbgl
 		(*this)[0][1] = -copy[0][1];
 		(*this)[1][1] = copy[0][0];
 		(*this) *= 1 / determinant;
+		return *this;
 	}
 	
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::getInverted() const

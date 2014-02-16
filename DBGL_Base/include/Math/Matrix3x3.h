@@ -46,7 +46,7 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Transposes this matrix
 	    /// </summary>
-	    void transpose();
+	    Matrix3x3<T>& transpose();
 	    /// <summary>
 	    /// @brief Returns a transposed version of this matrix
 	    /// </summary>
@@ -55,7 +55,7 @@ namespace dbgl
 	    /// @brief Inverts this matrix so that a multiplication with
 	    ///	   the original results in an identity matrix
 	    /// </summary>
-	    void invert();
+	    Matrix3x3<T>& invert();
 	    /// <summary>
 	    /// @brief Returns an inverted version of this matrix so that
 	    ///	   a multiplication with the original results in an

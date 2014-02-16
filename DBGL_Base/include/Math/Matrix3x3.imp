@@ -38,12 +38,13 @@ namespace dbgl
 		return 3;
 	}
 	
-	template<typename T> void Matrix3x3<T>::transpose()
+	template<typename T> Matrix3x3<T>& Matrix3x3<T>::transpose()
 	{
 		Matrix3x3<T> copy(*this); // Need old values
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
 				(*this)[x][y] = copy[y][x];
+		return *this;
 	}
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::getTransposed() const
@@ -53,7 +54,7 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T> void Matrix3x3<T>::invert()
+	template<typename T> Matrix3x3<T>& Matrix3x3<T>::invert()
 	{
 		Matrix3x3<T> copy(*this);
 		T determinant = copy[0][0] * copy[1][1] * copy[2][2] + copy[0][1] * copy[1][2] * copy[2][0] +
@@ -70,6 +71,7 @@ namespace dbgl
 		(*this)[1][2] = copy[1][0] * copy[0][2] - copy[0][0] * copy[1][2];
 		(*this)[2][2] = copy[0][0] * copy[1][1] - copy[1][0] * copy[0][1];
 		(*this) *= 1 / determinant;
+		return *this;
 	}
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::getInverted() const
