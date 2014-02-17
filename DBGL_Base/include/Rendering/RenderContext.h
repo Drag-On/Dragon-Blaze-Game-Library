@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "Viewport.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 #include "Log/Log.h"
 
 namespace dbgl
@@ -61,9 +62,10 @@ namespace dbgl
 	     * @param shader Shader to use for the render process. This method
 	     * 		     does not set the shader in use! Call use() on it
 	     * 		     before calling this method.
+	     * @param diffuseTex Loaded texture to paint on to the model
 	     */
 	    void draw(const Mesh* mesh, Mat4f const& modelMat,
-		    ShaderProgram* shader) const;
+		    ShaderProgram* shader, Texture* diffuseTex) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer

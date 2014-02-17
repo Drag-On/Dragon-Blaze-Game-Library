@@ -33,6 +33,11 @@ namespace dbgl
 	glDeleteTextures(1, &_textureId);
     }
 
+    GLuint Texture::getTextureHandle()
+    {
+	return _textureId;
+    }
+
     bool Texture::loadDDS(std::string path)
     {
 	// Read file

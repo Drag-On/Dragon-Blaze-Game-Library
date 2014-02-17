@@ -27,7 +27,7 @@ Mat4f modelMat;
 void renderCallback(const RenderContext* rc)
 {
     pShader->use();
-    rc->draw(pMesh, modelMat, pShader);
+    rc->draw(pMesh, modelMat, pShader, NULL);
 }
 
 int main()

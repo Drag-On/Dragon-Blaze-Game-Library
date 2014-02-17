@@ -35,7 +35,7 @@ namespace dbgl
     }
 
     void RenderContext::draw(const Mesh* mesh, Mat4f const& modelMat,
-	    ShaderProgram* shader) const
+	    ShaderProgram* shader, Texture* diffuseTex) const
     {
 	// Check all viewports
 	for (auto &viewport : _viewports)
@@ -47,6 +47,16 @@ namespace dbgl
 		    * (_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
 		    * (_frameHeight - viewportY);
+	    // Send diffuse texture if the shader needs it
+	    GLint diffuse = shader->getDefaultUniformHandle(
+		    ShaderProgram::TEX_DIFFUSE);
+	    if (diffuse >= 0 && diffuseTex != NULL)
+	    {
+		// Bind to texture unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseTex->getTextureHandle());
+		shader->setUniformSampler(diffuse, 0);
+	    }
 	    // Send model matrix if the shader needs it
 	    GLint model = shader->getDefaultUniformHandle(
 		    ShaderProgram::Uniform::MODEL);
