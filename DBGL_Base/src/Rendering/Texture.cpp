@@ -67,8 +67,7 @@ namespace dbgl
 		unsigned int mipMapCount = *(unsigned int*) &(header[24]);
 		unsigned int fourCC = *(unsigned int*) &(header[80]);
 		// Read mipmaps
-		unsigned int bufsize =
-		mipMapCount > 1 ? linearSize * 2 : linearSize;
+		unsigned int bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
 		char* buffer = new char[bufsize];
 		file.read(buffer, bufsize);
 		// Close file
@@ -119,6 +118,9 @@ namespace dbgl
 			if (height < 1)
 			height = 1;
 		    }
+		    // In case the file doesn't have mipmaps generate some
+		    if(mipMapCount == 1)
+			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		delete[] buffer;
 	    }
