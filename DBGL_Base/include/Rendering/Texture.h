@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <utility>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Log/Log.h"
@@ -51,9 +52,20 @@ namespace dbgl
 	    /**
 	     * @brief Loads a DXT1-, DXT3-, or DXT5-compressed DDS file from disk
 	     * @param path Path of the file to load
-	     * @return True in case the file has been loaded succesfully, otherwise false
+	     * @return True in case the file has been loaded successfully, otherwise false
 	     */
 	    bool loadDDS(std::string path);
+
+	    /**
+	     * @brief Vertically flips a DXT1 4x4 block
+	     * @param data Block to flip
+	     * @details Block Layout:
+	     * 		Bit 0-1: color 0
+	     * 		Bit 2-3: color 1
+	     * 		Bit 4-7: 2 bit per pixel color bitmap
+	     * 		Each of the bits 4-7 represents one line
+	     */
+	    static void ddsFlipDXT1Block(unsigned char *data);
 
 	    /**
 	     * @brief GL texture handle
