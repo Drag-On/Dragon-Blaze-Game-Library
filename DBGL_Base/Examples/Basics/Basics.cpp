@@ -15,6 +15,7 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
+#include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
 #include "Math/Constants.h"
 
@@ -22,12 +23,13 @@ using namespace dbgl;
 
 Mesh* pMesh;
 ShaderProgram* pShader;
+Texture* pTexture;
 Mat4f modelMat;
 
 void renderCallback(const RenderContext* rc)
 {
     pShader->use();
-    rc->draw(pMesh, modelMat, pShader, NULL);
+    rc->draw(pMesh, modelMat, pShader, pTexture);
 }
 
 int main()
@@ -44,9 +46,10 @@ int main()
     viewport->setCamera(cam);
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);
-    // Load mesh and shader
+    // Load mesh, shader and texture
     pMesh = Mesh::makePyramid();
     pShader = ShaderProgram::createSimpleShader();
+    pTexture = new Texture(Texture::DDS, "Bricks01.DDS");
     // Add render callback so we can draw the mesh
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     // Show window
@@ -59,6 +62,7 @@ int main()
     // Clean up
     delete pMesh;
     delete pShader;
+    delete pTexture;
     delete cam;
     delete viewport;
     // Free remaining internal resources

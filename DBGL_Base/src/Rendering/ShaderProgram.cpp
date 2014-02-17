@@ -378,24 +378,29 @@ namespace dbgl
     {
 	const char* vertexShader = "#version 330 core\n"
 		"layout(location = 0) in vec3 vertexPos;\n"
+		"layout(location = 1) in vec2 vertexUV;\n"
 		"layout(location = 2) in vec3 normal;\n"
 		"layout(location = 3) in vec3 color;\n"
 		"out vec3 normal_cam;\n"
+		"out vec2 uv;\n"
 		"out vec3 color_model;\n"
 		"uniform mat4 m_mvp;\n"
 		"uniform mat4 m_itmv;\n"
 		"void main(){\n"
 		"gl_Position = m_mvp * vec4(vertexPos, 1);\n"
+		"uv = vertexUV;\n"
 		"normal_cam = normalize((m_itmv * vec4(normal, 0)).xyz);\n"
 		"color_model = color;\n"
 		"}";
 	const char* fragmentShader = "#version 330 core\n"
 		"in vec3 normal_cam;\n"
+		"in vec2 uv;\n"
 		"in vec3 color_model;\n"
 		"out vec3 color;\n"
+		"uniform sampler2D tex_diffuse;\n"
 		"void main(){\n"
 		"float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));\n"
-		"color = color_model * variance;\n"
+		"color = texture(tex_diffuse, uv).rgb * color_model * variance;\n"
 		"}";
 	return new ShaderProgram(vertexShader, fragmentShader, false);
     }

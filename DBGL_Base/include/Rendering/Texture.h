@@ -20,6 +20,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Used to load textures from hard disk
+     */
     class Texture
     {
 	public:
