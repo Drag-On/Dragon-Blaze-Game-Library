@@ -20,6 +20,7 @@
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Camera.h"
+#include "Rendering/Texture.h"
 #include "Math/Constants.h"
 
 using namespace dbgl;
@@ -99,6 +100,7 @@ class TestWindow: public SimpleWindow
     };
 
 ShaderProgram* shader;
+Texture* tex;
 Mesh* pMesh;
 Mesh* pMesh2;
 Mesh* pMesh3;
@@ -107,25 +109,25 @@ Mesh* pMesh4;
 void renderCallbackWin(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh, Mat4f(), shader);
+    rc->draw(pMesh, Mat4f(), shader, tex);
 }
 
 void renderCallbackWin2(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh2, Mat4f(), shader);
+    rc->draw(pMesh2, Mat4f(), shader, tex);
 }
 
 void renderCallbackWin3(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh3, Mat4f(), shader);
+    rc->draw(pMesh3, Mat4f(), shader, tex);
 }
 
 void renderCallbackWin4(const RenderContext* rc)
 {
     shader->use();
-    rc->draw(pMesh4, Mat4f(), shader);
+    rc->draw(pMesh4, Mat4f(), shader, tex);
 }
 
 int testWindow()
@@ -164,12 +166,13 @@ int testWindow()
     viewport4->setCamera(cam4);
     wnd4->getRenderContext()->addViewport(viewport4);
     // Load meshes and shader
-    //wnd->makeCurrent();
+    wnd->makeCurrent();
     pMesh = Mesh::makePyramid();
     pMesh2 = Mesh::makeCube();
     pMesh3 = Mesh::makePlane();
     pMesh4 = Mesh::makeTriangle();
     shader = ShaderProgram::createSimpleShader();
+    tex = new Texture(Texture::BOGUS, "");
     // Show windows
     wnd->show();
     wnd->addRenderCallback(std::bind(&renderCallbackWin, std::placeholders::_1));
@@ -189,6 +192,7 @@ int testWindow()
     delete pMesh3;
     delete pMesh4;
     delete shader;
+    delete tex;
     delete cam;
     delete cam2;
     delete cam3_1;

@@ -32,8 +32,9 @@ namespace dbgl
 	     */
 	    enum Type
 	    {
+		BOGUS, //!< BOGUS
 		DDS, //!< DDS
-		DDS_VERTICAL_FLIP, //!<DDS_VERTICAL_FLIP
+		DDS_VERTICAL_FLIP, //!< DDS_VERTICAL_FLIP
 	    };
 	    /**
 	     * @brief Constructs a new texture
@@ -50,6 +51,11 @@ namespace dbgl
 	     */
 	    GLuint getTextureHandle();
 	private:
+	    /**
+	     * @brief Constructs a 1x1 white texture
+	     * @return True in case the texture has been successfully created, otherwise false
+	     */
+	    bool createBogus();
 	    /**
 	     * @brief Loads a DXT1-, DXT3-, or DXT5-compressed DDS file from disk
 	     * @param path Path of the file to load

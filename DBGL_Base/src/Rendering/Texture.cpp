@@ -17,6 +17,9 @@ namespace dbgl
 	bool success = false;
 	switch (type)
 	{
+	    case BOGUS:
+		success = createBogus();
+		break;
 	    case DDS:
 		success = loadDDS(path, false);
 		break;
@@ -39,6 +42,18 @@ namespace dbgl
     GLuint Texture::getTextureHandle()
     {
 	return _textureId;
+    }
+
+    bool Texture::createBogus()
+    {
+	glGenTextures(1, &_textureId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+	unsigned char data[3] = {
+	    255, 255, 255
+	};
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_BGR,
+	    GL_UNSIGNED_BYTE, &data);
+	return true;
     }
 
     bool Texture::loadDDS(std::string path, bool vertFlip)
@@ -145,13 +160,7 @@ namespace dbgl
 	    // If something went wrong simply create a 1x1 white texture
 	    // This makes sure the shader is not totally lost and at least
 	    // *something* shows up on screen
-	    glGenTextures(1, &_textureId);
-	    glBindTexture(GL_TEXTURE_2D, _textureId);
-	    unsigned char data[3] = {
-	        255, 255, 255
-	    };
-	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_BGR,
-	        GL_UNSIGNED_BYTE, &data);
+	    createBogus();
 	}
 	return result;
     }
