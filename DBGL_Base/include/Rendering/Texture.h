@@ -33,6 +33,7 @@ namespace dbgl
 	    enum Type
 	    {
 		DDS, //!< DDS
+		DDS_VERTICAL_FLIP, //!<DDS_VERTICAL_FLIP
 	    };
 	    /**
 	     * @brief Constructs a new texture
@@ -52,9 +53,23 @@ namespace dbgl
 	    /**
 	     * @brief Loads a DXT1-, DXT3-, or DXT5-compressed DDS file from disk
 	     * @param path Path of the file to load
+	     * @param vertFlip Vertically flip the texture
 	     * @return True in case the file has been loaded successfully, otherwise false
 	     */
-	    bool loadDDS(std::string path);
+	    bool loadDDS(std::string path, bool vertFlip = true);
+
+	    /**
+	     * @brief Vertically flips a dds image (i.e. one mip map level)
+	     * @param buffer Buffer with all the levels
+	     * @param offset Offset to the beginning of the level to flip
+	     * @param width Level width in blocks
+	     * @param height Level height in blocks
+	     * @param blockSize Block size
+	     * @param fourCC Type of image
+	     */
+	    static void ddsFlipVertically(char* buffer, unsigned int offset,
+		    unsigned int width, unsigned int height,
+		    unsigned int blockSize, unsigned int fourCC);
 
 	    /**
 	     * @brief Vertically flips a DXT1 4x4 block

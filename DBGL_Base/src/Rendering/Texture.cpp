@@ -18,7 +18,10 @@ namespace dbgl
 	switch (type)
 	{
 	    case DDS:
-		success = loadDDS(path);
+		success = loadDDS(path, false);
+		break;
+	    case DDS_VERTICAL_FLIP:
+		success = loadDDS(path, true);
 		break;
 	}
 	if (!success)
@@ -38,7 +41,7 @@ namespace dbgl
 	return _textureId;
     }
 
-    bool Texture::loadDDS(std::string path)
+    bool Texture::loadDDS(std::string path, bool vertFlip)
     {
 	bool result = false;
 	// Read file
@@ -105,52 +108,11 @@ namespace dbgl
 		    for (unsigned int level = 0;
 			    level < mipMapCount && (width || height); ++level)
 		    {
-			// Vertically flip texture to fit OpenGL needs
-			unsigned int bytesInARow = ((width + 3) / 4) * blockSize;
-			unsigned char* temp = new unsigned char[bytesInARow];
-			unsigned char* sourceRow = (unsigned char*)buffer + offset;
-			unsigned char* destinationRow = (unsigned char*)buffer + offset + ((height + 3) / 4 - 1) * bytesInARow;
-			for(unsigned int i = 0; i < (height + 3) / 4 / 2; i++)
+			if(vertFlip)
 			{
-			    // Swap source row with appropriate mirror row
-			    memcpy(temp, destinationRow, bytesInARow);
-			    memcpy(destinationRow, sourceRow, bytesInARow);
-			    memcpy(sourceRow, temp, bytesInARow);
-			    // Also swap pixels in blocks
-			    switch (fourCC)
-			    {
-				case FOURCC_DXT1:
-				{
-				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
-				    {
-					ddsFlipDXT1Block(sourceRow + j * blockSize);
-					ddsFlipDXT1Block(destinationRow + j * blockSize);
-				    }
-				    break;
-				}
-				case FOURCC_DXT3:
-				{
-				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
-				    {
-					ddsFlipDXT3Block(sourceRow + j * blockSize);
-					ddsFlipDXT3Block(destinationRow + j * blockSize);
-				    }
-				    break;
-				}
-				case FOURCC_DXT5:
-				{
-				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
-				    {
-					ddsFlipDXT5Block(sourceRow + j * blockSize);
-					ddsFlipDXT5Block(destinationRow + j * blockSize);
-				    }
-				    break;
-				}
-			    }
-			    sourceRow += bytesInARow;
-			    destinationRow -= bytesInARow;
+			    // Vertically flip texture to fit OpenGL needs
+			    ddsFlipVertically(buffer, offset, width, height, blockSize, fourCC);
 			}
-			delete [] temp; // Vertical flipping done
 			// Send compressed image to GL
 			unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 			glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width,
@@ -192,6 +154,56 @@ namespace dbgl
 	        GL_UNSIGNED_BYTE, &data);
 	}
 	return result;
+    }
+
+    void Texture::ddsFlipVertically(char* buffer, unsigned int offset,
+	    unsigned int width, unsigned int height, unsigned int blockSize, unsigned int fourCC)
+    {
+	unsigned int bytesInARow = ((width + 3) / 4) * blockSize;
+	unsigned char* temp = new unsigned char[bytesInARow];
+	unsigned char* sourceRow = (unsigned char*)buffer + offset;
+	unsigned char* destinationRow = (unsigned char*)buffer + offset + ((height + 3) / 4 - 1) * bytesInARow;
+	for(unsigned int i = 0; i < (height + 3) / 4 / 2; i++)
+	{
+	    // Swap source row with appropriate mirror row
+	    memcpy(temp, destinationRow, bytesInARow);
+	    memcpy(destinationRow, sourceRow, bytesInARow);
+	    memcpy(sourceRow, temp, bytesInARow);
+	    // Also swap pixels in blocks
+	    switch (fourCC)
+	    {
+		case FOURCC_DXT1:
+		{
+		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    {
+			ddsFlipDXT1Block(sourceRow + j * blockSize);
+			ddsFlipDXT1Block(destinationRow + j * blockSize);
+		    }
+		    break;
+		}
+		case FOURCC_DXT3:
+		{
+		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    {
+			ddsFlipDXT3Block(sourceRow + j * blockSize);
+			ddsFlipDXT3Block(destinationRow + j * blockSize);
+		    }
+		    break;
+		}
+		case FOURCC_DXT5:
+		{
+		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    {
+			ddsFlipDXT5Block(sourceRow + j * blockSize);
+			ddsFlipDXT5Block(destinationRow + j * blockSize);
+		    }
+		    break;
+		}
+	    }
+	    sourceRow += bytesInARow;
+	    destinationRow -= bytesInARow;
+	}
+	delete [] temp; // Vertical flipping done
     }
 
     void Texture::ddsFlipDXT1Block(unsigned char *data)
