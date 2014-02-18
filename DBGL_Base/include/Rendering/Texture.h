@@ -32,7 +32,7 @@ namespace dbgl
 	     */
 	    enum Type
 	    {
-		DDS,//!< DDS
+		DDS, //!< DDS
 	    };
 	    /**
 	     * @brief Constructs a new texture
@@ -68,6 +68,26 @@ namespace dbgl
 	    static void ddsFlipDXT1Block(unsigned char *data);
 
 	    /**
+	     * @brief Vertically flips a DXT3 4x4 block
+	     * @param data Block to flip
+	     * @details Block Layout:
+	     * 		Bit 0-7: 4-Bit alpha bitmap
+	     * 		Bit 8-15: DXT1 block
+	     */
+	    static void ddsFlipDXT3Block(unsigned char *data);
+
+	    /**
+	     * @brief Vertically flips a DXT5 4x4 block
+	     * @param data Block to flip
+	     * @details Block Layout:
+	     * 		Bit 0: Alpha 0
+	     * 		Bit 1: Alpha 1
+	     * 		Bit 2-7: 3-Bit Alpha Bitmap
+	     * 		Bit 8-15: DXT1 block
+	     */
+	    static void ddsFlipDXT5Block(unsigned char *data);
+
+	    /**
 	     * @brief GL texture handle
 	     */
 	    GLuint _textureId;
@@ -77,9 +97,9 @@ namespace dbgl
 	     */
 	    enum DXTType
 	    {
-		FOURCC_DXT1 = 0x31545844,//!< FOURCC_DXT1
-		FOURCC_DXT3 = 0x33545844,//!< FOURCC_DXT3
-		FOURCC_DXT5 = 0x35545844,//!< FOURCC_DXT5
+		FOURCC_DXT1 = 0x31545844, //!< FOURCC_DXT1
+		FOURCC_DXT3 = 0x33545844, //!< FOURCC_DXT3
+		FOURCC_DXT5 = 0x35545844, //!< FOURCC_DXT5
 	    };
     };
 }

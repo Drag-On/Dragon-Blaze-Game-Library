@@ -87,7 +87,7 @@ namespace dbgl
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			break;
 		    default:
-			LOG->warning("File %s is not DXT1-, DXT3 or DXT5-compressed", path.c_str());
+			LOG->warning("File %s is not DXT1-, DXT3- or DXT5-compressed", path.c_str());
 			delete[] buffer;
 			result = false;
 			break;
@@ -108,14 +108,14 @@ namespace dbgl
 			// Vertically flip texture to fit OpenGL needs
 			unsigned int bytesInARow = ((width + 3) / 4) * blockSize;
 			unsigned char* temp = new unsigned char[bytesInARow];
-			unsigned char* sourceBlock = (unsigned char*)buffer + offset;
-			unsigned char* destinationBlock = (unsigned char*)buffer + offset + ((height + 3) / 4 - 1) * bytesInARow;
+			unsigned char* sourceRow = (unsigned char*)buffer + offset;
+			unsigned char* destinationRow = (unsigned char*)buffer + offset + ((height + 3) / 4 - 1) * bytesInARow;
 			for(unsigned int i = 0; i < (height + 3) / 4 / 2; i++)
 			{
-			    // Swap blocks
-			    memcpy(temp, destinationBlock, bytesInARow);
-			    memcpy(destinationBlock, sourceBlock, bytesInARow);
-			    memcpy(sourceBlock, temp, bytesInARow);
+			    // Swap source row with appropriate mirror row
+			    memcpy(temp, destinationRow, bytesInARow);
+			    memcpy(destinationRow, sourceRow, bytesInARow);
+			    memcpy(sourceRow, temp, bytesInARow);
 			    // Also swap pixels in blocks
 			    switch (fourCC)
 			    {
@@ -123,29 +123,44 @@ namespace dbgl
 				{
 				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
 				    {
-					ddsFlipDXT1Block(sourceBlock + j * blockSize);
-					ddsFlipDXT1Block(destinationBlock + j * blockSize);
+					ddsFlipDXT1Block(sourceRow + j * blockSize);
+					ddsFlipDXT1Block(destinationRow + j * blockSize);
 				    }
 				    break;
 				}
 				case FOURCC_DXT3:
+				{
+				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+				    {
+					ddsFlipDXT3Block(sourceRow + j * blockSize);
+					ddsFlipDXT3Block(destinationRow + j * blockSize);
+				    }
 				    break;
+				}
 				case FOURCC_DXT5:
+				{
+				    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+				    {
+					ddsFlipDXT5Block(sourceRow + j * blockSize);
+					ddsFlipDXT5Block(destinationRow + j * blockSize);
+				    }
 				    break;
+				}
 			    }
-			    sourceBlock += bytesInARow;
-			    destinationBlock -= bytesInARow;
+			    sourceRow += bytesInARow;
+			    destinationRow -= bytesInARow;
 			}
 			delete [] temp; // Vertical flipping done
 			// Send compressed image to GL
 			unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 			glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width,
 				height, 0, size, buffer + offset);
-
+			// Prepare for next mipmap
 			offset += size;
 			width /= 2;
 			height /= 2;
-			// Fix for textures that are not power-of-two
+			// If the texture is not squared, width or height might become 0
+			// All mipmaps must have at least a width and height of 1
 			if (width < 1)
 			    width = 1;
 			if (height < 1)
@@ -166,13 +181,15 @@ namespace dbgl
 	if (!result)
 	{
 	    // If something went wrong simply create a 1x1 white texture
+	    // This makes sure the shader is not totally lost and at least
+	    // *something* shows up on screen
 	    glGenTextures(1, &_textureId);
 	    glBindTexture(GL_TEXTURE_2D, _textureId);
 	    unsigned char data[3] = {
-	    255, 255, 255
+	        255, 255, 255
 	    };
 	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_BGR,
-		    GL_UNSIGNED_BYTE, &data);
+	        GL_UNSIGNED_BYTE, &data);
 	}
 	return result;
     }
@@ -181,6 +198,32 @@ namespace dbgl
     {
 	std::swap(data[4], data[7]);
 	std::swap(data[5], data[6]);
+    }
+
+    void Texture::ddsFlipDXT3Block(unsigned char *data)
+    {
+	std::swap(data[0], data[6]);
+	std::swap(data[1], data[7]);
+	std::swap(data[2], data[4]);
+	std::swap(data[3], data[5]);
+	ddsFlipDXT1Block(data + 8);
+    }
+
+    void Texture::ddsFlipDXT5Block(unsigned char *data)
+    {
+	unsigned int row0_1 = data[2] + 256 * (data[3] + 256 * data[4]);
+	unsigned int row2_3 = data[5] + 256 * (data[6] + 256 * data[7]);
+	unsigned int row1_0 = ((row0_1 & 0x000fff) << 12)
+		| ((row0_1 & 0xfff000) >> 12);
+	unsigned int row3_2 = ((row2_3 & 0x000fff) << 12)
+		| ((row2_3 & 0xfff000) >> 12);
+	data[2] = row3_2 & 0xff;
+	data[3] = (row3_2 & 0xff00) >> 8;
+	data[4] = (row3_2 & 0xff0000) >> 16;
+	data[5] = row1_0 & 0xff;
+	data[6] = (row1_0 & 0xff00) >> 8;
+	data[7] = (row1_0 & 0xff0000) >> 16;
+	ddsFlipDXT1Block(data + 8);
     }
 }
 
