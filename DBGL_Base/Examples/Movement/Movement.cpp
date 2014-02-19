@@ -35,6 +35,12 @@ float horizontalAngle = pi_2(), verticalAngle = 0;
 float deltaTime, lastTime;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
 
+void scrollCallback(double x, double y)
+{
+    // Zoom
+    cam->setFieldOfView(cam->getFieldOfView() + 0.1f * y);
+}
+
 void updateCallback()
 {
     // Update mouse
@@ -105,6 +111,9 @@ int main()
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
+    wnd->addScrollCallback(
+	    std::bind(&scrollCallback, std::placeholders::_1,
+		    std::placeholders::_2));
     // Show window
     wnd->show();
     // Run update loop
