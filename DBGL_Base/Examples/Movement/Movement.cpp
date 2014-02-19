@@ -73,6 +73,10 @@ void updateCallback()
 	cam->position() -= direction * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_D) == GLFW_PRESS)
 	cam->position() += right * deltaTime * moveSpeed;
+    if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
+    	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+    if (wnd->getKey(GLFW_KEY_E) == GLFW_PRESS)
+    	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
     // Calculate delta time
     double currentTime = WindowManager::get()->getTime();
