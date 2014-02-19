@@ -268,6 +268,21 @@ namespace dbgl
 	glfwMakeContextCurrent(_pWndHandle);
     }
 
+    void Window::getCursorPos(double& x, double& y) const
+    {
+	glfwGetCursorPos(_pWndHandle, &x, &y);
+    }
+
+    void Window::setCursorPos(double x, double y)
+    {
+	glfwSetCursorPos(_pWndHandle, x, y);
+    }
+
+    int Window::getKey(int key) const
+    {
+	return glfwGetKey(_pWndHandle, key);
+    }
+
     void Window::addCloseCallback(std::function<void()> const& callback)
     {
 	_closeCallback = callback;

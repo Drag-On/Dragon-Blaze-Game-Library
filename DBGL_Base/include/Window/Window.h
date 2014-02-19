@@ -153,6 +153,24 @@ namespace dbgl
 	     */
 	    void makeCurrent();
 	    /**
+	     * @brief Grants access to the current cursor position inside of the window
+	     * @param x X coordinate is stored here
+	     * @param y Y coordinate is stored here
+	     */
+	    void getCursorPos(double& x, double& y) const;
+	    /**
+	     * @brief Changes the cursor position inside of the window
+	     * @param x New x coordinate
+	     * @param y New y coordinate
+	     */
+	    void setCursorPos(double x, double y);
+	    /**
+	     * @brief Checks a key's state
+	     * @param key Key to check
+	     * @return GLFW_PRESS or GLFW_RELEASE
+	     */
+	    int getKey(int key) const;
+	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */

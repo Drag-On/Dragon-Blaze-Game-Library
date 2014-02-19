@@ -43,5 +43,5 @@ TARGET_LINK_LIBRARIES(DBGL_Base "${OPENGL_LIBRARIES}")
 SET_TARGET_PROPERTIES(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
 
 # External examples
-add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/Basics"
-				 "${PROJECT_SOURCE_DIR}/Examples/Basics")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
+				 "${PROJECT_SOURCE_DIR}/Examples/")

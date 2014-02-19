@@ -114,6 +114,10 @@ namespace dbgl
 	     * @return True in case there are still windows open, otherwise false
 	     */
 	    bool isRunning() const;
+	    /**
+	     * @return Current time in seconds since the first window has been created
+	     */
+	    double getTime() const;
 	private:
 	    WindowManager();
 	    ~WindowManager();

@@ -60,6 +60,11 @@ namespace dbgl
 	return !WindowManager::windows.empty();
     }
 
+    double WindowManager::getTime() const
+    {
+	return glfwGetTime();
+    }
+
     WindowManager::WindowManager()
     {
 	glfwSetErrorCallback(WindowManager::errorCallback);
