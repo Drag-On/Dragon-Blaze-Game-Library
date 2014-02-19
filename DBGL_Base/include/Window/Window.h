@@ -165,6 +165,12 @@ namespace dbgl
 	     */
 	    void setCursorPos(double x, double y);
 	    /**
+	     * @brief Checks a mouse button's state
+	     * @param button Button to check
+	     * @return GLFW_PRESS or GLFW_RELEASE
+	     */
+	    int getButton(int button) const;
+	    /**
 	     * @brief Checks a key's state
 	     * @param key Key to check
 	     * @return GLFW_PRESS or GLFW_RELEASE

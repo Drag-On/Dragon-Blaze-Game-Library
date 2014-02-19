@@ -278,6 +278,11 @@ namespace dbgl
 	glfwSetCursorPos(_pWndHandle, x, y);
     }
 
+    int Window::getButton(int button) const
+    {
+	return glfwGetMouseButton(_pWndHandle, button);
+    }
+
     int Window::getKey(int key) const
     {
 	return glfwGetKey(_pWndHandle, key);
