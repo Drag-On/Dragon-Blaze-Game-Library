@@ -13,7 +13,13 @@
 
 #include <cstring>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <GL/glew.h>
+#include "Log/Log.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
 
 namespace dbgl
 {
@@ -24,9 +30,24 @@ namespace dbgl
     {
 	public:
 	    /**
+	     * @brief File types which can be loaded
+	     */
+	    enum Type
+	    {
+		OBJ,//!< OBJ
+	    };
+
+	    /**
 	     * @brief Clean up memory
 	     */
 	    ~Mesh();
+	    /**
+	     * @brief Loads a mesh from hard disk
+	     * @param path Path of the file
+	     * @param type File type to load
+	     * @return The loaded mesh or NULL if something went wrong
+	     */
+	    static Mesh* load(const std::string path, const Type type);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
@@ -73,6 +94,12 @@ namespace dbgl
 	     */
 	    static void fillBuffer(GLuint buffer, GLenum target,
 		    GLsizeiptr size, const GLvoid* data, GLenum usage);
+	    /**
+	     * @brief Loads a mesh in OBJ file format
+	     * @param path Path of the file
+	     * @return The loaded mesh
+	     */
+	    static Mesh* loadOBJ(const std::string path);
 
 	    std::vector<unsigned short> _indices;
 	    GLuint _indexBuffer;

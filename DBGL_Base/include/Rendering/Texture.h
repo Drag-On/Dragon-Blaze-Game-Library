@@ -41,7 +41,7 @@ namespace dbgl
 	     * @param type Texture type
 	     * @param path File path
 	     */
-	    Texture(Type type, std::string path);
+	    Texture(const Type type, std::string path);
 	    /**
 	     * @brief Clean up used memory
 	     */
@@ -62,7 +62,7 @@ namespace dbgl
 	     * @param vertFlip Vertically flip the texture
 	     * @return True in case the file has been loaded successfully, otherwise false
 	     */
-	    bool loadDDS(std::string path, bool vertFlip = true);
+	    bool loadDDS(const std::string path, bool vertFlip = true);
 
 	    /**
 	     * @brief Vertically flips a dds image (i.e. one mip map level)

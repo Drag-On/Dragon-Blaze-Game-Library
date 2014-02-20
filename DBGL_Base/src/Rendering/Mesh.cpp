@@ -27,6 +27,18 @@ namespace dbgl
 	    glDeleteBuffers(1, &_uvBuffer);
     }
 
+    Mesh* Mesh::load(const std::string path, const Type type)
+    {
+	switch (type)
+	{
+	    case OBJ:
+		return loadOBJ(path);
+	    default:
+		LOG->warning("Format of file %s not recognized", path.c_str());
+		return NULL;
+	    }
+	}
+
     Mesh* Mesh::makeTriangle()
     {
 	Mesh* mesh = new Mesh();
@@ -341,6 +353,116 @@ namespace dbgl
     {
 	glBindBuffer(target, buffer);
 	glBufferData(target, size, data, usage);
+    }
+
+    Mesh* Mesh::loadOBJ(const std::string path)
+    {
+	// Read file
+	std::ifstream file;
+	file.open(path.c_str(), std::ios::in);
+	if (file.is_open())
+	{
+	    file.seekg(0, std::ios::beg);
+	    std::vector<Vec3f> vertices, normals;
+	    std::vector<Vec2f> uvs;
+	    std::vector<float> curValues;
+	    std::string token;
+	    std::string line;
+	    // Scan whole file
+	    while (file.good())
+	    {
+		// Read line
+		std::getline(file, line);
+		std::stringstream lineStream;
+		lineStream << line;
+		// Check first token
+		lineStream >> token;
+		if (token.compare("v")) // Vertex definition
+		{
+		    // Read in all coordinates that follow
+		    std::vector<float> coords;
+		    float coord;
+		    while (lineStream >> coord)
+		    {
+			coords.push_back(coord);
+		    }
+		    // Everything after the 3rd coordinate will be discarded, so warn
+		    if (coords.size() > 3)
+		    {
+			LOG->warning("File %s has vertex definitions with more than 3 coordinates", path.c_str());
+		    }
+		    // If less than 3 coordinates the file is misformatted
+		    else if(coords.size() < 3)
+		    {
+			LOG->error("File %s has vertex definitions with less than 3 coordinates", path.c_str());
+			file.close();
+			return NULL;
+		    }
+		    // Store vertex
+		    vertices.push_back(Vec3f(coords[0], coords[1], coords[2]));
+		}
+		else if (token.compare("vt")) // UV definition
+		{
+		    // Read in all coordinates that follow
+		    std::vector<float> coords;
+		    float coord;
+		    while (lineStream >> coord)
+		    {
+			coords.push_back(coord);
+		    }
+		    // Everything after the 2rd coordinate will be discarded, so warn
+		    if (coords.size() > 2)
+		    {
+			LOG->warning("File %s has UV definitions with more than 2 coordinates", path.c_str());
+		    }
+		    // If less than 2 coordinates the file is misformatted
+		    else if(coords.size() < 3)
+		    {
+			LOG->error("File %s has UV definitions with less than 2 coordinates", path.c_str());
+			file.close();
+			return NULL;
+		    }
+		    // Store uv
+		    uvs.push_back(Vec2f(coords[0], coords[1]));
+		}
+		else if (token.compare("vn")) // Normal definition
+		{
+		    // Read in all coordinates that follow
+		    std::vector<float> coords;
+		    float coord;
+		    while (lineStream >> coord)
+		    {
+			coords.push_back(coord);
+		    }
+		    // Everything after the 3rd coordinate will be discarded, so warn
+		    if (coords.size() > 3)
+		    {
+			LOG->warning("File %s has normal definitions with more than 3 coordinates", path.c_str());
+		    }
+		    // If less than 3 coordinates the file is misformatted
+		    else if(coords.size() < 3)
+		    {
+			LOG->error("File %s has normal definitions with less than 3 coordinates", path.c_str());
+			file.close();
+			return NULL;
+		    }
+		    // Store normal; normals in OBJs might not be normalized, so normalize them here
+		    normals.push_back(
+			    Vec3f(coords[0], coords[1], coords[2]).normalize());
+		}
+		else if (token.compare("f")) // Face definition
+		{
+
+		}
+	    }
+	}
+	else
+	{
+	    LOG->warning("File %s not found", path.c_str());
+	    return NULL;
+	}
+	file.close();
+	return NULL;
     }
 }
 

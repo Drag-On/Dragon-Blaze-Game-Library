@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture::Texture(Type type, std::string path)
+    Texture::Texture(const Type type, const std::string path)
     {
 	bool success = false;
 	switch (type)
@@ -56,7 +56,7 @@ namespace dbgl
 	return true;
     }
 
-    bool Texture::loadDDS(std::string path, bool vertFlip)
+    bool Texture::loadDDS(const std::string path, bool vertFlip)
     {
 	bool result = false;
 	// Read file
