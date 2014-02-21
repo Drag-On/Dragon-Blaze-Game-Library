@@ -155,16 +155,6 @@ namespace dbgl
 		0,			// stride
 		(void*) 0);		// offset
 
-	// Bind color buffer : 3
-	glEnableVertexAttribArray(3);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->_colorBuffer);
-	glVertexAttribPointer(3,	// attribute
-		3,			// size
-		GL_FLOAT,		// type
-		GL_FALSE,		// normalized?
-		0,			// stride
-		(void*) 0);		// offset
-
 	// Index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->_indexBuffer);
 
@@ -178,7 +168,6 @@ namespace dbgl
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
     }
 
     void RenderContext::update()

@@ -21,8 +21,6 @@ namespace dbgl
 	    glDeleteBuffers(1, &_vertexBuffer);
 	if (_normalBuffer != GL_INVALID_VALUE)
 	    glDeleteBuffers(1, &_normalBuffer);
-	if (_colorBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &_colorBuffer);
 	if (_uvBuffer != GL_INVALID_VALUE)
 	    glDeleteBuffers(1, &_uvBuffer);
     }
@@ -44,34 +42,18 @@ namespace dbgl
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
 	{   -1, -1, 0, 1, -1, 0, 0, 1, 0};
-	mesh->_vertexBuffer = generateBuffer();
-	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
-		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
-		GL_STATIC_DRAW);
+
 	mesh->_normals =
 	{   0, 0, 1, 0, 0, 1, 0, 0, 1};
-	mesh->_normalBuffer = generateBuffer();
-	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
-		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
-		GL_STATIC_DRAW);
-	mesh->_color =
-	{   0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f};
-	mesh->_colorBuffer = generateBuffer();
-	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
-		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
-		GL_STATIC_DRAW);
+
 	mesh->_uv =
 	{   -1, -1, -1, 1, 1, 0};
-	mesh->_uvBuffer = generateBuffer();
-	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
-		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
-		GL_STATIC_DRAW);
+
 	mesh->_indices =
 	{   0, 1, 2};
-	mesh->_indexBuffer = generateBuffer();
-	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		mesh->_indices.size() * sizeof(unsigned short),
-		&mesh->_indices[0], GL_STATIC_DRAW);
+
+	mesh->updateBuffers();
+
 	return mesh;
     }
 
@@ -80,34 +62,18 @@ namespace dbgl
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
 	{   -1, -1, 0, -1, 1, 0, 1, 1, 0, 1, -1, 0};
-	mesh->_vertexBuffer = generateBuffer();
-	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
-		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
-		GL_STATIC_DRAW);
+
 	mesh->_normals =
 	{   0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
-	mesh->_normalBuffer = generateBuffer();
-	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
-		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
-		GL_STATIC_DRAW);
-	mesh->_color =
-	{   0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f};
-	mesh->_colorBuffer = generateBuffer();
-	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
-		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
-		GL_STATIC_DRAW);
+
 	mesh->_uv =
 	{   -1, -1, -1, 1, 1, 1, 1, -1};
-	mesh->_uvBuffer = generateBuffer();
-	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
-		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
-		GL_STATIC_DRAW);
+
 	mesh->_indices =
 	{   0, 2, 1, 0, 3, 2};
-	mesh->_indexBuffer = generateBuffer();
-	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		mesh->_indices.size() * sizeof(unsigned short),
-		&mesh->_indices[0], GL_STATIC_DRAW);
+
+	mesh->updateBuffers();
+
 	return mesh;
     }
 
@@ -143,18 +109,6 @@ namespace dbgl
 	    1.0, 1.0, -1.0,// 22
 	    1.0, 1.0, 1.0,// 23
 	};
-	mesh->_vertexBuffer = generateBuffer();
-	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
-		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
-		GL_STATIC_DRAW);
-
-	// Define some colors
-	for (int i = 0; i < 3 * 4 * 6; i++)
-	    mesh->_color.push_back(0.9f);
-	mesh->_colorBuffer = generateBuffer();
-	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
-		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
-		GL_STATIC_DRAW);
 
 	// Define elements
 	mesh->_indices =
@@ -172,10 +126,6 @@ namespace dbgl
 	    20, 21, 22,// right
 	    22, 23, 20,//
 	};
-	mesh->_indexBuffer = generateBuffer();
-	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		mesh->_indices.size() * sizeof(unsigned short),
-		&mesh->_indices[0], GL_STATIC_DRAW);
 
 	// Define normals
 	mesh->_normals =
@@ -205,10 +155,6 @@ namespace dbgl
 	    1, 0, 0,// 17
 	    1, 0, 0,// 18
 	};
-	mesh->_normalBuffer = generateBuffer();
-	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
-		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
-		GL_STATIC_DRAW);
 
 	// Define UVs
 	GLfloat uvs[2 * 4 * 6] = {
@@ -220,10 +166,8 @@ namespace dbgl
 	for (int i = 1; i < 6; i++)
 	    memcpy(&uvs[i * 4 * 2], &uvs[0], 2 * 4 * sizeof(GLfloat));
 	mesh->_uv.insert(mesh->_uv.begin(), std::begin(uvs), std::end(uvs));
-	mesh->_uvBuffer = generateBuffer();
-	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
-		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
-		GL_STATIC_DRAW);
+
+	mesh->updateBuffers();
 
 	return mesh;
     }
@@ -251,18 +195,6 @@ namespace dbgl
 	    -1, -1, -1,// Bottom back left 14
 	    1, -1, -1,// Bottom back right 15
 	};
-	mesh->_vertexBuffer = generateBuffer();
-	fillBuffer(mesh->_vertexBuffer, GL_ARRAY_BUFFER,
-		mesh->_vertices.size() * sizeof(GLfloat), &mesh->_vertices[0],
-		GL_STATIC_DRAW);
-
-	// Define some colors
-	for (int i = 0; i < 3 * 16; i++)
-	    mesh->_color.push_back(0.9f);
-	mesh->_colorBuffer = generateBuffer();
-	fillBuffer(mesh->_colorBuffer, GL_ARRAY_BUFFER,
-		mesh->_color.size() * sizeof(GLfloat), &mesh->_color[0],
-		GL_STATIC_DRAW);
 
 	// Define elements
 	mesh->_indices =
@@ -274,10 +206,6 @@ namespace dbgl
 	    12, 14, 13,// bottom left
 	    14, 15, 13,// bottom right
 	};
-	mesh->_indexBuffer = generateBuffer();
-	fillBuffer(mesh->_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		mesh->_indices.size() * sizeof(unsigned short),
-		&mesh->_indices[0], GL_STATIC_DRAW);
 
 	// Define normals
 	mesh->_normals =
@@ -299,10 +227,6 @@ namespace dbgl
 	    0, -1, 0,// bottom
 	    0, -1, 0,// bottom
 	};
-	mesh->_normalBuffer = generateBuffer();
-	fillBuffer(mesh->_normalBuffer, GL_ARRAY_BUFFER,
-		mesh->_normals.size() * sizeof(GLfloat), &mesh->_normals[0],
-		GL_STATIC_DRAW);
 
 	// Define UVs
 	mesh->_uv =
@@ -324,10 +248,8 @@ namespace dbgl
 	    1.0, 1.0,//
 	    0.0, 1.0,//
 	};
-	mesh->_uvBuffer = generateBuffer();
-	fillBuffer(mesh->_uvBuffer, GL_ARRAY_BUFFER,
-		mesh->_uv.size() * sizeof(GLfloat), &mesh->_uv[0],
-		GL_STATIC_DRAW);
+
+	mesh->updateBuffers();
 
 	return mesh;
     }
@@ -335,24 +257,55 @@ namespace dbgl
     Mesh::Mesh()
     {
 	_vertexBuffer = GL_INVALID_VALUE;
-	_colorBuffer = GL_INVALID_VALUE;
 	_indexBuffer = GL_INVALID_VALUE;
 	_normalBuffer = GL_INVALID_VALUE;
 	_uvBuffer = GL_INVALID_VALUE;
     }
 
-    bool Mesh::hasVertex(Vec3f coords)
+    void Mesh::updateBuffers()
+    {
+	if (_vertexBuffer == GL_INVALID_VALUE)
+	    _vertexBuffer = generateBuffer();
+	fillBuffer(_vertexBuffer, GL_ARRAY_BUFFER,
+		_vertices.size() * sizeof(GLfloat), &_vertices[0],
+		GL_STATIC_DRAW);
+
+	if (_indexBuffer == GL_INVALID_VALUE)
+	    _indexBuffer = generateBuffer();
+	fillBuffer(_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
+		_indices.size() * sizeof(unsigned short), &_indices[0],
+		GL_STATIC_DRAW);
+
+	if (_normalBuffer == GL_INVALID_VALUE)
+	    _normalBuffer = generateBuffer();
+	fillBuffer(_normalBuffer, GL_ARRAY_BUFFER,
+		_normals.size() * sizeof(GLfloat), &_normals[0],
+		GL_STATIC_DRAW);
+
+	if (_uvBuffer == GL_INVALID_VALUE)
+	    _uvBuffer = generateBuffer();
+	fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * sizeof(GLfloat),
+		&_uv[0], GL_STATIC_DRAW);
+    }
+
+    unsigned int Mesh::getVertexIndex(Vec3f const& coords, Vec3f const& normal,
+	    Vec2f const& uv)
     {
 	for (unsigned int i = 0; i < _vertices.size(); i += 3)
 	{
 	    if (std::abs(_vertices[i + 0] - coords[0]) < 0.01
 		    && std::abs(_vertices[i + 1] - coords[1]) < 0.01
-		    && std::abs(_vertices[i + 2] - coords[2]) < 0.01)
+		    && std::abs(_vertices[i + 2] - coords[2]) < 0.01
+		    && std::abs(_normals[i + 0] - normal[0]) < 0.01
+		    && std::abs(_normals[i + 1] - normal[1]) < 0.01
+		    && std::abs(_normals[i + 2] - normal[2]) < 0.01
+		    && std::abs(_uv[i / 3 * 2 + 0] - uv[0]) < 0.01
+		    && std::abs(_uv[i / 3 * 2 + 1] - uv[1]) < 0.01)
 	    {
-		return true;
+		return i / 3;
 	    }
 	}
-	return false;
+	return _vertices.size();
     }
 
     GLuint Mesh::generateBuffer()
@@ -508,13 +461,27 @@ namespace dbgl
 		    continue;
 		}
 	    }
+	    // Close file
+	    file.close();
 	    // Merge to one single index and save in new mesh
 	    mesh = new Mesh();
 	    for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	    {
-		// If the vertex has not been added yet, add it and the appropriate normals and uvs
-		if (!mesh->hasVertex(vertices[vertexIndices[i]]))
+		// Generate normal if none has been in the file
+		Vec3f normal;
+		unsigned int vertIndex;
+		if (normalIndices.size() > i
+			&& normals.size() > normalIndices[i])
 		{
+		    // Use normal from file
+		    normal = normals[normalIndices[i]];
+		}
+		// If the vertex has not been added yet, add it and the appropriate normals and uvs
+		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]],
+			normal, uvs[uvIndices[i]]);
+		if (normal.isZero() || vertIndex >= mesh->_vertices.size())
+		{
+		    vertIndex = mesh->_vertices.size() / 3;
 		    mesh->_vertices.push_back(vertices[vertexIndices[i]][0]);
 		    mesh->_vertices.push_back(vertices[vertexIndices[i]][1]);
 		    mesh->_vertices.push_back(vertices[vertexIndices[i]][2]);
@@ -523,13 +490,28 @@ namespace dbgl
 			mesh->_uv.push_back(uvs[uvIndices[i]][0]);
 			mesh->_uv.push_back(uvs[uvIndices[i]][1]);
 		    }
-		    if (normalIndices.size() > i && normals.size() > normalIndices[i])
+		    if (normalIndices.size() > i
+			    && normals.size() > normalIndices[i])
 		    {
 			mesh->_normals.push_back(normals[normalIndices[i]][0]);
 			mesh->_normals.push_back(normals[normalIndices[i]][1]);
 			mesh->_normals.push_back(normals[normalIndices[i]][2]);
 		    }
+		    else
+		    {
+			// No normal specified in file, so generate new one
+			unsigned int firstIndex = i / 3 * 3;
+			Vec3f dir1 = vertices[vertexIndices[firstIndex]]
+				- vertices[vertexIndices[firstIndex + 1]];
+			Vec3f dir2 = vertices[vertexIndices[firstIndex + 2]]
+				- vertices[vertexIndices[firstIndex + 1]];
+			Vec3f normal = dir2.getCrossProduct(dir1);
+			mesh->_normals.push_back(normal[0]);
+			mesh->_normals.push_back(normal[1]);
+			mesh->_normals.push_back(normal[2]);
+		    }
 		}
+		mesh->_indices.push_back(vertIndex);
 	    }
 	}
 	else
@@ -537,7 +519,8 @@ namespace dbgl
 	    LOG->warning("File %s not found", path.c_str());
 	    return NULL;
 	}
-	file.close();
+	// Send data to gl buffers
+	mesh->updateBuffers();
 	return mesh;
     }
 }

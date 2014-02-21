@@ -41,7 +41,7 @@ namespace dbgl
 	     * @param type Texture type
 	     * @param path File path
 	     */
-	    Texture(const Type type, std::string path);
+	    Texture(const Type type, const std::string path);
 	    /**
 	     * @brief Clean up used memory
 	     */

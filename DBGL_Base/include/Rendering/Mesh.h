@@ -78,16 +78,19 @@ namespace dbgl
 	     */
 	    Mesh();
 	    /**
+	     * @brief Updates GL buffers, resends vertices, uvs and normals
+	     */
+	    void updateBuffers();
+	    /**
 	     * @brief Checks, if the mesh has a vertex with the passed coordinates
 	     * 	      (or at least very, very similar)
 	     * @param coords Coordinates to search for
-	     * @return True in case the coordinates are already known,
-	     * 	       otherwise false
+	     * @return Index of the vertex or size + 1 if not found
 	     */
-	    bool hasVertex(Vec3f coords);
+	    unsigned int getVertexIndex(Vec3f const& coords, Vec3f const& normal, Vec2f const& uv);
 	    /**
 	     * @brief Generates a gl buffer
-	     * @return Buffer identifier
+	     * @return Buffer identifier or GL_INVALID_VALUE if something went wrong
 	     * @warning The generated buffer needs to be deleted using glDeleteBuffers
 	     */
 	    static GLuint generateBuffer();
@@ -110,15 +113,13 @@ namespace dbgl
 	    static Mesh* loadOBJ(const std::string path);
 
 	    std::vector<unsigned short> _indices;
-	    GLuint _indexBuffer;
+	    GLuint _indexBuffer = GL_INVALID_VALUE;
 	    std::vector<GLfloat> _vertices;
-	    GLuint _vertexBuffer;
+	    GLuint _vertexBuffer = GL_INVALID_VALUE;
 	    std::vector<GLfloat> _normals;
-	    GLuint _normalBuffer;
-	    std::vector<GLfloat> _color;
-	    GLuint _colorBuffer;
+	    GLuint _normalBuffer = GL_INVALID_VALUE;
 	    std::vector<GLfloat> _uv;
-	    GLuint _uvBuffer; // = GL_INVALID_VALUE
+	    GLuint _uvBuffer = GL_INVALID_VALUE; // = GL_INVALID_VALUE
 
 	    friend class RenderContext;
 	    // So the render context can render

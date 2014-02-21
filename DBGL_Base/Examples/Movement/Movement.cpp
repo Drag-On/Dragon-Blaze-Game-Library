@@ -73,9 +73,9 @@ void updateCallback()
 	cam->position() -= direction * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_D) == GLFW_PRESS)
 	cam->position() += right * deltaTime * moveSpeed;
-    if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
-    	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_E) == GLFW_PRESS)
+    	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+    if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
     	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
     // Calculate delta time
@@ -109,8 +109,8 @@ int main()
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);
     // Load meshes, shader and texture
-    pMeshPyramid = Mesh::load("Sphere.obj", Mesh::OBJ);//Mesh::makePyramid();
-    pMeshBox = Mesh::makeCube();
+    pMeshPyramid = Mesh::makePyramid();
+    pMeshBox =  Mesh::load("sphere.obj", Mesh::OBJ);//Mesh::makeCube();
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
