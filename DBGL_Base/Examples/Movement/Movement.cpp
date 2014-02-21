@@ -26,6 +26,7 @@ using namespace dbgl;
 Window* wnd;
 Mesh* pMeshPyramid;
 Mesh* pMeshBox;
+Mesh* pMeshIko;
 ShaderProgram* pShader;
 Texture* pTexture;
 Mat4f modelMat;
@@ -74,9 +75,9 @@ void updateCallback()
     if (wnd->getKey(GLFW_KEY_D) == GLFW_PRESS)
 	cam->position() += right * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_E) == GLFW_PRESS)
-    	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
-    	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
     // Calculate delta time
     double currentTime = WindowManager::get()->getTime();
@@ -91,6 +92,8 @@ void renderCallback(const RenderContext* rc)
     rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
     // Box will be drawn at (5, 0, 3)
     rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3), pShader, pTexture);
+    // Ikosaeder will be drawn at (-3, 0, 5)
+    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
 }
 
 int main()
@@ -110,7 +113,8 @@ int main()
     wnd->getRenderContext()->addViewport(viewport);
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid();
-    pMeshBox =  Mesh::load("sphere.obj", Mesh::OBJ);//Mesh::makeCube();
+    pMeshBox = Mesh::makeCube();
+    pMeshIko = Mesh::load("Ikosaeder.obj", Mesh::OBJ);
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
@@ -129,6 +133,7 @@ int main()
     // Clean up
     delete pMeshPyramid;
     delete pMeshBox;
+    delete pMeshIko;
     delete pShader;
     delete pTexture;
     delete cam;
