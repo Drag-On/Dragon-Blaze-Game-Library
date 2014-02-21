@@ -425,8 +425,13 @@ namespace dbgl
 		{
 		    // Read in all indices
 		    std::string faceToken;
-		    while (lineStream >> faceToken)
+		    for (int j = 0; lineStream >> faceToken; j++)
 		    {
+			if (j >= 3)
+			{
+			    LOG->warning("File %s contains polygons with more than 3 vertices", path.c_str());
+			    break;
+			}
 			std::string curElement;
 			std::stringstream tokenStream;
 			tokenStream.str(faceToken);
@@ -438,14 +443,20 @@ namespace dbgl
 			    switch (k)
 			    {
 				case 0:
+				{
 				    vertexIndices.push_back(curIndex - 1); // OBJ indices start with 1
 				    break;
+				}
 				case 1:
+				{
 				    uvIndices.push_back(curIndex - 1);
 				    break;
+				}
 				case 2:
+				{
 				    normalIndices.push_back(curIndex - 1);
 				    break;
+				}
 				default:
 				{
 				    LOG->warning("File %s misformatted: more than 3 indices", path.c_str());
@@ -476,10 +487,20 @@ namespace dbgl
 		    // Use normal from file
 		    normal = normals[normalIndices[i]];
 		}
+		else
+		{
+		    // No normal specified in file, so generate new one
+		    unsigned int firstIndex = i / 3 * 3;
+		    Vec3f dir1 = vertices[vertexIndices[firstIndex]]
+			    - vertices[vertexIndices[firstIndex + 1]];
+		    Vec3f dir2 = vertices[vertexIndices[firstIndex + 2]]
+			    - vertices[vertexIndices[firstIndex + 1]];
+		    normal = dir2.getCrossProduct(dir1);
+		}
 		// If the vertex has not been added yet, add it and the appropriate normals and uvs
 		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]],
 			normal, uvs[uvIndices[i]]);
-		if (normal.isZero() || vertIndex >= mesh->_vertices.size())
+		if (vertIndex >= mesh->_vertices.size())
 		{
 		    vertIndex = mesh->_vertices.size() / 3;
 		    mesh->_vertices.push_back(vertices[vertexIndices[i]][0]);
@@ -490,26 +511,9 @@ namespace dbgl
 			mesh->_uv.push_back(uvs[uvIndices[i]][0]);
 			mesh->_uv.push_back(uvs[uvIndices[i]][1]);
 		    }
-		    if (normalIndices.size() > i
-			    && normals.size() > normalIndices[i])
-		    {
-			mesh->_normals.push_back(normals[normalIndices[i]][0]);
-			mesh->_normals.push_back(normals[normalIndices[i]][1]);
-			mesh->_normals.push_back(normals[normalIndices[i]][2]);
-		    }
-		    else
-		    {
-			// No normal specified in file, so generate new one
-			unsigned int firstIndex = i / 3 * 3;
-			Vec3f dir1 = vertices[vertexIndices[firstIndex]]
-				- vertices[vertexIndices[firstIndex + 1]];
-			Vec3f dir2 = vertices[vertexIndices[firstIndex + 2]]
-				- vertices[vertexIndices[firstIndex + 1]];
-			Vec3f normal = dir2.getCrossProduct(dir1);
-			mesh->_normals.push_back(normal[0]);
-			mesh->_normals.push_back(normal[1]);
-			mesh->_normals.push_back(normal[2]);
-		    }
+		    mesh->_normals.push_back(normal[0]);
+		    mesh->_normals.push_back(normal[1]);
+		    mesh->_normals.push_back(normal[2]);
 		}
 		mesh->_indices.push_back(vertIndex);
 	    }
