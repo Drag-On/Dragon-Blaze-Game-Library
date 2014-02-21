@@ -95,6 +95,7 @@ void renderCallback(const RenderContext* rc)
 
 int main()
 {
+    LOG->setLogLevel(DBG);
     // Create window
     wnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
@@ -108,7 +109,7 @@ int main()
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);
     // Load meshes, shader and texture
-    pMeshPyramid = Mesh::makePyramid();
+    pMeshPyramid = Mesh::load("Sphere.obj", Mesh::OBJ);//Mesh::makePyramid();
     pMeshBox = Mesh::makeCube();
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");

@@ -341,6 +341,20 @@ namespace dbgl
 	_uvBuffer = GL_INVALID_VALUE;
     }
 
+    bool Mesh::hasVertex(Vec3f coords)
+    {
+	for (unsigned int i = 0; i < _vertices.size(); i += 3)
+	{
+	    if (std::abs(_vertices[i + 0] - coords[0]) < 0.01
+		    && std::abs(_vertices[i + 1] - coords[1]) < 0.01
+		    && std::abs(_vertices[i + 2] - coords[2]) < 0.01)
+	    {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     GLuint Mesh::generateBuffer()
     {
 	GLuint buffer;
@@ -357,6 +371,7 @@ namespace dbgl
 
     Mesh* Mesh::loadOBJ(const std::string path)
     {
+	Mesh* mesh = NULL;
 	// Read file
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in);
@@ -366,6 +381,7 @@ namespace dbgl
 	    std::vector<Vec3f> vertices, normals;
 	    std::vector<Vec2f> uvs;
 	    std::vector<float> curValues;
+	    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	    std::string token;
 	    std::string line;
 	    // Scan whole file
@@ -373,15 +389,17 @@ namespace dbgl
 	    {
 		// Read line
 		std::getline(file, line);
-		std::stringstream lineStream;
-		lineStream << line;
+		if (line.length() == 0) // Skip empty lines
+		    continue;
+		std::istringstream lineStream;
+		lineStream.str(line);
 		// Check first token
 		lineStream >> token;
-		if (token.compare("v")) // Vertex definition
+		if (token == "v") // Vertex definition
 		{
 		    // Read in all coordinates that follow
 		    std::vector<float> coords;
-		    float coord;
+		    float coord = 0;
 		    while (lineStream >> coord)
 		    {
 			coords.push_back(coord);
@@ -401,7 +419,7 @@ namespace dbgl
 		    // Store vertex
 		    vertices.push_back(Vec3f(coords[0], coords[1], coords[2]));
 		}
-		else if (token.compare("vt")) // UV definition
+		else if (token == "vt") // UV definition
 		{
 		    // Read in all coordinates that follow
 		    std::vector<float> coords;
@@ -411,12 +429,12 @@ namespace dbgl
 			coords.push_back(coord);
 		    }
 		    // Everything after the 2rd coordinate will be discarded, so warn
-		    if (coords.size() > 2)
+		    if (coords.size() > 3)
 		    {
-			LOG->warning("File %s has UV definitions with more than 2 coordinates", path.c_str());
+			LOG->warning("File %s has UV definitions with more than 3 coordinates", path.c_str());
 		    }
 		    // If less than 2 coordinates the file is misformatted
-		    else if(coords.size() < 3)
+		    else if(coords.size() < 2)
 		    {
 			LOG->error("File %s has UV definitions with less than 2 coordinates", path.c_str());
 			file.close();
@@ -425,7 +443,7 @@ namespace dbgl
 		    // Store uv
 		    uvs.push_back(Vec2f(coords[0], coords[1]));
 		}
-		else if (token.compare("vn")) // Normal definition
+		else if (token == "vn") // Normal definition
 		{
 		    // Read in all coordinates that follow
 		    std::vector<float> coords;
@@ -450,9 +468,67 @@ namespace dbgl
 		    normals.push_back(
 			    Vec3f(coords[0], coords[1], coords[2]).normalize());
 		}
-		else if (token.compare("f")) // Face definition
+		else if (token == "f") // Face definition
 		{
-
+		    // Read in all indices
+		    std::string faceToken;
+		    while (lineStream >> faceToken)
+		    {
+			std::string curElement;
+			std::stringstream tokenStream;
+			tokenStream.str(faceToken);
+			for (int k = 0;
+				std::getline(tokenStream, curElement, '/'); k++)
+			{
+			    int curIndex;
+			    std::stringstream(curElement) >> curIndex;
+			    switch (k)
+			    {
+				case 0:
+				    vertexIndices.push_back(curIndex - 1); // OBJ indices start with 1
+				    break;
+				case 1:
+				    uvIndices.push_back(curIndex - 1);
+				    break;
+				case 2:
+				    normalIndices.push_back(curIndex - 1);
+				    break;
+				default:
+				{
+				    LOG->warning("File %s misformatted: more than 3 indices", path.c_str());
+				    break;
+				}
+			    }
+			}
+		    }
+		}
+		else
+		{
+		    // Might be a comment or some other line we can skip
+		    continue;
+		}
+	    }
+	    // Merge to one single index and save in new mesh
+	    mesh = new Mesh();
+	    for (unsigned int i = 0; i < vertexIndices.size(); i++)
+	    {
+		// If the vertex has not been added yet, add it and the appropriate normals and uvs
+		if (!mesh->hasVertex(vertices[vertexIndices[i]]))
+		{
+		    mesh->_vertices.push_back(vertices[vertexIndices[i]][0]);
+		    mesh->_vertices.push_back(vertices[vertexIndices[i]][1]);
+		    mesh->_vertices.push_back(vertices[vertexIndices[i]][2]);
+		    if (uvIndices.size() > i && uvs.size() > uvIndices[i])
+		    {
+			mesh->_uv.push_back(uvs[uvIndices[i]][0]);
+			mesh->_uv.push_back(uvs[uvIndices[i]][1]);
+		    }
+		    if (normalIndices.size() > i && normals.size() > normalIndices[i])
+		    {
+			mesh->_normals.push_back(normals[normalIndices[i]][0]);
+			mesh->_normals.push_back(normals[normalIndices[i]][1]);
+			mesh->_normals.push_back(normals[normalIndices[i]][2]);
+		    }
 		}
 	    }
 	}
@@ -462,7 +538,7 @@ namespace dbgl
 	    return NULL;
 	}
 	file.close();
-	return NULL;
+	return mesh;
     }
 }
 

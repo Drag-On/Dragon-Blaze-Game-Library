@@ -78,6 +78,14 @@ namespace dbgl
 	     */
 	    Mesh();
 	    /**
+	     * @brief Checks, if the mesh has a vertex with the passed coordinates
+	     * 	      (or at least very, very similar)
+	     * @param coords Coordinates to search for
+	     * @return True in case the coordinates are already known,
+	     * 	       otherwise false
+	     */
+	    bool hasVertex(Vec3f coords);
+	    /**
 	     * @brief Generates a gl buffer
 	     * @return Buffer identifier
 	     * @warning The generated buffer needs to be deleted using glDeleteBuffers
