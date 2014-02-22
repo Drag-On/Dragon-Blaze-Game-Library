@@ -33,6 +33,7 @@ Mat4f modelMat;
 Camera* cam;
 Vec3f direction, right;
 Vec3f lightPos = Vec3f(0, 5, 0), lightColor = Vec3f(1, 0.8, 0.8) * 25;
+Vec3f matSpecular = Vec3f(1, 0.8, 0.8);
 float horizontalAngle = pi_2(), verticalAngle = 0;
 float deltaTime, lastTime;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
@@ -95,13 +96,16 @@ void renderCallback(const RenderContext* rc)
     pShader->setUniformFloat3(pShader->getUniformHandle("v_lightColor"),
 	    lightColor.getDataPointer());
     pShader->setUniformFloat3(pShader->getUniformHandle("v_ambientLight"),
-	    Vec3f(0.15, 0.15, 0.15).getDataPointer());
+	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
+    pShader->setUniformFloat3(pShader->getUniformHandle("v_matSpecColor"),
+	    matSpecular.getDataPointer());
+    pShader->setUniformFloat(pShader->getUniformHandle("f_matSpecWidth"), 5);
     // Pyramid will be drawn in the center of the world
     rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
     // Box will be drawn at (5, 0, 3)
     rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3), pShader, pTexture);
-    // Ikosaeder will be drawn at (-3, 0, 5)
-    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
+    // Icosahedron will be drawn at (-3, 0, 5)
+    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5) * Mat4f::makeRotationY(pi_2()), pShader, pTexture);
 }
 
 int main()

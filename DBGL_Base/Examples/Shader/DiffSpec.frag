@@ -29,6 +29,8 @@ uniform sampler2D tex_diffuse;	// Diffuse texture
 uniform vec3 v_lightPos_w;		// Light position in world space
 uniform vec3 v_lightColor;		// Light color
 uniform vec3 v_ambientLight;	// Ambient light color
+uniform vec3 v_matSpecColor;	// Material specular color
+uniform float f_matSpecWidth;	// Width of specular highlight, the higher, the thinner
 
 // Main entry point
 void main(){
@@ -36,8 +38,20 @@ void main(){
 	vec3 n = normalize(oNormal_c);
 	vec3 l = normalize(oLight_c);
 	float cosTheta = clamp(dot(n, l), 0, 1);
+	
+	// Calculate specular component
+	vec3 e = normalize(oEye_c);
+	vec3 r = reflect(-l, n);
+	float cosAlpha = clamp(dot(e, r), 0, 1);
  
 	vec3 matDiffuse = texture(tex_diffuse, oUV).rgb;
 	float dist = length(v_lightPos_w - oPos_w);
-	oColor = v_ambientLight + matDiffuse * v_lightColor * cosTheta / (dist * dist);
+	oColor = 
+		// Ambient
+		v_ambientLight +
+		// Diffuse
+		matDiffuse * v_lightColor * cosTheta / (dist * dist) +
+		// Specular
+		v_matSpecColor * v_lightColor * pow(cosAlpha, f_matSpecWidth) / (dist * dist);
+
 }
