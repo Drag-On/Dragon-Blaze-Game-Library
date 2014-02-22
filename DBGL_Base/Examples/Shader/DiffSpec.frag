@@ -19,8 +19,8 @@
 
 in vec3 oNormal_c;	// Vertex normal in camera space
 in vec2 oUV;		// UV coordinate
-in vec3 oPos_w;	// Vertex position in world space
-in vec3 oEye_c;	// Eye vector in camera space
+in vec3 oPos_w;		// Vertex position in world space
+in vec3 oEye_c;		// Eye vector in camera space
 in vec3 oLight_c;	// Light vector in camera space
 
 out vec3 oColor;	// Fragment color
@@ -28,6 +28,7 @@ out vec3 oColor;	// Fragment color
 uniform sampler2D tex_diffuse;	// Diffuse texture
 uniform vec3 v_lightPos_w;		// Light position in world space
 uniform vec3 v_lightColor;		// Light color
+uniform vec3 v_ambientLight;	// Ambient light color
 
 // Main entry point
 void main(){
@@ -38,5 +39,5 @@ void main(){
  
 	vec3 matDiffuse = texture(tex_diffuse, oUV).rgb;
 	float dist = length(v_lightPos_w - oPos_w);
-	oColor = matDiffuse * v_lightColor * cosTheta / (dist * dist);
+	oColor = v_ambientLight + matDiffuse * v_lightColor * cosTheta / (dist * dist);
 }

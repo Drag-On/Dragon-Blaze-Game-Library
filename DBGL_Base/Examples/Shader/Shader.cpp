@@ -93,7 +93,9 @@ void renderCallback(const RenderContext* rc)
     pShader->setUniformFloat3(pShader->getUniformHandle("v_lightPos_w"),
 	    lightPos.getDataPointer());
     pShader->setUniformFloat3(pShader->getUniformHandle("v_lightColor"),
-    	    lightColor.getDataPointer());
+	    lightColor.getDataPointer());
+    pShader->setUniformFloat3(pShader->getUniformHandle("v_ambientLight"),
+	    Vec3f(0.15, 0.15, 0.15).getDataPointer());
     // Pyramid will be drawn in the center of the world
     rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
     // Box will be drawn at (5, 0, 3)
