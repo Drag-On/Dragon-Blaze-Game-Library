@@ -32,8 +32,9 @@ Texture* pTexture;
 Mat4f modelMat;
 Camera* cam;
 Vec3f direction, right;
-Vec3f lightPos = Vec3f(0, 5, 0), lightColor = Vec3f(1, 0.8, 0.8) * 25;
-Vec3f matSpecular = Vec3f(1, 0.8, 0.8);
+Vec3f lightPos = Vec3f(0, 5, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
+Vec3f lightOffset; // For movement
+Vec3f matSpecular = Vec3f(0.1, 0.1, 0.3);
 float horizontalAngle = pi_2(), verticalAngle = 0;
 float deltaTime, lastTime;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
@@ -85,6 +86,11 @@ void updateCallback()
     double currentTime = WindowManager::get()->getTime();
     deltaTime = float(currentTime - lastTime);
     lastTime = currentTime;
+
+    // Update moving light
+    lightOffset[0] = sin(currentTime) * 3;
+    lightOffset[1] = cos(currentTime) * 3;
+    lightOffset[2] = -sin(currentTime) * 3;
 }
 
 void renderCallback(const RenderContext* rc)
@@ -92,20 +98,20 @@ void renderCallback(const RenderContext* rc)
     pShader->use();
     // Set light position and color
     pShader->setUniformFloat3(pShader->getUniformHandle("v_lightPos_w"),
-	    lightPos.getDataPointer());
+	    (lightPos + lightOffset).getDataPointer());
     pShader->setUniformFloat3(pShader->getUniformHandle("v_lightColor"),
 	    lightColor.getDataPointer());
     pShader->setUniformFloat3(pShader->getUniformHandle("v_ambientLight"),
 	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
     pShader->setUniformFloat3(pShader->getUniformHandle("v_matSpecColor"),
 	    matSpecular.getDataPointer());
-    pShader->setUniformFloat(pShader->getUniformHandle("f_matSpecWidth"), 5);
+    pShader->setUniformFloat(pShader->getUniformHandle("f_matSpecWidth"), 10);
     // Pyramid will be drawn in the center of the world
     rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
     // Box will be drawn at (5, 0, 3)
-    rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3), pShader, pTexture);
+    rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3) * Mat4f::makeRotationY(pi_4()), pShader, pTexture);
     // Icosahedron will be drawn at (-3, 0, 5)
-    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5) * Mat4f::makeRotationY(pi_2()), pShader, pTexture);
+    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
 }
 
 int main()
