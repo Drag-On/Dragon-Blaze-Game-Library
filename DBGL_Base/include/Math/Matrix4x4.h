@@ -112,7 +112,7 @@ namespace dbgl
 	    /// @param vec Vector to rotate around
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>
-	    static Matrix4x4<T> makeRotation(Vector4<T> vec, T angle);
+	    static Matrix4x4<T> makeRotation(Vector3<T> vec, T angle);
 	    /// <summary>
 	    /// @brief Constructs a scale matrix from the given factor
 	    /// @param factor Factor to scale by

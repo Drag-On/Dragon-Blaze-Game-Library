@@ -275,7 +275,7 @@ namespace dbgl
 	    return makeRotationX(xAngle) * makeRotationY(yAngle) * makeRotationZ(zAngle);
 	}
 	
-	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(Vector4<T> vec, T angle)
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(Vector3<T> vec, T angle)
 	{
 		vec.normalize();
 		Matrix4x4<T> mat;

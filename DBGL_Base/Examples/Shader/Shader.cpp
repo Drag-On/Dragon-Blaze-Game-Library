@@ -34,10 +34,11 @@ Camera* cam;
 Vec3f direction, right;
 Vec3f lightPos = Vec3f(0, 5, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
 Vec3f lightOffset; // For movement
-Vec3f matSpecular = Vec3f(0.1, 0.1, 0.3);
+Vec3f matSpecular = Vec3f(0.01, 0.01, 0.1);
 float horizontalAngle = pi_2(), verticalAngle = 0;
 float deltaTime, lastTime;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
+float icoAngle = 0;
 
 void scrollCallback(double x, double y)
 {
@@ -82,6 +83,9 @@ void updateCallback()
     if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
 	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
+    // Drive rotation of icosahedron
+    icoAngle += deltaTime;
+
     // Calculate delta time
     double currentTime = WindowManager::get()->getTime();
     deltaTime = float(currentTime - lastTime);
@@ -109,9 +113,14 @@ void renderCallback(const RenderContext* rc)
     // Pyramid will be drawn in the center of the world
     rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
     // Box will be drawn at (5, 0, 3)
-    rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3) * Mat4f::makeRotationY(pi_4()), pShader, pTexture);
+    rc->draw(pMeshBox,
+	    Mat4f::makeTranslation(5, 0, 3) * Mat4f::makeRotationY(pi_4()),
+	    pShader, pTexture);
     // Icosahedron will be drawn at (-3, 0, 5)
-    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
+    rc->draw(pMeshIko,
+	    Mat4f::makeTranslation(-3, 0, 5)
+		    * Mat4f::makeRotation(Vec3f(1, 1, 1), icoAngle), pShader,
+	    pTexture);
 }
 
 int main()
