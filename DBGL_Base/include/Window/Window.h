@@ -43,10 +43,11 @@ namespace dbgl
 	     * @brief Initializes the window
 	     * @warning Must be called exactly once!
 	     * @param depthTest Indicates if depth testing should be enabled
+	     * @param alphaBlend Indicates if alpha blending should be enabled
 	     * @param faceCulling Indicates if faces that are not facing the camera
 	     * 	      should be culled
 	     */
-	    void init(bool depthTest = true, bool faceCulling = true);
+	    void init(bool depthTest = true, bool alphaBlend = false, bool faceCulling = true);
 	    /**
 	     * @brief Makes this window show
 	     */

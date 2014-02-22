@@ -101,7 +101,7 @@ namespace dbgl
 	_pRenderContext = NULL;
     }
 
-    void Window::init(bool depthTest, bool faceCulling)
+    void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)
     {
 	makeCurrent();
 
@@ -110,6 +110,13 @@ namespace dbgl
 	{
 	    glEnable(GL_DEPTH_TEST);
 	    glDepthFunc(GL_LESS);
+	}
+
+	// Enable alpha blending?
+	if(alphaBlend)
+	{
+	    glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	// Cull triangles that are not facing the camera?
