@@ -295,105 +295,96 @@ namespace dbgl
 	return glfwGetKey(_pWndHandle, key);
     }
 
-    void Window::addCloseCallback(std::function<void()> const& callback)
+    void Window::addCloseCallback(CloseCallbackType const& callback)
     {
 	_closeCallback = callback;
 	glfwSetWindowCloseCallback(_pWndHandle, WindowManager::closeCallback);
     }
 
-    void Window::addFocusCallback(std::function<void(int)> const& callback)
+    void Window::addFocusCallback(FocusCallbackType const& callback)
     {
 	_focusCallback = callback;
 	glfwSetWindowFocusCallback(_pWndHandle, WindowManager::focusCallback);
     }
 
-    void Window::addIconifiedCallback(std::function<void(int)> const& callback)
+    void Window::addIconifiedCallback(IconifiedCallbackType const& callback)
     {
 	_iconifiedCallback = callback;
 	glfwSetWindowIconifyCallback(_pWndHandle,
 		WindowManager::iconifiedCallback);
     }
 
-    void Window::addRefreshCallback(std::function<void()> const& callback)
+    void Window::addRefreshCallback(RefreshCallbackType const& callback)
     {
 	_refreshCallback = callback;
 	glfwSetWindowRefreshCallback(_pWndHandle,
 		WindowManager::refreshCallback);
     }
 
-    void Window::addResizeCallback(
-	    std::function<void(int, int)> const& callback)
+    void Window::addResizeCallback(ResizeCallbackType const& callback)
     {
 	_resizeCallback = callback;
 	glfwSetWindowSizeCallback(_pWndHandle, WindowManager::resizeCallback);
     }
 
     void Window::addFramebufferResizeCallback(
-	    std::function<void(int, int)> const& callback)
+	    FramebufferResizeCallbackType const& callback)
     {
 	_framebufferResizeCallback = callback;
 	glfwSetFramebufferSizeCallback(_pWndHandle,
 		WindowManager::framebufferResizeCallback);
     }
 
-    void Window::addPositionCallback(
-	    std::function<void(int, int)> const& callback)
+    void Window::addPositionCallback(PositionCallbackType const& callback)
     {
 	_positionCallback = callback;
 	glfwSetWindowPosCallback(_pWndHandle, WindowManager::positionCallback);
     }
 
-    void Window::addCharacterCallback(
-	    std::function<void(unsigned int)> const& callback)
+    void Window::addCharacterCallback(CharacterCallbackType const& callback)
     {
 	_characterCallback = callback;
 	glfwSetCharCallback(_pWndHandle, WindowManager::characterCallback);
     }
 
-    void Window::addCursorEnterCallback(
-	    std::function<void(int)> const& callback)
+    void Window::addCursorEnterCallback(CursorEnterCallbackType const& callback)
     {
 	_cursorEnterCallback = callback;
 	glfwSetCursorEnterCallback(_pWndHandle,
 		WindowManager::cursorEnterCallback);
     }
 
-    void Window::addCursorCallback(
-	    std::function<void(double, double)> const& callback)
+    void Window::addCursorCallback(CursorCallbackType const& callback)
     {
 	_cursorCallback = callback;
 	glfwSetCursorPosCallback(_pWndHandle, WindowManager::cursorCallback);
     }
 
-    void Window::addMouseButtonCallback(
-	    std::function<void(int, int, int)> const& callback)
+    void Window::addMouseButtonCallback(MouseButtonCallbackType const& callback)
     {
 	_mouseButtonCallback = callback;
 	glfwSetMouseButtonCallback(_pWndHandle,
 		WindowManager::mouseButtonCallback);
     }
 
-    void Window::addScrollCallback(
-	    std::function<void(double, double)> const& callback)
+    void Window::addScrollCallback(ScrollCallbackType const& callback)
     {
 	_scrollCallback = callback;
 	glfwSetScrollCallback(_pWndHandle, WindowManager::scrollCallback);
     }
 
-    void Window::addKeyCallback(
-	    std::function<void(int, int, int, int)> const& callback)
+    void Window::addKeyCallback(KeyCallbackType const& callback)
     {
 	_keyCallback = callback;
 	glfwSetKeyCallback(_pWndHandle, WindowManager::keyCallback);
     }
 
-    void Window::addUpdateCallback(std::function<void(double)> const& callback)
+    void Window::addUpdateCallback(UpdateCallbackType const& callback)
     {
 	_updateCallback = callback;
     }
 
-    void Window::addRenderCallback(
-	    std::function<void(const RenderContext*)> const& callback)
+    void Window::addRenderCallback(RenderCallbackType const& callback)
     {
 	_renderCallback = callback;
     }

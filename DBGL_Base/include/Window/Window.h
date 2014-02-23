@@ -23,6 +23,22 @@
 
 namespace dbgl
 {
+    using CloseCallbackType = std::function<void()>;
+    using FocusCallbackType = std::function<void(int)>;
+    using IconifiedCallbackType = std::function<void(int)>;
+    using RefreshCallbackType = std::function<void()>;
+    using ResizeCallbackType = std::function<void(int, int)>;
+    using FramebufferResizeCallbackType = std::function<void(int, int)>;
+    using PositionCallbackType = std::function<void(int, int)>;
+    using CharacterCallbackType = std::function<void(unsigned int)>;
+    using CursorEnterCallbackType = std::function<void(int)>;
+    using CursorCallbackType = std::function<void(double, double)>;
+    using MouseButtonCallbackType = std::function<void(int, int, int)>;
+    using ScrollCallbackType = std::function<void(double, double)>;
+    using KeyCallbackType = std::function<void(int, int, int, int)>;
+    using UpdateCallbackType = std::function<void(double)>;
+    using RenderCallbackType = std::function<void(const RenderContext* rc)>;
+
     /**
      * @brief Base class for all windows
      * @details Windows need to be constructed by the @see WindowManager and
@@ -47,7 +63,8 @@ namespace dbgl
 	     * @param faceCulling Indicates if faces that are not facing the camera
 	     * 	      should be culled
 	     */
-	    void init(bool depthTest = true, bool alphaBlend = false, bool faceCulling = true);
+	    void init(bool depthTest = true, bool alphaBlend = false,
+		    bool faceCulling = true);
 	    /**
 	     * @brief Makes this window show
 	     */
@@ -181,87 +198,80 @@ namespace dbgl
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    void addCloseCallback(std::function<void()> const& callback);
+	    void addCloseCallback(CloseCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
 	     */
-	    void addFocusCallback(std::function<void(int)> const& callback);
+	    void addFocusCallback(FocusCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for iconified events
 	     * @param callback Function to be called when this window is getting iconified or restored
 	     */
-	    void addIconifiedCallback(std::function<void(int)> const& callback);
+	    void addIconifiedCallback(IconifiedCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for refresh events
 	     * @param callback Function to be called when this window needs to be refreshed
 	     */
-	    void addRefreshCallback(std::function<void()> const& callback);
+	    void addRefreshCallback(RefreshCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
-	    void addResizeCallback(
-		    std::function<void(int, int)> const& callback);
+	    void addResizeCallback(ResizeCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for framebuffer resize events
 	     * @param callback Function to be called when this window's framebuffer needs a resize
 	     */
 	    void addFramebufferResizeCallback(
-		    std::function<void(int, int)> const& callback);
+		    FramebufferResizeCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for window move events
 	     * @param callback Function to be called when this window is getting moved
 	     */
-	    void addPositionCallback(
-		    std::function<void(int, int)> const& callback);
+	    void addPositionCallback(PositionCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for unicode character events
 	     * @param callback Function to be called when a character is typed into this window
 	     */
-	    void addCharacterCallback(
-		    std::function<void(unsigned int)> const& callback);
+	    void addCharacterCallback(CharacterCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
 	    void addCursorEnterCallback(
-		    std::function<void(int)> const& callback);
+		    CursorEnterCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor move events
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
-	    void addCursorCallback(
-		    std::function<void(double, double)> const& callback);
+	    void addCursorCallback(CursorCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for mouse button events
 	     * @param callback Function to be called when a mouse button state changes
 	     */
 	    void addMouseButtonCallback(
-		    std::function<void(int, int, int)> const& callback);
+		    MouseButtonCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
 	     */
-	    void addScrollCallback(
-		    std::function<void(double, double)> const& callback);
+	    void addScrollCallback(ScrollCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for key events
 	     * @param callback Function to be called when a key state changes
 	     */
-	    void addKeyCallback(
-		    std::function<void(int, int, int, int)> const& callback);
+	    void addKeyCallback(KeyCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    void addUpdateCallback(std::function<void(double)> const& callback);
+	    void addUpdateCallback(UpdateCallbackType const& callback);
 	    /**
 	     * @brief Registers a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
 	     */
-	    void addRenderCallback(
-		    std::function<void(const RenderContext*)> const& callback);
+	    void addRenderCallback(RenderCallbackType const& callback);
 	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
@@ -316,7 +326,8 @@ namespace dbgl
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen);
+	    Window(GLFWwindow* share, const char* title, int width, int height,
+		    bool fullscreen);
 
 	    /**
 	     * GLFW window handle
@@ -325,21 +336,21 @@ namespace dbgl
 	    RenderContext* _pRenderContext;
 
 	private:
-	    std::function<void()> _closeCallback;
-	    std::function<void(int)> _focusCallback;
-	    std::function<void(int)> _iconifiedCallback;
-	    std::function<void()> _refreshCallback;
-	    std::function<void(int, int)> _resizeCallback;
-	    std::function<void(int, int)> _framebufferResizeCallback;
-	    std::function<void(int, int)> _positionCallback;
-	    std::function<void(unsigned int)> _characterCallback;
-	    std::function<void(int)> _cursorEnterCallback;
-	    std::function<void(double, double)> _cursorCallback;
-	    std::function<void(int, int, int)> _mouseButtonCallback;
-	    std::function<void(double, double)> _scrollCallback;
-	    std::function<void(int, int, int, int)> _keyCallback;
-	    std::function<void(double)> _updateCallback;
-	    std::function<void(const RenderContext* rc)> _renderCallback;
+	    CloseCallbackType _closeCallback;
+	    FocusCallbackType _focusCallback;
+	    IconifiedCallbackType _iconifiedCallback;
+	    RefreshCallbackType _refreshCallback;
+	    ResizeCallbackType _resizeCallback;
+	    FramebufferResizeCallbackType _framebufferResizeCallback;
+	    PositionCallbackType _positionCallback;
+	    CharacterCallbackType _characterCallback;
+	    CursorEnterCallbackType _cursorEnterCallback;
+	    CursorCallbackType _cursorCallback;
+	    MouseButtonCallbackType _mouseButtonCallback;
+	    ScrollCallbackType _scrollCallback;
+	    KeyCallbackType _keyCallback;
+	    UpdateCallbackType _updateCallback;
+	    RenderCallbackType _renderCallback;
 
 	    std::string _title;
 	    bool _isFullscreen;

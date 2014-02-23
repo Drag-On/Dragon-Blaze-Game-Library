@@ -26,7 +26,7 @@ using namespace dbgl;
 Window* wnd;
 Mesh* pMeshPyramid;
 Mesh* pMeshBox;
-Mesh* pMeshIko;
+Mesh* pMeshIco;
 ShaderProgram* pShader;
 Texture* pTexture;
 Mat4f modelMat;
@@ -88,7 +88,7 @@ void renderCallback(const RenderContext* rc)
     // Box will be drawn at (5, 0, 3)
     rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3), pShader, pTexture);
     // Ikosaeder will be drawn at (-3, 0, 5)
-    rc->draw(pMeshIko, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
+    rc->draw(pMeshIco, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
 }
 
 int main()
@@ -109,7 +109,7 @@ int main()
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid();
     pMeshBox = Mesh::makeCube();
-    pMeshIko = Mesh::load("Ikosaeder.obj", Mesh::OBJ);
+    pMeshIco = Mesh::load("Ikosaeder.obj", Mesh::OBJ);
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
@@ -128,7 +128,7 @@ int main()
     // Clean up
     delete pMeshPyramid;
     delete pMeshBox;
-    delete pMeshIko;
+    delete pMeshIco;
     delete pShader;
     delete pTexture;
     delete cam;
