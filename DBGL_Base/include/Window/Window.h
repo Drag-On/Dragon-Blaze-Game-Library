@@ -255,7 +255,7 @@ namespace dbgl
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    void addUpdateCallback(std::function<void()> const& callback);
+	    void addUpdateCallback(std::function<void(double)> const& callback);
 	    /**
 	     * @brief Registers a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
@@ -338,7 +338,7 @@ namespace dbgl
 	    std::function<void(int, int, int)> _mouseButtonCallback;
 	    std::function<void(double, double)> _scrollCallback;
 	    std::function<void(int, int, int, int)> _keyCallback;
-	    std::function<void()> _updateCallback;
+	    std::function<void(double)> _updateCallback;
 	    std::function<void(const RenderContext* rc)> _renderCallback;
 
 	    std::string _title;
@@ -346,6 +346,7 @@ namespace dbgl
 	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
 	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
 	    unsigned int _windowedX, _windowedY; // Last window position before entering fullscreen mode
+	    double _deltaTime = 0, _lastTime = 0; // Time since last frame
 	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0, 0, 0);
 	    GLuint _vertexArrayId;
 

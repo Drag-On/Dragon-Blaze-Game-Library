@@ -113,7 +113,7 @@ namespace dbgl
 	}
 
 	// Enable alpha blending?
-	if(alphaBlend)
+	if (alphaBlend)
 	{
 	    glEnable(GL_BLEND);
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -387,7 +387,7 @@ namespace dbgl
 	glfwSetKeyCallback(_pWndHandle, WindowManager::keyCallback);
     }
 
-    void Window::addUpdateCallback(std::function<void()> const& callback)
+    void Window::addUpdateCallback(std::function<void(double)> const& callback)
     {
 	_updateCallback = callback;
     }
@@ -405,11 +405,15 @@ namespace dbgl
     void Window::update()
     {
 	if (_updateCallback)
-	    _updateCallback();
+	    _updateCallback(_deltaTime);
     }
 
     void Window::postUpdate()
     {
+	// Calculate delta time
+	double currentTime = WindowManager::get()->getTime();
+	_deltaTime = currentTime - _lastTime;
+	_lastTime = currentTime;
     }
 
     void Window::preRender()

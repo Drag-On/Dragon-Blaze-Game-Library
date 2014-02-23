@@ -42,7 +42,7 @@ void scrollCallback(double x, double y)
     cam->setFieldOfView(cam->getFieldOfView() + 0.1f * y);
 }
 
-void updateCallback()
+void updateCallback(double deltaTime)
 {
     // Update mouse
     double x, y;
@@ -78,11 +78,6 @@ void updateCallback()
 	cam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
     if (wnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
 	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
-
-    // Calculate delta time
-    double currentTime = WindowManager::get()->getTime();
-    deltaTime = float(currentTime - lastTime);
-    lastTime = currentTime;
 }
 
 void renderCallback(const RenderContext* rc)
@@ -118,7 +113,7 @@ int main()
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
-    wnd->addUpdateCallback(std::bind(&updateCallback));
+    wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     wnd->addScrollCallback(
 	    std::bind(&scrollCallback, std::placeholders::_1,

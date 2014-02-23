@@ -36,7 +36,6 @@ Vec3f lightPos = Vec3f(0, 5, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
 Vec3f lightOffset; // For movement
 Vec3f matSpecular = Vec3f(0.01, 0.01, 0.1);
 float horizontalAngle = pi_2(), verticalAngle = 0;
-float deltaTime, lastTime;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
 float icoAngle = 0;
 
@@ -46,7 +45,7 @@ void scrollCallback(double x, double y)
     cam->setFieldOfView(cam->getFieldOfView() + 0.1f * y);
 }
 
-void updateCallback()
+void updateCallback(double deltaTime)
 {
     // Update mouse
     double x, y;
@@ -86,12 +85,8 @@ void updateCallback()
     // Drive rotation of icosahedron
     icoAngle += deltaTime;
 
-    // Calculate delta time
-    double currentTime = WindowManager::get()->getTime();
-    deltaTime = float(currentTime - lastTime);
-    lastTime = currentTime;
-
     // Update moving light
+    double currentTime = WindowManager::get()->getTime();
     lightOffset[0] = sin(currentTime) * 3;
     lightOffset[1] = cos(currentTime) * 3;
     lightOffset[2] = -sin(currentTime) * 3;
@@ -145,7 +140,7 @@ int main()
     pShader = new ShaderProgram("DiffSpec.vert", "DiffSpec.frag");
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
-    wnd->addUpdateCallback(std::bind(&updateCallback));
+    wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     wnd->addScrollCallback(
 	    std::bind(&scrollCallback, std::placeholders::_1,
