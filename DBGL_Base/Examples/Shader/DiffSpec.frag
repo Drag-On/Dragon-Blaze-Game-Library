@@ -48,7 +48,7 @@ void main(){
 	float dist = length(v_lightPos_w - oPos_w);
 	oColor = 
 		// Ambient
-		v_ambientLight +
+		v_ambientLight * matDiffuse +
 		// Diffuse
 		matDiffuse * v_lightColor * cosTheta / (dist * dist) +
 		// Specular
