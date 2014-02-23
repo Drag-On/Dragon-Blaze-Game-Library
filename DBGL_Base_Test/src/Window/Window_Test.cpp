@@ -21,7 +21,7 @@
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Texture.h"
-#include "Math/Constants.h"
+#include "Math/Tools.h"
 
 using namespace dbgl;
 

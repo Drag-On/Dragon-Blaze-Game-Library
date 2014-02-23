@@ -87,18 +87,18 @@ int testMatrix4x4()
     assert(std::abs(res[1] - 1) <= 0.01);
     assert(std::abs(res[2] - 0) <= 0.01);
     // makeRotation
-    res = (Matrix4x4<float>::makeRotation(Vector4<float>(0, 1, 0, 0), 1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1.57079633f) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
-    assert(Matrix4x4<float>::makeRotation(Vector4<float>(1, 0, 0, 0), 1) == Matrix4x4<float>::makeRotationX(1));
-    assert(Matrix4x4<float>::makeRotation(Vector4<float>(0, 1, 0, 0), 1) == Matrix4x4<float>::makeRotationY(1));
-    assert(Matrix4x4<float>::makeRotation(Vector4<float>(0, 0, 1, 0), 1) == Matrix4x4<float>::makeRotationZ(1));
-    res = (Matrix4x4<float>::makeRotation(Vector4<float>(0, 1, 0, 0), 1.57079633f) * Vector4<float>(1, 1, 0, 0));// 90°
+    assert(Matrix4x4<float>::makeRotation(Vector3<float>(1, 0, 0), 1) == Matrix4x4<float>::makeRotationX(1));
+    assert(Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1) == Matrix4x4<float>::makeRotationY(1));
+    assert(Matrix4x4<float>::makeRotation(Vector3<float>(0, 0, 1), 1) == Matrix4x4<float>::makeRotationZ(1));
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1.57079633f) * Vector4<float>(1, 1, 0, 0));// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 1) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
-    res = (Matrix4x4<float>::makeRotation(Vector4<float>(1, 1, 0, 0), 1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(1, 1, 0), 1.57079633f) * testVec);// 90°
     assert(std::abs(res[0] - 0.5) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] + 0.7) <= 0.01);

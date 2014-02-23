@@ -8,24 +8,12 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef CONSTANTS_H_
-#define CONSTANTS_H_
+#include "Math/Tools.h"
 
-#include<cmath>
-
-constexpr double pi()
+namespace dbgl
 {
-    return std::atan2(0, -1);
+    bool isSimilar(double a, double b, double precision)
+    {
+	return std::abs(a - b) < precision;
+    }
 }
-
-constexpr double pi_2()
-{
-    return pi() / 2;
-}
-
-constexpr double pi_4()
-{
-    return pi() / 4;
-}
-
-#endif /* CONSTANTS_H_ */

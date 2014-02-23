@@ -1,0 +1,82 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template <typename T> Quaternion<T>::Quaternion(T x, T y, T z, T w)
+	{
+    	_data[0] = x;
+    	_data[1] = y;
+    	_data[2] = z;
+    	_data[3] = w;
+	}
+    
+    template <typename T> Quaternion<T>::Quaternion(Vector4<T> data) : _data(data)
+	{
+	}
+    
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> axis, T angle)
+	{
+    	_data[0] = axis[0] * sin(angle / 2);
+    	_data[1] = axis[1] * sin(angle / 2);
+    	_data[2] = axis[2] * sin(angle / 2);
+    	_data[3] = cos(angle / 2);
+	}
+    
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> angles)
+	{
+    	float cosX_2 = cos(angles[0] / 2);
+		float cosY_2 = cos(angles[1] / 2);
+		float cosZ_2 = cos(angles[2] / 2);
+		float sinX_2 = sin(angles[0] / 2);
+		float sinY_2 = sin(angles[1] / 2);
+		float sinZ_2 = sin(angles[2] / 2);
+		_data[0] = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
+		_data[1] = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
+		_data[2] = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
+		_data[3] = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+	}
+    
+    template <typename T> bool Quaternion<T>::isUnit()
+	{
+    	return (_data[0] == (_data[1] == (_data[2] == 0)) && _data[3] == 1);
+	}
+    
+    template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix()
+	{
+    	Matrix4x4<T> mat;
+	    mat[0][0] = 1 - 2 * (_data[1] * _data[1] + _data[2] * _data[2]); 
+	    mat[0][1] = 2 * (_data[0] * _data[1] + _data[3] * _data[2]);
+	    mat[0][2] = 2 * (_data[0] * _data[2] - _data[3] * _data[1]);
+	    mat[0][3] = 0;
+	    mat[1][0] = 2 * (_data[0] * _data[1] - _data[3] * _data[2]);
+	    mat[1][1] = 1 - 2 * (_data[0] * _data[0] + _data[2] * _data[2]);
+	    mat[1][2] = 2 * (_data[1] * _data[2] + _data[3] * _data[0]);
+	    mat[1][3] = 0;
+	    mat[2][0] = 2 * (_data[0] * _data[2] + _data[3] * _data[1]);
+	    mat[2][1] = 2 * (_data[1] * _data[2]-_data[3] * _data[0]);
+	    mat[2][2] = 1 - 2 * (_data[0] * _data[0] + _data[1] * _data[1]);
+	    mat[2][3] = 0;
+	    mat[3][0] = 0;
+	    mat[3][1] = 0;
+	    mat[3][2] = 0;
+	    mat[3][3] = 1;
+	    return mat;
+	}
+    
+    template <typename T> Vector3<T> Quaternion<T>::getAngles()
+	{
+		Vector3<T> angles;
+		angles[0] = atan2(2 * (_data[1] * _data[2] + _data[3] * _data[0]), _data[3] * _data[3] - _data[0] * _data[0] - _data[1] * _data[1] + _data[2] * _data[2]);
+		angles[1] = asin(-2 * (_data[0] * _data[2] - _data[3] * _data[1]));
+		angles[2] = atan2(2 * (_data[0] * _data[1] + _data[3] * _data[2]), _data[3] * _data[3] + _data[0] * _data[0] - _data[1] * _data[1] - _data[2] * _data[2]);
+		return angles;
+	}
+}
