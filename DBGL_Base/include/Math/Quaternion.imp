@@ -44,6 +44,21 @@ namespace dbgl
 		_data[3] = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
 	}
     
+    template <typename T> bool Quaternion<T>::isSimilar(Quaternion const& other, double precision) const
+	{
+    	if(precision == 0)
+    		return _data == other._data;
+    	else
+    	{
+			for(int i = 0; i < _data.getDimension(); i++)
+			{
+				if(!dbgl::isSimilar(_data[i], other._data[i], precision))
+					return false;
+			}
+    	}
+	    return true;
+	}
+    
     template <typename T> bool Quaternion<T>::isUnit()
 	{
     	return (_data[0] == (_data[1] == (_data[2] == 0)) && _data[3] == 1);
@@ -74,9 +89,109 @@ namespace dbgl
     template <typename T> Vector3<T> Quaternion<T>::getAngles()
 	{
 		Vector3<T> angles;
-		angles[0] = atan2(2 * (_data[1] * _data[2] + _data[3] * _data[0]), _data[3] * _data[3] - _data[0] * _data[0] - _data[1] * _data[1] + _data[2] * _data[2]);
+		angles[0] = atan2(2 * (_data[1] * _data[2] + _data[3] * _data[0]),
+				_data[3] * _data[3] - _data[0] * _data[0] - _data[1] * _data[1] + _data[2] * _data[2]);
 		angles[1] = asin(-2 * (_data[0] * _data[2] - _data[3] * _data[1]));
-		angles[2] = atan2(2 * (_data[0] * _data[1] + _data[3] * _data[2]), _data[3] * _data[3] + _data[0] * _data[0] - _data[1] * _data[1] - _data[2] * _data[2]);
+		angles[2] = atan2(2 * (_data[0] * _data[1] + _data[3] * _data[2]),
+				_data[3] * _data[3] + _data[0] * _data[0] - _data[1] * _data[1] - _data[2] * _data[2]);
 		return angles;
 	}
+    
+    template <typename T> const T Quaternion<T>::dot(Quaternion<T> const& rhs) const
+	{
+		return _data * rhs._data;
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator=(Quaternion<T> const& rhs)
+    {
+	    _data[0] = rhs._data[0];
+	    _data[1] = rhs._data[1];
+	    _data[2] = rhs._data[2];
+	    _data[3] = rhs._data[3];
+	    return *this;
+    }
+    
+    template <typename T> const Quaternion<T> Quaternion<T>::operator+(Quaternion<T> const& rhs) const
+    {
+    	return Quaternion<T>(_data + rhs._data);
+    }
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator+=(Quaternion<T> const& rhs)
+	{
+	    _data += rhs._data;
+	    return *this;
+	}
+    
+    template <typename T> const Quaternion<T> Quaternion<T>::operator-(Quaternion<T> const& rhs) const
+    {
+    	return Quaternion<T>(_data - rhs._data);
+    }
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator-=(Quaternion<T> const& rhs)
+	{
+    	_data -= rhs._data;
+    	return *this;
+	}
+    
+    template <typename T> const Quaternion<T> Quaternion<T>::operator*(Quaternion<T> const& rhs) const
+    {
+    	return (Quaternion<T>(*this) *= rhs);
+    }
+    
+    template <typename T> const Quaternion<T> Quaternion<T>::operator*(T const& rhs) const
+    {
+    	return Quaternion<T>(_data * rhs);
+    }
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator*=(Quaternion<T> const& rhs)
+	{
+    	auto temp = _data;
+    	_data[0] = temp[3] * rhs._data[3] - temp[0] * rhs._data[0] - temp[1] * rhs._data[1] - temp[2] * rhs._data[2];
+    	_data[1] = temp[3] * rhs._data[0] + temp[0] * rhs._data[3] + temp[1] * rhs._data[2] - temp[2] * rhs._data[1];
+    	_data[2] = temp[3] * rhs._data[1] + temp[1] * rhs._data[3] + temp[2] * rhs._data[0] - temp[0] * rhs._data[2];
+    	_data[3] = temp[3] * rhs._data[2] + temp[2] * rhs._data[3] + temp[0] * rhs._data[1] - temp[1] * rhs._data[0];
+    	return *this;
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator*=(T const& rhs)
+	{
+	    _data *= rhs;
+	    return *this;
+	}
+    
+    template <typename T> const Quaternion<T> Quaternion<T>::operator/(T const& rhs) const
+    {
+    	return (Quaternion<T>(*this)/=rhs);
+    }
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::operator/=(T const& rhs)
+	{
+	    _data /= rhs;
+	    return *this;
+	}
+    
+    template <typename T> Quaternion<T> Quaternion<T>::operator-() const
+    {
+    	return Quaternion<T>(-_data);
+    }
+    
+    template <typename T> bool Quaternion<T>::operator==(Quaternion<T> const& rhs) const
+	{
+	    return _data == rhs._data;
+	}
+    
+    template <typename T> bool Quaternion<T>::operator!=(Quaternion<T> const& rhs) const
+	{
+	    return !((*this)==rhs);
+	}
+    
+    template <typename T> T& Quaternion<T>::operator[](std::size_t const& index)
+    {
+    	return _data[index];
+    }
+    
+    template <typename T> const T& Quaternion<T>::operator[](std::size_t const& index) const
+    {
+    	return _data[index];
+    }
 }

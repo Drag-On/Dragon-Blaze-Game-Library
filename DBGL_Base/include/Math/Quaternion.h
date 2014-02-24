@@ -15,6 +15,7 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
+#include "Tools.h"
 
 namespace dbgl
 {
@@ -49,6 +50,13 @@ namespace dbgl
 	     */
 	    Quaternion(Vector3<T> angles);
 	    /**
+	     * @brief Checks, if this quaternion is similar to the passed one
+	     * @param other Other quaternion
+	     * @param precision How close they need to be
+	     * @return True in case they are similar, oherwise false
+	     */
+	    bool isSimilar(Quaternion const& other, double precision = 0.1) const;
+	    /**
 	     * @brief Checks if this is a unit quaternion and does no rotation at all
 	     * @return True in case it's unit, otherwise false
 	     */
@@ -63,6 +71,29 @@ namespace dbgl
 	     * @return Euler angles executing the same rotation as this quaternion
 	     */
 	    Vector3<T> getAngles();
+	    /**
+	     * @brief Calculates the dot product
+	     * @param rhs Other quaternion to calculate dot product with
+	     * @return Dot product
+	     */
+	    const T dot(Quaternion<T> const& rhs) const;
+	    // Operators
+	    Quaternion<T>& operator=(Quaternion<T> const& rhs);
+	    const Quaternion<T> operator+(Quaternion<T> const& rhs) const;
+	    Quaternion<T>& operator+=(Quaternion<T> const& rhs);
+	    const Quaternion<T> operator-(Quaternion<T> const& rhs) const;
+	    Quaternion<T>& operator-=(Quaternion<T> const& rhs);
+	    const Quaternion<T> operator*(Quaternion<T> const& rhs) const;
+	    const Quaternion<T> operator*(T const& rhs) const;
+	    Quaternion<T>& operator*=(Quaternion<T> const& rhs);
+	    Quaternion<T>& operator*=(T const& rhs);
+	    const Quaternion<T> operator/(T const& rhs) const;
+	    Quaternion<T>& operator/=(T const& rhs);
+	    Quaternion<T> operator-() const;
+	    bool operator==(Quaternion<T> const& rhs) const;
+	    bool operator!=(Quaternion<T> const& rhs) const;
+	    T& operator[](std::size_t const& index);
+	    const T& operator[](std::size_t const& index) const;
 	private:
 	    Vector4<T> _data;
     };

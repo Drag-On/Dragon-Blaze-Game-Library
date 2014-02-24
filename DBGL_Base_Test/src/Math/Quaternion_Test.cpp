@@ -39,9 +39,53 @@ int testQuaternion()
     assert(isSimilar(quat4.getAngles()[0], pi_2()));
     assert(isSimilar(quat4.getAngles()[1], pi_4()));
     assert(isSimilar(quat4.getAngles()[2], 0));
+    // dot
+    assert(isSimilar(quat1.dot(quat2), Vec4f(0,0,0,1) * Vec4f(1, 3, -2.5, 0)));
     LOG->info("OK!");
     LOG->info("Operators... ");
-
+    // =
+    auto temp = quat3;
+    assert(temp.isSimilar(quat3, 0));
+    // +
+    assert((quat2 + quat1).isSimilar(QuatF(1, 3, -2.5, 1)));
+    // +=
+    temp = quat2;
+    temp += quat1;
+    assert(temp.isSimilar(QuatF(1, 3, -2.5, 1)));
+    //-
+    assert((quat2 - quat1).isSimilar(QuatF(1, 3, -2.5, -1)));
+    // -=
+    temp = quat2;
+    temp -= quat1;
+    assert(temp.isSimilar(QuatF(1, 3, -2.5, -1)));
+    // *
+    temp = quat2 * 3;
+    assert(temp.isSimilar(QuatF(Vec4f(1, 3, -2.5, 0)*3)));
+    // *=
+    temp = quat2;
+    temp *= 3;
+    assert(temp.isSimilar(QuatF(Vec4f(1, 3, -2.5, 0)*3)));
+    // /
+    temp = quat2 / 3;
+    assert(temp.isSimilar(QuatF(Vec4f(1, 3, -2.5, 0)/3)));
+    // /=
+    temp = quat2;
+    temp /= 3;
+    assert(temp.isSimilar(QuatF(Vec4f(1, 3, -2.5, 0)/3)));
+    // - (unary)
+    temp = -quat2;
+    assert(temp.isSimilar(QuatF(-Vec4f(1, 3, -2.5, 0))));
+    // ==
+    assert(temp == temp);
+    temp = quat2;
+    assert(temp == quat2);
+    // !=
+    assert(temp != quat4);
+    // []
+    assert(quat2[0] == 1);
+    assert(quat2[1] == 3);
+    assert(quat2[2] == -2.5);
+    assert(quat2[3] == 0);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

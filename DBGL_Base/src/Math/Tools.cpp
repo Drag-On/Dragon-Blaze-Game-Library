@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    bool isSimilar(double a, double b, double precision)
+    bool isSimilar(const double a, const double b, const double precision)
     {
 	return std::abs(a - b) < precision;
     }
