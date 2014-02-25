@@ -36,7 +36,7 @@ namespace dbgl
 	    Quaternion(T x = 0, T y = 0, T z = 0, T w = 1);
 	    /**
 	     * @brief Constructor
-	     * @param data All components as a vector
+	     * @param data All components as a vector in order x, y, z, w
 	     */
 	    Quaternion(Vector4<T> data);
 	    /**
@@ -170,23 +170,70 @@ namespace dbgl
 	     * 	       for the interpolation. Constant speed.
 	     */
 	    Quaternion<T> slerp(Quaternion<T> const& other, T factor) const;
-	    // Operators
+	    /**
+	     * @brief Standard assignment operator
+	     */
 	    Quaternion<T>& operator=(Quaternion<T> const& rhs);
+	    /**
+	     * @brief Standard quaternion addition
+	     */
 	    const Quaternion<T> operator+(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Standard quaternion addition
+	     */
 	    Quaternion<T>& operator+=(Quaternion<T> const& rhs);
+	    /**
+	     * @brief Standard quaternion subtraction
+	     */
 	    const Quaternion<T> operator-(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Standard quaternion subtraction
+	     */
 	    Quaternion<T>& operator-=(Quaternion<T> const& rhs);
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    const Quaternion<T> operator*(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Rotates the vector by this quaternion
+	     */
+	    const Vector4<T> operator*(Vector4<T> const& rhs) const;
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    const Quaternion<T> operator*(T const& rhs) const;
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    Quaternion<T>& operator*=(Quaternion<T> const& rhs);
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    Quaternion<T>& operator*=(T const& rhs);
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    const Quaternion<T> operator/(T const& rhs) const;
+	    /**
+	     * @brief Standard quaternion multiplication
+	     */
 	    Quaternion<T>& operator/=(T const& rhs);
+	    /**
+	     * @brief Inverts the sign of all values
+	     * @warn This is not the same as conjugate()!
+	     */
 	    Quaternion<T> operator-() const;
+	    /**
+	     * @brief Checks for equal values
+	     */
 	    bool operator==(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Checks for equal values
+	     */
 	    bool operator!=(Quaternion<T> const& rhs) const;
-	    T& operator[](std::size_t const& index);
-	    const T& operator[](std::size_t const& index) const;
+	    /**
+	     * @brief Converts to rotation matrix
+	     */
 	    operator Matrix4x4<T>() const;
 	private:
 	    Vector4<T> _data;

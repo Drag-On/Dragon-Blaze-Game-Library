@@ -44,7 +44,8 @@ namespace dbgl
 		_data[3] = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(const Quaternion<T>& other) : Quaternion(other[0], other[1], other[2], other[3])
+    template <typename T> Quaternion<T>::Quaternion(const Quaternion<T>& other)
+    		: Quaternion(other.x(), other.y(), other.z(), other.w())
     {
     }
     
@@ -229,11 +230,10 @@ namespace dbgl
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator=(Quaternion<T> const& rhs)
     {
-
 		if (*this != rhs)
 		{ 
 			for(int i = 0; i < _data.getDimension(); i++)
-				_data[i] = rhs[i];
+				_data[i] = rhs._data[i];
 		} 
 		return *this;
     }
@@ -263,6 +263,17 @@ namespace dbgl
     template <typename T> const Quaternion<T> Quaternion<T>::operator*(Quaternion<T> const& rhs) const
     {
     	return (Quaternion<T>(*this) *= rhs);
+    }
+    
+    template <typename T> const Vector4<T> Quaternion<T>::operator*(Vector4<T> const& rhs) const
+    {
+    	Vector4<T> cross1, cross2;
+    	auto quatVec = Vector4<T>(x(), y(), z());
+    	cross1 = quatVec.getCrossProduct(rhs);
+    	cross2 = quatVec.getCrossProduct(cross1);
+		cross1 *= (2 * w()); 
+		cross2 *= 2;
+		return rhs + cross1 + cross2;
     }
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator*(T const& rhs) const
@@ -311,16 +322,6 @@ namespace dbgl
 	{
 	    return !((*this)==rhs);
 	}
-    
-    template <typename T> T& Quaternion<T>::operator[](std::size_t const& index)
-    {
-    	return _data[index];
-    }
-    
-    template <typename T> const T& Quaternion<T>::operator[](std::size_t const& index) const
-    {
-    	return _data[index];
-    }
     
     template <typename T> Quaternion<T>::operator Matrix4x4<T>() const
 	{
