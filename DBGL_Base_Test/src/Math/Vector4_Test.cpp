@@ -42,14 +42,14 @@ int testVector4()
 	LOG->info("Methods... ");
 	// getDimension()
 	assert(vec.getDimension() == 4);
-	// getX()
-	assert(vec2.getX() == -1.5);
-	// getY()
-	assert(vec2.getY() == 3);
-	// getZ()
-	assert(vec2.getZ() == 15);
-	// getW()
-	assert(vec2.getW() == -9);
+	// x()
+	assert(vec2.x() == -1.5);
+	// y()
+	assert(vec2.y() == 3);
+	// z()
+	assert(vec2.z() == 15);
+	// w()
+	assert(vec2.w() == -9);
 	// getSquaredLength()
 	assert(vec2.getSquaredLength() == vec2[0]*vec2[0] + vec2[1]*vec2[1] + vec2[2]*vec2[2] + vec2[3]*vec2[3]);
 	// getLength()
@@ -126,8 +126,8 @@ int testVector4()
 	// >=
 	assert(vec2 >= vec);
 	// []
-	assert(vec2[0] == vec2.getX());
-	assert(vec2[1] == vec2.getY());
+	assert(vec2[0] == vec2.x());
+	assert(vec2[1] == vec2.y());
 	// *
 	vec3 = vec3 * 2;
 	assert(vec3[0] == -6);

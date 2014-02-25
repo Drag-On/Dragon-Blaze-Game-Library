@@ -56,11 +56,19 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Returns the vector's first element
 	    /// </summary>
-	    T getX() const;
+	    const T& x() const;
+	    /// <summary>
+	    /// @brief Returns the vector's first element
+	    /// </summary>
+	    T& x();
 	    /// <summary>
 	    /// @brief Returns the vector's second element
 	    /// </summary>
-	    T getY() const;
+	    const T& y() const;
+	    /// <summary>
+	    /// @brief Returns the vector's second element
+	    /// </summary>
+	    T& y();
 	    /// <summary>
 	    /// @brief Returns the squared length of this vector
 	    /// </summary>

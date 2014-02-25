@@ -31,12 +31,22 @@ namespace dbgl
 		return 2;
 	}
 	
-	template<typename T> T Vector2<T>::getX() const
+	template<typename T> const T& Vector2<T>::x() const
 	{
 		return _x;
 	}
 	
-	template<typename T> T Vector2<T>::getY() const
+	template<typename T> T& Vector2<T>::x()
+	{
+		return _x;
+	}
+	
+	template<typename T> const T& Vector2<T>::y() const
+	{
+		return _y;
+	}
+	
+	template<typename T> T& Vector2<T>::y()
 	{
 		return _y;
 	}

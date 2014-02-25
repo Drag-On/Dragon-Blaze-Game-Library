@@ -31,22 +31,42 @@ namespace dbgl
 		return 4;
 	}
 	
-	template<typename T> T Vector4<T>::getX() const
+	template<typename T> const T& Vector4<T>::x() const
 	{
 		return _x;
 	}
 	
-	template<typename T> T Vector4<T>::getY() const
+	template<typename T> T& Vector4<T>::x()
+	{
+		return _x;
+	}
+	
+	template<typename T> const T& Vector4<T>::y() const
 	{
 		return _y;
 	}
 	
-	template<typename T> T Vector4<T>::getZ() const
+	template<typename T> T& Vector4<T>::y()
+	{
+		return _y;
+	}
+	
+	template<typename T> const T& Vector4<T>::z() const
 	{
 		return _z;
 	}
 	
-	template<typename T> T Vector4<T>::getW() const
+	template<typename T> T& Vector4<T>::z()
+	{
+		return _z;
+	}
+	
+	template<typename T> const T& Vector4<T>::w() const
+	{
+		return _w;
+	}
+	
+	template<typename T> T& Vector4<T>::w()
 	{
 		return _w;
 	}
