@@ -17,7 +17,7 @@
 #include "Math/Quaternion.h"
 #include "Math/Matrix4x4.h"
 #include "Math/Vector4.h"
-#include "Math/Tools.h"
+#include "Math/Utility.h"
 
 using namespace dbgl;
 

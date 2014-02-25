@@ -8,12 +8,22 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "Math/Tools.h"
+#include "Math/Utility.h"
 
 namespace dbgl
 {
-    bool isSimilar(const double a, const double b, const double precision)
+    bool isSimilar(float a, float b, float precision)
     {
 	return std::abs(a - b) < precision;
+    }
+
+    template<typename T> T toRadians(T degrees)
+    {
+	return degrees * (pi() / 180);
+    }
+
+    template<typename T> T toDegrees(T radians)
+    {
+	return radians * (180 / pi());
     }
 }

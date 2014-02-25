@@ -19,7 +19,7 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
 #include "Math/Vector3.h"
-#include "Math/Tools.h"
+#include "Math/Utility.h"
 
 using namespace dbgl;
 

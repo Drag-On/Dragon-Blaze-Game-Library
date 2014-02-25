@@ -64,7 +64,19 @@ namespace dbgl
      * @param precision How close they need to be
      * @return True in case they are similar, otherwise false
      */
-    bool isSimilar(double a, double b, double precision = 0.01);
+    bool isSimilar(float a, float b, float precision = 0.01);
+    /**
+     * @brief Converts degrees into radians
+     * @param degrees Angle to convert
+     * @return The angle in radians
+     */
+    template<typename T> T toRadians(T degrees);
+    /**
+     * @brief Converts radians into degrees
+     * @param radians Angle to convert
+     * @return The angle in degrees
+     */
+    template<typename T> T toDegrees(T radians);
 }
 
 #endif /* TOOLS_H_ */
