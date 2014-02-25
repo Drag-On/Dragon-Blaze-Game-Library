@@ -39,12 +39,24 @@ int testQuaternion()
     assert(isSimilar(quat4.getAngles()[0], pi_2()));
     assert(isSimilar(quat4.getAngles()[1], pi_4()));
     assert(isSimilar(quat4.getAngles()[2], 0));
+    // getSquaredLength
+    assert(quat1.getSquaredLength() == 1);
+    // getLength
+    assert(quat1.getLength() == 1);
+    assert(isSimilar(quat2.getLength(), std::sqrt(1*1 + 3*3 +2.5*2.5)));
+    assert(isSimilar(quat3.getLength(), std::sqrt(quat3[0]*quat3[0] + quat3[1]*quat3[1] + quat3[2]*quat3[2] + quat3[3]*quat3[3])));
+    assert(isSimilar(quat4.getLength(), std::sqrt(quat4[0]*quat4[0] + quat4[1]*quat4[1] + quat4[2]*quat4[2] + quat4[3]*quat4[3])));
+    // getNormalized
+    assert(isSimilar(quat4.getNormalized().getLength(), 1));
+    // normalize
+    auto temp = quat4;
+    assert(isSimilar(temp.normalize().getLength(), 1));
     // dot
     assert(isSimilar(quat1.dot(quat2), Vec4f(0,0,0,1) * Vec4f(1, 3, -2.5, 0)));
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =
-    auto temp = quat3;
+    temp = quat3;
     assert(temp.isSimilar(quat3, 0));
     // +
     assert((quat2 + quat1).isSimilar(QuatF(1, 3, -2.5, 1)));

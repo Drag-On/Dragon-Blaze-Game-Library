@@ -44,6 +44,10 @@ namespace dbgl
 		_data[3] = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
 	}
     
+    template <typename T> Quaternion<T>::Quaternion(const Quaternion<T>& other) : Quaternion(other[0], other[1], other[2], other[3])
+    {
+    }
+    
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion const& other, double precision) const
 	{
     	if(precision == 0)
@@ -59,12 +63,12 @@ namespace dbgl
 	    return true;
 	}
     
-    template <typename T> bool Quaternion<T>::isUnit()
+    template <typename T> bool Quaternion<T>::isUnit() const
 	{
     	return (_data[0] == (_data[1] == (_data[2] == 0)) && _data[3] == 1);
 	}
     
-    template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix()
+    template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix() const
 	{
     	Matrix4x4<T> mat;
 	    mat[0][0] = 1 - 2 * (_data[1] * _data[1] + _data[2] * _data[2]); 
@@ -86,7 +90,7 @@ namespace dbgl
 	    return mat;
 	}
     
-    template <typename T> Vector3<T> Quaternion<T>::getAngles()
+    template <typename T> Vector3<T> Quaternion<T>::getAngles() const
 	{
 		Vector3<T> angles;
 		angles[0] = atan2(2 * (_data[1] * _data[2] + _data[3] * _data[0]),
@@ -97,6 +101,29 @@ namespace dbgl
 		return angles;
 	}
     
+    template <typename T> T Quaternion<T>::getSquaredLength() const
+    {
+    	return _data.getSquaredLength();
+    }
+
+    template <typename T>T Quaternion<T>::getLength() const
+	{
+		return _data.getLength();
+	}
+    
+    template <typename T> Quaternion<T> Quaternion<T>::getNormalized() const
+	{
+    	Quaternion<T> temp(*this);
+    	temp.normalize();
+	    return temp;
+	}
+
+    template <typename T> Quaternion<T>& Quaternion<T>::normalize()
+	{
+	    _data.normalize();
+	    return *this;
+	}
+    
     template <typename T> const T Quaternion<T>::dot(Quaternion<T> const& rhs) const
 	{
 		return _data * rhs._data;
@@ -104,11 +131,13 @@ namespace dbgl
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator=(Quaternion<T> const& rhs)
     {
-	    _data[0] = rhs._data[0];
-	    _data[1] = rhs._data[1];
-	    _data[2] = rhs._data[2];
-	    _data[3] = rhs._data[3];
-	    return *this;
+
+		if (*this != rhs)
+		{ 
+			for(int i = 0; i < _data.getDimension(); i++)
+				_data[i] = rhs[i];
+		} 
+		return *this;
     }
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator+(Quaternion<T> const& rhs) const

@@ -50,27 +50,50 @@ namespace dbgl
 	     */
 	    Quaternion(Vector3<T> angles);
 	    /**
+	     * @brief Copy constructor
+	     * @param other Quaternion to copy
+	     */
+	    Quaternion(const Quaternion<T>& other);
+	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
 	     * @param precision How close they need to be
 	     * @return True in case they are similar, oherwise false
 	     */
-	    bool isSimilar(Quaternion const& other, double precision = 0.1) const;
+	    bool isSimilar(Quaternion const& other,
+		    double precision = 0.1) const;
 	    /**
 	     * @brief Checks if this is a unit quaternion and does no rotation at all
 	     * @return True in case it's unit, otherwise false
 	     */
-	    bool isUnit();
+	    bool isUnit() const;
 	    /**
 	     * @brief Converts this quaternion to a rotation matrix
 	     * @return The matrix executing the same rotation as this quaternion
 	     */
-	    Matrix4x4<T> getMatrix();
+	    Matrix4x4<T> getMatrix() const;
 	    /**
 	     * @brief Converts this quaternion into euler angles
 	     * @return Euler angles executing the same rotation as this quaternion
 	     */
-	    Vector3<T> getAngles();
+	    Vector3<T> getAngles() const;
+	    /**
+	     * @return Squared euklidean length of the underlying vector
+	     */
+	    T getSquaredLength() const;
+	    /**
+	     * @return Euklidean length of the underlying vector
+	     */
+	    T getLength() const;
+	    /**
+	     * @return A normalized version of this quaternion
+	     */
+	    Quaternion<T> getNormalized() const;
+	    /**
+	     * @brief Normalizes this quaternion
+	     * @return Reference to this quaternion
+	     */
+	    Quaternion<T>& normalize();
 	    /**
 	     * @brief Calculates the dot product
 	     * @param rhs Other quaternion to calculate dot product with
