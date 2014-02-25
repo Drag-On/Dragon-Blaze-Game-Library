@@ -12,6 +12,7 @@
 #define QUATERNION_H_
 
 #include <cmath>
+#include <limits>
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
@@ -55,6 +56,38 @@ namespace dbgl
 	     */
 	    Quaternion(const Quaternion<T>& other);
 	    /**
+	     * @return Reference to x value
+	     */
+	    T& x();
+	    /**
+	     * @return Reference to x value
+	     */
+	    const T& x() const;
+	    /**
+	     * @return Reference to y value
+	     */
+	    T& y();
+	    /**
+	     * @return Reference to y value
+	     */
+	    const T& y() const;
+	    /**
+	     * @return Reference to z value
+	     */
+	    T& z();
+	    /**
+	     * @return Reference to z value
+	     */
+	    const T& z() const;
+	    /**
+	     * @return Reference to w value
+	     */
+	    T& w();
+	    /**
+	     * @return Reference to w value
+	     */
+	    const T& w() const;
+	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
 	     * @param precision How close they need to be
@@ -95,11 +128,48 @@ namespace dbgl
 	     */
 	    Quaternion<T>& normalize();
 	    /**
+	     * @return A conjugated copy
+	     */
+	    Quaternion<T> getConjugated() const;
+	    /**
+	     * @brief Conjugates this quaternion
+	     * @return Reference to this quaternion
+	     */
+	    Quaternion<T>& conjugate();
+	    /**
+	     * @return An inverted copy of this quaternion
+	     */
+	    Quaternion<T> getInverted() const;
+	    /**
+	     * @brief Inverts this quaternion
+	     * @return Reference to this quaternion
+	     */
+	    Quaternion<T>& invert();
+	    /**
 	     * @brief Calculates the dot product
 	     * @param rhs Other quaternion to calculate dot product with
 	     * @return Dot product
 	     */
 	    const T dot(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Linear interpolation of two quaternions
+	     * @param other Quaternion to interpolate with
+	     * @param factor Factor of interpolation in the [0, 1] range
+	     * @return A new quaternion interpolated out of this one and other
+	     * @detail The interpolation is oriented. If a factor out of range is
+	     * 	       passed, a warning is written to LOG and it is cropped to
+	     * 	       the closest number (0 or 1).
+	     */
+	    Quaternion<T> lerp(Quaternion<T> const& other, T factor) const;
+	    /**
+	     * @brief Sperical linear interpolation of two quaternions
+	     * @param other Quaternion to interpolate with
+	     * @param factor Factor of interpolation, defined for any real
+	     * @return A new quaternion interpolated out of this one and other
+	     * @detail This method guarantees to always use the shortest path
+	     * 	       for the interpolation. Constant speed.
+	     */
+	    Quaternion<T> slerp(Quaternion<T> const& other, T factor) const;
 	    // Operators
 	    Quaternion<T>& operator=(Quaternion<T> const& rhs);
 	    const Quaternion<T> operator+(Quaternion<T> const& rhs) const;
@@ -117,6 +187,7 @@ namespace dbgl
 	    bool operator!=(Quaternion<T> const& rhs) const;
 	    T& operator[](std::size_t const& index);
 	    const T& operator[](std::size_t const& index) const;
+	    operator Matrix4x4<T>() const;
 	private:
 	    Vector4<T> _data;
     };

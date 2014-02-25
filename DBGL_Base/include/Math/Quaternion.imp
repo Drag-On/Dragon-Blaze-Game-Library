@@ -48,6 +48,46 @@ namespace dbgl
     {
     }
     
+    template <typename T> T& Quaternion<T>::x()
+	{
+	    return _data[0];
+	}
+    
+    template <typename T> const T& Quaternion<T>::x() const
+	{
+		return _data[0];
+	}
+
+    template <typename T> T& Quaternion<T>::y()
+	{
+	    return _data[1];
+	}
+    
+    template <typename T> const T& Quaternion<T>::y() const
+	{
+	    return _data[1];
+	}
+
+    template <typename T> T& Quaternion<T>::z()
+	{
+		return _data[2];
+	}
+    
+    template <typename T> const T& Quaternion<T>::z() const
+	{
+		return _data[2];
+	}
+
+    template <typename T> T& Quaternion<T>::w()
+	{
+	    return _data[3];
+	}
+    
+    template <typename T> const T& Quaternion<T>::w() const
+	{
+	    return _data[3];
+	}
+    
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion const& other, double precision) const
 	{
     	if(precision == 0)
@@ -65,23 +105,23 @@ namespace dbgl
     
     template <typename T> bool Quaternion<T>::isUnit() const
 	{
-    	return (_data[0] == (_data[1] == (_data[2] == 0)) && _data[3] == 1);
+    	return getSquaredLength() == 1;
 	}
     
     template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix() const
 	{
     	Matrix4x4<T> mat;
-	    mat[0][0] = 1 - 2 * (_data[1] * _data[1] + _data[2] * _data[2]); 
-	    mat[0][1] = 2 * (_data[0] * _data[1] + _data[3] * _data[2]);
-	    mat[0][2] = 2 * (_data[0] * _data[2] - _data[3] * _data[1]);
+	    mat[0][0] = 1 - 2 * (y() * y() + z() * z()); 
+	    mat[0][1] = 2 * (x() * y() + w() * z());
+	    mat[0][2] = 2 * (x() * z() - w() * y());
 	    mat[0][3] = 0;
-	    mat[1][0] = 2 * (_data[0] * _data[1] - _data[3] * _data[2]);
-	    mat[1][1] = 1 - 2 * (_data[0] * _data[0] + _data[2] * _data[2]);
-	    mat[1][2] = 2 * (_data[1] * _data[2] + _data[3] * _data[0]);
+	    mat[1][0] = 2 * (x() * y() - w() * z());
+	    mat[1][1] = 1 - 2 * (x() * x() + z() * z());
+	    mat[1][2] = 2 * (y() * z() + w() * x());
 	    mat[1][3] = 0;
-	    mat[2][0] = 2 * (_data[0] * _data[2] + _data[3] * _data[1]);
-	    mat[2][1] = 2 * (_data[1] * _data[2]-_data[3] * _data[0]);
-	    mat[2][2] = 1 - 2 * (_data[0] * _data[0] + _data[1] * _data[1]);
+	    mat[2][0] = 2 * (x() * z() + w() * y());
+	    mat[2][1] = 2 * (y() * z()-w() * x());
+	    mat[2][2] = 1 - 2 * (x() * x() + y() * y());
 	    mat[2][3] = 0;
 	    mat[3][0] = 0;
 	    mat[3][1] = 0;
@@ -93,11 +133,11 @@ namespace dbgl
     template <typename T> Vector3<T> Quaternion<T>::getAngles() const
 	{
 		Vector3<T> angles;
-		angles[0] = atan2(2 * (_data[1] * _data[2] + _data[3] * _data[0]),
-				_data[3] * _data[3] - _data[0] * _data[0] - _data[1] * _data[1] + _data[2] * _data[2]);
-		angles[1] = asin(-2 * (_data[0] * _data[2] - _data[3] * _data[1]));
-		angles[2] = atan2(2 * (_data[0] * _data[1] + _data[3] * _data[2]),
-				_data[3] * _data[3] + _data[0] * _data[0] - _data[1] * _data[1] - _data[2] * _data[2]);
+		angles[0] = atan2(2 * (y() * z() + w() * x()),
+				w() * w() - x() * x() - y() * y() + z() * z());
+		angles[1] = asin(-2 * (x() * z() - w() * y()));
+		angles[2] = atan2(2 * (x() * y() + w() * z()),
+				w() * w() + x() * x() - y() * y() - z() * z());
 		return angles;
 	}
     
@@ -113,9 +153,7 @@ namespace dbgl
     
     template <typename T> Quaternion<T> Quaternion<T>::getNormalized() const
 	{
-    	Quaternion<T> temp(*this);
-    	temp.normalize();
-	    return temp;
+	    return Quaternion<T>(*this).normalize();
 	}
 
     template <typename T> Quaternion<T>& Quaternion<T>::normalize()
@@ -124,9 +162,69 @@ namespace dbgl
 	    return *this;
 	}
     
+    template <typename T> Quaternion<T> Quaternion<T>::getConjugated() const
+	{
+	    return Quaternion<T>(*this).conjugate();
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::conjugate()
+	{
+	    x() = -x();
+	    y() = -y();
+	    z() = -z();
+	    return *this;
+	}
+    
+    template <typename T> Quaternion<T> Quaternion<T>::getInverted() const
+	{
+    	return Quaternion<T>(*this).invert();
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::invert()
+	{
+    	return conjugate() /= getSquaredLength();
+	}
+    
     template <typename T> const T Quaternion<T>::dot(Quaternion<T> const& rhs) const
 	{
 		return _data * rhs._data;
+	}
+    
+    template <typename T> Quaternion<T> Quaternion<T>::lerp(Quaternion<T> const& other, T factor) const
+	{
+    	// Check if factor is valid
+    	if(factor < 0 || factor > 1)
+    	{
+    		LOG->warning("Quaternion lerp factor out of range!");
+    		factor = (factor < 0) ? 0 : 1;
+    	}
+    	return (*this) * (1 - factor) + (other * factor);
+	}
+    
+    template <typename T> Quaternion<T> Quaternion<T>::slerp(Quaternion<T> const& other, T factor) const
+	{
+    	auto copy = other;
+		T dotProd = dot(copy);
+		// Always use shortest path, so invert one quaternion if dotProd < 0
+		if (dotProd < 0)
+		{
+			copy = -copy;
+			dotProd = -dotProd;
+		}
+		// If angle is small use linear interpolation to avoid sin(1) == 0
+		if(dotProd > 1 - std::numeric_limits<T>::epsilon())
+		{
+			return Quaternion<T>(w() + factor * (copy.w() - w()),
+					x() + factor * (copy.x() - x()),
+					y() + factor * (copy.y() - y()),
+					z() + factor * (copy.z() - z()));
+		}
+		else
+		{
+			T angle = std::acos(dotProd);
+			return ((*this) * std::sin((1 - factor) * angle) +
+					copy * std::sin(factor * angle)) / std::sin(angle);
+		}
 	}
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator=(Quaternion<T> const& rhs)
@@ -175,10 +273,10 @@ namespace dbgl
     template <typename T> Quaternion<T>& Quaternion<T>::operator*=(Quaternion<T> const& rhs)
 	{
     	auto temp = _data;
-    	_data[0] = temp[3] * rhs._data[3] - temp[0] * rhs._data[0] - temp[1] * rhs._data[1] - temp[2] * rhs._data[2];
-    	_data[1] = temp[3] * rhs._data[0] + temp[0] * rhs._data[3] + temp[1] * rhs._data[2] - temp[2] * rhs._data[1];
-    	_data[2] = temp[3] * rhs._data[1] + temp[1] * rhs._data[3] + temp[2] * rhs._data[0] - temp[0] * rhs._data[2];
-    	_data[3] = temp[3] * rhs._data[2] + temp[2] * rhs._data[3] + temp[0] * rhs._data[1] - temp[1] * rhs._data[0];
+    	x() = temp[3] * rhs.w() - temp[0] * rhs.x() - temp[1] * rhs.y() - temp[2] * rhs.z();
+    	y() = temp[3] * rhs.x() + temp[0] * rhs.w() + temp[1] * rhs.z() - temp[2] * rhs.y();
+    	z() = temp[3] * rhs.y() + temp[1] * rhs.w() + temp[2] * rhs.x() - temp[0] * rhs.z();
+    	w() = temp[3] * rhs.z() + temp[2] * rhs.w() + temp[0] * rhs.y() - temp[1] * rhs.x();
     	return *this;
 	}
     
@@ -223,4 +321,9 @@ namespace dbgl
     {
     	return _data[index];
     }
+    
+    template <typename T> Quaternion<T>::operator Matrix4x4<T>() const
+	{
+	    return getMatrix();
+	}
 }
