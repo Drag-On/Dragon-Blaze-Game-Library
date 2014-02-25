@@ -30,11 +30,32 @@ namespace dbgl
 	return pi() / 2;
     }
     /**
+     * @return PI / 3
+     */
+    constexpr double pi_3()
+    {
+	return pi() / 3;
+    }
+    /**
      * @return PI / 4
      */
     constexpr double pi_4()
     {
 	return pi() / 4;
+    }
+    /**
+     * @return sqrt(PI)
+     */
+    constexpr double sqrtPi()
+    {
+	return std::sqrt(pi());
+    }
+    /**
+     * @return golden ratio
+     */
+    constexpr double goldenRatio()
+    {
+	return 1.61803398874989484820458683436563811;
     }
     /**
      * @brief Checks if two values are similar
