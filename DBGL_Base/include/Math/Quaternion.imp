@@ -24,24 +24,17 @@ namespace dbgl
     
     template <typename T> Quaternion<T>::Quaternion(Vector3<T> const& axis, T angle)
 	{
-    	x() = axis.x() * sin(angle / 2);
-    	y() = axis.y() * sin(angle / 2);
-    	z() = axis.z() * sin(angle / 2);
-    	w() = cos(angle / 2);
+    	fromAngleAxis(axis, angle);
 	}
     
     template <typename T> Quaternion<T>::Quaternion(Vector3<T> const& angles)
 	{
-    	float cosX_2 = cos(angles[0] / 2);
-		float cosY_2 = cos(angles[1] / 2);
-		float cosZ_2 = cos(angles[2] / 2);
-		float sinX_2 = sin(angles[0] / 2);
-		float sinY_2 = sin(angles[1] / 2);
-		float sinZ_2 = sin(angles[2] / 2);
-		x() = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
-		y() = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
-		z() = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
-		w() = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+    	fromAngles(angles);
+	}
+    
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> start, Vector3<T> dest)
+	{
+		fromVectors(start, dest);
 	}
     
     template <typename T> Quaternion<T>::Quaternion(Quaternion<T> const& other)
@@ -87,6 +80,57 @@ namespace dbgl
     template <typename T> const T& Quaternion<T>::w() const
 	{
 	    return _data[3];
+	}
+    
+    template <typename T> void Quaternion<T>::fromAngleAxis(Vector3<T> const& axis, T angle)
+	{
+    	x() = axis.x() * sin(angle / 2);
+		y() = axis.y() * sin(angle / 2);
+		z() = axis.z() * sin(angle / 2);
+		w() = cos(angle / 2);
+	}
+    
+    template <typename T> void Quaternion<T>::fromAngles(Vector3<T> const& angles)
+	{
+    	float cosX_2 = cos(angles[0] / 2);
+		float cosY_2 = cos(angles[1] / 2);
+		float cosZ_2 = cos(angles[2] / 2);
+		float sinX_2 = sin(angles[0] / 2);
+		float sinY_2 = sin(angles[1] / 2);
+		float sinZ_2 = sin(angles[2] / 2);
+		x() = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
+		y() = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
+		z() = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
+		w() = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+	}
+    
+    template <typename T> void Quaternion<T>::fromVectors(Vector3<T> start, Vector3<T> dest)
+	{
+    	start.normalize();
+		dest.normalize();
+	 
+		float cosTheta = start * dest;
+		Vector3<T> axis;
+	 
+		// Check if vectors are in opposite direction
+		if (dbgl::isSimilar(cosTheta, -1))
+		{
+			// Guess a random axis
+			axis = start.getCrossProduct(Vector3<T>(1, 0, 0));
+			if (dbgl::isSimilar(axis.getSquaredLength(), 0)) // Dammit!
+				axis = start.getCrossProduct(Vector3<T>(0, 1, 0));
+			axis.normalize();
+			// Initialize
+			fromAngleAxis(axis, pi_2());
+		}
+		// If not parallel everything's easier
+		axis = start.getCrossProduct(dest);
+		T s = std::sqrt((1 + cosTheta) * 2);
+	 
+		x() = axis.x() * 1 / s;
+		y() = axis.y() * 1 / s;
+		z() = axis.z() * 1 / s;
+		w() = s * 0.5;
 	}
     
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion<T> const& other, double precision) const

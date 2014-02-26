@@ -29,6 +29,10 @@ int testQuaternion()
     QuatF quat2 = QuatF(1, 3, -2.5, 0);
     QuatF quat3 = QuatF(Vec3f(1, 0, 0), pi());
     QuatF quat4 = QuatF(Vec3f(pi_2(), pi_4(), 0));
+    QuatF quat5 = QuatF(Vec3f(1, 0, 0), Vec3f(0, 1, 0));
+    assert(quat5.getAngles().x() == 0);
+    assert(quat5.getAngles().y() == 0);
+    assert(isSimilar(quat5.getAngles().z(), pi_2()));
     LOG->info("OK!");
     LOG->info("Methods... ");
     // x, y, z, w

@@ -47,9 +47,15 @@ namespace dbgl
 	    Quaternion(Vector3<T> const& axis, T angle);
 	    /**
 	     * @brief Constructor
-	     * @param angles Angles around x, y and z
+	     * @param angles Angles around x, y and z in radians
 	     */
 	    Quaternion(Vector3<T> const& angles);
+	    /**
+	     * @brief Constructs a quaternion such that it rotates start onto dest
+	     * @param start Start vector
+	     * @param end End vector
+	     */
+	    Quaternion(Vector3<T> start, Vector3<T> dest);
 	    /**
 	     * @brief Copy constructor
 	     * @param other Quaternion to copy
@@ -87,6 +93,23 @@ namespace dbgl
 	     * @return Reference to w value
 	     */
 	    const T& w() const;
+	    /**
+	     * @brief Initializes this quaternion from an axis and an angle
+	     * @param axis Axis to rotate around
+	     * @param angle Angle in radians
+	     */
+	    void fromAngleAxis(Vector3<T> const& axis, T angle);
+	    /**
+	     * @brief Initializes this quaternion from an angles around x, y and z
+	     * @param angles Angles around x, y and z in radians
+	     */
+	    void fromAngles(Vector3<T> const& angles);
+	    /**
+	     * @brief Initializes this quaternion such that it rotates start onto dest
+	     * @param start Start vector
+	     * @param end End vector
+	     */
+	    void fromVectors(Vector3<T> start, Vector3<T> dest);
 	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
