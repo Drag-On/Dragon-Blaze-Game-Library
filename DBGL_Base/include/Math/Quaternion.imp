@@ -12,25 +12,25 @@ namespace dbgl
 {
     template <typename T> Quaternion<T>::Quaternion(T x, T y, T z, T w)
 	{
-    	_data[0] = x;
-    	_data[1] = y;
-    	_data[2] = z;
-    	_data[3] = w;
+    	this->x() = x;
+    	this->y() = y;
+    	this->z() = z;
+    	this->w() = w;
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(Vector4<T> data) : _data(data)
+    template <typename T> Quaternion<T>::Quaternion(Vector4<T> const& data) : _data(data)
 	{
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(Vector3<T> axis, T angle)
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> const& axis, T angle)
 	{
-    	_data[0] = axis[0] * sin(angle / 2);
-    	_data[1] = axis[1] * sin(angle / 2);
-    	_data[2] = axis[2] * sin(angle / 2);
-    	_data[3] = cos(angle / 2);
+    	x() = axis.x() * sin(angle / 2);
+    	y() = axis.y() * sin(angle / 2);
+    	z() = axis.z() * sin(angle / 2);
+    	w() = cos(angle / 2);
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(Vector3<T> angles)
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> const& angles)
 	{
     	float cosX_2 = cos(angles[0] / 2);
 		float cosY_2 = cos(angles[1] / 2);
@@ -38,13 +38,13 @@ namespace dbgl
 		float sinX_2 = sin(angles[0] / 2);
 		float sinY_2 = sin(angles[1] / 2);
 		float sinZ_2 = sin(angles[2] / 2);
-		_data[0] = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
-		_data[1] = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
-		_data[2] = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
-		_data[3] = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+		x() = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
+		y() = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
+		z() = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
+		w() = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(const Quaternion<T>& other)
+    template <typename T> Quaternion<T>::Quaternion(Quaternion<T> const& other)
     		: Quaternion(other.x(), other.y(), other.z(), other.w())
     {
     }
@@ -89,7 +89,7 @@ namespace dbgl
 	    return _data[3];
 	}
     
-    template <typename T> bool Quaternion<T>::isSimilar(Quaternion const& other, double precision) const
+    template <typename T> bool Quaternion<T>::isSimilar(Quaternion<T> const& other, double precision) const
 	{
     	if(precision == 0)
     		return _data == other._data;
@@ -102,6 +102,11 @@ namespace dbgl
 			}
     	}
 	    return true;
+	}
+    
+    template <typename T> bool Quaternion<T>::isSimilarRot(Quaternion<T> const& other, double precision) const
+	{
+    	return (dbgl::isSimilar(dot(other) - 1, 0, precision));
 	}
     
     template <typename T> bool Quaternion<T>::isUnit() const

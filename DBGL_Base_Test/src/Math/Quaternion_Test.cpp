@@ -68,21 +68,23 @@ int testQuaternion()
     assert(isSimilar(temp.z(), -quat2.z()));
     assert(isSimilar(temp.w(), quat2.w()));
     // getInverted
-    temp = quat2.getInverted() * quat2;
     assert((quat2.getInverted() * quat2).isSimilar(QuatF(1,0,0,0)));
     // invert
+    temp = quat2;
+    temp.invert();
+    assert((quat2 * temp).isSimilar(QuatF(1,0,0,0)));
     // dot
     assert(isSimilar(quat1.dot(quat2), Vec4f(0,0,0,1) * Vec4f(1, 3, -2.5, 0)));
     // lerp
     assert(quat1.lerp(quat2, 0) == quat1);
     assert(quat1.lerp(quat2, 1) == quat2);
     assert(quat1.lerp(quat2, 2) == quat2);
-    assert(quat1.lerp(quat2, 0.5).isSimilar(QuatF(0.5, 1.5, -1.25, 0.5)));
+    temp = QuatF(Vec3f(1, 0, 0), 0);
+    auto temp2 = QuatF(Vec3f(1, 0, 0), pi_2());
+    assert(temp.lerp(temp2, 0.5).isSimilar(QuatF(Vec3f(1, 0, 0), pi_4())));
     // slerp
     assert(quat1.slerp(quat2, 0) == quat1);
     assert(quat1.slerp(quat2, 1) == quat2);
-    temp = QuatF(Vec3f(1, 0, 0), 0);
-    auto temp2 = QuatF(Vec3f(1, 0, 0), pi_2());
     assert(temp.slerp(temp2, 0.5).isSimilar(QuatF(Vec3f(1, 0, 0), pi_4())));
     LOG->info("OK!");
     LOG->info("Operators... ");

@@ -38,23 +38,23 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param data All components as a vector in order x, y, z, w
 	     */
-	    Quaternion(Vector4<T> data);
+	    Quaternion(Vector4<T> const& data);
 	    /**
 	     * @brief Constructor
 	     * @param axis Axis to rotate around
 	     * @param angle Angle in radians
 	     */
-	    Quaternion(Vector3<T> axis, T angle);
+	    Quaternion(Vector3<T> const& axis, T angle);
 	    /**
 	     * @brief Constructor
 	     * @param angles Angles around x, y and z
 	     */
-	    Quaternion(Vector3<T> angles);
+	    Quaternion(Vector3<T> const& angles);
 	    /**
 	     * @brief Copy constructor
 	     * @param other Quaternion to copy
 	     */
-	    Quaternion(const Quaternion<T>& other);
+	    Quaternion(Quaternion<T> const& other);
 	    /**
 	     * @return Reference to x value
 	     */
@@ -93,7 +93,15 @@ namespace dbgl
 	     * @param precision How close they need to be
 	     * @return True in case they are similar, oherwise false
 	     */
-	    bool isSimilar(Quaternion const& other,
+	    bool isSimilar(Quaternion<T> const& other,
+		    double precision = 0.1) const;
+	    /**
+	     * @brief Checks, if this quaternion resembles a similar rotation to other
+	     * @param other Other quaternion
+	     * @param precision How close they need to be
+	     * @return True in case they are similar, oherwise false
+	     */
+	    bool isSimilarRot(Quaternion<T> const& other,
 		    double precision = 0.1) const;
 	    /**
 	     * @brief Checks if this is a unit quaternion and does no rotation at all
