@@ -246,6 +246,11 @@ namespace dbgl
 		return _data * rhs._data;
 	}
     
+    template <typename T> Quaternion<T> Quaternion<T>::cross(Quaternion<T> const& rhs) const
+	{
+	    return (*this) * rhs;
+	}
+    
     template <typename T> Quaternion<T> Quaternion<T>::lerp(Quaternion<T> const& other, T factor) const
 	{
     	// Check if factor is valid

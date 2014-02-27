@@ -182,9 +182,15 @@ namespace dbgl
 	    /**
 	     * @brief Calculates the dot product
 	     * @param rhs Other quaternion to calculate dot product with
-	     * @return Dot product
+	     * @return Result of dot product
 	     */
 	    const T dot(Quaternion<T> const& rhs) const;
+	    /**
+	     * @brief Calculates the cross product
+	     * @param rhs Other quaternion to calculate cross product with
+	     * @return Result of cross product
+	     */
+	    Quaternion<T> cross(Quaternion<T> const& rhs) const;
 	    /**
 	     * @brief Linear interpolation of two quaternions
 	     * @param other Quaternion to interpolate with
