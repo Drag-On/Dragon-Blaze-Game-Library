@@ -82,15 +82,17 @@ namespace dbgl
 	    return _data[3];
 	}
     
-    template <typename T> void Quaternion<T>::fromAngleAxis(Vector3<T> const& axis, T angle)
+    template <typename T> Quaternion<T>& Quaternion<T>::fromAngleAxis(Vector3<T> const& axis, T angle)
 	{
     	x() = axis.x() * sin(angle / 2);
 		y() = axis.y() * sin(angle / 2);
 		z() = axis.z() * sin(angle / 2);
 		w() = cos(angle / 2);
+		
+		return *this;
 	}
     
-    template <typename T> void Quaternion<T>::fromAngles(Vector3<T> const& angles)
+    template <typename T> Quaternion<T>& Quaternion<T>::fromAngles(Vector3<T> const& angles)
 	{
     	float cosX_2 = cos(angles[0] / 2);
 		float cosY_2 = cos(angles[1] / 2);
@@ -102,9 +104,11 @@ namespace dbgl
 		y() = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
 		z() = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
 		w() = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+		
+		return *this;
 	}
     
-    template <typename T> void Quaternion<T>::fromVectors(Vector3<T> start, Vector3<T> dest)
+    template <typename T> Quaternion<T>& Quaternion<T>::fromVectors(Vector3<T> start, Vector3<T> dest)
 	{
     	start.normalize();
 		dest.normalize();
@@ -131,6 +135,8 @@ namespace dbgl
 		y() = axis.y() * 1 / s;
 		z() = axis.z() * 1 / s;
 		w() = s * 0.5;
+		
+		return *this;
 	}
     
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion<T> const& other, double precision) const
@@ -275,6 +281,46 @@ namespace dbgl
 			return ((*this) * std::sin((1 - factor) * angle) +
 					copy * std::sin(factor * angle)) / std::sin(angle);
 		}
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::rotateTowards(Quaternion<T> other, T maxAngle)
+	{
+		// Prevent division by 0
+		if(maxAngle < 2 * std::numeric_limits<T>::epsilon())
+			return *this;
+	 
+		float cosTheta = dot(other);
+		
+		// Already equal?
+		if(cosTheta > 1 - std::numeric_limits<T>::epsilon())
+		{
+			_data = other._data;
+			return *this;
+		}
+	 
+		// Force shortest path
+		if (cosTheta < 0)
+		{
+			(*this) *= -1;
+			cosTheta *= -1;
+		}
+	 
+		float angle = std::acos(cosTheta);
+	 
+		// Already there?
+		if (angle < maxAngle)
+		{
+			_data = other._data;
+			return *this;
+		}
+	 
+		float phase = maxAngle / angle;
+		angle = maxAngle;
+	 
+		*this = ((*this) * std::sin((1 - phase) * angle) + other * std::sin(phase * angle)) /
+				std::sin(angle);
+		
+		return normalize();
 	}
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator=(Quaternion<T> const& rhs)

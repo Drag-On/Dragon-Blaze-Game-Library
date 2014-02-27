@@ -90,6 +90,11 @@ int testQuaternion()
     assert(quat1.slerp(quat2, 0) == quat1);
     assert(quat1.slerp(quat2, 1) == quat2);
     assert(temp.slerp(temp2, 0.5).isSimilar(QuatF(Vec3f(1, 0, 0), pi_4())));
+    // rotateTowards
+    temp = QuatF(Vec3f(pi_2(), 0, 0));
+    temp2 = QuatF(Vec3f(0, 0, 0));
+    assert(temp.rotateTowards(temp2, pi_2()).isSimilar(temp2));
+    assert(temp2.rotateTowards(temp, pi_4()).isSimilarRot(QuatF(pi_4(), 0, 0)));
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =

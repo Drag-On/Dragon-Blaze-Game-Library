@@ -97,19 +97,22 @@ namespace dbgl
 	     * @brief Initializes this quaternion from an axis and an angle
 	     * @param axis Axis to rotate around
 	     * @param angle Angle in radians
+	     * @returns Reference to this quaternion
 	     */
-	    void fromAngleAxis(Vector3<T> const& axis, T angle);
+	    Quaternion<T>& fromAngleAxis(Vector3<T> const& axis, T angle);
 	    /**
 	     * @brief Initializes this quaternion from an angles around x, y and z
 	     * @param angles Angles around x, y and z in radians
+	     * @returns Reference to this quaternion
 	     */
-	    void fromAngles(Vector3<T> const& angles);
+	    Quaternion<T>& fromAngles(Vector3<T> const& angles);
 	    /**
 	     * @brief Initializes this quaternion such that it rotates start onto dest
 	     * @param start Start vector
 	     * @param end End vector
+	     * @returns Reference to this quaternion
 	     */
-	    void fromVectors(Vector3<T> start, Vector3<T> dest);
+	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest);
 	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
@@ -201,6 +204,13 @@ namespace dbgl
 	     * 	       for the interpolation. Constant speed.
 	     */
 	    Quaternion<T> slerp(Quaternion<T> const& other, T factor) const;
+	    /**
+	     * @brief Interpolates this quaternion so that it becomes more similar to other
+	     * @param other Rotation to interpolate to
+	     * @param maxAngle Maximum angle to rotate by
+	     * @returns Reference to this quaternion
+	     */
+	    Quaternion<T>& rotateTowards(Quaternion<T> other, T maxAngle);
 	    /**
 	     * @brief Standard assignment operator
 	     */
