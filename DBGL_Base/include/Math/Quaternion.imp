@@ -365,6 +365,17 @@ namespace dbgl
     	return (Quaternion<T>(*this) *= rhs);
     }
     
+    template <typename T> const Vector3<T> Quaternion<T>::operator*(Vector3<T> const& rhs) const
+	{
+    	Vector3<T> cross1, cross2;
+		auto quatVec = Vector3<T>(x(), y(), z());
+		cross1 = quatVec.getCrossProduct(rhs);
+		cross2 = quatVec.getCrossProduct(cross1);
+		cross1 *= (2 * w()); 
+		cross2 *= 2;
+		return rhs + cross1 + cross2;
+	}
+    
     template <typename T> const Vector4<T> Quaternion<T>::operator*(Vector4<T> const& rhs) const
     {
     	Vector4<T> cross1, cross2;
@@ -384,10 +395,10 @@ namespace dbgl
     template <typename T> Quaternion<T>& Quaternion<T>::operator*=(Quaternion<T> const& rhs)
 	{
     	auto temp = _data;
-    	x() = temp[3] * rhs.w() - temp[0] * rhs.x() - temp[1] * rhs.y() - temp[2] * rhs.z();
-    	y() = temp[3] * rhs.x() + temp[0] * rhs.w() + temp[1] * rhs.z() - temp[2] * rhs.y();
-    	z() = temp[3] * rhs.y() + temp[1] * rhs.w() + temp[2] * rhs.x() - temp[0] * rhs.z();
-    	w() = temp[3] * rhs.z() + temp[2] * rhs.w() + temp[0] * rhs.y() - temp[1] * rhs.x();
+    	x() = temp.w() * rhs.x() + temp.x() * rhs.w() + temp.y() * rhs.z() - temp.z() * rhs.y();
+    	y() = temp.w() * rhs.y() + temp.y() * rhs.w() + temp.z() * rhs.x() - temp.x() * rhs.z();
+    	z() = temp.w() * rhs.z() + temp.z() * rhs.w() + temp.x() * rhs.y() - temp.y() * rhs.x();
+    	w() = temp.w() * rhs.w() - temp.x() * rhs.x() - temp.y() * rhs.y() - temp.z() * rhs.z();
     	return *this;
 	}
     

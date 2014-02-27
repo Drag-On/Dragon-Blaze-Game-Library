@@ -244,6 +244,10 @@ namespace dbgl
 	    /**
 	     * @brief Rotates the vector by this quaternion
 	     */
+	    const Vector3<T> operator*(Vector3<T> const& rhs) const;
+	    /**
+	     * @brief Rotates the vector by this quaternion
+	     */
 	    const Vector4<T> operator*(Vector4<T> const& rhs) const;
 	    /**
 	     * @brief Standard quaternion multiplication
