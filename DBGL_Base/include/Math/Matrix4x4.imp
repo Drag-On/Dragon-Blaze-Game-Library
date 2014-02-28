@@ -330,9 +330,9 @@ namespace dbgl
 		f.normalize();
 		auto u = up;
 		u.normalize();
-		auto s = f.getCrossProduct(u);
+		auto s = f.cross(u);
 		s.normalize();
-		u = s.getCrossProduct(f);
+		u = s.cross(f);
 
 		(*this)[0][0] = s[0];
 		(*this)[1][0] = s[1];

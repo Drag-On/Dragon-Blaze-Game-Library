@@ -495,7 +495,7 @@ namespace dbgl
 			    - vertices[vertexIndices[firstIndex + 1]];
 		    Vec3f dir2 = vertices[vertexIndices[firstIndex + 2]]
 			    - vertices[vertexIndices[firstIndex + 1]];
-		    normal = dir2.getCrossProduct(dir1).normalize();
+		    normal = dir2.cross(dir1).normalize();
 		}
 		// If the vertex has not been added yet, add it and the appropriate normals and uvs
 		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]],

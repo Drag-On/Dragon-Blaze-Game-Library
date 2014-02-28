@@ -89,7 +89,12 @@ namespace dbgl
 		return copy;
 	}
 	
-	template<typename T> Vector3<T> Vector3<T>::getCrossProduct(Vector3<T> const& rhs) const
+	template<typename T> T Vector3<T>::dot(Vector3<T> const& rhs) const
+	{
+		return (*this) * rhs;
+	}
+	
+	template<typename T> Vector3<T> Vector3<T>::cross(Vector3<T> const& rhs) const
 	{
 		Vector3<T> copy(*this);
 		copy *= rhs;

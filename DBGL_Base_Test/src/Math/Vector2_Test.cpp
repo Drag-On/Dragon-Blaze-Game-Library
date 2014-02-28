@@ -50,9 +50,9 @@ int testVector2()
     // normalize
     vec2.normalize();
     assert(vec2.getLength() >= 0.99f && vec2.getLength() <= 1.01f);
-    // getCrossProduct
+    // cross
     vec3[0] = -1;
-    temp = vec2.getCrossProduct(vec3);
+    temp = vec2.cross(vec3);
     assert(temp[0] == vec2[1]*vec3[0] - vec2[0]*vec3[1]);
     assert(temp[1] == vec2[0]*vec3[1] - vec2[1]*vec3[0]);
     // isZero

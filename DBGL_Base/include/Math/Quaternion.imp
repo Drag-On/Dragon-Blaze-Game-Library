@@ -120,15 +120,15 @@ namespace dbgl
 		if (dbgl::isSimilar(cosTheta, -1))
 		{
 			// Guess a random axis
-			axis = start.getCrossProduct(Vector3<T>(1, 0, 0));
+			axis = start.cross(Vector3<T>(1, 0, 0));
 			if (dbgl::isSimilar(axis.getSquaredLength(), 0)) // Dammit!
-				axis = start.getCrossProduct(Vector3<T>(0, 1, 0));
+				axis = start.cross(Vector3<T>(0, 1, 0));
 			axis.normalize();
 			// Initialize
 			fromAngleAxis(axis, pi_2());
 		}
 		// If not parallel everything's easier
-		axis = start.getCrossProduct(dest);
+		axis = start.cross(dest);
 		T s = std::sqrt((1 + cosTheta) * 2);
 	 
 		x() = axis.x() * 1 / s;
@@ -369,8 +369,8 @@ namespace dbgl
 	{
     	Vector3<T> cross1, cross2;
 		auto quatVec = Vector3<T>(x(), y(), z());
-		cross1 = quatVec.getCrossProduct(rhs);
-		cross2 = quatVec.getCrossProduct(cross1);
+		cross1 = quatVec.cross(rhs);
+		cross2 = quatVec.cross(cross1);
 		cross1 *= (2 * w()); 
 		cross2 *= 2;
 		return rhs + cross1 + cross2;
@@ -380,8 +380,8 @@ namespace dbgl
     {
     	Vector4<T> cross1, cross2;
     	auto quatVec = Vector4<T>(x(), y(), z());
-    	cross1 = quatVec.getCrossProduct(rhs);
-    	cross2 = quatVec.getCrossProduct(cross1);
+    	cross1 = quatVec.cross(rhs);
+    	cross2 = quatVec.cross(cross1);
 		cross1 *= (2 * w()); 
 		cross2 *= 2;
 		return rhs + cross1 + cross2;

@@ -86,10 +86,15 @@ namespace dbgl
 	    /// </summary>
 	    Vector2<T> getNormalized() const;
 	    /// <summary>
+	    /// @brief Returns a new vector that is the dot product of
+	    ///	       this vector and the passed vector
+	    /// </summary>
+	    T dot(Vector2<T> const& rhs) const;
+	    /// <summary>
 	    /// @brief Returns a new vector that is the cross product of
 	    ///	       this vector and the passed vector
 	    /// </summary>
-	    Vector2<T> getCrossProduct(Vector2<T> const& rhs) const;
+	    Vector2<T> cross(Vector2<T> const& rhs) const;
 	    /// <summary>
 	    /// @brief Checks if all components are zero
 	    /// </summary>
