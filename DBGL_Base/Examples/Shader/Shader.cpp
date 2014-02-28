@@ -20,6 +20,7 @@
 #include "Rendering/Camera.h"
 #include "Math/Vector3.h"
 #include "Math/Utility.h"
+#include "Math/Quaternion.h"
 
 using namespace dbgl;
 
@@ -31,11 +32,10 @@ ShaderProgram* pShader;
 Texture* pTexture;
 Mat4f modelMat;
 Camera* cam;
-Vec3f direction, right;
+QuatF camRotation(Vec3f(0.1f, pi_2(), 0)), smoothRotation;
 Vec3f lightPos = Vec3f(0, 5, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
 Vec3f lightOffset; // For movement
 Vec3f matSpecular = Vec3f(0.01, 0.01, 0.1);
-float horizontalAngle = pi_2(), verticalAngle = 0;
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
 float icoAngle = 0;
 
@@ -50,19 +50,16 @@ void updateCallback(double deltaTime)
     // Update mouse
     double x, y;
     wnd->getCursorPos(x, y);
-    horizontalAngle += deltaTime * mouseSpeed
+    float horizontalAngle = deltaTime * mouseSpeed
 	    * float(wnd->getFrameWidth() / 2 - x);
-    verticalAngle += deltaTime * mouseSpeed
+    float verticalAngle = deltaTime * mouseSpeed
 	    * float(wnd->getFrameHeight() / 2 - y);
-    // Front vector
-    direction = Vec3f(cos(verticalAngle) * sin(horizontalAngle),
-	    sin(verticalAngle), cos(verticalAngle) * cos(horizontalAngle));
-    // Right vector
-    right = Vec3f(sin(horizontalAngle - pi_2()), 0,
-	    cos(horizontalAngle - pi_2()));
-    // Up vector
-    Vec3f up = right.getCrossProduct(direction);
-    // Set
+    camRotation = QuatF(Vec3f(0, horizontalAngle, 0)) * camRotation
+	    * QuatF(Vec3f(-verticalAngle, 0, 0));
+    // Camera vectors
+    Vec3f direction = camRotation * Vec3f(0, 0, 1);
+    Vec3f right = camRotation * Vec3f(-1, 0, 0);
+    Vec3f up = camRotation * Vec3f(0, 1, 0);
     cam->target() = cam->position() + direction;
     cam->up() = up;
     // Reset mouse position to center of the screen
