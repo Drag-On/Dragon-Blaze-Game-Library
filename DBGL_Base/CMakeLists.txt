@@ -42,6 +42,11 @@ if(WIN32)
 	set (GLFW_LIB_NAME "glfw3dll.a")
 	set (GLFW_DLL_NAME "glfw3.dll")
 elseif(UNIX)
+	set (DBGL_DLL_NAME "libDBGL_Base.so")
+	set (GLEW_LIB_NAME "libGLEW.so")
+	set (GLEW_DLL_NAME "libGLEW.so")
+	set (GLFW_LIB_NAME "libglfw.so")
+	set (GLFW_DLL_NAME "libglfw.so")
 endif()
  
 ######################################################################

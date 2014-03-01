@@ -11,3 +11,5 @@ CMakeCache.txt
 *.exe
 Logfile.txt
 *.a
+*.so
+DBGL_BASE_*
