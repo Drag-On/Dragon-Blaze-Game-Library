@@ -1,47 +1,108 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
-PROJECT (DBGL_Base C CXX)
-# The version number.
-SET (DBGL_VERSION_MAJOR 0)
-SET (DBGL_VERSION_MINOR 1)
+######################################################################
+### Dragon Blaze Game Library
+###
+### Copyright (c) 2014 by Jan Moeller
+###
+### This software is provided "as-is" and does not claim to be
+### complete or free of bugs in any way. It should work, but
+### it might also begin to hurt your kittens.
+######################################################################
+
+######################################################################
+### Main library cmake compilation file
+######################################################################
+cmake_minimum_required (VERSION 2.6)
+project (DBGL_BASE C CXX)
+
+######################################################################
+### Configure compilation details
+######################################################################
+
+#set (CMAKE_BUILD_TYPE Release)
+
+set (DBGL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 			# Path to own headers
+set (DBGL_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 	# Path to own library file
+set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glew/lib/") 		# Path to GLEW library file
+set (GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glew/include") # Path to GLEW headers
+set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/src/") 		# Path to GLFW library file
+set (GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/include") # Path to GLFW headers
+
+set (DBGL_VERSION_MAJOR 0)
+set (DBGL_VERSION_MINOR 1)
+set (DBGL_VERSION_ADD 0)
+set (DBGL_VERSION_FULL "${DBGL_VERSION_MAJOR}.${DBGL_VERSION_MINOR}.${DBGL_VERSION_ADD}")
+
+######################################################################
+### Platform specific stuff
+######################################################################
+if(WIN32)
+	set (DBGL_DLL_NAME "libDBGL_Base.dll")
+	set (GLEW_LIB_NAME "libglew32.dll.a")
+	set (GLEW_DLL_NAME "glew32.dll")
+	set (GLFW_LIB_NAME "glfw3dll.a")
+	set (GLFW_DLL_NAME "glfw3.dll")
+elseif(UNIX)
+endif()
  
-# configure a header file to pass some of the CMake settings
-# to the source code
-CONFIGURE_FILE (
-  "${PROJECT_SOURCE_DIR}/include/DBGL_Base_Config.h.in"
-  "${PROJECT_SOURCE_DIR}/include/DBGL_Base_Config.h"
+######################################################################
+### Make header file
+######################################################################
+configure_file (
+  "${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h.in"
+  "${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h"
   )
 
-# enable C++11
-IF(CMAKE_COMPILER_IS_GNUCXX)
-    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -std=gnu++0x")
-ENDIF()
+######################################################################
+### Compiler flags
+######################################################################
+# GCC
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++11 -std=gnu++0x") # C++11
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -Wextra -O0")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O3")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+# TODO: Other compilers
  
-# add the library
-FILE(GLOB_RECURSE Base_Src
+######################################################################
+### Project code files
+######################################################################
+file(GLOB_RECURSE BASE_SRC
     "include/*.h"
     "src/*.cpp"
 )
 
-# include the right directory
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/lib/glfw/include")
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/lib/glew/include")
+######################################################################
+### Include directories
+######################################################################
+include_directories(${DBGL_INCLUDE_DIR})
+include_directories(${GLEW_INCLUDE_DIR})
+include_directories(${GLFW_INCLUDE_DIR})
 
-# OpenGL
-FIND_PACKAGE(OpenGL)
-IF (OPENGL_FOUND)
-	MESSAGE("OpenGL Correctly Found")
-	INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
-ELSE (OPENGL_FOUND)
-	MESSAGE("OpenGL environment missing")
-ENDIF (OPENGL_FOUND)
+######################################################################
+### Find OpenGL
+######################################################################
+find_package(OpenGL)
+if (OPENGL_FOUND)
+	include_directories(${OPENGL_INCLUDE_DIR})
+else (OPENGL_FOUND)
+	message("OpenGL environment missing")
+endif (OPENGL_FOUND)
 
-ADD_LIBRARY(DBGL_Base SHARED ${Base_Src})
-TARGET_LINK_LIBRARIES(DBGL_Base "${PROJECT_SOURCE_DIR}/lib/glew/lib/libglew32.dll.a")
-TARGET_LINK_LIBRARIES(DBGL_Base "${PROJECT_SOURCE_DIR}/lib/glfw/src/glfw3dll.a")
-TARGET_LINK_LIBRARIES(DBGL_Base "${OPENGL_LIBRARIES}")
-SET_TARGET_PROPERTIES(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
+######################################################################
+### Make target
+######################################################################
+add_library(DBGL_Base SHARED ${BASE_SRC})
+set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
 
-# External examples
+######################################################################
+### Link libraries
+######################################################################
+target_link_libraries(DBGL_Base "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
+target_link_libraries(DBGL_Base "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
+target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
+
+######################################################################
+### Compile sub projects
+######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
 				 "${PROJECT_SOURCE_DIR}/Examples/")
