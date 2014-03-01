@@ -105,9 +105,9 @@ int main()
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid();
     pMeshBox = Mesh::makeCube();
-    pMeshIco = Mesh::load("Ikosaeder.obj", Mesh::OBJ);
+    pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ);
     pShader = ShaderProgram::createSimpleShader();
-    pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "Bricks01.DDS");
+    pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
