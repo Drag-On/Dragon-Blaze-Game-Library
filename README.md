@@ -12,6 +12,7 @@ Dragon-Blaze-Game-Library
 - perl
 - xorg-dev
 - libglu1-mesa-dev
+
 ### Commands
 Execute the following commands in a shell:
 - cd /some/folder/
@@ -30,5 +31,6 @@ Execute the following commands in a shell:
 - cd Release
 - cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release ../
 - make
+
 ## Windows
 TBD
