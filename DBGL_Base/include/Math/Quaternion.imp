@@ -37,6 +37,11 @@ namespace dbgl
 		fromVectors(start, dest);
 	}
     
+    template <typename T> Quaternion<T>::Quaternion(Vector3<T> start, Vector3<T> dest, Vector3<T> up)
+	{
+		fromVectors(start, dest, up);
+	}
+    
     template <typename T> Quaternion<T>::Quaternion(Quaternion<T> const& other)
     		: Quaternion(other.x(), other.y(), other.z(), other.w())
     {
@@ -94,16 +99,17 @@ namespace dbgl
     
     template <typename T> Quaternion<T>& Quaternion<T>::fromAngles(Vector3<T> const& angles)
 	{
-    	float cosX_2 = cos(angles[0] / 2);
-		float cosY_2 = cos(angles[1] / 2);
-		float cosZ_2 = cos(angles[2] / 2);
-		float sinX_2 = sin(angles[0] / 2);
-		float sinY_2 = sin(angles[1] / 2);
-		float sinZ_2 = sin(angles[2] / 2);
-		x() = cosZ_2 * cosY_2 * sinX_2 - sinZ_2 * sinY_2 * cosX_2;
-		y() = cosZ_2 * sinY_2 * cosX_2 + sinZ_2 * cosY_2 * sinX_2;
-		z() = sinZ_2 * cosY_2 * cosX_2 - cosZ_2 * sinY_2 * sinX_2;
-		w() = cosZ_2 * cosY_2 * cosX_2 + sinZ_2 * sinY_2 * sinX_2;
+    	T cosXHalf = std::cos(angles.x() / 2);
+    	T cosYHalf = std::cos(angles.y() / 2);
+    	T cosZHalf = std::cos(angles.z() / 2);
+    	T sinXHalf = std::sin(angles.x() / 2);
+		T sinYHalf = std::sin(angles.y() / 2);
+		T sinZHalf = std::sin(angles.z() / 2);
+		
+		w() = cosXHalf * cosYHalf * cosZHalf + sinXHalf * sinYHalf * sinZHalf;
+		x() = sinXHalf * cosYHalf * cosZHalf - cosXHalf * sinYHalf * sinZHalf;
+		y() = cosXHalf * sinYHalf * cosZHalf + sinXHalf * cosYHalf * sinZHalf;
+		z() = cosXHalf * cosYHalf * sinZHalf - sinXHalf * sinYHalf * cosZHalf;
 		
 		return *this;
 	}
@@ -136,7 +142,19 @@ namespace dbgl
 		z() = axis.z() * 1 / s;
 		w() = s * 0.5;
 		
+		normalize();
 		return *this;
+	}
+    
+    template <typename T> Quaternion<T>& Quaternion<T>::fromVectors(Vector3<T> start, Vector3<T> dest, Vector3<T> up)
+	{
+    	up.normalize();
+    	// Rotate as usual
+    	fromVectors(start, dest);
+    	// Check new up vector and rotate again
+    	Vector3<T> newUp = (*this) * Vector3<T>(0, 1, 0);
+    	Quaternion<T> rot2(newUp, up);
+		return *this = rot2 * (*this);
 	}
     
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion<T> const& other, double precision) const
@@ -165,24 +183,17 @@ namespace dbgl
 	}
     
     template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix() const
-	{
+	{   	
     	Matrix4x4<T> mat;
-	    mat[0][0] = 1 - 2 * (y() * y() + z() * z()); 
-	    mat[0][1] = 2 * (x() * y() + w() * z());
-	    mat[0][2] = 2 * (x() * z() - w() * y());
-	    mat[0][3] = 0;
-	    mat[1][0] = 2 * (x() * y() - w() * z());
-	    mat[1][1] = 1 - 2 * (x() * x() + z() * z());
-	    mat[1][2] = 2 * (y() * z() + w() * x());
-	    mat[1][3] = 0;
-	    mat[2][0] = 2 * (x() * z() + w() * y());
-	    mat[2][1] = 2 * (y() * z()-w() * x());
-	    mat[2][2] = 1 - 2 * (x() * x() + y() * y());
-	    mat[2][3] = 0;
-	    mat[3][0] = 0;
-	    mat[3][1] = 0;
-	    mat[3][2] = 0;
-	    mat[3][3] = 1;
+	    mat[0][0] = 1 - 2 * y() * y() - 2 * z() * z();
+	    mat[0][1] = 2 * x() * y() + 2 * w() * z();
+	    mat[0][2] = 2 * x() * z() - 2 * w() * y();
+	    mat[1][0] = 2 * x() * y() - 2 * w() * z();
+	    mat[1][1] = 1 - 2 * x() * x() - 2 * z() * z();
+	    mat[1][2] = 2 * y() * z() + 2 * w() * x();
+	    mat[2][0] = 2 * x() * z() + 2 * w() * y();
+	    mat[2][1] = 2 * y() * z() - 2 * w() * x();
+	    mat[2][2] = 1 - 2 * x() * x() - 2 * y() * y();
 	    return mat;
 	}
     
@@ -378,13 +389,9 @@ namespace dbgl
     
     template <typename T> const Vector4<T> Quaternion<T>::operator*(Vector4<T> const& rhs) const
     {
-    	Vector4<T> cross1, cross2;
-    	auto quatVec = Vector4<T>(x(), y(), z());
-    	cross1 = quatVec.cross(rhs);
-    	cross2 = quatVec.cross(cross1);
-		cross1 *= (2 * w()); 
-		cross2 *= 2;
-		return rhs + cross1 + cross2;
+    	Vector3<T> result(rhs.x(), rhs.y(), rhs.z());
+    	result = (*this) * result;
+		return Vector4<T>(result.x(), result.y(), result.z(), rhs.w());
     }
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator*(T const& rhs) const

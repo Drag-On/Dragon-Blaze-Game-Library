@@ -13,6 +13,7 @@
 
 #include "Math/Vector3.h"
 #include "Math/Matrix4x4.h"
+#include "Math/Quaternion.h"
 
 namespace dbgl
 {
@@ -25,26 +26,49 @@ namespace dbgl
 	    /**
 	     * @brief Constructor
 	     * @param position Camera position
-	     * @param target Target position to focus
+	     * @param direction Direction to look at
 	     * @param up Vector defining where "up" is
 	     * @param fieldOfView Opening angle
 	     * @param near Near clipping plane
 	     * @param far Far clipping plane
 	     */
-	    Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView, float near, float far);
+	    Camera(Vec3f position, Vec3f direction, Vec3f up, float fieldOfView, float near, float far);
+	    /**
+	     * @brief Constructor
+	     * @param position Camera position
+	     * @param orientation Initial camera rotation
+	     * @param fieldOfView Opening angle
+	     * @param near Near clipping plane
+	     * @param far Far clipping plane
+	     */
+	    Camera(Vec3f position, QuatF orientation, float fieldOfView, float near, float far);
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Camera();
 	    /**
 	     * @return Position
 	     */
 	    Vec3f& position();
 	    /**
-	     * @return Target
+	     * @return Rotation
 	     */
-	    Vec3f& target();
+	    QuatF& rotation();
 	    /**
-	     * @return Up vector
+	     * @brief Provides vectors pointing from the camera towards the target and up.
+	     * 	      They are copied into the provided arguments
+	     * @details One or more arguments may be passed as NULL
+	     * @param direction Pointing from the camera to the target
+	     * @param up Defines the up direction of the camera
+	     * @param right Pointing to the right of the camera
 	     */
-	    Vec3f& up();
+	    void getOrientation(Vec3f* direction, Vec3f* up, Vec3f* right) const;
+	    /**
+	     * @param Modifies this cams orientation by using vectors
+	     * @param direction New direction
+	     * @param up Up vector
+	     */
+	    void setOrientation(Vec3f const& direction, Vec3f const& up);
 	    /**
 	     * @return Opening angle
 	     */
@@ -70,7 +94,8 @@ namespace dbgl
 	     */
 	    void setFar(float far);
 	private:
-	    Vec3f _position, _target, _up;
+	    Vec3f _position;
+	    QuatF _rotation;
 	    float _fieldOfView, _near, _far;
     };
 }

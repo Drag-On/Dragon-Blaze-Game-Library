@@ -27,22 +27,34 @@ int testQuaternion()
     LOG->info("Constructors... ");
     QuatF quat1;
     QuatF quat2 = QuatF(1, 3, -2.5, 0);
-    QuatF quat3 = QuatF(Vec3f(1, 0, 0), pi());
+    QuatF quat3 = QuatF(Vec3f(1, 0, 0), pi_2());
     QuatF quat4 = QuatF(Vec3f(pi_2(), pi_4(), 0));
     QuatF quat5 = QuatF(Vec3f(1, 0, 0), Vec3f(0, 1, 0));
+    QuatF quat6 = QuatF(Vec3f(1, 0, 0), Vec3f(1, 1, 0), Vec3f(1, 1, 0).cross(Vec3f(1, 0, 0)));
     assert(quat5.getAngles().x() == 0);
     assert(quat5.getAngles().y() == 0);
     assert(isSimilar(quat5.getAngles().z(), pi_2()));
+    assert((quat5 * Vec3f(1, 0, 0)).isSimilar(Vec3f(0, 1, 0)));
+    assert((quat5 * Vec3f(0, 1, 0)).isSimilar(Vec3f(-1, 0, 0)));
+    assert((quat5 * Vec3f(1, 1, 0)).isSimilar(Vec3f(-1, 1, 0)));
+    assert((quat6 * Vec3f(1, 0, 0)).isSimilar(Vec3f(1, 1, 0).normalize()));
+    assert((quat6 * Vec3f(0, 1, 0)).isSimilar(Vec3f(1, 1, 0).cross(Vec3f(1, 0, 0).normalize())));
     LOG->info("OK!");
     LOG->info("Methods... ");
     // x, y, z, w
     auto temp = quat1;
     temp.x() = 1;
     assert(temp.x() == 1);
+    // fromVectors
+    temp.fromVectors(Vec3f(0.3, -1.1, 0.5), Vec3f(-0.1, 1, 0.7));
+    assert((temp * Vec3f(0.3, -1.1, 0.5).normalize()).isSimilar(Vec3f(-0.1, 1, 0.7).normalize()));
     // isUnit
     assert(quat1.isUnit());
+    assert(!quat2.isUnit());
     // getMatrix
-    assert(quat3.getMatrix() == Mat4f::makeRotationX(pi()));
+    assert((Mat4f::makeRotationX(pi_2()) * Vec4f(0, 1, 0, 0)).isSimilar(quat3.getMatrix() * Vec4f(0, 1, 0, 0)));
+    assert((Mat4f::makeRotation(pi_2(), pi_4(), 0) * Vec4f(0, 0, 1, 0)).isSimilar(quat4.getMatrix() * Vec4f(0, 0, 1, 0)));
+    assert((Mat4f::makeRotationZ(pi_2()) * Vec4f(0, 1, 0, 0)).isSimilar(quat5.getMatrix() * Vec4f(0, 1, 0, 0)));
     // getAngles
     assert(isSimilar(quat4.getAngles()[0], pi_2()));
     assert(isSimilar(quat4.getAngles()[1], pi_4()));
@@ -72,11 +84,11 @@ int testQuaternion()
     assert(isSimilar(temp.z(), -quat2.z()));
     assert(isSimilar(temp.w(), quat2.w()));
     // getInverted
-    assert((quat2.getInverted() * quat2).isSimilar(QuatF(1,0,0,0)));
+    assert((quat2.getInverted() * quat2).isSimilar(QuatF(0,0,0,1)));
     // invert
     temp = quat2;
     temp.invert();
-    assert((quat2 * temp).isSimilar(QuatF(1,0,0,0)));
+    assert((quat2 * temp).isSimilar(QuatF(0,0,0,1)));
     // dot
     assert(isSimilar(quat1.dot(quat2), Vec4f(0,0,0,1) * Vec4f(1, 3, -2.5, 0)));
     // lerp

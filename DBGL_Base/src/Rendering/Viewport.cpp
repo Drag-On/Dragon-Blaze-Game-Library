@@ -69,8 +69,9 @@ namespace dbgl
     {
 	if (_camera != NULL)
 	{
-	    _viewMat.view(_camera->position(), _camera->target(),
-		    _camera->up());
+	    Vec3f direction, up;
+	    _camera->getOrientation(&direction, &up, NULL);
+	    _viewMat.view(_camera->position(), direction, up);
 	    _projectionMat.projection(_camera->getFieldOfView(),
 		    (frameWidth * (_widthRatio - _xRatio))
 			    / (frameHeight * (_heightRatio - _yRatio)),

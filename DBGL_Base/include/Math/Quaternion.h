@@ -57,6 +57,14 @@ namespace dbgl
 	     */
 	    Quaternion(Vector3<T> start, Vector3<T> dest);
 	    /**
+	     * @brief Constructs a quaternion such that it rotates start onto dest,
+	     * 	      preserving up
+	     * @param start Start vector
+	     * @param end End vector
+	     * @param up Up vector
+	     */
+	    Quaternion(Vector3<T> start, Vector3<T> dest, Vector3<T> up);
+	    /**
 	     * @brief Copy constructor
 	     * @param other Quaternion to copy
 	     */
@@ -114,6 +122,16 @@ namespace dbgl
 	     */
 	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest);
 	    /**
+	     * @brief Initializes this quaternion such that it rotates start onto dest,
+	     * 	      preserving up
+	     * @param start Start vector
+	     * @param end End vector
+	     * @param up Up vector
+	     * @returns Reference to this quaternion
+	     */
+	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest,
+		    Vector3<T> up);
+	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
 	     * @param precision How close they need to be
@@ -130,7 +148,7 @@ namespace dbgl
 	    bool isSimilarRot(Quaternion<T> const& other,
 		    double precision = 0.1) const;
 	    /**
-	     * @brief Checks if this is a unit quaternion and does no rotation at all
+	     * @brief Checks if this is a unit quaternion
 	     * @return True in case it's unit, otherwise false
 	     */
 	    bool isUnit() const;

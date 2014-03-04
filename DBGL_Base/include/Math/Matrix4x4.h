@@ -86,6 +86,11 @@ namespace dbgl
 	    /// </summary>
 	    static Matrix4x4<T> makeTranslation(T x, T y, T z);
 	    /// <summary>
+	    /// @brief Constructs a translation matrix from the given translation values
+	    /// @param translation Translation values
+	    /// </summary>
+	    static Matrix4x4<T> makeTranslation(Vector3<T> translation);
+	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around the x axis
 	    /// </summary>
@@ -129,18 +134,18 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Constructs a camera matrix from the given data
 	    /// @param pos Position of the camera in 3D space
-	    /// @param target Position the camera aims at
+	    /// @param direction Direction the camera aims at
 	    /// @param up Vector that defines the camera up direction
 	    /// </summary>
 	    static Matrix4x4<T> makeView(Vector3<T> const& pos,
-		    Vector3<T> const& target, Vector3<T> const& up);
+		    Vector3<T> const& direction, Vector3<T> const& up);
 	    /// <summary>
 	    /// @brief Makes this matrix a camera matrix from the given data
 	    /// @param pos Position of the camera in 3D space
-	    /// @param target Position the camera aims at
+	    /// @param direction Direction the camera aims at
 	    /// @param up Vector that defines the camera up direction
 	    /// </summary>
-	    void view(Vector3<T> const& pos, Vector3<T> const& target,
+	    void view(Vector3<T> const& pos, Vector3<T> const& direction,
 		    Vector3<T> const& up);
 	    /// <summary>
 	    /// @brief Constructs a projection matrix from the given data

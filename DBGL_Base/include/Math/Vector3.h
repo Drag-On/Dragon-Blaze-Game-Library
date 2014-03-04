@@ -14,6 +14,7 @@
 #include<cstdlib>
 #include<cstddef>
 #include<cmath>
+#include"Utility.h"
 #include"Log/Log.h"
 
 namespace dbgl
@@ -107,6 +108,13 @@ namespace dbgl
 	    /// @brief Checks if all components are zero
 	    /// </summary>
 	    bool isZero() const;
+	    /// <summary>
+	    /// @brief Checks if other is similar to this vector
+	    /// @param other Other vector
+	    /// @param precision How close every component needs to be
+	    /// </summary>
+	    bool isSimilar(Vector3<T> const& other,
+		    double precision = 0.1) const;
 	    /// <summary>
 	    /// @brief Translates this vector by the specified amount
 	    /// </summary>

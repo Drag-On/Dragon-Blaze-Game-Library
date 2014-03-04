@@ -13,15 +13,19 @@
 namespace dbgl
 {
 
-    Camera::Camera(Vec3f position, Vec3f target, Vec3f up, float fieldOfView,
-	    float near, float far)
+    Camera::Camera(Vec3f position, Vec3f direction, Vec3f up, float fieldOfView,
+	    float near, float far) :
+	    _position(position), _fieldOfView(fieldOfView), _near(near), _far(
+		    far)
     {
-	_position = position;
-	_target = target;
-	_up = up;
-	_fieldOfView = fieldOfView;
-	_near = near;
-	_far = far;
+	setOrientation(direction, up);
+    }
+
+    Camera::Camera(Vec3f position, QuatF orientation, float fieldOfView,
+	    float near, float far) :
+	    _position(position), _rotation(orientation), _fieldOfView(
+		    fieldOfView), _near(near), _far(far)
+    {
     }
 
     Camera::~Camera()
@@ -33,14 +37,24 @@ namespace dbgl
 	return _position;
     }
 
-    Vec3f& Camera::target()
+    QuatF& Camera::rotation()
     {
-	return _target;
+	return _rotation;
     }
 
-    Vec3f& Camera::up()
+    void Camera::getOrientation(Vec3f* direction, Vec3f* up, Vec3f* right) const
     {
-	return _up;
+	if (direction != NULL)
+	    *direction = _rotation * Vec3f(0, 0, 1);
+	if (right != NULL)
+	    *right = _rotation * Vec3f(-1, 0, 0);
+	if (up != NULL)
+	    *up = _rotation * Vec3f(0, 1, 0);
+    }
+
+    void Camera::setOrientation(Vec3f const& direction, Vec3f const& up)
+    {
+	_rotation.fromVectors(Vec3f(0, 0, 1), direction, up);
     }
 
     float Camera::getFieldOfView() const

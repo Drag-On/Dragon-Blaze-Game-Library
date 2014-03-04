@@ -16,6 +16,7 @@
 #include "Log/Log.h"
 #include "Math/Matrix4x4.h"
 #include "Math/Vector4.h"
+#include "Math/Utility.h"
 
 using namespace dbgl;
 
@@ -70,35 +71,35 @@ int testMatrix4x4()
     assert(std::abs(res[2] + 43) <= 0.01);
     // makeRotationX
     Vector4<float> testVec(0, 1, 0, 1);
-    res = (Matrix4x4<float>::makeRotationX(1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotationX(pi_2()) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] - 1) <= 0.01);
     // makeRotationY
     testVec[0] = 1;
     testVec[1] = 0;
-    res = (Matrix4x4<float>::makeRotationY(1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotationY(pi_2()) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
     // makeRotationZ
-    res = (Matrix4x4<float>::makeRotationZ(1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotationZ(pi_2()) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 1) <= 0.01);
     assert(std::abs(res[2] - 0) <= 0.01);
     // makeRotation
-    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), pi_2()) * testVec);// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
     assert(Matrix4x4<float>::makeRotation(Vector3<float>(1, 0, 0), 1) == Matrix4x4<float>::makeRotationX(1));
     assert(Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1) == Matrix4x4<float>::makeRotationY(1));
     assert(Matrix4x4<float>::makeRotation(Vector3<float>(0, 0, 1), 1) == Matrix4x4<float>::makeRotationZ(1));
-    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), 1.57079633f) * Vector4<float>(1, 1, 0, 0));// 90°
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(0, 1, 0), pi_2()) * Vector4<float>(1, 1, 0, 0));// 90°
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 1) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
-    res = (Matrix4x4<float>::makeRotation(Vector3<float>(1, 1, 0), 1.57079633f) * testVec);// 90°
+    res = (Matrix4x4<float>::makeRotation(Vector3<float>(1, 1, 0), pi_2()) * testVec);// 90°
     assert(std::abs(res[0] - 0.5) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] + 0.7) <= 0.01);
@@ -114,16 +115,16 @@ int testMatrix4x4()
     assert(std::abs(res[2] - 6) <= 0.01);
     assert(std::abs(res[3] - 44) <= 0.01);
     // makeCamera
-    res = (Mat4f::makeView(Vec3f(-1, 0, 0), Vec3f(0, 0, 0), Vec3f(0, 1, 0)) * Vec4f(0, 0, 0, 1));
+    res = (Mat4f::makeView(Vec3f(-1, 0, 0), Vec3f(1, 0, 0), Vec3f(0, 1, 0)) * Vec4f(0, 0, 0, 1));
     assert(std::abs(res[0] - 0) <= 0.01);
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] + 1) <= 0.01);
     assert(std::abs(res[3] - 1) <= 0.01);
+    // makeProjection
+    auto proj = Mat4f::makeProjection(pi_2(), 4.0/3.0, 1, 10);
+    assert((proj * Vec4f(0, 0, -2, 1))[2] < (proj * Vec4f(0, 0, -5, 1))[2]);
     LOG->info("OK!");
     LOG->info("Operators... ");
-    // makeProjection
-    auto proj = Mat4f::makeProjection(1.57079633f, 4.0/3.0, 1, 10);
-    assert((proj * Vec4f(0, 0, -2, 1))[2] < (proj * Vec4f(0, 0, -5, 1))[2]);
     // =
     mat = mat2;
     assert(mat == mat2);
