@@ -70,6 +70,12 @@ namespace dbgl
 	     */
 	    void setOrientation(Vec3f const& direction, Vec3f const& up);
 	    /**
+	     * @brief Rotates the camera relative to it's current orientation
+	     * @param horizontal Amount to rotate on left-right-axis
+	     * @param vertical Amount to rotate on up-down-axis
+	     */
+	    void rotate(float horizontal, float vertical);
+	    /**
 	     * @return Opening angle
 	     */
 	    float getFieldOfView() const;

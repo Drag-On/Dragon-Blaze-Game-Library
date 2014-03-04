@@ -57,6 +57,12 @@ namespace dbgl
 	_rotation.fromVectors(Vec3f(0, 0, 1), direction, up);
     }
 
+    void Camera::rotate(float horizontal, float vertical)
+    {
+	rotation() = QuatF(Vec3f(0, horizontal, 0)) * rotation()
+		* QuatF(Vec3f(vertical, 0, 0));
+    }
+
     float Camera::getFieldOfView() const
     {
 	return _fieldOfView;

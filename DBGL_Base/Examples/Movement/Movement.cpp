@@ -45,12 +45,11 @@ void updateCallback(double deltaTime)
     // Update mouse
     double x, y;
     wnd->getCursorPos(x, y);
-    float horizontalAngle = deltaTime * mouseSpeed
+    float horizontal = deltaTime * mouseSpeed
 	    * float(wnd->getFrameWidth() / 2 - x);
-    float verticalAngle = deltaTime * mouseSpeed
+    float vertical = deltaTime * mouseSpeed
 	    * float(wnd->getFrameHeight() / 2 - y);
-    cam->rotation() = QuatF(Vec3f(0, horizontalAngle, 0)) * cam->rotation()
-	    * QuatF(Vec3f(-verticalAngle, 0, 0));
+    cam->rotate(horizontal, -vertical);
     // Camera vectors
     Vec3f direction = cam->rotation() * Vec3f(0, 0, 1);
     Vec3f right = cam->rotation() * Vec3f(-1, 0, 0);
@@ -94,7 +93,7 @@ int main()
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
     cam = new Camera(Vec3f(-1, 2, 3), Vec3f(6, -2, 0), Vec3f(0, 1, 0), pi_4(),
-    	    0.1, 100);
+	    0.1, 100);
     viewport->setCamera(cam);
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);
