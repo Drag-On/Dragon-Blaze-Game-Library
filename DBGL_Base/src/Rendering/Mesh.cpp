@@ -41,13 +41,13 @@ namespace dbgl
     {
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
-	{   -1, -1, 0, 1, -1, 0, 0, 1, 0};
+	{   Vec3f(-1, -1, 0), Vec3f(1, -1, 0), Vec3f(0, 1, 0)};
 
 	mesh->_normals =
-	{   0, 0, 1, 0, 0, 1, 0, 0, 1};
+	{   Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)};
 
 	mesh->_uv =
-	{   0, 0, 0.5, 0.5, 1, 0};
+	{   Vec2f(0, 0), Vec2f(0.5, 0.5), Vec2f(1, 0)};
 
 	mesh->_indices =
 	{   0, 1, 2};
@@ -61,13 +61,13 @@ namespace dbgl
     {
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
-	{   -1, -1, 0, -1, 1, 0, 1, 1, 0, 1, -1, 0};
+	{   Vec3f(-1, -1, 0), Vec3f(-1, 1, 0), Vec3f(1, 1, 0), Vec3f(1, -1, 0)};
 
 	mesh->_normals =
-	{   0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1};
+	{   Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)};
 
 	mesh->_uv =
-	{   0, 0, 0, 1, 1, 1, 1, 0};
+	{   Vec2f(0, 0), Vec2f(0, 1), Vec2f(1, 1), Vec2f(1, 0)};
 
 	mesh->_indices =
 	{   0, 2, 1, 0, 3, 2};
@@ -84,30 +84,30 @@ namespace dbgl
 	// Define vertices
 	mesh->_vertices =
 	{
-	    -1.0, -1.0, 1.0, // front 0
-	    1.0, -1.0, 1.0,// 1
-	    1.0, 1.0, 1.0,// 2
-	    -1.0, 1.0, 1.0,// 3
-	    -1.0, 1.0, 1.0,// top 4
-	    1.0, 1.0, 1.0,// 5
-	    1.0, 1.0, -1.0,// 6
-	    -1.0, 1.0, -1.0,// 7
-	    1.0, -1.0, -1.0,// back 8
-	    -1.0, -1.0, -1.0,// 9
-	    -1.0, 1.0, -1.0,// 10
-	    1.0, 1.0, -1.0,// 11
-	    -1.0, -1.0, -1.0,// bottom 12
-	    1.0, -1.0, -1.0,// 13
-	    1.0, -1.0, 1.0,// 14
-	    -1.0, -1.0, 1.0,// 15
-	    -1.0, -1.0, -1.0,// left 16
-	    -1.0, -1.0, 1.0,// 17
-	    -1.0, 1.0, 1.0,// 18
-	    -1.0, 1.0, -1.0,// 19
-	    1.0, -1.0, 1.0,// right 20
-	    1.0, -1.0, -1.0,// 21
-	    1.0, 1.0, -1.0,// 22
-	    1.0, 1.0, 1.0,// 23
+	    Vec3f(-1.0, -1.0, 1.0), // front 0
+	    Vec3f(1.0, -1.0, 1.0),// 1
+	    Vec3f(1.0, 1.0, 1.0),// 2
+	    Vec3f(-1.0, 1.0, 1.0),// 3
+	    Vec3f(-1.0, 1.0, 1.0),// top 4
+	    Vec3f(1.0, 1.0, 1.0),// 5
+	    Vec3f(1.0, 1.0, -1.0),// 6
+	    Vec3f(-1.0, 1.0, -1.0),// 7
+	    Vec3f(1.0, -1.0, -1.0),// back 8
+	    Vec3f(-1.0, -1.0, -1.0),// 9
+	    Vec3f(-1.0, 1.0, -1.0),// 10
+	    Vec3f(1.0, 1.0, -1.0),// 11
+	    Vec3f(-1.0, -1.0, -1.0),// bottom 12
+	    Vec3f(1.0, -1.0, -1.0),// 13
+	    Vec3f(1.0, -1.0, 1.0),// 14
+	    Vec3f(-1.0, -1.0, 1.0),// 15
+	    Vec3f(-1.0, -1.0, -1.0),// left 16
+	    Vec3f(-1.0, -1.0, 1.0),// 17
+	    Vec3f(-1.0, 1.0, 1.0),// 18
+	    Vec3f(-1.0, 1.0, -1.0),// 19
+	    Vec3f(1.0, -1.0, 1.0),// right 20
+	    Vec3f(1.0, -1.0, -1.0),// 21
+	    Vec3f(1.0, 1.0, -1.0),// 22
+	    Vec3f(1.0, 1.0, 1.0),// 23
 	};
 
 	// Define elements
@@ -130,41 +130,42 @@ namespace dbgl
 	// Define normals
 	mesh->_normals =
 	{
-	    0, 0, 1, // 0 Front
-	    0, 0, 1,// 1
-	    0, 0, 1,// 2
-	    0, 0, 1,// 3
-	    0, 1, 0,// 10 Top
-	    0, 1, 0,// 11
-	    0, 1, 0,// 14
-	    0, 1, 0,// 15
-	    0, 0, -1,// 4 Back
-	    0, 0, -1,// 5
-	    0, 0, -1,// 6
-	    0, 0, -1,// 7
-	    0, -1, 0,// 8 Bottom
-	    0, -1, 0,// 9
-	    0, -1, 0,// 12
-	    0, -1, 0,// 13
-	    -1, 0, 0,// 16 Left
-	    -1, 0, 0,// 19
-	    -1, 0, 0,// 20
-	    -1, 0, 0,// 23
-	    1, 0, 0,// 21 Right
-	    1, 0, 0,// 22
-	    1, 0, 0,// 17
-	    1, 0, 0,// 18
+	    Vec3f(0, 0, 1), // 0 Front
+	    Vec3f(0, 0, 1),// 1
+	    Vec3f(0, 0, 1),// 2
+	    Vec3f(0, 0, 1),// 3
+	    Vec3f(0, 1, 0),// 10 Top
+	    Vec3f(0, 1, 0),// 11
+	    Vec3f(0, 1, 0),// 14
+	    Vec3f(0, 1, 0),// 15
+	    Vec3f(0, 0, -1),// 4 Back
+	    Vec3f(0, 0, -1),// 5
+	    Vec3f(0, 0, -1),// 6
+	    Vec3f(0, 0, -1),// 7
+	    Vec3f(0, -1, 0),// 8 Bottom
+	    Vec3f(0, -1, 0),// 9
+	    Vec3f(0, -1, 0),// 12
+	    Vec3f(0, -1, 0),// 13
+	    Vec3f(-1, 0, 0),// 16 Left
+	    Vec3f(-1, 0, 0),// 19
+	    Vec3f(-1, 0, 0),// 20
+	    Vec3f(-1, 0, 0),// 23
+	    Vec3f(1, 0, 0),// 21 Right
+	    Vec3f(1, 0, 0),// 22
+	    Vec3f(1, 0, 0),// 17
+	    Vec3f(1, 0, 0),// 18
 	};
 
 	// Define UVs
-	GLfloat uvs[2 * 4 * 6] = {
-	0.0, 0.0, // front
-	1.0, 0.0, //
-	1.0, 1.0, //
-	0.0, 1.0,
+	Vec2f uvs[4 * 6] =
+	{
+	    Vec2f(0.0, 0.0), // front
+	    Vec2f(1.0, 0.0), //
+	    Vec2f(1.0, 1.0), //
+	    Vec2f(0.0, 1.0),
 	};
 	for (int i = 1; i < 6; i++)
-	    memcpy(&uvs[i * 4 * 2], &uvs[0], 2 * 4 * sizeof(GLfloat));
+	    memcpy(&uvs[i * 4], &uvs[0], 4 * sizeof(Vec2f));
 	mesh->_uv.insert(mesh->_uv.begin(), std::begin(uvs), std::end(uvs));
 
 	mesh->updateBuffers();
@@ -178,22 +179,22 @@ namespace dbgl
 
 	// Define vertices
 	mesh->_vertices =
-	{   -1, -1, 1, // Front lower left 0
-	    1, -1, 1,// Front lower right 1
-	    0, 1, 0,// Front top 2
-	    1, -1, 1,// Right lower left 3
-	    1, -1, -1,// Right lower right 4
-	    0, 1, 0,// Right top 5
-	    1, -1, -1,// Back lower left 6
-	    -1, -1, -1,// Back lower right 7
-	    0, 1, 0,// Back top 8
-	    -1, -1, -1,// Left lower left 9
-	    -1, -1, 1,// Left lower right 10
-	    0, 1, 0,// Left top 11
-	    -1, -1, 1,// Bottom front left 12
-	    1, -1, 1,// Bottom front right 13
-	    -1, -1, -1,// Bottom back left 14
-	    1, -1, -1,// Bottom back right 15
+	{   Vec3f(-1, -1, 1), // Front lower left 0
+	    Vec3f(1, -1, 1),// Front lower right 1
+	    Vec3f(0, 1, 0),// Front top 2
+	    Vec3f(1, -1, 1),// Right lower left 3
+	    Vec3f(1, -1, -1),// Right lower right 4
+	    Vec3f(0, 1, 0),// Right top 5
+	    Vec3f(1, -1, -1),// Back lower left 6
+	    Vec3f(-1, -1, -1),// Back lower right 7
+	    Vec3f(0, 1, 0),// Back top 8
+	    Vec3f(-1, -1, -1),// Left lower left 9
+	    Vec3f(-1, -1, 1),// Left lower right 10
+	    Vec3f(0, 1, 0),// Left top 11
+	    Vec3f(-1, -1, 1),// Bottom front left 12
+	    Vec3f(1, -1, 1),// Bottom front right 13
+	    Vec3f(-1, -1, -1),// Bottom back left 14
+	    Vec3f(1, -1, -1),// Bottom back right 15
 	};
 
 	// Define elements
@@ -210,43 +211,43 @@ namespace dbgl
 	// Define normals
 	mesh->_normals =
 	{
-	    0, 0.4472, 0.8944, // front
-	    0, 0.4472, 0.8944,// front
-	    0, 0.4472, 0.8944,// front
-	    0.8944, 0.4472, 0,// right
-	    0.8944, 0.4472, 0,// right
-	    0.8944, 0.4472, 0,// right
-	    0, 0.4472, -0.8944,// back
-	    0, 0.4472, -0.8944,// back
-	    0, 0.4472, -0.8944,// back
-	    -0.8944, 0.4472, 0,// left
-	    -0.8944, 0.4472, 0,// left
-	    -0.8944, 0.4472, 0,// left
-	    0, -1, 0,// bottom
-	    0, -1, 0,// bottom
-	    0, -1, 0,// bottom
-	    0, -1, 0,// bottom
+	    Vec3f(0, 0.4472, 0.8944), // front
+	    Vec3f(0, 0.4472, 0.8944),// front
+	    Vec3f(0, 0.4472, 0.8944),// front
+	    Vec3f(0.8944, 0.4472, 0),// right
+	    Vec3f(0.8944, 0.4472, 0),// right
+	    Vec3f(0.8944, 0.4472, 0),// right
+	    Vec3f(0, 0.4472, -0.8944),// back
+	    Vec3f(0, 0.4472, -0.8944),// back
+	    Vec3f(0, 0.4472, -0.8944),// back
+	    Vec3f(-0.8944, 0.4472, 0),// left
+	    Vec3f(-0.8944, 0.4472, 0),// left
+	    Vec3f(-0.8944, 0.4472, 0),// left
+	    Vec3f(0, -1, 0),// bottom
+	    Vec3f(0, -1, 0),// bottom
+	    Vec3f(0, -1, 0),// bottom
+	    Vec3f(0, -1, 0),// bottom
 	};
 
 	// Define UVs
 	mesh->_uv =
 	{
-	    0.0, 0.0, // front
-	    1.0, 0.0,//
-	    0.5, 1.0,//
-	    0.0, 0.0,// right
-	    1.0, 0.0,//
-	    0.5, 1.0,//
-	    0.0, 0.0,// back
-	    1.0, 0.0,//
-	    0.5, 1.0,//
-	    0.0, 0.0,// left
-	    1.0, 0.0,//
-	    0.5, 1.0,//
-	    0.0, 0.0,// bottom
-	    1.0, 0.0,//
-	    0.0, 1.0,//
-	    1.0, 1.0,//
+	    Vec2f(0.0, 0.0), // front
+	    Vec2f(1.0, 0.0),//
+	    Vec2f(0.5, 1.0),//
+	    Vec2f(0.0, 0.0),// right
+	    Vec2f(1.0, 0.0),//
+	    Vec2f(0.5, 1.0),//
+	    Vec2f(0.0, 0.0),// back
+	    Vec2f(1.0, 0.0),//
+	    Vec2f(0.5, 1.0),//
+	    Vec2f(0.0, 0.0),// left
+	    Vec2f(1.0, 0.0),//
+	    Vec2f(0.5, 1.0),//
+	    Vec2f(0.0, 0.0),// bottom
+	    Vec2f(1.0, 0.0),//
+	    Vec2f(0.0, 1.0),//
+	    Vec2f(1.0, 1.0),//
 	};
 
 	mesh->updateBuffers();
@@ -267,7 +268,7 @@ namespace dbgl
 	if (_vertexBuffer == GL_INVALID_VALUE)
 	    _vertexBuffer = generateBuffer();
 	fillBuffer(_vertexBuffer, GL_ARRAY_BUFFER,
-		_vertices.size() * sizeof(GLfloat), &_vertices[0],
+		_vertices.size() * 3 * sizeof(GLfloat), &_vertices[0],
 		GL_STATIC_DRAW);
 
 	if (_indexBuffer == GL_INVALID_VALUE)
@@ -279,33 +280,33 @@ namespace dbgl
 	if (_normalBuffer == GL_INVALID_VALUE)
 	    _normalBuffer = generateBuffer();
 	fillBuffer(_normalBuffer, GL_ARRAY_BUFFER,
-		_normals.size() * sizeof(GLfloat), &_normals[0],
+		_normals.size() * 3 * sizeof(GLfloat), &_normals[0],
 		GL_STATIC_DRAW);
 
 	if (_uvBuffer == GL_INVALID_VALUE)
 	    _uvBuffer = generateBuffer();
-	fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * sizeof(GLfloat),
+	fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * 2 * sizeof(GLfloat),
 		&_uv[0], GL_STATIC_DRAW);
     }
 
     unsigned int Mesh::getVertexIndex(Vec3f const& coords, Vec3f const& normal,
 	    Vec2f const& uv)
     {
-	for (unsigned int i = 0; i < _vertices.size(); i += 3)
+	for (unsigned int i = 0; i < _vertices.size(); i++)
 	{
-	    if (std::abs(_vertices[i + 0] - coords[0]) < 0.01
-		    && std::abs(_vertices[i + 1] - coords[1]) < 0.01
-		    && std::abs(_vertices[i + 2] - coords[2]) < 0.01
-		    && std::abs(_normals[i + 0] - normal[0]) < 0.01
-		    && std::abs(_normals[i + 1] - normal[1]) < 0.01
-		    && std::abs(_normals[i + 2] - normal[2]) < 0.01
-		    && std::abs(_uv[i / 3 * 2 + 0] - uv[0]) < 0.01
-		    && std::abs(_uv[i / 3 * 2 + 1] - uv[1]) < 0.01)
+	    if(_vertices[i].isSimilar(coords) &&
+		    _normals[i].isSimilar(normal) &&
+		    _uv[i].isSimilar(uv))
 	    {
-		return i / 3;
+		return i;
 	    }
 	}
 	return _vertices.size();
+    }
+
+    void Mesh::generateTangentBasis()
+    {
+	// TODO
     }
 
     GLuint Mesh::generateBuffer()
@@ -500,20 +501,14 @@ namespace dbgl
 		// If the vertex has not been added yet, add it and the appropriate normals and uvs
 		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]],
 			normal, uvs[uvIndices[i]]);
-		if (vertIndex >= mesh->_vertices.size())
+		if (vertIndex == mesh->_vertices.size())
 		{
-		    vertIndex = mesh->_vertices.size() / 3;
-		    mesh->_vertices.push_back(vertices[vertexIndices[i]][0]);
-		    mesh->_vertices.push_back(vertices[vertexIndices[i]][1]);
-		    mesh->_vertices.push_back(vertices[vertexIndices[i]][2]);
+		    mesh->_vertices.push_back(vertices[vertexIndices[i]]);
 		    if (uvIndices.size() > i && uvs.size() > uvIndices[i])
 		    {
-			mesh->_uv.push_back(uvs[uvIndices[i]][0]);
-			mesh->_uv.push_back(uvs[uvIndices[i]][1]);
+			mesh->_uv.push_back(uvs[uvIndices[i]]);
 		    }
-		    mesh->_normals.push_back(normal[0]);
-		    mesh->_normals.push_back(normal[1]);
-		    mesh->_normals.push_back(normal[2]);
+		    mesh->_normals.push_back(normal);
 		}
 		mesh->_indices.push_back(vertIndex);
 	    }

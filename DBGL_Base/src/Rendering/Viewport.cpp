@@ -78,8 +78,7 @@ namespace dbgl
 		    _camera->getNear(), _camera->getFar());
 	    _viewProjectionMat = _projectionMat * _viewMat;
 	    _itView = _viewMat;
-	    _itView.invert();
-	    _itView.transpose();
+	    _itView.invert().transpose();
 	}
     }
 

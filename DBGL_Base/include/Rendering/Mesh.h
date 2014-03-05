@@ -34,7 +34,7 @@ namespace dbgl
 	     */
 	    enum Type
 	    {
-		OBJ,//!< OBJ
+		OBJ, //!< OBJ
 	    };
 
 	    /**
@@ -87,7 +87,12 @@ namespace dbgl
 	     * @param coords Coordinates to search for
 	     * @return Index of the vertex or size + 1 if not found
 	     */
-	    unsigned int getVertexIndex(Vec3f const& coords, Vec3f const& normal, Vec2f const& uv);
+	    unsigned int getVertexIndex(Vec3f const& coords,
+		    Vec3f const& normal, Vec2f const& uv);
+	    /**
+	     * @brief Generates tangents and bitangents from this mesh's normals and UVs
+	     */
+	    void generateTangentBasis();
 	    /**
 	     * @brief Generates a gl buffer
 	     * @return Buffer identifier or GL_INVALID_VALUE if something went wrong
@@ -114,12 +119,16 @@ namespace dbgl
 
 	    std::vector<unsigned short> _indices;
 	    GLuint _indexBuffer = GL_INVALID_VALUE;
-	    std::vector<GLfloat> _vertices;
+	    std::vector<Vector3<GLfloat>> _vertices;
 	    GLuint _vertexBuffer = GL_INVALID_VALUE;
-	    std::vector<GLfloat> _normals;
+	    std::vector<Vector3<GLfloat>> _normals;
 	    GLuint _normalBuffer = GL_INVALID_VALUE;
-	    std::vector<GLfloat> _uv;
-	    GLuint _uvBuffer = GL_INVALID_VALUE; // = GL_INVALID_VALUE
+	    std::vector<Vector2<GLfloat>> _uv;
+	    GLuint _uvBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> _tangents;
+	    GLuint _tangentBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> _bitangents;
+	    GLuint _bitangentBuffer = GL_INVALID_VALUE;
 
 	    friend class RenderContext;
 	    // So the render context can render
