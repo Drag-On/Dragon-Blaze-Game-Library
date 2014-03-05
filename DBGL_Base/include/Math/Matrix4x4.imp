@@ -305,17 +305,30 @@ namespace dbgl
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T factor)
 	{
 		Matrix4x4<T> mat;
-		mat *= factor;
+		mat[0][0] = factor;
+		mat[1][1] = factor;
+		mat[2][2] = factor;
+		mat[3][3] = 1;
 		return mat;
 	}
 	
-	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T x, T y, T z, T w)
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T x, T y, T z)
 	{
 		Matrix4x4<T> mat;
-		mat[0][0] *= x;
-		mat[1][1] *= y;
-		mat[2][2] *= z;
-		mat[3][3] *= w;
+		mat[0][0] = x;
+		mat[1][1] = y;
+		mat[2][2] = z;
+		mat[3][3] = 1;
+		return mat;
+	}
+	
+	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(Vector3<T> scale)
+	{
+		Matrix4x4<T> mat;
+		mat[0][0] = scale.x();
+		mat[1][1] = scale.y();
+		mat[2][2] = scale.z();
+		mat[3][3] = 1;
 		return mat;
 	}
 	

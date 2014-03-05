@@ -55,7 +55,7 @@ namespace dbgl
 	     * @param start Start vector
 	     * @param end End vector
 	     */
-	    Quaternion(Vector3<T> start, Vector3<T> dest);
+	    Quaternion(Vector3<T> const& start, Vector3<T> const& dest);
 	    /**
 	     * @brief Constructs a quaternion such that it rotates start onto dest,
 	     * 	      preserving up
@@ -63,7 +63,7 @@ namespace dbgl
 	     * @param end End vector
 	     * @param up Up vector
 	     */
-	    Quaternion(Vector3<T> start, Vector3<T> dest, Vector3<T> up);
+	    Quaternion(Vector3<T> const& start, Vector3<T> const& dest, Vector3<T> const& up);
 	    /**
 	     * @brief Copy constructor
 	     * @param other Quaternion to copy
@@ -107,7 +107,7 @@ namespace dbgl
 	     * @param angle Angle in radians
 	     * @returns Reference to this quaternion
 	     */
-	    Quaternion<T>& fromAngleAxis(Vector3<T> const& axis, T angle);
+	    Quaternion<T>& fromAngleAxis(Vector3<T> axis, T angle);
 	    /**
 	     * @brief Initializes this quaternion from an angles around x, y and z
 	     * @param angles Angles around x, y and z in radians

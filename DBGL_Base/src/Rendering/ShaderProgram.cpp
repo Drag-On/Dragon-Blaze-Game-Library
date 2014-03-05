@@ -513,23 +513,14 @@ namespace dbgl
 
     // Initialize static variable
     std::map<ShaderProgram::Uniform, std::string> ShaderProgram::uniformNames =
-	    {
-	    {
-	    ShaderProgram::MODEL, "m_model"
-	    }, {
-	    ShaderProgram::VIEW, "m_view"
-	    }, {
-	    ShaderProgram::PROJECTION, "m_projection"
-	    }, {
-	    ShaderProgram::MVP, "m_mvp"
-	    }, {
-	    ShaderProgram::ITM, "m_itm"
-	    }, {
-	    ShaderProgram::ITMV, "m_itmv"
-	    }, {
-	    ShaderProgram::TEX_DIFFUSE, "s_texDiffuse"
-	    }, {
-	    ShaderProgram::TEX_DIFFUSE_FLAG, "b_texDiffuseFlag"
-	    },
-	    };
+    {
+	   {ShaderProgram::MODEL, "m_model"}, {
+	    ShaderProgram::VIEW, "m_view"}, {
+	    ShaderProgram::PROJECTION, "m_projection"}, {
+	    ShaderProgram::MVP, "m_mvp"}, {
+	    ShaderProgram::ITM, "m_itm"}, {
+	    ShaderProgram::ITMV, "m_itmv"}, {
+	    ShaderProgram::TEX_DIFFUSE, "tex_diffuse"}, {
+	    ShaderProgram::TEX_DIFFUSE_FLAG, "b_texDiffuseFlag"},
+    };
 }

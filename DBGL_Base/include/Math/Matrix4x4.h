@@ -128,9 +128,13 @@ namespace dbgl
 	    /// @param x Factor to scale by in x direction
 	    /// @param y Factor to scale by in y direction
 	    /// @param z Factor to scale by in z direction
-	    /// @param w Factor to scale by in w direction
 	    /// </summary>
-	    static Matrix4x4<T> makeScale(T x, T y, T z, T w);
+	    static Matrix4x4<T> makeScale(T x, T y, T z);
+	    /// <summary>
+	    /// @brief Constructs a scale matrix from the given factors
+	    /// @param scale Factors to scale by
+	    /// </summary>
+	    static Matrix4x4<T> makeScale(Vector3<T> scale);
 	    /// <summary>
 	    /// @brief Constructs a camera matrix from the given data
 	    /// @param pos Position of the camera in 3D space

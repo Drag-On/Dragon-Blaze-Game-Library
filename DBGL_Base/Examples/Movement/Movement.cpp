@@ -18,6 +18,7 @@
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
+#include "Rendering/Renderable.h"
 #include "Math/Vector3.h"
 #include "Math/Utility.h"
 #include "Math/Quaternion.h"
@@ -30,7 +31,7 @@ Mesh* pMeshBox;
 Mesh* pMeshIco;
 ShaderProgram* pShader;
 Texture* pTexture;
-Mat4f modelMat;
+Renderable renderable;
 Camera* cam;
 float mouseSpeed = 1.5, moveSpeed = 2.5;
 
@@ -73,13 +74,27 @@ void updateCallback(double deltaTime)
 
 void renderCallback(const RenderContext* rc)
 {
+    // Construct Renderable
+    renderable.pShader = pShader;
+    renderable.pTexDiffuse = pTexture;
+
     pShader->use();
+
     // Pyramid will be drawn in the center of the world
-    rc->draw(pMeshPyramid, modelMat, pShader, pTexture);
+    renderable.pMesh = pMeshPyramid;
+    renderable.position = Vec3f();
+    renderable.rotation = QuatF();
+    rc->draw(&renderable);
     // Box will be drawn at (5, 0, 3)
-    rc->draw(pMeshBox, Mat4f::makeTranslation(5, 0, 3), pShader, pTexture);
-    // Ikosaeder will be drawn at (-3, 0, 5)
-    rc->draw(pMeshIco, Mat4f::makeTranslation(-3, 0, 5), pShader, pTexture);
+    renderable.pMesh = pMeshBox;
+    renderable.position = Vec3f(5, 0, 3);
+    renderable.rotation = QuatF(Vec3f(0, pi_4(), 0));
+    rc->draw(&renderable);
+    // Icosahedron will be drawn at (-3, 0, 5)
+    renderable.pMesh = pMeshIco;
+    renderable.position = Vec3f(-3, 0, 5);
+    renderable.rotation = QuatF();
+    rc->draw(&renderable);
 }
 
 int main()
@@ -92,7 +107,8 @@ int main()
     // Create a viewport over the whole window space
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
-    cam = new Camera(Vec3f(-1, 2, 3), Vec3f(6, -2, 0), Vec3f(0, 1, 0), pi_4(),
+    Vec3f direction = Vec3f(6, -2, 0);
+    cam = new Camera(Vec3f(-1, 2, 3), Vec3f(6, -2, 0), Vec3f(0, 0, 1).cross(direction), pi_4(),
 	    0.1, 100);
     viewport->setCamera(cam);
     // Tell the render context about the new viewport

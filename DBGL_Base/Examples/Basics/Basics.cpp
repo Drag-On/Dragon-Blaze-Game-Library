@@ -17,6 +17,7 @@
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
+#include "Rendering/Renderable.h"
 #include "Math/Utility.h"
 
 using namespace dbgl;
@@ -24,16 +25,22 @@ using namespace dbgl;
 Mesh* pMesh;
 ShaderProgram* pShader;
 Texture* pTexture;
-Mat4f modelMat;
+Renderable renderable;
 
 void renderCallback(const RenderContext* rc)
 {
+    // Construct Renderable
+    renderable.pMesh = pMesh;
+    renderable.pShader = pShader;
+    renderable.pTexDiffuse = pTexture;
+
     pShader->use();
-    rc->draw(pMesh, modelMat, pShader, pTexture);
+    rc->draw(&renderable);
 }
 
 int main()
 {
+    LOG->setLogLevel(DBG);
     // Create window
     Window* wnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
@@ -41,7 +48,8 @@ int main()
     // Create a viewport over the whole window space
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
-    Camera* cam = new Camera(Vec3f(-1, 2, 3), Vec3f(0, -0.5, 0), Vec3f(0, 1, 0),
+    Vec3f direction = Vec3f(1, -2.5, -3);
+    Camera* cam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(1, 0, 0).cross(direction),
 	    pi_4(), 0.1, 10);
     viewport->setCamera(cam);
     // Tell the render context about the new viewport

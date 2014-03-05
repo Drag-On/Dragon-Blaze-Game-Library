@@ -34,86 +34,107 @@ namespace dbgl
 		_viewports.end());
     }
 
-    void RenderContext::draw(const Mesh* mesh, Mat4f const& modelMat,
-	    ShaderProgram* shader, Texture* diffuseTex) const
+    void RenderContext::draw(Renderable const* const entity) const
     {
+	// Check if valid
+	if(entity->pMesh == NULL || entity->pShader == NULL)
+	{
+	    LOG->warning("Invalid render attempt.");
+	    return;
+	}
+
+	// Define shortcuts
+	Mesh* pMesh = entity->pMesh;
+	Vec3f const& position = entity->position;
+	Vec3f const& scale = entity->scale;
+	QuatF const& rotation = entity->rotation;
+	ShaderProgram* pShader = entity->pShader;
+	Texture* pTexDiffuse = entity->pTexDiffuse;
+
+	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
+	Mat4f itmMat = modelMat.getInverted().transpose();
+
 	// Check all viewports
 	for (auto &viewport : _viewports)
 	{
+	    // Check if viewport has a camera
+	    if (viewport->getCamera() == NULL)
+	    {
+		continue;
+	    }
 	    // Calculate absolute viewport values
+	    // TODO: This is not needed for each mesh!
 	    int viewportX = viewport->getXRatio() * _frameWidth;
 	    int viewportY = viewport->getYRatio() * _frameHeight;
 	    int viewportWidth = viewport->getWidthRatio()
 		    * (_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
 		    * (_frameHeight - viewportY);
-	    // Send diffuse texture if the shader needs it
-	    GLint diffuse = shader->getDefaultUniformHandle(
+	    // Set viewport
+	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+
+	    // TODO: Frustum culling
+
+	    // Send diffuse texture if the shader wants it
+	    GLint diffuseId = pShader->getDefaultUniformHandle(
 		    ShaderProgram::TEX_DIFFUSE);
-	    if (diffuse >= 0 && diffuseTex != NULL)
+	    if (diffuseId >= 0 && pTexDiffuse != NULL)
 	    {
 		// Bind to texture unit 0
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseTex->getTextureHandle());
-		shader->setUniformSampler(diffuse, 0);
+		glBindTexture(GL_TEXTURE_2D, pTexDiffuse->getTextureHandle());
+		pShader->setUniformSampler(diffuseId, 0);
 	    }
-	    // Send model matrix if the shader needs it
-	    GLint model = shader->getDefaultUniformHandle(
+	    // Send model matrix if the shader wants it
+	    GLint modelId = pShader->getDefaultUniformHandle(
 		    ShaderProgram::Uniform::MODEL);
-	    if (model >= 0)
+	    if (modelId >= 0)
 	    {
-		shader->setUniformFloatMatrix4Array(model, 1, GL_FALSE,
+		pShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE,
 			modelMat.getDataPointer());
 	    }
-	    // If the viewport has a camera attached send matrices to shader
-	    if (viewport->getCamera() != NULL)
+	    // Send view matrix if the shader wants it
+	    GLint viewId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::VIEW);
+	    if (viewId >= 0)
 	    {
-		// TODO: Frustum culling
-		// Send view matrix if the shader needs it
-		GLint view = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::VIEW);
-		if (view >= 0)
-		{
-		    shader->setUniformFloatMatrix4Array(view, 1, GL_FALSE,
-			    viewport->getViewMat().getDataPointer());
-		}
-		// Send projection matrix if the shader needs it
-		GLint projection = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::PROJECTION);
-		if (projection >= 0)
-		{
-		    shader->setUniformFloatMatrix4Array(projection, 1, GL_FALSE,
-			    viewport->getProjectionMat().getDataPointer());
-		}
-		// Send mvp matrix if the shader needs it
-		GLint mvp = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::MVP);
-		if (mvp >= 0)
-		{
-		    shader->setUniformFloatMatrix4Array(mvp, 1, GL_FALSE,
-			    (viewport->getViewProjectionMat() * modelMat).getDataPointer());
-		}
-		// Send itm matrix if the shader needs it
-		GLint itm = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::ITM);
-		if (itm >= 0)
-		{
-		    shader->setUniformFloatMatrix4Array(itm, 1, GL_FALSE,
-			    modelMat.getInverted().transpose().getDataPointer());
-		}
-		// Send itmv matrix if the shader needs it
-		GLint itmv = shader->getDefaultUniformHandle(
-			ShaderProgram::Uniform::ITMV);
-		if (itmv >= 0)
-		{
-		    shader->setUniformFloatMatrix4Array(itmv, 1, GL_FALSE,
-			    (viewport->getITViewMat() * modelMat).getDataPointer());
-		}
+		pShader->setUniformFloatMatrix4Array(viewId, 1, GL_FALSE,
+			viewport->getViewMat().getDataPointer());
 	    }
-	    // Set viewport
-	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+	    // Send projection matrix if the shader wants it
+	    GLint projectionId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::PROJECTION);
+	    if (projectionId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(projectionId, 1, GL_FALSE,
+			viewport->getProjectionMat().getDataPointer());
+	    }
+	    // Send mvp matrix if the shader wants it
+	    GLint mvpId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::MVP);
+	    if (mvpId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE,
+			(viewport->getViewProjectionMat() * modelMat).getDataPointer());
+	    }
+	    // Send itm matrix if the shader wants it
+	    GLint itmId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::ITM);
+	    if (itmId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(itmId, 1, GL_FALSE,
+			itmMat.getDataPointer());
+	    }
+	    // Send itmv matrix if the shader wants it
+	    GLint itmvId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::ITMV);
+	    if (itmvId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,
+			(viewport->getITViewMat() * itmMat).getDataPointer());
+	    }
 	    // Render mesh
-	    renderMesh(mesh);
+	    renderMesh(pMesh);
 	}
     }
 
