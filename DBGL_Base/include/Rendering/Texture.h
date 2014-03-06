@@ -35,6 +35,7 @@ namespace dbgl
 		BOGUS, //!< BOGUS
 		DDS, //!< DDS
 		DDS_VERTICAL_FLIP, //!< DDS_VERTICAL_FLIP
+		TGA, //!< TGA
 	    };
 	    /**
 	     * @brief Constructs a new texture
@@ -63,6 +64,13 @@ namespace dbgl
 	     * @return True in case the file has been loaded successfully, otherwise false
 	     */
 	    bool loadDDS(const std::string path, bool vertFlip = true);
+
+	    /**
+	     * @brief Loads a (uncompressed) TGA file
+	     * @param path Path of the file to load
+	     * @return True in case the file has been loaded succesfully, otherwise false
+	     */
+	    bool loadTGA(const std::string path);
 
 	    /**
 	     * @brief Vertically flips a dds image (i.e. one mip map level)

@@ -159,7 +159,7 @@ int main()
     pShader = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShader2 = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks02.DDS");
-    pNormalTex = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks02_normal.DDS");
+    pNormalTex = new Texture(Texture::TGA, "../common/Bricks02_normal.tga");
     pTexture2  = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));

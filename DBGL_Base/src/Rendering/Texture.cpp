@@ -26,6 +26,9 @@ namespace dbgl
 	    case DDS_VERTICAL_FLIP:
 		success = loadDDS(path, true);
 		break;
+	    case TGA:
+		success = loadTGA(path);
+		break;
 	}
 	if (!success)
 	{
@@ -49,10 +52,10 @@ namespace dbgl
 	glGenTextures(1, &_textureId);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 	unsigned char data[3] = {
-	    255, 255, 255
+		255, 255, 255
 	};
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_BGR,
-	    GL_UNSIGNED_BYTE, &data);
+	GL_UNSIGNED_BYTE, &data);
 	return true;
     }
 
@@ -165,14 +168,127 @@ namespace dbgl
 	return result;
     }
 
+    bool Texture::loadTGA(const std::string path)
+    {
+	bool result = false;
+	// Read file
+	std::ifstream file;
+	file.open(path.c_str(), std::ios::in | std::ios::binary);
+	char* image = NULL;
+	unsigned short int width, height;
+	int colorMode;
+	if (file.is_open())
+	{
+	    file.seekg(0, std::ios::beg);
+
+	    // File header
+	    char header[18];
+	    file.read(header, 18);
+	    // Length of Image ID field
+//	    unsigned char imageIDLen = header[0];
+	    // Color palette
+	    // 0 = no palette, 1 = palette
+	    unsigned char colorPaletteType = header[1];
+	    if (colorPaletteType != 0)
+	    {
+		LOG->warning("TGA files with palettes currently not supported.");
+		file.close();
+		result = false;
+	    }
+	    else
+	    {
+		// Image type
+		// 0 = no img, 1 = indexed, 2 = RGB, 3 = monochrome, 9-11 run-length coded
+		unsigned char imageType = header[2];
+		if(imageType != 2 && imageType != 3)
+		{
+		    LOG->warning("TGA files in other modes than uncompressed RGB or monochrome currently not supported.");
+		    file.close();
+		    result = false;
+		}
+		else
+		{
+//		    // Palette start, usually 0
+//		    unsigned short int paletteStart = *(unsigned short int*) &header[3];
+//		    // Amount of colors in palette
+//		    unsigned short int paletteLength = *(unsigned short int*) &header[5];
+//		    // Size of one palette entry
+//		    unsigned char paletteEntrySize = header[7];
+//		    // Coordinates for origin
+//		    unsigned short int originX = *(unsigned short int*) &header[8];
+//		    unsigned short int originY = *(unsigned short int*) &header[10];
+		    // Image resolution
+		    width = *(unsigned short int*) &header[12];
+		    height = *(unsigned short int*) &header[14];
+		    // Bits per pixel
+		    unsigned char bitDepth = header[16];
+		    // Attribute byte
+		    // 0-3: Amount of attribute bits per pixel
+		    //   4: Horizontal position of origin (0 = left, 1 = right)
+		    //   5: Vertical position of origin (0 = down, 1 = up)
+		    // 6-7: 0
+//		    unsigned char attribute = header[17];
+
+		    // File contents
+		    // Image identification
+//		    char* imageID = new char[imageIDLen];
+//		    file.read(imageID, imageIDLen);
+		    // Color palette
+//		    char* colorPalette = new char[paletteLength];
+//		    file.read(colorPalette, paletteLength);
+		    // Actual image data
+		    // Calculate color mode; 3 = BGR, 4 = BGRA
+		    colorMode = bitDepth / 8;
+		    unsigned int imageDataLength = width * height * colorMode;
+		    image = new char[imageDataLength];
+		    file.read(image, imageDataLength);
+
+		    // Close file
+		    file.close();
+
+//		    delete [] imageID;
+//		    delete [] colorPalette;
+		    result = true;
+		}
+	    }
+	}
+
+	// If everything went right so far pass loaded texture to GL
+	if (result)
+	{
+	    // Create OpenGL texture
+	    glGenTextures(1, &_textureId);
+	    // Bind texture
+	    glBindTexture(GL_TEXTURE_2D, _textureId);
+	    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	    GLint intFormat = colorMode == 3 ? GL_RGB : GL_RGBA;
+	    GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;
+	    glTexImage2D(GL_TEXTURE_2D, 0, intFormat, width, height, 0, format,
+		    GL_UNSIGNED_BYTE, image);
+	    glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+	    // If something went wrong simply create a 1x1 white texture
+	    // This makes sure the shader is not totally lost and at least
+	    // *something* shows up on screen
+	    createBogus();
+	}
+	delete[] image;
+
+	return result;
+    }
+
     void Texture::ddsFlipVertically(char* buffer, unsigned int offset,
-	    unsigned int width, unsigned int height, unsigned int blockSize, unsigned int fourCC)
+	    unsigned int width, unsigned int height, unsigned int blockSize,
+	    unsigned int fourCC)
     {
 	unsigned int bytesInARow = ((width + 3) / 4) * blockSize;
 	unsigned char* temp = new unsigned char[bytesInARow];
-	unsigned char* sourceRow = (unsigned char*)buffer + offset;
-	unsigned char* destinationRow = (unsigned char*)buffer + offset + ((height + 3) / 4 - 1) * bytesInARow;
-	for(unsigned int i = 0; i < (height + 3) / 4 / 2; i++)
+	unsigned char* sourceRow = (unsigned char*) buffer + offset;
+	unsigned char* destinationRow = (unsigned char*) buffer + offset
+		+ ((height + 3) / 4 - 1) * bytesInARow;
+	for (unsigned int i = 0; i < (height + 3) / 4 / 2; i++)
 	{
 	    // Swap source row with appropriate mirror row
 	    memcpy(temp, destinationRow, bytesInARow);
@@ -183,7 +299,7 @@ namespace dbgl
 	    {
 		case FOURCC_DXT1:
 		{
-		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    for (unsigned int j = 0; j < bytesInARow / blockSize; j++)
 		    {
 			ddsFlipDXT1Block(sourceRow + j * blockSize);
 			ddsFlipDXT1Block(destinationRow + j * blockSize);
@@ -192,7 +308,7 @@ namespace dbgl
 		}
 		case FOURCC_DXT3:
 		{
-		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    for (unsigned int j = 0; j < bytesInARow / blockSize; j++)
 		    {
 			ddsFlipDXT3Block(sourceRow + j * blockSize);
 			ddsFlipDXT3Block(destinationRow + j * blockSize);
@@ -201,7 +317,7 @@ namespace dbgl
 		}
 		case FOURCC_DXT5:
 		{
-		    for(unsigned int j = 0; j < bytesInARow/blockSize; j++)
+		    for (unsigned int j = 0; j < bytesInARow / blockSize; j++)
 		    {
 			ddsFlipDXT5Block(sourceRow + j * blockSize);
 			ddsFlipDXT5Block(destinationRow + j * blockSize);
@@ -212,7 +328,7 @@ namespace dbgl
 	    sourceRow += bytesInARow;
 	    destinationRow -= bytesInARow;
 	}
-	delete [] temp; // Vertical flipping done
+	delete[] temp; // Vertical flipping done
     }
 
     void Texture::ddsFlipDXT1Block(unsigned char *data)
