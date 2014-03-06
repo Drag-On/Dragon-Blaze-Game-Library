@@ -43,35 +43,47 @@ namespace dbgl
 	    ~Mesh();
 	    /**
 	     * @brief Loads a mesh from hard disk
+	     * @warning The allocated memory needs to be freed manually!
 	     * @param path Path of the file
 	     * @param type File type to load
+	     * @param generateTangentBase Flag indicating if tangents
+	     * 	      and bitangents should be generated
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
-	    static Mesh* load(const std::string path, const Type type);
+	    static Mesh* load(const std::string path, const Type type,
+		    bool generateTangentBase = false);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
+	     * @param generateTangentBase Flag indicating if tangents
+	     * 	      and bitangents should be generated
 	     * @return The triangle mesh
 	     */
-	    static Mesh* makeTriangle();
+	    static Mesh* makeTriangle(bool generateTangentBase = false);
 	    /**
 	     * @brief Creates a mesh that represents a simple plane
 	     * @warning The allocated memory needs to be freed manually!
+	     * @param generateTangentBase Flag indicating if tangents
+	     * 	      and bitangents should be generated
 	     * @return The plane mesh
 	     */
-	    static Mesh* makePlane();
+	    static Mesh* makePlane(bool generateTangentBase = false);
 	    /**
 	     * @brief Creates a mesh that represents a cube
 	     * @warning The allocated memory needs to be freed manually!
+	     * @param generateTangentBase Flag indicating if tangents
+	     * 	      and bitangents should be generated
 	     * @return The cube mesh
 	     */
-	    static Mesh* makeCube();
+	    static Mesh* makeCube(bool generateTangentBase = false);
 	    /**
 	     * @brief Creates a mesh that represents a four-sided pyramid
 	     * @warning The allocated memory needs to be freed manually!
+	     * @param generateTangentBase Flag indicating if tangents
+	     * 	      and bitangents should be generated
 	     * @return The pyramid mesh
 	     */
-	    static Mesh* makePyramid();
+	    static Mesh* makePyramid(bool generateTangentBase = false);
 	private:
 	    /**
 	     * @brief Private constructor; use factory methods!

@@ -25,19 +25,30 @@ namespace dbgl
 	    glDeleteBuffers(1, &_uvBuffer);
     }
 
-    Mesh* Mesh::load(const std::string path, const Type type)
+    Mesh* Mesh::load(const std::string path, const Type type,
+	    bool generateTangentBase)
     {
 	switch (type)
 	{
 	    case OBJ:
-		return loadOBJ(path);
+	    {
+		Mesh* mesh = loadOBJ(path);
+		if (generateTangentBase)
+		{
+		    mesh->generateTangentBasis();
+		    mesh->updateBuffers();
+		}
+		return mesh;
+	    }
 	    default:
+	    {
 		LOG->warning("Format of file %s not recognized", path.c_str());
 		return NULL;
 	    }
 	}
+    }
 
-    Mesh* Mesh::makeTriangle()
+    Mesh* Mesh::makeTriangle(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
@@ -52,12 +63,16 @@ namespace dbgl
 	mesh->_indices =
 	{   0, 1, 2};
 
+	// Generate tangents and bitangents
+	if (generateTangentBase)
+	    mesh->generateTangentBasis();
+
 	mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePlane()
+    Mesh* Mesh::makePlane(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
 	mesh->_vertices =
@@ -72,12 +87,16 @@ namespace dbgl
 	mesh->_indices =
 	{   0, 2, 1, 0, 3, 2};
 
+	// Generate tangents and bitangents
+	if (generateTangentBase)
+	    mesh->generateTangentBasis();
+
 	mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makeCube()
+    Mesh* Mesh::makeCube(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
 
@@ -157,23 +176,26 @@ namespace dbgl
 	};
 
 	// Define UVs
-	Vec2f uvs[4 * 6] =
-	{
-	    Vec2f(0.0, 0.0), // front
-	    Vec2f(1.0, 0.0), //
-	    Vec2f(1.0, 1.0), //
-	    Vec2f(0.0, 1.0),
+	Vec2f uvs[4 * 6] = {
+	Vec2f(0.0, 0.0), // front
+	Vec2f(1.0, 0.0), //
+	Vec2f(1.0, 1.0), //
+	Vec2f(0.0, 1.0),
 	};
 	for (int i = 1; i < 6; i++)
 	    memcpy(&uvs[i * 4], &uvs[0], 4 * sizeof(Vec2f));
 	mesh->_uv.insert(mesh->_uv.begin(), std::begin(uvs), std::end(uvs));
+
+	// Generate tangents and bitangents
+	if (generateTangentBase)
+	    mesh->generateTangentBasis();
 
 	mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePyramid()
+    Mesh* Mesh::makePyramid(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
 
@@ -250,6 +272,10 @@ namespace dbgl
 	    Vec2f(1.0, 1.0),//
 	};
 
+	// Generate tangents and bitangents
+	if (generateTangentBase)
+	    mesh->generateTangentBasis();
+
 	mesh->updateBuffers();
 
 	return mesh;
@@ -268,7 +294,7 @@ namespace dbgl
 	if (_vertexBuffer == GL_INVALID_VALUE)
 	    _vertexBuffer = generateBuffer();
 	fillBuffer(_vertexBuffer, GL_ARRAY_BUFFER,
-		_vertices.size() * 3 * sizeof(GLfloat), &_vertices[0],
+		_vertices.size() * sizeof(Vec3f), &_vertices[0],
 		GL_STATIC_DRAW);
 
 	if (_indexBuffer == GL_INVALID_VALUE)
@@ -277,16 +303,40 @@ namespace dbgl
 		_indices.size() * sizeof(unsigned short), &_indices[0],
 		GL_STATIC_DRAW);
 
-	if (_normalBuffer == GL_INVALID_VALUE)
-	    _normalBuffer = generateBuffer();
-	fillBuffer(_normalBuffer, GL_ARRAY_BUFFER,
-		_normals.size() * 3 * sizeof(GLfloat), &_normals[0],
-		GL_STATIC_DRAW);
+	if (_normals.size() > 0)
+	{
+	    if (_normalBuffer == GL_INVALID_VALUE)
+		_normalBuffer = generateBuffer();
+	    fillBuffer(_normalBuffer, GL_ARRAY_BUFFER,
+		    _normals.size() * sizeof(Vec3f), &_normals[0],
+		    GL_STATIC_DRAW);
+	}
 
-	if (_uvBuffer == GL_INVALID_VALUE)
-	    _uvBuffer = generateBuffer();
-	fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * 2 * sizeof(GLfloat),
-		&_uv[0], GL_STATIC_DRAW);
+	if (_uv.size() > 0)
+	{
+	    if (_uvBuffer == GL_INVALID_VALUE)
+		_uvBuffer = generateBuffer();
+	    fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * sizeof(Vec2f),
+		    &_uv[0], GL_STATIC_DRAW);
+	}
+
+	if (_tangents.size() > 0)
+	{
+	    if (_tangentBuffer == GL_INVALID_VALUE)
+		_tangentBuffer = generateBuffer();
+	    fillBuffer(_tangentBuffer, GL_ARRAY_BUFFER,
+		    _tangents.size() * sizeof(Vec3f), &_tangents[0],
+		    GL_STATIC_DRAW);
+	}
+
+	if (_bitangents.size() > 0)
+	{
+	    if (_bitangentBuffer == GL_INVALID_VALUE)
+		_bitangentBuffer = generateBuffer();
+	    fillBuffer(_bitangentBuffer, GL_ARRAY_BUFFER,
+		    _bitangents.size() * sizeof(Vec3f), &_bitangents[0],
+		    GL_STATIC_DRAW);
+	}
     }
 
     unsigned int Mesh::getVertexIndex(Vec3f const& coords, Vec3f const& normal,
@@ -294,9 +344,8 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < _vertices.size(); i++)
 	{
-	    if(_vertices[i].isSimilar(coords) &&
-		    _normals[i].isSimilar(normal) &&
-		    _uv[i].isSimilar(uv))
+	    if (_vertices[i].isSimilar(coords) && _normals[i].isSimilar(normal)
+		    && _uv[i].isSimilar(uv))
 	    {
 		return i;
 	    }
@@ -306,7 +355,67 @@ namespace dbgl
 
     void Mesh::generateTangentBasis()
     {
-	// TODO
+	// Allocate sufficient memory
+	_tangents.resize(_vertices.size());
+	_bitangents.resize(_vertices.size());
+
+	for (unsigned int i = 0; i < _indices.size(); i += 3)
+	{
+	    // Shortcuts
+	    Vec3f& v0 = _vertices[_indices[i + 0]];
+	    Vec3f& v1 = _vertices[_indices[i + 1]];
+	    Vec3f& v2 = _vertices[_indices[i + 2]];
+	    Vec2f& uv0 = _uv[_indices[i + 0]];
+	    Vec2f& uv1 = _uv[_indices[i + 1]];
+	    Vec2f& uv2 = _uv[_indices[i + 2]];
+
+	    // Position delta
+	    Vec3f deltaPos1 = v1 - v0;
+	    Vec3f deltaPos2 = v2 - v0;
+
+	    // UV delta
+	    Vec2f deltaUV1 = uv1 - uv0;
+	    Vec2f deltaUV2 = uv2 - uv0;
+
+	    // Calculate tangent and bitangent
+	    float r = 1 / (deltaUV1.x() * deltaUV2.y()
+				    - deltaUV1.y() * deltaUV2.x());
+	    Vec3f tangent =
+		    (deltaPos1 * deltaUV2.y() - deltaPos2 * deltaUV1.y()) * r;
+	    Vec3f bitangent = (deltaPos2 * deltaUV1.x()
+		    - deltaPos1 * deltaUV2.x()) * r;
+
+	    // Average tangents and bitangents if already present
+	    _tangents[_indices[i + 0]] += tangent;
+	    _tangents[_indices[i + 1]] += tangent;
+	    _tangents[_indices[i + 2]] += tangent;
+	    _bitangents[_indices[i + 0]] += bitangent;
+	    _bitangents[_indices[i + 1]] += bitangent;
+	    _bitangents[_indices[i + 2]] += bitangent;
+	}
+	// TODO: Normalize tangents & bitangents?
+//	for (unsigned int i = 0; i < _tangents.size(); i++)
+//	{
+//	    _tangents[i].normalize();
+//	    _bitangents[i].normalize();
+//	}
+	// Orthogonalize normal/tangent/bitangent system
+	for (unsigned int i = 0; i < _vertices.size(); i++)
+	{
+	    Vec3f& n = _normals[i];
+	    Vec3f& t = _tangents[i];
+	    Vec3f& b = _bitangents[i];
+
+	    // Gram-Schmidt orthogonalize
+	    t = t - n * n.dot(t);
+	    t.normalize();
+
+	    // Calculate handedness
+	    if (n.cross(t).dot(b) < 0.0f)
+	    {
+		t = t * -1.0f;
+	    }
+	}
     }
 
     GLuint Mesh::generateBuffer()

@@ -109,7 +109,7 @@ int testMatrix4x4()
     assert(std::abs(res[1] - 0) <= 0.01);
     assert(std::abs(res[2] - 0) <= 0.01);
     assert(std::abs(res[3] - 0) <= 0.01);
-    res = (Mat4f::makeScale(2, 0.5, -3, 1) * Vec4f(1, 1, -2, 44));
+    res = (Mat4f::makeScale(2, 0.5, -3) * Vec4f(1, 1, -2, 44));
     assert(std::abs(res[0] - 2) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] - 6) <= 0.01);

@@ -37,7 +37,7 @@ namespace dbgl
     void RenderContext::draw(Renderable const* const entity) const
     {
 	// Check if valid
-	if(entity->pMesh == NULL || entity->pShader == NULL)
+	if (entity->pMesh == NULL || entity->pShader == NULL)
 	{
 	    LOG->warning("Invalid render attempt.");
 	    return;
@@ -50,6 +50,7 @@ namespace dbgl
 	QuatF const& rotation = entity->rotation;
 	ShaderProgram* pShader = entity->pShader;
 	Texture* pTexDiffuse = entity->pTexDiffuse;
+	Texture* pTexNormal = entity->pTexNormal;
 
 	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
 	Mat4f itmMat = modelMat.getInverted().transpose();
@@ -67,9 +68,9 @@ namespace dbgl
 	    int viewportX = viewport->getXRatio() * _frameWidth;
 	    int viewportY = viewport->getYRatio() * _frameHeight;
 	    int viewportWidth = viewport->getWidthRatio()
-		    * (_frameWidth - viewportX);
+	    * (_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
-		    * (_frameHeight - viewportY);
+	    * (_frameHeight - viewportY);
 	    // Set viewport
 	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
@@ -84,6 +85,16 @@ namespace dbgl
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, pTexDiffuse->getTextureHandle());
 		pShader->setUniformSampler(diffuseId, 0);
+	    }
+	    // Send normal texture if the shader wants it
+	    GLint normalId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::TEX_NORMAL);
+	    if (normalId >= 0 && pTexNormal != NULL)
+	    {
+		// Bind to texture unit 1
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, pTexNormal->getTextureHandle());
+		pShader->setUniformSampler(normalId, 1);
 	    }
 	    // Send model matrix if the shader wants it
 	    GLint modelId = pShader->getDefaultUniformHandle(
@@ -108,6 +119,14 @@ namespace dbgl
 	    {
 		pShader->setUniformFloatMatrix4Array(projectionId, 1, GL_FALSE,
 			viewport->getProjectionMat().getDataPointer());
+	    }
+	    // Send mv matrix if the shader wants it
+	    GLint mvId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::MV);
+	    if (mvId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(mvId, 1, GL_FALSE,
+			(viewport->getViewMat() * modelMat).getDataPointer());
 	    }
 	    // Send mvp matrix if the shader wants it
 	    GLint mvpId = pShader->getDefaultUniformHandle(
@@ -147,34 +166,69 @@ namespace dbgl
     void RenderContext::renderMesh(const Mesh* mesh) const
     {
 	// Bind vertex buffer : 0
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->_vertexBuffer);
-	glVertexAttribPointer(0,	// attribute
-		3,			// size
-		GL_FLOAT,		// type
-		GL_FALSE,		// normalized?
-		0,			// stride
-		(void*) 0);		// offset
+	if (mesh->_vertices.size() > 0)
+	{
+	    glEnableVertexAttribArray(0);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_vertexBuffer);
+	    glVertexAttribPointer(0,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
 
 	// Bind UV buffer : 1
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->_uvBuffer);
-	glVertexAttribPointer(1,	// attribute
-		2,			// size
-		GL_FLOAT,		// type
-		GL_FALSE,		// normalized?
-		0,			// stride
-		(void*) 0);		// offset
+	if (mesh->_uv.size() > 0)
+	{
+	    glEnableVertexAttribArray(1);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_uvBuffer);
+	    glVertexAttribPointer(1,	// attribute
+		    2,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
 
 	// Bind normal buffer : 2
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->_normalBuffer);
-	glVertexAttribPointer(2,	// attribute
-		3,			// size
-		GL_FLOAT,		// type
-		GL_FALSE,		// normalized?
-		0,			// stride
-		(void*) 0);		// offset
+	if (mesh->_normals.size() > 0)
+	{
+	    glEnableVertexAttribArray(2);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_normalBuffer);
+	    glVertexAttribPointer(2,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+
+	// Bind tangent buffer : 2
+	if (mesh->_tangents.size() > 0)
+	{
+	    glEnableVertexAttribArray(3);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_tangentBuffer);
+	    glVertexAttribPointer(3,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+
+	// Bind bitangent buffer : 2
+	if (mesh->_bitangents.size() > 0)
+	{
+	    glEnableVertexAttribArray(4);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_bitangentBuffer);
+	    glVertexAttribPointer(4,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
 
 	// Index buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->_indexBuffer);
@@ -186,9 +240,16 @@ namespace dbgl
 		(void*) 0);		// offset
 
 	// Disable buffers
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	if (mesh->_vertices.size() > 0)
+	    glDisableVertexAttribArray(0);
+	if (mesh->_uv.size() > 0)
+	    glDisableVertexAttribArray(1);
+	if (mesh->_normals.size() > 0)
+	    glDisableVertexAttribArray(2);
+	if (mesh->_tangents.size() > 0)
+	    glDisableVertexAttribArray(3);
+	if (mesh->_bitangents.size() > 0)
+	    glDisableVertexAttribArray(4);
     }
 
     void RenderContext::update()

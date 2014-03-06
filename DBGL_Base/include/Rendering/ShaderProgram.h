@@ -32,11 +32,12 @@ namespace dbgl
 		MODEL,
 		VIEW,
 		PROJECTION,
+		MV,
 		MVP,
 		ITM,
 		ITMV,
 		TEX_DIFFUSE,
-		TEX_DIFFUSE_FLAG,
+		TEX_NORMAL,
 	    };
 
 	    /**

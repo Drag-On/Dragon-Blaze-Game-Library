@@ -31,6 +31,7 @@ namespace dbgl
 	    QuatF rotation = QuatF(0, 0, 0, 1);
 	    ShaderProgram* pShader = NULL;
 	    Texture* pTexDiffuse = NULL;
+	    Texture* pTexNormal = NULL;
     };
 }
 
