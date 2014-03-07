@@ -548,6 +548,8 @@ namespace dbgl
 			for (int k = 0;
 				std::getline(tokenStream, curElement, '/'); k++)
 			{
+			    if(curElement.empty())
+				continue;
 			    int curIndex;
 			    std::stringstream(curElement) >> curIndex;
 			    switch (k)
@@ -584,6 +586,12 @@ namespace dbgl
 	    }
 	    // Close file
 	    file.close();
+	    // Check if there UVs have been read from file
+	    if(uvIndices.size() < vertexIndices.size())
+	    {
+		LOG->warning("No UVs specified in %s. This is currently not supported.", path.c_str());
+		return NULL;
+	    }
 	    // Merge to one single index and save in new mesh
 	    mesh = new Mesh();
 	    for (unsigned int i = 0; i < vertexIndices.size(); i++)
