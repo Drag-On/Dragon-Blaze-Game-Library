@@ -33,7 +33,7 @@ namespace dbgl
 	    case OBJ:
 	    {
 		Mesh* mesh = loadOBJ(path);
-		if (generateTangentBase)
+		if (generateTangentBase && mesh != NULL)
 		{
 		    mesh->generateTangentBasis();
 		    mesh->updateBuffers();
