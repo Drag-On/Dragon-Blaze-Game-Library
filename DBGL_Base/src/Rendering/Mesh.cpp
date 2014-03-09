@@ -339,13 +339,12 @@ namespace dbgl
 	}
     }
 
-    unsigned int Mesh::getVertexIndex(Vec3f const& coords, Vec3f const& normal,
-	    Vec2f const& uv)
+    unsigned int Mesh::getVertexIndex(Vec3f const& coords)
     {
+	// TODO: Accelerate w/ more sophisticated search
 	for (unsigned int i = 0; i < _vertices.size(); i++)
 	{
-	    if (_vertices[i].isSimilar(coords) && _normals[i].isSimilar(normal)
-		    && _uv[i].isSimilar(uv))
+	    if (_vertices[i].isSimilar(coords))
 	    {
 		return i;
 	    }
@@ -586,7 +585,7 @@ namespace dbgl
 	    }
 	    // Close file
 	    file.close();
-	    // Check if there UVs have been read from file
+	    // Check if UVs have been read from file
 	    if(uvIndices.size() < vertexIndices.size())
 	    {
 		LOG->warning("No UVs specified in %s. This is currently not supported.", path.c_str());
@@ -616,10 +615,28 @@ namespace dbgl
 		    normal = dir2.cross(dir1).normalize();
 		}
 		// If the vertex has not been added yet, add it and the appropriate normals and uvs
-		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]],
-			normal, uvs[uvIndices[i]]);
+		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]]);
+		if (vertIndex < mesh->_vertices.size())
+		{
+		    // Vertex with similar coordinates has been found
+		    // Check if normal and UVs are compatible and average them if they are
+		    if (mesh->_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
+			    mesh->_uv[vertIndex].isSimilar(uvs[uvIndices[i]]))
+		    {
+			mesh->_normals[vertIndex] += normal;
+			mesh->_normals[vertIndex].normalize();
+			mesh->_uv[vertIndex] += uvs[uvIndices[i]];
+			mesh->_uv[vertIndex] /= 2;
+		    }
+		    else
+		    {
+			// Normal or UVs don't match, so a new vertex has to be added
+			vertIndex = mesh->_vertices.size();
+		    }
+		}
 		if (vertIndex == mesh->_vertices.size())
 		{
+		    // No vertex with similar coordinates has been found
 		    mesh->_vertices.push_back(vertices[vertexIndices[i]]);
 		    if (uvIndices.size() > i && uvs.size() > uvIndices[i])
 		    {

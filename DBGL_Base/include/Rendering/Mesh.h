@@ -97,10 +97,9 @@ namespace dbgl
 	     * @brief Checks, if the mesh has a vertex with the passed coordinates
 	     * 	      (or at least very, very similar)
 	     * @param coords Coordinates to search for
-	     * @return Index of the vertex or size + 1 if not found
+	     * @return Index of the vertex or size if not found
 	     */
-	    unsigned int getVertexIndex(Vec3f const& coords,
-		    Vec3f const& normal, Vec2f const& uv);
+	    unsigned int getVertexIndex(Vec3f const& coords);
 	    /**
 	     * @brief Generates tangents and bitangents from this mesh's normals and UVs
 	     */
