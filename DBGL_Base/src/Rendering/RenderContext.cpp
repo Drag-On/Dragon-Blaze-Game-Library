@@ -34,23 +34,23 @@ namespace dbgl
 		m_viewports.end());
     }
 
-    void RenderContext::draw(Renderable const* const entity) const
+    void RenderContext::draw(Renderable const& entity) const
     {
 	// Check if valid
-	if (entity->pMesh == NULL || entity->pShader == NULL)
+	if (entity.pMesh == NULL || entity.pShader == NULL)
 	{
 	    LOG->warning("Invalid render attempt.");
 	    return;
 	}
 
 	// Define shortcuts
-	Mesh* pMesh = entity->pMesh;
-	Vec3f const& position = entity->position;
-	Vec3f const& scale = entity->scale;
-	QuatF const& rotation = entity->rotation;
-	ShaderProgram* pShader = entity->pShader;
-	Texture* pTexDiffuse = entity->pTexDiffuse;
-	Texture* pTexNormal = entity->pTexNormal;
+	Mesh* pMesh = entity.pMesh;
+	Vec3f const& position = entity.position;
+	Vec3f const& scale = entity.scale;
+	QuatF const& rotation = entity.rotation;
+	ShaderProgram* pShader = entity.pShader;
+	Texture* pTexDiffuse = entity.pTexDiffuse;
+	Texture* pTexNormal = entity.pTexNormal;
 
 	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
 	Mat4f itmMat = modelMat.getInverted().transpose();
@@ -252,7 +252,7 @@ namespace dbgl
 	    glDisableVertexAttribArray(4);
     }
 
-    void RenderContext::update()
+    void RenderContext::preRender()
     {
 	// Update all viewports
 	for (auto &viewport : m_viewports)

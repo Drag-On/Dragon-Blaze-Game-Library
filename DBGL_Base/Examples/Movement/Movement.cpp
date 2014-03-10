@@ -84,17 +84,17 @@ void renderCallback(const RenderContext* rc)
     renderable.pMesh = pMeshPyramid;
     renderable.position = Vec3f();
     renderable.rotation = QuatF();
-    rc->draw(&renderable);
+    rc->draw(renderable);
     // Box will be drawn at (5, 0, 3)
     renderable.pMesh = pMeshBox;
     renderable.position = Vec3f(5, 0, 3);
     renderable.rotation = QuatF(Vec3f(0, pi_4(), 0));
-    rc->draw(&renderable);
+    rc->draw(renderable);
     // Icosahedron will be drawn at (-3, 0, 5)
     renderable.pMesh = pMeshIco;
     renderable.position = Vec3f(-3, 0, 5);
     renderable.rotation = QuatF();
-    rc->draw(&renderable);
+    rc->draw(renderable);
 }
 
 int main()

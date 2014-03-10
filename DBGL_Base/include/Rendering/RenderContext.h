@@ -60,7 +60,7 @@ namespace dbgl
 	     * @brief Draws a mesh to all viewports where it is visible
 	     * @param entity Entity to draw
 	     */
-	    void draw(Renderable const* const entity) const;
+	    void draw(Renderable const& entity) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer
@@ -79,7 +79,7 @@ namespace dbgl
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame
 	     */
-	    void update();
+	    void preRender();
 
 	    unsigned int m_frameWidth, m_frameHeight;
 	    std::vector<Viewport*> m_viewports;

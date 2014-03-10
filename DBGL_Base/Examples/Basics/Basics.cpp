@@ -35,7 +35,7 @@ void renderCallback(const RenderContext* rc)
     renderable.pTexDiffuse = pTexture;
 
     pShader->use();
-    rc->draw(&renderable);
+    rc->draw(renderable);
 }
 
 int main()
