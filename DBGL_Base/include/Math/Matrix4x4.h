@@ -188,7 +188,7 @@ namespace dbgl
 	    const Vector4<T>& operator[](std::size_t const& index) const;
 
 	private:
-	    Vector4<T> _columns[4];
+	    Vector4<T> m_columns[4];
     };
 
     // Some default types

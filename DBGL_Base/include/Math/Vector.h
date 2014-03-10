@@ -115,7 +115,7 @@ namespace dbgl
 	    const T& operator[](std::size_t const& index) const;
 
 	private:
-	    T _elements[N];
+	    T m_elements[N];
     };
 }
 

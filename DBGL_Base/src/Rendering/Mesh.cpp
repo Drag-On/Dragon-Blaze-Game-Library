@@ -15,14 +15,14 @@ namespace dbgl
     Mesh::~Mesh()
     {
 	// Properly delete all buffers
-	if (_indexBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &_indexBuffer);
-	if (_vertexBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &_vertexBuffer);
-	if (_normalBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &_normalBuffer);
-	if (_uvBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &_uvBuffer);
+	if (m_indexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_indexBuffer);
+	if (m_vertexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_vertexBuffer);
+	if (m_normalBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_normalBuffer);
+	if (m_uvBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_uvBuffer);
     }
 
     Mesh* Mesh::load(const std::string path, const Type type,
@@ -51,16 +51,16 @@ namespace dbgl
     Mesh* Mesh::makeTriangle(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
-	mesh->_vertices =
+	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(1, -1, 0), Vec3f(0, 1, 0)};
 
-	mesh->_normals =
+	mesh->m_normals =
 	{   Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)};
 
-	mesh->_uv =
+	mesh->m_uv =
 	{   Vec2f(0, 0), Vec2f(0.5, 0.5), Vec2f(1, 0)};
 
-	mesh->_indices =
+	mesh->m_indices =
 	{   0, 1, 2};
 
 	// Generate tangents and bitangents
@@ -75,16 +75,16 @@ namespace dbgl
     Mesh* Mesh::makePlane(bool generateTangentBase)
     {
 	Mesh* mesh = new Mesh();
-	mesh->_vertices =
+	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(-1, 1, 0), Vec3f(1, 1, 0), Vec3f(1, -1, 0)};
 
-	mesh->_normals =
+	mesh->m_normals =
 	{   Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1), Vec3f(0, 0, 1)};
 
-	mesh->_uv =
+	mesh->m_uv =
 	{   Vec2f(0, 0), Vec2f(0, 1), Vec2f(1, 1), Vec2f(1, 0)};
 
-	mesh->_indices =
+	mesh->m_indices =
 	{   0, 2, 1, 0, 3, 2};
 
 	// Generate tangents and bitangents
@@ -101,7 +101,7 @@ namespace dbgl
 	Mesh* mesh = new Mesh();
 
 	// Define vertices
-	mesh->_vertices =
+	mesh->m_vertices =
 	{
 	    Vec3f(-1.0, -1.0, 1.0), // front 0
 	    Vec3f(1.0, -1.0, 1.0),// 1
@@ -130,7 +130,7 @@ namespace dbgl
 	};
 
 	// Define elements
-	mesh->_indices =
+	mesh->m_indices =
 	{
 	    0, 1, 2, // front
 	    2, 3, 0,//
@@ -147,7 +147,7 @@ namespace dbgl
 	};
 
 	// Define normals
-	mesh->_normals =
+	mesh->m_normals =
 	{
 	    Vec3f(0, 0, 1), // 0 Front
 	    Vec3f(0, 0, 1),// 1
@@ -184,7 +184,7 @@ namespace dbgl
 	};
 	for (int i = 1; i < 6; i++)
 	    memcpy(&uvs[i * 4], &uvs[0], 4 * sizeof(Vec2f));
-	mesh->_uv.insert(mesh->_uv.begin(), std::begin(uvs), std::end(uvs));
+	mesh->m_uv.insert(mesh->m_uv.begin(), std::begin(uvs), std::end(uvs));
 
 	// Generate tangents and bitangents
 	if (generateTangentBase)
@@ -200,7 +200,7 @@ namespace dbgl
 	Mesh* mesh = new Mesh();
 
 	// Define vertices
-	mesh->_vertices =
+	mesh->m_vertices =
 	{   Vec3f(-1, -1, 1), // Front lower left 0
 	    Vec3f(1, -1, 1),// Front lower right 1
 	    Vec3f(0, 1, 0),// Front top 2
@@ -220,7 +220,7 @@ namespace dbgl
 	};
 
 	// Define elements
-	mesh->_indices =
+	mesh->m_indices =
 	{
 	    0, 1, 2, // front
 	    3, 4, 5,// right
@@ -231,7 +231,7 @@ namespace dbgl
 	};
 
 	// Define normals
-	mesh->_normals =
+	mesh->m_normals =
 	{
 	    Vec3f(0, 0.4472, 0.8944), // front
 	    Vec3f(0, 0.4472, 0.8944),// front
@@ -252,7 +252,7 @@ namespace dbgl
 	};
 
 	// Define UVs
-	mesh->_uv =
+	mesh->m_uv =
 	{
 	    Vec2f(0.0, 0.0), // front
 	    Vec2f(1.0, 0.0),//
@@ -283,58 +283,58 @@ namespace dbgl
 
     Mesh::Mesh()
     {
-	_vertexBuffer = GL_INVALID_VALUE;
-	_indexBuffer = GL_INVALID_VALUE;
-	_normalBuffer = GL_INVALID_VALUE;
-	_uvBuffer = GL_INVALID_VALUE;
+	m_vertexBuffer = GL_INVALID_VALUE;
+	m_indexBuffer = GL_INVALID_VALUE;
+	m_normalBuffer = GL_INVALID_VALUE;
+	m_uvBuffer = GL_INVALID_VALUE;
     }
 
     void Mesh::updateBuffers()
     {
-	if (_vertexBuffer == GL_INVALID_VALUE)
-	    _vertexBuffer = generateBuffer();
-	fillBuffer(_vertexBuffer, GL_ARRAY_BUFFER,
-		_vertices.size() * sizeof(Vec3f), &_vertices[0],
+	if (m_vertexBuffer == GL_INVALID_VALUE)
+	    m_vertexBuffer = generateBuffer();
+	fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER,
+		m_vertices.size() * sizeof(Vec3f), &m_vertices[0],
 		GL_STATIC_DRAW);
 
-	if (_indexBuffer == GL_INVALID_VALUE)
-	    _indexBuffer = generateBuffer();
-	fillBuffer(_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		_indices.size() * sizeof(unsigned short), &_indices[0],
+	if (m_indexBuffer == GL_INVALID_VALUE)
+	    m_indexBuffer = generateBuffer();
+	fillBuffer(m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
+		m_indices.size() * sizeof(unsigned short), &m_indices[0],
 		GL_STATIC_DRAW);
 
-	if (_normals.size() > 0)
+	if (m_normals.size() > 0)
 	{
-	    if (_normalBuffer == GL_INVALID_VALUE)
-		_normalBuffer = generateBuffer();
-	    fillBuffer(_normalBuffer, GL_ARRAY_BUFFER,
-		    _normals.size() * sizeof(Vec3f), &_normals[0],
+	    if (m_normalBuffer == GL_INVALID_VALUE)
+		m_normalBuffer = generateBuffer();
+	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER,
+		    m_normals.size() * sizeof(Vec3f), &m_normals[0],
 		    GL_STATIC_DRAW);
 	}
 
-	if (_uv.size() > 0)
+	if (m_uv.size() > 0)
 	{
-	    if (_uvBuffer == GL_INVALID_VALUE)
-		_uvBuffer = generateBuffer();
-	    fillBuffer(_uvBuffer, GL_ARRAY_BUFFER, _uv.size() * sizeof(Vec2f),
-		    &_uv[0], GL_STATIC_DRAW);
+	    if (m_uvBuffer == GL_INVALID_VALUE)
+		m_uvBuffer = generateBuffer();
+	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uv.size() * sizeof(Vec2f),
+		    &m_uv[0], GL_STATIC_DRAW);
 	}
 
-	if (_tangents.size() > 0)
+	if (m_tangents.size() > 0)
 	{
-	    if (_tangentBuffer == GL_INVALID_VALUE)
-		_tangentBuffer = generateBuffer();
-	    fillBuffer(_tangentBuffer, GL_ARRAY_BUFFER,
-		    _tangents.size() * sizeof(Vec3f), &_tangents[0],
+	    if (m_tangentBuffer == GL_INVALID_VALUE)
+		m_tangentBuffer = generateBuffer();
+	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER,
+		    m_tangents.size() * sizeof(Vec3f), &m_tangents[0],
 		    GL_STATIC_DRAW);
 	}
 
-	if (_bitangents.size() > 0)
+	if (m_bitangents.size() > 0)
 	{
-	    if (_bitangentBuffer == GL_INVALID_VALUE)
-		_bitangentBuffer = generateBuffer();
-	    fillBuffer(_bitangentBuffer, GL_ARRAY_BUFFER,
-		    _bitangents.size() * sizeof(Vec3f), &_bitangents[0],
+	    if (m_bitangentBuffer == GL_INVALID_VALUE)
+		m_bitangentBuffer = generateBuffer();
+	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER,
+		    m_bitangents.size() * sizeof(Vec3f), &m_bitangents[0],
 		    GL_STATIC_DRAW);
 	}
     }
@@ -342,31 +342,31 @@ namespace dbgl
     unsigned int Mesh::getVertexIndex(Vec3f const& coords)
     {
 	// TODO: Accelerate w/ more sophisticated search
-	for (unsigned int i = 0; i < _vertices.size(); i++)
+	for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
-	    if (_vertices[i].isSimilar(coords))
+	    if (m_vertices[i].isSimilar(coords))
 	    {
 		return i;
 	    }
 	}
-	return _vertices.size();
+	return m_vertices.size();
     }
 
     void Mesh::generateTangentBasis()
     {
 	// Allocate sufficient memory
-	_tangents.resize(_vertices.size());
-	_bitangents.resize(_vertices.size());
+	m_tangents.resize(m_vertices.size());
+	m_bitangents.resize(m_vertices.size());
 
-	for (unsigned int i = 0; i < _indices.size(); i += 3)
+	for (unsigned int i = 0; i < m_indices.size(); i += 3)
 	{
 	    // Shortcuts
-	    Vec3f& v0 = _vertices[_indices[i + 0]];
-	    Vec3f& v1 = _vertices[_indices[i + 1]];
-	    Vec3f& v2 = _vertices[_indices[i + 2]];
-	    Vec2f& uv0 = _uv[_indices[i + 0]];
-	    Vec2f& uv1 = _uv[_indices[i + 1]];
-	    Vec2f& uv2 = _uv[_indices[i + 2]];
+	    Vec3f& v0 = m_vertices[m_indices[i + 0]];
+	    Vec3f& v1 = m_vertices[m_indices[i + 1]];
+	    Vec3f& v2 = m_vertices[m_indices[i + 2]];
+	    Vec2f& uv0 = m_uv[m_indices[i + 0]];
+	    Vec2f& uv1 = m_uv[m_indices[i + 1]];
+	    Vec2f& uv2 = m_uv[m_indices[i + 2]];
 
 	    // Position delta
 	    Vec3f deltaPos1 = v1 - v0;
@@ -385,12 +385,12 @@ namespace dbgl
 		    - deltaPos1 * deltaUV2.x()) * r;
 
 	    // Average tangents and bitangents if already present
-	    _tangents[_indices[i + 0]] += tangent;
-	    _tangents[_indices[i + 1]] += tangent;
-	    _tangents[_indices[i + 2]] += tangent;
-	    _bitangents[_indices[i + 0]] += bitangent;
-	    _bitangents[_indices[i + 1]] += bitangent;
-	    _bitangents[_indices[i + 2]] += bitangent;
+	    m_tangents[m_indices[i + 0]] += tangent;
+	    m_tangents[m_indices[i + 1]] += tangent;
+	    m_tangents[m_indices[i + 2]] += tangent;
+	    m_bitangents[m_indices[i + 0]] += bitangent;
+	    m_bitangents[m_indices[i + 1]] += bitangent;
+	    m_bitangents[m_indices[i + 2]] += bitangent;
 	}
 	// TODO: Normalize tangents & bitangents?
 //	for (unsigned int i = 0; i < _tangents.size(); i++)
@@ -399,11 +399,11 @@ namespace dbgl
 //	    _bitangents[i].normalize();
 //	}
 	// Orthogonalize normal/tangent/bitangent system
-	for (unsigned int i = 0; i < _vertices.size(); i++)
+	for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
-	    Vec3f& n = _normals[i];
-	    Vec3f& t = _tangents[i];
-	    Vec3f& b = _bitangents[i];
+	    Vec3f& n = m_normals[i];
+	    Vec3f& t = m_tangents[i];
+	    Vec3f& b = m_bitangents[i];
 
 	    // Gram-Schmidt orthogonalize
 	    t = t - n * n.dot(t);
@@ -616,35 +616,35 @@ namespace dbgl
 		}
 		// If the vertex has not been added yet, add it and the appropriate normals and uvs
 		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]]);
-		if (vertIndex < mesh->_vertices.size())
+		if (vertIndex < mesh->m_vertices.size())
 		{
 		    // Vertex with similar coordinates has been found
 		    // Check if normal and UVs are compatible and average them if they are
-		    if (mesh->_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
-			    mesh->_uv[vertIndex].isSimilar(uvs[uvIndices[i]]))
+		    if (mesh->m_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
+			    mesh->m_uv[vertIndex].isSimilar(uvs[uvIndices[i]]))
 		    {
-			mesh->_normals[vertIndex] += normal;
-			mesh->_normals[vertIndex].normalize();
-			mesh->_uv[vertIndex] += uvs[uvIndices[i]];
-			mesh->_uv[vertIndex] /= 2;
+			mesh->m_normals[vertIndex] += normal;
+			mesh->m_normals[vertIndex].normalize();
+			mesh->m_uv[vertIndex] += uvs[uvIndices[i]];
+			mesh->m_uv[vertIndex] /= 2;
 		    }
 		    else
 		    {
 			// Normal or UVs don't match, so a new vertex has to be added
-			vertIndex = mesh->_vertices.size();
+			vertIndex = mesh->m_vertices.size();
 		    }
 		}
-		if (vertIndex == mesh->_vertices.size())
+		if (vertIndex == mesh->m_vertices.size())
 		{
 		    // No vertex with similar coordinates has been found
-		    mesh->_vertices.push_back(vertices[vertexIndices[i]]);
+		    mesh->m_vertices.push_back(vertices[vertexIndices[i]]);
 		    if (uvIndices.size() > i && uvs.size() > uvIndices[i])
 		    {
-			mesh->_uv.push_back(uvs[uvIndices[i]]);
+			mesh->m_uv.push_back(uvs[uvIndices[i]]);
 		    }
-		    mesh->_normals.push_back(normal);
+		    mesh->m_normals.push_back(normal);
 		}
-		mesh->_indices.push_back(vertIndex);
+		mesh->m_indices.push_back(vertIndex);
 	    }
 	}
 	else

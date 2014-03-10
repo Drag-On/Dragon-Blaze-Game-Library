@@ -305,7 +305,7 @@ namespace dbgl
 	     */
 	    operator Matrix4x4<T>() const;
 	private:
-	    Vector4<T> _data;
+	    Vector4<T> m_data;
     };
 
     // Some default types

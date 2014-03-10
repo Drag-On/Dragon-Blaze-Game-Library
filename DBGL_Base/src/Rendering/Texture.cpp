@@ -33,24 +33,24 @@ namespace dbgl
 	if (!success)
 	{
 	    LOG->warning("Texture %s not loaded!", path.c_str());
-	    _textureId = 0;
+	    m_textureId = 0;
 	}
     }
 
     Texture::~Texture()
     {
-	glDeleteTextures(1, &_textureId);
+	glDeleteTextures(1, &m_textureId);
     }
 
     GLuint Texture::getTextureHandle()
     {
-	return _textureId;
+	return m_textureId;
     }
 
     bool Texture::createBogus()
     {
-	glGenTextures(1, &_textureId);
-	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glGenTextures(1, &m_textureId);
+	glBindTexture(GL_TEXTURE_2D, m_textureId);
 	unsigned char data[3] = {
 		255, 255, 255
 	};
@@ -116,9 +116,9 @@ namespace dbgl
 		if (result) // If everything went right so far pass loaded texture to GL
 		{
 		    // Create OpenGL texture
-		    glGenTextures(1, &_textureId);
+		    glGenTextures(1, &m_textureId);
 		    // Bind texture
-		    glBindTexture(GL_TEXTURE_2D, _textureId);
+		    glBindTexture(GL_TEXTURE_2D, m_textureId);
 		    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		    unsigned int offset = 0;
 		    unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
@@ -257,9 +257,9 @@ namespace dbgl
 	if (result)
 	{
 	    // Create OpenGL texture
-	    glGenTextures(1, &_textureId);
+	    glGenTextures(1, &m_textureId);
 	    // Bind texture
-	    glBindTexture(GL_TEXTURE_2D, _textureId);
+	    glBindTexture(GL_TEXTURE_2D, m_textureId);
 	    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	    GLint intFormat = colorMode == 3 ? GL_RGB : GL_RGBA;
 	    GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;

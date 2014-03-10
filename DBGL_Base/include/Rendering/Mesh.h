@@ -128,18 +128,18 @@ namespace dbgl
 	     */
 	    static Mesh* loadOBJ(const std::string path);
 
-	    std::vector<unsigned short> _indices;
-	    GLuint _indexBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> _vertices;
-	    GLuint _vertexBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> _normals;
-	    GLuint _normalBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector2<GLfloat>> _uv;
-	    GLuint _uvBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> _tangents;
-	    GLuint _tangentBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> _bitangents;
-	    GLuint _bitangentBuffer = GL_INVALID_VALUE;
+	    std::vector<unsigned short> m_indices;
+	    GLuint m_indexBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> m_vertices;
+	    GLuint m_vertexBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> m_normals;
+	    GLuint m_normalBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector2<GLfloat>> m_uv;
+	    GLuint m_uvBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> m_tangents;
+	    GLuint m_tangentBuffer = GL_INVALID_VALUE;
+	    std::vector<Vector3<GLfloat>> m_bitangents;
+	    GLuint m_bitangentBuffer = GL_INVALID_VALUE;
 
 	    friend class RenderContext;
 	    // So the render context can render

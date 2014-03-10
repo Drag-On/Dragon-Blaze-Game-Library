@@ -12,17 +12,17 @@ namespace dbgl
 {
 	template<typename T> Matrix4x4<T>::Matrix4x4()
 	{
-		_columns[0] = Vector4<T>(1,0,0,0);
-		_columns[1] = Vector4<T>(0,1,0,0);
-		_columns[2] = Vector4<T>(0,0,1,0);
-		_columns[3] = Vector4<T>(0,0,0,1);
+		m_columns[0] = Vector4<T>(1,0,0,0);
+		m_columns[1] = Vector4<T>(0,1,0,0);
+		m_columns[2] = Vector4<T>(0,0,1,0);
+		m_columns[3] = Vector4<T>(0,0,0,1);
 	}
 	
 	template<typename T> Matrix4x4<T>::Matrix4x4(const Matrix4x4<T> &other)
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
-				_columns[x][y] = other[x][y];
+				m_columns[x][y] = other[x][y];
 	}
 
 	template<typename T> Matrix4x4<T>::~Matrix4x4()
@@ -505,7 +505,7 @@ namespace dbgl
 	template<typename T> Vector4<T>& Matrix4x4<T>::operator[](std::size_t const& index)
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
@@ -516,7 +516,7 @@ namespace dbgl
 	template<typename T> const Vector4<T>& Matrix4x4<T>::operator[](std::size_t const& index) const
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());

@@ -147,7 +147,7 @@ namespace dbgl
 	    const T& operator[](std::size_t const& index) const;
 
 	private:
-	    T _x, _y, _z;
+	    T m_x, m_y, m_z;
     };
 
     // Some default types

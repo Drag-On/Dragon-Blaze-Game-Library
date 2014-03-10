@@ -80,7 +80,7 @@ namespace dbgl
 	    const Vector<T, M>& operator[](std::size_t const& index) const;
 
 	private:
-	    Vector<T, M> _columns[N];
+	    Vector<T, M> m_columns[N];
     };
 }
 

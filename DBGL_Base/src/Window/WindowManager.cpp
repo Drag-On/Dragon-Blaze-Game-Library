@@ -12,13 +12,13 @@
 
 namespace dbgl
 {
-    WindowManager WindowManager::instance = WindowManager();
-    std::map<GLFWwindow*, Window*> WindowManager::windows = std::map<
+    WindowManager WindowManager::s_instance = WindowManager();
+    std::map<GLFWwindow*, Window*> WindowManager::s_windows = std::map<
 	    GLFWwindow*, Window*>();
 
     WindowManager* WindowManager::get()
     {
-	return &instance;
+	return &s_instance;
     }
 
     void WindowManager::update()
@@ -26,7 +26,7 @@ namespace dbgl
 	// Poll events
 	glfwPollEvents();
 	// Update and render all windows
-	for (auto wnd = windows.begin(); wnd != windows.end();)
+	for (auto wnd = s_windows.begin(); wnd != s_windows.end();)
 	{
 	    wnd->second->preUpdate();
 	    wnd->second->update();
@@ -37,7 +37,7 @@ namespace dbgl
 	    if (glfwWindowShouldClose(wnd->first))
 	    {
 		delete (wnd->second);
-		wnd = windows.erase(wnd);
+		wnd = s_windows.erase(wnd);
 	    }
 	    else
 		++wnd;
@@ -47,8 +47,8 @@ namespace dbgl
     void WindowManager::terminate()
     {
 	// Delete windows that are still open
-	if (!windows.empty())
-	    for (auto wnd = windows.begin(); wnd != windows.end();)
+	if (!s_windows.empty())
+	    for (auto wnd = s_windows.begin(); wnd != s_windows.end();)
 		delete (wnd->second);
 
 	// Terminate glfw context
@@ -57,7 +57,7 @@ namespace dbgl
 
     bool WindowManager::isRunning() const
     {
-	return !WindowManager::windows.empty();
+	return !WindowManager::s_windows.empty();
     }
 
     double WindowManager::getTime() const
@@ -82,73 +82,73 @@ namespace dbgl
 
     void WindowManager::closeCallback(GLFWwindow* window)
     {
-	windows[window]->_closeCallback();
+	s_windows[window]->m_closeCallback();
     }
 
     void WindowManager::focusCallback(GLFWwindow* window, int focused)
     {
-	windows[window]->_focusCallback(focused);
+	s_windows[window]->m_focusCallback(focused);
     }
 
     void WindowManager::iconifiedCallback(GLFWwindow* window, int iconified)
     {
-	windows[window]->_iconifiedCallback(iconified);
+	s_windows[window]->m_iconifiedCallback(iconified);
     }
 
     void WindowManager::refreshCallback(GLFWwindow* window)
     {
-	windows[window]->_refreshCallback();
+	s_windows[window]->m_refreshCallback();
     }
 
     void WindowManager::resizeCallback(GLFWwindow* window, int width,
 	    int height)
     {
-	windows[window]->_resizeCallback(width, height);
+	s_windows[window]->m_resizeCallback(width, height);
     }
 
     void WindowManager::framebufferResizeCallback(GLFWwindow* window, int width,
 	    int height)
     {
-	windows[window]->_framebufferResizeCallback(width, height);
+	s_windows[window]->m_framebufferResizeCallback(width, height);
     }
 
     void WindowManager::positionCallback(GLFWwindow* window, int xpos, int ypos)
     {
-	windows[window]->_positionCallback(xpos, ypos);
+	s_windows[window]->m_positionCallback(xpos, ypos);
     }
 
     void WindowManager::characterCallback(GLFWwindow* window,
 	    unsigned int codepoint)
     {
-	windows[window]->_characterCallback(codepoint);
+	s_windows[window]->m_characterCallback(codepoint);
     }
 
     void WindowManager::cursorEnterCallback(GLFWwindow* window, int entered)
     {
-	windows[window]->_cursorEnterCallback(entered);
+	s_windows[window]->m_cursorEnterCallback(entered);
     }
 
     void WindowManager::cursorCallback(GLFWwindow* window, double x, double y)
     {
-	windows[window]->_cursorCallback(x, y);
+	s_windows[window]->m_cursorCallback(x, y);
     }
 
     void WindowManager::mouseButtonCallback(GLFWwindow* window, int button,
 	    int action, int mods)
     {
-	windows[window]->_mouseButtonCallback(button, action, mods);
+	s_windows[window]->m_mouseButtonCallback(button, action, mods);
     }
 
     void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
 	    double yOffset)
     {
-	windows[window]->_scrollCallback(xOffset, yOffset);
+	s_windows[window]->m_scrollCallback(xOffset, yOffset);
     }
 
     void WindowManager::keyCallback(GLFWwindow* window, int key, int scancode,
 	    int action, int mods)
     {
-	windows[window]->_keyCallback(key, scancode, action, mods);
+	s_windows[window]->m_keyCallback(key, scancode, action, mods);
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
@@ -158,10 +158,10 @@ namespace dbgl
     {
 	if (oldHandle != newHandle)
 	{
-	    auto i = windows.find(oldHandle);
+	    auto i = s_windows.find(oldHandle);
 	    auto temp = i->second;
-	    windows.erase(i);
-	    windows.insert(std::pair<GLFWwindow*, Window*>(newHandle, temp));
+	    s_windows.erase(i);
+	    s_windows.insert(std::pair<GLFWwindow*, Window*>(newHandle, temp));
 	}
     }
 }

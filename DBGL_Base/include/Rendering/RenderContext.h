@@ -81,9 +81,8 @@ namespace dbgl
 	     */
 	    void update();
 
-	    unsigned int _frameWidth, _frameHeight;
-	    std::vector<Viewport*> _viewports;
-
+	    unsigned int m_frameWidth, m_frameHeight;
+	    std::vector<Viewport*> m_viewports;
 	    // Window::preRender can access internals - only for update() method
 	    friend class Window;
     };

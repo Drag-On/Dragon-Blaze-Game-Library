@@ -15,7 +15,7 @@ namespace dbgl
 
     Camera::Camera(Vec3f position, Vec3f direction, Vec3f up, float fieldOfView,
 	    float near, float far) :
-	    _position(position), _fieldOfView(fieldOfView), _near(near), _far(
+	    m_position(position), m_fieldOfView(fieldOfView), m_near(near), m_far(
 		    far)
     {
 	setOrientation(direction, up);
@@ -23,8 +23,8 @@ namespace dbgl
 
     Camera::Camera(Vec3f position, QuatF orientation, float fieldOfView,
 	    float near, float far) :
-	    _position(position), _rotation(orientation), _fieldOfView(
-		    fieldOfView), _near(near), _far(far)
+	    m_position(position), m_rotation(orientation), m_fieldOfView(
+		    fieldOfView), m_near(near), m_far(far)
     {
     }
 
@@ -34,27 +34,27 @@ namespace dbgl
 
     Vec3f& Camera::position()
     {
-	return _position;
+	return m_position;
     }
 
     QuatF& Camera::rotation()
     {
-	return _rotation;
+	return m_rotation;
     }
 
     void Camera::getOrientation(Vec3f* direction, Vec3f* up, Vec3f* right) const
     {
 	if (direction != NULL)
-	    *direction = _rotation * Vec3f(0, 0, 1);
+	    *direction = m_rotation * Vec3f(0, 0, 1);
 	if (right != NULL)
-	    *right = _rotation * Vec3f(-1, 0, 0);
+	    *right = m_rotation * Vec3f(-1, 0, 0);
 	if (up != NULL)
-	    *up = _rotation * Vec3f(0, 1, 0);
+	    *up = m_rotation * Vec3f(0, 1, 0);
     }
 
     void Camera::setOrientation(Vec3f const& direction, Vec3f const& up)
     {
-	_rotation.fromVectors(Vec3f(0, 0, 1), direction, up);
+	m_rotation.fromVectors(Vec3f(0, 0, 1), direction, up);
     }
 
     void Camera::rotate(float horizontal, float vertical)
@@ -65,32 +65,32 @@ namespace dbgl
 
     float Camera::getFieldOfView() const
     {
-	return _fieldOfView;
+	return m_fieldOfView;
     }
 
     void Camera::setFieldOfView(float fieldOfView)
     {
-	_fieldOfView = fieldOfView;
+	m_fieldOfView = fieldOfView;
     }
 
     float Camera::getNear() const
     {
-	return _near;
+	return m_near;
     }
 
     void Camera::setNear(float near)
     {
-	_near = near;
+	m_near = near;
     }
 
     float Camera::getFar() const
     {
-	return _far;
+	return m_far;
     }
 
     void Camera::setFar(float far)
     {
-	_far = far;
+	m_far = far;
     }
 }
 

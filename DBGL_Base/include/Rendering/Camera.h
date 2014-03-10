@@ -100,9 +100,9 @@ namespace dbgl
 	     */
 	    void setFar(float far);
 	private:
-	    Vec3f _position;
-	    QuatF _rotation;
-	    float _fieldOfView, _near, _far;
+	    Vec3f m_position;
+	    QuatF m_rotation;
+	    float m_fieldOfView, m_near, m_far;
     };
 }
 

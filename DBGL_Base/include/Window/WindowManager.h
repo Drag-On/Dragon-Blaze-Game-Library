@@ -28,7 +28,7 @@ namespace dbgl
     class WindowManager
     {
 	private:
-	    GLFWwindow* _shareWindow;
+	    GLFWwindow* m_shareWindow;
 	public:
 	    /**
 	     * @return The only instance of this class
@@ -40,12 +40,12 @@ namespace dbgl
 	     */
 	    template<typename T> T* createWindow()
 	    {
-		GLFWwindow* share = _shareWindow;
+		GLFWwindow* share = m_shareWindow;
 		auto wnd = new T(share);
-		windows.insert(
-			std::pair<GLFWwindow*, Window*>(wnd->_pWndHandle, wnd));
-		if (_shareWindow == NULL)
-		    _shareWindow = wnd->_pWndHandle;
+		s_windows.insert(
+			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
+		if (m_shareWindow == NULL)
+		    m_shareWindow = wnd->m_pWndHandle;
 		return wnd;
 	    }
 	    /**
@@ -55,12 +55,12 @@ namespace dbgl
 	     */
 	    template<typename T> T* createWindow(const char* title)
 	    {
-		GLFWwindow* share = _shareWindow;
+		GLFWwindow* share = m_shareWindow;
 		auto wnd = new T(share, title);
-		windows.insert(
-			std::pair<GLFWwindow*, Window*>(wnd->_pWndHandle, wnd));
-		if (_shareWindow == NULL)
-		    _shareWindow = wnd->_pWndHandle;
+		s_windows.insert(
+			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
+		if (m_shareWindow == NULL)
+		    m_shareWindow = wnd->m_pWndHandle;
 		return wnd;
 	    }
 	    /**
@@ -73,12 +73,12 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title, int width,
 		    int height)
 	    {
-		GLFWwindow* share = _shareWindow;
+		GLFWwindow* share = m_shareWindow;
 		auto wnd = new T(share, title, width, height);
-		windows.insert(
-			std::pair<GLFWwindow*, Window*>(wnd->_pWndHandle, wnd));
-		if (_shareWindow == NULL)
-		    _shareWindow = wnd->_pWndHandle;
+		s_windows.insert(
+			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
+		if (m_shareWindow == NULL)
+		    m_shareWindow = wnd->m_pWndHandle;
 		return wnd;
 	    }
 	    /**
@@ -93,12 +93,12 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title, int width,
 		    int height, bool fullscreen)
 	    {
-		GLFWwindow* share = _shareWindow;
+		GLFWwindow* share = m_shareWindow;
 		auto wnd = new T(share, title, width, height, fullscreen);
-		windows.insert(
-			std::pair<GLFWwindow*, Window*>(wnd->_pWndHandle, wnd));
-		if (_shareWindow == NULL)
-		    _shareWindow = wnd->_pWndHandle;
+		s_windows.insert(
+			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
+		if (m_shareWindow == NULL)
+		    m_shareWindow = wnd->m_pWndHandle;
 		return wnd;
 	    }
 	    /**
@@ -146,8 +146,8 @@ namespace dbgl
 
 	    void updateHandle(GLFWwindow* oldHandle, GLFWwindow* newHandle);
 
-	    static std::map<GLFWwindow*, Window*> windows; // TODO: unordered_map?
-	    static WindowManager instance;
+	    static std::map<GLFWwindow*, Window*> s_windows; // TODO: unordered_map?
+	    static WindowManager s_instance;
 
 	    friend class Window;
     };

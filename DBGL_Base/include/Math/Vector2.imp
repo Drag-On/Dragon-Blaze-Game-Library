@@ -10,15 +10,15 @@
 
 namespace dbgl
 {
-	template<typename T> Vector2<T>::Vector2() : _x(0), _y(0)
+	template<typename T> Vector2<T>::Vector2() : m_x(0), m_y(0)
 	{
 	}
 	
-	template<typename T> Vector2<T>::Vector2(T x, T y) : _x(x), _y(y)
+	template<typename T> Vector2<T>::Vector2(T x, T y) : m_x(x), m_y(y)
 	{
 	}
 	
-	template<typename T> Vector2<T>::Vector2(const Vector2<T> &other) :_x(other[0]), _y(other[1])
+	template<typename T> Vector2<T>::Vector2(const Vector2<T> &other) :m_x(other[0]), m_y(other[1])
 	{
 	}
 
@@ -33,22 +33,22 @@ namespace dbgl
 	
 	template<typename T> const T& Vector2<T>::x() const
 	{
-		return _x;
+		return m_x;
 	}
 	
 	template<typename T> T& Vector2<T>::x()
 	{
-		return _x;
+		return m_x;
 	}
 	
 	template<typename T> const T& Vector2<T>::y() const
 	{
-		return _y;
+		return m_y;
 	}
 	
 	template<typename T> T& Vector2<T>::y()
 	{
-		return _y;
+		return m_y;
 	}
 	
 	template<typename T> T Vector2<T>::getSquaredLength() const
@@ -109,8 +109,8 @@ namespace dbgl
 	
 	template<typename T> Vector2<T>& Vector2<T>::translate(T x, T y)
 	{
-		_x += x;
-		_y += y;
+		m_x += x;
+		m_y += y;
 		return *this;
 	}
 	
@@ -249,7 +249,7 @@ namespace dbgl
 	template<typename T> T& Vector2<T>::operator[](std::size_t const& index)
 	{
 		if(index < getDimension())
-			return (&_x)[index];
+			return (&m_x)[index];
 		else
 		{
 			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
@@ -260,7 +260,7 @@ namespace dbgl
 	template<typename T> const T& Vector2<T>::operator[](std::size_t const& index) const
 	{
 		if(index < getDimension())
-			return (&_x)[index];
+			return (&m_x)[index];
 		else
 		{
 			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());

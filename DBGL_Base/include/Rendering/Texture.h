@@ -119,7 +119,7 @@ namespace dbgl
 	    /**
 	     * @brief GL texture handle
 	     */
-	    GLuint _textureId;
+	    GLuint m_textureId;
 
 	    /**
 	     * @brief DXT formats that can be loaded

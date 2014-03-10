@@ -36,27 +36,27 @@ namespace dbgl
 	    exit(EXIT_FAILURE);
 	}
 
-	_title = title;
+	m_title = title;
 	if(fullscreen)
 	{
 	    // Initialize window to default values
-	    _windowedWidth = 800;
-	    _windowedHeight = 600;
+	    m_windowedWidth = 800;
+	    m_windowedHeight = 600;
 	    // Initialize fullscreen resolution
-	    _fullscreenWidth = width;
-	    _fullscreenHeight = height;
-	    _isFullscreen = true;
+	    m_fullscreenWidth = width;
+	    m_fullscreenHeight = height;
+	    m_isFullscreen = true;
 	}
 	else
 	{
 	    // Initialize window to default values
-	    _windowedWidth = width;
-	    _windowedHeight = height;
+	    m_windowedWidth = width;
+	    m_windowedHeight = height;
 	    // Initialize fullscreen resolution to screen resolution
 	    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	    _fullscreenWidth = mode->width;
-	    _fullscreenHeight = mode->height;
-	    _isFullscreen = false;
+	    m_fullscreenWidth = mode->width;
+	    m_fullscreenHeight = mode->height;
+	    m_isFullscreen = false;
 	}
 
 	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
@@ -66,21 +66,21 @@ namespace dbgl
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 	if(fullscreen)
-	_pWndHandle = glfwCreateWindow(_fullscreenWidth, _fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
+	m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
-	_pWndHandle = glfwCreateWindow(_windowedWidth, _windowedHeight, title, NULL, share);
-	if (!_pWndHandle)
+	m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
+	if (!m_pWndHandle)
 	{
 	    LOG->error("Failed to create new window!");
 	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
 
-	_windowedX = getX();
-	_windowedY = getY();
+	m_windowedX = getX();
+	m_windowedY = getY();
 
 	// Create render context object
-	_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
+	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
 
 	makeCurrent();
 
@@ -96,11 +96,11 @@ namespace dbgl
     Window::~Window()
     {
 	makeCurrent();
-	glDeleteVertexArrays(1, &_vertexArrayId);
-	glfwDestroyWindow(_pWndHandle);
+	glDeleteVertexArrays(1, &m_vertexArrayId);
+	glfwDestroyWindow(m_pWndHandle);
 
-	delete _pRenderContext;
-	_pRenderContext = NULL;
+	delete m_pRenderContext;
+	m_pRenderContext = NULL;
     }
 
     void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)
@@ -126,269 +126,269 @@ namespace dbgl
 	    glEnable(GL_CULL_FACE);
 
 	// Create vertex array
-	glGenVertexArrays(1, &_vertexArrayId);
-	glBindVertexArray(_vertexArrayId);
+	glGenVertexArrays(1, &m_vertexArrayId);
+	glBindVertexArray(m_vertexArrayId);
     }
 
     void Window::show()
     {
-	glfwShowWindow(_pWndHandle);
+	glfwShowWindow(m_pWndHandle);
     }
 
     void Window::hide()
     {
-	glfwHideWindow(_pWndHandle);
+	glfwHideWindow(m_pWndHandle);
     }
 
     void Window::close()
     {
-	glfwSetWindowShouldClose(_pWndHandle, true);
+	glfwSetWindowShouldClose(m_pWndHandle, true);
     }
 
     bool Window::hasFocus() const
     {
-	return glfwGetWindowAttrib(_pWndHandle, GLFW_FOCUSED);
+	return glfwGetWindowAttrib(m_pWndHandle, GLFW_FOCUSED);
     }
 
     bool Window::isIconified() const
     {
-	return glfwGetWindowAttrib(_pWndHandle, GLFW_ICONIFIED);
+	return glfwGetWindowAttrib(m_pWndHandle, GLFW_ICONIFIED);
     }
 
     bool Window::isVisible() const
     {
-	return glfwGetWindowAttrib(_pWndHandle, GLFW_VISIBLE);
+	return glfwGetWindowAttrib(m_pWndHandle, GLFW_VISIBLE);
     }
 
     bool Window::isResizable() const
     {
-	return glfwGetWindowAttrib(_pWndHandle, GLFW_RESIZABLE);
+	return glfwGetWindowAttrib(m_pWndHandle, GLFW_RESIZABLE);
     }
 
     bool Window::isDecorated() const
     {
-	return glfwGetWindowAttrib(_pWndHandle, GLFW_DECORATED);
+	return glfwGetWindowAttrib(m_pWndHandle, GLFW_DECORATED);
     }
 
     const char* Window::getTitle() const
     {
-	return _title.c_str();
+	return m_title.c_str();
     }
 
     void Window::setTitle(const char* title)
     {
-	_title.assign(title);
-	glfwSetWindowTitle(_pWndHandle, title);
+	m_title.assign(title);
+	glfwSetWindowTitle(m_pWndHandle, title);
     }
 
     int Window::getWidth() const
     {
 	int width, height;
-	glfwGetWindowSize(_pWndHandle, &width, &height);
+	glfwGetWindowSize(m_pWndHandle, &width, &height);
 	return width;
     }
 
     int Window::getHeight() const
     {
 	int width, height;
-	glfwGetWindowSize(_pWndHandle, &width, &height);
+	glfwGetWindowSize(m_pWndHandle, &width, &height);
 	return height;
     }
 
     void Window::setSize(int width, int height)
     {
-	glfwSetWindowSize(_pWndHandle, width, height);
+	glfwSetWindowSize(m_pWndHandle, width, height);
     }
 
     int Window::getFrameWidth() const
     {
 	int width, height;
-	glfwGetFramebufferSize(_pWndHandle, &width, &height);
+	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
 	return width;
     }
 
     int Window::getFrameHeight() const
     {
 	int width, height;
-	glfwGetFramebufferSize(_pWndHandle, &width, &height);
+	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
 	return height;
     }
 
     int Window::getX() const
     {
 	int x, y;
-	glfwGetWindowPos(_pWndHandle, &x, &y);
+	glfwGetWindowPos(m_pWndHandle, &x, &y);
 	return x;
     }
 
     int Window::getY() const
     {
 	int x, y;
-	glfwGetWindowPos(_pWndHandle, &x, &y);
+	glfwGetWindowPos(m_pWndHandle, &x, &y);
 	return y;
     }
 
     void Window::setPos(int x, int y)
     {
-	glfwSetWindowPos(_pWndHandle, x, y);
+	glfwSetWindowPos(m_pWndHandle, x, y);
     }
 
     bool Window::isFullscreen() const
     {
-	return _isFullscreen;
+	return m_isFullscreen;
     }
 
     void Window::setFullscreen(bool fullscreen)
     {
 	if (isFullscreen() && !fullscreen)
 	{
-	    this->setPos(_windowedX, _windowedY);
-	    this->setSize(_windowedWidth, _windowedHeight);
+	    this->setPos(m_windowedX, m_windowedY);
+	    this->setSize(m_windowedWidth, m_windowedHeight);
 	}
 	else if (!isFullscreen() && fullscreen)
 	{
-	    _windowedWidth = getFrameWidth();
-	    _windowedHeight = getFrameHeight();
-	    _windowedX = getX();
-	    _windowedY = getY();
+	    m_windowedWidth = getFrameWidth();
+	    m_windowedHeight = getFrameHeight();
+	    m_windowedX = getX();
+	    m_windowedY = getY();
 	    this->setPos(0, 0);
-	    this->setSize(_fullscreenWidth, _fullscreenHeight);
+	    this->setSize(m_fullscreenWidth, m_fullscreenHeight);
 	}
-	_isFullscreen = fullscreen;
+	m_isFullscreen = fullscreen;
     }
 
     Vec3f Window::getClearColor() const
     {
-	return _clearColor;
+	return m_clearColor;
     }
 
     void Window::setClearColor(Vector3<GLclampf> const& color)
     {
-	_clearColor = color;
+	m_clearColor = color;
     }
 
     RenderContext* Window::getRenderContext() const
     {
-	return _pRenderContext;
+	return m_pRenderContext;
     }
 
     void Window::makeCurrent()
     {
-	glfwMakeContextCurrent(_pWndHandle);
+	glfwMakeContextCurrent(m_pWndHandle);
     }
 
     void Window::getCursorPos(double& x, double& y) const
     {
-	glfwGetCursorPos(_pWndHandle, &x, &y);
+	glfwGetCursorPos(m_pWndHandle, &x, &y);
     }
 
     void Window::setCursorPos(double x, double y)
     {
-	glfwSetCursorPos(_pWndHandle, x, y);
+	glfwSetCursorPos(m_pWndHandle, x, y);
     }
 
     int Window::getButton(int button) const
     {
-	return glfwGetMouseButton(_pWndHandle, button);
+	return glfwGetMouseButton(m_pWndHandle, button);
     }
 
     int Window::getKey(int key) const
     {
-	return glfwGetKey(_pWndHandle, key);
+	return glfwGetKey(m_pWndHandle, key);
     }
 
     void Window::addCloseCallback(CloseCallbackType const& callback)
     {
-	_closeCallback = callback;
-	glfwSetWindowCloseCallback(_pWndHandle, WindowManager::closeCallback);
+	m_closeCallback = callback;
+	glfwSetWindowCloseCallback(m_pWndHandle, WindowManager::closeCallback);
     }
 
     void Window::addFocusCallback(FocusCallbackType const& callback)
     {
-	_focusCallback = callback;
-	glfwSetWindowFocusCallback(_pWndHandle, WindowManager::focusCallback);
+	m_focusCallback = callback;
+	glfwSetWindowFocusCallback(m_pWndHandle, WindowManager::focusCallback);
     }
 
     void Window::addIconifiedCallback(IconifiedCallbackType const& callback)
     {
-	_iconifiedCallback = callback;
-	glfwSetWindowIconifyCallback(_pWndHandle,
+	m_iconifiedCallback = callback;
+	glfwSetWindowIconifyCallback(m_pWndHandle,
 		WindowManager::iconifiedCallback);
     }
 
     void Window::addRefreshCallback(RefreshCallbackType const& callback)
     {
-	_refreshCallback = callback;
-	glfwSetWindowRefreshCallback(_pWndHandle,
+	m_refreshCallback = callback;
+	glfwSetWindowRefreshCallback(m_pWndHandle,
 		WindowManager::refreshCallback);
     }
 
     void Window::addResizeCallback(ResizeCallbackType const& callback)
     {
-	_resizeCallback = callback;
-	glfwSetWindowSizeCallback(_pWndHandle, WindowManager::resizeCallback);
+	m_resizeCallback = callback;
+	glfwSetWindowSizeCallback(m_pWndHandle, WindowManager::resizeCallback);
     }
 
     void Window::addFramebufferResizeCallback(
 	    FramebufferResizeCallbackType const& callback)
     {
-	_framebufferResizeCallback = callback;
-	glfwSetFramebufferSizeCallback(_pWndHandle,
+	m_framebufferResizeCallback = callback;
+	glfwSetFramebufferSizeCallback(m_pWndHandle,
 		WindowManager::framebufferResizeCallback);
     }
 
     void Window::addPositionCallback(PositionCallbackType const& callback)
     {
-	_positionCallback = callback;
-	glfwSetWindowPosCallback(_pWndHandle, WindowManager::positionCallback);
+	m_positionCallback = callback;
+	glfwSetWindowPosCallback(m_pWndHandle, WindowManager::positionCallback);
     }
 
     void Window::addCharacterCallback(CharacterCallbackType const& callback)
     {
-	_characterCallback = callback;
-	glfwSetCharCallback(_pWndHandle, WindowManager::characterCallback);
+	m_characterCallback = callback;
+	glfwSetCharCallback(m_pWndHandle, WindowManager::characterCallback);
     }
 
     void Window::addCursorEnterCallback(CursorEnterCallbackType const& callback)
     {
-	_cursorEnterCallback = callback;
-	glfwSetCursorEnterCallback(_pWndHandle,
+	m_cursorEnterCallback = callback;
+	glfwSetCursorEnterCallback(m_pWndHandle,
 		WindowManager::cursorEnterCallback);
     }
 
     void Window::addCursorCallback(CursorCallbackType const& callback)
     {
-	_cursorCallback = callback;
-	glfwSetCursorPosCallback(_pWndHandle, WindowManager::cursorCallback);
+	m_cursorCallback = callback;
+	glfwSetCursorPosCallback(m_pWndHandle, WindowManager::cursorCallback);
     }
 
     void Window::addMouseButtonCallback(MouseButtonCallbackType const& callback)
     {
-	_mouseButtonCallback = callback;
-	glfwSetMouseButtonCallback(_pWndHandle,
+	m_mouseButtonCallback = callback;
+	glfwSetMouseButtonCallback(m_pWndHandle,
 		WindowManager::mouseButtonCallback);
     }
 
     void Window::addScrollCallback(ScrollCallbackType const& callback)
     {
-	_scrollCallback = callback;
-	glfwSetScrollCallback(_pWndHandle, WindowManager::scrollCallback);
+	m_scrollCallback = callback;
+	glfwSetScrollCallback(m_pWndHandle, WindowManager::scrollCallback);
     }
 
     void Window::addKeyCallback(KeyCallbackType const& callback)
     {
-	_keyCallback = callback;
-	glfwSetKeyCallback(_pWndHandle, WindowManager::keyCallback);
+	m_keyCallback = callback;
+	glfwSetKeyCallback(m_pWndHandle, WindowManager::keyCallback);
     }
 
     void Window::addUpdateCallback(UpdateCallbackType const& callback)
     {
-	_updateCallback = callback;
+	m_updateCallback = callback;
     }
 
     void Window::addRenderCallback(RenderCallbackType const& callback)
     {
-	_renderCallback = callback;
+	m_renderCallback = callback;
     }
 
     void Window::preUpdate()
@@ -397,35 +397,35 @@ namespace dbgl
 
     void Window::update()
     {
-	if (_updateCallback)
-	    _updateCallback(_deltaTime);
+	if (m_updateCallback)
+	    m_updateCallback(m_deltaTime);
     }
 
     void Window::postUpdate()
     {
 	// Calculate delta time
 	double currentTime = WindowManager::get()->getTime();
-	_deltaTime = currentTime - _lastTime;
-	_lastTime = currentTime;
+	m_deltaTime = currentTime - m_lastTime;
+	m_lastTime = currentTime;
     }
 
     void Window::preRender()
     {
 	makeCurrent();
-	glClearColor(_clearColor[0], _clearColor[1], _clearColor[2], 0);
+	glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	_pRenderContext->update();
+	m_pRenderContext->update();
     }
 
     void Window::render()
     {
-	if (_renderCallback)
-	    _renderCallback(_pRenderContext);
+	if (m_renderCallback)
+	    m_renderCallback(m_pRenderContext);
     }
 
     void Window::postRender()
     {
-	glfwSwapBuffers(_pWndHandle);
+	glfwSwapBuffers(m_pWndHandle);
     }
 }
 

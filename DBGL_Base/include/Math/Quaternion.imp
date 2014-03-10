@@ -18,7 +18,7 @@ namespace dbgl
     	this->w() = w;
 	}
     
-    template <typename T> Quaternion<T>::Quaternion(Vector4<T> const& data) : _data(data)
+    template <typename T> Quaternion<T>::Quaternion(Vector4<T> const& data) : m_data(data)
 	{
 	}
     
@@ -49,42 +49,42 @@ namespace dbgl
     
     template <typename T> T& Quaternion<T>::x()
 	{
-	    return _data[0];
+	    return m_data[0];
 	}
     
     template <typename T> const T& Quaternion<T>::x() const
 	{
-		return _data[0];
+		return m_data[0];
 	}
 
     template <typename T> T& Quaternion<T>::y()
 	{
-	    return _data[1];
+	    return m_data[1];
 	}
     
     template <typename T> const T& Quaternion<T>::y() const
 	{
-	    return _data[1];
+	    return m_data[1];
 	}
 
     template <typename T> T& Quaternion<T>::z()
 	{
-		return _data[2];
+		return m_data[2];
 	}
     
     template <typename T> const T& Quaternion<T>::z() const
 	{
-		return _data[2];
+		return m_data[2];
 	}
 
     template <typename T> T& Quaternion<T>::w()
 	{
-	    return _data[3];
+	    return m_data[3];
 	}
     
     template <typename T> const T& Quaternion<T>::w() const
 	{
-	    return _data[3];
+	    return m_data[3];
 	}
     
     template <typename T> Quaternion<T>& Quaternion<T>::fromAngleAxis(Vector3<T> axis, T angle)
@@ -161,12 +161,12 @@ namespace dbgl
     template <typename T> bool Quaternion<T>::isSimilar(Quaternion<T> const& other, double precision) const
 	{
     	if(precision == 0)
-    		return _data == other._data;
+    		return m_data == other.m_data;
     	else
     	{
-			for(int i = 0; i < _data.getDimension(); i++)
+			for(int i = 0; i < m_data.getDimension(); i++)
 			{
-				if(!dbgl::isSimilar(_data[i], other._data[i], precision))
+				if(!dbgl::isSimilar(m_data[i], other.m_data[i], precision))
 					return false;
 			}
     	}
@@ -211,12 +211,12 @@ namespace dbgl
     
     template <typename T> T Quaternion<T>::getSquaredLength() const
     {
-    	return _data.getSquaredLength();
+    	return m_data.getSquaredLength();
     }
 
     template <typename T>T Quaternion<T>::getLength() const
 	{
-		return _data.getLength();
+		return m_data.getLength();
 	}
     
     template <typename T> Quaternion<T> Quaternion<T>::getNormalized() const
@@ -226,7 +226,7 @@ namespace dbgl
 
     template <typename T> Quaternion<T>& Quaternion<T>::normalize()
 	{
-	    _data.normalize();
+	    m_data.normalize();
 	    return *this;
 	}
     
@@ -255,7 +255,7 @@ namespace dbgl
     
     template <typename T> const T Quaternion<T>::dot(Quaternion<T> const& rhs) const
 	{
-		return _data * rhs._data;
+		return m_data * rhs.m_data;
 	}
     
     template <typename T> Quaternion<T> Quaternion<T>::cross(Quaternion<T> const& rhs) const
@@ -311,7 +311,7 @@ namespace dbgl
 		// Already equal?
 		if(cosTheta > 1 - std::numeric_limits<T>::epsilon())
 		{
-			_data = other._data;
+			m_data = other.m_data;
 			return *this;
 		}
 	 
@@ -327,7 +327,7 @@ namespace dbgl
 		// Already there?
 		if (angle < maxAngle)
 		{
-			_data = other._data;
+			m_data = other.m_data;
 			return *this;
 		}
 	 
@@ -344,31 +344,31 @@ namespace dbgl
     {
 		if (*this != rhs)
 		{ 
-			for(int i = 0; i < _data.getDimension(); i++)
-				_data[i] = rhs._data[i];
+			for(int i = 0; i < m_data.getDimension(); i++)
+				m_data[i] = rhs.m_data[i];
 		} 
 		return *this;
     }
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator+(Quaternion<T> const& rhs) const
     {
-    	return Quaternion<T>(_data + rhs._data);
+    	return Quaternion<T>(m_data + rhs.m_data);
     }
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator+=(Quaternion<T> const& rhs)
 	{
-	    _data += rhs._data;
+	    m_data += rhs.m_data;
 	    return *this;
 	}
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator-(Quaternion<T> const& rhs) const
     {
-    	return Quaternion<T>(_data - rhs._data);
+    	return Quaternion<T>(m_data - rhs.m_data);
     }
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator-=(Quaternion<T> const& rhs)
 	{
-    	_data -= rhs._data;
+    	m_data -= rhs.m_data;
     	return *this;
 	}
     
@@ -397,12 +397,12 @@ namespace dbgl
     
     template <typename T> const Quaternion<T> Quaternion<T>::operator*(T const& rhs) const
     {
-    	return Quaternion<T>(_data * rhs);
+    	return Quaternion<T>(m_data * rhs);
     }
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator*=(Quaternion<T> const& rhs)
 	{
-    	auto temp = _data;
+    	auto temp = m_data;
     	x() = temp.w() * rhs.x() + temp.x() * rhs.w() + temp.y() * rhs.z() - temp.z() * rhs.y();
     	y() = temp.w() * rhs.y() + temp.y() * rhs.w() + temp.z() * rhs.x() - temp.x() * rhs.z();
     	z() = temp.w() * rhs.z() + temp.z() * rhs.w() + temp.x() * rhs.y() - temp.y() * rhs.x();
@@ -412,7 +412,7 @@ namespace dbgl
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator*=(T const& rhs)
 	{
-	    _data *= rhs;
+	    m_data *= rhs;
 	    return *this;
 	}
     
@@ -423,18 +423,18 @@ namespace dbgl
     
     template <typename T> Quaternion<T>& Quaternion<T>::operator/=(T const& rhs)
 	{
-	    _data /= rhs;
+	    m_data /= rhs;
 	    return *this;
 	}
     
     template <typename T> Quaternion<T> Quaternion<T>::operator-() const
     {
-    	return Quaternion<T>(-_data);
+    	return Quaternion<T>(-m_data);
     }
     
     template <typename T> bool Quaternion<T>::operator==(Quaternion<T> const& rhs) const
 	{
-	    return _data == rhs._data;
+	    return m_data == rhs.m_data;
 	}
     
     template <typename T> bool Quaternion<T>::operator!=(Quaternion<T> const& rhs) const

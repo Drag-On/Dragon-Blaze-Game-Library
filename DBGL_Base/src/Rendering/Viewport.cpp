@@ -14,8 +14,8 @@ namespace dbgl
 {
     Viewport::Viewport(float xRatio, float yRatio, float widthRatio,
 	    float heightRatio) :
-	    _xRatio(xRatio), _yRatio(yRatio), _widthRatio(widthRatio), _heightRatio(
-		    heightRatio), _camera(NULL)
+	    m_xRatio(xRatio), m_yRatio(yRatio), m_widthRatio(widthRatio), m_heightRatio(
+		    heightRatio), m_camera(NULL)
     {
     }
 
@@ -25,81 +25,81 @@ namespace dbgl
 
     float Viewport::getXRatio() const
     {
-	return _xRatio;
+	return m_xRatio;
     }
 
     float Viewport::getYRatio() const
     {
-	return _yRatio;
+	return m_yRatio;
     }
 
     float Viewport::getWidthRatio() const
     {
-	return _widthRatio;
+	return m_widthRatio;
     }
 
     float Viewport::getHeightRatio() const
     {
-	return _heightRatio;
+	return m_heightRatio;
     }
 
     void Viewport::setPosRatio(float xRatio, float yRatio)
     {
-	_xRatio = xRatio;
-	_yRatio = yRatio;
+	m_xRatio = xRatio;
+	m_yRatio = yRatio;
     }
 
     void Viewport::setSizeRatio(float widthRatio, float heightRatio)
     {
-	_widthRatio = widthRatio;
-	_heightRatio = heightRatio;
+	m_widthRatio = widthRatio;
+	m_heightRatio = heightRatio;
     }
 
     Camera* Viewport::getCamera() const
     {
-	return _camera;
+	return m_camera;
     }
 
     void Viewport::setCamera(Camera* camera)
     {
-	_camera = camera;
+	m_camera = camera;
     }
 
     void Viewport::update(float frameWidth, float frameHeight)
     {
-	if (_camera != NULL)
+	if (m_camera != NULL)
 	{
 	    Vec3f direction, up;
-	    _camera->getOrientation(&direction, &up, NULL);
-	    _viewMat.view(_camera->position(), direction, up);
-	    _projectionMat.projection(_camera->getFieldOfView(),
-		    (frameWidth * (_widthRatio - _xRatio))
-			    / (frameHeight * (_heightRatio - _yRatio)),
-		    _camera->getNear(), _camera->getFar());
-	    _viewProjectionMat = _projectionMat * _viewMat;
-	    _itView = _viewMat;
-	    _itView.invert().transpose();
+	    m_camera->getOrientation(&direction, &up, NULL);
+	    m_viewMat.view(m_camera->position(), direction, up);
+	    m_projectionMat.projection(m_camera->getFieldOfView(),
+		    (frameWidth * (m_widthRatio - m_xRatio))
+			    / (frameHeight * (m_heightRatio - m_yRatio)),
+		    m_camera->getNear(), m_camera->getFar());
+	    m_viewProjectionMat = m_projectionMat * m_viewMat;
+	    m_itView = m_viewMat;
+	    m_itView.invert().transpose();
 	}
     }
 
     Mat4f const& Viewport::getViewMat() const
     {
-	return _viewMat;
+	return m_viewMat;
     }
 
     Mat4f const& Viewport::getProjectionMat() const
     {
-	return _projectionMat;
+	return m_projectionMat;
     }
 
     Mat4f const& Viewport::getViewProjectionMat() const
     {
-	return _viewProjectionMat;
+	return m_viewProjectionMat;
     }
 
     Mat4f const& Viewport::getITViewMat() const
     {
-	return _itView;
+	return m_itView;
     }
 }
 

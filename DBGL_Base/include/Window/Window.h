@@ -332,34 +332,34 @@ namespace dbgl
 	    /**
 	     * GLFW window handle
 	     */
-	    GLFWwindow* _pWndHandle = NULL;
-	    RenderContext* _pRenderContext;
+	    GLFWwindow* m_pWndHandle = NULL;
+	    RenderContext* m_pRenderContext;
 
 	private:
-	    CloseCallbackType _closeCallback;
-	    FocusCallbackType _focusCallback;
-	    IconifiedCallbackType _iconifiedCallback;
-	    RefreshCallbackType _refreshCallback;
-	    ResizeCallbackType _resizeCallback;
-	    FramebufferResizeCallbackType _framebufferResizeCallback;
-	    PositionCallbackType _positionCallback;
-	    CharacterCallbackType _characterCallback;
-	    CursorEnterCallbackType _cursorEnterCallback;
-	    CursorCallbackType _cursorCallback;
-	    MouseButtonCallbackType _mouseButtonCallback;
-	    ScrollCallbackType _scrollCallback;
-	    KeyCallbackType _keyCallback;
-	    UpdateCallbackType _updateCallback;
-	    RenderCallbackType _renderCallback;
+	    CloseCallbackType m_closeCallback;
+	    FocusCallbackType m_focusCallback;
+	    IconifiedCallbackType m_iconifiedCallback;
+	    RefreshCallbackType m_refreshCallback;
+	    ResizeCallbackType m_resizeCallback;
+	    FramebufferResizeCallbackType m_framebufferResizeCallback;
+	    PositionCallbackType m_positionCallback;
+	    CharacterCallbackType m_characterCallback;
+	    CursorEnterCallbackType m_cursorEnterCallback;
+	    CursorCallbackType m_cursorCallback;
+	    MouseButtonCallbackType m_mouseButtonCallback;
+	    ScrollCallbackType m_scrollCallback;
+	    KeyCallbackType m_keyCallback;
+	    UpdateCallbackType m_updateCallback;
+	    RenderCallbackType m_renderCallback;
 
-	    std::string _title;
-	    bool _isFullscreen;
-	    unsigned int _fullscreenWidth, _fullscreenHeight; // Resolution for full screen
-	    unsigned int _windowedWidth, _windowedHeight; // Resolution for window
-	    unsigned int _windowedX, _windowedY; // Last window position before entering fullscreen mode
-	    double _deltaTime = 0, _lastTime = 0; // Time since last frame
-	    Vector3<GLclampf> _clearColor = Vector3<GLclampf>(0, 0, 0);
-	    GLuint _vertexArrayId;
+	    std::string m_title;
+	    bool m_isFullscreen;
+	    unsigned int m_fullscreenWidth, m_fullscreenHeight; // Resolution for full screen
+	    unsigned int m_windowedWidth, m_windowedHeight; // Resolution for window
+	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
+	    double m_deltaTime = 0, m_lastTime = 0; // Time since last frame
+	    Vector3<GLclampf> m_clearColor = Vector3<GLclampf>(0, 0, 0);
+	    GLuint m_vertexArrayId;
 
 	    friend class WindowManager;
     };

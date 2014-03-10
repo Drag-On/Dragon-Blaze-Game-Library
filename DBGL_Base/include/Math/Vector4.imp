@@ -10,15 +10,15 @@
 
 namespace dbgl
 {
-	template<typename T> Vector4<T>::Vector4() : _x(0), _y(0), _z(0), _w(0)
+	template<typename T> Vector4<T>::Vector4() : m_x(0), m_y(0), m_z(0), m_w(0)
 	{
 	}
 	
-	template<typename T> Vector4<T>::Vector4(T x, T y, T z, T w) : _x(x), _y(y), _z(z), _w(w)
+	template<typename T> Vector4<T>::Vector4(T x, T y, T z, T w) : m_x(x), m_y(y), m_z(z), m_w(w)
 	{
 	}
 	
-	template<typename T> Vector4<T>::Vector4(const Vector4<T> &other) :_x(other[0]), _y(other[1]), _z(other[2]), _w(other[3])
+	template<typename T> Vector4<T>::Vector4(const Vector4<T> &other) :m_x(other[0]), m_y(other[1]), m_z(other[2]), m_w(other[3])
 	{
 	}
 
@@ -33,42 +33,42 @@ namespace dbgl
 	
 	template<typename T> const T& Vector4<T>::x() const
 	{
-		return _x;
+		return m_x;
 	}
 	
 	template<typename T> T& Vector4<T>::x()
 	{
-		return _x;
+		return m_x;
 	}
 	
 	template<typename T> const T& Vector4<T>::y() const
 	{
-		return _y;
+		return m_y;
 	}
 	
 	template<typename T> T& Vector4<T>::y()
 	{
-		return _y;
+		return m_y;
 	}
 	
 	template<typename T> const T& Vector4<T>::z() const
 	{
-		return _z;
+		return m_z;
 	}
 	
 	template<typename T> T& Vector4<T>::z()
 	{
-		return _z;
+		return m_z;
 	}
 	
 	template<typename T> const T& Vector4<T>::w() const
 	{
-		return _w;
+		return m_w;
 	}
 	
 	template<typename T> T& Vector4<T>::w()
 	{
-		return _w;
+		return m_w;
 	}
 	
 	template<typename T> T Vector4<T>::getSquaredLength() const
@@ -129,10 +129,10 @@ namespace dbgl
 	
 	template<typename T> Vector4<T>& Vector4<T>::translate(T x, T y, T z, T w)
 	{
-		_x += x;
-		_y += y;
-		_z += z;
-		_w += w;
+		m_x += x;
+		m_y += y;
+		m_z += z;
+		m_w += w;
 		return *this;
 	}
 	
@@ -271,7 +271,7 @@ namespace dbgl
 	template<typename T> T& Vector4<T>::operator[](std::size_t const& index)
 	{
 		if(index < getDimension())
-			return (&_x)[index];
+			return (&m_x)[index];
 		else
 		{
 			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
@@ -282,7 +282,7 @@ namespace dbgl
 	template<typename T> const T& Vector4<T>::operator[](std::size_t const& index) const
 	{
 		if(index < getDimension())
-			return (&_x)[index];
+			return (&m_x)[index];
 		else
 		{
 			LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());

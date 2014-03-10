@@ -12,15 +12,15 @@ namespace dbgl
 {
 	template<typename T> Matrix2x2<T>::Matrix2x2()
 	{
-		_columns[0] = Vector2<T>(1,0);
-		_columns[1] = Vector2<T>(0,1);
+		m_columns[0] = Vector2<T>(1,0);
+		m_columns[1] = Vector2<T>(0,1);
 	}
 	
 	template<typename T> Matrix2x2<T>::Matrix2x2(const Matrix2x2<T> &other)
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
-				_columns[x][y] = other[x][y];
+				m_columns[x][y] = other[x][y];
 	}
 
 	template<typename T> Matrix2x2<T>::~Matrix2x2()
@@ -249,7 +249,7 @@ namespace dbgl
 	template<typename T> Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index)
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
@@ -260,7 +260,7 @@ namespace dbgl
 	template<typename T> const Vector2<T>& Matrix2x2<T>::operator[](std::size_t const& index) const
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());

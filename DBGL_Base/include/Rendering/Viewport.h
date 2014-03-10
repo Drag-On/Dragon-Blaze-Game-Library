@@ -115,10 +115,10 @@ namespace dbgl
 	     */
 	    Mat4f const& getITViewMat() const;
 
-	    float _xRatio, _yRatio;
-	    float _widthRatio, _heightRatio;
-	    Camera* _camera;
-	    Mat4f _viewMat, _projectionMat, _viewProjectionMat, _itView; // Cached matrizes
+	    float m_xRatio, m_yRatio;
+	    float m_widthRatio, m_heightRatio;
+	    Camera* m_camera;
+	    Mat4f m_viewMat, m_projectionMat, m_viewProjectionMat, m_itView; // Cached matrizes
 
 	    friend class RenderContext;
     };

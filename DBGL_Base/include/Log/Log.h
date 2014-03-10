@@ -91,8 +91,8 @@ namespace dbgl
 	    void error(const char* msg, ...);
 
 	private:
-	    int _logLevel;
-	    static const int _maxBuffer = 1024;
+	    int m_logLevel;
+	    static const int m_maxBuffer = 1024;
 
 	    static Log* s_pInstance;
 

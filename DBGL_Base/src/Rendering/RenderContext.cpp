@@ -14,7 +14,7 @@ namespace dbgl
 {
     RenderContext::RenderContext(unsigned int frameWidth,
 	    unsigned int frameHeight) :
-	    _frameWidth(frameWidth), _frameHeight(frameHeight)
+	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
     {
     }
 
@@ -24,14 +24,14 @@ namespace dbgl
 
     void RenderContext::addViewport(Viewport* viewport)
     {
-	_viewports.push_back(viewport);
+	m_viewports.push_back(viewport);
     }
 
     void RenderContext::removeViewport(Viewport* viewport)
     {
-	_viewports.erase(
-		std::remove(_viewports.begin(), _viewports.end(), viewport),
-		_viewports.end());
+	m_viewports.erase(
+		std::remove(m_viewports.begin(), m_viewports.end(), viewport),
+		m_viewports.end());
     }
 
     void RenderContext::draw(Renderable const* const entity) const
@@ -56,7 +56,7 @@ namespace dbgl
 	Mat4f itmMat = modelMat.getInverted().transpose();
 
 	// Check all viewports
-	for (auto &viewport : _viewports)
+	for (auto &viewport : m_viewports)
 	{
 	    // Check if viewport has a camera
 	    if (viewport->getCamera() == NULL)
@@ -65,12 +65,12 @@ namespace dbgl
 	    }
 	    // Calculate absolute viewport values
 	    // TODO: This is not needed for each mesh!
-	    int viewportX = viewport->getXRatio() * _frameWidth;
-	    int viewportY = viewport->getYRatio() * _frameHeight;
+	    int viewportX = viewport->getXRatio() * m_frameWidth;
+	    int viewportY = viewport->getYRatio() * m_frameHeight;
 	    int viewportWidth = viewport->getWidthRatio()
-	    * (_frameWidth - viewportX);
+	    * (m_frameWidth - viewportX);
 	    int viewportHeight = viewport->getHeightRatio()
-	    * (_frameHeight - viewportY);
+	    * (m_frameHeight - viewportY);
 	    // Set viewport
 	    glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
@@ -159,17 +159,17 @@ namespace dbgl
 
     void RenderContext::changeSize(unsigned int width, unsigned int height)
     {
-	_frameWidth = width;
-	_frameHeight = height;
+	m_frameWidth = width;
+	m_frameHeight = height;
     }
 
     void RenderContext::renderMesh(const Mesh* mesh) const
     {
 	// Bind vertex buffer : 0
-	if (mesh->_vertices.size() > 0)
+	if (mesh->m_vertices.size() > 0)
 	{
 	    glEnableVertexAttribArray(0);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_vertexBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->m_vertexBuffer);
 	    glVertexAttribPointer(0,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -179,10 +179,10 @@ namespace dbgl
 	}
 
 	// Bind UV buffer : 1
-	if (mesh->_uv.size() > 0)
+	if (mesh->m_uv.size() > 0)
 	{
 	    glEnableVertexAttribArray(1);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_uvBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->m_uvBuffer);
 	    glVertexAttribPointer(1,	// attribute
 		    2,			// size
 		    GL_FLOAT,		// type
@@ -192,10 +192,10 @@ namespace dbgl
 	}
 
 	// Bind normal buffer : 2
-	if (mesh->_normals.size() > 0)
+	if (mesh->m_normals.size() > 0)
 	{
 	    glEnableVertexAttribArray(2);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_normalBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->m_normalBuffer);
 	    glVertexAttribPointer(2,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -205,10 +205,10 @@ namespace dbgl
 	}
 
 	// Bind tangent buffer : 2
-	if (mesh->_tangents.size() > 0)
+	if (mesh->m_tangents.size() > 0)
 	{
 	    glEnableVertexAttribArray(3);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_tangentBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->m_tangentBuffer);
 	    glVertexAttribPointer(3,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -218,10 +218,10 @@ namespace dbgl
 	}
 
 	// Bind bitangent buffer : 2
-	if (mesh->_bitangents.size() > 0)
+	if (mesh->m_bitangents.size() > 0)
 	{
 	    glEnableVertexAttribArray(4);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh->_bitangentBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, mesh->m_bitangentBuffer);
 	    glVertexAttribPointer(4,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -231,33 +231,33 @@ namespace dbgl
 	}
 
 	// Index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->_indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->m_indexBuffer);
 
 	// Draw!
 	glDrawElements(GL_TRIANGLES,	// mode
-		mesh->_indices.size(),	// count
+		mesh->m_indices.size(),	// count
 		GL_UNSIGNED_SHORT,	// type
 		(void*) 0);		// offset
 
 	// Disable buffers
-	if (mesh->_vertices.size() > 0)
+	if (mesh->m_vertices.size() > 0)
 	    glDisableVertexAttribArray(0);
-	if (mesh->_uv.size() > 0)
+	if (mesh->m_uv.size() > 0)
 	    glDisableVertexAttribArray(1);
-	if (mesh->_normals.size() > 0)
+	if (mesh->m_normals.size() > 0)
 	    glDisableVertexAttribArray(2);
-	if (mesh->_tangents.size() > 0)
+	if (mesh->m_tangents.size() > 0)
 	    glDisableVertexAttribArray(3);
-	if (mesh->_bitangents.size() > 0)
+	if (mesh->m_bitangents.size() > 0)
 	    glDisableVertexAttribArray(4);
     }
 
     void RenderContext::update()
     {
 	// Update all viewports
-	for (auto &viewport : _viewports)
+	for (auto &viewport : m_viewports)
 	{
-	    viewport->update(_frameWidth, _frameHeight);
+	    viewport->update(m_frameWidth, m_frameHeight);
 	}
     }
 }

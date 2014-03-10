@@ -26,7 +26,7 @@ namespace dbgl
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
-				_columns[x][y] = other[x][y];
+				m_columns[x][y] = other[x][y];
 	}
 
 	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>::~Matrix()
@@ -194,7 +194,7 @@ namespace dbgl
 	template<typename T, unsigned int N, unsigned int M> Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index)
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
@@ -205,7 +205,7 @@ namespace dbgl
 	template<typename T, unsigned int N, unsigned int M> const Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index) const
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());

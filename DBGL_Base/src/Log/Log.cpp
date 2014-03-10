@@ -21,7 +21,7 @@ namespace dbgl
      */
     Log::Log()
     {
-	_logLevel = WARN;
+	m_logLevel = WARN;
 
 	// Get current time
 	const char* time = getCurTime(true);
@@ -72,7 +72,7 @@ namespace dbgl
      */
     void Log::setLogLevel(int lvl)
     {
-	_logLevel = lvl;
+	m_logLevel = lvl;
     }
 
     /**
@@ -81,9 +81,9 @@ namespace dbgl
      */
     void Log::debug(const char* msg, ...)
     {
-	if (_logLevel <= DBG)
+	if (m_logLevel <= DBG)
 	{
-	    char buffer[_maxBuffer]; // Buffer for arguments
+	    char buffer[m_maxBuffer]; // Buffer for arguments
 	    va_list pArgList; // List of arguments
 
 	    // Make string from arguments
@@ -106,9 +106,9 @@ namespace dbgl
      */
     void Log::info(const char* msg, ...)
     {
-	if (_logLevel <= INFO)
+	if (m_logLevel <= INFO)
 	{
-	    char buffer[_maxBuffer]; // Buffer for arguments
+	    char buffer[m_maxBuffer]; // Buffer for arguments
 	    va_list pArgList; // List of arguments
 
 	    // Make string from arguments
@@ -131,9 +131,9 @@ namespace dbgl
      */
     void Log::warning(const char* msg, ...)
     {
-	if (_logLevel <= WARN)
+	if (m_logLevel <= WARN)
 	{
-	    char buffer[_maxBuffer]; // Buffer for arguments
+	    char buffer[m_maxBuffer]; // Buffer for arguments
 	    va_list pArgList; // List of arguments
 
 	    // Make string from arguments
@@ -156,9 +156,9 @@ namespace dbgl
      */
     void Log::error(const char* msg, ...)
     {
-	if (_logLevel <= ERR)
+	if (m_logLevel <= ERR)
 	{
-	    char buffer[_maxBuffer]; // Buffer for arguments
+	    char buffer[m_maxBuffer]; // Buffer for arguments
 	    va_list pArgList; // List of arguments
 
 	    // Make string from arguments
@@ -181,7 +181,7 @@ namespace dbgl
      */
     void Log::writeLog(const char* msg, ...)
     {
-	char buffer[_maxBuffer]; // Buffer for arguments
+	char buffer[m_maxBuffer]; // Buffer for arguments
 	va_list pArgList; // List of arguments
 
 	// Make string from arguments

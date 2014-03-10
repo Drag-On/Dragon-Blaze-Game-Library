@@ -12,16 +12,16 @@ namespace dbgl
 {
 	template<typename T> Matrix3x3<T>::Matrix3x3()
 	{
-		_columns[0] = Vector3<T>(1,0,0);
-		_columns[1] = Vector3<T>(0,1,0);
-		_columns[2] = Vector3<T>(0,0,1);
+		m_columns[0] = Vector3<T>(1,0,0);
+		m_columns[1] = Vector3<T>(0,1,0);
+		m_columns[2] = Vector3<T>(0,0,1);
 	}
 	
 	template<typename T> Matrix3x3<T>::Matrix3x3(const Matrix3x3<T> &other)
 	{
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
-				_columns[x][y] = other[x][y];
+				m_columns[x][y] = other[x][y];
 	}
 
 	template<typename T> Matrix3x3<T>::~Matrix3x3()
@@ -305,7 +305,7 @@ namespace dbgl
 	template<typename T> Vector3<T>& Matrix3x3<T>::operator[](std::size_t const& index)
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
@@ -316,7 +316,7 @@ namespace dbgl
 	template<typename T> const Vector3<T>& Matrix3x3<T>::operator[](std::size_t const& index) const
 	{
 		if(index < getWidth())
-			return _columns[index];
+			return m_columns[index];
 		else
 		{
 			LOG->error("Tried to access column %d of %d-width matrix!", index, getWidth());
