@@ -145,7 +145,7 @@ void renderCallback(const RenderContext* rc)
     renderable.pTexNormal = pNormalTex;
     renderable.pMesh = pMeshBox;
     renderable.position = Vec3f(5, 0, 3);
-    renderable.rotation = QuatF(0, pi_4(), 0);
+    renderable.rotation = QuatF(Vec3f(0, pi_4(), 0)); // 0, pi_4(), 0
     renderable.scale = Vec3f(1, 1, 1);
     rc->draw(renderable);
 

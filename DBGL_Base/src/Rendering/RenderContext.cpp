@@ -204,7 +204,7 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 
-	// Bind tangent buffer : 2
+	// Bind tangent buffer : 3
 	if (mesh->m_tangents.size() > 0)
 	{
 	    glEnableVertexAttribArray(3);
@@ -217,7 +217,7 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 
-	// Bind bitangent buffer : 2
+	// Bind bitangent buffer : 4
 	if (mesh->m_bitangents.size() > 0)
 	{
 	    glEnableVertexAttribArray(4);
