@@ -30,7 +30,8 @@ Mesh* pMeshPyramid;
 Mesh* pMeshBox;
 Mesh* pMeshIco;
 Mesh* pMeshPlane;
-ShaderProgram* pShader, *pShader2;
+Mesh* pMeshSphere;
+ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderCheap;
 Texture* pTexture, *pNormalTex, *pTexture2, *pTextureWhite;
 Renderable renderable;
 Camera* cam;
@@ -88,35 +89,37 @@ void updateCallback(double deltaTime)
 
 void renderCallback(const RenderContext* rc)
 {
-    // Construct Renderable
-    renderable.pShader = pShader;
+    pShaderCheap->use();
+    pShaderCheap->setUniformFloat3(pShaderCheap->getDefaultUniformHandle(ShaderProgram::COLOR), Vec3f(1, 1, 1).getDataPointer());
+
+    // Draw sphere at light position
+    renderable.pShader = pShaderCheap;
+    renderable.pMesh = pMeshSphere;
+    renderable.pTexDiffuse = pTextureWhite;
+    renderable.position = lightPos + lightOffset;
+    renderable.rotation = QuatF();
+    renderable.scale = Vec3f(0.2f, 0.2f, 0.2f);
+    rc->draw(renderable);
 
     // Set light position and color for shader 1
-    pShader->use();
-    pShader->setUniformFloat3(pShader->getUniformHandle("v_lightPos_w"),
+    pShaderDiffSpec->use();
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_lightPos_w"),
 	    (lightPos + lightOffset).getDataPointer());
-    pShader->setUniformFloat3(pShader->getUniformHandle("v_lightColor"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_lightColor"),
 	    lightColor.getDataPointer());
-    pShader->setUniformFloat3(pShader->getUniformHandle("v_ambientLight"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_ambientLight"),
 	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShader->setUniformFloat3(pShader->getUniformHandle("v_matSpecColor"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_matSpecColor"),
 	    matSpecular.getDataPointer());
-    pShader->setUniformFloat(pShader->getUniformHandle("f_matSpecWidth"), 10);
+    pShaderDiffSpec->setUniformFloat(pShaderDiffSpec->getUniformHandle("f_matSpecWidth"), 10);
 
     // Draw ground plane
+    renderable.pShader = pShaderDiffSpec;
     renderable.pMesh = pMeshPlane;
     renderable.pTexDiffuse = pTextureWhite;
     renderable.position = Vec3f(0, -1, 0);
     renderable.rotation = QuatF(Vec3f(0, 0, 1), Vec3f(0, 1, 0));
     renderable.scale = Vec3f(10, 10, 10);
-    rc->draw(renderable);
-
-    // Draw Box at light position
-    renderable.pMesh = pMeshBox;
-    renderable.pTexDiffuse = pTextureWhite;
-    renderable.position = lightPos + lightOffset;
-    renderable.rotation = QuatF();
-    renderable.scale = Vec3f(0.2f, 0.2f, 0.2f);
     rc->draw(renderable);
 
     // Pyramid will be drawn in the center of the world
@@ -128,24 +131,34 @@ void renderCallback(const RenderContext* rc)
     rc->draw(renderable);
 
     // Set light position and color for shader 2
-    pShader2->use();
-    pShader2->setUniformFloat3(pShader2->getUniformHandle("v_lightPos_w"),
+    pShaderNorm->use();
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_lightPos_w"),
 	(lightPos + lightOffset).getDataPointer());
-    pShader2->setUniformFloat3(pShader2->getUniformHandle("v_lightColor"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_lightColor"),
 	lightColor.getDataPointer());
-    pShader2->setUniformFloat3(pShader2->getUniformHandle("v_ambientLight"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_ambientLight"),
 	Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShader2->setUniformFloat3(pShader2->getUniformHandle("v_matSpecColor"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_matSpecColor"),
 	matSpecular.getDataPointer());
-    pShader2->setUniformFloat(pShader2->getUniformHandle("f_matSpecWidth"), 10);
+    pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("f_matSpecWidth"), 10);
 
     // Box will be drawn at (5, 0, 3)
-    renderable.pShader = pShader2;
+    renderable.pShader = pShaderNorm;
     renderable.pTexDiffuse = pTexture;
     renderable.pTexNormal = pNormalTex;
     renderable.pMesh = pMeshBox;
     renderable.position = Vec3f(5, 0, 3);
-    renderable.rotation = QuatF(Vec3f(0, pi_4(), 0)); // 0, pi_4(), 0
+    renderable.rotation = QuatF(Vec3f(0, pi_4(), 0));
+    renderable.scale = Vec3f(1, 1, 1);
+    rc->draw(renderable);
+
+    // Sphere will be drawn at (2, 0, 8)
+    renderable.pShader = pShaderNorm;
+    renderable.pTexDiffuse = pTexture;
+    renderable.pTexNormal = pNormalTex;
+    renderable.pMesh = pMeshSphere;
+    renderable.position = Vec3f(2, 0, 8);
+    renderable.rotation = QuatF();
     renderable.scale = Vec3f(1, 1, 1);
     rc->draw(renderable);
 
@@ -163,7 +176,7 @@ int main()
     // Create window
     wnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
-    wnd->init(true, true, false);
+    wnd->init(true, true, true);
     // Create a viewport over the whole window space
     Viewport* viewport = new Viewport(0, 0, 1, 1);
     // Add a camera
@@ -178,8 +191,10 @@ int main()
     pMeshBox = Mesh::makeCube(true);
     pMeshPlane = Mesh::makePlane(false);
     pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ, true);
-    pShader = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
-    pShader2 = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
+    pMeshSphere = Mesh::load("../common/Sphere.obj", Mesh::OBJ, true);
+    pShaderCheap = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
+    pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
+    pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     pNormalTex = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
     pTexture2  = pTexture;//new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
@@ -202,8 +217,10 @@ int main()
     delete pMeshBox;
     delete pMeshIco;
     delete pMeshPlane;
-    delete pShader;
-    delete pShader2;
+    delete pMeshSphere;
+    delete pShaderCheap;
+    delete pShaderDiffSpec;
+    delete pShaderNorm;
     delete pTexture;
     delete pTexture2;
     delete pNormalTex;
