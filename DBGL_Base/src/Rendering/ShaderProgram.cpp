@@ -405,7 +405,7 @@ namespace dbgl
     {
 	use();
 	// Iterate over uniform enum... not nice, but handy!
-	for (int val = MODEL; val != TEX_NORMAL; val++)
+	for (int val = MODEL; val != BOGUS; val++)
 	{
 	    Uniform uniform = static_cast<Uniform>(val);
 	    auto foo = uniformNames.find(uniform);
@@ -522,6 +522,7 @@ namespace dbgl
 	    ShaderProgram::ITM, "m_itm"}, {
 	    ShaderProgram::ITMV, "m_itmv"}, {
 	    ShaderProgram::TEX_DIFFUSE, "tex_diffuse"}, {
-	    ShaderProgram::TEX_NORMAL, "tex_normal"},
+	    ShaderProgram::TEX_NORMAL, "tex_normal"}, {
+	    ShaderProgram::BOGUS, ""},
     };
 }
