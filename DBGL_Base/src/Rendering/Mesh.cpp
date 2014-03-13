@@ -392,12 +392,12 @@ namespace dbgl
 	    m_bitangents[m_indices[i + 1]] += bitangent;
 	    m_bitangents[m_indices[i + 2]] += bitangent;
 	}
-	// TODO: Normalize tangents & bitangents?
-//	for (unsigned int i = 0; i < _tangents.size(); i++)
-//	{
-//	    _tangents[i].normalize();
-//	    _bitangents[i].normalize();
-//	}
+	// Normalize tangents & bitangents
+	for (unsigned int i = 0; i < m_tangents.size(); i++)
+	{
+	    m_tangents[i].normalize();
+	    m_bitangents[i].normalize();
+	}
 	// Orthogonalize normal/tangent/bitangent system
 	for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
