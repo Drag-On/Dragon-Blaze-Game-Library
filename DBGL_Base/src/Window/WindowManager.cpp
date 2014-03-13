@@ -82,73 +82,113 @@ namespace dbgl
 
     void WindowManager::closeCallback(GLFWwindow* window)
     {
-	s_windows[window]->m_closeCallback();
+	for (std::vector<CloseCallbackType>::iterator it =
+		s_windows[window]->m_closeCallbacks.begin();
+		it != s_windows[window]->m_closeCallbacks.end(); ++it)
+	    (*it)();
     }
 
     void WindowManager::focusCallback(GLFWwindow* window, int focused)
     {
-	s_windows[window]->m_focusCallback(focused);
+	for (std::vector<FocusCallbackType>::iterator it =
+		s_windows[window]->m_focusCallbacks.begin();
+		it != s_windows[window]->m_focusCallbacks.end(); ++it)
+	    (*it)(focused);
     }
 
     void WindowManager::iconifiedCallback(GLFWwindow* window, int iconified)
     {
-	s_windows[window]->m_iconifiedCallback(iconified);
+	for (std::vector<IconifiedCallbackType>::iterator it =
+		s_windows[window]->m_iconifiedCallbacks.begin();
+		it != s_windows[window]->m_iconifiedCallbacks.end(); ++it)
+	    (*it)(iconified);
     }
 
     void WindowManager::refreshCallback(GLFWwindow* window)
     {
-	s_windows[window]->m_refreshCallback();
+	for (std::vector<RefreshCallbackType>::iterator it =
+		s_windows[window]->m_refreshCallbacks.begin();
+		it != s_windows[window]->m_refreshCallbacks.end(); ++it)
+	    (*it)();
     }
 
     void WindowManager::resizeCallback(GLFWwindow* window, int width,
 	    int height)
     {
-	s_windows[window]->m_resizeCallback(width, height);
+	for (std::vector<ResizeCallbackType>::iterator it =
+		s_windows[window]->m_resizeCallbacks.begin();
+		it != s_windows[window]->m_resizeCallbacks.end(); ++it)
+	    (*it)(width, height);
     }
 
     void WindowManager::framebufferResizeCallback(GLFWwindow* window, int width,
 	    int height)
     {
-	s_windows[window]->m_framebufferResizeCallback(width, height);
+	for (std::vector<FramebufferResizeCallbackType>::iterator it =
+		s_windows[window]->m_framebufferResizeCallbacks.begin();
+		it != s_windows[window]->m_framebufferResizeCallbacks.end();
+		++it)
+	    (*it)(width, height);
     }
 
     void WindowManager::positionCallback(GLFWwindow* window, int xpos, int ypos)
     {
-	s_windows[window]->m_positionCallback(xpos, ypos);
+	for (std::vector<PositionCallbackType>::iterator it =
+		s_windows[window]->m_positionCallbacks.begin();
+		it != s_windows[window]->m_positionCallbacks.end(); ++it)
+	    (*it)(xpos, ypos);
     }
 
     void WindowManager::characterCallback(GLFWwindow* window,
 	    unsigned int codepoint)
     {
-	s_windows[window]->m_characterCallback(codepoint);
+	for (std::vector<CharacterCallbackType>::iterator it =
+		s_windows[window]->m_characterCallbacks.begin();
+		it != s_windows[window]->m_characterCallbacks.end(); ++it)
+	    (*it)(codepoint);
     }
 
     void WindowManager::cursorEnterCallback(GLFWwindow* window, int entered)
     {
-	s_windows[window]->m_cursorEnterCallback(entered);
+	for (std::vector<CursorEnterCallbackType>::iterator it =
+		s_windows[window]->m_cursorEnterCallbacks.begin();
+		it != s_windows[window]->m_cursorEnterCallbacks.end(); ++it)
+	    (*it)(entered);
     }
 
     void WindowManager::cursorCallback(GLFWwindow* window, double x, double y)
     {
-	s_windows[window]->m_cursorCallback(x, y);
+	for (std::vector<CursorCallbackType>::iterator it =
+		s_windows[window]->m_cursorCallbacks.begin();
+		it != s_windows[window]->m_cursorCallbacks.end(); ++it)
+	    (*it)(x, y);
     }
 
     void WindowManager::mouseButtonCallback(GLFWwindow* window, int button,
 	    int action, int mods)
     {
-	s_windows[window]->m_mouseButtonCallback(button, action, mods);
+	for (std::vector<MouseButtonCallbackType>::iterator it =
+		s_windows[window]->m_mouseButtonCallbacks.begin();
+		it != s_windows[window]->m_mouseButtonCallbacks.end(); ++it)
+	    (*it)(button, action, mods);
     }
 
     void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
 	    double yOffset)
     {
-	s_windows[window]->m_scrollCallback(xOffset, yOffset);
+	for (std::vector<ScrollCallbackType>::iterator it =
+		s_windows[window]->m_scrollCallbacks.begin();
+		it != s_windows[window]->m_scrollCallbacks.end(); ++it)
+	    (*it)(xOffset, yOffset);
     }
 
     void WindowManager::keyCallback(GLFWwindow* window, int key, int scancode,
 	    int action, int mods)
     {
-	s_windows[window]->m_keyCallback(key, scancode, action, mods);
+	for (std::vector<KeyCallbackType>::iterator it =
+		s_windows[window]->m_keyCallbacks.begin();
+		it != s_windows[window]->m_keyCallbacks.end(); ++it)
+	    (*it)(key, scancode, action, mods);
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}

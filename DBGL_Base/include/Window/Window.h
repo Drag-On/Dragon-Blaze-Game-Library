@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string>
 #include <functional>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Math/Vector3.h"
@@ -336,21 +337,21 @@ namespace dbgl
 	    RenderContext* m_pRenderContext;
 
 	private:
-	    CloseCallbackType m_closeCallback;
-	    FocusCallbackType m_focusCallback;
-	    IconifiedCallbackType m_iconifiedCallback;
-	    RefreshCallbackType m_refreshCallback;
-	    ResizeCallbackType m_resizeCallback;
-	    FramebufferResizeCallbackType m_framebufferResizeCallback;
-	    PositionCallbackType m_positionCallback;
-	    CharacterCallbackType m_characterCallback;
-	    CursorEnterCallbackType m_cursorEnterCallback;
-	    CursorCallbackType m_cursorCallback;
-	    MouseButtonCallbackType m_mouseButtonCallback;
-	    ScrollCallbackType m_scrollCallback;
-	    KeyCallbackType m_keyCallback;
-	    UpdateCallbackType m_updateCallback;
-	    RenderCallbackType m_renderCallback;
+	    std::vector<CloseCallbackType> m_closeCallbacks;
+	    std::vector<FocusCallbackType> m_focusCallbacks;
+	    std::vector<IconifiedCallbackType> m_iconifiedCallbacks;
+	    std::vector<RefreshCallbackType> m_refreshCallbacks;
+	    std::vector<ResizeCallbackType> m_resizeCallbacks;
+	    std::vector<FramebufferResizeCallbackType> m_framebufferResizeCallbacks;
+	    std::vector<PositionCallbackType> m_positionCallbacks;
+	    std::vector<CharacterCallbackType> m_characterCallbacks;
+	    std::vector<CursorEnterCallbackType> m_cursorEnterCallbacks;
+	    std::vector<CursorCallbackType> m_cursorCallbacks;
+	    std::vector<MouseButtonCallbackType> m_mouseButtonCallbacks;
+	    std::vector<ScrollCallbackType> m_scrollCallbacks;
+	    std::vector<KeyCallbackType> m_keyCallbacks;
+	    std::vector<UpdateCallbackType> m_updateCallbacks;
+	    std::vector<RenderCallbackType> m_renderCallbacks;
 
 	    std::string m_title;
 	    bool m_isFullscreen;
