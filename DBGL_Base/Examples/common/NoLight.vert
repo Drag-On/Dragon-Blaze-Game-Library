@@ -14,12 +14,12 @@
 
 #version 330 core
 
-layout(location = 0) in vec3 iPos_m;	// Vertex position in model space
+layout(location = 0) in vec3 i_v3_Pos_m; // Vertex position in model space
 
-uniform mat4 m_mvp;		// Model-view-projection matrix
+uniform mat4 MVP; // Model-view-projection matrix
 
 // Main entry point
 void main(){
 	// Vertex position in clip space
-	gl_Position =  m_mvp * vec4(iPos_m, 1);
+	gl_Position =  MVP * vec4(i_v3_Pos_m, 1);
 }

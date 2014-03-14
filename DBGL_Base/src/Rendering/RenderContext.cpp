@@ -144,6 +144,14 @@ namespace dbgl
 		pShader->setUniformFloatMatrix4Array(itmId, 1, GL_FALSE,
 			itmMat.getDataPointer());
 	    }
+	    // Send itv matrix if the shader wants it
+	    GLint itvId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::Uniform::ITV);
+	    if (itvId >= 0)
+	    {
+		pShader->setUniformFloatMatrix4Array(itvId, 1, GL_FALSE,
+			(viewport->getITViewMat()).getDataPointer());
+	    }
 	    // Send itmv matrix if the shader wants it
 	    GLint itmvId = pShader->getDefaultUniformHandle(
 		    ShaderProgram::Uniform::ITMV);

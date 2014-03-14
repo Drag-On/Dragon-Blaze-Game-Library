@@ -18,48 +18,48 @@
 
 #version 330 core
 
-in vec3 oNormal_w;	// Vertex normal in world space
-in vec2 oUV;		// UV coordinate
-in vec3 oPos_w;		// Vertex position in world space
-in vec3 oEye_w;		// Eye vector in world space
-in vec3 oLight_w;	// Light vector in world space
-in mat3 oM_TBN;		// TBN matrix from tangent- into world space
+in vec3 v3_normal_w;// Vertex normal in world space
+in vec2 v2_uv;		// UV coordinate
+in vec3 v3_pos_w;	// Vertex position in world space
+in vec3 v3_eye_w;	// Eye vector in world space
+in vec3 v3_light_w;	// Light vector in world space
+in mat3 TBN;		// TBN matrix from tangent- into world space
 
-out vec3 oColor;	// Fragment color
+out vec3 color;	// Fragment color
 
 uniform sampler2D tex_diffuse;	// Diffuse texture
 uniform sampler2D tex_normal;	// Normal texture
-uniform vec3 v_lightPos_w;		// Light position in world space
-uniform vec3 v_lightColor;		// Light color
-uniform vec3 v_ambientLight;	// Ambient light color
-uniform vec3 v_matSpecColor;	// Material specular color
+uniform vec3 v3_lightPos_w;		// Light position in world space
+uniform vec3 v3_lightColor;		// Light color
+uniform vec3 v3_ambientLight;	// Ambient light color
+uniform vec3 v3_matSpecColor;	// Material specular color
 uniform float f_matSpecWidth;	// Width of specular highlight, the higher, the thinner
 
 // Main entry point
 void main(){
 	// Calculate normal in camera space
-	vec3 normal_t = texture2D(tex_normal, oUV).rgb * 2.0 - 1.0;
-	vec3 normal_w = oM_TBN * normal_t;
+	vec3 v3_normal_t = texture2D(tex_normal, v2_uv).rgb * 2.0 - 1.0;
+	vec3 v3_normal_w = TBN * v3_normal_t;
 
 	// Calculate diffuse component
-	vec3 n = normalize(normal_w);
-	vec3 l = normalize(oLight_w);
+	vec3 n = normalize(v3_normal_w);
+	vec3 l = normalize(v3_light_w);
 	float cosTheta = clamp(dot(n, l), 0, 1);
 	
 	// Calculate specular component
-	vec3 e = normalize(oEye_w);
+	vec3 e = normalize(v3_eye_w);
 	vec3 r = reflect(-l, n);
 	float cosAlpha = clamp(dot(e, r), 0, 1);
  
-	vec3 matDiffuse = texture(tex_diffuse, oUV).rgb;
-	float dist = length(v_lightPos_w - oPos_w);
+	vec3 matDiffuse = texture(tex_diffuse, v2_uv).rgb;
+	float dist = length(v3_lightPos_w - v3_pos_w);
 	float distSquare = dist * dist;
-	oColor = 
+	color = 
 		// Ambient
-		v_ambientLight * matDiffuse +
+		v3_ambientLight * matDiffuse +
 		// Diffuse
-		matDiffuse * v_lightColor * cosTheta / distSquare +
+		matDiffuse * v3_lightColor * cosTheta / distSquare +
 		// Specular
-		v_matSpecColor * v_lightColor * pow(cosAlpha, f_matSpecWidth) / distSquare;
+		v3_matSpecColor * v3_lightColor * pow(cosAlpha, f_matSpecWidth) / distSquare;
 
 }

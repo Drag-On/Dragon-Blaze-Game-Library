@@ -107,13 +107,13 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Set light position and color for shader 1
     pShaderDiffSpec->use();
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_lightPos_w"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_lightPos_w"),
 	    (lightPos + lightOffset).getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_lightColor"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_lightColor"),
 	    lightColor.getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_ambientLight"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_ambientLight"),
 	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v_matSpecColor"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_matSpecColor"),
 	    matSpecular.getDataPointer());
     pShaderDiffSpec->setUniformFloat(pShaderDiffSpec->getUniformHandle("f_matSpecWidth"), 10);
 
@@ -128,13 +128,13 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Set light position and color for shader 2
     pShaderNorm->use();
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_lightPos_w"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_lightPos_w"),
 	(lightPos + lightOffset).getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_lightColor"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_lightColor"),
 	lightColor.getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_ambientLight"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_ambientLight"),
 	Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_matSpecColor"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_matSpecColor"),
 	matSpecular.getDataPointer());
     pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("f_matSpecWidth"), 10);
 

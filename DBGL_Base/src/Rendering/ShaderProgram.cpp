@@ -382,12 +382,12 @@ namespace dbgl
 		"layout(location = 2) in vec3 normal;\n"
 		"out vec3 normal_cam;\n"
 		"out vec2 uv;\n"
-		"uniform mat4 m_mvp;\n"
-		"uniform mat4 m_itmv;\n"
+		"uniform mat4 MVP;\n"
+		"uniform mat4 ITMV;\n"
 		"void main(){\n"
-		"gl_Position = m_mvp * vec4(vertexPos, 1);\n"
+		"gl_Position = MVP * vec4(vertexPos, 1);\n"
 		"uv = vertexUV;\n"
-		"normal_cam = normalize((m_itmv * vec4(normal, 0)).xyz);\n"
+		"normal_cam = normalize((ITMV * vec4(normal, 0)).xyz);\n"
 		"}";
 	const char* fragmentShader = "#version 330 core\n"
 		"in vec3 normal_cam;\n"
@@ -514,16 +514,17 @@ namespace dbgl
     // Initialize static variable
     std::map<ShaderProgram::Uniform, std::string> ShaderProgram::uniformNames =
     {
-        { ShaderProgram::MODEL, "m_model" },
-        { ShaderProgram::VIEW, "m_view" },
-        { ShaderProgram::PROJECTION, "m_projection" },
-        { ShaderProgram::MV, "m_mv" },
-        { ShaderProgram::MVP, "m_mvp" },
-        { ShaderProgram::ITM, "m_itm" },
-        { ShaderProgram::ITMV, "m_itmv" },
+        { ShaderProgram::MODEL, "M" },
+        { ShaderProgram::VIEW, "V" },
+        { ShaderProgram::PROJECTION, "P" },
+        { ShaderProgram::MV, "MV" },
+        { ShaderProgram::MVP, "MVP" },
+        { ShaderProgram::ITM, "ITM" },
+        { ShaderProgram::ITV, "ITV" },
+        { ShaderProgram::ITMV, "ITMV" },
         { ShaderProgram::TEX_DIFFUSE, "tex_diffuse" },
         { ShaderProgram::TEX_NORMAL, "tex_normal" },
-        { ShaderProgram::COLOR, "v_color" },
+        { ShaderProgram::COLOR, "v3_color" },
         { ShaderProgram::BOGUS, "" },
     };
 }

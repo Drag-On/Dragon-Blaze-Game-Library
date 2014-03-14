@@ -14,11 +14,11 @@
 
 #version 330 core
 
-out vec3 oColor;		// Fragment color
+out vec3 color;			// Fragment color
 
-uniform vec3 v_color;	// Color
+uniform vec3 v3_color;	// Color
 
 // Main entry point
 void main(){
-	oColor = v_color;
+	color = v3_color;
 }

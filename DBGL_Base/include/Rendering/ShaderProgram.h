@@ -35,6 +35,7 @@ namespace dbgl
 		MV,
 		MVP,
 		ITM,
+		ITV,
 		ITMV,
 		TEX_DIFFUSE,
 		TEX_NORMAL,
