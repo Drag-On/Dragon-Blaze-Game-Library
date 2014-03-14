@@ -32,7 +32,7 @@ Mesh* pMeshIco;
 Mesh* pMeshPlane;
 Mesh* pMeshSphere;
 ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderCheap;
-Texture* pTexture, *pNormalTex, *pTexture2, *pTextureWhite;
+Texture* pTexture, *pNormalTex, *pTextureWhite;
 Renderable renderable;
 Camera* cam;
 Vec3f lightPos = Vec3f(0, 3, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
@@ -126,14 +126,6 @@ void renderCallback(Window::RenderEventArgs const& args)
     renderable.scale = Vec3f(10, 10, 10);
     rc->draw(renderable);
 
-    // Pyramid will be drawn in the center of the world
-    renderable.pTexDiffuse = pTexture2;
-    renderable.pMesh = pMeshPyramid;
-    renderable.position = Vec3f();
-    renderable.rotation = QuatF();
-    renderable.scale = Vec3f(1, 1, 1);
-    rc->draw(renderable);
-
     // Set light position and color for shader 2
     pShaderNorm->use();
     pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_lightPos_w"),
@@ -145,6 +137,15 @@ void renderCallback(Window::RenderEventArgs const& args)
     pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v_matSpecColor"),
 	matSpecular.getDataPointer());
     pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("f_matSpecWidth"), 10);
+
+    // Pyramid will be drawn in the center of the world
+    renderable.pShader = pShaderNorm;
+    renderable.pTexDiffuse = pTexture;
+    renderable.pMesh = pMeshPyramid;
+    renderable.position = Vec3f();
+    renderable.rotation = QuatF();
+    renderable.scale = Vec3f(1, 1, 1);
+    rc->draw(renderable);
 
     // Box will be drawn at (5, 0, 3)
     renderable.pShader = pShaderNorm;
@@ -191,7 +192,7 @@ int main()
     // Tell the render context about the new viewport
     wnd->getRenderContext()->addViewport(viewport);
     // Load meshes, shader and texture
-    pMeshPyramid = Mesh::makePyramid();
+    pMeshPyramid = Mesh::makePyramid(true);
     pMeshBox = Mesh::makeCube(true);
     pMeshPlane = Mesh::makePlane(false);
     pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ, true);
@@ -201,7 +202,6 @@ int main()
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     pNormalTex = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
-    pTexture2  = pTexture;//new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     pTextureWhite = new Texture(Texture::BOGUS, "");
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
@@ -224,7 +224,6 @@ int main()
     delete pShaderDiffSpec;
     delete pShaderNorm;
     delete pTexture;
-    delete pTexture2;
     delete pNormalTex;
     delete pTextureWhite;
     delete cam;
