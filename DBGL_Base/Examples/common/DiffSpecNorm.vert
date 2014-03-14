@@ -69,7 +69,7 @@ void main(){
 	oEye_w = mat3(m_itv) * eye_c;
 
 	// Light vector, i.e. from vertex to light in world space
-	oLight_w = v_lightPos_w + oEye_w;
+	oLight_w = v_lightPos_w - oPos_w;
 	
 	// Pass UVs
 	oUV = iUV;
