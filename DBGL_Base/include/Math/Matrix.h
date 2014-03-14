@@ -11,7 +11,7 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 #include "Vector.h"
 
 namespace dbgl

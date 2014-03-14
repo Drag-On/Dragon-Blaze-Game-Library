@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 
 namespace dbgl
 {

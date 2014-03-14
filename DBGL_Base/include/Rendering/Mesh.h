@@ -17,7 +17,7 @@
 #include <fstream>
 #include <sstream>
 #include <GL/glew.h>
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
 

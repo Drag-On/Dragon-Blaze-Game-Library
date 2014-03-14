@@ -15,7 +15,7 @@
 #include<cstddef>
 #include<cmath>
 #include"Utility.h"
-#include"Log/Log.h"
+#include"System/Log/Log.h"
 
 namespace dbgl
 {

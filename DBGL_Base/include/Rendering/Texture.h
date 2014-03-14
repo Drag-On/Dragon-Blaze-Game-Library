@@ -17,7 +17,7 @@
 #include <utility>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 
 namespace dbgl
 {

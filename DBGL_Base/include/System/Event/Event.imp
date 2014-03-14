@@ -29,35 +29,35 @@ namespace dbgl
     template<class DelegateType, typename EventArgs> void Event<DelegateType,
 	    EventArgs>::fire(EventArgs const& args)
     {
-	std::for_each(m_delegates.begin(), m_delegates.end(),
-		[&args](const DelegatePtr& _decl) { (*_decl)(args); });
+		std::for_each(m_delegates.begin(), m_delegates.end(),
+			[&args](const DelegatePtr& _decl) { (*_decl)(args); });
     }
 
     template<class DelegateType, typename EventArgs> typename Event<
 	    DelegateType, EventArgs>::DelegatePtr Event<DelegateType, EventArgs>::addListener(
 	    DelegateType listener)
     {
-	DelegatePtr ptr(new DelegateType(listener));
-	m_delegates.insert(ptr);
-	return ptr;
+		DelegatePtr ptr(new DelegateType(listener));
+		m_delegates.insert(ptr);
+		return ptr;
     }
 
     template<class DelegateType, typename EventArgs> bool Event<DelegateType,
 	    EventArgs>::removeListener(DelegatePtr listener)
     {
-	typename std::set<DelegatePtr>::const_iterator it(m_delegates.find(listener));
-	if (it != m_delegates.end())
-	{
-	    m_delegates.erase(it);
-	    return true;
-	}
-	else
-	    return false;
+		typename std::set<DelegatePtr>::const_iterator it(m_delegates.find(listener));
+		if (it != m_delegates.end())
+		{
+			m_delegates.erase(it);
+			return true;
+		}
+		else
+			return false;
     }
 
     template<class DelegateType, typename EventArgs> bool Event<DelegateType,
 	    EventArgs>::hasListener()
     {
-	return !m_delegates.empty();
+	    return !m_delegates.empty();
     }
 }

@@ -11,7 +11,7 @@
 #ifndef MATRIX3X3_H_
 #define MATRIX3X3_H_
 
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 #include "Vector3.h"
 
 namespace dbgl

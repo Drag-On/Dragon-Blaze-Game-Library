@@ -20,7 +20,7 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "Renderable.h"
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 
 namespace dbgl
 {

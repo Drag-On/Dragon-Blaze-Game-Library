@@ -19,7 +19,7 @@
 #include <GLFW/glfw3.h>
 #include "Math/Vector3.h"
 #include "System/Event/Event.h"
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 #include "WindowManager.h"
 #include "Rendering/RenderContext.h"
 
