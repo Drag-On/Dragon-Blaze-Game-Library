@@ -35,8 +35,8 @@ namespace dbgl
 	    SimpleWindow(GLFWwindow* share, const char* title, int width,
 		    int height, bool fullscreen);
 	    // Callbacks
-	    void framebufferResizeCallback(int width, int height);
-	    void keyCallback(int key, int scancode, int action, int mods);
+	    void framebufferResizeCallback(FramebufferResizeEventArgs args);
+	    void keyCallback(KeyEventArgs args);
 
 	private:
 	    friend class WindowManager;

@@ -35,11 +35,9 @@ namespace dbgl
 	// Add callbacks for framebuffer and keyboard input
 	addFramebufferResizeCallback(
 		std::bind(&SimpleWindow::framebufferResizeCallback, this,
-			std::placeholders::_1, std::placeholders::_2));
-	addKeyCallback(
-		std::bind(&SimpleWindow::keyCallback, this,
-			std::placeholders::_1, std::placeholders::_2,
-			std::placeholders::_3, std::placeholders::_4));
+			std::placeholders::_1));
+	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this,
+		std::placeholders::_1));
     }
 
     SimpleWindow::~SimpleWindow()
@@ -47,21 +45,21 @@ namespace dbgl
 
     }
 
-    void SimpleWindow::framebufferResizeCallback(int width, int height)
+    void SimpleWindow::framebufferResizeCallback(FramebufferResizeEventArgs args)
     {
 	// Change viewport
-	m_pRenderContext->changeSize(width, height);
+	m_pRenderContext->changeSize(args.width, args.height);
     }
 
-    void SimpleWindow::keyCallback(int key, int scancode, int action, int mods)
+    void SimpleWindow::keyCallback(KeyEventArgs args)
     {
 	// Close on escape
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	if (args.key == GLFW_KEY_ESCAPE && args.action == GLFW_PRESS)
 	    close();
 
 	// Switch to fullscreen on alt + enter
-	if (key == GLFW_KEY_ENTER && action == GLFW_PRESS
-		&& (mods & (1 << GLFW_MOD_ALT)) == 0)
+	if (args.key == GLFW_KEY_ENTER && args.action == GLFW_PRESS
+		&& (args.mods & (1 << GLFW_MOD_ALT)) == 0)
 	    setFullscreen(!isFullscreen());
     }
 }

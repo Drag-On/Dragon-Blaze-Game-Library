@@ -297,98 +297,236 @@ namespace dbgl
 	return glfwGetKey(m_pWndHandle, key);
     }
 
-    void Window::addCloseCallback(CloseCallbackType const& callback)
+    Window::CloseEventType::DelegatePtr Window::addCloseCallback(
+	    CloseCallbackType const& callback)
     {
-	m_closeCallbacks.push_back(callback);
 	glfwSetWindowCloseCallback(m_pWndHandle, WindowManager::closeCallback);
+	return m_closeCallbacks.addListener(callback);
     }
 
-    void Window::addFocusCallback(FocusCallbackType const& callback)
+    bool Window::removeCloseCallback(
+	    CloseEventType::DelegatePtr const& callback)
     {
-	m_focusCallbacks.push_back(callback);
+	bool ret = m_closeCallbacks.removeListener(callback);
+	if (!m_closeCallbacks.hasListener())
+	    glfwSetWindowCloseCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::FocusEventType::DelegatePtr Window::addFocusCallback(
+	    FocusCallbackType const& callback)
+    {
 	glfwSetWindowFocusCallback(m_pWndHandle, WindowManager::focusCallback);
+	return m_focusCallbacks.addListener(callback);
     }
 
-    void Window::addIconifiedCallback(IconifiedCallbackType const& callback)
+    bool Window::removeFocusCallback(
+	    FocusEventType::DelegatePtr const& callback)
     {
-	m_iconifiedCallbacks.push_back(callback);
-	glfwSetWindowIconifyCallback(m_pWndHandle,
-		WindowManager::iconifiedCallback);
+	bool ret = m_focusCallbacks.removeListener(callback);
+	if (!m_focusCallbacks.hasListener())
+	    glfwSetWindowFocusCallback(m_pWndHandle, NULL);
+	return ret;
     }
 
-    void Window::addRefreshCallback(RefreshCallbackType const& callback)
+    Window::IconifiedEventType::DelegatePtr Window::addIconifiedCallback(
+	    IconifiedCallbackType const& callback)
     {
-	m_refreshCallbacks.push_back(callback);
-	glfwSetWindowRefreshCallback(m_pWndHandle,
-		WindowManager::refreshCallback);
+	glfwSetWindowIconifyCallback(m_pWndHandle, WindowManager::iconifiedCallback);
+	return m_iconifiedCallbacks.addListener(callback);
     }
 
-    void Window::addResizeCallback(ResizeCallbackType const& callback)
+    bool Window::removeIconifiedCallback(
+	    IconifiedEventType::DelegatePtr const& callback)
     {
-	m_resizeCallbacks.push_back(callback);
+	bool ret = m_iconifiedCallbacks.removeListener(callback);
+	if (!m_iconifiedCallbacks.hasListener())
+	    glfwSetWindowIconifyCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::RefreshEventType::DelegatePtr Window::addRefreshCallback(
+	    RefreshCallbackType const& callback)
+    {
+	glfwSetWindowRefreshCallback(m_pWndHandle, WindowManager::refreshCallback);
+	return m_refreshCallbacks.addListener(callback);
+    }
+
+    bool Window::removeRefreshCallback(
+	    RefreshEventType::DelegatePtr const& callback)
+    {
+	bool ret = m_refreshCallbacks.removeListener(callback);
+	if (!m_refreshCallbacks.hasListener())
+	    glfwSetWindowRefreshCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::ResizeEventType::DelegatePtr Window::addResizeCallback(
+	    ResizeCallbackType const& callback)
+    {
 	glfwSetWindowSizeCallback(m_pWndHandle, WindowManager::resizeCallback);
+	return m_resizeCallbacks.addListener(callback);
     }
 
-    void Window::addFramebufferResizeCallback(
+    bool Window::removeResizeCallback(
+	    ResizeEventType::DelegatePtr const& callback)
+    {
+	bool ret = m_resizeCallbacks.removeListener(callback);
+	if (!m_resizeCallbacks.hasListener())
+	    glfwSetWindowSizeCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::FramebufferResizeEventType::DelegatePtr Window::addFramebufferResizeCallback(
 	    FramebufferResizeCallbackType const& callback)
     {
-	m_framebufferResizeCallbacks.push_back(callback);
-	glfwSetFramebufferSizeCallback(m_pWndHandle,
-		WindowManager::framebufferResizeCallback);
+	glfwSetFramebufferSizeCallback(m_pWndHandle, WindowManager::framebufferResizeCallback);
+	return m_framebufferResizeCallbacks.addListener(callback);
     }
 
-    void Window::addPositionCallback(PositionCallbackType const& callback)
+    bool Window::removeFramebufferResizeCallback(
+	    FramebufferResizeEventType::DelegatePtr const& callback)
     {
-	m_positionCallbacks.push_back(callback);
+	bool ret = m_framebufferResizeCallbacks.removeListener(callback);
+	if (!m_framebufferResizeCallbacks.hasListener())
+	    glfwSetFramebufferSizeCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::PositionEventType::DelegatePtr Window::addPositionCallback(
+	    PositionCallbackType const& callback)
+    {
 	glfwSetWindowPosCallback(m_pWndHandle, WindowManager::positionCallback);
+	return m_positionCallbacks.addListener(callback);
     }
 
-    void Window::addCharacterCallback(CharacterCallbackType const& callback)
+    bool Window::removePositionCallback(
+	    PositionEventType::DelegatePtr const& callback)
     {
-	m_characterCallbacks.push_back(callback);
+	bool ret = m_positionCallbacks.removeListener(callback);
+	if (!m_positionCallbacks.hasListener())
+	    glfwSetWindowPosCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::CharacterEventType::DelegatePtr Window::addCharacterCallback(
+	    CharacterCallbackType const& callback)
+    {
 	glfwSetCharCallback(m_pWndHandle, WindowManager::characterCallback);
+	return m_characterCallbacks.addListener(callback);
     }
 
-    void Window::addCursorEnterCallback(CursorEnterCallbackType const& callback)
+    bool Window::removeCharacterCallback(
+	    CharacterEventType::DelegatePtr const& callback)
     {
-	m_cursorEnterCallbacks.push_back(callback);
-	glfwSetCursorEnterCallback(m_pWndHandle,
-		WindowManager::cursorEnterCallback);
+	bool ret = m_characterCallbacks.removeListener(callback);
+	if (!m_characterCallbacks.hasListener())
+	    glfwSetCharCallback(m_pWndHandle, NULL);
+	return ret;
     }
 
-    void Window::addCursorCallback(CursorCallbackType const& callback)
+    Window::CursorEnterEventType::DelegatePtr Window::addCursorEnterCallback(
+	    CursorEnterCallbackType const& callback)
     {
-	m_cursorCallbacks.push_back(callback);
+	glfwSetCursorEnterCallback(m_pWndHandle, WindowManager::cursorEnterCallback);
+	return m_cursorEnterCallbacks.addListener(callback);
+    }
+
+    bool Window::removeCursorEnterCallback(
+	    CursorEnterEventType::DelegatePtr const& callback)
+    {
+	bool ret = m_cursorEnterCallbacks.removeListener(callback);
+	if (!m_cursorEnterCallbacks.hasListener())
+	    glfwSetCursorEnterCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::CursorEventType::DelegatePtr Window::addCursorCallback(
+	    CursorCallbackType const& callback)
+    {
 	glfwSetCursorPosCallback(m_pWndHandle, WindowManager::cursorCallback);
+	return m_cursorCallbacks.addListener(callback);
     }
 
-    void Window::addMouseButtonCallback(MouseButtonCallbackType const& callback)
+    bool Window::removeCursorCallback(
+	    CursorEventType::DelegatePtr const& callback)
     {
-	m_mouseButtonCallbacks.push_back(callback);
-	glfwSetMouseButtonCallback(m_pWndHandle,
-		WindowManager::mouseButtonCallback);
+	bool ret = m_cursorCallbacks.removeListener(callback);
+	if (!m_cursorCallbacks.hasListener())
+	    glfwSetCursorPosCallback(m_pWndHandle, NULL);
+	return ret;
     }
 
-    void Window::addScrollCallback(ScrollCallbackType const& callback)
+    Window::MouseButtonEventType::DelegatePtr Window::addMouseButtonCallback(
+	    MouseButtonCallbackType const& callback)
     {
-	m_scrollCallbacks.push_back(callback);
+	glfwSetMouseButtonCallback(m_pWndHandle, WindowManager::mouseButtonCallback);
+	return m_mouseButtonCallbacks.addListener(callback);
+    }
+
+    bool Window::removeMouseButtonCallback(
+	    MouseButtonEventType::DelegatePtr const& callback)
+    {
+	bool ret = m_mouseButtonCallbacks.removeListener(callback);
+	if (!m_mouseButtonCallbacks.hasListener())
+	    glfwSetMouseButtonCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::ScrollEventType::DelegatePtr Window::addScrollCallback(
+	    ScrollCallbackType const& callback)
+    {
 	glfwSetScrollCallback(m_pWndHandle, WindowManager::scrollCallback);
+	return m_scrollCallbacks.addListener(callback);
     }
 
-    void Window::addKeyCallback(KeyCallbackType const& callback)
+    bool Window::removeScrollCallback(
+	    ScrollEventType::DelegatePtr const& callback)
     {
-	m_keyCallbacks.push_back(callback);
+	bool ret = m_scrollCallbacks.removeListener(callback);
+	if (!m_scrollCallbacks.hasListener())
+	    glfwSetScrollCallback(m_pWndHandle, NULL);
+	return ret;
+    }
+
+    Window::KeyEventType::DelegatePtr Window::addKeyCallback(
+	    KeyCallbackType const& callback)
+    {
 	glfwSetKeyCallback(m_pWndHandle, WindowManager::keyCallback);
+	return m_keyCallbacks.addListener(callback);
     }
 
-    void Window::addUpdateCallback(UpdateCallbackType const& callback)
+    bool Window::removeKeyCallback(
+	    KeyEventType::DelegatePtr const& callback)
     {
-	m_updateCallbacks.push_back(callback);
+	bool ret = m_keyCallbacks.removeListener(callback);
+	if(!m_keyCallbacks.hasListener())
+	    glfwSetKeyCallback(m_pWndHandle, NULL);
+	return ret;
     }
 
-    void Window::addRenderCallback(RenderCallbackType const& callback)
+    Window::UpdateEventType::DelegatePtr Window::addUpdateCallback(
+	    UpdateCallbackType const& callback)
     {
-	m_renderCallbacks.push_back(callback);
+	return m_updateCallbacks.addListener(callback);
+    }
+
+    bool Window::removeUpdateCallback(
+	    UpdateEventType::DelegatePtr const& callback)
+    {
+	return m_updateCallbacks.removeListener(callback);
+    }
+
+    Window::RenderEventType::DelegatePtr Window::addRenderCallback(
+	    RenderCallbackType const& callback)
+    {
+	return m_renderCallbacks.addListener(callback);
+    }
+
+    bool Window::removeRenderCallback(
+	    RenderEventType::DelegatePtr const& callback)
+    {
+	return m_renderCallbacks.removeListener(callback);
     }
 
     void Window::preUpdate()
@@ -397,8 +535,7 @@ namespace dbgl
 
     void Window::update()
     {
-	for(std::vector<UpdateCallbackType>::iterator it = m_updateCallbacks.begin(); it != m_updateCallbacks.end(); ++it)
-	    (*it)(m_deltaTime);
+	m_updateCallbacks.fire(UpdateEventArgs {m_deltaTime});
     }
 
     void Window::postUpdate()
@@ -419,9 +556,7 @@ namespace dbgl
 
     void Window::render()
     {
-	for (std::vector<RenderCallbackType>::iterator it = m_renderCallbacks.begin();
-		it != m_renderCallbacks.end(); ++it)
-	    (*it)(m_pRenderContext);
+	m_renderCallbacks.fire(RenderEventArgs{m_pRenderContext});
     }
 
     void Window::postRender()

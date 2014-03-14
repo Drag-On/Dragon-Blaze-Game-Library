@@ -14,32 +14,17 @@
 #include <stdlib.h>
 #include <string>
 #include <functional>
-#include <vector>
+#include <set>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Math/Vector3.h"
+#include "System/Event/Event.h"
 #include "Log/Log.h"
 #include "WindowManager.h"
 #include "Rendering/RenderContext.h"
 
 namespace dbgl
 {
-    using CloseCallbackType = std::function<void()>;
-    using FocusCallbackType = std::function<void(int)>;
-    using IconifiedCallbackType = std::function<void(int)>;
-    using RefreshCallbackType = std::function<void()>;
-    using ResizeCallbackType = std::function<void(int, int)>;
-    using FramebufferResizeCallbackType = std::function<void(int, int)>;
-    using PositionCallbackType = std::function<void(int, int)>;
-    using CharacterCallbackType = std::function<void(unsigned int)>;
-    using CursorEnterCallbackType = std::function<void(int)>;
-    using CursorCallbackType = std::function<void(double, double)>;
-    using MouseButtonCallbackType = std::function<void(int, int, int)>;
-    using ScrollCallbackType = std::function<void(double, double)>;
-    using KeyCallbackType = std::function<void(int, int, int, int)>;
-    using UpdateCallbackType = std::function<void(double)>;
-    using RenderCallbackType = std::function<void(const RenderContext* rc)>;
-
     /**
      * @brief Base class for all windows
      * @details Windows need to be constructed by the @see WindowManager and
@@ -52,6 +37,54 @@ namespace dbgl
     class Window
     {
 	public:
+	    struct CloseEventArgs {};
+	    struct FocusEventArgs {bool focused;};
+	    struct IconifiedEventArgs {bool iconified;};
+	    struct RefreshEventArgs {};
+	    struct ResizeEventArgs {int width; int height;};
+	    struct FramebufferResizeEventArgs {int width; int height;};
+	    struct PositionEventArgs {int x; int y;};
+	    struct CharacterEventArgs {unsigned int codepoint;};
+	    struct CursorEnterEventArgs {bool entered;};
+	    struct CursorEventArgs {double x; double y;};
+	    struct MouseButtonEventArgs {int button; int action; int mods;};
+	    struct ScrollEventArgs {double xOffset; double yOffset;};
+	    struct KeyEventArgs {int key; int scancode; int action; int mods;};
+	    struct UpdateEventArgs {double deltaTime;};
+	    struct RenderEventArgs {const RenderContext* rc;};
+
+	    using CloseCallbackType = std::function<void(CloseEventArgs const&)>;
+	    using FocusCallbackType = std::function<void(FocusEventArgs const&)>;
+	    using IconifiedCallbackType = std::function<void(IconifiedEventArgs const&)>;
+	    using RefreshCallbackType = std::function<void(RefreshEventArgs const&)>;
+	    using ResizeCallbackType = std::function<void(ResizeEventArgs const&)>;
+	    using FramebufferResizeCallbackType = std::function<void(FramebufferResizeEventArgs const&)>;
+	    using PositionCallbackType = std::function<void(PositionEventArgs const&)>;
+	    using CharacterCallbackType = std::function<void(CharacterEventArgs const&)>;
+	    using CursorEnterCallbackType = std::function<void(CursorEnterEventArgs const&)>;
+	    using CursorCallbackType = std::function<void(CursorEventArgs const&)>;
+	    using MouseButtonCallbackType = std::function<void(MouseButtonEventArgs const&)>;
+	    using ScrollCallbackType = std::function<void(ScrollEventArgs const&)>;
+	    using KeyCallbackType = std::function<void(KeyEventArgs const&)>;
+	    using UpdateCallbackType = std::function<void(UpdateEventArgs const&)>;
+	    using RenderCallbackType = std::function<void(RenderEventArgs const&)>;
+
+	    using CloseEventType = Event<CloseCallbackType, CloseEventArgs>;
+	    using FocusEventType = Event<FocusCallbackType, FocusEventArgs>;
+	    using IconifiedEventType = Event<IconifiedCallbackType, IconifiedEventArgs>;
+	    using RefreshEventType = Event<RefreshCallbackType, RefreshEventArgs>;
+	    using ResizeEventType = Event<ResizeCallbackType, ResizeEventArgs>;
+	    using FramebufferResizeEventType = Event<FramebufferResizeCallbackType, FramebufferResizeEventArgs>;
+	    using PositionEventType = Event<PositionCallbackType, PositionEventArgs>;
+	    using CharacterEventType = Event<CharacterCallbackType, CharacterEventArgs>;
+	    using CursorEnterEventType = Event<CursorEnterCallbackType, CursorEnterEventArgs>;
+	    using CursorEventType = Event<CursorCallbackType, CursorEventArgs>;
+	    using MouseButtonEventType = Event<MouseButtonCallbackType, MouseButtonEventArgs>;
+	    using ScrollEventType = Event<ScrollCallbackType, ScrollEventArgs>;
+	    using KeyEventType = Event<KeyCallbackType, KeyEventArgs>;
+	    using UpdateEventType = Event<UpdateCallbackType, UpdateEventArgs>;
+	    using RenderEventType = Event<RenderCallbackType, RenderEventArgs>;
+
 	    /**
 	     * @brief Frees all memory allocated to this window
 	     */
@@ -199,80 +232,182 @@ namespace dbgl
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    void addCloseCallback(CloseCallbackType const& callback);
+	    CloseEventType::DelegatePtr addCloseCallback(
+		    CloseCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for close events
+	     * @param callback Function to be called when this window is getting closed
+	     */
+	    bool removeCloseCallback(
+		    CloseEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
 	     */
-	    void addFocusCallback(FocusCallbackType const& callback);
+	    FocusEventType::DelegatePtr addFocusCallback(
+		    FocusCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for focus events
+	     * @param callback Function to be called when this window's focus state changes
+	     */
+	    bool removeFocusCallback(
+		    FocusEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for iconified events
 	     * @param callback Function to be called when this window is getting iconified or restored
 	     */
-	    void addIconifiedCallback(IconifiedCallbackType const& callback);
+	    IconifiedEventType::DelegatePtr addIconifiedCallback(
+		    IconifiedCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for iconified events
+	     * @param callback Function to be called when this window is getting iconified or restored
+	     */
+	    bool removeIconifiedCallback(
+		    IconifiedEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for refresh events
 	     * @param callback Function to be called when this window needs to be refreshed
 	     */
-	    void addRefreshCallback(RefreshCallbackType const& callback);
+	    RefreshEventType::DelegatePtr addRefreshCallback(
+		    RefreshCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for refresh events
+	     * @param callback Function to be called when this window needs to be refreshed
+	     */
+	    bool removeRefreshCallback(
+		    RefreshEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
-	    void addResizeCallback(ResizeCallbackType const& callback);
+	    ResizeEventType::DelegatePtr addResizeCallback(
+		    ResizeCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for resize events
+	     * @param callback Function to be called when this window is getting resized
+	     */
+	    bool removeResizeCallback(
+		    ResizeEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for framebuffer resize events
 	     * @param callback Function to be called when this window's framebuffer needs a resize
 	     */
-	    void addFramebufferResizeCallback(
+	    FramebufferResizeEventType::DelegatePtr addFramebufferResizeCallback(
 		    FramebufferResizeCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for framebuffer resize events
+	     * @param callback Function to be called when this window's framebuffer needs a resize
+	     */
+	    bool removeFramebufferResizeCallback(
+		    FramebufferResizeEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for window move events
 	     * @param callback Function to be called when this window is getting moved
 	     */
-	    void addPositionCallback(PositionCallbackType const& callback);
+	    PositionEventType::DelegatePtr addPositionCallback(
+		    PositionCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for window move events
+	     * @param callback Function to be called when this window is getting moved
+	     */
+	    bool removePositionCallback(
+		    PositionEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for unicode character events
 	     * @param callback Function to be called when a character is typed into this window
 	     */
-	    void addCharacterCallback(CharacterCallbackType const& callback);
+	    CharacterEventType::DelegatePtr addCharacterCallback(
+		    CharacterCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for unicode character events
+	     * @param callback Function to be called when a character is typed into this window
+	     */
+	    bool removeCharacterCallback(
+		    CharacterEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
-	    void addCursorEnterCallback(
+	    CursorEnterEventType::DelegatePtr addCursorEnterCallback(
 		    CursorEnterCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for cursor enter events
+	     * @param callback Function to be called when the cursor enters or leaves this window
+	     */
+	    bool removeCursorEnterCallback(
+		    CursorEnterEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor move events
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
-	    void addCursorCallback(CursorCallbackType const& callback);
+	    CursorEventType::DelegatePtr addCursorCallback(
+		    CursorCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for cursor move events
+	     * @param callback Function to be called when the cursor is moved inside this window
+	     */
+	    bool removeCursorCallback(
+		    CursorEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for mouse button events
 	     * @param callback Function to be called when a mouse button state changes
 	     */
-	    void addMouseButtonCallback(
+	    MouseButtonEventType::DelegatePtr addMouseButtonCallback(
 		    MouseButtonCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for mouse button events
+	     * @param callback Function to be called when a mouse button state changes
+	     */
+	    bool removeMouseButtonCallback(
+		    MouseButtonEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
 	     */
-	    void addScrollCallback(ScrollCallbackType const& callback);
+	    ScrollEventType::DelegatePtr addScrollCallback(
+		    ScrollCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for scroll events
+	     * @param callback Function to be called when the mouse wheel is scrolled
+	     */
+	    bool removeScrollCallback(
+		    ScrollEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for key events
 	     * @param callback Function to be called when a key state changes
 	     */
-	    void addKeyCallback(KeyCallbackType const& callback);
+	    KeyEventType::DelegatePtr addKeyCallback(
+		    KeyCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for key events
+	     * @param callback Function to be called when a key state changes
+	     */
+	    bool removeKeyCallback(
+		    KeyEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    void addUpdateCallback(UpdateCallbackType const& callback);
+	    UpdateEventType::DelegatePtr addUpdateCallback(
+		    UpdateCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for update events
+	     * @param callback Function to be called when the window is being updated
+	     */
+	    bool removeUpdateCallback(
+		    UpdateEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
 	     */
-	    void addRenderCallback(RenderCallbackType const& callback);
+	    RenderEventType::DelegatePtr addRenderCallback(
+		    RenderCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for render events
+	     * @param callback Function to be called when the window is being rendered
+	     */
+	    bool removeRenderCallback(
+		    RenderEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
@@ -337,21 +472,21 @@ namespace dbgl
 	    RenderContext* m_pRenderContext;
 
 	private:
-	    std::vector<CloseCallbackType> m_closeCallbacks;
-	    std::vector<FocusCallbackType> m_focusCallbacks;
-	    std::vector<IconifiedCallbackType> m_iconifiedCallbacks;
-	    std::vector<RefreshCallbackType> m_refreshCallbacks;
-	    std::vector<ResizeCallbackType> m_resizeCallbacks;
-	    std::vector<FramebufferResizeCallbackType> m_framebufferResizeCallbacks;
-	    std::vector<PositionCallbackType> m_positionCallbacks;
-	    std::vector<CharacterCallbackType> m_characterCallbacks;
-	    std::vector<CursorEnterCallbackType> m_cursorEnterCallbacks;
-	    std::vector<CursorCallbackType> m_cursorCallbacks;
-	    std::vector<MouseButtonCallbackType> m_mouseButtonCallbacks;
-	    std::vector<ScrollCallbackType> m_scrollCallbacks;
-	    std::vector<KeyCallbackType> m_keyCallbacks;
-	    std::vector<UpdateCallbackType> m_updateCallbacks;
-	    std::vector<RenderCallbackType> m_renderCallbacks;
+	    CloseEventType m_closeCallbacks;
+	    FocusEventType m_focusCallbacks;
+	    IconifiedEventType m_iconifiedCallbacks;
+	    RefreshEventType m_refreshCallbacks;
+	    ResizeEventType m_resizeCallbacks;
+	    FramebufferResizeEventType m_framebufferResizeCallbacks;
+	    PositionEventType m_positionCallbacks;
+	    CharacterEventType m_characterCallbacks;
+	    CursorEnterEventType m_cursorEnterCallbacks;
+	    CursorEventType m_cursorCallbacks;
+	    MouseButtonEventType m_mouseButtonCallbacks;
+	    ScrollEventType m_scrollCallbacks;
+	    KeyEventType m_keyCallbacks;
+	    UpdateEventType m_updateCallbacks;
+	    RenderEventType m_renderCallbacks;
 
 	    std::string m_title;
 	    bool m_isFullscreen;

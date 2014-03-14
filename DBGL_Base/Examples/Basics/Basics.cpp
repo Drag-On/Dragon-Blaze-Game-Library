@@ -27,7 +27,7 @@ ShaderProgram* pShader;
 Texture* pTexture;
 Renderable renderable;
 
-void renderCallback(const RenderContext* rc)
+void renderCallback(Window::RenderEventArgs const& args)
 {
     // Construct Renderable
     renderable.pMesh = pMesh;
@@ -35,7 +35,7 @@ void renderCallback(const RenderContext* rc)
     renderable.pTexDiffuse = pTexture;
 
     pShader->use();
-    rc->draw(renderable);
+    args.rc->draw(renderable);
 }
 
 int main()

@@ -35,14 +35,16 @@ Renderable renderable;
 Camera* cam;
 float mouseSpeed = 1.5, moveSpeed = 2.5;
 
-void scrollCallback(double x, double y)
+void scrollCallback(Window::ScrollEventArgs const& args)
 {
     // Zoom
-    cam->setFieldOfView(cam->getFieldOfView() + 0.1f * y);
+    cam->setFieldOfView(cam->getFieldOfView() + 0.1f * args.yOffset);
 }
 
-void updateCallback(double deltaTime)
+void updateCallback(Window::UpdateEventArgs const& args)
 {
+    auto deltaTime = args.deltaTime;
+
     // Update mouse
     double x, y;
     wnd->getCursorPos(x, y);
@@ -72,8 +74,10 @@ void updateCallback(double deltaTime)
 	cam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 }
 
-void renderCallback(const RenderContext* rc)
+void renderCallback(Window::RenderEventArgs const& args)
 {
+    auto rc = args.rc;
+
     // Construct Renderable
     renderable.pShader = pShader;
     renderable.pTexDiffuse = pTexture;
@@ -122,9 +126,7 @@ int main()
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
-    wnd->addScrollCallback(
-	    std::bind(&scrollCallback, std::placeholders::_1,
-		    std::placeholders::_2));
+    wnd->addScrollCallback(std::bind(&scrollCallback, std::placeholders::_1));
     // Show window
     wnd->show();
     // Run update loop

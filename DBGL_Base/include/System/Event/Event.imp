@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<class DelegateType, typename EventArgs> Event<DelegateType,
+	    EventArgs>::Event()
+    {
+    }
+
+    template<class DelegateType, typename EventArgs> Event<DelegateType,
+	    EventArgs>::Event(Event&& other) :
+	    m_delegates(std::move(other.m_delegates))
+    {
+    }
+
+    template<class DelegateType, typename EventArgs> Event<DelegateType,
+	    EventArgs>::~Event()
+    {
+    }
+
+    template<class DelegateType, typename EventArgs> void Event<DelegateType,
+	    EventArgs>::fire(EventArgs const& args)
+    {
+	std::for_each(m_delegates.begin(), m_delegates.end(),
+		[&args](const DelegatePtr& _decl) { (*_decl)(args); });
+    }
+
+    template<class DelegateType, typename EventArgs> typename Event<
+	    DelegateType, EventArgs>::DelegatePtr Event<DelegateType, EventArgs>::addListener(
+	    DelegateType listener)
+    {
+	DelegatePtr ptr(new DelegateType(listener));
+	m_delegates.insert(ptr);
+	return ptr;
+    }
+
+    template<class DelegateType, typename EventArgs> bool Event<DelegateType,
+	    EventArgs>::removeListener(DelegatePtr listener)
+    {
+	typename std::set<DelegatePtr>::const_iterator it(m_delegates.find(listener));
+	if (it != m_delegates.end())
+	{
+	    m_delegates.erase(it);
+	    return true;
+	}
+	else
+	    return false;
+    }
+
+    template<class DelegateType, typename EventArgs> bool Event<DelegateType,
+	    EventArgs>::hasListener()
+    {
+	return !m_delegates.empty();
+    }
+}
