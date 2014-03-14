@@ -16,8 +16,13 @@ project (DBGL_BASE_EXAMPLES C CXX)
 
 # External examples
 add_subdirectory("${PROJECT_SOURCE_DIR}/Basics"
-				 "${PROJECT_SOURCE_DIR}/Basics")
+				 "${PROJECT_BINARY_DIR}/Basics")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Movement"
-				 "${PROJECT_SOURCE_DIR}/Movement")
+				 "${PROJECT_BINARY_DIR}/Movement")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Shader"
-				 "${PROJECT_SOURCE_DIR}/Shader")
+				 "${PROJECT_BINARY_DIR}/Shader")
+				 
+######################################################################
+### Copy common resource folder
+######################################################################
+file(COPY "${PROJECT_SOURCE_DIR}/common" DESTINATION "${PROJECT_BINARY_DIR}")

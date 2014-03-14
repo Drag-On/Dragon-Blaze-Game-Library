@@ -38,7 +38,7 @@ add_executable(DBGL_BASE_BASICS ${SRC_FILES_BASICS})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_BASE_BASICS "${PROJECT_SOURCE_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_BASICS "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
 
 ######################################################################
 ### Copy files
@@ -54,7 +54,7 @@ add_dependencies(DBGL_BASE_BASICS ALWAYS_EXECUTE_BASICS)
 foreach(file_i ${LIBRARIES2COPY})
 	add_custom_command(TARGET ALWAYS_EXECUTE_BASICS
                         PRE_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_SOURCE_DIR}"
+                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
                         DEPENDS ${file_i}
                         )
 endforeach(file_i)

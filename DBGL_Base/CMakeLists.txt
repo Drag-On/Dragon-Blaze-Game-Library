@@ -110,4 +110,4 @@ target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
 ### Compile sub projects
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
-				 "${PROJECT_SOURCE_DIR}/Examples/")
+				 "${PROJECT_BINARY_DIR}/Examples/")

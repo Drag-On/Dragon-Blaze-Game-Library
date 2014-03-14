@@ -38,7 +38,7 @@ add_executable(DBGL_BASE_MOVEMENT ${SRC_FILES_MOVEMENT})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_BASE_MOVEMENT "${PROJECT_SOURCE_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_MOVEMENT "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
 
 ######################################################################
 ### Copy files
@@ -54,7 +54,7 @@ add_dependencies(DBGL_BASE_MOVEMENT ALWAYS_EXECUTE_MOVEMENT)
 foreach(file_i ${LIBRARIES2COPY})
 	add_custom_command(TARGET ALWAYS_EXECUTE_MOVEMENT
                         PRE_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_SOURCE_DIR}"
+                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
                         DEPENDS ${file_i}
                         )
 endforeach(file_i)
