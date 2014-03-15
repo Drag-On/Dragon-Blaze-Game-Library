@@ -19,6 +19,7 @@
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Renderable.h"
+#include "Entity/Entity.h"
 #include "Math/Vector3.h"
 #include "Math/Utility.h"
 #include "Math/Quaternion.h"
@@ -26,14 +27,10 @@
 using namespace dbgl;
 
 Window* wnd;
-Mesh* pMeshPyramid;
-Mesh* pMeshBox;
-Mesh* pMeshIco;
-Mesh* pMeshPlane;
-Mesh* pMeshSphere;
+Mesh* pMeshPyramid, *pMeshBox, *pMeshIco, *pMeshPlane, *pMeshSphere;
 ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderCheap;
-Texture* pTexture, *pNormalTex, *pTextureWhite;
-Renderable renderable;
+Texture* pTexBricks, *pTexBricksNormal, *pTexWhite;
+Entity* pPyramid, *pBox, *pIco, *pPlane, *pSphere, *pLight;
 Camera* cam;
 Vec3f lightPos = Vec3f(0, 3, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
 Vec3f lightOffset; // For movement
@@ -81,12 +78,16 @@ void updateCallback(Window::UpdateEventArgs const& args)
 
     // Drive rotation of icosahedron
     icoAngle += deltaTime;
+    pIco->getTransform()->rotation() = QuatF(Vec3f(1, 1, 1), icoAngle);
+    pIco->update(deltaTime);
 
     // Update moving light
     double currentTime = WindowManager::get()->getTime();
     lightOffset.x() = sin(currentTime) * 3;
     lightOffset.y() = -sin(currentTime) * 1;
     lightOffset.z() = cos(currentTime) * 3;
+    pLight->getTransform()->position() = lightPos + lightOffset;
+    pLight->update(deltaTime);
 }
 
 void renderCallback(Window::RenderEventArgs const& args)
@@ -96,14 +97,8 @@ void renderCallback(Window::RenderEventArgs const& args)
     pShaderCheap->use();
     pShaderCheap->setUniformFloat3(pShaderCheap->getDefaultUniformHandle(ShaderProgram::COLOR), Vec3f(1, 1, 1).getDataPointer());
 
-    // Draw sphere at light position
-    renderable.pShader = pShaderCheap;
-    renderable.pMesh = pMeshSphere;
-    renderable.pTexDiffuse = pTextureWhite;
-    renderable.position = lightPos + lightOffset;
-    renderable.rotation = QuatF();
-    renderable.scale = Vec3f(0.2f, 0.2f, 0.2f);
-    rc->draw(renderable);
+    // Draw sphere at light position using the "cheap" shader
+    pLight->render(rc);
 
     // Set light position and color for shader 1
     pShaderDiffSpec->use();
@@ -117,14 +112,8 @@ void renderCallback(Window::RenderEventArgs const& args)
 	    matSpecular.getDataPointer());
     pShaderDiffSpec->setUniformFloat(pShaderDiffSpec->getUniformHandle("f_matSpecWidth"), 10);
 
-    // Draw ground plane
-    renderable.pShader = pShaderDiffSpec;
-    renderable.pMesh = pMeshPlane;
-    renderable.pTexDiffuse = pTextureWhite;
-    renderable.position = Vec3f(0, -1, 0);
-    renderable.rotation = QuatF(Vec3f(0, 0, 1), Vec3f(0, 1, 0));
-    renderable.scale = Vec3f(10, 10, 10);
-    rc->draw(renderable);
+    // Draw ground plane using the diffuse + specular shader
+    pPlane->render(rc);
 
     // Set light position and color for shader 2
     pShaderNorm->use();
@@ -138,41 +127,11 @@ void renderCallback(Window::RenderEventArgs const& args)
 	matSpecular.getDataPointer());
     pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("f_matSpecWidth"), 10);
 
-    // Pyramid will be drawn in the center of the world
-    renderable.pShader = pShaderNorm;
-    renderable.pTexDiffuse = pTexture;
-    renderable.pMesh = pMeshPyramid;
-    renderable.position = Vec3f();
-    renderable.rotation = QuatF();
-    renderable.scale = Vec3f(1, 1, 1);
-    rc->draw(renderable);
-
-    // Box will be drawn at (5, 0, 3)
-    renderable.pShader = pShaderNorm;
-    renderable.pTexDiffuse = pTexture;
-    renderable.pTexNormal = pNormalTex;
-    renderable.pMesh = pMeshBox;
-    renderable.position = Vec3f(5, 0, 3);
-    renderable.rotation = QuatF(Vec3f(0, pi_4(), 0));
-    renderable.scale = Vec3f(1, 1, 1);
-    rc->draw(renderable);
-
-    // Sphere will be drawn at (2, 0, 8)
-    renderable.pShader = pShaderNorm;
-    renderable.pTexDiffuse = pTexture;
-    renderable.pTexNormal = pNormalTex;
-    renderable.pMesh = pMeshSphere;
-    renderable.position = Vec3f(2, 0, 8);
-    renderable.rotation = QuatF();
-    renderable.scale = Vec3f(1, 1, 1);
-    rc->draw(renderable);
-
-    // Icosahedron will be drawn at (-3, 0, 5)
-    renderable.pMesh = pMeshIco;
-    renderable.position = Vec3f(-3, 0, 5);
-    renderable.rotation = QuatF(Vec3f(1, 1, 1), icoAngle);
-    renderable.scale = Vec3f(1, 1, 1);
-    rc->draw(renderable);
+    // Draw other objects using the normal shader
+    pPyramid->render(rc);
+    pBox->render(rc);
+    pSphere->render(rc);
+    pIco->render(rc);
 }
 
 int main()
@@ -200,9 +159,33 @@ int main()
     pShaderCheap = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
     pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
-    pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
-    pNormalTex = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
-    pTextureWhite = new Texture(Texture::BOGUS, "");
+    pTexBricks = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
+    pTexBricksNormal = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
+    pTexWhite = new Texture(Texture::BOGUS, "");
+    // Create pyramid entity
+    Renderable data(pMeshPyramid, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(0, 0, 0),
+		    Vec3f(1, 1, 1), QuatF(0, 0, 0, 1));
+    pPyramid = new Entity(data, "pyramid");
+    // Create box entity
+    data.set(pMeshBox, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(5, 0, 3),
+	    Vec3f(1, 1, 1), QuatF(Vec3f(0, pi_4(), 0)));
+    pBox = new Entity(data, "box");
+    // Create icosahedron entity
+    data.set(pMeshIco, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(-3, 0, 5),
+	    Vec3f(1, 1, 1), QuatF());
+    pIco = new Entity(data, "icosahedron");
+    // Create sphere entity
+    data.set(pMeshSphere, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(2, 0, 8),
+	    Vec3f(1, 1, 1), QuatF());
+    pSphere = new Entity(data, "sphere");
+    // Create plane entity
+    data.set(pMeshPlane, pShaderDiffSpec, pTexWhite, NULL, Vec3f(0, -1, 0),
+	    Vec3f(10, 10, 10), QuatF(Vec3f(0, 0, 1), Vec3f(0, 1, 0)));
+    pPlane = new Entity(data, "plane");
+    // Create flying sphere symbolizing the light
+    data.set(pMeshSphere, pShaderCheap, NULL, NULL, Vec3f(2, 0, 8),
+	    Vec3f(0.2f, 0.2f, 0.2f), QuatF());
+    pLight = new Entity(data, "light");
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
@@ -223,9 +206,15 @@ int main()
     delete pShaderCheap;
     delete pShaderDiffSpec;
     delete pShaderNorm;
-    delete pTexture;
-    delete pNormalTex;
-    delete pTextureWhite;
+    delete pTexBricks;
+    delete pTexBricksNormal;
+    delete pTexWhite;
+    delete pPyramid;
+    delete pBox;
+    delete pIco;
+    delete pPlane;
+    delete pSphere;
+    delete pLight;
     delete cam;
     delete viewport;
     // Free remaining internal resources
