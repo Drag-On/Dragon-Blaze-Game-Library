@@ -53,9 +53,9 @@ endif()
 ### Make header file
 ######################################################################
 configure_file (
-  "${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h.in"
-  "${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h"
-  )
+	"${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h.in"
+	"${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h"
+)
 
 ######################################################################
 ### Compiler flags
@@ -77,6 +77,25 @@ file(GLOB_RECURSE BASE_SRC
 )
 
 ######################################################################
+### Add target for doxygen
+######################################################################
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+	configure_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile @ONLY
+	)
+	add_custom_target(doc
+		${DOXYGEN_EXECUTABLE}
+		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Generating documentation..." VERBATIM
+	)
+else (DOXYGEN_FOUND)
+	message("Doxygen not found!")
+endif(DOXYGEN_FOUND)
+
+######################################################################
 ### Include directories
 ######################################################################
 include_directories(${DBGL_INCLUDE_DIR})
@@ -90,7 +109,7 @@ find_package(OpenGL)
 if (OPENGL_FOUND)
 	include_directories(${OPENGL_INCLUDE_DIR})
 else (OPENGL_FOUND)
-	message("OpenGL environment missing")
+	message("OpenGL environment missing!")
 endif (OPENGL_FOUND)
 
 ######################################################################
