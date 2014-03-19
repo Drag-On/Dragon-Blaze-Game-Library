@@ -524,6 +524,7 @@ namespace dbgl
         { ShaderProgram::ITMV, "ITMV" },
         { ShaderProgram::TEX_DIFFUSE, "tex_diffuse" },
         { ShaderProgram::TEX_NORMAL, "tex_normal" },
+        { ShaderProgram::TEX_SPECULAR, "tex_specular" },
         { ShaderProgram::COLOR, "v3_color" },
         { ShaderProgram::BOGUS, "" },
     };

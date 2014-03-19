@@ -51,6 +51,7 @@ namespace dbgl
 	ShaderProgram* pShader = entity.pShader;
 	Texture* pTexDiffuse = entity.pTexDiffuse;
 	Texture* pTexNormal = entity.pTexNormal;
+	Texture* pTexSpecular = entity.pTexSpecular;
 
 	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
 	Mat4f itmMat = modelMat.getInverted().transpose();
@@ -95,6 +96,16 @@ namespace dbgl
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, pTexNormal->getTextureHandle());
 		pShader->setUniformSampler(normalId, 1);
+	    }
+	    // Send specular texture if the shader wants it
+	    GLint specularId = pShader->getDefaultUniformHandle(
+		    ShaderProgram::TEX_SPECULAR);
+	    if (specularId >= 0 && pTexSpecular != NULL)
+	    {
+		// Bind to texture unit 2
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, pTexSpecular->getTextureHandle());
+		pShader->setUniformSampler(specularId, 2);
 	    }
 	    // Send model matrix if the shader wants it
 	    GLint modelId = pShader->getDefaultUniformHandle(

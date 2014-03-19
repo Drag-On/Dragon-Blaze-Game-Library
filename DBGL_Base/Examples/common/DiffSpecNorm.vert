@@ -18,6 +18,9 @@
 
 #version 330 core
 
+//////////////////////////////////////////////////////////////////////
+// Variables
+//////////////////////////////////////////////////////////////////////
 layout(location = 0) in vec3 i_v3_Pos_m;		// Vertex position in model space
 layout(location = 1) in vec2 i_v2_UV;			// UV coordinate
 layout(location = 2) in vec3 i_v3_Normal_m;		// Vertex normal in model space
@@ -28,18 +31,20 @@ out vec3 v3_normal_w;	// Vertex normal in world space
 out vec2 v2_uv;			// UV coordinate
 out vec3 v3_pos_w;		// Vertex position in world space
 out vec3 v3_eye_w;		// Eye vector in world space
-out vec3 v3_light_w;	// Light vector in world space
 out mat3 TBN;			// TBN matrix
 
 uniform mat4 M;				// Model matrix
 uniform mat4 MVP;			// Model-view-projection matrix
 uniform mat4 MV;			// Model-view matrix
+uniform mat4 V;				// View matrix
 uniform mat4 ITM;			// Inverse transposed model matrix
 uniform mat4 ITV;			// Inverse transposed view matrix
-uniform vec3 v3_lightPos_w;	// Light position in world space
 
+//////////////////////////////////////////////////////////////////////
 // Main entry point
-void main(){
+//////////////////////////////////////////////////////////////////////
+void main()
+{
 	// Vertex position in clip space
 	gl_Position =  MVP * vec4(i_v3_Pos_m, 1);
 
@@ -63,12 +68,8 @@ void main(){
     );
 
 	// Eye vector, i.e. from vertex to camera in world space
-	vec3 pos_c = (MV * vec4(i_v3_Pos_m, 1)).xyz;
-	vec3 eye_c = vec3(0,0,0) - pos_c;
-	v3_eye_w = mat3(ITV) * eye_c;
-
-	// Light vector, i.e. from vertex to light in world space
-	v3_light_w = v3_lightPos_w - v3_pos_w;
+	vec3 cam_w = (vec4(0,0,0,1) * ITV).xyz;
+	v3_eye_w = normalize(cam_w - v3_pos_w);
 	
 	// Pass UVs
 	v2_uv = i_v2_UV;

@@ -39,6 +39,7 @@ namespace dbgl
 		ITMV,
 		TEX_DIFFUSE,
 		TEX_NORMAL,
+		TEX_SPECULAR,
 		COLOR,
 		BOGUS,
 	    };

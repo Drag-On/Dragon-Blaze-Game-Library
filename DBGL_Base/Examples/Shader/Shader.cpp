@@ -29,12 +29,13 @@ using namespace dbgl;
 Window* wnd;
 Mesh* pMeshPyramid, *pMeshBox, *pMeshIco, *pMeshPlane, *pMeshSphere;
 ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderCheap;
-Texture* pTexBricks, *pTexBricksNormal, *pTexWhite;
-Entity* pPyramid, *pBox, *pIco, *pPlane, *pSphere, *pLight;
+Texture* pTexBricks, *pTexBricksNormal, *pTexBricksSpecular, *pTexWhite;
+Entity* pPyramid, *pBox, *pIco, *pPlane, *pSphere, *pLight, *pLight2;
 Camera* cam;
-Vec3f lightPos = Vec3f(0, 3, 3), lightColor = Vec3f(1, 0.8, 0.8) * 25;
+Vec3f lightPos = Vec3f(0, 3, 3), lightColor = Vec3f(1.0f, 0.5f, 0.0f) * 15; // Orange
+Vec3f light2Pos = Vec3f(1, 2, 4.5f), light2Color = Vec3f(0.5f, 0.5f, 1.0f) * 25; // Blue-ish
 Vec3f lightOffset; // For movement
-Vec3f matSpecular = Vec3f(0.01, 0.01, 0.02);
+Vec3f matSpecular = Vec3f(0.1, 0.1, 0.2);
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
 float icoAngle = 0;
 
@@ -51,10 +52,10 @@ void updateCallback(Window::UpdateEventArgs const& args)
     // Update mouse
     double x, y;
     wnd->getCursorPos(x, y);
-    float horizontal = deltaTime * mouseSpeed
-	    * float(wnd->getFrameWidth() / 2 - x);
-    float vertical = deltaTime * mouseSpeed
-	    * float(wnd->getFrameHeight() / 2 - y);
+    double horizontal = deltaTime * mouseSpeed
+	    * (wnd->getFrameWidth() / 2.0 - x);
+    double vertical = deltaTime * mouseSpeed
+	    * (wnd->getFrameHeight() / 2.0 - y);
     cam->rotate(horizontal, -vertical);
     // Camera vectors
     Vec3f direction = cam->rotation() * Vec3f(0, 0, 1);
@@ -99,33 +100,59 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Draw sphere at light position using the "cheap" shader
     pLight->render(rc);
+    pLight2->render(rc);
 
     // Set light position and color for shader 1
     pShaderDiffSpec->use();
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_lightPos_w"),
-	    (lightPos + lightOffset).getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_lightColor"),
+    pShaderDiffSpec->setUniformInt(
+	    pShaderDiffSpec->getUniformHandle("i_numLights"), 2);
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("lights[0].v3_position_w"),
+	    pLight->getTransform()->position().getDataPointer());
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("lights[0].v3_color"),
 	    lightColor.getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_ambientLight"),
-	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_matSpecColor"),
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("lights[1].v3_position_w"),
+	    pLight2->getTransform()->position().getDataPointer());
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("lights[1].v3_color"),
+	    light2Color.getDataPointer());
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("v3_ambientLight"),
+	    Vec3f(0.2, 0.2, 0.2).getDataPointer());
+    pShaderDiffSpec->setUniformFloat3(
+	    pShaderDiffSpec->getUniformHandle("mat.v3_specColor"),
 	    matSpecular.getDataPointer());
-    pShaderDiffSpec->setUniformFloat(pShaderDiffSpec->getUniformHandle("f_matSpecWidth"), 10);
+    pShaderDiffSpec->setUniformFloat(
+	    pShaderDiffSpec->getUniformHandle("mat.f_specWidth"), 10);
 
     // Draw ground plane using the diffuse + specular shader
     pPlane->render(rc);
 
     // Set light position and color for shader 2
     pShaderNorm->use();
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_lightPos_w"),
-	(lightPos + lightOffset).getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_lightColor"),
-	lightColor.getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_ambientLight"),
-	Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_matSpecColor"),
-	matSpecular.getDataPointer());
-    pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("f_matSpecWidth"), 10);
+    pShaderNorm->setUniformInt(pShaderNorm->getUniformHandle("i_numLights"), 2);
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("lights[0].v3_position_w"),
+	    pLight->getTransform()->position().getDataPointer());
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("lights[0].v3_color"),
+	    lightColor.getDataPointer());
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("lights[1].v3_position_w"),
+	    pLight2->getTransform()->position().getDataPointer());
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("lights[1].v3_color"),
+	    light2Color.getDataPointer());
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("v3_ambientLight"),
+	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
+    pShaderNorm->setUniformFloat3(
+	    pShaderNorm->getUniformHandle("mat.v3_specColor"),
+	    matSpecular.getDataPointer());
+    pShaderNorm->setUniformFloat(
+	    pShaderNorm->getUniformHandle("mat.f_specWidth"), 10);
 
     // Draw other objects using the normal shader
     pPyramid->render(rc);
@@ -161,31 +188,36 @@ int main()
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
     pTexBricks = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     pTexBricksNormal = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
+    pTexBricksSpecular = new Texture(Texture::TGA, "../common/Bricks01_specular.tga");
     pTexWhite = new Texture(Texture::BOGUS, "");
     // Create pyramid entity
-    Renderable data(pMeshPyramid, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(0, 0, 0),
-		    Vec3f(1, 1, 1), QuatF(0, 0, 0, 1));
+    Renderable data(pMeshPyramid, pShaderNorm, pTexBricks, pTexBricksNormal, pTexBricksSpecular, Vec3f(0, 0, 0),
+	    Vec3f(1, 1, 1), QuatF(0, 0, 0, 1));
     pPyramid = new Entity(data, "pyramid");
     // Create box entity
-    data.set(pMeshBox, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(5, 0, 3),
+    data.set(pMeshBox, pShaderNorm, pTexBricks, pTexBricksNormal, pTexBricksSpecular, Vec3f(5, 0, 3),
 	    Vec3f(1, 1, 1), QuatF(Vec3f(0, pi_4(), 0)));
     pBox = new Entity(data, "box");
     // Create icosahedron entity
-    data.set(pMeshIco, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(-3, 0, 5),
+    data.set(pMeshIco, pShaderNorm, pTexBricks, pTexBricksNormal, pTexBricksSpecular, Vec3f(-3, 0, 5),
 	    Vec3f(1, 1, 1), QuatF());
     pIco = new Entity(data, "icosahedron");
     // Create sphere entity
-    data.set(pMeshSphere, pShaderNorm, pTexBricks, pTexBricksNormal, Vec3f(2, 0, 8),
+    data.set(pMeshSphere, pShaderNorm, pTexBricks, pTexBricksNormal, pTexBricksSpecular, Vec3f(2, 0, 8),
 	    Vec3f(1, 1, 1), QuatF());
     pSphere = new Entity(data, "sphere");
     // Create plane entity
-    data.set(pMeshPlane, pShaderDiffSpec, pTexWhite, NULL, Vec3f(0, -1, 0),
+    data.set(pMeshPlane, pShaderDiffSpec, pTexWhite, NULL, pTexWhite, Vec3f(0, -1, 0),
 	    Vec3f(10, 10, 10), QuatF(Vec3f(0, 0, 1), Vec3f(0, 1, 0)));
     pPlane = new Entity(data, "plane");
     // Create flying sphere symbolizing the light
-    data.set(pMeshSphere, pShaderCheap, NULL, NULL, Vec3f(2, 0, 8),
+    data.set(pMeshSphere, pShaderCheap, NULL, NULL, NULL, lightPos,
 	    Vec3f(0.2f, 0.2f, 0.2f), QuatF());
     pLight = new Entity(data, "light");
+    // Other light
+    data.set(pMeshSphere, pShaderCheap, NULL, NULL, NULL, light2Pos,
+    	    Vec3f(0.2f, 0.2f, 0.2f), QuatF());
+    pLight2 = new Entity(data, "light2");
     // Add update- and render callback so we can draw the mesh
     wnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
@@ -208,6 +240,7 @@ int main()
     delete pShaderNorm;
     delete pTexBricks;
     delete pTexBricksNormal;
+    delete pTexBricksSpecular;
     delete pTexWhite;
     delete pPyramid;
     delete pBox;
@@ -215,6 +248,7 @@ int main()
     delete pPlane;
     delete pSphere;
     delete pLight;
+    delete pLight2;
     delete cam;
     delete viewport;
     // Free remaining internal resources

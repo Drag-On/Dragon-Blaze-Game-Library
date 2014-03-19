@@ -17,9 +17,9 @@ namespace dbgl
     }
 
     Renderable::Renderable(Mesh* mesh, ShaderProgram* shader, Texture* diff,
-	    Texture* norm, Vec3f pos, Vec3f scle, QuatF rot)
+	    Texture* norm, Texture* spec, Vec3f pos, Vec3f scle, QuatF rot)
     {
-	set(mesh, shader, diff, norm, pos, scle, rot);
+	set(mesh, shader, diff, norm, spec, pos, scle, rot);
     }
 
     Renderable::Renderable(Renderable const& other)
@@ -31,10 +31,11 @@ namespace dbgl
 	pShader = other.pShader;
 	pTexDiffuse = other.pTexDiffuse;
 	pTexNormal = other.pTexNormal;
+	pTexSpecular = other.pTexSpecular;
     }
 
     void Renderable::set(Mesh* mesh, ShaderProgram* shader, Texture* diff,
-	    Texture* norm, Vec3f pos, Vec3f scle, QuatF rot)
+	    Texture* norm, Texture* spec, Vec3f pos, Vec3f scle, QuatF rot)
     {
 	pMesh = mesh;
 	position = pos;
@@ -43,5 +44,6 @@ namespace dbgl
 	pShader = shader;
 	pTexDiffuse = diff;
 	pTexNormal = norm;
+	pTexSpecular = spec;
     }
 }

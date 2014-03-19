@@ -27,12 +27,14 @@ namespace dbgl
 	public:
 	    Renderable();
 	    Renderable(Mesh* mesh, ShaderProgram* shader, Texture* diff = NULL,
-		    Texture* norm = NULL, Vec3f pos = Vec3f(0, 0, 0),
-		    Vec3f scle = Vec3f(1, 1, 1), QuatF rot = QuatF());
+		    Texture* norm = NULL, Texture* spec = NULL,
+		    Vec3f pos = Vec3f(0, 0, 0), Vec3f scle = Vec3f(1, 1, 1),
+		    QuatF rot = QuatF());
 	    Renderable(Renderable const& other);
 	    void set(Mesh* mesh, ShaderProgram* shader, Texture* diff = NULL,
-		    Texture* norm = NULL, Vec3f pos = Vec3f(0, 0, 0),
-		    Vec3f scle = Vec3f(1, 1, 1), QuatF rot = QuatF());
+		    Texture* norm = NULL, Texture* spec = NULL,
+		    Vec3f pos = Vec3f(0, 0, 0), Vec3f scle = Vec3f(1, 1, 1),
+		    QuatF rot = QuatF());
 
 	    Mesh* pMesh = NULL;
 	    Vec3f position = Vec3f(0, 0, 0);
@@ -41,6 +43,7 @@ namespace dbgl
 	    ShaderProgram* pShader = NULL;
 	    Texture* pTexDiffuse = NULL;
 	    Texture* pTexNormal = NULL;
+	    Texture* pTexSpecular = NULL;
     };
 }
 

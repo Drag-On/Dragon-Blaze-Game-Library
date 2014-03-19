@@ -17,41 +17,104 @@
 
 #version 330 core
 
-in vec3 v3_normal_c;	// Vertex normal in camera space
+//////////////////////////////////////////////////////////////////////
+// Structure definitions
+//////////////////////////////////////////////////////////////////////
+struct lightSource
+{
+	vec3 v3_position_w;		// Coordinates in world space
+	vec3 v3_color;			// Light color (and power)
+	float f_spotCutoff;		// Cutoff (if spotlight)
+	vec3 v3_direction_w;	// Direction (if spot or directional)
+};
+struct material
+{
+	vec3 v3_specColor;	// Material specular color
+	float f_specWidth;	// Width of specular highlight, the higher, the thinner
+};
+
+//////////////////////////////////////////////////////////////////////
+// Variables
+//////////////////////////////////////////////////////////////////////
+in vec3 v3_normal_w;	// Vertex normal in world space
 in vec2 v2_uv;			// UV coordinate
 in vec3 v3_pos_w;		// Vertex position in world space
-in vec3 v3_eye_c;		// Eye vector in camera space
-in vec3 v3_light_c;		// Light vector in camera space
+in vec3 v3_eye_w;		// Eye vector in world space
 
 out vec3 color;			// Fragment color
 
-uniform sampler2D tex_diffuse;	// Diffuse texture
-uniform vec3 v3_lightPos_w;		// Light position in world space
-uniform vec3 v3_lightColor;		// Light color
-uniform vec3 v3_ambientLight;	// Ambient light color
-uniform vec3 v3_matSpecColor;	// Material specular color
-uniform float f_matSpecWidth;	// Width of specular highlight, the higher, the thinner
+const int c_MAXLIGHTS = 10;
 
-// Main entry point
-void main(){
-	// Calculate diffuse component
-	vec3 n = normalize(v3_normal_c);
-	vec3 l = normalize(v3_light_c);
-	float cosTheta = clamp(dot(n, l), 0, 1);
-	
-	// Calculate specular component
-	vec3 e = normalize(v3_eye_c);
-	vec3 r = reflect(-l, n);
+uniform int i_numLights;					// Number of lights to process
+uniform lightSource lights[c_MAXLIGHTS];	// Lights
+uniform material mat;						// Material
+uniform sampler2D tex_diffuse;				// Diffuse texture
+uniform sampler2D tex_specular;				// Specular texture
+uniform vec3 v3_ambientLight;				// Ambient light color
+
+//////////////////////////////////////////////////////////////////////
+// Functions
+//////////////////////////////////////////////////////////////////////
+//
+// Ambient part of lighting
+//	color = color (and intensity)
+//
+vec3 calcAmbient(vec3 color)
+{
+	return color * v3_ambientLight;
+}
+//
+// Diffuse part of lighting
+// 	i = index of light
+//	normal_w = normal to use for calculation in world space
+//	light_w = vector from vertex to light in world space
+//	matColor = material diffuse color (and intensity)
+//
+vec3 calcDiffuse(int i, vec3 normal_w, vec3 light_w, vec3 matColor)
+{
+	float cosTheta = clamp(dot(normal_w, light_w), 0, 1);
+	return matColor * lights[i].v3_color * cosTheta;
+}
+//
+// Specular part of lighting
+//	i = index of light
+//	normal_w = normal to use for calculation in world space
+//	light_w = vector from vertex to light in world space
+//	intensity = specular intensity
+//
+vec3 calcSpecular(int i, vec3 normal_w, vec3 light_w, vec3 intensity)
+{
+	vec3 e = normalize(v3_eye_w);
+	vec3 r = normalize(reflect(-light_w, normal_w));
 	float cosAlpha = clamp(dot(e, r), 0, 1);
- 
-	vec3 matDiffuse = texture(tex_diffuse, v2_uv).rgb;
-	float dist = length(v3_lightPos_w - v3_pos_w);
-	color = 
-		// Ambient
-		v3_ambientLight * matDiffuse +
-		// Diffuse
-		matDiffuse * v3_lightColor * cosTheta / (dist * dist) +
-		// Specular
-		v3_matSpecColor * v3_lightColor * pow(cosAlpha, f_matSpecWidth) / (dist * dist);
+	return mat.v3_specColor * intensity * lights[i].v3_color * pow(cosAlpha, mat.f_specWidth);
+}
 
+//////////////////////////////////////////////////////////////////////
+// Main entry point
+//////////////////////////////////////////////////////////////////////
+void main()
+{
+	// Calculate lights
+	vec3 diffuseColor = texture(tex_diffuse, v2_uv).rgb;
+	vec3 specularInt = texture(tex_specular, v2_uv).rgb;
+	vec3 ambient = calcAmbient(diffuseColor);
+	vec3 diffuse = vec3(0.0, 0.0, 0.0);
+	vec3 specular = vec3(0.0, 0.0, 0.0);
+	for(int i = 0; i < i_numLights; i++)
+	{
+		// Calculate light vector, i.e. from vertex to light in world space
+		vec3 vertToLight_w = lights[i].v3_position_w - v3_pos_w;
+		vec3 light_w = normalize(vertToLight_w);
+		// Calculate attenuation
+		float dist = length(vertToLight_w);
+		float attenuation = dist * dist;
+		// Calculate diffuse component
+		diffuse += calcDiffuse(i, v3_normal_w, light_w, diffuseColor) / attenuation;
+		// Calculate specular component
+		specular += calcSpecular(i, v3_normal_w, light_w, specularInt) / attenuation;
+	}
+	
+	// Final color
+	color = ambient + diffuse + specular;
 }
