@@ -2,6 +2,7 @@ Debug
 .metadata
 /RemoteSystemsTempFiles
 .cproject
+.project
 .settings
 CMakeFiles
 Makefile
@@ -13,3 +14,4 @@ Logfile.txt
 *.a
 *.so
 DBGL_BASE_*
+Doxyfile
