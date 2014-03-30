@@ -82,6 +82,11 @@ namespace dbgl
 	// Create render context object
 	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
 
+	// Add framebuffer resize event handler
+	addFramebufferResizeCallback(
+		std::bind(&Window::framebufferResizeCallback, this,
+			std::placeholders::_1));
+
 	makeCurrent();
 
 	// Initialize GLEW
@@ -101,6 +106,12 @@ namespace dbgl
 
 	delete m_pRenderContext;
 	m_pRenderContext = NULL;
+    }
+
+    void Window::framebufferResizeCallback(FramebufferResizeEventArgs args)
+    {
+	// Change viewport
+	m_pRenderContext->changeSize(args.width, args.height);
     }
 
     void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)

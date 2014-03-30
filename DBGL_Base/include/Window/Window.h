@@ -464,6 +464,11 @@ namespace dbgl
 	     */
 	    Window(GLFWwindow* share, const char* title, int width, int height,
 		    bool fullscreen);
+	    /**
+	     * @brief Needed to update render context on window resize
+	     * @param args New size
+	     */
+	    void framebufferResizeCallback(FramebufferResizeEventArgs args);
 
 	    /**
 	     * GLFW window handle

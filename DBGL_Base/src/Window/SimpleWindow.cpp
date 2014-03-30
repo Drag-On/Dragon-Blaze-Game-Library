@@ -32,23 +32,13 @@ namespace dbgl
 	    int height, bool fullscreen) :
 	    Window(share, title, width, height, fullscreen)
     {
-	// Add callbacks for framebuffer and keyboard input
-	addFramebufferResizeCallback(
-		std::bind(&SimpleWindow::framebufferResizeCallback, this,
-			std::placeholders::_1));
+	// Add callback for keyboard input
 	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this,
 		std::placeholders::_1));
     }
 
     SimpleWindow::~SimpleWindow()
     {
-
-    }
-
-    void SimpleWindow::framebufferResizeCallback(FramebufferResizeEventArgs args)
-    {
-	// Change viewport
-	m_pRenderContext->changeSize(args.width, args.height);
     }
 
     void SimpleWindow::keyCallback(KeyEventArgs args)
