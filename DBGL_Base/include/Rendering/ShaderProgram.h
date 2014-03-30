@@ -78,6 +78,14 @@ namespace dbgl
 	    GLint getUniformHandle(const char* name) const;
 
 	    /**
+	     * @brief Binds a texture to a certain texture location
+	     * @param texLocation Texture location, e.g. GL_TEXTURE0
+	     * @param texType Type of the texture, e.g. GL_TEXTURE_2D
+	     * @param texHandle Handle of the texture
+	     */
+	    void bindTexture(int texLocation, int texType, GLuint texHandle) const;
+
+	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value

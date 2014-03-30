@@ -15,11 +15,8 @@
 #include <vector>
 #include <algorithm>
 #include "Mesh.h"
-#include "Camera.h"
-#include "Viewport.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
-#include "Renderable.h"
 #include "System/Log/Log.h"
 
 namespace dbgl
@@ -29,8 +26,7 @@ namespace dbgl
     /**
      * @brief The RenderContext serves as the main rendering authority.
      * @details All objects that are supposed to be displayed need to be passed to an instance
-     * 		of this class. It will then take care of the model and render it to all
-     * 		viewports where it is visible.
+     * 		of this class.
      */
     class RenderContext
     {
@@ -44,29 +40,29 @@ namespace dbgl
 	    /**
 	     * @brief Cleans up memory
 	     */
-	    ~RenderContext();
+	    virtual ~RenderContext();
 	    /**
-	     * @brief Adds a new viewport to this context which will then be drawn to
-	     * @details Without a viewport you won't see anything!
-	     * @param viewport New viewport object to add
+	     * @brief Draws a mesh using the currently bound shader
+	     * @param mesh Mesh to draw
 	     */
-	    void addViewport(Viewport* viewport);
-	    /**
-	     * @brief Removes the passed viewport from this render context
-	     * @param viewport Viewport to remove
-	     */
-	    void removeViewport(Viewport* viewport);
-	    /**
-	     * @brief Draws a mesh to all viewports where it is visible
-	     * @param entity Entity to draw
-	     */
-	    void draw(Renderable const& entity) const;
+	    virtual void draw(Mesh const& mesh) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer
 	     * @param height New height of the framebuffer
 	     */
 	    void changeSize(unsigned int width, unsigned int height);
+	protected:
+	    /**
+	     * @brief Updates the render context's cached values, needed once per frame
+	     */
+	    virtual void preRender();
+	    /**
+	     * @brief Called after rendering has been done
+	     */
+	    virtual void postRender();
+
+	    unsigned int m_frameWidth, m_frameHeight;
 	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
@@ -75,15 +71,9 @@ namespace dbgl
 	     * 	      been set up before.
 	     * @param mesh Pointer to the mesh to render
 	     */
-	    void renderMesh(const Mesh* mesh) const;
-	    /**
-	     * @brief Updates the render context's cached values, needed once per frame
-	     */
-	    void preRender();
+	    void renderMesh(Mesh const& mesh) const;
 
-	    unsigned int m_frameWidth, m_frameHeight;
-	    std::vector<Viewport*> m_viewports;
-	    // Window::preRender can access internals - only for update() method
+	    // Window::preRender can access internals - only for preRender() method
 	    friend class Window;
     };
 }

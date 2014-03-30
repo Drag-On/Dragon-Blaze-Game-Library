@@ -12,12 +12,6 @@
 
 namespace dbgl
 {
-    /**
-     * Constructor
-     * @param vert Code of the vertex shader
-     * @param frag Code of the fragment shader
-     * @param isFiles Indicates, if vert and frag contain only paths of files that contain the code
-     */
     ShaderProgram::ShaderProgram(const char* vert, const char* frag,
 	    bool isFiles)
     {
@@ -68,302 +62,161 @@ namespace dbgl
 	glDeleteProgram(_shaderProgram);
     }
 
-    /**
-     * @brief Sets this shader as the current one
-     */
     void ShaderProgram::use() const
     {
 	glUseProgram(_shaderProgram);
     }
 
-    /**
-     * @brief Returns the handle for a shader attribute by it's name
-     * @param name Name of the shader attribute
-     * @return The attributes id or -1 in case the attribute could not be found
-     */
     GLint ShaderProgram::getAttributeHandle(const char* name) const
     {
 	return glGetAttribLocation(_shaderProgram, name);
     }
 
-    /**
-     * @brief Returns the handle for a shader uniform by it's name
-     * @param name Name of the shader uniform
-     * @return The uniform id or -1 in case the uniform could not be found
-     */
     GLint ShaderProgram::getUniformHandle(const char* name) const
     {
 	return glGetUniformLocation(_shaderProgram, name);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
+    void ShaderProgram::bindTexture(int texLocation, int texType, GLuint texHandle) const
+    {
+	glActiveTexture(texLocation);
+	glBindTexture(texType, texHandle);
+    }
+
     void ShaderProgram::setUniformFloat(GLint handle, const float value) const
     {
 	glUniform1f(handle, value);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformFloat2(GLint handle,
 	    const float value[2]) const
     {
 	glUniform2f(handle, value[0], value[1]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformFloat3(GLint handle,
 	    const float value[3]) const
     {
 	glUniform3f(handle, value[0], value[1], value[2]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformFloat4(GLint handle,
 	    const float value[4]) const
     {
 	glUniform4f(handle, value[0], value[1], value[2], value[3]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformInt(GLint handle, const int value) const
     {
 	glUniform1i(handle, value);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformInt2(GLint handle, const int value[2]) const
     {
 	glUniform2i(handle, value[0], value[1]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformInt3(GLint handle, const int value[3]) const
     {
 	glUniform3i(handle, value[0], value[1], value[2]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformInt4(GLint handle, const int value[4]) const
     {
 	glUniform4i(handle, value[0], value[1], value[2], value[3]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformBool(GLint handle, const bool value) const
     {
 	glUniform1i(handle, value);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformBool2(GLint handle, const bool value[2]) const
     {
 	glUniform2i(handle, value[0], value[1]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformBool3(GLint handle, const bool value[3]) const
     {
 	glUniform3i(handle, value[0], value[1], value[2]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformBool4(GLint handle, const bool value[4]) const
     {
 	glUniform4i(handle, value[0], value[1], value[2], value[3]);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloatArray(GLint handle, unsigned int count,
 	    const float* values) const
     {
 	glUniform1fv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloat2Array(GLint handle, unsigned int count,
 	    const float* values) const
     {
 	glUniform2fv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloat3Array(GLint handle, unsigned int count,
 	    const float* values) const
     {
 	glUniform3fv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloat4Array(GLint handle, unsigned int count,
 	    const float* values) const
     {
 	glUniform4fv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformIntArray(GLint handle, unsigned int count,
 	    const int* values) const
     {
 	glUniform1iv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformInt2Array(GLint handle, unsigned int count,
 	    const int* values) const
     {
 	glUniform2iv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformInt3Array(GLint handle, unsigned int count,
 	    const int* values) const
     {
 	glUniform3iv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformInt4Array(GLint handle, unsigned int count,
 	    const int* values) const
     {
 	glUniform4iv(handle, count, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloatMatrix2Array(GLint handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix2fv(handle, count, transpose, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloatMatrix3Array(GLint handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix3fv(handle, count, transpose, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param count Amount of elements of the uniform array
-     * @param values Pointer to array with count values
-     */
     void ShaderProgram::setUniformFloatMatrix4Array(GLint handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
 	glUniformMatrix4fv(handle, count, transpose, values);
     }
 
-    /**
-     * @brief Sets a uniform by it's handle
-     * @param handle Uniform handle
-     * @param value New value
-     */
     void ShaderProgram::setUniformSampler(GLint handle, const int value) const
     {
 	glUniform1i(handle, value);
     }
 
-    /**
-     * @return OpenGL handle of the shader program
-     */
     GLuint ShaderProgram::getHandle() const
     {
 	return _shaderProgram;
@@ -416,11 +269,6 @@ namespace dbgl
 	}
     }
 
-    /**
-     * @brief Reads in a text file
-     * @param path Path of the file to read
-     * @return Content of the read file
-     */
     std::string ShaderProgram::readFile(const char* path)
     {
 	std::string code;
@@ -437,11 +285,6 @@ namespace dbgl
 	return code;
     }
 
-    /**
-     * @brief Prints the output of a shader compile process to LOG
-     * @param object Shader to print the log for
-     * @param ok Indicates if compilation was successful
-     */
     void ShaderProgram::printLog(GLuint object, GLint ok)
     {
 	GLint logLength = 0;
@@ -478,14 +321,6 @@ namespace dbgl
 	}
     }
 
-    /**
-     * @brief Compiles a string as a shader and returns it
-     * @attention Shader must be version 120 (100 for GLES)
-     * @param code Code of the shader to compile
-     * @param type Type of the shader to compile
-     * @param fileName Name of the file if the shader is compiled from a file
-     * @return The compiled shader or -1 in case something went wrong
-     */
     GLuint ShaderProgram::compile(const char* code, GLenum type,
 	    const char* fileName)
     {

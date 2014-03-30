@@ -31,8 +31,6 @@ out vec3 v3_eye_w;		// Eye vector in world space
 
 uniform mat4 M;				// Model matrix
 uniform mat4 MVP;			// Model-view-projection matrix
-uniform mat4 MV;			// Model-view matrix
-uniform mat4 V;				// View matrix
 uniform mat4 ITM;			// Inverse transposed model matrix
 uniform mat4 ITV;			// Inverse transposed view matrix
 

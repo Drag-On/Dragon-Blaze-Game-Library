@@ -562,6 +562,7 @@ namespace dbgl
     void Window::postRender()
     {
 	glfwSwapBuffers(m_pWndHandle);
+	m_pRenderContext->postRender();
     }
 }
 

@@ -17,7 +17,6 @@
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Camera.h"
-#include "Rendering/Renderable.h"
 #include "Math/Utility.h"
 
 using namespace dbgl;
@@ -25,43 +24,74 @@ using namespace dbgl;
 Mesh* pMesh;
 ShaderProgram* pShader;
 Texture* pTexture;
-Renderable renderable;
+Camera* pCam;
+Mat4f view, projection;
+
+void framebufferResizeCallback(Window::FramebufferResizeEventArgs const& args)
+{
+    projection = Mat4f::makeProjection(pCam->getFieldOfView(),
+	    float(args.width) / args.height, pCam->getNear(), pCam->getFar());
+}
 
 void renderCallback(Window::RenderEventArgs const& args)
 {
-    // Construct Renderable
-    renderable.pMesh = pMesh;
-    renderable.pShader = pShader;
-    renderable.pTexDiffuse = pTexture;
-
+    // Instruct shader
     pShader->use();
-    args.rc->draw(renderable);
+    // Diffuse texture
+    GLint diffuseId = pShader->getDefaultUniformHandle(
+	    ShaderProgram::TEX_DIFFUSE);
+    if (diffuseId >= 0)
+    {
+	// Bind diffuse texture to unit 0
+	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getTextureHandle());
+	pShader->setUniformSampler(diffuseId, 0);
+    }
+    // MVP matrix
+    Mat4f mvp = projection * view; // Identity model matrix
+    GLint mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    if (mvpId >= 0)
+    {
+	pShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE,
+		mvp.getDataPointer());
+    }
+    // ITMV matrix
+    GLint itmvId = pShader->getDefaultUniformHandle(
+	    ShaderProgram::Uniform::ITMV);
+    if (itmvId >= 0)
+    {
+	// In this case inverse transpose of view equals view
+	pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,
+		view.getDataPointer());
+    }
+
+    // Draw
+    args.rc->draw(*pMesh);
 }
 
 int main()
 {
     LOG->setLogLevel(DBG);
     // Create window
-    Window* wnd = WindowManager::get()->createWindow<SimpleWindow>();
+    Window* pWnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
-    wnd->init();
-    // Create a viewport over the whole window space
-    Viewport* viewport = new Viewport(0, 0, 1, 1);
+    pWnd->init();
     // Add a camera
     Vec3f direction = Vec3f(1, -2.5, -3);
-    Camera* cam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(1, 0, 0).cross(direction),
-	    pi_4(), 0.1, 10);
-    viewport->setCamera(cam);
-    // Tell the render context about the new viewport
-    wnd->getRenderContext()->addViewport(viewport);
+    pCam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(1, 0, 0).cross(direction), pi_4(), 0.1, 10);
+    // Calculate model and view matrix
+    view = Mat4f::makeView(pCam->position(),
+	    pCam->rotation() * Vec3f(0, 0, 1), pCam->rotation() * Vec3f(0, 1, 0));
+    projection = Mat4f::makeProjection(pCam->getFieldOfView(),
+	    float(pWnd->getFrameWidth()) / pWnd->getFrameHeight(), pCam->getNear(), pCam->getFar());
     // Load mesh, shader and texture
     pMesh = Mesh::makePyramid();
     pShader = ShaderProgram::createSimpleShader();
     pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
     // Add render callback so we can draw the mesh
-    wnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
+    pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
+    pWnd->addFramebufferResizeCallback(std::bind(&framebufferResizeCallback, std::placeholders::_1));
     // Show window
-    wnd->show();
+    pWnd->show();
     // Run update loop
     while (WindowManager::get()->isRunning())
     {
@@ -71,8 +101,8 @@ int main()
     delete pMesh;
     delete pShader;
     delete pTexture;
-    delete cam;
-    delete viewport;
+    delete pCam;
+    // delete pWnd; // No need for this as windows will delete themselves when closed
     // Free remaining internal resources
     WindowManager::get()->terminate();
     return 0;
