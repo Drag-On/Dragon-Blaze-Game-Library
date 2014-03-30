@@ -35,6 +35,12 @@ namespace dbgl
 	     */
 	    bool load(const std::string path);
 	    /**
+	     * @brief Interprets a line
+	     * @detail Reads in -key value pairs
+	     * @param line String to parse
+	     */
+	    void interpret(const std::string line);
+	    /**
 	     * @param key Key to get the value for
 	     * @return Raw string value associated with the passed key
 	     */
@@ -65,6 +71,7 @@ namespace dbgl
 	private:
 	    std::string m_cmntSymbol = "#";
 	    std::string m_keyValueSep = "=";
+	    std::string m_keyPrefix = "-";
 	    std::unordered_map<std::string, std::string> m_properties;
     };
 }
