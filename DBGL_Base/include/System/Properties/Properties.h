@@ -68,6 +68,18 @@ namespace dbgl
 	     * @return Value associated with the passed key or "" if not found
 	     */
 	    std::string operator[](std::string key);
+	    /**
+	     * @param cmntQualifier String that qualifies lines as comments
+	     */
+	    void setCommentQualifier(std::string cmntQualifier);
+	    /**
+	     * @param delimiter String to delimit key and value in property files
+	     */
+	    void setKeyValueDelimiter(std::string delimiter);
+	    /**
+	     * @param prefix Prefix for keys in interpreted lines
+	     */
+	    void setKeyPrefix(std::string prefix);
 	private:
 	    std::string m_cmntSymbol = "#";
 	    std::string m_keyValueSep = "=";

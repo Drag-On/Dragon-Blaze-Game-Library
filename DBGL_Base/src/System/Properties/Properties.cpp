@@ -47,7 +47,7 @@ namespace dbgl
 		    end = line.find(m_keyValueSep, start);
 		}
 		tokens.push_back(line.substr(start, end));
-		if(tokens.size() != 2)
+		if (tokens.size() != 2)
 		{
 		    LOG->warning("Properties file \"%s\" misformatted at line %d!", path.c_str(), lineNo);
 		    continue;
@@ -56,9 +56,9 @@ namespace dbgl
 		tokens[0].erase(tokens[0].find_last_not_of(' ') + 1);
 		tokens[1].erase(0, tokens[1].find_first_not_of(' '));
 		// Check if property already exists
-		if(m_properties.find(tokens[0]) != m_properties.end())
+		if (m_properties.find(tokens[0]) != m_properties.end())
 		    LOG->warning("Properties file \"%s\" contains multiple definitions for key \"%s\" at line %d!", path.c_str(), tokens[0].c_str(), lineNo);
-		// Add property
+		    // Add property
 		m_properties[tokens[0]] = tokens[1];
 	    }
 	    return true;
@@ -71,10 +71,10 @@ namespace dbgl
     {
 	std::string token;
 	std::istringstream lineStream(line);
-	while(lineStream.good())
+	while (lineStream.good())
 	{
 	    lineStream >> token;
-	    if(token.substr(0, m_cmntSymbol.size()) != m_keyPrefix)
+	    if (token.substr(0, m_cmntSymbol.size()) != m_keyPrefix)
 	    {
 		LOG->warning("Misformatted argument in \"%s\"!", line.c_str());
 		return;
@@ -93,7 +93,7 @@ namespace dbgl
     std::string Properties::getStringValue(std::string key)
     {
 	auto it = m_properties.find(key);
-	if(it != m_properties.end())
+	if (it != m_properties.end())
 	    return it->second;
 	else
 	    return "";
@@ -122,5 +122,20 @@ namespace dbgl
     std::string Properties::operator[](std::string key)
     {
 	return getStringValue(key);
+    }
+
+    void Properties::setCommentQualifier(std::string cmntQualifier)
+    {
+	m_cmntSymbol = cmntQualifier;
+    }
+
+    void Properties::setKeyValueDelimiter(std::string delimiter)
+    {
+	m_keyValueSep = delimiter;
+    }
+
+    void Properties::setKeyPrefix(std::string prefix)
+    {
+	m_keyPrefix = prefix;
     }
 }
