@@ -10,7 +10,7 @@
 
 #include <cstdio>
 #include "DBGL_Base_Config.h"
-#include "Log/Log.h"
+#include "System/Log/Log.h"
 
 int testVector2();
 int testVector3();
