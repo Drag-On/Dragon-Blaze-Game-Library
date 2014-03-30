@@ -22,11 +22,12 @@ int testMatrix4x4();
 int testMatrix();
 int testQuaternion();
 int testWindow();
+int testProperties();
 
 int main()
 {
 	LOG->setLogLevel((int)dbgl::LOGLEVEL::DBG);
-	LOG->info("DBGL Version %d.%d", DBGL_VERSION_MAJOR, DBGL_VERSION_MINOR);
+	LOG->info("DBGL Version %s", DBGL_VERSION_FULL);
 
 	testVector2();
 	testVector3();
@@ -38,6 +39,7 @@ int main()
 	testMatrix();
 	testQuaternion();
 	//testWindow();
+	testProperties();
 
 	LOG->info("Tests done!");
 	LOG->del();
