@@ -27,13 +27,8 @@ namespace dbgl
 	    ~SimpleWindow();
 
 	protected:
-	    // Constructors
-	    SimpleWindow(GLFWwindow* share);
-	    SimpleWindow(GLFWwindow* share, const char* title);
-	    SimpleWindow(GLFWwindow* share, const char* title, int width,
-		    int height);
-	    SimpleWindow(GLFWwindow* share, const char* title, int width,
-		    int height, bool fullscreen);
+	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
+		    int width = 800, int height = 600, bool fullscreen = false);
 	    // Callbacks
 	    void keyCallback(KeyEventArgs args);
 

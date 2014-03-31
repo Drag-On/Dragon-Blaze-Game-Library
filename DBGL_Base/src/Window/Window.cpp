@@ -12,23 +12,8 @@
 
 namespace dbgl
 {
-    Window::Window(GLFWwindow* share) :
-	    Window(share, "Dragon Blaze Game Library")
-    {
-    }
-
-    Window::Window(GLFWwindow* share, const char* title) :
-	    Window(share, title, 800, 600)
-    {
-    }
-
-    Window::Window(GLFWwindow* share, const char* title, int width, int height) :
-	    Window(share, title, width, height, false)
-    {
-    }
-
-    Window::Window(GLFWwindow* share, const char* title, int width, int height,
-	    bool fullscreen)
+    Window::Window(GLFWwindow* share, const char* title,
+	    int width, int height, bool fullscreen)
     {
 	if (!glfwInit())
 	{
@@ -79,9 +64,6 @@ namespace dbgl
 	m_windowedX = getX();
 	m_windowedY = getY();
 
-	// Create render context object
-	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
-
 	// Add framebuffer resize event handler
 	addFramebufferResizeCallback(
 		std::bind(&Window::framebufferResizeCallback, this,
@@ -112,6 +94,11 @@ namespace dbgl
     {
 	// Change viewport
 	m_pRenderContext->changeSize(args.width, args.height);
+    }
+
+    void Window::setRenderContext(RenderContext* rc)
+    {
+	m_pRenderContext = rc;
     }
 
     void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)

@@ -19,6 +19,7 @@
 namespace dbgl
 {
     class Window;
+    class RenderContext;
 
     /**
      * @brief Handles all open windows
@@ -38,10 +39,11 @@ namespace dbgl
 	     * @brief Constructs a new window
 	     * @return A new window of the specified type with default initialization
 	     */
-	    template<typename T> T* createWindow()
+	    template<typename T, typename RC = RenderContext> T* createWindow()
 	    {
 		GLFWwindow* share = m_pShareWindow;
 		auto wnd = new T(share);
+		wnd->setRenderContext(new RC(wnd->getFrameWidth(), wnd->getFrameHeight()));
 		s_windows.insert(
 			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
 		if (m_pShareWindow == NULL)
@@ -53,10 +55,11 @@ namespace dbgl
 	     * @param title Window title
 	     * @return A new window of the specified type with default initialization
 	     */
-	    template<typename T> T* createWindow(const char* title)
+	    template<typename T, typename RC = RenderContext> T* createWindow(const char* title)
 	    {
 		GLFWwindow* share = m_pShareWindow;
 		auto wnd = new T(share, title);
+		wnd->setRenderContext(new RC(wnd->getFrameWidth(), wnd->getFrameHeight()));
 		s_windows.insert(
 			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
 		if (m_pShareWindow == NULL)
@@ -70,11 +73,12 @@ namespace dbgl
 	     * @param height Window height
 	     * @return A new window of the specified type
 	     */
-	    template<typename T> T* createWindow(const char* title, int width,
-		    int height)
+	    template<typename T, typename RC = RenderContext> T* createWindow(const char* title,
+		    int width, int height)
 	    {
 		GLFWwindow* share = m_pShareWindow;
 		auto wnd = new T(share, title, width, height);
+		wnd->setRenderContext(new RC(wnd->getFrameWidth(), wnd->getFrameHeight()));
 		s_windows.insert(
 			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
 		if (m_pShareWindow == NULL)
@@ -90,11 +94,12 @@ namespace dbgl
 	     * 			 otherwise false
 	     * @return A new window of the specified type
 	     */
-	    template<typename T> T* createWindow(const char* title, int width,
-		    int height, bool fullscreen)
+	    template<typename T, typename RC = RenderContext> T* createWindow(
+		    const char* title, int width, int height, bool fullscreen)
 	    {
 		GLFWwindow* share = m_pShareWindow;
 		auto wnd = new T(share, title, width, height, fullscreen);
+		wnd->setRenderContext(new RC(wnd->getFrameWidth(), wnd->getFrameHeight()));
 		s_windows.insert(
 			std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
 		if (m_pShareWindow == NULL)

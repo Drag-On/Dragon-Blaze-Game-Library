@@ -434,26 +434,6 @@ namespace dbgl
 	    virtual void postRender();
 
 	protected:
-	    // Constructors
-	    /**
-	     * @brief Constructs a window of size 800x600 with a standard title
-	     * @param share Window to share resources with or NULL if none
-	     */
-	    Window(GLFWwindow* share);
-	    /**
-	     * @brief Constructs a window of size 800x600
-	     * @param share Window to share resources with or NULL if none
-	     * @param title Title of the window
-	     */
-	    Window(GLFWwindow* share, const char* title);
-	    /**
-	     * @brief Constructs a window
-	     * @param share Window to share resources with or NULL if none
-	     * @param title Title of the window
-	     * @param width Width of the rendering plane
-	     * @param height Height of the rendering plane
-	     */
-	    Window(GLFWwindow* share, const char* title, int width, int height);
 	    /**
 	     * @brief Constructs a window
 	     * @param share Window to share resources with or NULL if none
@@ -462,8 +442,17 @@ namespace dbgl
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    Window(GLFWwindow* share, const char* title, int width, int height,
-		    bool fullscreen);
+	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width =
+		    800, int height = 600, bool fullscreen = false);
+	    /**
+	     * @brief Removes the current render context from the window and applies a new one
+	     * @warning Only use this if you know what you're doing, otherwise severe memory leaks
+	     * 		might occur!
+	     * @details The currently applied render context is not freed, the new one will be freed
+	     * 		unless it is switched out using this method beforehand
+	     * @param rc New render context
+	     */
+	    void setRenderContext(RenderContext* rc);
 	    /**
 	     * @brief Needed to update render context on window resize
 	     * @param args New size
