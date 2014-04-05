@@ -446,13 +446,8 @@ namespace dbgl
 		    800, int height = 600, bool fullscreen = false);
 	    /**
 	     * @brief Removes the current render context from the window and applies a new one
-	     * @warning Only use this if you know what you're doing, otherwise severe memory leaks
-	     * 		might occur!
-	     * @details The currently applied render context is not freed, the new one will be freed
-	     * 		unless it is switched out using this method beforehand
-	     * @param rc New render context
 	     */
-	    void setRenderContext(RenderContext* rc);
+	    virtual void createRenderContext();
 	    /**
 	     * @brief Needed to update render context on window resize
 	     * @param args New size
@@ -463,7 +458,7 @@ namespace dbgl
 	     * GLFW window handle
 	     */
 	    GLFWwindow* m_pWndHandle = NULL;
-	    RenderContext* m_pRenderContext;
+	    RenderContext* m_pRenderContext = NULL;
 
 	private:
 	    CloseEventType m_closeCallbacks;

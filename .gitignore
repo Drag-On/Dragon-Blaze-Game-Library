@@ -15,3 +15,4 @@ Logfile.txt
 *.so
 DBGL_BASE_*
 Doxyfile
+DBGL_Base/Doxyfile

@@ -64,6 +64,9 @@ namespace dbgl
 	m_windowedX = getX();
 	m_windowedY = getY();
 
+	// Create render context
+	createRenderContext();
+
 	// Add framebuffer resize event handler
 	addFramebufferResizeCallback(
 		std::bind(&Window::framebufferResizeCallback, this,
@@ -96,9 +99,12 @@ namespace dbgl
 	m_pRenderContext->changeSize(args.width, args.height);
     }
 
-    void Window::setRenderContext(RenderContext* rc)
+    void Window::createRenderContext()
     {
-	m_pRenderContext = rc;
+	if(m_pRenderContext != NULL)
+	    delete m_pRenderContext;
+
+	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
     }
 
     void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)
