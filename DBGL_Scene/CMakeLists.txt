@@ -24,6 +24,10 @@ set (DBGL_SCENE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 						# Path to sce
 set (DBGL_SCENE_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 				# Path to scene library file
 set (DBGL_BASE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/include") 			# Path to base headers
 set (DBGL_BASE_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/${CMAKE_BUILD_TYPE}")	# Path to base library file
+set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/lib/") 				# Path to GLEW library file
+set (GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glew/include") 		# Path to GLEW headers
+set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/src/") 				# Path to GLFW library file
+set (GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/lib/glfw/include") 		# Path to GLFW headers
 
 ######################################################################
 ### Platform specific stuff
@@ -31,9 +35,17 @@ set (DBGL_BASE_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Base/${CMAKE_BUILD_TYPE}")
 if(WIN32)
 	set (DBGL_BASE_DLL_NAME "libDBGL_Base.dll")
 	set (DBGL_SCENE_DLL_NAME "libDBGL_Scene.dll")
+	set (GLEW_LIB_NAME "libglew32.dll.a")
+	set (GLEW_DLL_NAME "glew32.dll")
+	set (GLFW_LIB_NAME "glfw3dll.a")
+	set (GLFW_DLL_NAME "glfw3.dll")
 elseif(UNIX)
 	set (DBGL_BASE_DLL_NAME "libDBGL_Base.so")
 	set (DBGL_SCENE_DLL_NAME "libDBGL_Scene.so")
+	set (GLEW_LIB_NAME "libGLEW.so")
+	set (GLEW_DLL_NAME "libGLEW.so")
+	set (GLFW_LIB_NAME "libglfw.so")
+	set (GLFW_DLL_NAME "libglfw.so")
 endif()
 
 ######################################################################
@@ -79,6 +91,8 @@ endif(DOXYGEN_FOUND)
 ######################################################################
 include_directories(${DBGL_BASE_INCLUDE_DIR})
 include_directories(${DBGL_SCENE_INCLUDE_DIR})
+include_directories(${GLEW_INCLUDE_DIR})
+include_directories(${GLFW_INCLUDE_DIR})
 
 ######################################################################
 ### Find OpenGL
@@ -101,9 +115,11 @@ set_target_properties(DBGL_Scene PROPERTIES LINKER_LANGUAGE CXX)
 ######################################################################
 target_link_libraries(DBGL_Scene "${OPENGL_LIBRARIES}")
 target_link_libraries(DBGL_Scene "${DBGL_BASE_LIB_DIR}/${DBGL_BASE_DLL_NAME}")
+target_link_libraries(DBGL_Scene "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
+target_link_libraries(DBGL_Scene "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
 
 ######################################################################
 ### Compile sub projects
 ######################################################################
-#add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
-#				 "${PROJECT_BINARY_DIR}/Examples/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
+				 "${PROJECT_BINARY_DIR}/Examples/")
