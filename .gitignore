@@ -1,4 +1,5 @@
 Debug
+Release
 .metadata
 /RemoteSystemsTempFiles
 .cproject
@@ -14,5 +15,5 @@ Logfile.txt
 *.a
 *.so
 DBGL_BASE_*
+DBGL_SCENE_*
 Doxyfile
-DBGL_Base/Doxyfile
