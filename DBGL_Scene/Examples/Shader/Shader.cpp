@@ -95,7 +95,7 @@ void updateCallback(Window::UpdateEventArgs const& args)
 
 void renderCallback(Window::RenderEventArgs const& args)
 {
-    auto rc = (SceneRenderContext*)args.rc;
+    auto rc = dynamic_cast<const SceneRenderContext*>(args.rc);
 
     pShaderNoLight->use();
     pShaderNoLight->setUniformFloat3(pShaderNoLight->getDefaultUniformHandle(ShaderProgram::COLOR), Vec3f(1, 1, 1).getDataPointer());
@@ -178,7 +178,7 @@ int main()
 	    0.1, 100);
     pViewport->setCamera(cam);
     // Tell the render context about the new viewport
-    SceneRenderContext* pRC = (SceneRenderContext*)pWnd->getRenderContext();
+    SceneRenderContext* pRC = dynamic_cast<SceneRenderContext*>(pWnd->getRenderContext());
     pRC->addViewport(pViewport);
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid(true);

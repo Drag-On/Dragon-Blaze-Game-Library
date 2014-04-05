@@ -51,9 +51,9 @@ namespace dbgl
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 	if(fullscreen)
-	m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
+	    m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
-	m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
+	    m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
 	if (!m_pWndHandle)
 	{
 	    LOG->error("Failed to create new window!");
@@ -63,9 +63,6 @@ namespace dbgl
 
 	m_windowedX = getX();
 	m_windowedY = getY();
-
-	// Create render context
-	createRenderContext();
 
 	// Add framebuffer resize event handler
 	addFramebufferResizeCallback(
@@ -110,6 +107,9 @@ namespace dbgl
     void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)
     {
 	makeCurrent();
+
+	// Create render context
+	createRenderContext();
 
 	// Enable depth test?
 	if (depthTest)
