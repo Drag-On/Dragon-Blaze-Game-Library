@@ -36,7 +36,7 @@ Entity* pPyramid, *pBox, *pIco, *pPlane, *pSphere, *pLight, *pLight2;
 Camera* cam;
 Vec3f light1Pos = Vec3f(0, 3, 3), lightColor = Vec3f(1.0f, 0.5f, 0.0f) * 15; // Orange
 Vec3f light2Pos = Vec3f(1, 2, 4.5f), light2Color = Vec3f(0.5f, 0.5f, 1.0f) * 25; // Blue-ish
-Vec3f light1Offset; // For movement
+Vec3f light1Offset, light2Offset; // For movement of light
 Vec3f matSpecular = Vec3f(0.1, 0.1, 0.2);
 float mouseSpeed = 3.0f, moveSpeed = 2.5;
 float icoAngle = 0;
@@ -91,6 +91,10 @@ void updateCallback(Window::UpdateEventArgs const& args)
     light1Offset.z() = cos(currentTime) * 3;
     pLight->getTransform()->position() = light1Pos + light1Offset;
     pLight->update(deltaTime);
+
+    light2Offset.y() = sin(currentTime);
+    pLight2->getTransform()->position() = light2Pos + light2Offset;
+    pLight2->update(deltaTime);
 }
 
 void renderCallback(Window::RenderEventArgs const& args)
@@ -98,36 +102,32 @@ void renderCallback(Window::RenderEventArgs const& args)
     auto rc = dynamic_cast<const SceneRenderContext*>(args.rc);
 
     pShaderNoLight->use();
-    pShaderNoLight->setUniformFloat3(pShaderNoLight->getDefaultUniformHandle(ShaderProgram::COLOR), Vec3f(1, 1, 1).getDataPointer());
 
-    // Draw sphere at light position using the "cheap" shader
+    // Draw sphere at light position using the simple color shader
+    pShaderNoLight->setUniformFloat3(pShaderNoLight->getDefaultUniformHandle(ShaderProgram::COLOR),
+    	    lightColor.getNormalized().getDataPointer());
     pLight->render(rc);
+
+    pShaderNoLight->setUniformFloat3(pShaderNoLight->getDefaultUniformHandle(ShaderProgram::COLOR),
+    	    light2Color.getNormalized().getDataPointer());
     pLight2->render(rc);
 
     // Set light position and color for shader 1
     pShaderDiffSpec->use();
-    pShaderDiffSpec->setUniformInt(
-	    pShaderDiffSpec->getUniformHandle("i_numLights"), 2);
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("lights[0].v3_position_w"),
+    pShaderDiffSpec->setUniformInt(pShaderDiffSpec->getUniformHandle("i_numLights"), 2);
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("lights[0].v3_position_w"),
 	    pLight->getTransform()->position().getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("lights[0].v3_color"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("lights[0].v3_color"),
 	    lightColor.getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("lights[1].v3_position_w"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("lights[1].v3_position_w"),
 	    pLight2->getTransform()->position().getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("lights[1].v3_color"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("lights[1].v3_color"),
 	    light2Color.getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("v3_ambientLight"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("v3_ambientLight"),
 	    Vec3f(0.2, 0.2, 0.2).getDataPointer());
-    pShaderDiffSpec->setUniformFloat3(
-	    pShaderDiffSpec->getUniformHandle("mat.v3_specColor"),
+    pShaderDiffSpec->setUniformFloat3(pShaderDiffSpec->getUniformHandle("mat.v3_specColor"),
 	    matSpecular.getDataPointer());
-    pShaderDiffSpec->setUniformFloat(
-	    pShaderDiffSpec->getUniformHandle("mat.f_specWidth"), 10);
+    pShaderDiffSpec->setUniformFloat(pShaderDiffSpec->getUniformHandle("mat.f_specWidth"), 10);
 
     // Draw ground plane using the diffuse + specular shader
     pPlane->render(rc);
@@ -135,26 +135,19 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Set light position and color for shader 2
     pShaderNorm->use();
     pShaderNorm->setUniformInt(pShaderNorm->getUniformHandle("i_numLights"), 2);
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("lights[0].v3_position_w"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("lights[0].v3_position_w"),
 	    pLight->getTransform()->position().getDataPointer());
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("lights[0].v3_color"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("lights[0].v3_color"),
 	    lightColor.getDataPointer());
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("lights[1].v3_position_w"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("lights[1].v3_position_w"),
 	    pLight2->getTransform()->position().getDataPointer());
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("lights[1].v3_color"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("lights[1].v3_color"),
 	    light2Color.getDataPointer());
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("v3_ambientLight"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("v3_ambientLight"),
 	    Vec3f(0.1, 0.1, 0.1).getDataPointer());
-    pShaderNorm->setUniformFloat3(
-	    pShaderNorm->getUniformHandle("mat.v3_specColor"),
+    pShaderNorm->setUniformFloat3(pShaderNorm->getUniformHandle("mat.v3_specColor"),
 	    matSpecular.getDataPointer());
-    pShaderNorm->setUniformFloat(
-	    pShaderNorm->getUniformHandle("mat.f_specWidth"), 10);
+    pShaderNorm->setUniformFloat(pShaderNorm->getUniformHandle("mat.f_specWidth"), 10);
 
     // Draw other objects using the normal shader
     pPyramid->render(rc);
@@ -219,7 +212,7 @@ int main()
     pLight = new Entity(data, "light");
     // Other light
     data.set(pMeshSphere, pShaderNoLight, NULL, NULL, NULL, light2Pos,
-    	    Vec3f(0.2f, 0.2f, 0.2f), QuatF());
+	    Vec3f(0.2f, 0.2f, 0.2f), QuatF());
     pLight2 = new Entity(data, "light2");
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
