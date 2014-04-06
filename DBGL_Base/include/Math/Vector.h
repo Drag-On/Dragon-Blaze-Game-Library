@@ -69,7 +69,7 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Normalizes this vector so it has the length 1
 	    /// </summary>
-	    void normalize();
+	    Vector<T, N>& normalize();
 	    /// <summary>
 	    /// @brief Returns a normalized copy of this vector of length 1
 	    /// </summary>

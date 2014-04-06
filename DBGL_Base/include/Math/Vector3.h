@@ -15,6 +15,7 @@
 #include<cstddef>
 #include<cmath>
 #include"Utility.h"
+#include"Vector.h"
 #include"System/Log/Log.h"
 
 namespace dbgl
@@ -31,8 +32,10 @@ namespace dbgl
     ///		 is an overload for the cross product, but not for the
     ///		 dot product.
     /// </summary>
-    template<typename T> class Vector3
+    template<typename T> class Vector3 : public Vector<T, 3>
     {
+	    using BaseVectorType = Vector<T, 3>;
+
 	public:
 	    // Constructors
 	    /// <summary>
@@ -46,14 +49,10 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Copies a vector
 	    /// </summary>
-	    Vector3(const Vector3<T> &other);
+	    Vector3(const BaseVectorType &other);
 	    // Destructors
 	    ~Vector3();
 	    // Methods
-	    /// <summary>
-	    /// @brief Returns the dimension of this vector
-	    /// </summary>
-	    std::size_t getDimension() const;
 	    /// <summary>
 	    /// @brief Returns the vector's first element
 	    /// </summary>
@@ -79,75 +78,13 @@ namespace dbgl
 	    /// </summary>
 	    T& z();
 	    /// <summary>
-	    /// @brief Returns the squared length of this vector
-	    /// </summary>
-	    T getSquaredLength() const;
-	    /// <summary>
-	    /// @brief Returns the length of this vector
-	    /// </summary>
-	    T getLength() const;
-	    /// <summary>
-	    /// @brief Normalizes this vector so it has the length 1
-	    /// </summary>
-	    Vector3<T>& normalize();
-	    /// <summary>
-	    /// @brief Returns a normalized copy of this vector of length 1
-	    /// </summary>
-	    Vector3<T> getNormalized() const;
-	    /// <summary>
-	    /// @brief Returns a new vector that is the dot product of
-	    ///	       this vector and the passed vector
-	    /// </summary>
-	    T dot(Vector3<T> const& rhs) const;
-	    /// <summary>
-	    /// @brief Returns a new vector that is the cross product of
-	    ///	       this vector and the passed vector
-	    /// </summary>
-	    Vector3<T> cross(Vector3<T> const& rhs) const;
-	    /// <summary>
-	    /// @brief Checks if all components are zero
-	    /// </summary>
-	    bool isZero() const;
-	    /// <summary>
-	    /// @brief Checks if other is similar to this vector
-	    /// @param other Other vector
-	    /// @param precision How close every component needs to be
-	    /// </summary>
-	    bool isSimilar(Vector3<T> const& other,
-		    double precision = 0.1) const;
-	    /// <summary>
 	    /// @brief Translates this vector by the specified amount
 	    /// </summary>
 	    Vector3<T>& translate(T x, T y, T z);
-	    /// <summary>
-	    /// @brief Grants access to the internal memory
-	    /// @return A pointer to the first element of this vector
-	    /// </summary>
-	    const T* getDataPointer() const;
 	    // Operators
-	    Vector3<T>& operator=(Vector3<T> const& rhs);
-	    const Vector3<T> operator+(Vector3<T> const& rhs) const;
-	    Vector3<T>& operator+=(Vector3<T> const& rhs);
-	    const Vector3<T> operator-(Vector3<T> const& rhs) const;
-	    Vector3<T>& operator-=(Vector3<T> const& rhs);
-	    const T operator*(Vector3<T> const& rhs) const;
-	    const Vector3<T> operator*(T const& rhs) const;
-	    Vector3<T>& operator*=(T const& rhs);
-	    Vector3<T>& operator*=(Vector3<T> const& rhs);
-	    const Vector3<T> operator/(T const& rhs) const;
-	    Vector3<T>& operator/=(T const& rhs);
-	    Vector3<T> operator-() const;
-	    bool operator==(Vector3<T> const& rhs) const;
-	    bool operator!=(Vector3<T> const& rhs) const;
-	    bool operator<(Vector3<T> const& rhs) const;
-	    bool operator>(Vector3<T> const& rhs) const;
-	    bool operator<=(Vector3<T> const& rhs) const;
-	    bool operator>=(Vector3<T> const& rhs) const;
-	    T& operator[](std::size_t const& index);
-	    const T& operator[](std::size_t const& index) const;
+	    using BaseVectorType::operator=;
 
 	private:
-	    T m_x, m_y, m_z;
     };
 
     // Some default types

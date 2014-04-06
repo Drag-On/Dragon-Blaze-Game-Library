@@ -65,11 +65,12 @@ namespace dbgl
 		return static_cast<T>(std::sqrt(static_cast<double>(getSquaredLength())));
 	}
 	
-	template<typename T, unsigned int N> void Vector<T,N>::normalize()
+	template<typename T, unsigned int N> Vector<T,N>& Vector<T,N>::normalize()
 	{
 		T length = getLength();
 		for(int i = 0; i < getDimension(); i++)
 			(*this)[i] /= length;
+		return *this;
 	}
 	
 	template<typename T, unsigned int N> Vector<T,N> Vector<T,N>::getNormalized() const

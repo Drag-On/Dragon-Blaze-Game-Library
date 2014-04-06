@@ -74,18 +74,7 @@ namespace dbgl
 	    /// </summary>
 	    Vector2<T>& translate(T x, T y);
 	    // Operators
-	    Vector2<T>& operator=(BaseVectorType const& rhs);
-	    const Vector2<T> operator+(BaseVectorType const& rhs) const;
-	    Vector2<T>& operator+=(BaseVectorType const& rhs);
-	    const Vector2<T> operator-(BaseVectorType const& rhs) const;
-	    Vector2<T>& operator-=(BaseVectorType const& rhs);
-	    const T operator*(BaseVectorType const& rhs) const;
-	    const Vector2<T> operator*(T const& rhs) const;
-	    Vector2<T>& operator*=(T const& rhs);
-	    Vector2<T>& operator*=(BaseVectorType const& rhs);
-	    const Vector2<T> operator/(T const& rhs) const;
-	    Vector2<T>& operator/=(T const& rhs);
-	    Vector2<T> operator-() const;
+	    using BaseVectorType::operator=;
 
 	private:
     };
