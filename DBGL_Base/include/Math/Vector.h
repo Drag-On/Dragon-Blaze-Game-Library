@@ -11,8 +11,10 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include<cstdlib>
+#include<assert.h>
+#include<cstdarg>
 #include<cstddef>
+#include<type_traits>
 #include<cmath>
 #include"Utility.h"
 #include"System/Log/Log.h"
@@ -39,6 +41,12 @@ namespace dbgl
 	    /// @brief Constructs a new null vector
 	    /// </summary>
 	    Vector();
+	    /// <summary>
+	    /// @brief Constructs a new vector and initializes it
+	    /// @param n Amount of passed parameters
+	    /// @param ... n initialization values
+	    /// </summary>
+	    Vector(int n, ...);
 	    /// <summary>
 	    /// @brief Copies a vector
 	    /// </summary>
