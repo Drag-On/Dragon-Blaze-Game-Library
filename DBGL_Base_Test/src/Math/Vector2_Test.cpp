@@ -32,6 +32,15 @@ int testVector2()
     Vector2<float> vec3(vec2);
     assert(vec3[0] == -1.5f);
     assert(vec3[1] == 3);
+    Vector2<char> vec4(42, 100);
+    assert(vec4[0] == 42);
+    assert(vec4[1] == 100);
+    Vector2<short> vec5(1, -5);
+    assert(vec5[0] == 1);
+    assert(vec5[1] == -5);
+    Vector2<double> vec6(23.444, 3.141);
+    assert(vec6[0] == 23.444);
+    assert(vec6[1] == 3.141);
     LOG->info("OK!");
     LOG->info("Methods... ");
     // getDimension()

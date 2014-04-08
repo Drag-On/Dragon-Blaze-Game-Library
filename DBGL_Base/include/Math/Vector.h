@@ -19,6 +19,20 @@
 #include"Utility.h"
 #include"System/Log/Log.h"
 
+//////////////////////////////////////////////////////////////////////
+// This header involves some pre-processor (black) magic.
+// In order to prevent copy & pasting of common parts of all Vector
+// specializations, the common part is included from a separate file.
+// In this case deriving from a common supertype was not an option
+// since operators don't work well with inheritance.
+//
+// Specialization was necessary since some types get promoted when
+// using variadic functions; e.g. float becomes double. Using
+// va_arg(args, TYPE) with the wrong type makes the program crash.
+// Unfortunately constructors can not be specialized, just methods
+// or whole classes.
+//////////////////////////////////////////////////////////////////////
+
 namespace dbgl
 {
     /// <summary>
@@ -53,80 +67,110 @@ namespace dbgl
 	    Vector(const Vector<T, N> &other);
 	    // Destructors
 	    ~Vector();
-	    // Methods
-	    /// <summary>
-	    /// @brief Returns the dimension of this vector
-	    /// </summary>
-	    std::size_t getDimension() const;
-	    /// <summary>
-	    /// @brief Returns the squared length of this vector
-	    /// </summary>
-	    T getSquaredLength() const;
-	    /// <summary>
-	    /// @brief Returns the length of this vector
-	    /// </summary>
-	    T getLength() const;
-	    /// <summary>
-	    /// @brief Normalizes this vector so it has the length 1
-	    /// </summary>
-	    Vector<T, N>& normalize();
-	    /// <summary>
-	    /// @brief Returns a normalized copy of this vector of length 1
-	    /// </summary>
-	    Vector<T, N> getNormalized() const;
-	    /// <summary>
-	    /// @brief Returns the dot product of this vector and the
-	    ///	       passed vector
-	    /// </summary>
-	    T dot(Vector<T, N> const& rhs) const;
-	    /// <summary>
-	    /// @brief Returns a new vector that is the cross product of
-	    ///	       this vector and the passed vector
-	    /// </summary>
-	    Vector<T, N> cross(Vector<T, N> const& rhs) const;
-	    /// <summary>
-	    /// @brief Checks if all components are zero
-	    /// </summary>
-	    bool isZero() const;
-	    /// <summary>
-	    /// @brief Checks if other is similar to this vector
-	    /// @param other Other vector
-	    /// @param precision How close every component needs to be
-	    /// </summary>
-	    bool isSimilar(Vector<T, N> const& other,
-		    double precision = 0.1) const;
-	    /// <summary>
-	    /// @brief Grants access to the internal memory
-	    /// @return A pointer to the first element of this vector
-	    /// </summary>
-	    const T* getDataPointer() const;
-	    // Operators
-	    Vector<T, N>& operator=(Vector<T, N> const& rhs);
-	    const Vector<T, N> operator+(Vector<T, N> const& rhs) const;
-	    Vector<T, N>& operator+=(Vector<T, N> const& rhs);
-	    const Vector<T, N> operator-(Vector<T, N> const& rhs) const;
-	    Vector<T, N>& operator-=(Vector<T, N> const& rhs);
-	    const T operator*(Vector<T, N> const& rhs) const;
-	    const Vector<T, N> operator*(T const& rhs) const;
-	    Vector<T, N>& operator*=(T const& rhs);
-	    Vector<T, N>& operator*=(Vector<T, N> const& rhs);
-	    const Vector<T, N> operator/(T const& rhs) const;
-	    Vector<T, N>& operator/=(T const& rhs);
-	    Vector<T, N> operator-() const;
-	    bool operator==(Vector<T, N> const& rhs) const;
-	    bool operator!=(Vector<T, N> const& rhs) const;
-	    bool operator<(Vector<T, N> const& rhs) const;
-	    bool operator>(Vector<T, N> const& rhs) const;
-	    bool operator<=(Vector<T, N> const& rhs) const;
-	    bool operator>=(Vector<T, N> const& rhs) const;
-	    T& operator[](std::size_t const& index);
-	    const T& operator[](std::size_t const& index) const;
 
+	    #undef RETURN_QUALIFIER
+	    #define RETURN_QUALIFIER const
+	    #include "Vector_Common.hpart"
+    };
+
+    /*
+     * Vector<float,N>
+     * Specialized for floats
+     */
+    template<unsigned int N> class Vector<float, N>
+    {
 	private:
-	    T m_elements[N];
+	    using T = float;
+	public:
+	    // Constructors
+	    /// <summary>
+	    /// @brief Constructs a new null vector
+	    /// </summary>
+	    Vector();
+	    /// <summary>
+	    /// @brief Constructs a new vector and initializes it
+	    /// @param n Amount of passed parameters
+	    /// @param ... n initialization values
+	    /// </summary>
+	    Vector(int n, ...);
+	    /// <summary>
+	    /// @brief Copies a vector
+	    /// </summary>
+	    Vector(const Vector<T, N> &other);
+	    // Destructors
+	    ~Vector();
+
+	    #undef RETURN_QUALIFIER
+	    #define RETURN_QUALIFIER
+	    #include "Vector_Common.hpart"
+    };
+
+    /*
+     * Vector<char,N>
+     * Specialized for chars
+     */
+    template<unsigned int N> class Vector<char, N>
+    {
+	private:
+	    using T = char;
+	public:
+	    // Constructors
+	    /// <summary>
+	    /// @brief Constructs a new null vector
+	    /// </summary>
+	    Vector();
+	    /// <summary>
+	    /// @brief Constructs a new vector and initializes it
+	    /// @param n Amount of passed parameters
+	    /// @param ... n initialization values
+	    /// </summary>
+	    Vector(int n, ...);
+	    /// <summary>
+	    /// @brief Copies a vector
+	    /// </summary>
+	    Vector(const Vector<T, N> &other);
+	    // Destructors
+	    ~Vector();
+
+	    #undef RETURN_QUALIFIER
+	    #define RETURN_QUALIFIER
+	    #include "Vector_Common.hpart"
+    };
+
+    /*
+     * Vector<short,N>
+     * Specialized for shorts
+     */
+    template<unsigned int N> class Vector<short, N>
+    {
+	private:
+	    using T = short;
+	public:
+	    // Constructors
+	    /// <summary>
+	    /// @brief Constructs a new null vector
+	    /// </summary>
+	    Vector();
+	    /// <summary>
+	    /// @brief Constructs a new vector and initializes it
+	    /// @param n Amount of passed parameters
+	    /// @param ... n initialization values
+	    /// </summary>
+	    Vector(int n, ...);
+	    /// <summary>
+	    /// @brief Copies a vector
+	    /// </summary>
+	    Vector(const Vector<T, N> &other);
+	    // Destructors
+	    ~Vector();
+
+	    #undef RETURN_QUALIFIER
+	    #define RETURN_QUALIFIER
+	    #include "Vector_Common.hpart"
     };
 }
 
+#undef RETURN_QUALIFIER
 #include "Vector.imp"
 
 #endif /* VECTOR_H_ */
