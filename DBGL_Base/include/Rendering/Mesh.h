@@ -42,48 +42,77 @@ namespace dbgl
 	     */
 	    ~Mesh();
 	    /**
+	     * @return A const reference to the indices list
+	     */
+	    std::vector<unsigned short> const& getIndices() const;
+	    /**
+	     * @return A const reference to the vertices list
+	     */
+	    std::vector<Vector3<GLfloat>> const& getVertices() const;
+	    /**
+	     * @return A const reference to the normals list
+	     */
+	    std::vector<Vector3<GLfloat>> const& getNormals() const;
+	    /**
+	     * @return A const reference to the UVs list
+	     */
+	    std::vector<Vector2<GLfloat>> const& getUVs() const;
+	    /**
+	     * @return A const reference to the tangents list
+	     */
+	    std::vector<Vector3<GLfloat>> const& getTangents() const;
+	    /**
+	     * @return A const reference to the bitangents list
+	     */
+	    std::vector<Vector3<GLfloat>> const& getBitangents() const;
+	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param path Path of the file
 	     * @param type File type to load
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
+	     * @param sendToGPU automatically sends the loaded mesh to gpu
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
 	    static Mesh* load(const std::string path, const Type type,
-		    bool generateTangentBase = false);
+		    bool generateTangentBase = false, bool sendToGPU = true);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
+	     * @param sendToGPU automatically sends the loaded mesh to gpu
 	     * @return The triangle mesh
 	     */
-	    static Mesh* makeTriangle(bool generateTangentBase = false);
+	    static Mesh* makeTriangle(bool generateTangentBase = false, bool sendToGPU = true);
 	    /**
 	     * @brief Creates a mesh that represents a simple plane
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
+	     * @param sendToGPU automatically sends the loaded mesh to gpu
 	     * @return The plane mesh
 	     */
-	    static Mesh* makePlane(bool generateTangentBase = false);
+	    static Mesh* makePlane(bool generateTangentBase = false, bool sendToGPU = true);
 	    /**
 	     * @brief Creates a mesh that represents a cube
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
+	     * @param sendToGPU automatically sends the loaded mesh to gpu
 	     * @return The cube mesh
 	     */
-	    static Mesh* makeCube(bool generateTangentBase = false);
+	    static Mesh* makeCube(bool generateTangentBase = false, bool sendToGPU = true);
 	    /**
 	     * @brief Creates a mesh that represents a four-sided pyramid
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
+	     * @param sendToGPU automatically sends the loaded mesh to gpu
 	     * @return The pyramid mesh
 	     */
-	    static Mesh* makePyramid(bool generateTangentBase = false);
+	    static Mesh* makePyramid(bool generateTangentBase = false, bool sendToGPU = true);
 	private:
 	    /**
 	     * @brief Private constructor; use factory methods!
@@ -126,7 +155,7 @@ namespace dbgl
 	     * @param path Path of the file
 	     * @return The loaded mesh
 	     */
-	    static Mesh* loadOBJ(const std::string path);
+	    static Mesh* loadOBJ(const std::string path, bool sendToGPU);
 
 	    std::vector<unsigned short> m_indices;
 	    GLuint m_indexBuffer = GL_INVALID_VALUE;

@@ -25,18 +25,49 @@ namespace dbgl
 	    glDeleteBuffers(1, &m_uvBuffer);
     }
 
+    std::vector<unsigned short> const& Mesh::getIndices() const
+    {
+	return m_indices;
+    }
+
+    std::vector<Vector3<GLfloat>> const& Mesh::getVertices() const
+    {
+	return m_vertices;
+    }
+
+    std::vector<Vector3<GLfloat>> const& Mesh::getNormals() const
+    {
+	return m_normals;
+    }
+
+    std::vector<Vector2<GLfloat>> const& Mesh::getUVs() const
+    {
+	return m_uv;
+    }
+
+    std::vector<Vector3<GLfloat>> const& Mesh::getTangents() const
+    {
+	return m_tangents;
+    }
+
+    std::vector<Vector3<GLfloat>> const& Mesh::getBitangents() const
+    {
+	return m_bitangents;
+    }
+
     Mesh* Mesh::load(const std::string path, const Type type,
-	    bool generateTangentBase)
+	    bool generateTangentBase, bool sendToGPU)
     {
 	switch (type)
 	{
 	    case OBJ:
 	    {
-		Mesh* mesh = loadOBJ(path);
+		Mesh* mesh = loadOBJ(path, sendToGPU);
 		if (generateTangentBase && mesh != NULL)
 		{
 		    mesh->generateTangentBasis();
-		    mesh->updateBuffers();
+		    if (sendToGPU)
+			mesh->updateBuffers();
 		}
 		return mesh;
 	    }
@@ -48,7 +79,7 @@ namespace dbgl
 	}
     }
 
-    Mesh* Mesh::makeTriangle(bool generateTangentBase)
+    Mesh* Mesh::makeTriangle(bool generateTangentBase, bool sendToGPU)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -67,12 +98,13 @@ namespace dbgl
 	if (generateTangentBase)
 	    mesh->generateTangentBasis();
 
-	mesh->updateBuffers();
+	if (sendToGPU)
+	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePlane(bool generateTangentBase)
+    Mesh* Mesh::makePlane(bool generateTangentBase, bool sendToGPU)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -91,12 +123,13 @@ namespace dbgl
 	if (generateTangentBase)
 	    mesh->generateTangentBasis();
 
-	mesh->updateBuffers();
+	if (sendToGPU)
+	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makeCube(bool generateTangentBase)
+    Mesh* Mesh::makeCube(bool generateTangentBase, bool sendToGPU)
     {
 	Mesh* mesh = new Mesh();
 
@@ -190,12 +223,13 @@ namespace dbgl
 	if (generateTangentBase)
 	    mesh->generateTangentBasis();
 
-	mesh->updateBuffers();
+	if (sendToGPU)
+	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePyramid(bool generateTangentBase)
+    Mesh* Mesh::makePyramid(bool generateTangentBase, bool sendToGPU)
     {
 	Mesh* mesh = new Mesh();
 
@@ -276,7 +310,8 @@ namespace dbgl
 	if (generateTangentBase)
 	    mesh->generateTangentBasis();
 
-	mesh->updateBuffers();
+	if (sendToGPU)
+	    mesh->updateBuffers();
 
 	return mesh;
     }
@@ -431,7 +466,7 @@ namespace dbgl
 	glBufferData(target, size, data, usage);
     }
 
-    Mesh* Mesh::loadOBJ(const std::string path)
+    Mesh* Mesh::loadOBJ(const std::string path, bool sendToGPU)
     {
 	Mesh* mesh = NULL;
 	// Read file
@@ -653,7 +688,8 @@ namespace dbgl
 	    return NULL;
 	}
 	// Send data to gl buffers
-	mesh->updateBuffers();
+	if (sendToGPU)
+	    mesh->updateBuffers();
 	return mesh;
     }
 }
