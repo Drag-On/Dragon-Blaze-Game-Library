@@ -15,6 +15,7 @@
 #include"System/Log/Log.h"
 #include"Vector3.h"
 #include"Vector4.h"
+#include"Matrix.h"
 #include"Utility.h"
 
 namespace dbgl
@@ -23,8 +24,9 @@ namespace dbgl
     /// @brief Matrix of size 4 by 4
     /// @author Jan Moeller
     /// </summary>
-    template<typename T> class Matrix4x4
+    template<typename T> class Matrix4x4 : public Matrix<T, 4, 4>
     {
+	    using BaseMatrixType = Matrix<T, 4, 4>;
 	public:
 	    // Constructors
 	    /// <summary>
@@ -34,26 +36,14 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Copies another 3x3 matrix
 	    /// </summary>
-	    Matrix4x4(const Matrix4x4<T> &other);
+	    Matrix4x4(const BaseMatrixType &other);
 	    // Destructors
 	    ~Matrix4x4();
 	    // Methods
 	    /// <summary>
-	    /// @brief Gets the amount of columns of this matrix
-	    /// </summary>
-	    int getWidth() const;
-	    /// <summary>
-	    /// @brief Gets the amount of lines of this matrix
-	    /// </summary>
-	    int getHeight() const;
-	    /// <summary>
 	    /// @brief Transposes this matrix
 	    /// </summary>
 	    Matrix4x4<T>& transpose();
-	    /// <summary>
-	    /// @brief Returns a transposed version of this matrix
-	    /// </summary>
-	    Matrix4x4<T> getTransposed() const;
 	    /// <summary>
 	    /// @brief Inverts this matrix so that a multiplication with
 	    ///	   the original results in an identity matrix
@@ -65,19 +55,6 @@ namespace dbgl
 	    ///	   identity matrix
 	    /// </summary>
 	    Matrix4x4<T> getInverted() const;
-	    /// <summary>
-	    /// @brief Checks if all elements are zero
-	    /// </summary>
-	    bool isZero() const;
-	    /// <summary>
-	    /// @brief Checks if this matrix is an identity matrix
-	    /// </summary>
-	    bool isIdentity() const;
-	    /// <summary>
-	    /// @brief Grants access to the internal memory
-	    /// @return A pointer to the first element of this matrix
-	    /// </summary>
-	    const T* getDataPointer() const;
 	    /// <summary>
 	    /// @brief Constructs a translation matrix from the given translation values
 	    /// @param x Amount to translate on the x axis
@@ -169,26 +146,22 @@ namespace dbgl
 	    /// </summary>
 	    void projection(T fieldOfView, T aspectRatio, T near, T far);
 	    // Operators
-	    Matrix4x4<T>& operator=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator+(Matrix4x4<T> const& rhs) const;
-	    Matrix4x4<T>& operator+=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator-(Matrix4x4<T> const& rhs) const;
-	    Matrix4x4<T>& operator-=(Matrix4x4<T> const& rhs);
-	    const Matrix4x4<T> operator*(Matrix4x4<T> const& rhs) const;
-	    const Vector4<T> operator*(Vector4<T> const& rhs) const;
+	    using BaseMatrixType::operator=;
+	    using BaseMatrixType::operator+=;
+	    using BaseMatrixType::operator-=;
+	    using BaseMatrixType::operator*=;
+	    using BaseMatrixType::operator/=;
+	    const Matrix4x4<T> operator+(BaseMatrixType const& rhs) const;
+	    const Matrix4x4<T> operator-(BaseMatrixType const& rhs) const;
+	    const Matrix4x4<T> operator*(BaseMatrixType const& rhs) const;
+	    const Vector4<T> operator*(Vector<T,4> const& rhs) const;
 	    const Matrix4x4<T> operator*(T const& rhs) const;
-	    Matrix4x4<T>& operator*=(Matrix4x4<T> const& rhs);
-	    Matrix4x4<T>& operator*=(T const& rhs);
+	    Matrix4x4<T>& operator*=(BaseMatrixType const& rhs);
 	    const Matrix4x4<T> operator/(T const& rhs) const;
-	    Matrix4x4<T>& operator/=(T const& rhs);
 	    Matrix4x4<T> operator-() const;
-	    bool operator==(Matrix4x4<T> const& rhs) const;
-	    bool operator!=(Matrix4x4<T> const& rhs) const;
-	    Vector4<T>& operator[](std::size_t const& index);
-	    const Vector4<T>& operator[](std::size_t const& index) const;
+
 
 	private:
-	    Vector4<T> m_columns[4];
     };
 
     // Some default types

@@ -12,6 +12,7 @@
 #define MATRIX3X3_H_
 
 #include "System/Log/Log.h"
+#include "Matrix.h"
 #include "Vector3.h"
 
 namespace dbgl
@@ -20,8 +21,9 @@ namespace dbgl
     /// @brief Matrix of size 3 by 3
     /// @author Jan Moeller
     /// </summary>
-    template<typename T> class Matrix3x3
+    template<typename T> class Matrix3x3 : public Matrix<T, 3, 3>
     {
+	    using BaseMatrixType = Matrix<T, 3, 3>;
 	public:
 	    // Constructors
 	    /// <summary>
@@ -31,26 +33,14 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Copies another 3x3 matrix
 	    /// </summary>
-	    Matrix3x3(const Matrix3x3<T> &other);
+	    Matrix3x3(const BaseMatrixType &other);
 	    // Destructors
 	    ~Matrix3x3();
 	    // Methods
 	    /// <summary>
-	    /// @brief Gets the amount of columns of this matrix
-	    /// </summary>
-	    int getWidth() const;
-	    /// <summary>
-	    /// @brief Gets the amount of lines of this matrix
-	    /// </summary>
-	    int getHeight() const;
-	    /// <summary>
 	    /// @brief Transposes this matrix
 	    /// </summary>
 	    Matrix3x3<T>& transpose();
-	    /// <summary>
-	    /// @brief Returns a transposed version of this matrix
-	    /// </summary>
-	    Matrix3x3<T> getTransposed() const;
 	    /// <summary>
 	    /// @brief Inverts this matrix so that a multiplication with
 	    ///	   the original results in an identity matrix
@@ -62,19 +52,6 @@ namespace dbgl
 	    ///	   identity matrix
 	    /// </summary>
 	    Matrix3x3<T> getInverted() const;
-	    /// <summary>
-	    /// @brief Checks if all elements are zero
-	    /// </summary>
-	    bool isZero() const;
-	    /// <summary>
-	    /// @brief Checks if this matrix is an identity matrix
-	    /// </summary>
-	    bool isIdentity() const;
-	    /// <summary>
-	    /// @brief Grants access to the internal memory
-	    /// @return A pointer to the first element of this matrix
-	    /// </summary>
-	    const T* getDataPointer() const;
 	    /// <summary>
 	    /// @brief Constructs a rotation matrix from the given angle
 	    /// @param angle Angle to rotate around the x axis
@@ -116,26 +93,21 @@ namespace dbgl
 	    /// </summary>
 	    static Matrix3x3<T> makeScale(T x, T y, T z);
 	    // Operators
-	    Matrix3x3<T>& operator=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator+(Matrix3x3<T> const& rhs) const;
-	    Matrix3x3<T>& operator+=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator-(Matrix3x3<T> const& rhs) const;
-	    Matrix3x3<T>& operator-=(Matrix3x3<T> const& rhs);
-	    const Matrix3x3<T> operator*(Matrix3x3<T> const& rhs) const;
-	    const Vector3<T> operator*(Vector3<T> const& rhs) const;
+	    using BaseMatrixType::operator=;
+	    using BaseMatrixType::operator+=;
+	    using BaseMatrixType::operator-=;
+	    using BaseMatrixType::operator*=;
+	    using BaseMatrixType::operator/=;
+	    const Matrix3x3<T> operator+(BaseMatrixType const& rhs) const;
+	    const Matrix3x3<T> operator-(BaseMatrixType const& rhs) const;
+	    const Matrix3x3<T> operator*(BaseMatrixType const& rhs) const;
+	    const Vector3<T> operator*(Vector<T,3> const& rhs) const;
 	    const Matrix3x3<T> operator*(T const& rhs) const;
-	    Matrix3x3<T>& operator*=(Matrix3x3<T> const& rhs);
-	    Matrix3x3<T>& operator*=(T const& rhs);
+	    Matrix3x3<T>& operator*=(BaseMatrixType const& rhs);
 	    const Matrix3x3<T> operator/(T const& rhs) const;
-	    Matrix3x3<T>& operator/=(T const& rhs);
 	    Matrix3x3<T> operator-() const;
-	    bool operator==(Matrix3x3<T> const& rhs) const;
-	    bool operator!=(Matrix3x3<T> const& rhs) const;
-	    Vector3<T>& operator[](std::size_t const& index);
-	    const Vector3<T>& operator[](std::size_t const& index) const;
 
 	private:
-	    Vector3<T> m_columns[3];
     };
 
     // Some default types

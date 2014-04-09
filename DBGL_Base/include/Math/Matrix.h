@@ -66,8 +66,7 @@ namespace dbgl
 	    Matrix<T, N, M>& operator+=(Matrix<T, N, M> const& rhs);
 	    const Matrix<T, N, M> operator-(Matrix<T, N, M> const& rhs) const;
 	    Matrix<T, N, M>& operator-=(Matrix<T, N, M> const& rhs);
-	    template<unsigned int O> const Matrix<T, M, O> operator*(
-		    Matrix<T, O, N> const& rhs) const;
+	    template<unsigned int O> const Matrix<T, M, O> operator*(Matrix<T, O, N> const& rhs) const;
 	    const Vector<T, M> operator*(Vector<T, N> const& rhs) const;
 	    const Matrix<T, N, M> operator*(T const& rhs) const;
 	    Matrix<T, N, M>& operator*=(T const& rhs);
