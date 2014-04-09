@@ -66,6 +66,30 @@ namespace dbgl
 	     */
 	    std::vector<Vector3<GLfloat>> const& getBitangents() const;
 	    /**
+	     * @return A reference to the indices list
+	     */
+	    std::vector<unsigned short>& indices();
+	    /**
+	     * @return A reference to the vertices list
+	     */
+	    std::vector<Vector3<GLfloat>>& vertices();
+	    /**
+	     * @return A reference to the normals list
+	     */
+	    std::vector<Vector3<GLfloat>>& normals();
+	    /**
+	     * @return A reference to the UVs list
+	     */
+	    std::vector<Vector2<GLfloat>>& uvs();
+	    /**
+	     * @return A reference to the tangents list
+	     */
+	    std::vector<Vector3<GLfloat>>& tangents();
+	    /**
+	     * @return A reference to the bitangents list
+	     */
+	    std::vector<Vector3<GLfloat>>& bitangents();
+	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param path Path of the file

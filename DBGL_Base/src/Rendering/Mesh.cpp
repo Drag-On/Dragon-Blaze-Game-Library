@@ -55,6 +55,36 @@ namespace dbgl
 	return m_bitangents;
     }
 
+    std::vector<unsigned short>& Mesh::indices()
+    {
+	return m_indices;
+    }
+
+    std::vector<Vector3<GLfloat>>& Mesh::vertices()
+    {
+	return m_vertices;
+    }
+
+    std::vector<Vector3<GLfloat>>& Mesh::normals()
+    {
+	return m_normals;
+    }
+
+    std::vector<Vector2<GLfloat>>& Mesh::uvs()
+    {
+	return m_uv;
+    }
+
+    std::vector<Vector3<GLfloat>>& Mesh::tangents()
+    {
+	return m_tangents;
+    }
+
+    std::vector<Vector3<GLfloat>>& Mesh::bitangents()
+    {
+	return m_bitangents;
+    }
+
     Mesh* Mesh::load(const std::string path, const Type type,
 	    bool generateTangentBase, bool sendToGPU)
     {
