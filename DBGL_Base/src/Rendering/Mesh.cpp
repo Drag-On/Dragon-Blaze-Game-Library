@@ -85,14 +85,14 @@ namespace dbgl
 	return m_bitangents;
     }
 
-    Mesh* Mesh::load(const std::string path, const Type type,
-	    bool generateTangentBase, bool sendToGPU)
+    Mesh* Mesh::load(const std::string path, const Type type, bool generateTangentBase,
+	    bool sendToGPU, bool optimize)
     {
 	switch (type)
 	{
 	    case OBJ:
 	    {
-		Mesh* mesh = loadOBJ(path, sendToGPU);
+		Mesh* mesh = loadOBJ(path, sendToGPU, optimize);
 		if (generateTangentBase && mesh != NULL)
 		{
 		    mesh->generateTangentBasis();
@@ -496,7 +496,7 @@ namespace dbgl
 	glBufferData(target, size, data, usage);
     }
 
-    Mesh* Mesh::loadOBJ(const std::string path, bool sendToGPU)
+    Mesh* Mesh::loadOBJ(const std::string path, bool sendToGPU, bool optimize)
     {
 	Mesh* mesh = NULL;
 	// Read file
@@ -685,7 +685,7 @@ namespace dbgl
 		{
 		    // Vertex with similar coordinates has been found
 		    // Check if normal and UVs are compatible and average them if they are
-		    if (mesh->m_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
+		    if (optimize && mesh->m_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
 			    mesh->m_uv[vertIndex].isSimilar(uvs[uvIndices[i]]))
 		    {
 			mesh->m_normals[vertIndex] += normal;

@@ -97,10 +97,12 @@ namespace dbgl
 	     * @param generateTangentBase Flag indicating if tangents
 	     * 	      and bitangents should be generated
 	     * @param sendToGPU automatically sends the loaded mesh to gpu
+	     * @param optimize Indicates if the mesh should be optimized (i.e. vertices that are
+	     * 		       close to each other and have normals within 80° are merged)
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
-	    static Mesh* load(const std::string path, const Type type,
-		    bool generateTangentBase = false, bool sendToGPU = true);
+	    static Mesh* load(const std::string path, const Type type, bool generateTangentBase =
+		    false, bool sendToGPU = true, bool optimize = true);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
@@ -177,9 +179,12 @@ namespace dbgl
 	    /**
 	     * @brief Loads a mesh in OBJ file format
 	     * @param path Path of the file
+	     * @param sendToGPU Indicates if the mesh should be sent to GPU immediately
+	     * @param optimize Indicates if the mesh should be optimized (i.e. vertices that are
+	     * 		       close to each other and have normals within 80° are merged)
 	     * @return The loaded mesh
 	     */
-	    static Mesh* loadOBJ(const std::string path, bool sendToGPU);
+	    static Mesh* loadOBJ(const std::string path, bool sendToGPU, bool optimize = true);
 
 	    std::vector<unsigned short> m_indices;
 	    GLuint m_indexBuffer = GL_INVALID_VALUE;
