@@ -81,6 +81,10 @@ namespace dbgl
 	private:
 	    Vector<T, M> m_columns[N];
     };
+
+    // Free function operators
+    template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> operator*(Matrix<T, N, M> const& lhs, T const& rhs);
+    template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> operator*(T const& lhs, Matrix<T, N, M> const& rhs);
 }
 
 #include "Matrix.imp"
