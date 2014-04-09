@@ -249,6 +249,7 @@ namespace dbgl
 		"uniform sampler2D tex_diffuse;\n"
 		"void main(){\n"
 		"float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));\n"
+		"variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));\n"
 		"color = texture(tex_diffuse, uv).rgb * variance;\n"
 		"}";
 	return new ShaderProgram(vertexShader, fragmentShader, false);

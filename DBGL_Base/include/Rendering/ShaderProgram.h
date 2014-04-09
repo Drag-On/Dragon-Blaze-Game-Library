@@ -292,6 +292,7 @@ namespace dbgl
 	    /**
 	     * @brief Creates a very simple shader program, mainly intended
 	     * 	      for testing purposes
+	     * @details Two-sided diffuse lighting with light coming from the camera
 	     * @warning The generated memory needs to be deallocated manually!
 	     * @return The newly created shader program
 	     */

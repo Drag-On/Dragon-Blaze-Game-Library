@@ -139,15 +139,15 @@ namespace dbgl
 	     * @return The pyramid mesh
 	     */
 	    static Mesh* makePyramid(bool generateTangentBase = false, bool sendToGPU = true);
+	    /**
+	     * @brief Updates GL buffers, resends vertices, uvs and normals
+	     */
+	    void updateBuffers();
 	private:
 	    /**
 	     * @brief Private constructor; use factory methods!
 	     */
 	    Mesh();
-	    /**
-	     * @brief Updates GL buffers, resends vertices, uvs and normals
-	     */
-	    void updateBuffers();
 	    /**
 	     * @brief Checks, if the mesh has a vertex with the passed coordinates
 	     * 	      (or at least very, very similar)
