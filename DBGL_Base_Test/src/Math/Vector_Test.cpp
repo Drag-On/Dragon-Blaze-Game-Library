@@ -128,6 +128,7 @@ int testVector()
     assert(vec3[1] == 12);
     float dotProd = vec3 * vec;
     assert(dotProd == vec3[0]*vec[0] + vec3[1]*vec[1]);
+    2.0f * vec3;
     // *=
     vec3 *= 0.5;
     assert(vec3[0] == -3);

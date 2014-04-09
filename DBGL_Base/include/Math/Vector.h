@@ -168,6 +168,10 @@ namespace dbgl
 	    #define RETURN_QUALIFIER
 	    #include "Vector_Common.hpart"
     };
+
+    // Free function operators
+    template<typename T, unsigned int N> const Vector<T, N> operator*(Vector<T, N> const& lhs, T const& rhs);
+    template<typename T, unsigned int N> const Vector<T, N> operator*(T const& lhs, Vector<T, N> const& rhs);
 }
 
 #undef RETURN_QUALIFIER
