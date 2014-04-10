@@ -14,7 +14,7 @@ namespace dbgl
 {
 
     // Init static variable
-    Log* Log::s_pInstance = NULL;
+    Log* Log::s_pInstance = new Log();
 
     /**
      * Constructor
@@ -32,7 +32,7 @@ namespace dbgl
 	writeLog("%s\n", time);
 	writeLog("-----------------\n");
 
-	delete (time);
+	delete[] (time);
     }
 
     /**
@@ -47,10 +47,6 @@ namespace dbgl
      */
     Log* Log::get()
     {
-	if (!Log::s_pInstance)
-	{
-	    Log::s_pInstance = new Log();
-	}
 	return Log::s_pInstance;
     }
 
@@ -92,8 +88,8 @@ namespace dbgl
 	    va_end(pArgList);
 
 	    const char* time = getCurTime();
-	    fprintf(stderr, "%s: DEBUG: %s\n", time, buffer);
-	    fflush (stderr);
+	    fprintf(stdout, "%s: DEBUG: %s\n", time, buffer);
+	    fflush (stdout);
 
 	    writeLog("%s: DEBUG: %s\n", time, buffer);
 	    delete (time);
@@ -117,8 +113,8 @@ namespace dbgl
 	    va_end(pArgList);
 
 	    const char* time = getCurTime();
-	    fprintf(stderr, "%s: INFO: %s\n", time, buffer);
-	    fflush (stderr);
+	    fprintf(stdout, "%s: INFO: %s\n", time, buffer);
+	    fflush (stdout);
 
 	    writeLog("%s: INFO: %s\n", time, buffer);
 	    delete (time);

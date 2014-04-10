@@ -53,6 +53,9 @@ namespace dbgl
 
 	// Terminate glfw context
 	glfwTerminate();
+
+	// Free logfile
+	LOG->del();
     }
 
     bool WindowManager::isRunning() const
