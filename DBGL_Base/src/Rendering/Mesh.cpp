@@ -23,6 +23,10 @@ namespace dbgl
 	    glDeleteBuffers(1, &m_normalBuffer);
 	if (m_uvBuffer != GL_INVALID_VALUE)
 	    glDeleteBuffers(1, &m_uvBuffer);
+	if (m_tangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_tangentBuffer);
+	if (m_bitangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_bitangentBuffer);
     }
 
     std::vector<unsigned short> const& Mesh::getIndices() const
