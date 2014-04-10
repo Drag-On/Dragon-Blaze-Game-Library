@@ -90,6 +90,35 @@ namespace dbgl
 	}
     }
 
+    void Properties::interpret(int argc, char** argv)
+    {
+	for(int i = 0; i < argc; i+=2)
+	{
+	    std::string token(argv[i]);
+	    if (token.substr(0, m_cmntSymbol.size()) != m_keyPrefix || argc <= i+1)
+	    {
+		LOG->warning("Misformatted argument in \"%s\"!", token.c_str());
+		return;
+	    }
+	    std::string key = token.substr(m_cmntSymbol.size(), token.size());
+	    std::string value(argv[i+1]);
+	    // Check if property already exists
+	    if (m_properties.find(key) != m_properties.end())
+		LOG->warning("Multiple definitions for key  \"%s\"!", key.c_str());
+		// Add property
+	    m_properties[key] = value;
+	}
+    }
+
+    void Properties::setValue(std::string key, std::string value)
+    {
+	// Check if property already exists
+	if (m_properties.find(key) != m_properties.end())
+	    LOG->warning("Multiple definitions for key  \"%s\"!", key.c_str());
+	// Add property
+	m_properties[key] = value;
+    }
+
     std::string Properties::getStringValue(std::string key)
     {
 	auto it = m_properties.find(key);

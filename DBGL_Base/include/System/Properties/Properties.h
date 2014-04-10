@@ -41,6 +41,19 @@ namespace dbgl
 	     */
 	    void interpret(const std::string line);
 	    /**
+	     * @brief Interprets an array
+	     * @detail Reads in -key value pairs
+	     * @param argc Amount of arguments
+	     * @param argv Actual arguments
+	     */
+	    void interpret(int argc, char** argv);
+	    /**
+	     * @brief Manually sets a property, overwriting any previous values
+	     * @param key Key of the property
+	     * @param value Value of the property
+	     */
+	    void setValue(std::string key, std::string value);
+	    /**
 	     * @param key Key to get the value for
 	     * @return Raw string value associated with the passed key
 	     */
