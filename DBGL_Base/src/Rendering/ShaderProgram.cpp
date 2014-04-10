@@ -255,6 +255,30 @@ namespace dbgl
 	return new ShaderProgram(vertexShader, fragmentShader, false);
     }
 
+    ShaderProgram* ShaderProgram::createSimpleColorShader()
+        {
+    	const char* vertexShader = "#version 330 core\n"
+    		"layout(location = 0) in vec3 vertexPos;\n"
+    		"layout(location = 2) in vec3 normal;\n"
+    		"out vec3 normal_cam;\n"
+    		"uniform mat4 MVP;\n"
+    		"uniform mat4 ITMV;\n"
+    		"void main(){\n"
+    		"gl_Position = MVP * vec4(vertexPos, 1);\n"
+    		"normal_cam = normalize((ITMV * vec4(normal, 0)).xyz);\n"
+    		"}";
+    	const char* fragmentShader = "#version 330 core\n"
+    		"in vec3 normal_cam;\n"
+    		"out vec3 color;\n"
+    		"uniform vec3 v3_color;\n"
+    		"void main(){\n"
+    		"float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));\n"
+    		"variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));\n"
+    		"color = v3_color * variance;\n"
+    		"}";
+    	return new ShaderProgram(vertexShader, fragmentShader, false);
+        }
+
     void ShaderProgram::checkUniforms()
     {
 	use();

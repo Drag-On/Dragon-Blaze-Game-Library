@@ -292,11 +292,22 @@ namespace dbgl
 	    /**
 	     * @brief Creates a very simple shader program, mainly intended
 	     * 	      for testing purposes
-	     * @details Two-sided diffuse lighting with light coming from the camera
+	     * @details Two-sided diffuse lighting with light coming from the camera,
+	     * 		textured objects
 	     * @warning The generated memory needs to be deallocated manually!
 	     * @return The newly created shader program
 	     */
 	    static ShaderProgram* createSimpleShader();
+
+	    /**
+	     * @brief Creates a very simple shader program, mainly intended
+	     * 	      for testing purposes
+	     * @details Two-sided diffuse lighting with light coming from the camera,
+	     * 		only using colors for objects, no textures
+	     * @warning The generated memory needs to be deallocated manually!
+	     * @return The newly created shader program
+	     */
+	    static ShaderProgram* createSimpleColorShader();
 
 	private:
 	    GLuint _shaderProgram; // GL shader program handle
