@@ -12,6 +12,7 @@
 #include "DBGL_Base_Config.h"
 #include "System/Log/Log.h"
 
+int testLog();
 int testVector2();
 int testVector3();
 int testVector4();
@@ -29,6 +30,7 @@ int main()
 	LOG->setLogLevel((int)dbgl::LOGLEVEL::DBG);
 	LOG->info("DBGL Version %s", DBGL_VERSION_FULL);
 
+	testLog();
 	testVector2();
 	testVector3();
 	testVector4();

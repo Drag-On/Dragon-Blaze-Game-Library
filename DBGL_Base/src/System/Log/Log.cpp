@@ -13,8 +13,12 @@
 namespace dbgl
 {
 
-    // Init static variable
-    Log* Log::s_pInstance = new Log();
+    // Init static variables
+    Log* Log::s_pInstance = nullptr;
+    Log::Logger Log::dbg(LOGLEVEL::DBG);
+    Log::Logger Log::inf(LOGLEVEL::INFO);
+    Log::Logger Log::wrn(LOGLEVEL::WARN);
+    Log::Logger Log::err(LOGLEVEL::ERR);
 
     /**
      * Constructor
@@ -33,6 +37,10 @@ namespace dbgl
 	writeLog("-----------------\n");
 
 	delete[] (time);
+
+	// Redirect std streams
+	m_pOldCout = std::cout.rdbuf(inf.rdbuf());
+	m_pOldCerr = std::cerr.rdbuf(err.rdbuf());
     }
 
     /**
@@ -40,6 +48,9 @@ namespace dbgl
      */
     Log::~Log()
     {
+	// Restore original std streams
+	std::cout.rdbuf(m_pOldCout);
+	std::cerr.rdbuf(m_pOldCerr);
     }
 
     /**
@@ -47,6 +58,10 @@ namespace dbgl
      */
     Log* Log::get()
     {
+	if (!Log::s_pInstance)
+	{
+	    Log::s_pInstance = new Log();
+	}
 	return Log::s_pInstance;
     }
 
@@ -207,6 +222,44 @@ namespace dbgl
 	else
 	    strftime(buf, 80, "%X", &tstruct);
 	return buf;
+    }
+
+    Log::Logger::LogBuf::LogBuf(LOGLEVEL loglevel) : m_loglevel(loglevel)
+    {
+    }
+
+    Log::Logger::LogBuf::~LogBuf()
+    {
+	pubsync();
+    }
+
+    int Log::Logger::LogBuf::sync()
+    {
+	switch(m_loglevel)
+	{
+	    case DBG:
+		LOG->debug(str().c_str());
+		break;
+	    case INFO:
+		LOG->info(str().c_str());
+		break;
+	    case WARN:
+		LOG->warning(str().c_str());
+		break;
+	    case ERR:
+		LOG->error(str().c_str());
+		break;
+	}
+	str("");
+	return 0;
+    }
+
+    Log::Logger::Logger(LOGLEVEL loglevel) : std::ostream(new LogBuf(loglevel))
+    {
+    }
+
+    Log::Logger::~Logger()
+    {
     }
 
 } /* namespace DBGL */

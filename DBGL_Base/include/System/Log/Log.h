@@ -11,6 +11,9 @@
 #ifndef LOG_H_
 #define LOG_H_
 
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <fstream>
 #include <cstdarg>
@@ -21,7 +24,6 @@
 
 namespace dbgl
 {
-
     /**
      * Defines what is actually logged
      */
@@ -92,8 +94,9 @@ namespace dbgl
 
 	private:
 	    int m_logLevel;
-	    static const int m_maxBuffer = 1024;
+	    std::streambuf* m_pOldCout, *m_pOldCerr;
 
+	    static const int m_maxBuffer = 1024;
 	    static Log* s_pInstance;
 
 	    /**
@@ -108,6 +111,34 @@ namespace dbgl
 	     * @return A string with the current time
 	     */
 	    const char* getCurTime(bool date = false);
+
+	    /**
+	     * @brief Inner class used for streams
+	     */
+	    class Logger : public std::ostream
+	    {
+		private:
+		    /**
+		     * @brief Buffer for Logger class
+		     */
+		    class LogBuf: public std::stringbuf
+		    {
+			private:
+			    LOGLEVEL m_loglevel;
+			public:
+			    LogBuf(LOGLEVEL loglevel);
+			    ~LogBuf();
+			    int sync();
+		    };
+		public:
+		    Logger(LOGLEVEL loglevel);
+		    ~Logger();
+	    };
+	public:
+	    /**
+	     * @brief streams that can be used to write to log
+	     */
+	    static Logger dbg, inf, wrn, err;
     };
 
 } /* namespace dbgl */
