@@ -48,6 +48,11 @@ int testQuaternion()
     // fromVectors
     temp.fromVectors(Vec3f(0.3, -1.1, 0.5), Vec3f(-0.1, 1, 0.7));
     assert((temp * Vec3f(0.3, -1.1, 0.5).normalize()).isSimilar(Vec3f(-0.1, 1, 0.7).normalize()));
+    temp.fromVectors(Vec3f(1, 0, 0), Vec3f(1, 0, 1), Vec3f(0, 1, 0));
+    assert((temp * Vec3f(1, 0, 0).normalize()).isSimilar(Vec3f(1, 0, 1).normalize()));
+    assert((temp * Vec3f(0, 1, 0).normalize()).isSimilar(Vec3f(0, 1, 0).normalize()));
+    temp.fromVectors(Vec3f(1, 0, 0), Vec3f(-1, 0, 0));
+    assert((temp * Vec3f(1, 0, 0)).isSimilar(Vec3f(-1, 0, 0)));
     // isUnit
     assert(quat1.isUnit());
     assert(!quat2.isUnit());

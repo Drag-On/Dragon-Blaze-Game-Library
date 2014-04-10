@@ -132,16 +132,19 @@ namespace dbgl
 				axis = start.cross(Vector3<T>(0, 1, 0));
 			axis.normalize();
 			// Initialize
-			fromAngleAxis(axis, pi_2());
+			fromAngleAxis(axis, pi());
 		}
-		// If not parallel everything's easier
-		axis = start.cross(dest);
-		T s = std::sqrt((1 + cosTheta) * 2);
-	 
-		x() = axis.x() * 1 / s;
-		y() = axis.y() * 1 / s;
-		z() = axis.z() * 1 / s;
-		w() = s * 0.5;
+		else
+		{
+			// If not parallel everything's easier
+			axis = start.cross(dest);
+			T s = std::sqrt((1 + cosTheta) * 2);
+	
+			x() = axis.x() * 1 / s;
+			y() = axis.y() * 1 / s;
+			z() = axis.z() * 1 / s;
+			w() = s * 0.5;
+		}
 		
 		normalize();
 		return *this;
