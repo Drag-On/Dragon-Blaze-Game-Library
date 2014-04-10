@@ -124,7 +124,7 @@ namespace dbgl
 		Vector3<T> axis;
 	 
 		// Check if vectors are in opposite direction
-		if (dbgl::isSimilar(cosTheta, -1))
+		if (cosTheta == -1)
 		{
 			// Guess a random axis
 			axis = start.cross(Vector3<T>(1, 0, 0));
