@@ -24,6 +24,7 @@ int testMatrix();
 int testQuaternion();
 int testWindow();
 int testProperties();
+int testBitmask();
 
 int main()
 {
@@ -42,6 +43,7 @@ int main()
 	testQuaternion();
 	//testWindow();
 	testProperties();
+	testBitmask();
 
 	LOG->info("Tests done!");
 	LOG->del();
