@@ -104,7 +104,7 @@ namespace dbgl
 	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
     }
 
-    void Window::init(bool depthTest, bool alphaBlend, bool faceCulling)
+    void Window::init(Bitmask options)
     {
 	makeCurrent();
 
@@ -112,21 +112,21 @@ namespace dbgl
 	createRenderContext();
 
 	// Enable depth test?
-	if (depthTest)
+	if (options.isSet(DepthTest))
 	{
 	    glEnable(GL_DEPTH_TEST);
 	    glDepthFunc(GL_LESS);
 	}
 
 	// Enable alpha blending?
-	if (alphaBlend)
+	if (options.isSet(AlphaBlend))
 	{
 	    glEnable(GL_BLEND);
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	// Cull triangles that are not facing the camera?
-	if (faceCulling)
+	if (options.isSet(FaceCulling))
 	    glEnable(GL_CULL_FACE);
 
 	// Create vertex array

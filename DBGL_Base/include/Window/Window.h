@@ -20,6 +20,7 @@
 #include "Math/Vector3.h"
 #include "System/Event/Event.h"
 #include "System/Log/Log.h"
+#include "System/Bitmask/Bitmask.h"
 #include "WindowManager.h"
 #include "Rendering/RenderContext.h"
 
@@ -85,6 +86,11 @@ namespace dbgl
 	    using UpdateEventType = Event<UpdateCallbackType, UpdateEventArgs>;
 	    using RenderEventType = Event<RenderCallbackType, RenderEventArgs>;
 
+	    // Constants used for bitmasks
+	    static const int DepthTest = 1 << 0;
+	    static const int AlphaBlend = 1 << 1;
+	    static const int FaceCulling = 1 << 2;
+
 	    /**
 	     * @brief Frees all memory allocated to this window
 	     */
@@ -92,13 +98,10 @@ namespace dbgl
 	    /**
 	     * @brief Initializes the window
 	     * @warning Must be called exactly once!
-	     * @param depthTest Indicates if depth testing should be enabled
-	     * @param alphaBlend Indicates if alpha blending should be enabled
-	     * @param faceCulling Indicates if faces that are not facing the camera
-	     * 	      should be culled
+	     * @param options Bitmask indicating which options are set. Accounts for
+	     * 		      DepthTest, AlphaBlend & FaceCulling
 	     */
-	    void init(bool depthTest = true, bool alphaBlend = false,
-		    bool faceCulling = true);
+	    void init(Bitmask options = DepthTest | FaceCulling);
 	    /**
 	     * @brief Makes this window show
 	     */

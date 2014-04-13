@@ -162,7 +162,7 @@ int main()
     // Create window
     pWnd = WindowManager::get()->createWindow<SimpleSceneWindow>();
     // Initialize it
-    pWnd->init(true, true, true);
+    pWnd->init();
     // Create a viewport over the whole window space
     Viewport* pViewport = new Viewport(0, 0, 1, 1);
     // Add a camera
