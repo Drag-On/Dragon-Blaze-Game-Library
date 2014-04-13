@@ -16,7 +16,7 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture.h"
+#include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
 #include "Math/Vector3.h"
 #include "Math/Utility.h"
@@ -152,10 +152,10 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Bind textures
     // Bind diffuse texture to unit 0
-    pShaderDiffSpec->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexWhite->getTextureHandle());
+    pShaderDiffSpec->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexWhite->getHandle());
     pShaderDiffSpec->setUniformSampler(diffuseId, 0);
     // Bind specular texture to unit 1
-    pShaderDiffSpec->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexWhite->getTextureHandle());
+    pShaderDiffSpec->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexWhite->getHandle());
     pShaderDiffSpec->setUniformSampler(specularId, 1);
 
     // Calc matrices
@@ -201,13 +201,13 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Bind textures
     // Bind diffuse texture to unit 0
-    pShaderDiffSpec->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexBricks->getTextureHandle());
+    pShaderDiffSpec->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexBricks->getHandle());
     pShaderDiffSpec->setUniformSampler(diffuseId, 0);
     // Bind specular texture to unit 1
-    pShaderDiffSpec->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexBricksSpecular->getTextureHandle());
+    pShaderDiffSpec->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexBricksSpecular->getHandle());
     pShaderDiffSpec->setUniformSampler(specularId, 1);
     // Bind normal texture to unit 2
-    pShaderDiffSpec->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexBricksNormal->getTextureHandle());
+    pShaderDiffSpec->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexBricksNormal->getHandle());
     pShaderDiffSpec->setUniformSampler(normalId, 2);
 
     // Set uniforms that are the same for all of the following models
@@ -277,10 +277,10 @@ int main()
     pShaderNoLight = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
     pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
-    pTexBricks = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
-    pTexBricksNormal = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
-    pTexBricksSpecular = new Texture(Texture::TGA, "../common/Bricks01_specular.tga");
-    pTexWhite = new Texture(Texture::BOGUS, "");
+    pTexBricks = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
+    pTexBricksNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
+    pTexBricksSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
+    pTexWhite = Texture::load(Texture::BOGUS, "");
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));

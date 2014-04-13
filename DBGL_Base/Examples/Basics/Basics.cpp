@@ -15,7 +15,7 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture.h"
+#include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
 #include "Math/Utility.h"
 
@@ -43,7 +43,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getTextureHandle());
+	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
 	pShader->setUniformSampler(diffuseId, 0);
     }
     // MVP matrix
@@ -86,7 +86,7 @@ int main()
     // Load mesh, shader and texture
     pMesh = Mesh::makePyramid();
     pShader = ShaderProgram::createSimpleShader();
-    pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
+    pTexture = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
     // Add render callback so we can draw the mesh
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     pWnd->addFramebufferResizeCallback(std::bind(&framebufferResizeCallback, std::placeholders::_1));

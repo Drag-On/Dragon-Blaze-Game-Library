@@ -83,7 +83,7 @@ namespace dbgl
 	    {
 		// Bind to texture unit 0
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, pTexDiffuse->getTextureHandle());
+		glBindTexture(GL_TEXTURE_2D, pTexDiffuse->getHandle());
 		pShader->setUniformSampler(diffuseId, 0);
 	    }
 	    // Send normal texture if the shader wants it
@@ -93,7 +93,7 @@ namespace dbgl
 	    {
 		// Bind to texture unit 1
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, pTexNormal->getTextureHandle());
+		glBindTexture(GL_TEXTURE_2D, pTexNormal->getHandle());
 		pShader->setUniformSampler(normalId, 1);
 	    }
 	    // Send specular texture if the shader wants it
@@ -103,7 +103,7 @@ namespace dbgl
 	    {
 		// Bind to texture unit 2
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, pTexSpecular->getTextureHandle());
+		glBindTexture(GL_TEXTURE_2D, pTexSpecular->getHandle());
 		pShader->setUniformSampler(specularId, 2);
 	    }
 	    // Send model matrix if the shader wants it

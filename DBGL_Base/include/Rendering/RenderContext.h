@@ -16,7 +16,7 @@
 #include <algorithm>
 #include "Mesh.h"
 #include "ShaderProgram.h"
-#include "Texture.h"
+#include "Texture/Texture.h"
 #include "System/Log/Log.h"
 
 namespace dbgl

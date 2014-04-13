@@ -16,7 +16,7 @@
 #include "Rendering/RenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture.h"
+#include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
 #include "Math/Vector3.h"
 #include "Math/Utility.h"
@@ -104,7 +104,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getTextureHandle());
+	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
 	pShader->setUniformSampler(diffuseId, 0);
     }
 
@@ -159,7 +159,7 @@ int main()
     pMeshBox = Mesh::makeCube();
     pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ);
     pShader = ShaderProgram::createSimpleShader();
-    pTexture = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
+    pTexture = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));

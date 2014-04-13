@@ -17,7 +17,7 @@
 #include "Rendering/SceneRenderContext.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture.h"
+#include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Renderable.h"
 #include "Rendering/Viewport.h"
@@ -182,10 +182,10 @@ int main()
     pShaderNoLight = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
     pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
-    pTexBricks = new Texture(Texture::DDS_VERTICAL_FLIP, "../common/Bricks01.DDS");
-    pTexBricksNormal = new Texture(Texture::TGA, "../common/Bricks01_normal.tga");
-    pTexBricksSpecular = new Texture(Texture::TGA, "../common/Bricks01_specular.tga");
-    pTexWhite = new Texture(Texture::BOGUS, "");
+    pTexBricks = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
+    pTexBricksNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
+    pTexBricksSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
+    pTexWhite = Texture::load(Texture::BOGUS, "");
     // Create pyramid entity
     Renderable data(pMeshPyramid, pShaderNorm, pTexBricks, pTexBricksNormal, pTexBricksSpecular, Vec3f(0, 0, 0),
 	    Vec3f(1, 1, 1), QuatF(0, 0, 0, 1));

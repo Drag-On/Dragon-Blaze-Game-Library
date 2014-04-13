@@ -13,7 +13,7 @@
 
 #include "Rendering/Mesh.h"
 #include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture.h"
+#include "Rendering/Texture/Texture.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 
