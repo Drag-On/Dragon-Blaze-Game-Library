@@ -14,7 +14,7 @@
 #include "Window/WindowManager.h"
 #include "Window/SimpleWindow.h"
 #include "Rendering/RenderContext.h"
-#include "Rendering/Mesh.h"
+#include "Rendering/Mesh/Mesh.h"
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
@@ -269,11 +269,11 @@ int main()
     pCam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(0, 0, 1).cross(direction), pi_4(),
 	    0.1, 100);
     // Load meshes, shader and texture
-    pMeshPyramid = Mesh::makePyramid(true);
-    pMeshBox = Mesh::makeCube(true);
-    pMeshPlane = Mesh::makePlane(false);
-    pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ, true);
-    pMeshSphere = Mesh::load("../common/Sphere.obj", Mesh::OBJ, true);
+    pMeshPyramid = Mesh::makePyramid(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+    pMeshBox = Mesh::makeCube(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+    pMeshPlane = Mesh::makePlane();
+    pMeshIco = Mesh::load(Mesh::OBJ,"../common/Icosahedron.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+    pMeshSphere = Mesh::load(Mesh::OBJ,"../common/Sphere.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pShaderNoLight = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
     pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");

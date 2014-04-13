@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "Rendering/Mesh.h"
+#include "Rendering/Mesh/Mesh.h"
 
 namespace dbgl
 {
@@ -89,31 +89,28 @@ namespace dbgl
 	return m_bitangents;
     }
 
-    Mesh* Mesh::load(const std::string path, const Type type, bool generateTangentBase,
-	    bool sendToGPU, bool optimize)
+    Mesh* Mesh::load(const Type type, const std::string path, Bitmask flags)
     {
 	switch (type)
 	{
 	    case OBJ:
 	    {
-		Mesh* mesh = loadOBJ(path, sendToGPU, optimize);
-		if (generateTangentBase && mesh != NULL)
-		{
-		    mesh->generateTangentBasis();
-		    if (sendToGPU)
-			mesh->updateBuffers();
-		}
-		return mesh;
+		return OBJMeshLoader().load(path, flags);
 	    }
 	    default:
 	    {
 		LOG->warning("Format of file %s not recognized", path.c_str());
-		return NULL;
+		return nullptr;
 	    }
 	}
     }
 
-    Mesh* Mesh::makeTriangle(bool generateTangentBase, bool sendToGPU)
+    template<class Loader> Mesh* Mesh::load(const std::string path, Bitmask flags)
+    {
+	return Loader().load(path, flags);
+    }
+
+    Mesh* Mesh::makeTriangle(Bitmask flags)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -129,16 +126,16 @@ namespace dbgl
 	{   0, 1, 2};
 
 	// Generate tangents and bitangents
-	if (generateTangentBase)
+	if (flags.isSet(GenerateTangentBase))
 	    mesh->generateTangentBasis();
 
-	if (sendToGPU)
+	if (flags.isSet(SendToGPU))
 	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePlane(bool generateTangentBase, bool sendToGPU)
+    Mesh* Mesh::makePlane(Bitmask flags)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -154,16 +151,16 @@ namespace dbgl
 	{   0, 2, 1, 0, 3, 2};
 
 	// Generate tangents and bitangents
-	if (generateTangentBase)
+	if (flags.isSet(GenerateTangentBase))
 	    mesh->generateTangentBasis();
 
-	if (sendToGPU)
+	if (flags.isSet(SendToGPU))
 	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makeCube(bool generateTangentBase, bool sendToGPU)
+    Mesh* Mesh::makeCube(Bitmask flags)
     {
 	Mesh* mesh = new Mesh();
 
@@ -254,16 +251,16 @@ namespace dbgl
 	mesh->m_uv.insert(mesh->m_uv.begin(), std::begin(uvs), std::end(uvs));
 
 	// Generate tangents and bitangents
-	if (generateTangentBase)
+	if (flags.isSet(GenerateTangentBase))
 	    mesh->generateTangentBasis();
 
-	if (sendToGPU)
+	if (flags.isSet(SendToGPU))
 	    mesh->updateBuffers();
 
 	return mesh;
     }
 
-    Mesh* Mesh::makePyramid(bool generateTangentBase, bool sendToGPU)
+    Mesh* Mesh::makePyramid(Bitmask flags)
     {
 	Mesh* mesh = new Mesh();
 
@@ -341,10 +338,10 @@ namespace dbgl
 	};
 
 	// Generate tangents and bitangents
-	if (generateTangentBase)
+	if (flags.isSet(GenerateTangentBase))
 	    mesh->generateTangentBasis();
 
-	if (sendToGPU)
+	if (flags.isSet(SendToGPU))
 	    mesh->updateBuffers();
 
 	return mesh;
@@ -498,233 +495,6 @@ namespace dbgl
     {
 	glBindBuffer(target, buffer);
 	glBufferData(target, size, data, usage);
-    }
-
-    Mesh* Mesh::loadOBJ(const std::string path, bool sendToGPU, bool optimize)
-    {
-	Mesh* mesh = NULL;
-	// Read file
-	std::ifstream file;
-	file.open(path.c_str(), std::ios::in);
-	if (file.is_open())
-	{
-	    file.seekg(0, std::ios::beg);
-	    std::vector<Vec3f> vertices, normals;
-	    std::vector<Vec2f> uvs;
-	    std::vector<float> curValues;
-	    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-	    std::string token;
-	    std::string line;
-	    // Scan whole file
-	    while (file.good())
-	    {
-		// Read line
-		std::getline(file, line);
-		if (line.length() == 0) // Skip empty lines
-		    continue;
-		std::istringstream lineStream;
-		lineStream.str(line);
-		// Check first token
-		lineStream >> token;
-		if (token == "v") // Vertex definition
-		{
-		    // Read in all coordinates that follow
-		    std::vector<float> coords;
-		    float coord = 0;
-		    while (lineStream >> coord)
-		    {
-			coords.push_back(coord);
-		    }
-		    // Everything after the 3rd coordinate will be discarded, so warn
-		    if (coords.size() > 3)
-		    {
-			LOG->warning("File %s has vertex definitions with more than 3 coordinates", path.c_str());
-		    }
-		    // If less than 3 coordinates the file is misformatted
-		    else if(coords.size() < 3)
-		    {
-			LOG->error("File %s has vertex definitions with less than 3 coordinates", path.c_str());
-			file.close();
-			return NULL;
-		    }
-		    // Store vertex
-		    vertices.push_back(Vec3f(coords[0], coords[1], coords[2]));
-		}
-		else if (token == "vt") // UV definition
-		{
-		    // Read in all coordinates that follow
-		    std::vector<float> coords;
-		    float coord;
-		    while (lineStream >> coord)
-		    {
-			coords.push_back(coord);
-		    }
-		    // Everything after the 2rd coordinate will be discarded, so warn
-		    if (coords.size() > 3)
-		    {
-			LOG->warning("File %s has UV definitions with more than 3 coordinates", path.c_str());
-		    }
-		    // If less than 2 coordinates the file is misformatted
-		    else if(coords.size() < 2)
-		    {
-			LOG->error("File %s has UV definitions with less than 2 coordinates", path.c_str());
-			file.close();
-			return NULL;
-		    }
-		    // Store uv
-		    uvs.push_back(Vec2f(coords[0], coords[1]));
-		}
-		else if (token == "vn") // Normal definition
-		{
-		    // Read in all coordinates that follow
-		    std::vector<float> coords;
-		    float coord;
-		    while (lineStream >> coord)
-		    {
-			coords.push_back(coord);
-		    }
-		    // Everything after the 3rd coordinate will be discarded, so warn
-		    if (coords.size() > 3)
-		    {
-			LOG->warning("File %s has normal definitions with more than 3 coordinates", path.c_str());
-		    }
-		    // If less than 3 coordinates the file is misformatted
-		    else if(coords.size() < 3)
-		    {
-			LOG->error("File %s has normal definitions with less than 3 coordinates", path.c_str());
-			file.close();
-			return NULL;
-		    }
-		    // Store normal; normals in OBJs might not be normalized, so normalize them here
-		    normals.push_back(
-			    Vec3f(coords[0], coords[1], coords[2]).normalize());
-		}
-		else if (token == "f") // Face definition
-		{
-		    // Read in all indices
-		    std::string faceToken;
-		    for (int j = 0; lineStream >> faceToken; j++)
-		    {
-			if (j >= 3)
-			{
-			    LOG->warning("File %s contains polygons with more than 3 vertices", path.c_str());
-			    break;
-			}
-			std::string curElement;
-			std::stringstream tokenStream;
-			tokenStream.str(faceToken);
-			for (int k = 0;
-				std::getline(tokenStream, curElement, '/'); k++)
-			{
-			    if(curElement.empty())
-				continue;
-			    int curIndex;
-			    std::stringstream(curElement) >> curIndex;
-			    switch (k)
-			    {
-				case 0:
-				{
-				    vertexIndices.push_back(curIndex - 1); // OBJ indices start with 1
-				    break;
-				}
-				case 1:
-				{
-				    uvIndices.push_back(curIndex - 1);
-				    break;
-				}
-				case 2:
-				{
-				    normalIndices.push_back(curIndex - 1);
-				    break;
-				}
-				default:
-				{
-				    LOG->warning("File %s misformatted: more than 3 indices", path.c_str());
-				    break;
-				}
-			    }
-			}
-		    }
-		}
-		else
-		{
-		    // Might be a comment or some other line we can skip
-		    continue;
-		}
-	    }
-	    // Close file
-	    file.close();
-	    // Check if UVs have been read from file
-	    if(uvIndices.size() < vertexIndices.size())
-	    {
-		LOG->warning("No UVs specified in %s. This is currently not supported.", path.c_str());
-		return NULL;
-	    }
-	    // Merge to one single index and save in new mesh
-	    mesh = new Mesh();
-	    for (unsigned int i = 0; i < vertexIndices.size(); i++)
-	    {
-		// Generate normal if none has been in the file
-		Vec3f normal;
-		unsigned int vertIndex;
-		if (normalIndices.size() > i
-			&& normals.size() > normalIndices[i])
-		{
-		    // Use normal from file
-		    normal = normals[normalIndices[i]];
-		}
-		else
-		{
-		    // No normal specified in file, so generate new one
-		    unsigned int firstIndex = i / 3 * 3;
-		    Vec3f dir1 = vertices[vertexIndices[firstIndex]]
-			    - vertices[vertexIndices[firstIndex + 1]];
-		    Vec3f dir2 = vertices[vertexIndices[firstIndex + 2]]
-			    - vertices[vertexIndices[firstIndex + 1]];
-		    normal = dir2.cross(dir1).normalize();
-		}
-		// If the vertex has not been added yet, add it and the appropriate normals and uvs
-		vertIndex = mesh->getVertexIndex(vertices[vertexIndices[i]]);
-		if (vertIndex < mesh->m_vertices.size())
-		{
-		    // Vertex with similar coordinates has been found
-		    // Check if normal and UVs are compatible and average them if they are
-		    if (optimize && mesh->m_normals[vertIndex].dot(normal) < 1.3962634 &&  // < 80°
-			    mesh->m_uv[vertIndex].isSimilar(uvs[uvIndices[i]]))
-		    {
-			mesh->m_normals[vertIndex] += normal;
-			mesh->m_normals[vertIndex].normalize();
-			mesh->m_uv[vertIndex] += uvs[uvIndices[i]];
-			mesh->m_uv[vertIndex] /= 2;
-		    }
-		    else
-		    {
-			// Normal or UVs don't match, so a new vertex has to be added
-			vertIndex = mesh->m_vertices.size();
-		    }
-		}
-		if (vertIndex == mesh->m_vertices.size())
-		{
-		    // No vertex with similar coordinates has been found
-		    mesh->m_vertices.push_back(vertices[vertexIndices[i]]);
-		    if (uvIndices.size() > i && uvs.size() > uvIndices[i])
-		    {
-			mesh->m_uv.push_back(uvs[uvIndices[i]]);
-		    }
-		    mesh->m_normals.push_back(normal);
-		}
-		mesh->m_indices.push_back(vertIndex);
-	    }
-	}
-	else
-	{
-	    LOG->warning("File %s not found", path.c_str());
-	    return NULL;
-	}
-	// Send data to gl buffers
-	if (sendToGPU)
-	    mesh->updateBuffers();
-	return mesh;
     }
 }
 

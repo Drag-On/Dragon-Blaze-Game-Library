@@ -13,7 +13,7 @@
 #include "Window/WindowManager.h"
 #include "Window/SimpleWindow.h"
 #include "Rendering/RenderContext.h"
-#include "Rendering/Mesh.h"
+#include "Rendering/Mesh/Mesh.h"
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"

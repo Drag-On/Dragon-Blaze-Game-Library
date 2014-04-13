@@ -14,7 +14,7 @@
 #include "Window/WindowManager.h"
 #include "Window/SimpleWindow.h"
 #include "Rendering/RenderContext.h"
-#include "Rendering/Mesh.h"
+#include "Rendering/Mesh/Mesh.h"
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture/Texture.h"
 #include "Rendering/Camera.h"
@@ -157,7 +157,7 @@ int main()
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid();
     pMeshBox = Mesh::makeCube();
-    pMeshIco = Mesh::load("../common/Icosahedron.obj", Mesh::OBJ);
+    pMeshIco = Mesh::load(Mesh::OBJ, "../common/Icosahedron.obj");
     pShader = ShaderProgram::createSimpleShader();
     pTexture = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
     // Add update- and render callback so we can draw the mesh

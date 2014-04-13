@@ -11,13 +11,11 @@
 #ifndef MESH_H_
 #define MESH_H_
 
-#include <cstring>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
 #include <GL/glew.h>
+#include "MeshLoader.h"
+#include "OBJMeshLoader.h"
 #include "System/Log/Log.h"
+#include "System/Bitmask/Bitmask.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
 
@@ -30,13 +28,30 @@ namespace dbgl
     {
 	public:
 	    /**
-	     * @brief File types which can be loaded
+	     * @brief File types that can be loaded
 	     */
 	    enum Type
 	    {
 		OBJ, //!< OBJ
 	    };
+	    /**
+	     * @brief Flag indicating if tangents and bitangents should be generated
+	     */
+	    static const int GenerateTangentBase = 1 << 0;
+	    /**
+	     * @brief Automatically sends the loaded mesh to gpu
+	     */
+	    static const int SendToGPU = 1 << 1;
+	    /**
+	     * @brief Indicates if the mesh should be optimized (i.e. vertices that are
+	     * 	      close to each other and have normals within 80° are merged)
+	     */
+	    static const int Optimize = 1 << 2;
 
+	    /**
+	     * @brief Bare constructor. You probably want to use the factory methods.
+	     */
+	    Mesh();
 	    /**
 	     * @brief Clean up memory
 	     */
@@ -92,64 +107,56 @@ namespace dbgl
 	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
-	     * @param path Path of the file
 	     * @param type File type to load
-	     * @param generateTangentBase Flag indicating if tangents
-	     * 	      and bitangents should be generated
-	     * @param sendToGPU automatically sends the loaded mesh to gpu
-	     * @param optimize Indicates if the mesh should be optimized (i.e. vertices that are
-	     * 		       close to each other and have normals within 80° are merged)
+	     * @param path Path of the file
+	     * @param flags Parameters to pass to the loader
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
-	    static Mesh* load(const std::string path, const Type type, bool generateTangentBase =
-		    false, bool sendToGPU = true, bool optimize = true);
+	    static Mesh* load(const Type type, const std::string path,
+		    Bitmask flags = SendToGPU | Optimize);
+	    /**
+	     * @brief Loads a mesh from hard disk
+	     * @warning The allocated memory needs to be freed manually!
+	     * @param path Path of the file
+	     * @param flags Parameters to pass to the loader
+	     * @return The loaded mesh or NULL if something went wrong
+	     */
+	    template<class Loader> static Mesh* load(const std::string path,
+		    Bitmask flags = SendToGPU | Optimize);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
-	     * @param generateTangentBase Flag indicating if tangents
-	     * 	      and bitangents should be generated
-	     * @param sendToGPU automatically sends the loaded mesh to gpu
+	     * @param flags Parameters to pass to the loader
 	     * @return The triangle mesh
 	     */
-	    static Mesh* makeTriangle(bool generateTangentBase = false, bool sendToGPU = true);
+	    static Mesh* makeTriangle(Bitmask flags = SendToGPU | Optimize);
 	    /**
 	     * @brief Creates a mesh that represents a simple plane
 	     * @warning The allocated memory needs to be freed manually!
-	     * @param generateTangentBase Flag indicating if tangents
-	     * 	      and bitangents should be generated
-	     * @param sendToGPU automatically sends the loaded mesh to gpu
+	     * @param flags Parameters to pass to the loader
 	     * @return The plane mesh
 	     */
-	    static Mesh* makePlane(bool generateTangentBase = false, bool sendToGPU = true);
+	    static Mesh* makePlane(Bitmask flags = SendToGPU | Optimize);
 	    /**
 	     * @brief Creates a mesh that represents a cube
 	     * @warning The allocated memory needs to be freed manually!
-	     * @param generateTangentBase Flag indicating if tangents
-	     * 	      and bitangents should be generated
-	     * @param sendToGPU automatically sends the loaded mesh to gpu
+	     * @param flags Parameters to pass to the loader
 	     * @return The cube mesh
 	     */
-	    static Mesh* makeCube(bool generateTangentBase = false, bool sendToGPU = true);
+	    static Mesh* makeCube(Bitmask flags = SendToGPU | Optimize);
 	    /**
 	     * @brief Creates a mesh that represents a four-sided pyramid
 	     * @warning The allocated memory needs to be freed manually!
-	     * @param generateTangentBase Flag indicating if tangents
-	     * 	      and bitangents should be generated
-	     * @param sendToGPU automatically sends the loaded mesh to gpu
+	     * @p@param flags Parameters to pass to the loader
 	     * @return The pyramid mesh
 	     */
-	    static Mesh* makePyramid(bool generateTangentBase = false, bool sendToGPU = true);
+	    static Mesh* makePyramid(Bitmask flags = SendToGPU | Optimize);
 	    /**
 	     * @brief Updates GL buffers, resends vertices, uvs and normals
 	     */
 	    void updateBuffers();
-	private:
 	    /**
-	     * @brief Private constructor; use factory methods!
-	     */
-	    Mesh();
-	    /**
-	     * @brief Checks, if the mesh has a vertex with the passed coordinates
+	     * @brief Checks if the mesh has a vertex with the passed coordinates
 	     * 	      (or at least very, very similar)
 	     * @param coords Coordinates to search for
 	     * @return Index of the vertex or size if not found
@@ -159,6 +166,7 @@ namespace dbgl
 	     * @brief Generates tangents and bitangents from this mesh's normals and UVs
 	     */
 	    void generateTangentBasis();
+	private:
 	    /**
 	     * @brief Generates a gl buffer
 	     * @return Buffer identifier or GL_INVALID_VALUE if something went wrong
@@ -174,17 +182,8 @@ namespace dbgl
 	     * @param usage Expected usage, e.g. GL_STATIC_DRAW
 	     * @return Buffer identifier
 	     */
-	    static void fillBuffer(GLuint buffer, GLenum target,
-		    GLsizeiptr size, const GLvoid* data, GLenum usage);
-	    /**
-	     * @brief Loads a mesh in OBJ file format
-	     * @param path Path of the file
-	     * @param sendToGPU Indicates if the mesh should be sent to GPU immediately
-	     * @param optimize Indicates if the mesh should be optimized (i.e. vertices that are
-	     * 		       close to each other and have normals within 80° are merged)
-	     * @return The loaded mesh
-	     */
-	    static Mesh* loadOBJ(const std::string path, bool sendToGPU, bool optimize = true);
+	    static void fillBuffer(GLuint buffer, GLenum target, GLsizeiptr size,
+		    const GLvoid* data, GLenum usage);
 
 	    std::vector<unsigned short> m_indices;
 	    GLuint m_indexBuffer = GL_INVALID_VALUE;

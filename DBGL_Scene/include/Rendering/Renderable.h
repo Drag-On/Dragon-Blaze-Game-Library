@@ -11,7 +11,7 @@
 #ifndef RENDERABLE_H_
 #define RENDERABLE_H_
 
-#include "Rendering/Mesh.h"
+#include "Rendering/Mesh/Mesh.h"
 #include "Rendering/ShaderProgram.h"
 #include "Rendering/Texture/Texture.h"
 #include "Math/Vector3.h"

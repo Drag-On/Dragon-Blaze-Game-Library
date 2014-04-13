@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* TGATextureLoader::load(std::string path, Bitmask flags)
+    Texture* TGATextureLoader::load(std::string path, Bitmask /* flags */)
     {
 	GLuint texID;
 	// Read file

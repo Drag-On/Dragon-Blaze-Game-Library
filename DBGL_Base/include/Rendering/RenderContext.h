@@ -14,7 +14,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include <algorithm>
-#include "Mesh.h"
+#include "Mesh/Mesh.h"
 #include "ShaderProgram.h"
 #include "Texture/Texture.h"
 #include "System/Log/Log.h"
