@@ -11,6 +11,7 @@
 #ifndef OBJMESHLOADER_H_
 #define OBJMESHLOADER_H_
 
+#include <limits>
 #include <cstring>
 #include <vector>
 #include <string>
@@ -18,6 +19,8 @@
 #include <sstream>
 #include "Mesh.h"
 #include "MeshLoader.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
 
 namespace dbgl
 {
@@ -29,6 +32,27 @@ namespace dbgl
 	public:
 	    Mesh* load(std::string path, Bitmask flags = 0);
 	private:
+	    void clear();
+	    bool loadData(std::string path, Bitmask flags = 0);
+	    Mesh* interpret(Bitmask flags = 0);
+
+	    struct FaceComponent
+	    {
+		public:
+		    unsigned short vertexIndex = std::numeric_limits<unsigned short>::max();
+		    unsigned short uvIndex = std::numeric_limits<unsigned short>::max();
+		    unsigned short normalIndex = std::numeric_limits<unsigned short>::max();
+	    };
+	    struct Face
+	    {
+		public:
+		    FaceComponent components[3];
+	    };
+
+	    const float NormalCompatibilityAngle = 1.3962634f; // 80°
+	    std::vector<Face> m_origFaces;
+	    std::vector<Vec3f> m_origVertices, m_origNormals;
+	    std::vector<Vec2f> m_origUvs;
     };
 }
 

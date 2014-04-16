@@ -410,7 +410,7 @@ namespace dbgl
 	// TODO: Accelerate w/ more sophisticated search
 	for (unsigned int i = 0; i < m_vertices.size(); i++)
 	{
-	    if (m_vertices[i].isSimilar(coords))
+	    if (m_vertices[i].isSimilar(coords, 0.001))
 	    {
 		return i;
 	    }
