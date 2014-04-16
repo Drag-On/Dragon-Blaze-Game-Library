@@ -37,7 +37,8 @@ namespace dbgl
 	if (flags.isSet(Mesh::SendToGPU))
 	    mesh->updateBuffers();
 
-	Log::dbg << "Loaded model " << path << " with " << mesh->getIndices().size() / 3 << " faces, " << mesh->getVertices().size() << " vertices." << std::flush;
+	Log::inf << "Loaded model " << path << " with " << mesh->getIndices().size() / 3 << " faces, ";
+	Log::inf << mesh->getVertices().size() << " vertices." << std::flush;
 
 	return mesh;
     }
