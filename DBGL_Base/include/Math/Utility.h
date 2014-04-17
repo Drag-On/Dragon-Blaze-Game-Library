@@ -44,6 +44,20 @@ namespace dbgl
 	return pi() / 4;
     }
     /**
+     * @return PI / 5
+     */
+    constexpr double pi_5()
+    {
+	return pi() / 5;
+    }
+    /**
+     * @return PI / 6
+     */
+    constexpr double pi_6()
+    {
+	return pi() / 6;
+    }
+    /**
      * @return sqrt(PI)
      */
     constexpr double sqrtPi()
