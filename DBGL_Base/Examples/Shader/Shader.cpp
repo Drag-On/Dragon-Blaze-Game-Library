@@ -25,9 +25,9 @@
 using namespace dbgl;
 
 Window* pWnd;
-Mesh* pMeshPyramid, *pMeshBox, *pMeshIco, *pMeshPlane, *pMeshSphere;
+Mesh* pMeshPyramid, *pMeshBox, *pMeshIco, *pMeshPlane, *pMeshSphere, *pMeshPillar;
 ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderNoLight;
-Texture* pTexBricks, *pTexBricksNormal, *pTexBricksSpecular, *pTexWhite;
+Texture* pTexBricks, *pTexBricksNormal, *pTexBricksSpecular, *pTexWhite, *pTexMarble, *pTexMarbleNormal, *pTexMarbleSpecular;
 Camera* pCam;
 Mat4f view, projection;
 Vec3f light1Pos = Vec3f(0, 3, 3), lightColor = Vec3f(1.0f, 0.5f, 0.0f) * 15; // Orange
@@ -255,6 +255,26 @@ void renderCallback(Window::RenderEventArgs const& args)
     pShaderNorm->setUniformFloatMatrix4Array(itmId, 1, GL_FALSE, model.getInverted().transpose().getDataPointer());
     pShaderNorm->setUniformFloatMatrix4Array(itvId, 1, GL_FALSE, view.getInverted().transpose().getDataPointer());
     rc->draw(*pMeshIco);
+
+    // Bind textures
+    // Bind diffuse texture to unit 0
+    pShaderDiffSpec->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexMarble->getHandle());
+    pShaderDiffSpec->setUniformSampler(diffuseId, 0);
+    // Bind specular texture to unit 1
+    pShaderDiffSpec->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexMarbleSpecular->getHandle());
+    pShaderDiffSpec->setUniformSampler(specularId, 1);
+    // Bind normal texture to unit 2
+    pShaderDiffSpec->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexMarbleNormal->getHandle());
+    pShaderDiffSpec->setUniformSampler(normalId, 2);
+
+    // Render pillar
+    model = Mat4f::makeTranslation(-2.5, 1.2f, 2) * QuatF(Vec3f(0, 1, 0), pi_5());
+    mvp = projection * view * model;
+    pShaderNorm->setUniformFloatMatrix4Array(mId, 1, GL_FALSE, model.getDataPointer());
+    pShaderNorm->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE, mvp.getDataPointer());
+    pShaderNorm->setUniformFloatMatrix4Array(itmId, 1, GL_FALSE, model.getInverted().transpose().getDataPointer());
+    pShaderNorm->setUniformFloatMatrix4Array(itvId, 1, GL_FALSE, view.getInverted().transpose().getDataPointer());
+    rc->draw(*pMeshPillar);
 }
 
 int main()
@@ -274,6 +294,7 @@ int main()
     pMeshPlane = Mesh::makePlane();
     pMeshIco = Mesh::load(Mesh::OBJ,"../common/Icosahedron.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pMeshSphere = Mesh::load(Mesh::OBJ,"../common/Sphere.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+    pMeshPillar = Mesh::load(Mesh::OBJ, "../common/Pillar.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pShaderNoLight = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
     pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
     pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
@@ -281,6 +302,9 @@ int main()
     pTexBricksNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
     pTexBricksSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
     pTexWhite = Texture::load(Texture::BOGUS, "");
+    pTexMarble = Texture::load(Texture::DDS, "../common/Marble_Cream_01_Diffuse.DDS", Texture::FlipVertically);
+    pTexMarbleNormal = Texture::load(Texture::TGA, "../common/Marble_Cream_01_Normal.tga");
+    pTexMarbleSpecular = Texture::load(Texture::TGA, "../common/Marble_Cream_01_Specular.tga");
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
@@ -299,6 +323,7 @@ int main()
     delete pMeshIco;
     delete pMeshPlane;
     delete pMeshSphere;
+    delete pMeshPillar;
     delete pShaderNoLight;
     delete pShaderDiffSpec;
     delete pShaderNorm;
@@ -306,6 +331,9 @@ int main()
     delete pTexBricksNormal;
     delete pTexBricksSpecular;
     delete pTexWhite;
+    delete pTexMarble;
+    delete pTexMarbleNormal;
+    delete pTexMarbleSpecular;
     delete pCam;
     // delete pWnd; // No need for this as windows will delete themselves when closed
     // Free remaining internal resources
