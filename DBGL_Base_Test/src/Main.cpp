@@ -9,8 +9,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <cstdio>
-#include "DBGL_Base_Config.h"
-#include "System/Log/Log.h"
+#include "DBGL/DBGL_Base_Config.h"
+#include "DBGL/System/Log/Log.h"
 
 int testLog();
 int testVector2();
@@ -22,7 +22,6 @@ int testMatrix3x3();
 int testMatrix4x4();
 int testMatrix();
 int testQuaternion();
-int testWindow();
 int testProperties();
 int testBitmask();
 
@@ -41,7 +40,6 @@ int main()
 	testMatrix4x4();
 	testMatrix();
 	testQuaternion();
-	//testWindow();
 	testProperties();
 	testBitmask();
 

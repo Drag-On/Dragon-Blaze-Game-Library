@@ -13,11 +13,11 @@
 
 #include <cstdio>
 #include <cassert>
-#include "System/Log/Log.h"
-#include "Math/Quaternion.h"
-#include "Math/Matrix4x4.h"
-#include "Math/Vector4.h"
-#include "Math/Utility.h"
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/Math/Quaternion.h"
+#include "DBGL/Math/Matrix4x4.h"
+#include "DBGL/Math/Vector4.h"
+#include "DBGL/Math/Utility.h"
 
 using namespace dbgl;
 

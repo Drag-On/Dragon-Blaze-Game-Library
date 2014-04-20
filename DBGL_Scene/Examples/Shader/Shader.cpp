@@ -10,21 +10,21 @@
 
 #include <functional>
 #include <cmath>
-#include "System/Log/Log.h"
-#include "Window/WindowManager.h"
-#include "Window/SimpleSceneWindow.h"
-#include "Rendering/RenderContext.h"
-#include "Rendering/SceneRenderContext.h"
-#include "Rendering/Mesh/Mesh.h"
-#include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture/Texture.h"
-#include "Rendering/Camera.h"
-#include "Rendering/Renderable.h"
-#include "Rendering/Viewport.h"
-#include "Entity/Entity.h"
-#include "Math/Vector3.h"
-#include "Math/Utility.h"
-#include "Math/Quaternion.h"
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/Window/WindowManager.h"
+#include "DBGL/Window/SimpleSceneWindow.h"
+#include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Rendering/SceneRenderContext.h"
+#include "DBGL/Rendering/Mesh/Mesh.h"
+#include "DBGL/Rendering/ShaderProgram.h"
+#include "DBGL/Rendering/Texture/Texture.h"
+#include "DBGL/Rendering/Camera.h"
+#include "DBGL/Rendering/Renderable.h"
+#include "DBGL/Rendering/Viewport.h"
+#include "DBGL/Entity/Entity.h"
+#include "DBGL/Math/Vector3.h"
+#include "DBGL/Math/Utility.h"
+#include "DBGL/Math/Quaternion.h"
 
 using namespace dbgl;
 

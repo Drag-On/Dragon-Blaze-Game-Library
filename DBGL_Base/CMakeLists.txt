@@ -53,8 +53,8 @@ endif()
 ### Make header file
 ######################################################################
 configure_file (
-	"${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h.in"
-	"${DBGL_INCLUDE_DIR}/DBGL_Base_Config.h"
+	"${DBGL_INCLUDE_DIR}/DBGL/DBGL_Base_Config.h.in"
+	"${DBGL_INCLUDE_DIR}/DBGL/DBGL_Base_Config.h"
 )
 
 ######################################################################

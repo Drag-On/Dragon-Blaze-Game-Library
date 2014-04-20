@@ -14,8 +14,8 @@
 #include <cstdio>
 #include <cassert>
 #include <cmath>
-#include "System/Log/Log.h"
-#include "Math/Vector2.h"
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/Math/Vector2.h"
 
 using namespace dbgl;
 

@@ -9,15 +9,15 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <functional>
-#include "System/Log/Log.h"
-#include "Window/WindowManager.h"
-#include "Window/SimpleWindow.h"
-#include "Rendering/RenderContext.h"
-#include "Rendering/Mesh/Mesh.h"
-#include "Rendering/ShaderProgram.h"
-#include "Rendering/Texture/Texture.h"
-#include "Rendering/Camera.h"
-#include "Math/Utility.h"
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/Window/WindowManager.h"
+#include "DBGL/Window/SimpleWindow.h"
+#include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Rendering/Mesh/Mesh.h"
+#include "DBGL/Rendering/ShaderProgram.h"
+#include "DBGL/Rendering/Texture/Texture.h"
+#include "DBGL/Rendering/Camera.h"
+#include "DBGL/Math/Utility.h"
 
 using namespace dbgl;
 

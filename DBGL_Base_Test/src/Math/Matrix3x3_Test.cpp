@@ -14,9 +14,9 @@
 #include <cstdio>
 #include <cassert>
 #include <cmath>
-#include "System/Log/Log.h"
-#include "Math/Matrix3x3.h"
-#include "Math/Vector3.h"
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/Math/Matrix3x3.h"
+#include "DBGL/Math/Vector3.h"
 
 using namespace dbgl;
 
