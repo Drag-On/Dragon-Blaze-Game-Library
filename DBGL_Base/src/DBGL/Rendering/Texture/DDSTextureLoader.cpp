@@ -35,11 +35,15 @@ namespace dbgl
 		// Read header
 		char header[124];
 		file.read(header, 124);
-		unsigned int height = *(unsigned int*) &(header[8]);
-		unsigned int width = *(unsigned int*) &(header[12]);
-		unsigned int linearSize = *(unsigned int*) &(header[16]);
-		unsigned int mipMapCount = *(unsigned int*) &(header[24]);
-		unsigned int fourCC = *(unsigned int*) &(header[80]);
+		unsigned int height = 0, width = 0, linearSize = 0, mipMapCount = 0, fourCC = 0;
+		for(int i = 0; i < 4; i++)
+		{
+		    height = (height << 8) | header[8 + i];
+		    width = (width << 8) | header[12 + i];
+		    linearSize = (linearSize << 8) | header[16 + i];
+		    mipMapCount = (mipMapCount << 8) | header[24 + i];
+		    fourCC = (fourCC << 8) | header[80 + i];
+		}
 		// Read mipmaps
 		unsigned int bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
 		char* buffer = new char[bufsize];

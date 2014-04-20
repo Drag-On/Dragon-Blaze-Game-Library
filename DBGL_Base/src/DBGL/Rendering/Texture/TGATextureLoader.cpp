@@ -19,8 +19,8 @@ namespace dbgl
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
 	char* image = NULL;
-	unsigned short int width, height;
-	int colorMode;
+	unsigned short int width = 0, height = 0;
+	int colorMode = 0;
 	if (file.is_open())
 	{
 	    file.seekg(0, std::ios::beg);
@@ -52,18 +52,22 @@ namespace dbgl
 		}
 		else
 		{
-//		    // Palette start, usually 0
-//		    unsigned short int paletteStart = *(unsigned short int*) &header[3];
-//		    // Amount of colors in palette
-//		    unsigned short int paletteLength = *(unsigned short int*) &header[5];
+//		    unsigned short int paletteStart = 0, paletteLength = 0, originX = 0, originY = 0;
+		    for(int i = 0; i < 2; i++)
+		    {
+//			// Palette start, usually 0
+//			paletteStart = (paletteStart << 8) | header[3 + i];
+//			// Amount of colors in palette
+//			paletteLength = (paletteLength << 8) | header[5 + i];
+//			// Coordinates for origin
+//			originX = (originX << 8) | header[8 + i];
+//			originY = (originY) | header[10 + i];
+			// Image resolution
+			width = (width << 8) | header[12 + i];
+			height = (height << 8) | header[14 + i];
+		    }
 //		    // Size of one palette entry
 //		    unsigned char paletteEntrySize = header[7];
-//		    // Coordinates for origin
-//		    unsigned short int originX = *(unsigned short int*) &header[8];
-//		    unsigned short int originY = *(unsigned short int*) &header[10];
-		    // Image resolution
-		    width = *(unsigned short int*) &header[12];
-		    height = *(unsigned short int*) &header[14];
 		    // Bits per pixel
 		    unsigned char bitDepth = header[16];
 		    // Attribute byte
