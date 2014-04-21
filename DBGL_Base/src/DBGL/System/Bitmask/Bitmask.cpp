@@ -75,7 +75,7 @@ namespace dbgl
     void Bitmask::set(int mask)
     {
 	Bitmask other(mask);
-	for(unsigned int i = 0; i < other.m_length; i++)
+	for(unsigned int i = 0; i < other.getSize(); i++)
 	{
 	    if(other.get(i))
 		set(i);
@@ -101,7 +101,7 @@ namespace dbgl
     void Bitmask::clear(int mask)
     {
 	Bitmask other(mask);
-	for(unsigned int i = 0; i < other.m_length; i++)
+	for(unsigned int i = 0; i < other.getSize(); i++)
 	{
 	    if(other.get(i))
 		clear(i);
@@ -127,7 +127,7 @@ namespace dbgl
     void Bitmask::toggle(int mask)
     {
 	Bitmask other(mask);
-	for(unsigned int i = 0; i < other.m_length; i++)
+	for(unsigned int i = 0; i < other.getSize(); i++)
 	{
 	    if(other.get(i))
 		toggle(i);
