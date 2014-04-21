@@ -30,8 +30,9 @@ namespace dbgl
     class OBJMeshLoader: public MeshLoader
     {
 	public:
-	    Mesh* load(std::string path, Bitmask flags = 0);
-	private:
+	    virtual Mesh* load(std::string path, Bitmask flags = 0);
+	    void setNormalCompatibilityAngle(float angle);
+	protected:
 	    void clear();
 	    bool loadData(std::string path, Bitmask flags = 0);
 	    Mesh* interpret(Bitmask flags = 0);
@@ -49,7 +50,7 @@ namespace dbgl
 		    FaceComponent components[3];
 	    };
 
-	    const float NormalCompatibilityAngle = 1.3962634f; // 80°
+	    float m_normalCompatibilityAngle = 1.3962634f; // 80°
 	    std::vector<Face> m_origFaces;
 	    std::vector<Vec3f> m_origVertices, m_origNormals;
 	    std::vector<Vec2f> m_origUvs;

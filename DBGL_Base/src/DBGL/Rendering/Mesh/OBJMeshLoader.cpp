@@ -43,6 +43,11 @@ namespace dbgl
 	return mesh;
     }
 
+    void OBJMeshLoader::setNormalCompatibilityAngle(float angle)
+    {
+	m_normalCompatibilityAngle = angle;
+    }
+
     void OBJMeshLoader::clear()
     {
 	m_origFaces.clear();
@@ -257,7 +262,7 @@ namespace dbgl
 			theta = 1.0f;
 		    auto angle = std::acos(theta);
 		    bool uvCompatibility = useUv ? mesh->uvs()[vertIndex].isSimilar(uv, 0.01) : true;
-		    if ((angle < NormalCompatibilityAngle) && uvCompatibility)
+		    if ((angle < m_normalCompatibilityAngle) && uvCompatibility)
 		    {
 			auto prev = mesh->normals()[vertIndex];
 
