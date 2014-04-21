@@ -72,6 +72,16 @@ namespace dbgl
 	}
     }
 
+    void Bitmask::set(int mask)
+    {
+	Bitmask other(mask);
+	for(unsigned int i = 0; i < other.m_length; i++)
+	{
+	    if(other.get(i))
+		set(i);
+	}
+    }
+
     void Bitmask::clear(unsigned int index)
     {
 	if (getSize() > index)
@@ -88,6 +98,16 @@ namespace dbgl
 	}
     }
 
+    void Bitmask::clear(int mask)
+    {
+	Bitmask other(mask);
+	for(unsigned int i = 0; i < other.m_length; i++)
+	{
+	    if(other.get(i))
+		clear(i);
+	}
+    }
+
     void Bitmask::toggle(unsigned int index)
     {
 	if (getSize() > index)
@@ -101,6 +121,16 @@ namespace dbgl
 	    std::stringstream msg;
 	    msg << "Bit index out of bounds: " << index;
 	    throw std::out_of_range(msg.str());
+	}
+    }
+
+    void Bitmask::toggle(int mask)
+    {
+	Bitmask other(mask);
+	for(unsigned int i = 0; i < other.m_length; i++)
+	{
+	    if(other.get(i))
+		toggle(i);
 	}
     }
 

@@ -61,15 +61,30 @@ namespace dbgl
 	     */
 	    void set(unsigned int index);
 	    /**
+	     * @brief Sets all bits set in mask, leaving the others unchanged
+	     * @param mask Indicates which bits to set
+	     */
+	    void set(int mask);
+	    /**
 	     * @brief Clears a certain bit
 	     * @param index Index of the bit to clear
 	     */
 	    void clear(unsigned int index);
 	    /**
+	     * @brief Clears all bits set in mask, leaving others unchanged
+	     * @param mask Indicates which bits to clear
+	     */
+	    void clear(int mask);
+	    /**
 	     * @brief Toggles a certain bit
 	     * @param index Index of the bit to toggle
 	     */
 	    void toggle(unsigned int index);
+	    /**
+	     * @brief Toggles all bits set in mask, leaving others unchanged
+	     * @param mask Indicates which bits to toggle
+	     */
+	    void toggle(int mask);
 	    /**
 	     * @brief Gets the state of a certain bit
 	     * @param index Index of the bit to get
