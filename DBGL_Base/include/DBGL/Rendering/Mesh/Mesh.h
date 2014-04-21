@@ -124,6 +124,16 @@ namespace dbgl
 	    template<class Loader> static Mesh* load(const std::string path,
 		    Bitmask flags = SendToGPU | Optimize);
 	    /**
+	     * @brief Loads a mesh from hard disk
+	     * @warning The allocated memory needs to be freed manually!
+	     * @param loader Loader to use
+	     * @param path Path of the file
+	     * @param flags Parameters to pass to the loader
+	     * @return The loaded mesh or NULL if something went wrong
+	     */
+	    static Mesh* load(MeshLoader& loader, const std::string path,
+		    Bitmask flags = SendToGPU | Optimize);
+	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param flags Parameters to pass to the loader

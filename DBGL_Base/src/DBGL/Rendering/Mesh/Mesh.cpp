@@ -110,6 +110,11 @@ namespace dbgl
 	return Loader().load(path, flags);
     }
 
+    Mesh* Mesh::load(MeshLoader& loader, const std::string path, Bitmask flags)
+    {
+	return loader.load(path, flags);
+    }
+
     Mesh* Mesh::makeTriangle(Bitmask flags)
     {
 	Mesh* mesh = new Mesh();
