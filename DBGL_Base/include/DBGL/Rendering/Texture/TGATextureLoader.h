@@ -14,8 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "TextureLoader.h"
-#include "BogusTextureLoader.h"
+#include "Texture.h"
 
 namespace dbgl
 {
@@ -30,7 +29,5 @@ namespace dbgl
 	private:
     };
 }
-
-
 
 #endif /* TGATEXTURELOADER_H_ */

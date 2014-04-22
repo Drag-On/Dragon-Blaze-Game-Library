@@ -14,7 +14,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "BogusTextureLoader.h"
 #include "Texture.h"
 
 namespace dbgl
