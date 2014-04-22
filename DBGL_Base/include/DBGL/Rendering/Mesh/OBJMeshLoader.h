@@ -30,12 +30,12 @@ namespace dbgl
     class OBJMeshLoader: public MeshLoader
     {
 	public:
-	    virtual Mesh* load(std::string path, Bitmask flags = 0);
+	    virtual Mesh* load(std::string path, Bitmask<> flags = 0);
 	    void setNormalCompatibilityAngle(float angle);
 	protected:
 	    void clear();
-	    bool loadData(std::string path, Bitmask flags = 0);
-	    Mesh* interpret(Bitmask flags = 0);
+	    bool loadData(std::string path, Bitmask<> flags = 0);
+	    Mesh* interpret(Bitmask<> flags = 0);
 
 	    struct FaceComponent
 	    {

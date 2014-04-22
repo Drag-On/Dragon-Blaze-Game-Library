@@ -31,7 +31,7 @@ namespace dbgl
 	     * @param flags Special behavior that may be requested from the loader
 	     * @return The loaded texture if everything went right, otherwise NULL
 	     */
-	    virtual Texture* load(std::string path, Bitmask flags = 0) = 0;
+	    virtual Texture* load(std::string path, Bitmask<> flags = 0) = 0;
 	private:
     };
 }

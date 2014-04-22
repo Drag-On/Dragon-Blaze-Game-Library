@@ -11,6 +11,7 @@
 #include <functional>
 #include <cmath>
 #include "DBGL/System/Log/Log.h"
+#include "DBGL/System/Bitmask/Bitmask.h"
 #include "DBGL/Window/WindowManager.h"
 #include "DBGL/Window/SimpleWindow.h"
 #include "DBGL/Rendering/RenderContext.h"

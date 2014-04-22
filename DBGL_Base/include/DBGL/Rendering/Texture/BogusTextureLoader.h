@@ -23,7 +23,7 @@ namespace dbgl
     class BogusTextureLoader: public TextureLoader
     {
 	public:
-	    Texture* load(std::string path, Bitmask flags = 0);
+	    Texture* load(std::string path, Bitmask<> flags = 0);
 	private:
     };
 }

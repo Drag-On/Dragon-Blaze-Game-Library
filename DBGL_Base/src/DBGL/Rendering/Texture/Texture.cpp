@@ -27,7 +27,7 @@ namespace dbgl
 	return m_textureId;
     }
 
-    template <class Loader> Texture* Texture::load(const std::string path, Bitmask flags)
+    template <class Loader> Texture* Texture::load(const std::string path, Bitmask<> flags)
     {
 	Loader loader;
 	Texture* pTex = loader.load(path, flags);
@@ -38,7 +38,7 @@ namespace dbgl
 	return pTex;
     }
 
-    Texture* Texture::load(const Type type, const std::string path, Bitmask flags)
+    Texture* Texture::load(const Type type, const std::string path, Bitmask<> flags)
     {
 	switch (type)
 	{

@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Mesh* OBJMeshLoader::load(std::string path, Bitmask flags)
+    Mesh* OBJMeshLoader::load(std::string path, Bitmask<> flags)
     {
 	clear();
 
@@ -56,7 +56,7 @@ namespace dbgl
 	m_origNormals.clear();
     }
 
-    bool OBJMeshLoader::loadData(std::string path, Bitmask /* flags */)
+    bool OBJMeshLoader::loadData(std::string path, Bitmask<> /* flags */)
     {
 	// Read file
 	std::ifstream file;
@@ -206,7 +206,7 @@ namespace dbgl
 	}
     }
 
-    Mesh* OBJMeshLoader::interpret(Bitmask flags)
+    Mesh* OBJMeshLoader::interpret(Bitmask<> flags)
     {
 	// Merge to one single index and save in new mesh
 	auto mesh = new Mesh();

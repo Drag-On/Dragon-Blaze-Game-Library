@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* TGATextureLoader::load(std::string path, Bitmask /* flags */)
+    Texture* TGATextureLoader::load(std::string path, Bitmask<> /* flags */)
     {
 	GLuint texID;
 	// Read file
@@ -53,19 +53,12 @@ namespace dbgl
 		else
 		{
 //		    unsigned short int paletteStart = 0, paletteLength = 0, originX = 0, originY = 0;
-		    for(int i = 0; i < 2; i++)
-		    {
-//			// Palette start, usually 0
-//			paletteStart = (paletteStart << 8) | header[3 + i];
-//			// Amount of colors in palette
-//			paletteLength = (paletteLength << 8) | header[5 + i];
-//			// Coordinates for origin
-//			originX = (originX << 8) | header[8 + i];
-//			originY = (originY) | header[10 + i];
-			// Image resolution
-			width = (width << 8) | header[12 + i];
-			height = (height << 8) | header[14 + i];
-		    }
+//		    paletteStart = (header[3]<<0) | (header[4]<<8);
+//		    paletteLength = (header[5]<<0) | (header[6]<<8);
+//		    originX = (header[8]<<0) | (header[9]<<8);
+//		    originY = (header[10]<<0) | (header[11]<<8);
+		    width = (header[12]<<0) | (header[13]<<8);
+		    height = (header[14]<<0) | (header[15]<<8);
 //		    // Size of one palette entry
 //		    unsigned char paletteEntrySize = header[7];
 		    // Bits per pixel

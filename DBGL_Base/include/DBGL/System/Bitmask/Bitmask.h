@@ -11,97 +11,56 @@
 #ifndef BITMASK_H_
 #define BITMASK_H_
 
-#include <stdexcept>
-#include <sstream>
 #include <string>
-#include <stdlib.h>
-#include <string.h>
 #include <cmath>
 
 namespace dbgl
 {
     /**
      * @brief Bitmask of arbitrary size, designed to store flags
+     * @details Per default the bitmask uses unsigned integers to store flags. Integers
+     * 		usually have 4 bytes and thus can store 4 * 8 = 32 flags. If more or less
+     * 		flags are needed, one can create a bitmask with a different underlying
+     * 		datatype, e.g. char or long int
      */
-    class Bitmask
+    template <typename T = unsigned int> class Bitmask
     {
 	public:
 	    /**
 	     * @brief Constructs a bitmask of the size of an int
 	     * @param bits Interprets the int as flags
 	     */
-	    Bitmask(int bits = 0);
-	    /**
-	     * @brief Constructs a bitmask from a string
-	     * @param bits String to interpret as bits
-	     */
-	    Bitmask(std::string bits);
-	    /**
-	     * @brief Constructs a bitmask from the bits set in bits
-	     * @param bits Char array that is interpreted as bitmask
-	     * @param length Length of the array
-	     */
-	    Bitmask(char* bits, unsigned int length);
+	    Bitmask(T const& mask = 0);
 	    /**
 	     * @brief Copies another bitmask
 	     * @param other Bitmask to copy
 	     */
-	    Bitmask(Bitmask const& other);
-	    /**
-	     * @brief Destructor
-	     */
-	    ~Bitmask();
+	    Bitmask(Bitmask<T> const& other);
 	    /**
 	     * @return Amount of usable bits
 	     */
 	    unsigned int getSize() const;
 	    /**
-	     * @brief Sets a certain bit
-	     * @param index Index of the bit to set
-	     */
-	    void set(unsigned int index);
-	    /**
 	     * @brief Sets all bits set in mask, leaving the others unchanged
 	     * @param mask Indicates which bits to set
 	     */
-	    void set(int mask);
-	    /**
-	     * @brief Clears a certain bit
-	     * @param index Index of the bit to clear
-	     */
-	    void clear(unsigned int index);
+	    void set(Bitmask<T> mask);
 	    /**
 	     * @brief Clears all bits set in mask, leaving others unchanged
 	     * @param mask Indicates which bits to clear
 	     */
-	    void clear(int mask);
-	    /**
-	     * @brief Toggles a certain bit
-	     * @param index Index of the bit to toggle
-	     */
-	    void toggle(unsigned int index);
+	    void clear(Bitmask<T> mask);
 	    /**
 	     * @brief Toggles all bits set in mask, leaving others unchanged
 	     * @param mask Indicates which bits to toggle
 	     */
-	    void toggle(int mask);
-	    /**
-	     * @brief Gets the state of a certain bit
-	     * @param index Index of the bit to get
-	     * @return True in case the bit is set, otherwise false
-	     */
-	    bool get(unsigned int index) const;
+	    void toggle(Bitmask<T> mask);
 	    /**
 	     * @brief Checks if the passed bitmask is set
 	     * @param bit bitmask
 	     * @return True in case all bits set in the mask are set
 	     */
-	    bool isSet(int mask) const;
-	    /**
-	     * @brief Replaces all bits with content from the string
-	     * @param bits String to parse
-	     */
-	    void fromString(std::string bits);
+	    bool isSet(Bitmask<T> mask) const;
 	    /**
 	     * @brief Converts this bitmask to a readable string
 	     * @return The bitmask formatted as a string
@@ -112,23 +71,23 @@ namespace dbgl
 	     * @param rhs
 	     * @return Reference to this bitmask
 	     */
-	    Bitmask& operator=(Bitmask const& rhs);
+	    Bitmask<T>& operator=(Bitmask<T> const& rhs);
 	    /**
-	     * @brief Interprets the char as a bitmask of size sizeof(char)
+	     * @brief Interprets rhs as a bitmask
 	     * @param rhs Bitmask to copy
 	     * @return Reference to this bitmask
 	     */
-	    Bitmask& operator=(char const& rhs);
+	    Bitmask<T>& operator=(T const& rhs);
 	    /**
-	     * @brief Interprets the int as a bitmask of size sizeof(int)
-	     * @param rhs Bitmask to copy
-	     * @return Reference to this bitmask
+	     * @brief Allows for implicit conversion to T
+	     * @return The base representation of this bitfield
 	     */
-	    Bitmask& operator=(int const& rhs);
+	    operator T();
 	private:
-	    char* m_pData;
-	    unsigned int m_length;
+	    T m_data;
     };
 }
+
+#include "Bitmask.imp"
 
 #endif /* BITMASK_H_ */

@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* DDSTextureLoader::load(std::string path, Bitmask flags)
+    Texture* DDSTextureLoader::load(std::string path, Bitmask<> flags)
     {
 	GLuint texID;
 	// Read file
@@ -35,15 +35,11 @@ namespace dbgl
 		// Read header
 		char header[124];
 		file.read(header, 124);
-		unsigned int height = 0, width = 0, linearSize = 0, mipMapCount = 0, fourCC = 0;
-		for(int i = 0; i < 4; i++)
-		{
-		    height = (height << 8) | header[8 + i];
-		    width = (width << 8) | header[12 + i];
-		    linearSize = (linearSize << 8) | header[16 + i];
-		    mipMapCount = (mipMapCount << 8) | header[24 + i];
-		    fourCC = (fourCC << 8) | header[80 + i];
-		}
+		unsigned int height = (header[8]<<0) | (header[9]<<8) | (header[10]<<16) | (header[11]<<24);
+		unsigned int width = (header[12]<<0) | (header[13]<<8) | (header[14]<<16) | (header[15]<<24);
+		unsigned int linearSize = (header[16]<<0) | (header[17]<<8) | (header[18]<<16) | (header[19]<<24);
+		unsigned int mipMapCount = (header[24]<<0) | (header[25]<<8) | (header[26]<<16) | (header[27]<<24);
+		unsigned int fourCC = (header[80]<<0) | (header[81]<<8) | (header[82]<<16) | (header[83]<<24);
 		// Read mipmaps
 		unsigned int bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
 		char* buffer = new char[bufsize];

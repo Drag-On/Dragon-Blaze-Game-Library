@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* BogusTextureLoader::load(std::string /* path */, Bitmask /* flags */)
+    Texture* BogusTextureLoader::load(std::string /* path */, Bitmask<> /* flags */)
     {
 	GLuint texID;
 	glGenTextures(1, &texID);

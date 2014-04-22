@@ -26,7 +26,7 @@ namespace dbgl
     {
 	public:
 	    virtual ~TGATextureLoader() {};
-	    virtual Texture* load(std::string path, Bitmask flags = 0);
+	    virtual Texture* load(std::string path, Bitmask<> flags = 0);
 	private:
     };
 }

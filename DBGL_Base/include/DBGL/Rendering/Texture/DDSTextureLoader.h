@@ -29,7 +29,7 @@ namespace dbgl
     {
 	public:
 	    virtual ~DDSTextureLoader() {};
-	    virtual Texture* load(std::string path, Bitmask flags = 0);
+	    virtual Texture* load(std::string path, Bitmask<> flags = 0);
 	private:
 	    /**
 	     * @brief Vertically flips a dds image (i.e. one mip map level)

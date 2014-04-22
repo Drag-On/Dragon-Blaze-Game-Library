@@ -101,7 +101,7 @@ namespace dbgl
 	     * @param options Bitmask indicating which options are set. Accounts for
 	     * 		      DepthTest, AlphaBlend & FaceCulling
 	     */
-	    void init(Bitmask options = DepthTest | FaceCulling);
+	    void init(Bitmask<> options = DepthTest | FaceCulling);
 	    /**
 	     * @brief Makes this window show
 	     */

@@ -89,7 +89,7 @@ namespace dbgl
 	return m_bitangents;
     }
 
-    Mesh* Mesh::load(const Type type, const std::string path, Bitmask flags)
+    Mesh* Mesh::load(const Type type, const std::string path, Bitmask<> flags)
     {
 	switch (type)
 	{
@@ -105,17 +105,17 @@ namespace dbgl
 	}
     }
 
-    template<class Loader> Mesh* Mesh::load(const std::string path, Bitmask flags)
+    template<class Loader> Mesh* Mesh::load(const std::string path, Bitmask<> flags)
     {
 	return Loader().load(path, flags);
     }
 
-    Mesh* Mesh::load(MeshLoader& loader, const std::string path, Bitmask flags)
+    Mesh* Mesh::load(MeshLoader& loader, const std::string path, Bitmask<> flags)
     {
 	return loader.load(path, flags);
     }
 
-    Mesh* Mesh::makeTriangle(Bitmask flags)
+    Mesh* Mesh::makeTriangle(Bitmask<> flags)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -140,7 +140,7 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makePlane(Bitmask flags)
+    Mesh* Mesh::makePlane(Bitmask<> flags)
     {
 	Mesh* mesh = new Mesh();
 	mesh->m_vertices =
@@ -165,7 +165,7 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makeCube(Bitmask flags)
+    Mesh* Mesh::makeCube(Bitmask<> flags)
     {
 	Mesh* mesh = new Mesh();
 
@@ -265,7 +265,7 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makePyramid(Bitmask flags)
+    Mesh* Mesh::makePyramid(Bitmask<> flags)
     {
 	Mesh* mesh = new Mesh();
 

@@ -31,7 +31,7 @@ namespace dbgl
 	     * @param flags Special behavior that may be requested from the loader
 	     * @return The loaded mesh if everything went right, otherwise NULL
 	     */
-	    virtual Mesh* load(std::string path, Bitmask flags = 0) = 0;
+	    virtual Mesh* load(std::string path, Bitmask<> flags = 0) = 0;
 	private:
     };
 }

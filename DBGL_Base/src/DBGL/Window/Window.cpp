@@ -104,7 +104,7 @@ namespace dbgl
 	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
     }
 
-    void Window::init(Bitmask options)
+    void Window::init(Bitmask<> options)
     {
 	makeCurrent();
 
