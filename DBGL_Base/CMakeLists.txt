@@ -79,6 +79,9 @@ file(GLOB_RECURSE BASE_SRC
 ######################################################################
 ### Add target for doxygen
 ######################################################################
+if(NOT DEFINED GRAPHVIZ_INSTALLED)
+	set(GRAPHVIZ_INSTALLED NO)
+endif(NOT DEFINED GRAPHVIZ_INSTALLED)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 	configure_file(
