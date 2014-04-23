@@ -11,6 +11,8 @@
 #ifndef MESH_H_
 #define MESH_H_
 
+#include <stdexcept>
+#include <sstream>
 #include <GL/glew.h>
 #include "MeshLoader.h"
 #include "OBJMeshLoader.h"
@@ -176,6 +178,16 @@ namespace dbgl
 	     * @brief Generates tangents and bitangents from this mesh's normals and UVs
 	     */
 	    void generateTangentBasis();
+	    /**
+	     * @brief Removes a vertex and all faces using that vertex from the mesh
+	     * @param i Index of the vertex to remove
+	     * @note This method does not update the buffers automatically, so you
+	     * 	     probably want to do that on your own.
+	     * @warning The internal data representation isn't very well suited for
+	     * 		removal of vertices, thus this method might take quite a long
+	     * 		time to finish.
+	     */
+	    void removeVertex(unsigned short i);
 	private:
 	    /**
 	     * @brief Generates a gl buffer

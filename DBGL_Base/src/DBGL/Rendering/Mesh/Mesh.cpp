@@ -488,6 +488,63 @@ namespace dbgl
 	}
     }
 
+    void Mesh::removeVertex(unsigned short i)
+    {
+	// Check if i is valid
+	if (i >= m_vertices.size())
+	{
+	    std::stringstream msg;
+	    msg << "Vertex index out of bounds: " << i;
+	    throw std::out_of_range(msg.str());
+	}
+
+	// Remove vertex from list
+	auto itVertex = m_vertices.begin() + i;
+	m_vertices.erase(itVertex);
+	if (i < m_normals.size())
+	{
+	    auto itNormal = m_normals.begin() + i;
+	    m_normals.erase(itNormal);
+	}
+	if (i < m_uv.size())
+	{
+	    auto itUv = m_uv.begin() + i;
+	    m_uv.erase(itUv);
+	}
+	if (i < m_tangents.size())
+	{
+	    auto itTangent = m_tangents.begin() + i;
+	    m_tangents.erase(itTangent);
+	}
+	if (i < m_bitangents.size())
+	{
+	    auto itBitangent = m_bitangents.begin() + i;
+	    m_bitangents.erase(itBitangent);
+	}
+	// The previous operation modified the indices of all vertices after the removed one,
+	// thus we need to decrement every index greater than the removed one. Also every face
+	// using the removed vertex needs to be removed as well
+	for(auto it = m_indices.begin(); it != m_indices.end(); ++it)
+	{
+	    if(*it == i)
+	    {
+		unsigned int curIndex = it - m_indices.begin();
+		unsigned int mod = curIndex % 3;
+		for (unsigned int i = 0; i < mod; i++)
+		    --it;
+		it = m_indices.erase(it);
+		it = m_indices.erase(it);
+		it = m_indices.erase(it);
+	    }
+	    if(it == m_indices.end())
+		break;
+	    if (*it > i)
+	    {
+		(*it)--;
+	    }
+	}
+    }
+
     GLuint Mesh::generateBuffer()
     {
 	GLuint buffer;
