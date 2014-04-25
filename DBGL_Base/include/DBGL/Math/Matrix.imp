@@ -33,12 +33,12 @@ namespace dbgl
 	{
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> int Matrix<T,N,M>::getWidth() const
+	template<typename T, unsigned int N, unsigned int M> int Matrix<T,N,M>::getWidth()
 	{
 		return N;
 	}
 	
-	template<typename T, unsigned int N, unsigned int M> int Matrix<T,N,M>::getHeight() const
+	template<typename T, unsigned int N, unsigned int M> int Matrix<T,N,M>::getHeight()
 	{
 		return M;
 	}

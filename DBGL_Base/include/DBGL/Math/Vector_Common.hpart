@@ -20,11 +20,10 @@
 //////////////////////////////////////////////////////////////////////
 
 public:
-    // Methods
 	/// <summary>
 	/// @brief Returns the dimension of this vector
 	/// </summary>
-	std::size_t getDimension() const;
+	static std::size_t getDimension();
 	/// <summary>
 	/// @brief Returns the squared length of this vector
 	/// </summary>
