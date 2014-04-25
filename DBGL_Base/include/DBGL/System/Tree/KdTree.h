@@ -27,6 +27,9 @@ namespace dbgl
     template<typename Data, typename Point> class KdTree
     {
 	public:
+	    /**
+	     * @brief Container struct used to create a k-d tree from a list
+	     */
 	    struct Container
 	    {
 		Point point;
