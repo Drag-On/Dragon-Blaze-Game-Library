@@ -49,6 +49,10 @@ int testKdTree()
     assert(tree.remove(Vec2f()) == true);
     assert(*tree.get(Vec2f(-1, 0)) == 42);
     assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
+    // balance
+    tree.balance();
+    assert(*tree.get(Vec2f(-1, 0)) == 42);
+    assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
     LOG->info("OK!");
     LOG->info("Operators... ");
 
