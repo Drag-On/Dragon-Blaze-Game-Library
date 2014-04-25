@@ -23,6 +23,8 @@ namespace dbgl
      * 		It has an average insertion-, deletion- and search complexity of O(log n). Every
      * 		node (in contrary to every leaf node in a nonhomogeneous k-d tree) holds exactly
      * 		one data object.
+     * 		It is possible to add multiple points with the same coordinates, however methods
+     * 		like get() and remove() only expect one, i.e. it's undefined which one they use.
      */
     template<typename Data, typename Point> class KdTree
     {
@@ -85,6 +87,11 @@ namespace dbgl
 	     * @param data Data attached to the nearest neighbor will be copied here
 	     */
 	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data);
+	    /**
+	     * @brief Collects all nodes stored in the tree
+	     * @return The list of all nodes
+	     */
+	    std::vector<Container> getAll();
 	private:
 	    /**
 	     * @brief Represents a node
@@ -128,6 +135,13 @@ namespace dbgl
 	     * @return The list of all child nodes of node
 	     */
 	    std::vector<Container> getAllChildren(Node const& node);
+
+	    /**
+	     * @brief Collects all child nodes of the passed node and the passed node and inserts them into list
+	     * @param node Node to get all children from
+	     * @param list List to insert all child nodes into
+	     */
+	    void getAllNodes(Node const& node, std::vector<Container>& list);
 
 	    /**
 	     * @brief Searches for the node with the passed coordinates, returning the last checked node,

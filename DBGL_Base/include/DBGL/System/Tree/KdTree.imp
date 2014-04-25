@@ -50,7 +50,7 @@ namespace dbgl
     template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
     		RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth, Node* parent) -> Node*
     {
-    	// Chose median by axis as pivot element. This will result in a well-balanced tree.
+    	// Choose median by axis as pivot element. This will result in a well-balanced tree.
     	auto amountOfElements = std::distance(begin, end);
     	if(amountOfElements > 0)
     	{
@@ -176,19 +176,42 @@ namespace dbgl
     template<typename Data, typename Point> auto KdTree<Data, Point>::getAllChildren(
     		Node const& node) -> std::vector<Container>
 	{
-	    std::vector<Container> nodes;
-	    if(node.leftChild != nullptr)
-	    {
-	    	auto children = getAllChildren(*node.leftChild);
-		    nodes.insert(nodes.end(), children.begin(), children.end());
-	    }
-	    if(node.rightChild != nullptr)
-	    {
-	    	auto children = getAllChildren(*node.rightChild);
-	    	nodes.insert(nodes.end(), children.begin(), children.end());
-	    }
-	    nodes.push_back({node.point, node.data});
-	    return nodes;
+	    std::vector<Container> list;
+    	if(node.leftChild != nullptr)
+		{
+    		getAllNodes(*node.leftChild, list);
+		}
+		if(node.rightChild != nullptr)
+		{
+			getAllNodes(*node.rightChild, list);
+		}
+	    return list;
+	}
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::getAllNodes(
+    		Node const& node, std::vector<Container>& list)
+    {
+    	if(node.leftChild != nullptr)
+		{
+    		getAllNodes(*node.leftChild, list);
+		}
+		if(node.rightChild != nullptr)
+		{
+			getAllNodes(*node.rightChild, list);
+		}
+		list.push_back({node.point, node.data});
+    }
+    
+    template<typename Data, typename Point> auto KdTree<Data, Point>::getAll() -> std::vector<Container>
+	{
+    	if(m_pRoot != nullptr)
+    	{
+    		auto list = getAllChildren(*m_pRoot);
+    		list.push_back({m_pRoot->point, m_pRoot->data});
+		    return list;
+    	}
+    	else
+    		return std::vector<Container>();
 	}
     
     template<typename Data, typename Point> void KdTree<Data, Point>::balance()
