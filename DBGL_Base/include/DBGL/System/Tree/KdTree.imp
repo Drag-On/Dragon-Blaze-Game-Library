@@ -1,0 +1,90 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<typename Data, typename Point> unsigned int KdTree<Data, Point>::compareAxis = 0;
+    
+    template<typename Data, typename Point> bool KdTree<Data, Point>::compare(Container const& a, Container const& b)
+    {
+    	return a.point[compareAxis] <= b.point[compareAxis];
+    }
+
+    template<typename Data, typename Point> KdTree<Data, Point>::KdTree()
+	{
+	}
+    
+    template<typename Data, typename Point> template<class RandomAccessIterator> KdTree<Data, Point>::KdTree(
+    		RandomAccessIterator begin,	RandomAccessIterator end)
+	{
+    	m_pRoot = buildTree(begin, end, 0, nullptr);
+	}
+    
+    template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
+    {
+    	// Free all nodes
+    	delete m_pRoot;
+    }
+    
+    template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
+    		RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth, Node* parent) -> Node*
+    {
+    	// Chose median by axis as pivot element. This will result in a well-balanced tree.
+    	auto amountOfElements = std::distance(begin, end);
+    	if(amountOfElements > 0)
+    	{
+	    	// Select axis for splitting plane
+	    	auto axis = curDepth % Point::getDimension();
+	    	compareAxis = axis;
+			auto middleElement = amountOfElements / 2;
+			std::nth_element(begin, begin + middleElement, end, compare);
+			auto container = *(begin + middleElement);
+			// Create node and subtree
+			auto node = new Node();
+			node->point = container.point;
+			node->data = container.data;
+			node->parent = parent;
+			// Recursively create subtrees
+			node->leftChild = buildTree(begin, begin + middleElement, curDepth + 1);
+			node->rightChild = buildTree(begin + (middleElement + 1), end, curDepth + 1);
+			return node;
+    	}
+    	else
+    		return nullptr;
+    }
+    
+    template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point)
+    {
+    	auto result = searchFor(point, m_pRoot, 0);
+    	if(result != nullptr)
+    	    return &result->data;
+    	else
+    		return nullptr;
+    }
+    
+    template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(
+    		Point const& point, Node* node, unsigned int curDepth) -> Node*
+	{
+	    if(node != nullptr)
+	    {
+	    	// Check if the start node is already matching
+	    	if(point == node->point)
+	    		return node;
+	    	// Otherwise check child nodes
+	    	auto axis = curDepth % Point::getDimension();
+	    	if(point[axis] <= node->point[axis])
+	    		return searchFor(point, node->leftChild, curDepth + 1);
+	    	else
+	    		return searchFor(point, node->rightChild, curDepth + 1);
+	    }
+	    else
+	    	return nullptr;
+	}
+}

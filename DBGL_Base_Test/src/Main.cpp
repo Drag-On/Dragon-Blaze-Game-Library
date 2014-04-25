@@ -24,6 +24,7 @@ int testMatrix();
 int testQuaternion();
 int testProperties();
 int testBitmask();
+int testKdTree();
 
 int main()
 {
@@ -42,6 +43,7 @@ int main()
 	testQuaternion();
 	testProperties();
 	testBitmask();
+	testKdTree();
 
 	LOG->info("Tests done!");
 	LOG->del();
