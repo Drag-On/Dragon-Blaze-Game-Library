@@ -145,6 +145,17 @@ namespace dbgl
 	    void free(Node* node);
 
 	    /**
+	     * @brief Recursively finds the nearest neighbor to point
+	     * @param point Point to find nearest neighbor for
+	     * @param node Node to start search at
+	     * @param currentBest Current best match
+	     * @param goDown Tells the algorithm to check for closer nodes down of the current node
+	     * @param curDepth Current depth
+	     */
+	    void findNearestNeighbor(Point const& point, Node const& node, Node const*& currentBest,
+		    bool goDown, unsigned int curDepth);
+
+	    /**
 	     * @brief Compares two containers by their coordinate defined in compareAxis
 	     * @param a First container
 	     * @param b Second container

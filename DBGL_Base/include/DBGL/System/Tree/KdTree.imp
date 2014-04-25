@@ -66,8 +66,8 @@ namespace dbgl
 			node->data = container.data;
 			node->parent = parent;
 			// Recursively create subtrees
-			node->leftChild = buildTree(begin, begin + middleElement, curDepth + 1);
-			node->rightChild = buildTree(begin + (middleElement + 1), end, curDepth + 1);
+			node->leftChild = buildTree(begin, begin + middleElement, curDepth + 1, node);
+			node->rightChild = buildTree(begin + (middleElement + 1), end, curDepth + 1, node);
 			return node;
     	}
     	else
@@ -199,6 +199,63 @@ namespace dbgl
     	    nodes.push_back({m_pRoot->point, m_pRoot->data});
     	    free(m_pRoot);
     	    m_pRoot = buildTree(nodes.begin(), nodes.end(), 0);
+    	}
+    }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
+    		Point const& point, Point& nearest, Data& data)
+    {
+    	Node const* curBest = nullptr;
+    	findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
+    	nearest = curBest->point;
+    	data = curBest->data;
+    }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
+    		Point const& point, Node const& node, Node const *& currentBest,
+    		bool goDown, unsigned int curDepth)
+    {
+    	auto axis = curDepth % Point::getDimension();
+    	// As long as currentBest is NULL we're moving down
+    	if(goDown)
+    	{
+			// Check if we go left or right
+			if(point[axis] <= node.point[axis] && node.leftChild != nullptr)
+				findNearestNeighbor(point, *node.leftChild, currentBest, true, curDepth + 1);
+			else if(point[axis] > node.point[axis] && node.rightChild != nullptr)
+				findNearestNeighbor(point, *node.rightChild, currentBest, true, curDepth + 1);
+			else
+			{
+				// This is a leaf node
+				if(currentBest != nullptr)
+				{
+					// Check if the newly found node is closer
+					auto sqLengthCurBest = (point - currentBest->point).getSquaredLength();
+					auto sqLengthCur = (point - node.point).getSquaredLength();
+					if(sqLengthCur < sqLengthCurBest)
+						currentBest = &node;
+				}
+				else
+				    currentBest = &node;
+				goDown = false;
+				return;
+			}
+    	}
+    	// Check if we've found a better match
+    	auto sqLengthCurBest = (point - currentBest->point).getSquaredLength();
+    	auto sqLengthCur = (point - node.point).getSquaredLength();
+    	if(sqLengthCur < sqLengthCurBest)
+    	{
+    		currentBest = &node;
+    		sqLengthCurBest = sqLengthCur;
+    	}
+    	// Check if there could be a closer point on the other side of the splitting plane
+    	auto dist = point[axis] - node.point[axis];
+    	if(dist * dist < sqLengthCurBest)
+    	{
+    		auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
+    		if(otherSide != nullptr)
+    		    findNearestNeighbor(point, *otherSide, currentBest, true, curDepth + 1);
     	}
     }
 }

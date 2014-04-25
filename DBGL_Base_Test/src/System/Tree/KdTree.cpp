@@ -34,7 +34,11 @@ int testKdTree()
     // get
     assert(tree.get(Vec2f()) == nullptr);
     assert(*tree2.get(Vec2f()) == 0);
+    assert(*tree2.get(Vec2f(1, 0)) == 1);
     assert(*tree2.get(Vec2f(-1, 1)) == 2);
+    assert(*tree2.get(Vec2f(0.5f, -0.5f)) == 3);
+    assert(*tree2.get(Vec2f(0.75f, 0.5f)) == 4);
+    assert(*tree2.get(Vec2f(-0.5f, -0.5f)) == 5);
     assert(tree2.get(Vec2f(300, 0)) == nullptr);
     // insert
     tree.insert(Vec2f(), 300);
@@ -53,9 +57,25 @@ int testKdTree()
     tree.balance();
     assert(*tree.get(Vec2f(-1, 0)) == 42);
     assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
-    LOG->info("OK!");
-    LOG->info("Operators... ");
-
+    // findNearestNeighbor
+    Vec2f neighbor;
+    int neighborData;
+    tree2.findNearestNeighbor(Vec2f(0.25f, 0.25f), neighbor, neighborData);
+    assert(neighborData == 0);
+    tree2.findNearestNeighbor(Vec2f(), neighbor, neighborData);
+    assert(neighborData == 0);
+    tree2.findNearestNeighbor(Vec2f(0.5f, 0.5f), neighbor, neighborData);
+    assert(neighborData == 4);
+    tree2.findNearestNeighbor(Vec2f(-1, 0), neighbor, neighborData);
+    assert(neighborData == 5);
+    tree2.findNearestNeighbor(Vec2f(-2, 100), neighbor, neighborData);
+    assert(neighborData == 2);
+    tree2.findNearestNeighbor(Vec2f(1.5f, 0.5f), neighbor, neighborData);
+    assert(neighborData == 1);
+    tree2.findNearestNeighbor(Vec2f(0.5f, -0.5f), neighbor, neighborData);
+    assert(neighborData == 3);
+    tree2.findNearestNeighbor(Vec2f(0.5f, 0), neighbor, neighborData);
+    assert(neighborData == 0 || neighborData == 3 || neighborData == 1);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;
