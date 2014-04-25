@@ -30,7 +30,18 @@ namespace dbgl
     template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
     {
     	// Free all nodes
-    	delete m_pRoot;
+    	if (m_pRoot != nullptr)
+		    free(m_pRoot);
+    }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::free(Node* node)
+    {
+    	if(node->leftChild != nullptr)
+    		free(node->leftChild);
+    	if(node->rightChild != nullptr)
+    		free(node->rightChild);
+    	delete node;
+    	node = nullptr;
     }
     
     template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
@@ -70,21 +81,110 @@ namespace dbgl
     }
     
     template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(
-    		Point const& point, Node* node, unsigned int curDepth) -> Node*
+    		Point const& point, Node* node, unsigned int curDepth, unsigned int *level) -> Node*
 	{
 	    if(node != nullptr)
 	    {
 	    	// Check if the start node is already matching
 	    	if(point == node->point)
+	    	{
+	    		if(level != nullptr)
+	    		    *level = curDepth;
 	    		return node;
+	    	}
 	    	// Otherwise check child nodes
 	    	auto axis = curDepth % Point::getDimension();
 	    	if(point[axis] <= node->point[axis])
-	    		return searchFor(point, node->leftChild, curDepth + 1);
+	    		return searchFor(point, node->leftChild, curDepth + 1, level);
 	    	else
-	    		return searchFor(point, node->rightChild, curDepth + 1);
+	    		return searchFor(point, node->rightChild, curDepth + 1, level);
 	    }
 	    else
 	    	return nullptr;
+	}
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::insert(
+    		Point const& point, Data const& data)
+    {
+    	if(m_pRoot != nullptr)
+    	    insert(point, data, *m_pRoot, 0);
+    	else
+    	{
+    		m_pRoot = new Node();
+    		m_pRoot->point = point;
+    		m_pRoot->data = data;
+    	}
+    }
+    
+    template<typename Data, typename Point> auto KdTree<Data, Point>::insert(
+    		Point const& point, Data const& data, Node& node, unsigned int curDepth) -> Node&
+    {
+    	auto axis = curDepth % Point::getDimension();
+    	// Check if we can insert here
+    	if(point[axis] <= node.point[axis] && node.leftChild == nullptr)
+    	{
+    		node.leftChild = new Node();
+    		node.leftChild->point = point;
+			node.leftChild->data = data;
+			node.leftChild->parent = &node;
+			return *node.leftChild;
+    	}
+    	else if(point[axis] > node.point[axis] && node.rightChild == nullptr)
+    	{
+    		node.rightChild = new Node();
+    		node.rightChild->point = point;
+			node.rightChild->data = data;
+			node.rightChild->parent = &node;
+			return *node.rightChild;
+    	}
+		// Otherwise check child nodes
+		if(point[axis] <= node.point[axis])
+			return insert(point, data, *node.leftChild, curDepth + 1);
+		else
+			return insert(point, data, *node.rightChild, curDepth + 1);
+    }
+    
+    template<typename Data, typename Point> bool KdTree<Data, Point>::remove(Point const& point)
+    {
+    	// Check if the node to delete exists
+    	unsigned int level;
+    	auto node2Delete = searchFor(point, m_pRoot, 0, &level);
+    	if(node2Delete == nullptr)
+    		return false;
+    	else
+    	{
+    		// It exists, thus collect all of its children and rebuild the partial tree from them
+    		auto children = getAllChildren(*node2Delete);
+    		auto parent = node2Delete->parent;
+    		Node** attachHere = &m_pRoot;
+    		if(parent != nullptr)
+    		{
+    			if(parent->leftChild == node2Delete)
+    			    attachHere = &parent->leftChild;
+    			else
+    				attachHere = &parent->rightChild;
+    		}   
+    		free(node2Delete);
+    		*attachHere = buildTree(children.begin(), children.end(), level);
+    		return true;
+    	}
+    }
+    
+    template<typename Data, typename Point> auto KdTree<Data, Point>::getAllChildren(
+    		Node const& node) -> std::vector<Container>
+	{
+	    std::vector<Container> nodes;
+	    if(node.leftChild != nullptr)
+	    {
+	    	auto children = getAllChildren(*node.leftChild);
+		    nodes.insert(nodes.end(), children.begin(), children.end());
+	    }
+	    if(node.rightChild != nullptr)
+	    {
+	    	auto children = getAllChildren(*node.rightChild);
+	    	nodes.insert(nodes.end(), children.begin(), children.end());
+	    }
+	    nodes.push_back({node.point, node.data});
+	    return nodes;
 	}
 }

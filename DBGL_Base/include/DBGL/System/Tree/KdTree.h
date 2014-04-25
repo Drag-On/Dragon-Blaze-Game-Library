@@ -13,6 +13,7 @@
 
 #include <iterator>
 #include <algorithm>
+#include <vector>
 
 namespace dbgl
 {
@@ -42,6 +43,7 @@ namespace dbgl
 	    KdTree();
 	    /**
 	     * @brief Constructs an k-d tree from the passed elements
+	     * @details The iterators have to be random-access iterators to a list of KdTree::Container
 	     * @param begin Iterator pointing to the first element to add
 	     * @param end iterator pointing to the last element to add
 	     * @note Objects in the range begin to end will be modified
@@ -54,7 +56,7 @@ namespace dbgl
 	    /**
 	     * @brief Gets the data attached to the passed point
 	     * @param point Point to get data for
-	     * @return Poiner to the data attached to the passed point or NULL if the point wasn't found
+	     * @return Pointer to the data attached to the passed point or NULL if the point wasn't found
 	     */
 	    Data* get(Point const& point);
 	    /**
@@ -62,12 +64,13 @@ namespace dbgl
 	     * @param point Coordinates of the point to add
 	     * @param data Data to store with that point
 	     */
-	    void insert(Point const& point, Data& data);
+	    void insert(Point const& point, Data const& data);
 	    /**
 	     * @brief Removes a point completely from the tree
 	     * @param point Point to remove
+	     * @return True in case something was removed, otherwise false
 	     */
-	    void remove(Point const& point);
+	    bool remove(Point const& point);
 	    /**
 	     * @brief Balances the tree, increasing query performance
 	     */
@@ -83,23 +86,18 @@ namespace dbgl
 	    /**
 	     * @brief Represents a node
 	     */
-	    class Node
+	    struct Node
 	    {
-		public:
-		    Point point;			// Stored point
-		    Data data;			// Attached data
-		    Node* parent = nullptr;		// Parent node
-		    Node* leftChild = nullptr;	// Left child node
-		    Node* rightChild = nullptr;	// Right child node
-		    ~Node()
-		    {
-			delete leftChild;
-			delete rightChild;
-		    }
+		Point point;			// Stored point
+		Data data;			// Attached data
+		Node* parent = nullptr;		// Parent node
+		Node* leftChild = nullptr;	// Left child node
+		Node* rightChild = nullptr;	// Right child node
 	    };
 
 	    /**
 	     * @brief Recursively builds a tree from the passed list
+	     * @details The iterators have to be random-access iterators to a list of KdTree::Container
 	     * @param begin Iterator pointing to the first element to add
 	     * @param end iterator pointing to the last element to add
 	     * @param curDepth Current depth of tree building
@@ -115,9 +113,36 @@ namespace dbgl
 	     * @param point Coordinates of the point to search for
 	     * @param node Node to start search
 	     * @param curDepth Depth of the node to start from
+	     * @param level If level is not NULL the level of the found node is copied here.
+	     * 		    If the searched node has not been found this variable is left unchanged
 	     * @return Pointer to the node with the passed coordinates or NULL if not found
 	     */
-	    Node* searchFor(Point const& point, Node* node, unsigned int curDepth);
+	    Node* searchFor(Point const& point, Node* node, unsigned int curDepth, unsigned int *level = nullptr);
+
+	    /**
+	     * @brief Collects all child nodes of the passed node
+	     * @param node Node to get all children from
+	     * @return The list of all child nodes of node
+	     */
+	    std::vector<Container> getAllChildren(Node const& node);
+
+	    /**
+	     * @brief Searches for the node with the passed coordinates, returning the last checked node,
+	     * 	      even if the point was not found
+	     * @param point Coordinates of the point to search for
+	     * @param data Data to store with that point
+	     * @param node Node to start search
+	     * @param curDepth Depth of the node to start from
+	     * @return Reference to the last node the algorithm checked. This might be the searched node
+	     * 	       but if no such node could be found it's the "closest" node in the tree
+	     */
+	    Node& insert(Point const& point, Data const& data, Node& node, unsigned int curDepth);
+
+	    /**
+	     * @brief Recursively frees all child nodes of node and node itself
+	     * @param node Node to free recursively
+	     */
+	    void free(Node* node);
 
 	    /**
 	     * @brief Compares two containers by their coordinate defined in compareAxis
