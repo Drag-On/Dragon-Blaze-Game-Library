@@ -96,6 +96,10 @@ namespace dbgl
 	     * @return Amount of elements held by the tree
 	     */
 	    unsigned int size() const;
+	    /**
+	     * @brief Clears the tree.
+	     */
+	    void clear();
 	private:
 	    /**
 	     * @brief Represents a node

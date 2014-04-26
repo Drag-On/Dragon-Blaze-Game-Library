@@ -89,6 +89,13 @@ int testKdTree()
     assert(allNodes.size() == tree2.size());
     allNodes = tree.getAll();
     assert(allNodes.size() == tree.size());
+    // clear
+    tree.clear();
+    tree2.clear();
+    assert(tree.size() == 0);
+    assert(tree2.size() == 0);
+    assert(tree.get(Vec2f(-1, 0)) == nullptr);
+    assert(tree.get(Vec2f(-0.5f, 0)) == nullptr);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

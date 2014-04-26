@@ -290,4 +290,13 @@ namespace dbgl
     {
     	return m_size;
     }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::clear()
+    {
+    	// Free all nodes
+    	if (m_pRoot != nullptr)
+    	    free(m_pRoot);
+    	m_pRoot = nullptr;
+    	m_size = 0;
+    }
 }
