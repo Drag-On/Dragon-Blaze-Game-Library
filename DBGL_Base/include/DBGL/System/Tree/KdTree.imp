@@ -50,7 +50,7 @@ namespace dbgl
     }
     
     template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
-    		RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth, Node* parent) -> Node*
+    		RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth, Node* parent) const -> Node*
     {
     	// Choose median by axis as pivot element. This will result in a well-balanced tree.
     	auto amountOfElements = std::distance(begin, end);
@@ -76,7 +76,7 @@ namespace dbgl
     		return nullptr;
     }
     
-    template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point)
+    template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point) const
     {
     	auto result = searchFor(point, m_pRoot, 0);
     	if(result != nullptr)
@@ -86,7 +86,7 @@ namespace dbgl
     }
     
     template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(
-    		Point const& point, Node* node, unsigned int curDepth, unsigned int *level) -> Node*
+    		Point const& point, Node* node, unsigned int curDepth, unsigned int *level) const -> Node*
 	{
 	    if(node != nullptr)
 	    {
@@ -178,7 +178,7 @@ namespace dbgl
     }
     
     template<typename Data, typename Point> auto KdTree<Data, Point>::getAllChildren(
-    		Node const& node) -> std::vector<Container>
+    		Node const& node) const -> std::vector<Container>
 	{
 	    std::vector<Container> list;
     	if(node.leftChild != nullptr)
@@ -193,7 +193,7 @@ namespace dbgl
 	}
     
     template<typename Data, typename Point> void KdTree<Data, Point>::getAllNodes(
-    		Node const& node, std::vector<Container>& list)
+    		Node const& node, std::vector<Container>& list) const
     {
     	if(node.leftChild != nullptr)
 		{
@@ -206,7 +206,7 @@ namespace dbgl
 		list.push_back({node.point, node.data});
     }
     
-    template<typename Data, typename Point> auto KdTree<Data, Point>::getAll() -> std::vector<Container>
+    template<typename Data, typename Point> auto KdTree<Data, Point>::getAll() const -> std::vector<Container>
 	{
     	if(m_pRoot != nullptr)
     	{
@@ -230,7 +230,7 @@ namespace dbgl
     }
     
     template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
-    		Point const& point, Point& nearest, Data& data)
+    		Point const& point, Point& nearest, Data& data) const
     {
     	Node const* curBest = nullptr;
     	findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
@@ -240,7 +240,7 @@ namespace dbgl
     
     template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
     		Point const& point, Node const& node, Node const *& currentBest,
-    		bool goDown, unsigned int curDepth)
+    		bool goDown, unsigned int curDepth) const
     {
     	auto axis = curDepth % Point::getDimension();
     	// As long as currentBest is NULL we're moving down
@@ -286,7 +286,7 @@ namespace dbgl
     	}
     }
     
-    template<typename Data, typename Point> unsigned int KdTree<Data, Point>::size()
+    template<typename Data, typename Point> unsigned int KdTree<Data, Point>::size() const
     {
     	return m_size;
     }

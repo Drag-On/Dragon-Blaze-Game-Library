@@ -63,7 +63,7 @@ namespace dbgl
 	     * @param point Point to get data for
 	     * @return Pointer to the data attached to the passed point or NULL if the point wasn't found
 	     */
-	    Data* get(Point const& point);
+	    Data* get(Point const& point) const;
 	    /**
 	     * @brief Inserts an element into the tree, probably leaving the tree unbalanced
 	     * @param point Coordinates of the point to add
@@ -86,16 +86,16 @@ namespace dbgl
 	     * @param nearest Location of the nearest neighbor will be copied here
 	     * @param data Data attached to the nearest neighbor will be copied here
 	     */
-	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data);
+	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data) const;
 	    /**
 	     * @brief Collects all nodes stored in the tree
 	     * @return The list of all nodes
 	     */
-	    std::vector<Container> getAll();
+	    std::vector<Container> getAll() const;
 	    /**
 	     * @return Amount of elements held by the tree
 	     */
-	    unsigned int size();
+	    unsigned int size() const;
 	private:
 	    /**
 	     * @brief Represents a node
@@ -120,7 +120,7 @@ namespace dbgl
 	     * @note Objects in the range begin to end will be modified
 	     */
 	    template<class RandomAccessIterator> Node* buildTree(RandomAccessIterator begin,
-		    RandomAccessIterator end, unsigned int curDepth = 0, Node* parent = nullptr);
+		    RandomAccessIterator end, unsigned int curDepth = 0, Node* parent = nullptr) const;
 
 	    /**
 	     * @brief Searches for the node with the passed coordinates
@@ -131,21 +131,21 @@ namespace dbgl
 	     * 		    If the searched node has not been found this variable is left unchanged
 	     * @return Pointer to the node with the passed coordinates or NULL if not found
 	     */
-	    Node* searchFor(Point const& point, Node* node, unsigned int curDepth, unsigned int *level = nullptr);
+	    Node* searchFor(Point const& point, Node* node, unsigned int curDepth, unsigned int *level = nullptr) const;
 
 	    /**
 	     * @brief Collects all child nodes of the passed node
 	     * @param node Node to get all children from
 	     * @return The list of all child nodes of node
 	     */
-	    std::vector<Container> getAllChildren(Node const& node);
+	    std::vector<Container> getAllChildren(Node const& node) const;
 
 	    /**
 	     * @brief Collects all child nodes of the passed node and the passed node and inserts them into list
 	     * @param node Node to get all children from
 	     * @param list List to insert all child nodes into
 	     */
-	    void getAllNodes(Node const& node, std::vector<Container>& list);
+	    void getAllNodes(Node const& node, std::vector<Container>& list) const;
 
 	    /**
 	     * @brief Searches for the node with the passed coordinates, returning the last checked node,
@@ -174,7 +174,7 @@ namespace dbgl
 	     * @param curDepth Current depth
 	     */
 	    void findNearestNeighbor(Point const& point, Node const& node, Node const*& currentBest,
-		    bool goDown, unsigned int curDepth);
+		    bool goDown, unsigned int curDepth) const;
 
 	    /**
 	     * @brief Compares two containers by their coordinate defined in compareAxis
