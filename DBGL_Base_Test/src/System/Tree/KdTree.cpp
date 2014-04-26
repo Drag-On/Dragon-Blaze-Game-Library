@@ -31,6 +31,9 @@ int testKdTree()
     KdTree<int, Vec2f> tree2(data.begin(), data.end());
     LOG->info("OK!");
     LOG->info("Methods... ");
+    // size
+    assert(tree.size() == 0);
+    assert(tree2.size() == data.size());
     // get
     assert(tree.get(Vec2f()) == nullptr);
     assert(*tree2.get(Vec2f()) == 0);
@@ -44,18 +47,22 @@ int testKdTree()
     tree.insert(Vec2f(), 300);
     tree.insert(Vec2f(-1, 0), 42);
     tree.insert(Vec2f(-0.5f, 0), 23);
+    assert(tree.size() == 3);
     assert(*tree.get(Vec2f()) == 300);
     assert(*tree.get(Vec2f(-1, 0)) == 42);
     assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
     assert(tree.get(Vec2f(42, 42)) == nullptr);
     // remove
     assert(tree.remove(Vec2f(42, 42)) == false);
+    assert(tree.size() == 3);
     assert(tree.remove(Vec2f()) == true);
+    assert(tree.size() == 2);
     assert(*tree.get(Vec2f(-1, 0)) == 42);
     assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
     assert(tree.get(Vec2f()) == nullptr);
     // balance
     tree.balance();
+    assert(tree.size() == 2);
     assert(*tree.get(Vec2f(-1, 0)) == 42);
     assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
     // findNearestNeighbor
@@ -79,9 +86,9 @@ int testKdTree()
     assert(neighborData == 0 || neighborData == 3 || neighborData == 1);
     // getAll
     auto allNodes = tree2.getAll();
-    assert(allNodes.size() == 6);
+    assert(allNodes.size() == tree2.size());
     allNodes = tree.getAll();
-    assert(allNodes.size() == 2);
+    assert(allNodes.size() == tree.size());
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

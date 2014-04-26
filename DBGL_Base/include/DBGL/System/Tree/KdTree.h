@@ -92,6 +92,10 @@ namespace dbgl
 	     * @return The list of all nodes
 	     */
 	    std::vector<Container> getAll();
+	    /**
+	     * @return Amount of elements held by the tree
+	     */
+	    unsigned int size();
 	private:
 	    /**
 	     * @brief Represents a node
@@ -189,6 +193,11 @@ namespace dbgl
 	     * @brief Pointer to root node
 	     */
 	    Node* m_pRoot = nullptr;
+
+	    /**
+	     * @brief Amount of elements held by the tree
+	     */
+	    unsigned int m_size = 0;
     };
 }
 
