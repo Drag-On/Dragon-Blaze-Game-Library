@@ -31,7 +31,7 @@ namespace dbgl
 	    SceneNode();
 	    /**
 	     * @brief Destructor
-	     * @detail Deallocates this node and all of its children and removes them
+	     * @details Deallocates this node and all of its children and removes them
 	     * 	       from the graph hierarchy
 	     */
 	    virtual ~SceneNode();
@@ -44,13 +44,13 @@ namespace dbgl
 	     * @brief Removes a child from this node
 	     * @param child Node to remove
 	     * @return True in case the requested child was removed, otherwise false
-	     * @detail Removes the requested child from this node and deallocates it
+	     * @details Removes the requested child from this node and deallocates it
 	     * 	       (and its children)
 	     */
 	    bool remove(SceneNode* child);
 	    /**
 	     * @brief Removes all children from this node
-	     * @detail Removes all children and deallocates them (and their children)
+	     * @details Removes all children and deallocates them (and their children)
 	     */
 	    void clear();
 	    /**

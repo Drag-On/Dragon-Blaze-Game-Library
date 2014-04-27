@@ -36,13 +36,13 @@ namespace dbgl
 	    bool load(const std::string path);
 	    /**
 	     * @brief Interprets a line
-	     * @detail Reads in -key value pairs
+	     * @details Reads in -key value pairs
 	     * @param line String to parse
 	     */
 	    void interpret(const std::string line);
 	    /**
 	     * @brief Interprets an array
-	     * @detail Reads in -key value pairs
+	     * @details Reads in -key value pairs
 	     * @param argc Amount of arguments
 	     * @param argv Actual arguments
 	     */

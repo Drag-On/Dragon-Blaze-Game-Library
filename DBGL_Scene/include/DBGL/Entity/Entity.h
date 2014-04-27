@@ -42,7 +42,7 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param name Entity name
 	     * @param renderable Data on how to render
-	     * @detail Automatically creates a transform and render component!
+	     * @details Automatically creates a transform and render component!
 	     */
 	    Entity(Renderable const& renderable, std::string name = "");
 	    /**
@@ -56,21 +56,21 @@ namespace dbgl
 	    /**
 	     * @brief Creates a component of a certain type and adds it to this entity
 	     * @return Reference to the newly created component
-	     * @detail Component must be a (sub-)type of EntityComponent. A component
+	     * @details Component must be a (sub-)type of EntityComponent. A component
 	     * 	       of a specific type can only be added one time.
 	     */
 	    template<class Component> Component* addComponent();
 	    /**
 	     * @brief Completely removes a component
 	     * @return True in case the component was removed, false if not found
-	     * @detail Component must be a (sub-)type of EntityComponent
+	     * @details Component must be a (sub-)type of EntityComponent
 	     */
 	    template<class Component> bool removeComponent();
 	    /**
 	     * @brief Provides access to a component
 	     * @return Pointer to the requested component or NULL if no component of
 	     * 	       type Component has been found
-	     * @detail Component must be a (sub-)type of EntityComponent
+	     * @details Component must be a (sub-)type of EntityComponent
 	     */
 	    template<class Component> Component* getComponent();
 	    /**

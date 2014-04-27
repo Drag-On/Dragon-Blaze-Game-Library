@@ -214,7 +214,7 @@ namespace dbgl
 	     * @param other Quaternion to interpolate with
 	     * @param factor Factor of interpolation in the [0, 1] range
 	     * @return A new quaternion interpolated out of this one and other
-	     * @detail The interpolation is oriented. If a factor out of range is
+	     * @details The interpolation is oriented. If a factor out of range is
 	     * 	       passed, a warning is written to LOG and it is cropped to
 	     * 	       the closest number (0 or 1).
 	     */
@@ -224,7 +224,7 @@ namespace dbgl
 	     * @param other Quaternion to interpolate with
 	     * @param factor Factor of interpolation, defined for any real
 	     * @return A new quaternion interpolated out of this one and other
-	     * @detail This method guarantees to always use the shortest path
+	     * @details This method guarantees to always use the shortest path
 	     * 	       for the interpolation. Constant speed.
 	     */
 	    Quaternion<T> slerp(Quaternion<T> const& other, T factor) const;

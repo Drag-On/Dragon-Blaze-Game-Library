@@ -20,7 +20,7 @@ namespace dbgl
 {
     /**
      * @brief Implements a generic event system
-     * @detail DelegateType needs to be of type std::function<void(EventArgs const&)>
+     * @details DelegateType needs to be of type std::function<void(EventArgs const&)>
      */
     template <class DelegateType, typename EventArgs> class Event
     {
