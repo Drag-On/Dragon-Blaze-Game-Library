@@ -35,7 +35,13 @@ namespace dbgl
 	     */
 	    struct Container
 	    {
+		/**
+		 * @brief Spatial data
+		 */
 		Point point;
+		/**
+		 * @brief Data stored with the point
+		 */
 		Data data;
 	    };
 

@@ -151,15 +151,53 @@ namespace dbgl
 	    using BaseMatrixType::operator-=;
 	    using BaseMatrixType::operator*=;
 	    using BaseMatrixType::operator/=;
-	    const Matrix4x4<T> operator+(BaseMatrixType const& rhs) const;
-	    const Matrix4x4<T> operator-(BaseMatrixType const& rhs) const;
-	    const Matrix4x4<T> operator*(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Adds a matrix to this matrix
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
+	    const Matrix4x43<T> operator+(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Subtracts a matrix from this matrix
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
+	    const Matrix4x43<T> operator-(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix multiplication
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
+	    const Matrix4x43<T> operator*(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix-vector multiplication
+	    /// @param rhs 2D Vector
+	    /// @return Resulting vector
+	    /// </summary>
 	    const Vector4<T> operator*(Vector<T,4> const& rhs) const;
-	    const Matrix4x4<T> operator*(T const& rhs) const;
-	    Matrix4x4<T>& operator*=(BaseMatrixType const& rhs);
-	    const Matrix4x4<T> operator/(T const& rhs) const;
-	    Matrix4x4<T> operator-() const;
-
+	    /// <summary>
+	    /// @brief Scalar multiplication
+	    /// @param rhs Scalar
+	    /// @return Resulting matrix
+	    /// </summary>
+	    const Matrix4x43<T> operator*(T const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix multiplication, assigning the resulting matrix to this
+	    /// @param rhs Other matrix
+	    /// @return Reference to this
+	    /// </summary>
+	    Matrix4x43<T>& operator*=(BaseMatrixType const& rhs);
+	    /// <summary>
+	    /// @brief Scalar division
+	    /// @param rhs Scalar
+	    /// @return Resulting matrix
+	    /// </summary>
+	    const Matrix4x43<T> operator/(T const& rhs) const;
+	    /// <summary>
+	    /// @brief Unary minus
+	    /// @return Resulting matrix
+	    /// </summary>
+	    Matrix4x43<T> operator-() const;
 
 	private:
     };

@@ -27,9 +27,20 @@ namespace dbgl
 	    ~SimpleWindow();
 
 	protected:
+	    /**
+	     * @brief Creates a simple window
+	     * @param share Other window to share resources with
+	     * @param title Window title
+	     * @param width Window width
+	     * @param height Window height
+	     * @param fullscreen Indicates if the window should be initialized as fullscreen
+	     */
 	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
 		    int width = 800, int height = 600, bool fullscreen = false);
-	    // Callbacks
+	    /**
+	     * @brief Called on key events.
+	     * @param args Key event arguments
+	     */
 	    void keyCallback(KeyEventArgs args);
 
 	private:

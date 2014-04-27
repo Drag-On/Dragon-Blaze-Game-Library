@@ -27,21 +27,24 @@ namespace dbgl
     class ShaderProgram
     {
 	public:
+	    /**
+	     * @brief Known default uniforms
+	     */
 	    enum Uniform
 	    {
-		MODEL,
-		VIEW,
-		PROJECTION,
-		MV,
-		MVP,
-		ITM,
-		ITV,
-		ITMV,
-		TEX_DIFFUSE,
-		TEX_NORMAL,
-		TEX_SPECULAR,
-		COLOR,
-		BOGUS,
+		MODEL,       //!< MODEL
+		VIEW,        //!< VIEW
+		PROJECTION,  //!< PROJECTION
+		MV,          //!< MV
+		MVP,         //!< MVP
+		ITM,         //!< ITM
+		ITV,         //!< ITV
+		ITMV,        //!< ITMV
+		TEX_DIFFUSE, //!< TEX_DIFFUSE
+		TEX_NORMAL,  //!< TEX_NORMAL
+		TEX_SPECULAR,//!< TEX_SPECULAR
+		COLOR,       //!< COLOR
+		BOGUS,       //!< BOGUS
 	    };
 
 	    /**
@@ -246,6 +249,7 @@ namespace dbgl
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param count Amount of elements of the uniform array
+	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
 	    void setUniformFloatMatrix2Array(GLint handle, unsigned int count,
@@ -255,6 +259,7 @@ namespace dbgl
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param count Amount of elements of the uniform array
+	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
 	    void setUniformFloatMatrix3Array(GLint handle, unsigned int count,
@@ -264,6 +269,7 @@ namespace dbgl
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param count Amount of elements of the uniform array
+	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
 	    void setUniformFloatMatrix4Array(GLint handle, unsigned int count,

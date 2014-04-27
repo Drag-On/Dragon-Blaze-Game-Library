@@ -98,13 +98,52 @@ namespace dbgl
 	    using BaseMatrixType::operator-=;
 	    using BaseMatrixType::operator*=;
 	    using BaseMatrixType::operator/=;
+	    /// <summary>
+	    /// @brief Adds a matrix to this matrix
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
 	    const Matrix3x3<T> operator+(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Subtracts a matrix from this matrix
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
 	    const Matrix3x3<T> operator-(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix multiplication
+	    /// @param rhs Other matrix
+	    /// @return Resulting matrix
+	    /// </summary>
 	    const Matrix3x3<T> operator*(BaseMatrixType const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix-vector multiplication
+	    /// @param rhs 2D Vector
+	    /// @return Resulting vector
+	    /// </summary>
 	    const Vector3<T> operator*(Vector<T,3> const& rhs) const;
+	    /// <summary>
+	    /// @brief Scalar multiplication
+	    /// @param rhs Scalar
+	    /// @return Resulting matrix
+	    /// </summary>
 	    const Matrix3x3<T> operator*(T const& rhs) const;
+	    /// <summary>
+	    /// @brief Matrix multiplication, assigning the resulting matrix to this
+	    /// @param rhs Other matrix
+	    /// @return Reference to this
+	    /// </summary>
 	    Matrix3x3<T>& operator*=(BaseMatrixType const& rhs);
+	    /// <summary>
+	    /// @brief Scalar division
+	    /// @param rhs Scalar
+	    /// @return Resulting matrix
+	    /// </summary>
 	    const Matrix3x3<T> operator/(T const& rhs) const;
+	    /// <summary>
+	    /// @brief Unary minus
+	    /// @return Resulting matrix
+	    /// </summary>
 	    Matrix3x3<T> operator-() const;
 
 	private:

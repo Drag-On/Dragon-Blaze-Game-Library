@@ -33,8 +33,8 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Creates a new render context
-	     * @param width New width of of the framebuffer
-	     * @param height New height of the framebuffer
+	     * @param frameWidth New width of of the framebuffer
+	     * @param frameHeight New height of the framebuffer
 	     */
 	    RenderContext(unsigned int frameWidth, unsigned int frameHeight);
 	    /**
@@ -62,7 +62,14 @@ namespace dbgl
 	     */
 	    virtual void postRender();
 
-	    unsigned int m_frameWidth, m_frameHeight;
+	    /**
+	     * @brief Width of the frame
+	     */
+	    unsigned int m_frameWidth;
+	    /**
+	     * @brief Height of the frame
+	     */
+	    unsigned int m_frameHeight;
 	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has

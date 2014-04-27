@@ -159,7 +159,7 @@ namespace dbgl
 	    /**
 	     * @brief Creates a mesh that represents a four-sided pyramid
 	     * @warning The allocated memory needs to be freed manually!
-	     * @p@param flags Parameters to pass to the loader
+	     * @param flags Parameters to pass to the loader
 	     * @return The pyramid mesh
 	     */
 	    static Mesh* makePyramid(Bitmask<> flags = SendToGPU | Optimize);

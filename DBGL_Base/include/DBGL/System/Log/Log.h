@@ -136,9 +136,21 @@ namespace dbgl
 	    };
 	public:
 	    /**
-	     * @brief streams that can be used to write to log
+	     * @brief Debug stream
 	     */
-	    static Logger dbg, inf, wrn, err;
+	    static Logger dbg;
+	    /**
+	     * @brief Info stream
+	     */
+	    static Logger inf;
+	    /**
+	     * @brief Warning stream
+	     */
+	    static Logger wrn;
+	    /**
+	     * @brief Error stream
+	     */
+	    static Logger err;
     };
 
 } /* namespace dbgl */

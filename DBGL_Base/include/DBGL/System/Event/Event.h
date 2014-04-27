@@ -25,6 +25,9 @@ namespace dbgl
     template <class DelegateType, typename EventArgs> class Event
     {
 	public:
+	    /**
+	     * @brief Smartpointer to a delegate
+	     */
 	    using DelegatePtr = std::shared_ptr<DelegateType>;
 
 	    /**
@@ -42,7 +45,7 @@ namespace dbgl
 	    virtual ~Event();
 	    /**
 	     * @brief Invokes all connected listeners
-	     * @param Parameters passed to the listeners
+	     * @param args Parameters passed to the listeners
 	     */
 	    void fire(EventArgs const& args);
 	    /**
@@ -62,6 +65,9 @@ namespace dbgl
 	     */
 	    bool hasListener();
 	private:
+	    /**
+	     * @brief Set of all delegates
+	     */
 	    std::set<DelegatePtr> m_delegates;
     };
 }

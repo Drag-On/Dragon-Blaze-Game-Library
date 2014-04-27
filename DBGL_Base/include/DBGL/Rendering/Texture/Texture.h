@@ -41,7 +41,13 @@ namespace dbgl
 		TGA, //!< TGA
 	    };
 
+	    /**
+	     * @brief Constant to request vertical flipping
+	     */
 	    static const int FlipVertically = 1 << 0;
+	    /**
+	     * @brief Constant to request horizontal flipping
+	     */
 	    static const int FlipHorizontally = 1 << 1;
 
 	    /**

@@ -41,99 +41,322 @@ namespace dbgl
 	    /**
 	     * @brief Arguments passed on a close event
 	     */
-	    struct CloseEventArgs {};
+	    struct CloseEventArgs
+	    {
+	    };
 	    /**
 	     * @brief Arguments passed on a focus event
 	     */
-	    struct FocusEventArgs {bool focused;};
+	    struct FocusEventArgs
+	    {
+		    /**
+		     * @brief True in case the window is in focus now, otherwise false
+		     */
+		    bool focused;
+	    };
 	    /**
 	     * @brief Arguments passed on a iconified event
 	     */
-	    struct IconifiedEventArgs {bool iconified;};
+	    struct IconifiedEventArgs
+	    {
+		    /**
+		     * @brief True in case the window is iconified now, otherwise false
+		     */
+		    bool iconified;
+	    };
 	    /**
 	     * @brief Arguments passed on a refresh event
 	     */
-	    struct RefreshEventArgs {};
+	    struct RefreshEventArgs
+	    {
+	    };
 	    /**
 	     * @brief Arguments passed on a resize event
 	     */
-	    struct ResizeEventArgs {int width; int height;};
+	    struct ResizeEventArgs
+	    {
+		    /**
+		     * @brief New window width
+		     */
+		    int width;
+		    /**
+		     * @brief New window height
+		     */
+		    int height;
+	    };
 	    /**
 	     * @brief Arguments passed on a framebuffer resize event
 	     */
-	    struct FramebufferResizeEventArgs {int width; int height;};
+	    struct FramebufferResizeEventArgs
+	    {
+		    /**
+		     * @brief New framebuffer width
+		     */
+		    int width;
+		    /**
+		     * @brief New framebuffer height
+		     */
+		    int height;
+	    };
 	    /**
 	     * @brief Arguments passed on a position event
 	     */
-	    struct PositionEventArgs {int x; int y;};
+	    struct PositionEventArgs
+	    {
+		    /**
+		     * @brief New x coordinate
+		     */
+		    int x;
+		    /**
+		     * @brief New y coordinate
+		     */
+		    int y;
+	    };
 	    /**
 	     * @brief Arguments passed on a character event
 	     */
-	    struct CharacterEventArgs {unsigned int codepoint;};
+	    struct CharacterEventArgs
+	    {
+		    /**
+		     * @brief Unicode codepoint of the character
+		     */
+		    unsigned int codepoint;
+	    };
 	    /**
 	     * @brief Arguments passed on a cursor enter event
 	     */
-	    struct CursorEnterEventArgs {bool entered;};
+	    struct CursorEnterEventArgs
+	    {
+		    /**
+		     * @brief True in case the cursor entered the window, otherwise false
+		     */
+		    bool entered;
+	    };
 	    /**
 	     * @brief Arguments passed on a cursor event
 	     */
-	    struct CursorEventArgs {double x; double y;};
+	    struct CursorEventArgs
+	    {
+		    /**
+		     * @brief New cursor x coordinate
+		     */
+		    double x;
+		    /**
+		     * @brief New cursor y coordinate
+		     */
+		    double y;
+	    };
 	    /**
 	     * @brief Arguments passed on a mouse button event
 	     */
-	    struct MouseButtonEventArgs {int button; int action; int mods;};
+	    struct MouseButtonEventArgs
+	    {
+		    /**
+		     * @brief Pressed button
+		     */
+		    int button;
+		    /**
+		     * @brief Action that happened. One of GLFW_PRESS or GLFW_REPEAT
+		     */
+		    int action;
+		    /**
+		     * @brief Bitmask describing which modifier keys were held down.
+		     * @details GLFW_MOD_ALT, GLFW_MOD_CONTROL, GLFW_MOD_SHIFT and/or GLFW_MOD_SUPER
+		     */
+		    int mods;
+	    };
 	    /**
 	     * @brief Arguments passed on a scroll event
 	     */
-	    struct ScrollEventArgs {double xOffset; double yOffset;};
+	    struct ScrollEventArgs
+	    {
+		    /**
+		     * @brief Scroll x offset
+		     */
+		    double xOffset;
+		    /**
+		     * @brief Scroll y offset
+		     */
+		    double yOffset;
+	    };
 	    /**
 	     * @brief Arguments passed on a key event
 	     */
-	    struct KeyEventArgs {int key; int scancode; int action; int mods;};
+	    struct KeyEventArgs
+	    {
+		    /**
+		     * @brief Key that was pressed or released. GLFW_KEY_XXX
+		     */
+		    int key;
+		    /**
+		     * @brief System-specific scancode of that key
+		     */
+		    int scancode;
+		    /**
+		     * @brief GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT.
+		     */
+		    int action;
+		    /**
+		     * @brief Bitmask describing which modifier keys were held down.
+		     * @details GLFW_MOD_ALT, GLFW_MOD_CONTROL, GLFW_MOD_SHIFT and/or GLFW_MOD_SUPER
+		     */
+		    int mods;
+	    };
 	    /**
 	     * @brief Arguments passed on an update event
 	     */
-	    struct UpdateEventArgs {double deltaTime;};
+	    struct UpdateEventArgs
+	    {
+		    /**
+		     * @brief Time since last update
+		     */
+		    double deltaTime;
+	    };
 	    /**
 	     * @brief Arguments passed on a render event
 	     */
-	    struct RenderEventArgs {const RenderContext* rc;};
+	    struct RenderEventArgs
+	    {
+		    /**
+		     * @brief Current render context
+		     */
+		    const RenderContext* rc;
+	    };
 
+	    /**
+	     * @brief Type of a close event method
+	     */
 	    using CloseCallbackType = std::function<void(CloseEventArgs const&)>;
+	    /**
+	     * @brief Type of a focus event method
+	     */
 	    using FocusCallbackType = std::function<void(FocusEventArgs const&)>;
+	    /**
+	     * @brief Type of a iconified event method
+	     */
 	    using IconifiedCallbackType = std::function<void(IconifiedEventArgs const&)>;
+	    /**
+	     * @brief Type of a refresh event method
+	     */
 	    using RefreshCallbackType = std::function<void(RefreshEventArgs const&)>;
+	    /**
+	     * @brief Type of a resize event method
+	     */
 	    using ResizeCallbackType = std::function<void(ResizeEventArgs const&)>;
+	    /**
+	     * @brief Type of a framebuffer resize event method
+	     */
 	    using FramebufferResizeCallbackType = std::function<void(FramebufferResizeEventArgs const&)>;
+	    /**
+	     * @brief Type of a position event method
+	     */
 	    using PositionCallbackType = std::function<void(PositionEventArgs const&)>;
+	    /**
+	     * @brief Type of a character event method
+	     */
 	    using CharacterCallbackType = std::function<void(CharacterEventArgs const&)>;
+	    /**
+	     * @brief Type of a cursor enter event method
+	     */
 	    using CursorEnterCallbackType = std::function<void(CursorEnterEventArgs const&)>;
+	    /**
+	     * @brief Type of a cursor event method
+	     */
 	    using CursorCallbackType = std::function<void(CursorEventArgs const&)>;
+	    /**
+	     * @brief Type of a mouse button event method
+	     */
 	    using MouseButtonCallbackType = std::function<void(MouseButtonEventArgs const&)>;
+	    /**
+	     * @brief Type of a scroll event method
+	     */
 	    using ScrollCallbackType = std::function<void(ScrollEventArgs const&)>;
+	    /**
+	     * @brief Type of a key event method
+	     */
 	    using KeyCallbackType = std::function<void(KeyEventArgs const&)>;
+	    /**
+	     * @brief Type of a update event method
+	     */
 	    using UpdateCallbackType = std::function<void(UpdateEventArgs const&)>;
+	    /**
+	     * @brief Type of a render event method
+	     */
 	    using RenderCallbackType = std::function<void(RenderEventArgs const&)>;
 
+	    /**
+	     * @brief Type of a close event
+	     */
 	    using CloseEventType = Event<CloseCallbackType, CloseEventArgs>;
+	    /**
+	     * @brief Type of a focus event
+	     */
 	    using FocusEventType = Event<FocusCallbackType, FocusEventArgs>;
+	    /**
+	     * @brief Type of a iconified event
+	     */
 	    using IconifiedEventType = Event<IconifiedCallbackType, IconifiedEventArgs>;
+	    /**
+	     * @brief Type of a refresh event
+	     */
 	    using RefreshEventType = Event<RefreshCallbackType, RefreshEventArgs>;
+	    /**
+	     * @brief Type of a resize event
+	     */
 	    using ResizeEventType = Event<ResizeCallbackType, ResizeEventArgs>;
+	    /**
+	     * @brief Type of a framebuffer resize event
+	     */
 	    using FramebufferResizeEventType = Event<FramebufferResizeCallbackType, FramebufferResizeEventArgs>;
+	    /**
+	     * @brief Type of a position event
+	     */
 	    using PositionEventType = Event<PositionCallbackType, PositionEventArgs>;
+	    /**
+	     * @brief Type of a character event
+	     */
 	    using CharacterEventType = Event<CharacterCallbackType, CharacterEventArgs>;
+	    /**
+	     * @brief Type of a cursor enter event
+	     */
 	    using CursorEnterEventType = Event<CursorEnterCallbackType, CursorEnterEventArgs>;
+	    /**
+	     * @brief Type of a cursor event
+	     */
 	    using CursorEventType = Event<CursorCallbackType, CursorEventArgs>;
+	    /**
+	     * @brief Type of a mouse button event
+	     */
 	    using MouseButtonEventType = Event<MouseButtonCallbackType, MouseButtonEventArgs>;
+	    /**
+	     * @brief Type of a scroll event
+	     */
 	    using ScrollEventType = Event<ScrollCallbackType, ScrollEventArgs>;
+	    /**
+	     * @brief Type of a key event
+	     */
 	    using KeyEventType = Event<KeyCallbackType, KeyEventArgs>;
+	    /**
+	     * @brief Type of a update event
+	     */
 	    using UpdateEventType = Event<UpdateCallbackType, UpdateEventArgs>;
+	    /**
+	     * @brief Type of a render event
+	     */
 	    using RenderEventType = Event<RenderCallbackType, RenderEventArgs>;
 
 	    // Constants used for bitmasks
+	    /**
+	     * @brief Constant to enable depth testing
+	     */
 	    static const int DepthTest = 1 << 0;
+	    /**
+	     * @brief Constant to enable alpha blending
+	     */
 	    static const int AlphaBlend = 1 << 1;
+	    /**
+	     * @brief Constant to enable backface culling
+	     */
 	    static const int FaceCulling = 1 << 2;
 
 	    /**
@@ -506,6 +729,9 @@ namespace dbgl
 	     * GLFW window handle
 	     */
 	    GLFWwindow* m_pWndHandle = NULL;
+	    /**
+	     * @brief Render context
+	     */
 	    RenderContext* m_pRenderContext = NULL;
 
 	private:

@@ -63,8 +63,17 @@ namespace dbgl
 	    struct FaceComponent
 	    {
 		public:
+		    /**
+		     * @brief Index of the vertex (coordinate)
+		     */
 		    unsigned short vertexIndex = std::numeric_limits<unsigned short>::max();
+		    /**
+		     * @brief Index of the UV
+		     */
 		    unsigned short uvIndex = std::numeric_limits<unsigned short>::max();
+		    /**
+		     * @brief Index of the normal
+		     */
 		    unsigned short normalIndex = std::numeric_limits<unsigned short>::max();
 	    };
 	    /**
@@ -73,6 +82,9 @@ namespace dbgl
 	    struct Face
 	    {
 		public:
+		    /**
+		     * @brief Components of a face. Currently only polygons with 3 vertices are allowed.
+		     */
 		    FaceComponent components[3];
 	    };
 
@@ -85,9 +97,13 @@ namespace dbgl
 	     */
 	    std::vector<Face> m_origFaces;
 	    /**
-	     * @brief List the vertices / normals are written to
+	     * @brief List the normals are written to
 	     */
-	    std::vector<Vec3f> m_origVertices, m_origNormals;
+	    std::vector<Vec3f> m_origVertices;
+	    /**
+	     * @brief List the vertices are written to
+	     */
+	    std::vector<Vec3f> m_origNormals;
 	    /**
 	     * @brief List the UVs are written to
 	     */

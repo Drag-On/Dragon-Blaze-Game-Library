@@ -64,7 +64,7 @@ namespace dbgl
 	     */
 	    void getOrientation(Vec3f* direction, Vec3f* up, Vec3f* right) const;
 	    /**
-	     * @param Modifies this cams orientation by using vectors
+	     * @brief Modifies this cams orientation by using vectors
 	     * @param direction New direction
 	     * @param up Up vector
 	     */

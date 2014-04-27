@@ -53,14 +53,14 @@ namespace dbgl
 	    /**
 	     * @brief Constructs a quaternion such that it rotates start onto dest
 	     * @param start Start vector
-	     * @param end End vector
+	     * @param dest Destination vector
 	     */
 	    Quaternion(Vector3<T> const& start, Vector3<T> const& dest);
 	    /**
 	     * @brief Constructs a quaternion such that it rotates start onto dest,
 	     * 	      preserving up
 	     * @param start Start vector
-	     * @param end End vector
+	     * @param dest Destination vector
 	     * @param up Up vector
 	     */
 	    Quaternion(Vector3<T> const& start, Vector3<T> const& dest, Vector3<T> const& up);
@@ -117,7 +117,7 @@ namespace dbgl
 	    /**
 	     * @brief Initializes this quaternion such that it rotates start onto dest
 	     * @param start Start vector
-	     * @param end End vector
+	     * @param dest Destination vector
 	     * @returns Reference to this quaternion
 	     */
 	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest);
@@ -125,28 +125,25 @@ namespace dbgl
 	     * @brief Initializes this quaternion such that it rotates start onto dest,
 	     * 	      preserving up
 	     * @param start Start vector
-	     * @param end End vector
+	     * @param dest Destination vector
 	     * @param up Up vector
 	     * @returns Reference to this quaternion
 	     */
-	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest,
-		    Vector3<T> up);
+	    Quaternion<T>& fromVectors(Vector3<T> start, Vector3<T> dest, Vector3<T> up);
 	    /**
 	     * @brief Checks, if this quaternion is similar to the passed one
 	     * @param other Other quaternion
 	     * @param precision How close they need to be
 	     * @return True in case they are similar, oherwise false
 	     */
-	    bool isSimilar(Quaternion<T> const& other,
-		    double precision = 0.1) const;
+	    bool isSimilar(Quaternion<T> const& other, double precision = 0.1) const;
 	    /**
 	     * @brief Checks, if this quaternion resembles a similar rotation to other
 	     * @param other Other quaternion
 	     * @param precision How close they need to be
 	     * @return True in case they are similar, oherwise false
 	     */
-	    bool isSimilarRot(Quaternion<T> const& other,
-		    double precision = 0.1) const;
+	    bool isSimilarRot(Quaternion<T> const& other, double precision = 0.1) const;
 	    /**
 	     * @brief Checks if this is a unit quaternion
 	     * @return True in case it's unit, otherwise false
