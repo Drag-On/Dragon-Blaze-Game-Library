@@ -19,7 +19,7 @@ namespace dbgl
     class Mesh;
 
     /**
-     * @brief Interface for all texture loaders
+     * @brief Interface for all mesh loaders
      */
     class MeshLoader
     {
