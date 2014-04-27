@@ -38,20 +38,65 @@ namespace dbgl
     class Window
     {
 	public:
+	    /**
+	     * @brief Arguments passed on a close event
+	     */
 	    struct CloseEventArgs {};
+	    /**
+	     * @brief Arguments passed on a focus event
+	     */
 	    struct FocusEventArgs {bool focused;};
+	    /**
+	     * @brief Arguments passed on a iconified event
+	     */
 	    struct IconifiedEventArgs {bool iconified;};
+	    /**
+	     * @brief Arguments passed on a refresh event
+	     */
 	    struct RefreshEventArgs {};
+	    /**
+	     * @brief Arguments passed on a resize event
+	     */
 	    struct ResizeEventArgs {int width; int height;};
+	    /**
+	     * @brief Arguments passed on a framebuffer resize event
+	     */
 	    struct FramebufferResizeEventArgs {int width; int height;};
+	    /**
+	     * @brief Arguments passed on a position event
+	     */
 	    struct PositionEventArgs {int x; int y;};
+	    /**
+	     * @brief Arguments passed on a character event
+	     */
 	    struct CharacterEventArgs {unsigned int codepoint;};
+	    /**
+	     * @brief Arguments passed on a cursor enter event
+	     */
 	    struct CursorEnterEventArgs {bool entered;};
+	    /**
+	     * @brief Arguments passed on a cursor event
+	     */
 	    struct CursorEventArgs {double x; double y;};
+	    /**
+	     * @brief Arguments passed on a mouse button event
+	     */
 	    struct MouseButtonEventArgs {int button; int action; int mods;};
+	    /**
+	     * @brief Arguments passed on a scroll event
+	     */
 	    struct ScrollEventArgs {double xOffset; double yOffset;};
+	    /**
+	     * @brief Arguments passed on a key event
+	     */
 	    struct KeyEventArgs {int key; int scancode; int action; int mods;};
+	    /**
+	     * @brief Arguments passed on an update event
+	     */
 	    struct UpdateEventArgs {double deltaTime;};
+	    /**
+	     * @brief Arguments passed on a render event
+	     */
 	    struct RenderEventArgs {const RenderContext* rc;};
 
 	    using CloseCallbackType = std::function<void(CloseEventArgs const&)>;

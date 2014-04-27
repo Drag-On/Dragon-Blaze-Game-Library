@@ -289,7 +289,7 @@ namespace dbgl
 	    Quaternion<T>& operator/=(T const& rhs);
 	    /**
 	     * @brief Inverts the sign of all values
-	     * @warn This is not the same as conjugate()!
+	     * @warning This is not the same as conjugate()!
 	     */
 	    Quaternion<T> operator-() const;
 	    /**
@@ -309,8 +309,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief Quaternion of integers
+     */
     using QuatI = Quaternion<int>;
+    /**
+     * @brief Quaternion of floats
+     */
     using QuatF = Quaternion<float>;
+    /**
+     * @brief Quaternion of doubles
+     */
     using QuatD = Quaternion<double>;
 }
 

@@ -28,7 +28,7 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Constructs a bitmask of the size of an int
-	     * @param bits Interprets the int as flags
+	     * @param mask Interprets the int as flags
 	     */
 	    Bitmask(T const& mask = 0);
 	    /**
@@ -57,7 +57,7 @@ namespace dbgl
 	    void toggle(Bitmask<T> mask);
 	    /**
 	     * @brief Checks if the passed bitmask is set
-	     * @param bit bitmask
+	     * @param mask Bitmask
 	     * @return True in case all bits set in the mask are set
 	     */
 	    bool isSet(Bitmask<T> mask) const;

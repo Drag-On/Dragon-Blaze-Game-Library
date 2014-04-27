@@ -165,8 +165,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief 4x4 matrix of integers
+     */
     using Mat4i = Matrix4x4<int>;
+    /**
+     * @brief 4x4 matrix of floats
+     */
     using Mat4f = Matrix4x4<float>;
+    /**
+     * @brief 4x4 matrix of doubles
+     */
     using Mat4d = Matrix4x4<double>;
 }
 

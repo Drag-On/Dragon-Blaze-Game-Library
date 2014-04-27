@@ -34,6 +34,10 @@ namespace dbgl
     /// </summary>
     template<typename T> class Vector4 : public Vector<T, 4>
     {
+	private:
+	    /**
+	     * @brief Type this class is derived from
+	     */
 	    using BaseVectorType = Vector<T, 4>;
 
 	public:
@@ -95,8 +99,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief 4D vector of integers
+     */
     using Vec4i = Vector4<int>;
+    /**
+     * @brief 4D vector of floats
+     */
     using Vec4f = Vector4<float>;
+    /**
+     * @brief 4D vector of doubles
+     */
     using Vec4d = Vector4<double>;
 }
 

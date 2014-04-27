@@ -86,8 +86,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief 2x2 matrix of integers
+     */
     using Mat2i = Matrix2x2<int>;
+    /**
+     * @brief 2x2 matrix of floats
+     */
     using Mat2f = Matrix2x2<float>;
+    /**
+     * @brief 2x2 matrix of doubles
+     */
     using Mat2d = Matrix2x2<double>;
 }
 

@@ -111,8 +111,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief 3x3 matrix of integers
+     */
     using Mat3i = Matrix3x3<int>;
+    /**
+     * @brief 3x3 matrix of floats
+     */
     using Mat3f = Matrix3x3<float>;
+    /**
+     * @brief 3x3 matrix of doubles
+     */
     using Mat3d = Matrix3x3<double>;
 }
 

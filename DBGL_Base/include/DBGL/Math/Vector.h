@@ -37,20 +37,10 @@ namespace dbgl
 {
     /// <summary>
     /// @brief Vector of arbitrary dimension
-    /// @author Jan Moeller
-    ///
-    /// @details Since it's not possible to implement dot product and
-    ///		 cross product as operator, * does the dot product. For
-    ///		 convenience there is a method getCrossProduct() which
-    ///		 returns a new vector containing the cross product of
-    ///		 this vector and another one. For the *= operator there
-    ///		 is an overload for the cross product, but not for the
-    ///		 dot product.
     /// </summary>
     template<typename T, unsigned int N> class Vector
     {
 	public:
-	    // Constructors
 	    /// <summary>
 	    /// @brief Constructs a new null vector
 	    /// </summary>
@@ -65,7 +55,9 @@ namespace dbgl
 	    /// @brief Copies a vector
 	    /// </summary>
 	    Vector(const Vector<T, N> &other);
-	    // Destructors
+	    /// <summary>
+	    /// @brief Destructor
+	    /// </summary>
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -73,16 +65,14 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /*
-     * Vector<float,N>
-     * Specialized for floats
-     */
+    /// <summary>
+    /// @brief Vector of arbitrary dimension
+    /// </summary>
     template<unsigned int N> class Vector<float, N>
     {
 	private:
 	    using T = float;
 	public:
-	    // Constructors
 	    /// <summary>
 	    /// @brief Constructs a new null vector
 	    /// </summary>
@@ -97,7 +87,9 @@ namespace dbgl
 	    /// @brief Copies a vector
 	    /// </summary>
 	    Vector(const Vector<T, N> &other);
-	    // Destructors
+	    /// <summary>
+	    /// @brief Destructor
+	    /// </summary>
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -105,16 +97,14 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /*
-     * Vector<char,N>
-     * Specialized for chars
-     */
+    /// <summary>
+    /// @brief Vector of arbitrary dimension
+    /// </summary>
     template<unsigned int N> class Vector<char, N>
     {
 	private:
 	    using T = char;
 	public:
-	    // Constructors
 	    /// <summary>
 	    /// @brief Constructs a new null vector
 	    /// </summary>
@@ -129,7 +119,9 @@ namespace dbgl
 	    /// @brief Copies a vector
 	    /// </summary>
 	    Vector(const Vector<T, N> &other);
-	    // Destructors
+	    /// <summary>
+	    /// @brief Destructor
+	    /// </summary>
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -137,16 +129,14 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /*
-     * Vector<short,N>
-     * Specialized for shorts
-     */
+    /// <summary>
+    /// @brief Vector of arbitrary dimension
+    /// </summary>
     template<unsigned int N> class Vector<short, N>
     {
 	private:
 	    using T = short;
 	public:
-	    // Constructors
 	    /// <summary>
 	    /// @brief Constructs a new null vector
 	    /// </summary>
@@ -161,7 +151,9 @@ namespace dbgl
 	    /// @brief Copies a vector
 	    /// </summary>
 	    Vector(const Vector<T, N> &other);
-	    // Destructors
+	    /// <summary>
+	    /// @brief Destructor
+	    /// </summary>
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -170,7 +162,19 @@ namespace dbgl
     };
 
     // Free function operators
+    /**
+     * @brief Scalar multiplication. Scales the vector by rhs
+     * @param lhs Vector to scale
+     * @param rhs Scalar
+     * @return Result of the operation
+     */
     template<typename T, unsigned int N> const Vector<T, N> operator*(Vector<T, N> const& lhs, T const& rhs);
+    /**
+     * @brief Scalar multiplication. Scales the vector by lhs
+     * @param lhs Scalar
+     * @param rhs Vector to scale
+     * @return Result of the operation
+     */
     template<typename T, unsigned int N> const Vector<T, N> operator*(T const& lhs, Vector<T, N> const& rhs);
 }
 

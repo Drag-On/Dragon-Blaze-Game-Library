@@ -31,12 +31,35 @@ namespace dbgl
     {
 	public:
 	    virtual Mesh* load(std::string path, Bitmask<> flags = 0);
+	    /**
+	     * @brief Sets the angle which is used to determine if an edge is phong shaded or not
+	     * @param angle Normals with an angle smaller than this are phong shaded
+	     */
 	    void setNormalCompatibilityAngle(float angle);
 	protected:
+	    /**
+	     * @brief Clears the loaders temporary data
+	     */
 	    void clear();
+	    /**
+	     * @brief Used internally to load an obj file into memory
+	     * @param path Path of the obj file to load
+	     * @param flags Flags to consider
+	     * @return True in case the mesh was loaded, otherwise false
+	     */
 	    bool loadData(std::string path, Bitmask<> flags = 0);
+	    /**
+	     * @brief Analyzes the previously loaded data and creates a Mesh out of them
+	     * @param flags Flags to consider
+	     * @return Pointer to the created mesh. The mesh is created on the heap and thus needs
+	     * 	       to be freed manually.
+	     */
 	    Mesh* interpret(Bitmask<> flags = 0);
 
+	    /**
+	     * @brief Every OBJ face consists of three vertices having a position and (possibly)
+	     * 	      a UV and/or normal.
+	     */
 	    struct FaceComponent
 	    {
 		public:
@@ -44,15 +67,30 @@ namespace dbgl
 		    unsigned short uvIndex = std::numeric_limits<unsigned short>::max();
 		    unsigned short normalIndex = std::numeric_limits<unsigned short>::max();
 	    };
+	    /**
+	     * @brief One face (i.e. polygon)
+	     */
 	    struct Face
 	    {
 		public:
 		    FaceComponent components[3];
 	    };
 
-	    float m_normalCompatibilityAngle = 1.3962634f; // 80°
+	    /**
+	     * @brief Angle used by interpret() to split phong shaded edges from others. Default: 80°.
+	     */
+	    float m_normalCompatibilityAngle = 1.3962634f;
+	    /**
+	     * @brief List the faces are written to
+	     */
 	    std::vector<Face> m_origFaces;
+	    /**
+	     * @brief List the vertices / normals are written to
+	     */
 	    std::vector<Vec3f> m_origVertices, m_origNormals;
+	    /**
+	     * @brief List the UVs are written to
+	     */
 	    std::vector<Vec2f> m_origUvs;
     };
 }

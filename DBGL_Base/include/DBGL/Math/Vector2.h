@@ -34,6 +34,10 @@ namespace dbgl
     /// </summary>
     template<typename T> class Vector2 : public Vector<T, 2>
     {
+	private:
+	    /**
+	     * @brief Type this class is derived from
+	     */
 	    using BaseVectorType = Vector<T, 2>;
 
 	public:
@@ -80,8 +84,17 @@ namespace dbgl
     };
 
     // Some default types
+    /**
+     * @brief 2D vector of integers
+     */
     using Vec2i = Vector2<int>;
+    /**
+     * @brief 2D vector of floats
+     */
     using Vec2f = Vector2<float>;
+    /**
+     * @brief 2D vector of doubles
+     */
     using Vec2d = Vector2<double>;
 }
 
