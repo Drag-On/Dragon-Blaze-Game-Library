@@ -15,6 +15,13 @@
 
 using namespace dbgl;
 
+void checkKNearestNeighbor(std::vector<typename KdTree<int, Vec2f>::Container> result, std::vector<int> needed)
+{
+    assert(result.size() == needed.size());
+    for(auto item : result)
+	assert(std::find(needed.begin(), needed.end(), item.data) != needed.end());
+}
+
 int testKdTree()
 {
     LOG->info("Starting KdTree test suite...");
@@ -84,6 +91,34 @@ int testKdTree()
     assert(neighborData == 3);
     tree2.findNearestNeighbor(Vec2f(0.5f, 0), neighbor, neighborData);
     assert(neighborData == 0 || neighborData == 3 || neighborData == 1);
+    // findKNearestNeighbors
+    std::vector<typename KdTree<int, Vec2f>::Container> list;
+    tree2.findKNearestNeighbors(Vec2f(0.5f, 0), 3, list);
+    checkKNearestNeighbor(list, {0, 3, 1});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.5f, 0), 4, list);
+    checkKNearestNeighbor(list, {0, 3, 1, 4});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 1, list);
+    checkKNearestNeighbor(list, {0});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 2, list);
+    checkKNearestNeighbor(list, {0, 3});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 3, list);
+    checkKNearestNeighbor(list, {0, 3, 5});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 4, list);
+    checkKNearestNeighbor(list, {0, 3, 5, 1});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 5, list);
+    checkKNearestNeighbor(list, {0, 3, 5, 1, 4});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 6, list);
+    checkKNearestNeighbor(list, {0, 3, 5, 1, 4, 2});
+    list.clear();
+    tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 7, list);
+    checkKNearestNeighbor(list, {0, 3, 5, 1, 4, 2});
     // getAll
     auto allNodes = tree2.getAll();
     assert(allNodes.size() == tree2.size());

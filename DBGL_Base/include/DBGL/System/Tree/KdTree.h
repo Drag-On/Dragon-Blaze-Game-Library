@@ -14,6 +14,7 @@
 #include <iterator>
 #include <algorithm>
 #include <vector>
+#include <stdexcept>
 
 namespace dbgl
 {
@@ -88,6 +89,13 @@ namespace dbgl
 	     */
 	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data) const;
 	    /**
+	     * @brief Finds the k nearest neighbors to point
+	     * @param point Point to find the nearest neighbors for
+	     * @param k Amount of nearest neighbors to find
+	     * @param nearest This list will be filled with the found nearest neighbors
+	     */
+	    void findKNearestNeighbors(Point const& point, unsigned int k, std::vector<Container>& nearest) const;
+	    /**
 	     * @brief Collects all nodes stored in the tree
 	     * @return The list of all nodes
 	     */
@@ -111,6 +119,14 @@ namespace dbgl
 		Node* parent = nullptr;		// Parent node
 		Node* leftChild = nullptr;	// Left child node
 		Node* rightChild = nullptr;	// Right child node
+	    };
+	    /**
+	     * @brief Container used to temporarily store found nearest neighbors
+	     */
+	    struct NearestNeighbor
+	    {
+		Node const* pNode = nullptr;
+		float sqDist = std::numeric_limits<float>::max();
 	    };
 
 	    /**
@@ -177,8 +193,20 @@ namespace dbgl
 	     * @param goDown Tells the algorithm to check for closer nodes down of the current node
 	     * @param curDepth Current depth
 	     */
-	    void findNearestNeighbor(Point const& point, Node const& node, Node const*& currentBest,
+	    void findNearestNeighbor(Point const& point, Node const& node, NearestNeighbor& currentBest,
 		    bool goDown, unsigned int curDepth) const;
+
+	    /**
+	     * @brief Recursively finds the k nearest neighbors to point
+	     * @param point Point to find nearest neighbors for
+	     * @param k Amount of nearest neighbors to find
+	     * @param node Node to start search at
+	     * @param currentBest List of current best matches. Needs to have space for exactly k elements.
+	     * @param goDown Tells the algorithm to check for closer nodes down of the current node
+	     * @param curDepth Current depth
+	     */
+	    void findKNearestNeighbors(Point const& point, unsigned int k, Node const& node,
+		    std::vector<NearestNeighbor>& currentBest, bool goDown, unsigned int curDepth) const;
 
 	    /**
 	     * @brief Compares two containers by their coordinate defined in compareAxis

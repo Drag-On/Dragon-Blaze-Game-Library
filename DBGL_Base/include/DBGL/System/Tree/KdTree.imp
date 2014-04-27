@@ -232,18 +232,17 @@ namespace dbgl
     template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
     		Point const& point, Point& nearest, Data& data) const
     {
-    	Node const* curBest = nullptr;
+    	NearestNeighbor curBest;
     	findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
-    	nearest = curBest->point;
-    	data = curBest->data;
+    	nearest = curBest.pNode->point;
+    	data = curBest.pNode->data;
     }
     
     template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(
-    		Point const& point, Node const& node, Node const *& currentBest,
+    		Point const& point, Node const& node, NearestNeighbor& currentBest,
     		bool goDown, unsigned int curDepth) const
     {
     	auto axis = curDepth % Point::getDimension();
-    	// As long as currentBest is NULL we're moving down
     	if(goDown)
     	{
 			// Check if we go left or right
@@ -254,35 +253,139 @@ namespace dbgl
 			else
 			{
 				// This is a leaf node
-				if(currentBest != nullptr)
+				if(currentBest.pNode != nullptr)
 				{
 					// Check if the newly found node is closer
-					auto sqLengthCurBest = (point - currentBest->point).getSquaredLength();
+					auto sqLengthCurBest = currentBest.sqDist;
 					auto sqLengthCur = (point - node.point).getSquaredLength();
 					if(sqLengthCur < sqLengthCurBest)
-						currentBest = &node;
+					{
+						currentBest.pNode = &node;
+						currentBest.sqDist = sqLengthCur;
+					}
 				}
 				else
-				    currentBest = &node;
+				{
+				    currentBest.pNode = &node;
+				    currentBest.sqDist = (point - currentBest.pNode->point).getSquaredLength();
+				}
 				goDown = false;
 				return;
 			}
     	}
     	// Check if we've found a better match
-    	auto sqLengthCurBest = (point - currentBest->point).getSquaredLength();
+    	auto sqLengthCurBest = currentBest.sqDist;
     	auto sqLengthCur = (point - node.point).getSquaredLength();
     	if(sqLengthCur < sqLengthCurBest)
     	{
-    		currentBest = &node;
-    		sqLengthCurBest = sqLengthCur;
+    		currentBest.pNode = &node;
+    		currentBest.sqDist = sqLengthCur;
     	}
     	// Check if there could be a closer point on the other side of the splitting plane
     	auto dist = point[axis] - node.point[axis];
-    	if(dist * dist < sqLengthCurBest)
+    	if(dist * dist < currentBest.sqDist)
     	{
     		auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
     		if(otherSide != nullptr)
     		    findNearestNeighbor(point, *otherSide, currentBest, true, curDepth + 1);
+    	}
+    }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(
+    		Point const& point, unsigned int k, std::vector<Container>& nearest) const
+    {
+    	if(k == 0)
+    		std::invalid_argument("Cannot search for zero nearest neighbors.");
+    	if(k > size())
+    		k = size();
+    	
+    	std::vector<NearestNeighbor> curBest;
+    	findKNearestNeighbors(point, k, *m_pRoot, curBest, true, 0);
+    	for(auto nn : curBest)
+    		nearest.push_back({nn.pNode->point, nn.pNode->data});
+    }
+    
+    template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(
+    		Point const& point, unsigned int k, Node const& node,
+    		std::vector<NearestNeighbor>& currentBest, bool goDown, unsigned int curDepth) const
+    {
+    	// Calculate current axis
+    	auto axis = curDepth % Point::getDimension();
+    	// Declare sort lambda used later on
+		auto sortFunc = [] (NearestNeighbor nn1, NearestNeighbor nn2) -> bool
+		{
+			return nn1.sqDist < nn2.sqDist;
+		};
+    	if(goDown)
+    	{
+			// Check if we go left or right
+			if(point[axis] <= node.point[axis] && node.leftChild != nullptr)
+				findKNearestNeighbors(point, k, *node.leftChild, currentBest, true, curDepth + 1);
+			else if(point[axis] > node.point[axis] && node.rightChild != nullptr)
+				findKNearestNeighbors(point, k, *node.rightChild, currentBest, true, curDepth + 1);
+			else
+			{
+				// This is a leaf node
+				// If we've already found k nearest neighbors, check if the current node is closer
+				// than the furthest of the already found ones
+				if(currentBest.size() == k)
+				{
+					// Sort by squared distance
+					std::sort(currentBest.begin(), currentBest.end(), sortFunc);
+					// Check if the newly found node is closer
+					auto& leastClosest = currentBest[k-1];
+					auto sqLengthCurBest = leastClosest.sqDist;
+					auto sqLengthCur = (point - node.point).getSquaredLength();
+					if(sqLengthCur < sqLengthCurBest)
+					{
+						leastClosest.pNode = &node;
+						leastClosest.sqDist = sqLengthCur;
+					}
+				}
+				else
+				{
+					NearestNeighbor nn;
+					nn.pNode = &node;
+					nn.sqDist = (point - node.point).getSquaredLength();
+				    currentBest.push_back(nn);
+				}
+				goDown = false;
+				return;
+			}
+    	}
+    	// If we didn't find k neighbors yet just add the point
+    	auto sqLengthCur = (point - node.point).getSquaredLength();
+    	if(currentBest.size() < k)
+    	{
+			NearestNeighbor nn;
+			nn.pNode = &node;
+			nn.sqDist = sqLengthCur;
+		    currentBest.push_back(nn);
+    	}
+    	else
+    	{
+			// Check if we've found a better match
+			// Sort by squared distance
+			std::sort(currentBest.begin(), currentBest.end(), sortFunc);
+			// Check if the newly found node is closer
+			auto& leastClosest = currentBest[k-1];
+			auto sqLengthCurBest = leastClosest.sqDist;
+			if(sqLengthCur < sqLengthCurBest)
+			{
+				leastClosest.pNode = &node;
+				leastClosest.sqDist = sqLengthCur;
+			}
+    	}
+    	// Check if there could be a closer point on the other side of the splitting plane
+    	auto dist = point[axis] - node.point[axis];
+    	for(auto best : currentBest)
+    	{
+			if(dist * dist < best.sqDist)
+			{
+				auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
+				if(otherSide != nullptr)
+					findKNearestNeighbors(point, k, *otherSide, currentBest, true, curDepth + 1);
+			}
     	}
     }
     
