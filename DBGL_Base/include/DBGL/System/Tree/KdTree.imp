@@ -60,16 +60,18 @@ namespace dbgl
 	    	auto axis = curDepth % Point::getDimension();
 	    	compareAxis = axis;
 			auto middleElement = amountOfElements / 2;
-			std::nth_element(begin, begin + middleElement, end, compare);
-			auto container = *(begin + middleElement);
+			auto itMiddle = begin;
+			std::advance(itMiddle, middleElement);
+			std::nth_element(begin, itMiddle, end, compare);
+			auto container = *itMiddle;
 			// Create node and subtree
 			auto node = new Node();
 			node->point = container.point;
 			node->data = container.data;
 			node->parent = parent;
 			// Recursively create subtrees
-			node->leftChild = buildTree(begin, begin + middleElement, curDepth + 1, node);
-			node->rightChild = buildTree(begin + (middleElement + 1), end, curDepth + 1, node);
+			node->leftChild = buildTree(begin, itMiddle, curDepth + 1, node);
+			node->rightChild = buildTree(std::next(itMiddle), end, curDepth + 1, node);
 			return node;
     	}
     	else
