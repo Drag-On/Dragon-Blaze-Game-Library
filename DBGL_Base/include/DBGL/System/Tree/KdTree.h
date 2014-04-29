@@ -72,6 +72,13 @@ namespace dbgl
 	     */
 	    Data* get(Point const& point) const;
 	    /**
+	     * @brief Gets the data attached to the first found point similar to the passed one
+	     * @param point Point to get data for
+	     * @param precision Defines how close every coordinate has to be to be treated as similar
+	     * @return Pointer to the data attached to the passed point or NULL if the point wasn't found
+	     */
+	    Data* getSimilar(Point const& point, double precision = 0.001) const;
+	    /**
 	     * @brief Inserts an element into the tree, probably leaving the tree unbalanced
 	     * @param point Coordinates of the point to add
 	     * @param data Data to store with that point
@@ -144,6 +151,9 @@ namespace dbgl
 	     * @param parent Pointer to the parent node of the node to build
 	     * @return Pointer to the root of the built tree
 	     * @note Objects in the range begin to end will be modified
+	     * @warning Due to a bug in some versions of gcc (4.7.x / 4.8.x / 4.9.x) this method may
+	     * 		segfault on std::nth_element. It's recommended to use an up-to-date version of gcc.
+	     *		See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58800 for more details.
 	     */
 	    template<class RandomAccessIterator> Node* buildTree(RandomAccessIterator begin,
 		    RandomAccessIterator end, unsigned int curDepth = 0, Node* parent = nullptr) const;
@@ -158,6 +168,19 @@ namespace dbgl
 	     * @return Pointer to the node with the passed coordinates or NULL if not found
 	     */
 	    Node* searchFor(Point const& point, Node* node, unsigned int curDepth, unsigned int *level = nullptr) const;
+
+	    /**
+	     * @brief Searches for the first node with similar coordinates to the passed coordinates
+	     * @param point Coordinates of the point to search for
+	     * @param node Node to start search
+	     * @param curDepth Depth of the node to start from
+	     * @param level If level is not NULL the level of the found node is copied here.
+	     * 		    If the searched node has not been found this variable is left unchanged
+	     * @param precision Defines how precisely a point has to match
+	     * @return Pointer to the node with the passed coordinates or NULL if not found
+	     */
+	    Node* searchForSimilar(Point const& point, Node* node, unsigned int curDepth,
+		    unsigned int *level = nullptr, double precision = 0.001) const;
 
 	    /**
 	     * @brief Collects all child nodes of the passed node
@@ -213,19 +236,6 @@ namespace dbgl
 	     */
 	    void findKNearestNeighbors(Point const& point, unsigned int k, Node const& node,
 		    std::vector<NearestNeighbor>& currentBest, bool goDown, unsigned int curDepth) const;
-
-	    /**
-	     * @brief Compares two containers by their coordinate defined in compareAxis
-	     * @param a First container
-	     * @param b Second container
-	     * @return True if as compareAxis is smaller or equal to bs, otherwise false
-	     */
-	    static bool compare(Container const& a, Container const& b);
-
-	    /**
-	     * Axis used by compare()
-	     */
-	    static unsigned int compareAxis;
 
 	    /**
 	     * @brief Pointer to root node

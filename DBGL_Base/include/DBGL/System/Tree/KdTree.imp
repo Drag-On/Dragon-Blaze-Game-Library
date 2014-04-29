@@ -10,43 +10,36 @@
 
 namespace dbgl
 {
-    template<typename Data, typename Point> unsigned int KdTree<Data, Point>::compareAxis = 0;
-    
-    template<typename Data, typename Point> bool KdTree<Data, Point>::compare(Container const& a, Container const& b)
-    {
-    	return a.point[compareAxis] <= b.point[compareAxis];
-    }
-
     template<typename Data, typename Point> KdTree<Data, Point>::KdTree()
-	{
-    	m_size = 0;
-	}
+    {
+	m_size = 0;
+    }
     
     template<typename Data, typename Point> template<class RandomAccessIterator> KdTree<Data, Point>::KdTree(
-    		RandomAccessIterator begin,	RandomAccessIterator end)
-	{
-    	m_pRoot = buildTree(begin, end, 0, nullptr);
-    	m_size = std::distance(begin, end);
-	}
+	    RandomAccessIterator begin, RandomAccessIterator end)
+    {
+	m_pRoot = buildTree(begin, end, 0, nullptr);
+	m_size = std::distance(begin, end);
+    }
     
     template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
     {
-    	// Free all nodes
-    	if (m_pRoot != nullptr)
-		    free(m_pRoot);
+	// Free all nodes
+	if (m_pRoot != nullptr)
+	    free(m_pRoot);
     }
     
     template<typename Data, typename Point> void KdTree<Data, Point>::free(Node* node)
     {
-    	if(node != nullptr)
-    	{
-			if(node->leftChild != nullptr)
-				free(node->leftChild);
-			if(node->rightChild != nullptr)
-				free(node->rightChild);
-			delete node;
-			node = nullptr;
-    	}
+	if (node != nullptr)
+	{
+	    if (node->leftChild != nullptr)
+		free(node->leftChild);
+	    if (node->rightChild != nullptr)
+		free(node->rightChild);
+	    delete node;
+	    node = nullptr;
+	}
     }
     
     template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
@@ -56,26 +49,27 @@ namespace dbgl
     	auto amountOfElements = std::distance(begin, end);
     	if(amountOfElements > 0)
     	{
-	    	// Select axis for splitting plane
-	    	auto axis = curDepth % Point::getDimension();
-	    	compareAxis = axis;
-			auto middleElement = amountOfElements / 2;
-			auto itMiddle = begin;
-			std::advance(itMiddle, middleElement);
-			std::nth_element(begin, itMiddle, end, compare);
-			auto container = *itMiddle;
-			// Create node and subtree
-			auto node = new Node();
-			node->point = container.point;
-			node->data = container.data;
-			node->parent = parent;
-			// Recursively create subtrees
-			node->leftChild = buildTree(begin, itMiddle, curDepth + 1, node);
-			node->rightChild = buildTree(std::next(itMiddle), end, curDepth + 1, node);
-			return node;
+	    // Select axis for splitting plane
+	    auto axis = curDepth % Point::getDimension();
+	    auto itMiddle = begin + (end - begin) / 2;
+	    auto compare = [axis](Container const& a, Container const& b)
+	    {
+		return a.point[axis] < b.point[axis];
+	    };
+	    std::nth_element(begin, itMiddle, end, compare);
+	    auto container = *itMiddle;
+	    // Create node and subtree
+	    auto node = new Node();
+	    node->point = container.point;
+	    node->data = container.data;
+	    node->parent = parent;
+	    // Recursively create subtrees
+	    node->leftChild = buildTree(begin, itMiddle, curDepth + 1, node);
+	    node->rightChild = buildTree(std::next(itMiddle), end, curDepth + 1, node);
+	    return node;
     	}
-    	else
-    		return nullptr;
+	else
+	    return nullptr;
     }
     
     template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point) const
@@ -83,17 +77,51 @@ namespace dbgl
     	auto result = searchFor(point, m_pRoot, 0);
     	if(result != nullptr)
     	    return &result->data;
+	else
+	    return nullptr;
+    }
+    
+    template<typename Data, typename Point> Data* KdTree<Data, Point>::getSimilar(
+    		Point const& point, double precision) const
+    {
+    	auto result = searchForSimilar(point, m_pRoot, 0, nullptr, precision);
+    	if(result != nullptr)
+    	    return &result->data;
     	else
     		return nullptr;
     }
     
-    template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(
-    		Point const& point, Node* node, unsigned int curDepth, unsigned int *level) const -> Node*
+    template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(Point const& point,
+	    Node* node, unsigned int curDepth, unsigned int *level) const -> Node*
+    {
+	if (node != nullptr)
 	{
+	    // Check if the start node is already matching
+	    if (point == node->point)
+	    {
+		if (level != nullptr)
+		    *level = curDepth;
+		return node;
+	    }
+	    // Otherwise check child nodes
+	    auto axis = curDepth % Point::getDimension();
+	    if (point[axis] <= node->point[axis])
+		return searchFor(point, node->leftChild, curDepth + 1, level);
+	    else
+		return searchFor(point, node->rightChild, curDepth + 1, level);
+	}
+	else
+	    return nullptr;
+    }
+    
+    template<typename Data, typename Point> auto KdTree<Data, Point>::searchForSimilar(
+    		Point const& point, Node* node, unsigned int curDepth,
+    		unsigned int *level, double precision) const -> Node*
+    {
 	    if(node != nullptr)
 	    {
 	    	// Check if the start node is already matching
-	    	if(point == node->point)
+	    	if(point.isSimilar(node->point, precision))
 	    	{
 	    		if(level != nullptr)
 	    		    *level = curDepth;
@@ -102,13 +130,13 @@ namespace dbgl
 	    	// Otherwise check child nodes
 	    	auto axis = curDepth % Point::getDimension();
 	    	if(point[axis] <= node->point[axis])
-	    		return searchFor(point, node->leftChild, curDepth + 1, level);
+	    		return searchForSimilar(point, node->leftChild, curDepth + 1, level, precision);
 	    	else
-	    		return searchFor(point, node->rightChild, curDepth + 1, level);
+	    		return searchForSimilar(point, node->rightChild, curDepth + 1, level, precision);
 	    }
 	    else
 	    	return nullptr;
-	}
+    }
     
     template<typename Data, typename Point> void KdTree<Data, Point>::insert(
     		Point const& point, Data const& data)

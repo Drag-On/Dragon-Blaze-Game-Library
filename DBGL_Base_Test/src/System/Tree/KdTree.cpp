@@ -50,6 +50,16 @@ int testKdTree()
     assert(*tree2.get(Vec2f(0.75f, 0.5f)) == 4);
     assert(*tree2.get(Vec2f(-0.5f, -0.5f)) == 5);
     assert(tree2.get(Vec2f(300, 0)) == nullptr);
+    // getSimilar
+    assert(tree.getSimilar(Vec2f()) == nullptr);
+    assert(*tree2.getSimilar(Vec2f()) == 0);
+    assert(*tree2.getSimilar(Vec2f(1.00001, 0)) == 1);
+    assert(*tree2.getSimilar(Vec2f(-1, 1.000134)) == 2);
+    assert(*tree2.getSimilar(Vec2f(0.5f, -0.5f)) == 3);
+    assert(*tree2.getSimilar(Vec2f(0.75023f, 0.5f)) == 4);
+    assert(*tree2.getSimilar(Vec2f(-0.5f, -0.5f)) == 5);
+    assert(tree2.getSimilar(Vec2f(300, 0)) == nullptr);
+    assert(*tree2.getSimilar(Vec2f(300, 0), 299.1) == 1);
     // insert
     tree.insert(Vec2f(), 300);
     tree.insert(Vec2f(-1, 0), 42);
