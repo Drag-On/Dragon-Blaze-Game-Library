@@ -39,9 +39,10 @@ namespace dbgl
     {
 	if(this != &other)
 	{
-	    m_pRoot = copyNode(other.m_pRoot);
+	    m_pRoot = copyNode(*other.m_pRoot);
 	    m_size = other.m_size;
 	}
+	return *this;
     }
 
     template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(KdTree<Data, Point>&& other)
@@ -53,6 +54,7 @@ namespace dbgl
 	    m_size = other.m_size;
 	    other.m_size = 0;
 	}
+	return *this;
     }
 
     template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
