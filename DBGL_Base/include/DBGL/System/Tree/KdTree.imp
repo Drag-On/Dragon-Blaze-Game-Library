@@ -22,6 +22,12 @@ namespace dbgl
 	m_size = std::distance(begin, end);
     }
     
+    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree const& other)
+    {
+	m_pRoot = copyNode(*other.m_pRoot);
+	m_size = other.m_size;
+    }
+
     template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
     {
 	// Free all nodes
@@ -29,6 +35,24 @@ namespace dbgl
 	    free(m_pRoot);
     }
     
+    template<typename Data, typename Point> auto KdTree<Data, Point>::copyNode(Node& node) const -> Node*
+    {
+	Node* pNewNode = new Node();
+	pNewNode->point = node.point;
+	pNewNode->data = node.data;
+	if(node.leftChild != nullptr)
+	{
+	    pNewNode->leftChild = copyNode(*node.leftChild);
+	    pNewNode->leftChild->parent = pNewNode;
+	}
+	if(node.rightChild != nullptr)
+	{
+	    pNewNode->rightChild = copyNode(*node.rightChild);
+	    pNewNode->rightChild->parent = pNewNode;
+	}
+	return pNewNode;
+    }
+
     template<typename Data, typename Point> void KdTree<Data, Point>::free(Node* node)
     {
 	if (node != nullptr)

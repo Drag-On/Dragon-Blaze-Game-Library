@@ -36,6 +36,9 @@ int testKdTree()
 	    {Vec2f(-0.5f, -0.5f), 5},
     };
     KdTree<int, Vec2f> tree2(data.begin(), data.end());
+    auto copy(tree2);
+    assert(*copy.get(Vec2f(0.0)) == *tree2.get(Vec2f(0,0)));
+    assert(copy.get(Vec2f(0.0)) != tree2.get(Vec2f(0,0)));
     LOG->info("OK!");
     LOG->info("Methods... ");
     // size

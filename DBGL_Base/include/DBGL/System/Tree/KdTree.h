@@ -62,6 +62,11 @@ namespace dbgl
 	     */
 	    template<class RandomAccessIterator> KdTree(RandomAccessIterator begin, RandomAccessIterator end);
 	    /**
+	     * @brief Copies a k-d tree
+	     * @param other Tree to copy
+	     */
+	    KdTree(KdTree const& other);
+	    /**
 	     * @brief Frees all previously allocated memory
 	     */
 	    ~KdTree();
@@ -141,6 +146,13 @@ namespace dbgl
 		Node const* pNode = nullptr;
 		float sqDist = std::numeric_limits<float>::max();
 	    };
+
+	    /**
+	     * @brief Copies a node and all of its children
+	     * @param node Node to copy
+	     * @return Pointer to the copied root node
+	     */
+	    Node* copyNode(Node& node) const;
 
 	    /**
 	     * @brief Recursively builds a tree from the passed list
