@@ -49,6 +49,7 @@ namespace dbgl
     {
 	if(this != &other)
 	{
+	    free(m_pRoot);
 	    m_pRoot = other.m_pRoot;
 	    other.m_pRoot = nullptr;
 	    m_size = other.m_size;
