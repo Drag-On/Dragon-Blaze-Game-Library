@@ -37,8 +37,13 @@ int testKdTree()
     };
     KdTree<int, Vec2f> tree2(data.begin(), data.end());
     auto copy(tree2);
-    assert(*copy.get(Vec2f(0.0)) == *tree2.get(Vec2f(0,0)));
-    assert(copy.get(Vec2f(0.0)) != tree2.get(Vec2f(0,0)));
+    assert(*copy.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
+    assert(copy.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
+    auto move = std::move(copy);
+    assert(*move.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
+    assert(move.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
+    assert(copy.get(Vec2f(0,0)) == nullptr);
+    assert(copy.size() == 0);
     LOG->info("OK!");
     LOG->info("Methods... ");
     // size

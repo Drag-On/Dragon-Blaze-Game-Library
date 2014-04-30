@@ -67,6 +67,23 @@ namespace dbgl
 	     */
 	    KdTree(KdTree const& other);
 	    /**
+	     * @brief Move operator
+	     * @param other Tree to move
+	     */
+	    KdTree(KdTree&& other);
+	    /**
+	     * @brief Copy assignment operator
+	     * @param other Tree to copy
+	     * @return Reference to this tree
+	     */
+	    KdTree& operator=(KdTree const& other);
+	    /**
+	     * @brief Move assignment operator
+	     * @param other Tree to move
+	     * @return Reference to this tree
+	     */
+	    KdTree& operator=(KdTree&& other);
+	    /**
 	     * @brief Frees all previously allocated memory
 	     */
 	    ~KdTree();

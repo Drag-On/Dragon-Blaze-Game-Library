@@ -22,10 +22,37 @@ namespace dbgl
 	m_size = std::distance(begin, end);
     }
     
-    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree const& other)
+    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> const& other)
     {
 	m_pRoot = copyNode(*other.m_pRoot);
 	m_size = other.m_size;
+    }
+
+    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point>&& other)
+    {
+	m_pRoot = other.m_pRoot;
+	other.m_pRoot = nullptr;
+	other.m_size = 0;
+    }
+
+    template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(KdTree<Data, Point> const& other)
+    {
+	if(this != &other)
+	{
+	    m_pRoot = copyNode(other.m_pRoot);
+	    m_size = other.m_size;
+	}
+    }
+
+    template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(KdTree<Data, Point>&& other)
+    {
+	if(this != &other)
+	{
+	    m_pRoot = other.m_pRoot;
+	    other.m_pRoot = nullptr;
+	    m_size = other.m_size;
+	    other.m_size = 0;
+	}
     }
 
     template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
