@@ -545,6 +545,7 @@ namespace dbgl
 
     void Window::preUpdate()
     {
+	m_input.update();
     }
 
     void Window::update()
