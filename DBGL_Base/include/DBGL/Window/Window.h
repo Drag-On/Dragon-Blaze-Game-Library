@@ -236,6 +236,10 @@ namespace dbgl
 		     * @brief Input object
 		     */
 		    Input const& input;
+		    /**
+		     * @brief Key that triggered the event
+		     */
+		    Input::Key key;
 	    };
 
 	    /**

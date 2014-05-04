@@ -152,7 +152,7 @@ namespace dbgl
 	else
 	    keyState = Input::KeyState::UP;
 	s_windows[window]->m_mouseButtonCallbacks.fire(Window::MouseButtonEventArgs{button, keyConst, keyState, mods});
-	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input});
+	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input, keyConst});
     }
 
     void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
@@ -177,7 +177,7 @@ namespace dbgl
 	else
 	    keyState = Input::KeyState::UP;
 	s_windows[window]->m_keyCallbacks.fire(Window::KeyEventArgs{keyConst, scancode, keyState, mods});
-	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input});
+	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input, keyConst});
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
