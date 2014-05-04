@@ -308,8 +308,12 @@ namespace dbgl
     Input::KeyState Window::getKey(Input::Key key) const
     {
 	// Convert Input::Key to GLFW key
-	int glfwKey = (int) key - Input::keyboard_offset;
-	return (Input::KeyState) glfwGetKey(m_pWndHandle, glfwKey);
+	int glfwKey = int(key) - Input::keyboard_offset;
+	int glfwResult = glfwGetKey(m_pWndHandle, glfwKey);
+	Input::KeyState keyState = Input::KeyState::UP;
+	if(glfwResult == GLFW_PRESS || glfwResult == GLFW_REPEAT)
+	    keyState = Input::KeyState::DOWN;
+	return keyState;
     }
 
     Window::CloseEventType::DelegatePtr Window::addCloseCallback(CloseCallbackType const& callback)
