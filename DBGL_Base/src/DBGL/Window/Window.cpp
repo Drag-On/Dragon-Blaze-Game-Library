@@ -12,8 +12,7 @@
 
 namespace dbgl
 {
-    Window::Window(GLFWwindow* share, const char* title,
-	    int width, int height, bool fullscreen)
+    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen)
     {
 	if (!glfwInit())
 	{
@@ -51,9 +50,9 @@ namespace dbgl
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 	if(fullscreen)
-	    m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
+	m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
-	    m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
+	m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
 	if (!m_pWndHandle)
 	{
 	    LOG->error("Failed to create new window!");
@@ -96,9 +95,19 @@ namespace dbgl
 	m_pRenderContext->changeSize(args.width, args.height);
     }
 
+    void Window::keyCallback(KeyEventArgs args)
+    {
+	m_input.updateKey(args.key, args.action);
+    }
+
+    void Window::mouseButtonCallback(MouseButtonEventArgs args)
+    {
+	m_input.updateKey(args.key, args.action);
+    }
+
     void Window::createRenderContext()
     {
-	if(m_pRenderContext != NULL)
+	if (m_pRenderContext != NULL)
 	    delete m_pRenderContext;
 
 	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
@@ -301,15 +310,13 @@ namespace dbgl
 	return glfwGetKey(m_pWndHandle, key);
     }
 
-    Window::CloseEventType::DelegatePtr Window::addCloseCallback(
-	    CloseCallbackType const& callback)
+    Window::CloseEventType::DelegatePtr Window::addCloseCallback(CloseCallbackType const& callback)
     {
 	glfwSetWindowCloseCallback(m_pWndHandle, WindowManager::closeCallback);
 	return m_closeCallbacks.addListener(callback);
     }
 
-    bool Window::removeCloseCallback(
-	    CloseEventType::DelegatePtr const& callback)
+    bool Window::removeCloseCallback(CloseEventType::DelegatePtr const& callback)
     {
 	bool ret = m_closeCallbacks.removeListener(callback);
 	if (!m_closeCallbacks.hasListener())
@@ -317,15 +324,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::FocusEventType::DelegatePtr Window::addFocusCallback(
-	    FocusCallbackType const& callback)
+    Window::FocusEventType::DelegatePtr Window::addFocusCallback(FocusCallbackType const& callback)
     {
 	glfwSetWindowFocusCallback(m_pWndHandle, WindowManager::focusCallback);
 	return m_focusCallbacks.addListener(callback);
     }
 
-    bool Window::removeFocusCallback(
-	    FocusEventType::DelegatePtr const& callback)
+    bool Window::removeFocusCallback(FocusEventType::DelegatePtr const& callback)
     {
 	bool ret = m_focusCallbacks.removeListener(callback);
 	if (!m_focusCallbacks.hasListener())
@@ -340,8 +345,7 @@ namespace dbgl
 	return m_iconifiedCallbacks.addListener(callback);
     }
 
-    bool Window::removeIconifiedCallback(
-	    IconifiedEventType::DelegatePtr const& callback)
+    bool Window::removeIconifiedCallback(IconifiedEventType::DelegatePtr const& callback)
     {
 	bool ret = m_iconifiedCallbacks.removeListener(callback);
 	if (!m_iconifiedCallbacks.hasListener())
@@ -349,15 +353,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::RefreshEventType::DelegatePtr Window::addRefreshCallback(
-	    RefreshCallbackType const& callback)
+    Window::RefreshEventType::DelegatePtr Window::addRefreshCallback(RefreshCallbackType const& callback)
     {
 	glfwSetWindowRefreshCallback(m_pWndHandle, WindowManager::refreshCallback);
 	return m_refreshCallbacks.addListener(callback);
     }
 
-    bool Window::removeRefreshCallback(
-	    RefreshEventType::DelegatePtr const& callback)
+    bool Window::removeRefreshCallback(RefreshEventType::DelegatePtr const& callback)
     {
 	bool ret = m_refreshCallbacks.removeListener(callback);
 	if (!m_refreshCallbacks.hasListener())
@@ -365,15 +367,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::ResizeEventType::DelegatePtr Window::addResizeCallback(
-	    ResizeCallbackType const& callback)
+    Window::ResizeEventType::DelegatePtr Window::addResizeCallback(ResizeCallbackType const& callback)
     {
 	glfwSetWindowSizeCallback(m_pWndHandle, WindowManager::resizeCallback);
 	return m_resizeCallbacks.addListener(callback);
     }
 
-    bool Window::removeResizeCallback(
-	    ResizeEventType::DelegatePtr const& callback)
+    bool Window::removeResizeCallback(ResizeEventType::DelegatePtr const& callback)
     {
 	bool ret = m_resizeCallbacks.removeListener(callback);
 	if (!m_resizeCallbacks.hasListener())
@@ -388,8 +388,7 @@ namespace dbgl
 	return m_framebufferResizeCallbacks.addListener(callback);
     }
 
-    bool Window::removeFramebufferResizeCallback(
-	    FramebufferResizeEventType::DelegatePtr const& callback)
+    bool Window::removeFramebufferResizeCallback(FramebufferResizeEventType::DelegatePtr const& callback)
     {
 	bool ret = m_framebufferResizeCallbacks.removeListener(callback);
 	if (!m_framebufferResizeCallbacks.hasListener())
@@ -397,15 +396,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::PositionEventType::DelegatePtr Window::addPositionCallback(
-	    PositionCallbackType const& callback)
+    Window::PositionEventType::DelegatePtr Window::addPositionCallback(PositionCallbackType const& callback)
     {
 	glfwSetWindowPosCallback(m_pWndHandle, WindowManager::positionCallback);
 	return m_positionCallbacks.addListener(callback);
     }
 
-    bool Window::removePositionCallback(
-	    PositionEventType::DelegatePtr const& callback)
+    bool Window::removePositionCallback(PositionEventType::DelegatePtr const& callback)
     {
 	bool ret = m_positionCallbacks.removeListener(callback);
 	if (!m_positionCallbacks.hasListener())
@@ -420,8 +417,7 @@ namespace dbgl
 	return m_characterCallbacks.addListener(callback);
     }
 
-    bool Window::removeCharacterCallback(
-	    CharacterEventType::DelegatePtr const& callback)
+    bool Window::removeCharacterCallback(CharacterEventType::DelegatePtr const& callback)
     {
 	bool ret = m_characterCallbacks.removeListener(callback);
 	if (!m_characterCallbacks.hasListener())
@@ -436,8 +432,7 @@ namespace dbgl
 	return m_cursorEnterCallbacks.addListener(callback);
     }
 
-    bool Window::removeCursorEnterCallback(
-	    CursorEnterEventType::DelegatePtr const& callback)
+    bool Window::removeCursorEnterCallback(CursorEnterEventType::DelegatePtr const& callback)
     {
 	bool ret = m_cursorEnterCallbacks.removeListener(callback);
 	if (!m_cursorEnterCallbacks.hasListener())
@@ -445,15 +440,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::CursorEventType::DelegatePtr Window::addCursorCallback(
-	    CursorCallbackType const& callback)
+    Window::CursorEventType::DelegatePtr Window::addCursorCallback(CursorCallbackType const& callback)
     {
 	glfwSetCursorPosCallback(m_pWndHandle, WindowManager::cursorCallback);
 	return m_cursorCallbacks.addListener(callback);
     }
 
-    bool Window::removeCursorCallback(
-	    CursorEventType::DelegatePtr const& callback)
+    bool Window::removeCursorCallback(CursorEventType::DelegatePtr const& callback)
     {
 	bool ret = m_cursorCallbacks.removeListener(callback);
 	if (!m_cursorCallbacks.hasListener())
@@ -468,8 +461,7 @@ namespace dbgl
 	return m_mouseButtonCallbacks.addListener(callback);
     }
 
-    bool Window::removeMouseButtonCallback(
-	    MouseButtonEventType::DelegatePtr const& callback)
+    bool Window::removeMouseButtonCallback(MouseButtonEventType::DelegatePtr const& callback)
     {
 	bool ret = m_mouseButtonCallbacks.removeListener(callback);
 	if (!m_mouseButtonCallbacks.hasListener())
@@ -477,15 +469,13 @@ namespace dbgl
 	return ret;
     }
 
-    Window::ScrollEventType::DelegatePtr Window::addScrollCallback(
-	    ScrollCallbackType const& callback)
+    Window::ScrollEventType::DelegatePtr Window::addScrollCallback(ScrollCallbackType const& callback)
     {
 	glfwSetScrollCallback(m_pWndHandle, WindowManager::scrollCallback);
 	return m_scrollCallbacks.addListener(callback);
     }
 
-    bool Window::removeScrollCallback(
-	    ScrollEventType::DelegatePtr const& callback)
+    bool Window::removeScrollCallback(ScrollEventType::DelegatePtr const& callback)
     {
 	bool ret = m_scrollCallbacks.removeListener(callback);
 	if (!m_scrollCallbacks.hasListener())
@@ -493,44 +483,58 @@ namespace dbgl
 	return ret;
     }
 
-    Window::KeyEventType::DelegatePtr Window::addKeyCallback(
-	    KeyCallbackType const& callback)
+    Window::KeyEventType::DelegatePtr Window::addKeyCallback(KeyCallbackType const& callback)
     {
 	glfwSetKeyCallback(m_pWndHandle, WindowManager::keyCallback);
 	return m_keyCallbacks.addListener(callback);
     }
 
-    bool Window::removeKeyCallback(
-	    KeyEventType::DelegatePtr const& callback)
+    bool Window::removeKeyCallback(KeyEventType::DelegatePtr const& callback)
     {
 	bool ret = m_keyCallbacks.removeListener(callback);
-	if(!m_keyCallbacks.hasListener())
+	if (!m_keyCallbacks.hasListener())
 	    glfwSetKeyCallback(m_pWndHandle, NULL);
 	return ret;
     }
 
-    Window::UpdateEventType::DelegatePtr Window::addUpdateCallback(
-	    UpdateCallbackType const& callback)
+    Window::UpdateEventType::DelegatePtr Window::addUpdateCallback(UpdateCallbackType const& callback)
     {
 	return m_updateCallbacks.addListener(callback);
     }
 
-    bool Window::removeUpdateCallback(
-	    UpdateEventType::DelegatePtr const& callback)
+    bool Window::removeUpdateCallback(UpdateEventType::DelegatePtr const& callback)
     {
 	return m_updateCallbacks.removeListener(callback);
     }
 
-    Window::RenderEventType::DelegatePtr Window::addRenderCallback(
-	    RenderCallbackType const& callback)
+    Window::RenderEventType::DelegatePtr Window::addRenderCallback(RenderCallbackType const& callback)
     {
 	return m_renderCallbacks.addListener(callback);
     }
 
-    bool Window::removeRenderCallback(
-	    RenderEventType::DelegatePtr const& callback)
+    bool Window::removeRenderCallback(RenderEventType::DelegatePtr const& callback)
     {
 	return m_renderCallbacks.removeListener(callback);
+    }
+
+    Window::InputEventType::DelegatePtr Window::addInputCallback(InputCallbackType const& callback)
+    {
+	if(!m_inputKeyDelegate)
+	    m_inputKeyDelegate = addKeyCallback(std::bind(&dbgl::Window::keyCallback, this, std::placeholders::_1));
+	if(!m_inputMouseDelegate)
+	    m_inputMouseDelegate = addMouseButtonCallback(std::bind(&dbgl::Window::mouseButtonCallback, this, std::placeholders::_1));
+	return m_inputCallbacks.addListener(callback);
+    }
+
+    bool Window::removeInputCallback(InputEventType::DelegatePtr const& callback)
+    {
+	auto removed = m_inputCallbacks.removeListener(callback);
+	if(!m_inputCallbacks.hasListener())
+	{
+	    removeKeyCallback(m_inputKeyDelegate);
+	    removeMouseButtonCallback(m_inputMouseDelegate);
+	}
+	return removed;
     }
 
     void Window::preUpdate()
@@ -539,7 +543,9 @@ namespace dbgl
 
     void Window::update()
     {
-	m_updateCallbacks.fire(UpdateEventArgs {m_deltaTime});
+	m_updateCallbacks.fire(UpdateEventArgs {
+	    m_deltaTime
+	});
     }
 
     void Window::postUpdate()
@@ -560,7 +566,9 @@ namespace dbgl
 
     void Window::render()
     {
-	m_renderCallbacks.fire(RenderEventArgs{m_pRenderContext});
+	m_renderCallbacks.fire(RenderEventArgs {
+	    m_pRenderContext
+	});
     }
 
     void Window::postRender()

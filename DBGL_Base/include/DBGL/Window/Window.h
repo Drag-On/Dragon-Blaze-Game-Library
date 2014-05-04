@@ -23,6 +23,7 @@
 #include "DBGL/System/Bitmask/Bitmask.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "WindowManager.h"
+#include "Input.h"
 
 namespace dbgl
 {
@@ -156,14 +157,18 @@ namespace dbgl
 		     */
 		    int button;
 		    /**
-		     * @brief Action that happened. One of GLFW_PRESS or GLFW_REPEAT
+		     * @brief Key constant representing the button
 		     */
-		    int action;
+		    Input::Key key;
+		    /**
+		     * @brief Action that happened.
+		     */
+		    Input::KeyState action;
 		    /**
 		     * @brief Bitmask describing which modifier keys were held down.
-		     * @details GLFW_MOD_ALT, GLFW_MOD_CONTROL, GLFW_MOD_SHIFT and/or GLFW_MOD_SUPER
+		     * @details Input::Modifier constants may be set
 		     */
-		    int mods;
+		    Bitmask<> mods;
 	    };
 	    /**
 	     * @brief Arguments passed on a scroll event
@@ -187,7 +192,7 @@ namespace dbgl
 		    /**
 		     * @brief Key that was pressed or released. GLFW_KEY_XXX
 		     */
-		    int key;
+		    Input::Key key;
 		    /**
 		     * @brief System-specific scancode of that key
 		     */
@@ -195,12 +200,12 @@ namespace dbgl
 		    /**
 		     * @brief GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT.
 		     */
-		    int action;
+		    Input::KeyState action;
 		    /**
 		     * @brief Bitmask describing which modifier keys were held down.
-		     * @details GLFW_MOD_ALT, GLFW_MOD_CONTROL, GLFW_MOD_SHIFT and/or GLFW_MOD_SUPER
+		     * @details Input::Modifier constants may be set
 		     */
-		    int mods;
+		    Bitmask<> mods;
 	    };
 	    /**
 	     * @brief Arguments passed on an update event
@@ -221,6 +226,16 @@ namespace dbgl
 		     * @brief Current render context
 		     */
 		    const RenderContext* rc;
+	    };
+	    /**
+	     * @brief Arguments passed on an input event
+	     */
+	    struct InputEventArgs
+	    {
+		    /**
+		     * @brief Input object
+		     */
+		    Input const& input;
 	    };
 
 	    /**
@@ -283,6 +298,10 @@ namespace dbgl
 	     * @brief Type of a render event method
 	     */
 	    using RenderCallbackType = std::function<void(RenderEventArgs const&)>;
+	    /**
+	     * @brief Type of a input event method
+	     */
+	    using InputCallbackType = std::function<void(InputEventArgs const&)>;
 
 	    /**
 	     * @brief Type of a close event
@@ -344,6 +363,10 @@ namespace dbgl
 	     * @brief Type of a render event
 	     */
 	    using RenderEventType = Event<RenderCallbackType, RenderEventArgs>;
+	    /**
+	     * @brief Type of an input event
+	     */
+	    using InputEventType = Event<InputCallbackType, InputEventArgs>;
 
 	    // Constants used for bitmasks
 	    /**
@@ -503,62 +526,52 @@ namespace dbgl
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    CloseEventType::DelegatePtr addCloseCallback(
-		    CloseCallbackType const& callback);
+	    CloseEventType::DelegatePtr addCloseCallback(CloseCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
 	     */
-	    bool removeCloseCallback(
-		    CloseEventType::DelegatePtr const& callback);
+	    bool removeCloseCallback(CloseEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
 	     */
-	    FocusEventType::DelegatePtr addFocusCallback(
-		    FocusCallbackType const& callback);
+	    FocusEventType::DelegatePtr addFocusCallback(FocusCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for focus events
 	     * @param callback Function to be called when this window's focus state changes
 	     */
-	    bool removeFocusCallback(
-		    FocusEventType::DelegatePtr const& callback);
+	    bool removeFocusCallback(FocusEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for iconified events
 	     * @param callback Function to be called when this window is getting iconified or restored
 	     */
-	    IconifiedEventType::DelegatePtr addIconifiedCallback(
-		    IconifiedCallbackType const& callback);
+	    IconifiedEventType::DelegatePtr addIconifiedCallback(IconifiedCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for iconified events
 	     * @param callback Function to be called when this window is getting iconified or restored
 	     */
-	    bool removeIconifiedCallback(
-		    IconifiedEventType::DelegatePtr const& callback);
+	    bool removeIconifiedCallback(IconifiedEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for refresh events
 	     * @param callback Function to be called when this window needs to be refreshed
 	     */
-	    RefreshEventType::DelegatePtr addRefreshCallback(
-		    RefreshCallbackType const& callback);
+	    RefreshEventType::DelegatePtr addRefreshCallback(RefreshCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for refresh events
 	     * @param callback Function to be called when this window needs to be refreshed
 	     */
-	    bool removeRefreshCallback(
-		    RefreshEventType::DelegatePtr const& callback);
+	    bool removeRefreshCallback(RefreshEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
-	    ResizeEventType::DelegatePtr addResizeCallback(
-		    ResizeCallbackType const& callback);
+	    ResizeEventType::DelegatePtr addResizeCallback(ResizeCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
-	    bool removeResizeCallback(
-		    ResizeEventType::DelegatePtr const& callback);
+	    bool removeResizeCallback(ResizeEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for framebuffer resize events
 	     * @param callback Function to be called when this window's framebuffer needs a resize
@@ -569,116 +582,107 @@ namespace dbgl
 	     * @brief Unregisters a function as callback for framebuffer resize events
 	     * @param callback Function to be called when this window's framebuffer needs a resize
 	     */
-	    bool removeFramebufferResizeCallback(
-		    FramebufferResizeEventType::DelegatePtr const& callback);
+	    bool removeFramebufferResizeCallback(FramebufferResizeEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for window move events
 	     * @param callback Function to be called when this window is getting moved
 	     */
-	    PositionEventType::DelegatePtr addPositionCallback(
-		    PositionCallbackType const& callback);
+	    PositionEventType::DelegatePtr addPositionCallback(PositionCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for window move events
 	     * @param callback Function to be called when this window is getting moved
 	     */
-	    bool removePositionCallback(
-		    PositionEventType::DelegatePtr const& callback);
+	    bool removePositionCallback(PositionEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for unicode character events
 	     * @param callback Function to be called when a character is typed into this window
 	     */
-	    CharacterEventType::DelegatePtr addCharacterCallback(
-		    CharacterCallbackType const& callback);
+	    CharacterEventType::DelegatePtr addCharacterCallback(CharacterCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for unicode character events
 	     * @param callback Function to be called when a character is typed into this window
 	     */
-	    bool removeCharacterCallback(
-		    CharacterEventType::DelegatePtr const& callback);
+	    bool removeCharacterCallback(CharacterEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
-	    CursorEnterEventType::DelegatePtr addCursorEnterCallback(
-		    CursorEnterCallbackType const& callback);
+	    CursorEnterEventType::DelegatePtr addCursorEnterCallback(CursorEnterCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
-	    bool removeCursorEnterCallback(
-		    CursorEnterEventType::DelegatePtr const& callback);
+	    bool removeCursorEnterCallback(CursorEnterEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for cursor move events
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
-	    CursorEventType::DelegatePtr addCursorCallback(
-		    CursorCallbackType const& callback);
+	    CursorEventType::DelegatePtr addCursorCallback(CursorCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for cursor move events
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
-	    bool removeCursorCallback(
-		    CursorEventType::DelegatePtr const& callback);
+	    bool removeCursorCallback(CursorEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for mouse button events
 	     * @param callback Function to be called when a mouse button state changes
 	     */
-	    MouseButtonEventType::DelegatePtr addMouseButtonCallback(
-		    MouseButtonCallbackType const& callback);
+	    MouseButtonEventType::DelegatePtr addMouseButtonCallback(MouseButtonCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for mouse button events
 	     * @param callback Function to be called when a mouse button state changes
 	     */
-	    bool removeMouseButtonCallback(
-		    MouseButtonEventType::DelegatePtr const& callback);
+	    bool removeMouseButtonCallback(MouseButtonEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
 	     */
-	    ScrollEventType::DelegatePtr addScrollCallback(
-		    ScrollCallbackType const& callback);
+	    ScrollEventType::DelegatePtr addScrollCallback(ScrollCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
 	     */
-	    bool removeScrollCallback(
-		    ScrollEventType::DelegatePtr const& callback);
+	    bool removeScrollCallback(ScrollEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for key events
 	     * @param callback Function to be called when a key state changes
 	     */
-	    KeyEventType::DelegatePtr addKeyCallback(
-		    KeyCallbackType const& callback);
+	    KeyEventType::DelegatePtr addKeyCallback(KeyCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for key events
 	     * @param callback Function to be called when a key state changes
 	     */
-	    bool removeKeyCallback(
-		    KeyEventType::DelegatePtr const& callback);
+	    bool removeKeyCallback(KeyEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    UpdateEventType::DelegatePtr addUpdateCallback(
-		    UpdateCallbackType const& callback);
+	    UpdateEventType::DelegatePtr addUpdateCallback(UpdateCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
-	    bool removeUpdateCallback(
-		    UpdateEventType::DelegatePtr const& callback);
+	    bool removeUpdateCallback(UpdateEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
 	     */
-	    RenderEventType::DelegatePtr addRenderCallback(
-		    RenderCallbackType const& callback);
+	    RenderEventType::DelegatePtr addRenderCallback(RenderCallbackType const& callback);
 	    /**
 	     * @brief Unregisters a function as callback for render events
 	     * @param callback Function to be called when the window is being rendered
 	     */
-	    bool removeRenderCallback(
-		    RenderEventType::DelegatePtr const& callback);
+	    bool removeRenderCallback(RenderEventType::DelegatePtr const& callback);
+	    /**
+	     * @brief Registers a function as callback for input events
+	     * @param callback Function to be called when some sort of input happens
+	     */
+	    InputEventType::DelegatePtr addInputCallback(InputCallbackType const& callback);
+	    /**
+	     * @brief Unregisters a function as callback for input events
+	     * @param callback Function to be called when some sort of input happens
+	     */
+	    bool removeInputCallback(InputEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Gets called once a frame before @see update
 	     */
@@ -713,8 +717,8 @@ namespace dbgl
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
 	     */
-	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width =
-		    800, int height = 600, bool fullscreen = false);
+	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width = 800,
+		    int height = 600, bool fullscreen = false);
 	    /**
 	     * @brief Removes the current render context from the window and applies a new one
 	     */
@@ -724,6 +728,16 @@ namespace dbgl
 	     * @param args New size
 	     */
 	    void framebufferResizeCallback(FramebufferResizeEventArgs args);
+	    /**
+	     * @brief Called on key input if an input listener needs to be fed
+	     * @param args Key event arguments
+	     */
+	    void keyCallback(KeyEventArgs args);
+	    /**
+	     * @brief Called on mouse button events if an input listener needs to be fed
+	     * @param args Mouse button event arguments
+	     */
+	    void mouseButtonCallback(MouseButtonEventArgs args);
 
 	    /**
 	     * GLFW window handle
@@ -750,6 +764,7 @@ namespace dbgl
 	    KeyEventType m_keyCallbacks;
 	    UpdateEventType m_updateCallbacks;
 	    RenderEventType m_renderCallbacks;
+	    InputEventType m_inputCallbacks;
 
 	    std::string m_title;
 	    bool m_isFullscreen;
@@ -759,6 +774,9 @@ namespace dbgl
 	    double m_deltaTime = 0, m_lastTime = 0; // Time since last frame
 	    Vector3<GLclampf> m_clearColor = Vector3<GLclampf>(0, 0, 0);
 	    GLuint m_vertexArrayId;
+	    Input m_input;
+	    KeyEventType::DelegatePtr m_inputKeyDelegate;
+	    MouseButtonEventType::DelegatePtr m_inputMouseDelegate;
 
 	    friend class WindowManager;
     };

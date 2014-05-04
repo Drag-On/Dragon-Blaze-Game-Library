@@ -139,7 +139,20 @@ namespace dbgl
     void WindowManager::mouseButtonCallback(GLFWwindow* window, int button,
 	    int action, int mods)
     {
-	s_windows[window]->m_mouseButtonCallbacks.fire(Window::MouseButtonEventArgs{button, action, mods});
+	// Translate GLFW button into Input::Key
+	Input::Key keyConst = Input::Key(Input::mouse_offset + button);
+	// Translate GLFW action int Input::KeyState
+	Input::KeyState keyState;
+	if(action == GLFW_RELEASE)
+	    keyState = Input::KeyState::RELEASED;
+	else if(action == GLFW_PRESS)
+	    keyState = Input::KeyState::PRESSED;
+	else if(action == GLFW_REPEAT)
+	    keyState = Input::KeyState::DOWN;
+	else
+	    keyState = Input::KeyState::UP;
+	s_windows[window]->m_mouseButtonCallbacks.fire(Window::MouseButtonEventArgs{button, keyConst, keyState, mods});
+	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input});
     }
 
     void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
@@ -151,7 +164,20 @@ namespace dbgl
     void WindowManager::keyCallback(GLFWwindow* window, int key, int scancode,
 	    int action, int mods)
     {
-	s_windows[window]->m_keyCallbacks.fire(Window::KeyEventArgs{key, scancode, action, mods});
+	// Translate GLFW key into Input::Key
+	Input::Key keyConst = Input::Key(Input::keyboard_offset + key);
+	// Translate GLFW action int Input::KeyState
+	Input::KeyState keyState;
+	if(action == GLFW_RELEASE)
+	    keyState = Input::KeyState::RELEASED;
+	else if(action == GLFW_PRESS)
+	    keyState = Input::KeyState::PRESSED;
+	else if(action == GLFW_REPEAT)
+	    keyState = Input::KeyState::DOWN;
+	else
+	    keyState = Input::KeyState::UP;
+	s_windows[window]->m_keyCallbacks.fire(Window::KeyEventArgs{keyConst, scancode, keyState, mods});
+	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input});
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
