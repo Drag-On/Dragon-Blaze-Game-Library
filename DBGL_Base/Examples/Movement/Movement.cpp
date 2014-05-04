@@ -75,17 +75,17 @@ void updateCallback(Window::UpdateEventArgs const& args)
 	    pCam->rotation() * Vec3f(0, 1, 0));
 
     // Update keyboard
-    if (pWnd->getKey(Input::Key::KEY_W) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_W) == Input::KeyState::DOWN)
 	pCam->position() += direction * deltaTime * moveSpeed;
-    if (pWnd->getKey(Input::Key::KEY_A) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_A) == Input::KeyState::DOWN)
 	pCam->position() -= right * deltaTime * moveSpeed;
-    if (pWnd->getKey(Input::Key::KEY_S) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_S) == Input::KeyState::DOWN)
 	pCam->position() -= direction * deltaTime * moveSpeed;
-    if (pWnd->getKey(Input::Key::KEY_D) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_D) == Input::KeyState::DOWN)
 	pCam->position() += right * deltaTime * moveSpeed;
-    if (pWnd->getKey(Input::Key::KEY_E) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_E) == Input::KeyState::DOWN)
 	pCam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
-    if (pWnd->getKey(Input::Key::KEY_Q) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_Q) == Input::KeyState::DOWN)
 	pCam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 }
 
