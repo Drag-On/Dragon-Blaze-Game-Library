@@ -190,7 +190,7 @@ namespace dbgl
 	    struct KeyEventArgs
 	    {
 		    /**
-		     * @brief Key that was pressed or released. GLFW_KEY_XXX
+		     * @brief Key that was pressed or released.
 		     */
 		    Input::Key key;
 		    /**
@@ -198,7 +198,7 @@ namespace dbgl
 		     */
 		    int scancode;
 		    /**
-		     * @brief GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT.
+		     * @brief Action that happened
 		     */
 		    Input::KeyState action;
 		    /**
