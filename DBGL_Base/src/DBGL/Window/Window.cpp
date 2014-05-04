@@ -305,9 +305,11 @@ namespace dbgl
 	return glfwGetMouseButton(m_pWndHandle, button);
     }
 
-    int Window::getKey(int key) const
+    Input::KeyState Window::getKey(Input::Key key) const
     {
-	return glfwGetKey(m_pWndHandle, key);
+	// Convert Input::Key to GLFW key
+	int glfwKey = (int) key - Input::keyboard_offset;
+	return (Input::KeyState) glfwGetKey(m_pWndHandle, glfwKey);
     }
 
     Window::CloseEventType::DelegatePtr Window::addCloseCallback(CloseCallbackType const& callback)

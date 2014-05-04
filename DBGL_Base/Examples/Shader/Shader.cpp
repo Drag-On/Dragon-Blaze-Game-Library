@@ -73,17 +73,17 @@ void updateCallback(Window::UpdateEventArgs const& args)
     pWnd->setCursorPos(pWnd->getFrameWidth() / 2, pWnd->getFrameHeight() / 2);
 
     // Update keyboard
-    if (pWnd->getKey(GLFW_KEY_W) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_W) == GLFW_PRESS)
 	pCam->position() += direction * deltaTime * moveSpeed;
-    if (pWnd->getKey(GLFW_KEY_A) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_A) == GLFW_PRESS)
 	pCam->position() -= right * deltaTime * moveSpeed;
-    if (pWnd->getKey(GLFW_KEY_S) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_S) == GLFW_PRESS)
 	pCam->position() -= direction * deltaTime * moveSpeed;
-    if (pWnd->getKey(GLFW_KEY_D) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_D) == GLFW_PRESS)
 	pCam->position() += right * deltaTime * moveSpeed;
-    if (pWnd->getKey(GLFW_KEY_E) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_E) == GLFW_PRESS)
 	pCam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
-    if (pWnd->getKey(GLFW_KEY_Q) == GLFW_PRESS)
+    if (pWnd->getKey(Input::Key::KEY_Q) == GLFW_PRESS)
 	pCam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
     // Drive rotation of icosahedron

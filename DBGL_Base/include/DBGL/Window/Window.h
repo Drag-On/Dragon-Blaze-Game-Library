@@ -519,9 +519,9 @@ namespace dbgl
 	    /**
 	     * @brief Checks a key's state
 	     * @param key Key to check
-	     * @return GLFW_PRESS or GLFW_RELEASE
+	     * @return Input::Up or Input::Down
 	     */
-	    int getKey(int key) const;
+	    Input::KeyState getKey(Input::Key) const;
 	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed
