@@ -213,25 +213,25 @@ namespace dbgl
 	     * @param key Key to check
 	     * @return \code True \endcode in case the key is down, otherwise \code false \endcode
 	     */
-	    bool isDown(Key key);
+	    bool isDown(Key key) const;
 	    /**
 	     * @brief Checks if the passed key is currently not held down
 	     * @param key Key to check
 	     * @return \code True \endcode in case the key is up, otherwise \code false \endcode
 	     */
-	    bool isUp(Key key);
+	    bool isUp(Key key) const;
 	    /**
 	     * @brief Checks if the passed key was just pressed down
 	     * @param key Key to check
 	     * @return \code True \endcode in case the key is pressed, otherwise \code false \endcode
 	     */
-	    bool isPressed(Key key);
+	    bool isPressed(Key key) const;
 	    /**
 	     * @brief Checks if the passed key was just released
 	     * @param key Key to check
 	     * @return \code True \endcode in case the key is released, otherwise \code false \endcode
 	     */
-	    bool isReleased(Key key);
+	    bool isReleased(Key key) const;
 	    /**
 	     * @brief Translates a character to a key constant
 	     * @param character Character to translate
@@ -239,20 +239,20 @@ namespace dbgl
 	     * @note This does currently not consider the keyboard layout of the user but
 	     * 	     assumes a US keyboard
 	     */
-	    Key charToKey(char character);
+	    static Key charToKey(char character);
 	    /**
 	     * @brief Translates a key constant into a character if possible
 	     * @param key Key to translate
 	     * @return The character representing the passed key or an empty character
 	     * 	       if the key can not be translated into a character
 	     */
-	    char keyToChar(Key key);
+	    static char keyToChar(Key key);
 	    /**
 	     * @brief Translates a key constant into an appropriate string
 	     * @param key Key to translate
 	     * @return A string describing the passed key
 	     */
-	    std::string keyToString(Key key);
+	    static std::string keyToString(Key key);
 	private:
 	    using KeyDescriptionMap = std::map<Key, std::string>;
 

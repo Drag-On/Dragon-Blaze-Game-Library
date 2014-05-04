@@ -167,25 +167,25 @@ namespace dbgl
 //	{JOYSTICK_LAST, GLFW_JOYSTICK_LAST},
     };
 
-    bool Input::isDown(Key key)
+    bool Input::isDown(Key key) const
     {
 	auto iter = m_keys.find(key);
 	return iter != m_keys.end() && (iter->second == DOWN || iter->second == PRESSED);
     }
 
-    bool Input::isUp(Key key)
+    bool Input::isUp(Key key) const
     {
 	auto iter = m_keys.find(key);
 	return iter == m_keys.end() || iter->second == UP || iter->second == RELEASED;
     }
 
-    bool Input::isPressed(Key key)
+    bool Input::isPressed(Key key) const
     {
 	auto iter = m_keys.find(key);
 	return iter != m_keys.end() && iter->second == PRESSED;
     }
 
-    bool Input::isReleased(Key key)
+    bool Input::isReleased(Key key) const
     {
 	auto iter = m_keys.find(key);
 	return iter != m_keys.end() && iter->second == RELEASED;
@@ -433,7 +433,7 @@ namespace dbgl
 	    case KEY_LEFT_BRACKET:
 		return ('[');
 	    case KEY_RIGHT_BRACKET:
-		return ('[');
+		return (']');
 	    case KEY_GRAVE_ACCENT:
 		return ('´');
 	    case KEY_MINUS:
