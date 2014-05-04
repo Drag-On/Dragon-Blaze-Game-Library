@@ -501,7 +501,6 @@ namespace dbgl
 
     void Input::updateKey(Key key, KeyState state)
     {
-	auto pair = std::make_pair(key, state);
-	m_keys.insert(pair);
+	m_keys[key] = state;
     }
 }
