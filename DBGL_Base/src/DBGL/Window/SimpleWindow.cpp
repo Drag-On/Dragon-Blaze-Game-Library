@@ -28,12 +28,12 @@ namespace dbgl
     void SimpleWindow::keyCallback(KeyEventArgs args)
     {
 	// Close on escape
-	if (args.key == GLFW_KEY_ESCAPE && args.action == GLFW_PRESS)
+	if (args.key == Input::Key::KEY_ESCAPE && args.action == Input::KeyState::PRESSED)
 	    close();
 
 	// Switch to fullscreen on alt + enter
-	if (args.key == GLFW_KEY_ENTER && args.action == GLFW_PRESS
-		&& (args.mods & (1 << GLFW_MOD_ALT)) == 0)
+	if (args.key == Input::Key::KEY_ENTER && args.action == Input::KeyState::PRESSED
+		&& args.mods.isSet(Input::Modifier::KEY_ALT))
 	    setFullscreen(!isFullscreen());
     }
 }
