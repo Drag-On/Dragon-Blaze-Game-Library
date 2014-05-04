@@ -202,9 +202,9 @@ namespace dbgl
 	     */
 	    enum Modifier
 	    {
-		KEY_ALT = GLFW_MOD_SHIFT,
+		KEY_ALT = GLFW_MOD_ALT,
 		KEY_CONTROL = GLFW_MOD_CONTROL,
-		KEY_SHIFT = GLFW_MOD_ALT,
+		KEY_SHIFT = GLFW_MOD_SHIFT,
 		KEY_SUPER = GLFW_MOD_SUPER,
 	    };
 
