@@ -28,6 +28,23 @@ Texture* pTexture;
 Camera* pCam;
 Mat4f view, projection;
 
+void inputCallback(Window::InputEventArgs const& args)
+{
+    std::string whatHappened;
+    if(args.input.isPressed(args.key))
+	whatHappened = "has been pressed";
+    else if(args.input.isReleased(args.key))
+	whatHappened = "has been released";
+    else if(args.input.isDown(args.key))
+	whatHappened = "is down";
+    else
+	whatHappened = "is up";
+    char charRepresentation = Input::keyToChar(args.key);
+    if(charRepresentation == '\0')
+	charRepresentation = ' ';
+    LOG->debug("Key \"%s\" (char \'%c\') %s.", Input::keyToString(args.key).c_str(), charRepresentation, whatHappened.c_str());
+}
+
 void framebufferResizeCallback(Window::FramebufferResizeEventArgs const& args)
 {
     projection = Mat4f::makeProjection(pCam->getFieldOfView(),
@@ -91,6 +108,7 @@ int main()
     // Add render callback so we can draw the mesh
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
     pWnd->addFramebufferResizeCallback(std::bind(&framebufferResizeCallback, std::placeholders::_1));
+    pWnd->addInputCallback(std::bind(&inputCallback, std::placeholders::_1));
     // Show window
     pWnd->show();
     // Run update loop
