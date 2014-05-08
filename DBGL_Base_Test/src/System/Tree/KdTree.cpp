@@ -16,7 +16,7 @@
 
 using namespace dbgl;
 
-class KdTreePrintVisitor : public AbstractTreeVisitor
+class KdTreePrintVisitor1 : public AbstractTreeVisitor
 {
     public:
 	void visit(KdTree<int, Vec2f>& tree)
@@ -39,6 +39,23 @@ class KdTreePrintVisitor : public AbstractTreeVisitor
 		visit((KdTree<int, Vec2f>::Node&) visitable);
 	    else
 		LOG->info("I've got no clue what I'm visiting.");
+	}
+};
+
+class KdTreePrintVisitor2
+{
+    public:
+	void visit(KdTree<int, Vec2f>& tree)
+	{
+	    LOG->info("Visiting tree with %d elements.", tree.size());
+	}
+	void visit(KdTree<int, Vec2f>::Node& node)
+	{
+	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    if(node.leftChild != nullptr)
+		node.leftChild->accept(*this);
+	    if(node.rightChild != nullptr)
+		node.rightChild->accept(*this);
 	}
 };
 
@@ -177,11 +194,12 @@ int testKdTree()
     assert(tree.get(Vec2f(-1, 0)) == nullptr);
     assert(tree.get(Vec2f(-0.5f, 0)) == nullptr);
     // Visitor pattern
-    KdTreePrintVisitor visitor;
+    KdTreePrintVisitor1 visitor;
     LOG->info("Tree1:");
     tree.accept(visitor);
+    KdTreePrintVisitor2 visitor2;
     LOG->info("(Former) Tree2:");
-    move.accept(visitor);
+    move.accept<KdTreePrintVisitor2>(visitor2);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

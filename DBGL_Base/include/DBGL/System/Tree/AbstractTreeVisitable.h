@@ -20,9 +20,10 @@ namespace dbgl
 	public:
 	    virtual ~AbstractTreeVisitable();
 	    virtual void accept(AbstractTreeVisitor& visitor);
+	    template <class Visitor, class MyType = AbstractTreeVisitable*> void accept(Visitor& visitor);
     };
 }
 
-
+#include "AbstractTreeVisitable.imp"
 
 #endif /* ABSTRACTTREEVISITABLE_H_ */

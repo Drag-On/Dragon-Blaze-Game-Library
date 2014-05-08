@@ -56,6 +56,11 @@ namespace dbgl
 		    Node* parent = nullptr;	// Parent node
 		    Node* leftChild = nullptr;	// Left child node
 		    Node* rightChild = nullptr;	// Right child node
+
+		    template<class Visitor> void accept(Visitor& visitor)
+		    {
+			AbstractTree::Node::accept<Visitor, KdTree<Data, Point>::Node*>(visitor);
+		    }
 	    };
 
 	    /**
@@ -161,6 +166,11 @@ namespace dbgl
 	     * @param visitor Visitor to accept
 	     */
 	    virtual void accept(AbstractTreeVisitor& visitor);
+	    /**
+	     * @brief Aceept a visitor
+	     * @param visitor Visitor to accept
+	     */
+	    template<class Visitor> void accept(Visitor& visitor);
 	private:
 	    /**
 	     * @brief Container used to temporarily store found nearest neighbors

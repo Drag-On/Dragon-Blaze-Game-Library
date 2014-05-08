@@ -493,4 +493,11 @@ namespace dbgl
 	if(m_pRoot != nullptr)
 	    m_pRoot->accept(visitor);
     }
+
+    template<typename Data, typename Point> template<class Visitor> void KdTree<Data, Point>::accept(Visitor& visitor)
+    {
+	AbstractTree::accept<Visitor, KdTree<Data, Point>*>(visitor);
+	if(m_pRoot != nullptr)
+	    m_pRoot->accept<Visitor>(visitor);
+    }
 }
