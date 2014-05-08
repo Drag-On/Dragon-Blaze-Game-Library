@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include "AbstractTree.h"
 
 namespace dbgl
 {
@@ -27,7 +28,7 @@ namespace dbgl
      * 		It is possible to add multiple points with the same coordinates, however methods
      * 		like get() and remove() only expect one, i.e. it's undefined which one they use.
      */
-    template<typename Data, typename Point> class KdTree
+    template<typename Data, typename Point> class KdTree : public AbstractTree
     {
 	public:
 	    /**
@@ -43,6 +44,18 @@ namespace dbgl
 		 * @brief Data stored with the point
 		 */
 		Data data;
+	    };
+	    /**
+	     * @brief Represents a node
+	     */
+	    class Node : public AbstractTree::Node
+	    {
+		public:
+		    Point point;		// Stored point
+		    Data data;			// Attached data
+		    Node* parent = nullptr;	// Parent node
+		    Node* leftChild = nullptr;	// Left child node
+		    Node* rightChild = nullptr;	// Right child node
 	    };
 
 	    /**
@@ -143,18 +156,12 @@ namespace dbgl
 	     * @brief Clears the tree.
 	     */
 	    void clear();
-	private:
 	    /**
-	     * @brief Represents a node
+	     * @brief Accept a visitor
+	     * @param visitor Visitor to accept
 	     */
-	    struct Node
-	    {
-		Point point;			// Stored point
-		Data data;			// Attached data
-		Node* parent = nullptr;		// Parent node
-		Node* leftChild = nullptr;	// Left child node
-		Node* rightChild = nullptr;	// Right child node
-	    };
+	    virtual void accept(AbstractTreeVisitor& visitor);
+	private:
 	    /**
 	     * @brief Container used to temporarily store found nearest neighbors
 	     */

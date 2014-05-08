@@ -10,10 +10,37 @@
 
 #include <vector>
 #include "DBGL/System/Tree/KdTree.h"
+#include "DBGL/System/Tree/AbstractTreeVisitor.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/Math/Vector2.h"
 
 using namespace dbgl;
+
+class KdTreePrintVisitor : public AbstractTreeVisitor
+{
+    public:
+	void visit(KdTree<int, Vec2f>& tree)
+	{
+	    LOG->info("Visiting tree with %d elements.", tree.size());
+	}
+	void visit(KdTree<int, Vec2f>::Node& node)
+	{
+	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    if(node.leftChild != nullptr)
+		node.leftChild->accept(*this);
+	    if(node.rightChild != nullptr)
+		node.rightChild->accept(*this);
+	}
+	void visit(AbstractTreeVisitable& visitable)
+	{
+	    if(typeid(visitable) == typeid(KdTree<int, Vec2f>&))
+		visit((KdTree<int, Vec2f>&)visitable);
+	    else if(typeid(visitable) == typeid(KdTree<int, Vec2f>::Node&))
+		visit((KdTree<int, Vec2f>::Node&) visitable);
+	    else
+		LOG->info("I've got no clue what I'm visiting.");
+	}
+};
 
 void checkKNearestNeighbor(std::vector<typename KdTree<int, Vec2f>::Container> result, std::vector<int> needed)
 {
@@ -149,6 +176,12 @@ int testKdTree()
     assert(tree2.size() == 0);
     assert(tree.get(Vec2f(-1, 0)) == nullptr);
     assert(tree.get(Vec2f(-0.5f, 0)) == nullptr);
+    // Visitor pattern
+    KdTreePrintVisitor visitor;
+    LOG->info("Tree1:");
+    tree.accept(visitor);
+    LOG->info("(Former) Tree2:");
+    move.accept(visitor);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;
