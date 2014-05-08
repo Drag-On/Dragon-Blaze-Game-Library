@@ -14,12 +14,13 @@ namespace dbgl
 {
     RenderContext::RenderContext(unsigned int frameWidth,
 	    unsigned int frameHeight) :
-	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
+	    m_frameWidth(frameWidth), m_frameHeight(frameHeight), m_pRenderer(new OpenGL3Renderer)
     {
     }
 
     RenderContext::~RenderContext()
     {
+	delete m_pRenderer;
     }
 
     void RenderContext::draw(Mesh const& mesh) const

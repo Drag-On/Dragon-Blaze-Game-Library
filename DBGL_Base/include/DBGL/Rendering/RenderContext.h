@@ -17,6 +17,8 @@
 #include "Mesh/Mesh.h"
 #include "ShaderProgram.h"
 #include "Texture/Texture.h"
+#include "Renderer/AbstractRenderer.h"
+#include "Renderer/OpenGL3Renderer.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -80,6 +82,7 @@ namespace dbgl
 	     */
 	    void renderMesh(Mesh const& mesh) const;
 
+	    AbstractRenderer* m_pRenderer;
 	    // Window::preRender can access internals - only for preRender() method
 	    friend class Window;
     };
