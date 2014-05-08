@@ -51,12 +51,30 @@ namespace dbgl
 	    class Node : public AbstractTree::Node
 	    {
 		public:
-		    Point point;		// Stored point
-		    Data data;			// Attached data
-		    Node* parent = nullptr;	// Parent node
-		    Node* leftChild = nullptr;	// Left child node
-		    Node* rightChild = nullptr;	// Right child node
-
+		    /**
+		     * @brief Stored point
+		     */
+		    Point point;
+		    /**
+		     * @brief Attached data
+		     */
+		    Data data;
+		    /**
+		     * @brief Parent node
+		     */
+		    Node* parent = nullptr;
+		    /**
+		     * @brief Left child node
+		     */
+		    Node* leftChild = nullptr;
+		    /**
+		     * @brief Right child node
+		     */
+		    Node* rightChild = nullptr;
+		    /**
+		     * @brief Accepts a visitor
+		     * @param visitor Visitor to accept
+		     */
 		    template<class Visitor> void accept(Visitor& visitor)
 		    {
 			AbstractTree::Node::accept<Visitor, KdTree<Data, Point>::Node*>(visitor);

@@ -15,11 +15,25 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for objects that can be visited by TreeVisitors
+     */
     class AbstractTreeVisitable
     {
 	public:
+	    /**
+	     * @brief Destructor
+	     */
 	    virtual ~AbstractTreeVisitable();
+	    /**
+	     * @brief Accepts a visitor
+	     * @param visitor Visitor to accept
+	     */
 	    virtual void accept(AbstractTreeVisitor& visitor);
+	    /**
+	     * @brief Accepts a visitor
+	     * @param visitor Visitor to accept
+	     */
 	    template <class Visitor, class MyType = AbstractTreeVisitable*> void accept(Visitor& visitor);
     };
 }

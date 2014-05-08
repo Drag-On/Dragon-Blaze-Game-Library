@@ -21,6 +21,9 @@ namespace dbgl
     class AbstractTree : public AbstractTreeVisitable
     {
 	protected:
+	    /**
+	     * @brief Interface class for tree nodes
+	     */
 	    class Node : public AbstractTreeVisitable
 	    {
 	    };

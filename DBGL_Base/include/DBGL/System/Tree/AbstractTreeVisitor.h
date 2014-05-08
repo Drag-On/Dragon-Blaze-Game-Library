@@ -15,10 +15,20 @@ namespace dbgl
 {
     class AbstractTreeVisitable;
 
+    /**
+     * @brief Interface class for tree visitors
+     */
     class AbstractTreeVisitor
     {
 	public:
+	    /**
+	     * @brief Destructor
+	     */
 	    virtual ~AbstractTreeVisitor() {}
+	    /**
+	     * @brief Called by the tree on visit
+	     * @param visitable Object that got visited
+	     */
 	    virtual void visit(AbstractTreeVisitable& visitable) = 0;
     };
 }
