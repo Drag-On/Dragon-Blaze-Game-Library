@@ -14,7 +14,11 @@ namespace dbgl
 {
     OpenGL3Renderer::~OpenGL3Renderer()
     {
-
+	// Delete all buffers that are still left
+	for(auto it = m_vertexBuffers.begin(); it != m_vertexBuffers.end(); ++it)
+	    m_vertexBuffers.erase(it->first);
+	for(auto it = m_indexBuffers.begin(); it != m_indexBuffers.end(); ++it)
+	    m_indexBuffers.erase(it->first);
     }
 
     auto OpenGL3Renderer::genVertexBuffer(BufferType type, unsigned int size, const void* data) -> VertexBufferId
