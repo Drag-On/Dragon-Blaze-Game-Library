@@ -128,6 +128,20 @@ namespace dbgl
 	}
     }
 
+    void OpenGL3Renderer::useIndexBuffer(IndexBufferId indexBuffer)
+    {
+	auto indexBufferIt = m_indexBuffers.find(indexBuffer);
+	if(indexBufferIt != m_indexBuffers.end())
+	{
+	    auto indexBuffer = indexBufferIt->second;
+	    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.id);
+	}
+    }
+
+    void OpenGL3Renderer::endUseIndexBuffer(IndexBufferId /* indexBuffer */)
+    {
+    }
+
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
     {
 	switch(type)

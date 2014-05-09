@@ -29,8 +29,8 @@ namespace dbgl
 	    virtual VertexFormatId regVertexFormat(AttribType type, unsigned int size, AttribFormat format);
 	    virtual void useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
 	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
-//	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
-//	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
+	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
+	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
 //	    virtual void drawElements(PolygonMode mode);
 	private:
 	    GLenum convertBufferType(BufferType type);
