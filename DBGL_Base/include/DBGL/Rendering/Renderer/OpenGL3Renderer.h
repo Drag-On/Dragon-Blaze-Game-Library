@@ -14,20 +14,21 @@
 #include <GL/glew.h>
 #include <map>
 #include "AbstractRenderer.h"
+#include "NullRenderer.h"
 
 namespace dbgl
 {
-    class OpenGL3Renderer : public AbstractRenderer
+    class OpenGL3Renderer : public NullRenderer // AbstractRenderer
     {
 	public:
 	    virtual ~OpenGL3Renderer();
 	    virtual VertexBufferId genVertexBuffer(BufferType type, unsigned int size, const void* data);
-	    virtual VertexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data);
-	    virtual void useVertexBuffer(VertexBufferId vertBuffer);
-	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer);
-	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
-	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
-	    virtual void drawElements(PolygonMode mode);
+//	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data);
+//	    virtual void useVertexBuffer(VertexBufferId vertBuffer);
+//	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer);
+//	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
+//	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
+//	    virtual void drawElements(PolygonMode mode);
 	private:
 	    GLenum convertBufferType(BufferType type);
 

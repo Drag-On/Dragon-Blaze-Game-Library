@@ -149,7 +149,7 @@ namespace dbgl
 	     * @param data Data to initialize the buffer with
 	     * @return Identifier of the newly created buffer or INVALID_INDEX_BUFFER if something went wrong
 	     */
-	    virtual VertexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data) = 0;
+	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data) = 0;
 	    /**
 	     * @brief Initializes a vertex buffer to be used on the next draw call
 	     * @param vertBuffer Identifier of the vertex buffer to use
