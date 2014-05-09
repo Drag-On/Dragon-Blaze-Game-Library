@@ -143,6 +143,11 @@ namespace dbgl
 	     */
 	    virtual VertexBufferId genVertexBuffer(BufferType type, unsigned int size, const void* data) = 0;
 	    /**
+	     * @brief Deletes a vertex buffer
+	     * @param id ID of the buffer to delete
+	     */
+	    virtual void delVertexBuffer(VertexBufferId id) = 0;
+	    /**
 	     * @brief Generates a vertex buffer
 	     * @param size Size of the buffer to create
 	     * @param type Buffer type
@@ -150,6 +155,11 @@ namespace dbgl
 	     * @return Identifier of the newly created buffer or INVALID_INDEX_BUFFER if something went wrong
 	     */
 	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data) = 0;
+	    /**
+	     * @brief Deletes an index buffer
+	     * @param id ID of the buffer to delete
+	     */
+	    virtual void delIndexBuffer(IndexBufferId id) = 0;
 	    /**
 	     * @brief Initializes a vertex buffer to be used on the next draw call
 	     * @param vertBuffer Identifier of the vertex buffer to use

@@ -23,10 +23,20 @@ namespace dbgl
 	return 0;
     }
 
+    void NullRenderer::delVertexBuffer(VertexBufferId id)
+    {
+	LOG->debug("Deleting vertex buffer %d.", id);
+    }
+
     auto NullRenderer::genIndexBuffer(BufferType type, unsigned int size, const void* /* data */) -> IndexBufferId
     {
 	LOG->debug("Generating index buffer of type %d, size %d.", type, size);
 	return 0;
+    }
+
+    void NullRenderer::delIndexBuffer(IndexBufferId id)
+    {
+	LOG->debug("Deleting index buffer %d.", id);
     }
 
     void NullRenderer::useVertexBuffer(VertexBufferId vertBuffer)

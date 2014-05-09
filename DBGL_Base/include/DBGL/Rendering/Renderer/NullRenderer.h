@@ -21,7 +21,9 @@ namespace dbgl
 	public:
 	    virtual ~NullRenderer();
 	    virtual VertexBufferId genVertexBuffer(BufferType type, unsigned int size, const void* data);
+	    virtual void delVertexBuffer(VertexBufferId id);
 	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data);
+	    virtual void delIndexBuffer(IndexBufferId id);
 	    virtual void useVertexBuffer(VertexBufferId vertBuffer);
 	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer);
 	    virtual void useIndexBuffer(IndexBufferId indexBuffer);

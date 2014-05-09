@@ -39,6 +39,50 @@ namespace dbgl
 	return INVALID_VERTEX_BUFFER;
     }
 
+    void OpenGL3Renderer::delVertexBuffer(VertexBufferId id)
+    {
+	auto it = m_vertexBuffers.find(id);
+	if(it != m_vertexBuffers.end())
+	{
+	    auto glId = it->first;
+	    glDeleteBuffers(1, &glId);
+	    m_vertexBuffers.erase(it);
+	}
+    }
+
+    auto OpenGL3Renderer::genIndexBuffer(BufferType type, unsigned int size, const void* data) -> IndexBufferId
+    {
+	static IndexBufferId nextId = 0;
+	// Create buffer
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	if (buffer != GL_INVALID_VALUE)
+	{
+	    if (size > 0)
+	    {
+		// Fill
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, convertBufferType(type));
+	    }
+	    // Store mapping between OpenGL identifiers and our identifiers
+	    m_indexBuffers[nextId] = { buffer, static_cast<GLsizei>(size) };
+	    nextId++;
+	    return nextId - 1;
+	}
+	return INVALID_INDEX_BUFFER;
+    }
+
+    void OpenGL3Renderer::delIndexBuffer(IndexBufferId id)
+    {
+	auto it = m_indexBuffers.find(id);
+	if(it != m_indexBuffers.end())
+	{
+	    auto glId = it->first;
+	    glDeleteBuffers(1, &glId);
+	    m_indexBuffers.erase(it);
+	}
+    }
+
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
     {
 	switch(type)
