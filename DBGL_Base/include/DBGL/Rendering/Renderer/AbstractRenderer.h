@@ -35,6 +35,10 @@ namespace dbgl
 	     * @brief Value for specifying an invalid vertex buffer
 	     */
 	    VertexBufferId INVALID_VERTEX_BUFFER = std::numeric_limits<VertexBufferId>::max();
+	    /**
+	     * @brief Identifier of a certain vertex format
+	     */
+	    using VertexFormatId = unsigned int;
 
 	    /**
 	     * @brief Type of buffer
@@ -56,9 +60,21 @@ namespace dbgl
 	     */
 	    enum class AttribFormat : char
 	    {
-		FLOAT,//!< FLOAT
-		HALF, //!< HALF
-		UBYTE,//!< UBYTE
+		FLOAT,	//!< FLOAT
+		SHORT,	//!< SHORT
+		BYTE,	//!< BYTE
+	    };
+	    /**
+	     * @brief Type of a vertex attribute
+	     */
+	    enum class AttribType : char
+	    {
+		VERTEX = 0,//!< VERTEX
+		NORMAL,    //!< NORMAL
+		UV,        //!< UV
+		TANGENT,   //!< TANGENT
+		BITANGENT, //!< BITANGENT
+		OTHER,     //!< OTHER
 	    };
 	    /**
 	     * @brief Supported blend modes
@@ -117,17 +133,12 @@ namespace dbgl
 		BACK, //!< BACK
 		FRONT,//!< FRONT
 	    };
-	private:
+	protected:
 	    struct VertexFormat
 	    {
-		unsigned int id;
-		unsigned int amount;
-		AttribFormat format;
-	    };
-	    struct IndexBuffer
-	    {
-		unsigned int id;
+		AttribType type;
 		unsigned int size;
+		AttribFormat format;
 	    };
 	public:
 	    /**
@@ -161,15 +172,25 @@ namespace dbgl
 	     */
 	    virtual void delIndexBuffer(IndexBufferId id) = 0;
 	    /**
+	     * @brief Registers a new vertex format
+	     * @param type Attribute type
+	     * @param size Amount of attributes to pass
+	     * @param format Attribute format
+	     * @param offset Offset
+	     * @return Identifier of the newly registered vertex format
+	     */
+	    virtual VertexFormatId regVertexFormat(AttribType type, unsigned int size, AttribFormat format) = 0;
+	    /**
 	     * @brief Initializes a vertex buffer to be used on the next draw call
 	     * @param vertBuffer Identifier of the vertex buffer to use
+	     * @param vertFormat Vertex format to use
 	     */
-	    virtual void useVertexBuffer(VertexBufferId vertBuffer) = 0;
+	    virtual void useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat) = 0;
 	    /**
 	     * @brief Ends the usage of a certain vertex buffer
 	     * @param vertBuffer Identifier of the vertex buffer to end usage
 	     */
-	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer) = 0;
+	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat) = 0;
 	    /**
 	     * @brief Initializes a index buffer to be used on the next draw call
 	     * @param vertBuffer Identifier of the index buffer to use

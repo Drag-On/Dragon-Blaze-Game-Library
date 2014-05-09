@@ -39,12 +39,18 @@ namespace dbgl
 	LOG->debug("Deleting index buffer %d.", id);
     }
 
-    void NullRenderer::useVertexBuffer(VertexBufferId vertBuffer)
+    auto NullRenderer::regVertexFormat(AttribType type, unsigned int size, AttribFormat format) -> VertexFormatId
+    {
+	LOG->debug("Registering vertex format of type %d, size %d, format %d and offset %d.", type, size, format);
+	return 0;
+    }
+
+    void NullRenderer::useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat)
     {
 	LOG->debug("Using vertex buffer %d.", vertBuffer);
     }
 
-    void NullRenderer::endUseVertexBuffer(VertexBufferId vertBuffer)
+    void NullRenderer::endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat)
     {
 	LOG->debug("Ending use of vertex buffer %d.", vertBuffer);
     }

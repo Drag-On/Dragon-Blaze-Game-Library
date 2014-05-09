@@ -26,13 +26,15 @@ namespace dbgl
 	    virtual void delVertexBuffer(VertexBufferId id);
 	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data);
 	    void delIndexBuffer(IndexBufferId id);
-//	    virtual void useVertexBuffer(VertexBufferId vertBuffer);
-//	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer);
+	    virtual VertexFormatId regVertexFormat(AttribType type, unsigned int size, AttribFormat format);
+	    virtual void useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
+	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
 //	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
 //	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
 //	    virtual void drawElements(PolygonMode mode);
 	private:
 	    GLenum convertBufferType(BufferType type);
+	    GLenum convertAttributeFormat(AttribFormat format);
 
 	    struct IndexBuffer
 	    {
@@ -47,6 +49,7 @@ namespace dbgl
 
 	    std::map<VertexBufferId, VertexBuffer> m_vertexBuffers;
 	    std::map<IndexBufferId, IndexBuffer> m_indexBuffers;
+	    std::map<VertexFormatId, VertexFormat> m_vertexFormats;
     };
 }
 

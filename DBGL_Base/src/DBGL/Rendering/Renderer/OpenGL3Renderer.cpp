@@ -87,6 +87,47 @@ namespace dbgl
 	}
     }
 
+    auto OpenGL3Renderer::regVertexFormat(AttribType type, unsigned int size, AttribFormat format) -> VertexFormatId
+    {
+	static VertexFormatId nextId = 0;
+	m_vertexFormats[nextId] = {type, size, format};
+	nextId++;
+	return nextId - 1;
+    }
+
+    void OpenGL3Renderer::useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat)
+    {
+	auto vertFormatIt = m_vertexFormats.find(vertFormat);
+	auto vertBufferIt = m_vertexBuffers.find(vertBuffer);
+	if(vertFormatIt != m_vertexFormats.end() && vertBufferIt != m_vertexBuffers.end())
+	{
+	    auto format = vertFormatIt->second;
+	    auto vertBuffer = vertBufferIt->second;
+	    auto oGlFormat = convertAttributeFormat(format.format);
+	    GLuint glType = static_cast<GLuint>(format.type);
+
+	    glEnableVertexAttribArray(glType);
+	    glBindBuffer(GL_ARRAY_BUFFER, vertBuffer.id);
+	    glVertexAttribPointer(glType,	// attribute
+		    vertBuffer.size,		// size
+		    oGlFormat,			// type
+		    GL_FALSE,			// normalized?
+		    0,				// stride
+		    (void*) 0);			// offset
+	}
+    }
+
+    void OpenGL3Renderer::endUseVertexBuffer(VertexBufferId /* vertBuffer */, VertexFormatId vertFormat)
+    {
+	auto vertFormatIt = m_vertexFormats.find(vertFormat);
+	if (vertFormatIt != m_vertexFormats.end())
+	{
+	    auto format = vertFormatIt->second;
+	    GLuint glType = static_cast<GLuint>(format.type);
+	    glDisableVertexAttribArray(glType);
+	}
+    }
+
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
     {
 	switch(type)
@@ -95,6 +136,20 @@ namespace dbgl
 		return GL_STATIC_DRAW;
 	    case BufferType::DYNAMIC:
 		return GL_DYNAMIC_DRAW;
+	}
+	return GL_INVALID_ENUM;
+    }
+
+    GLenum OpenGL3Renderer::convertAttributeFormat(AttribFormat format)
+    {
+	switch(format)
+	{
+	    case AttribFormat::FLOAT:
+		return GL_FLOAT;
+	    case AttribFormat::SHORT:
+		return GL_SHORT;
+	    case AttribFormat::BYTE:
+		return GL_BYTE;
 	}
 	return GL_INVALID_ENUM;
     }
