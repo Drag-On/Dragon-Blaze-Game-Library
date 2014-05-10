@@ -28,6 +28,11 @@ namespace dbgl
 	LOG->debug("Deleting vertex buffer %d.", id);
     }
 
+    void NullRenderer::fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* data)
+    {
+	LOG->debug("Filling vertex buffer %d of type %d and size %d.", id, type, size);
+    }
+
     auto NullRenderer::genIndexBuffer(BufferType type, unsigned int size, const void* /* data */) -> IndexBufferId
     {
 	LOG->debug("Generating index buffer of type %d, size %d.", type, size);
@@ -37,6 +42,11 @@ namespace dbgl
     void NullRenderer::delIndexBuffer(IndexBufferId id)
     {
 	LOG->debug("Deleting index buffer %d.", id);
+    }
+
+    void NullRenderer::fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data)
+    {
+	LOG->debug("Filling index buffer %d of type %d and size %d.", id, type, size);
     }
 
     auto NullRenderer::regVertexFormat(AttribType type, unsigned int size, AttribFormat format) -> VertexFormatId

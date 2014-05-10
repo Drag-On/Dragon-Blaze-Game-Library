@@ -54,6 +54,19 @@ namespace dbgl
 	}
     }
 
+    void OpenGL3Renderer::fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* data)
+    {
+	auto it = m_vertexBuffers.find(id);
+	if(it != m_vertexBuffers.end())
+	{
+	    auto vertBuffer = it->second;
+	    auto oglType = convertBufferType(type);
+	    glBindBuffer(GL_ARRAY_BUFFER, vertBuffer.id);
+	    glBufferData(GL_ARRAY_BUFFER, size, data, oglType);
+	    it->second.size = size;
+	}
+    }
+
     auto OpenGL3Renderer::genIndexBuffer(BufferType type, unsigned int size, const void* data) -> IndexBufferId
     {
 	static IndexBufferId nextId = 0;
@@ -84,6 +97,19 @@ namespace dbgl
 	    auto glId = it->first;
 	    glDeleteBuffers(1, &glId);
 	    m_indexBuffers.erase(it);
+	}
+    }
+
+    void OpenGL3Renderer::fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data)
+    {
+	auto it = m_indexBuffers.find(id);
+	if(it != m_indexBuffers.end())
+	{
+	    auto indexBuffer = it->second;
+	    auto oglType = convertBufferType(type);
+	    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.id);
+	    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, oglType);
+	    it->second.size = size;
 	}
     }
 

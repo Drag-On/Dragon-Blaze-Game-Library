@@ -159,6 +159,14 @@ namespace dbgl
 	     */
 	    virtual void delVertexBuffer(VertexBufferId id) = 0;
 	    /**
+	     * @brief Sends data to a buffer
+	     * @param id Identifier of the buffer
+	     * @param type Buffer type
+	     * @param size Size of the buffer
+	     * @param data Data to send to the buffer
+	     */
+	    virtual void fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* data) = 0;
+	    /**
 	     * @brief Generates a vertex buffer
 	     * @param size Size of the buffer to create
 	     * @param type Buffer type
@@ -171,6 +179,14 @@ namespace dbgl
 	     * @param id ID of the buffer to delete
 	     */
 	    virtual void delIndexBuffer(IndexBufferId id) = 0;
+	    /**
+	     * @brief Sends data to a buffer
+	     * @param id Identifier of the buffer
+	     * @param type Buffer type
+	     * @param size Size of the buffer
+	     * @param data Data to send to the buffer
+	     */
+	    virtual void fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data) = 0;
 	    /**
 	     * @brief Registers a new vertex format
 	     * @param type Attribute type

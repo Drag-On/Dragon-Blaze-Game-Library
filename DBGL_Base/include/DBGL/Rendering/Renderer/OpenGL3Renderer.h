@@ -24,8 +24,10 @@ namespace dbgl
 	    virtual ~OpenGL3Renderer();
 	    virtual VertexBufferId genVertexBuffer(BufferType type, unsigned int size, const void* data);
 	    virtual void delVertexBuffer(VertexBufferId id);
+	    virtual void fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* data);
 	    virtual IndexBufferId genIndexBuffer(BufferType type, unsigned int size, const void* data);
 	    void delIndexBuffer(IndexBufferId id);
+	    virtual void fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data);
 	    virtual VertexFormatId regVertexFormat(AttribType type, unsigned int size, AttribFormat format);
 	    virtual void useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
 	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
