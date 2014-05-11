@@ -11,6 +11,7 @@
 #ifndef HYPERRECTANGLE_H_
 #define HYPERRECTANGLE_H_
 
+#include <algorithm>
 #include "Vector.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -58,6 +59,18 @@ namespace dbgl
 	     * @return Extent of the hyperrectangle
 	     */
 	    Vector<T, D>& extent();
+	    /**
+	     * @brief Provides the "left" coordinate of the hyperrectangle of a certain dimension
+	     * @param dimension Dimension to get the "left" coordinate for
+	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     */
+	    T left(unsigned int dimension) const;
+	    /**
+	     * @brief Provides the "right" coordinate of the hyperrectangle of a certain dimension
+	     * @param dimension Dimension to get the "right" coordinate for
+	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     */
+	    T right(unsigned int dimension) const;
 	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this hyperrectangle
 	     * @param point Point to check
@@ -145,6 +158,18 @@ namespace dbgl
 	     */
 	    Vector2<T>& extent();
 	    /**
+	     * @brief Provides the "left" coordinate of the rectangle of a certain dimension
+	     * @param dimension Dimension to get the "left" coordinate for
+	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     */
+	    T left(unsigned int dimension) const;
+	    /**
+	     * @brief Provides the "right" coordinate of the rectangle of a certain dimension
+	     * @param dimension Dimension to get the "right" coordinate for
+	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     */
+	    T right(unsigned int dimension) const;
+	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this rectangle
 	     * @param point Point to check
 	     * @return True in case \p point is within (or on) the bounds of this rectangle, otherwise false
@@ -230,6 +255,18 @@ namespace dbgl
 	     * @return Extent of the box
 	     */
 	    Vector3<T>& extent();
+	    /**
+	     * @brief Provides the "left" coordinate of the box of a certain dimension
+	     * @param dimension Dimension to get the "left" coordinate for
+	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     */
+	    T left(unsigned int dimension) const;
+	    /**
+	     * @brief Provides the "right" coordinate of the box of a certain dimension
+	     * @param dimension Dimension to get the "right" coordinate for
+	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     */
+	    T right(unsigned int dimension) const;
 	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this box
 	     * @param point Point to check

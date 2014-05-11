@@ -53,21 +53,32 @@ namespace dbgl
 	return m_extent;
     }
 
+    template<typename T, unsigned int D> T Hyperrectangle<T, D>::left(unsigned int dimension) const
+    {
+	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
+    template<typename T, unsigned int D> T Hyperrectangle<T, D>::right(unsigned int dimension) const
+    {
+	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
     template<typename T, unsigned int D> bool Hyperrectangle<T, D>::contains(Vector<T, D> const& point) const
     {
-	for(unsigned int i = 0; i < D; i++)
+	for (unsigned int i = 0; i < D; i++)
 	{
-	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+	    if (point[i] < left(i) || point[i] > right(i))
 		return false;
 	}
 	return true;
     }
 
-    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::overlaps(Hyperrectangle<T, D> const& other) const
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::overlaps(
+	    Hyperrectangle<T, D> const& other) const
     {
-	for(unsigned int i = 0; i < D; i++)
+	for (unsigned int i = 0; i < D; i++)
 	{
-	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+	    if (other.right(i) < left(i) || other.left(i) > right(i))
 		return false;
 	}
 	return true;
@@ -144,11 +155,21 @@ namespace dbgl
 	return m_extent;
     }
 
+    template<typename T> T Hyperrectangle<T, 2>::left(unsigned int dimension) const
+    {
+	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
+    template<typename T> T Hyperrectangle<T, 2>::right(unsigned int dimension) const
+    {
+	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
     template<typename T> bool Hyperrectangle<T, 2>::contains(Vector<T, 2> const& point) const
     {
-	for(unsigned int i = 0; i < 2; i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
-	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+	    if (point[i] < left(i) || point[i] > right(i))
 		return false;
 	}
 	return true;
@@ -156,9 +177,9 @@ namespace dbgl
 
     template<typename T> bool Hyperrectangle<T, 2>::overlaps(Hyperrectangle<T, 2> const& other) const
     {
-	for(unsigned int i = 0; i < 2; i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
-	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+	    if (other.right(i) < left(i) || other.left(i) > right(i))
 		return false;
 	}
 	return true;
@@ -233,11 +254,21 @@ namespace dbgl
 	return m_extent;
     }
 
+    template<typename T> T Hyperrectangle<T, 3>::left(unsigned int dimension) const
+    {
+	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
+    template<typename T> T Hyperrectangle<T, 3>::right(unsigned int dimension) const
+    {
+	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+    }
+
     template<typename T> bool Hyperrectangle<T, 3>::contains(Vector<T, 3> const& point) const
     {
-	for(unsigned int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
-	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+	    if (point[i] < left(i) || point[i] > right(i))
 		return false;
 	}
 	return true;
@@ -245,9 +276,9 @@ namespace dbgl
 
     template<typename T> bool Hyperrectangle<T, 3>::overlaps(Hyperrectangle<T, 3> const& other) const
     {
-	for(unsigned int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 3; i++)
 	{
-	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+	    if (other.right(i) < left(i) || other.left(i) > right(i))
 		return false;
 	}
 	return true;
