@@ -268,13 +268,9 @@ namespace dbgl
     {
 	std::vector<Container> list;
 	if (node.leftChild != nullptr)
-	{
 	    getAllNodes(*node.leftChild, list);
-	}
 	if (node.rightChild != nullptr)
-	{
 	    getAllNodes(*node.rightChild, list);
-	}
 	return list;
     }
 
@@ -282,16 +278,10 @@ namespace dbgl
 	    std::vector<Container>& list) const
     {
 	if (node.leftChild != nullptr)
-	{
 	    getAllNodes(*node.leftChild, list);
-	}
 	if (node.rightChild != nullptr)
-	{
 	    getAllNodes(*node.rightChild, list);
-	}
-	list.push_back( {
-	node.point, node.data
-	});
+	list.push_back( { node.point, node.data });
     }
 
     template<typename Data, typename Point> auto KdTree<Data, Point>::getAll() const -> std::vector<Container>
@@ -299,9 +289,7 @@ namespace dbgl
 	if (m_pRoot != nullptr)
 	{
 	    auto list = getAllChildren(*m_pRoot);
-	    list.push_back( {
-	    m_pRoot->point, m_pRoot->data
-	    });
+	    list.push_back( { m_pRoot->point, m_pRoot->data });
 	    return list;
 	}
 	else
@@ -313,9 +301,7 @@ namespace dbgl
 	if (m_pRoot != nullptr)
 	{
 	    auto nodes = getAllChildren(*m_pRoot);
-	    nodes.push_back( {
-	    m_pRoot->point, m_pRoot->data
-	    });
+	    nodes.push_back( { m_pRoot->point, m_pRoot->data });
 	    free(m_pRoot);
 	    m_pRoot = buildTree(nodes.begin(), nodes.end(), 0);
 	}
@@ -393,9 +379,7 @@ namespace dbgl
 	std::vector<NearestNeighbor> curBest;
 	findKNearestNeighbors(point, k, *m_pRoot, curBest, true, 0);
 	for (auto nn : curBest)
-	    nearest.push_back( {
-	    nn.pNode->point, nn.pNode->data
-	    });
+	    nearest.push_back( { nn.pNode->point, nn.pNode->data });
     }
 
     template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(
