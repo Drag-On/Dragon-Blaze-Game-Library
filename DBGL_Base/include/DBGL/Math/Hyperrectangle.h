@@ -18,7 +18,7 @@
 namespace dbgl
 {
     /**
-     * @brief A general rectangle class (i.e. for arbitrary dimensions)
+     * @brief A general axis-aligned rectangle class (i.e. for arbitrary dimensions)
      */
     template<typename T, unsigned int D> class Hyperrectangle
     {
@@ -99,7 +99,7 @@ namespace dbgl
     };
 
     /**
-     * @brief Rectangle (i.e. 2 dimensions)
+     * @brief Axis-aligned rectangle (i.e. 2 dimensions)
      */
     template<typename T> using Rectangle = Hyperrectangle<T, 2>;
 
@@ -185,7 +185,7 @@ namespace dbgl
     };
 
     /**
-     * @brief Box (i.e. 3 dimensions)
+     * @brief Axis-aligned box (i.e. 3 dimensions)
      */
     template<typename T> using Box = Hyperrectangle<T, 3>;
 
