@@ -84,6 +84,12 @@ namespace dbgl
 	return true;
     }
 
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::isSimilar(
+	    Hyperrectangle<T, D> const& other, double precision) const
+    {
+	return (m_pos.isSimilar(other.m_pos) && m_extent.isSimilar(other.m_extent));
+    }
+
     template<typename T, unsigned int D> Hyperrectangle<T, D>& Hyperrectangle<T, D>::operator=(
 	    Hyperrectangle<T, D> const& rhs)
     {
@@ -194,6 +200,12 @@ namespace dbgl
 	return true;
     }
 
+    template<typename T> bool Hyperrectangle<T, 2>::isSimilar(Hyperrectangle<T, 2> const& other,
+	    double precision) const
+    {
+	return (m_pos.isSimilar(other.m_pos) && m_extent.isSimilar(other.m_extent));
+    }
+
     template<typename T> Hyperrectangle<T, 2>& Hyperrectangle<T, 2>::operator=(
 	    Hyperrectangle<T, 2> const& rhs)
     {
@@ -299,6 +311,12 @@ namespace dbgl
 		return false;
 	}
 	return true;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 3>::isSimilar(Hyperrectangle<T, 3> const& other,
+	    double precision) const
+    {
+	return (m_pos.isSimilar(other.m_pos) && m_extent.isSimilar(other.m_extent));
     }
 
     template<typename T> Hyperrectangle<T, 3>& Hyperrectangle<T, 3>::operator=(

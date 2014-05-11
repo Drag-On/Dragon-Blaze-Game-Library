@@ -84,6 +84,13 @@ namespace dbgl
 	     */
 	    bool overlaps(Hyperrectangle<T, D> const& other) const;
 	    /**
+	     * @brief Checks, if this hyperrectangle is similar to another one
+	     * @param other Other hyperrectangle to check
+	     * @param precision Precision of the check
+	     * @return True in case the two hyperrectangles are similar, otherwise false
+	     */
+	    bool isSimilar(Hyperrectangle<T, D> const& other, double precision = 0.1) const;
+	    /**
 	     * @brief Assigns another hyperrectangle by copying its values
 	     * @param rhs Hyperrectangle to copy
 	     * @return Reference to this hyperrectangle
@@ -189,6 +196,13 @@ namespace dbgl
 	     */
 	    bool overlaps(Hyperrectangle<T, 2> const& other) const;
 	    /**
+	     * @brief Checks, if this rectangle is similar to another one
+	     * @param other Other rectangle to check
+	     * @param precision Precision of the check
+	     * @return True in case the two rectangles are similar, otherwise false
+	     */
+	    bool isSimilar(Hyperrectangle<T, 2> const& other, double precision = 0.1) const;
+	    /**
 	     * @brief Assigns another rectangle by copying its values
 	     * @param rhs Rectangle to copy
 	     * @return Reference to this rectangle
@@ -293,6 +307,13 @@ namespace dbgl
 	     * @return True in case \p other overlaps with (or touches) this box, otherwise false
 	     */
 	    bool overlaps(Hyperrectangle<T, 3> const& other) const;
+	    /**
+	     * @brief Checks, if this box is similar to another one
+	     * @param other Other box to check
+	     * @param precision Precision of the check
+	     * @return True in case the two box are similar, otherwise false
+	     */
+	    bool isSimilar(Hyperrectangle<T, 3> const& other, double precision = 0.1) const;
 	    /**
 	     * @brief Assigns another box by copying its values
 	     * @param rhs Box to copy
