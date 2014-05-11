@@ -104,6 +104,15 @@ namespace dbgl
 	return !(*this == rhs);
     }
 
+    template<typename T, unsigned int D> T Hyperrectangle<T, D>::operator[](
+	    std::size_t const& index) const
+    {
+	if(index < getDimension())
+	    return m_pos[index];
+	else
+	    return m_pos[index - getDimension()] + m_extent[index - getDimension()];
+    }
+
     template<typename T, unsigned int D> constexpr unsigned int Hyperrectangle<T, D>::getDimension()
     {
 	return D;
@@ -203,6 +212,14 @@ namespace dbgl
 	return !(*this == rhs);
     }
 
+    template<typename T> T Hyperrectangle<T, 2>::operator[](std::size_t const& index) const
+    {
+	if(index < getDimension())
+	    return m_pos[index];
+	else
+	    return m_pos[index - getDimension()] + m_extent[index - getDimension()];
+    }
+
     template<typename T> constexpr unsigned int Hyperrectangle<T, 2>::getDimension()
     {
 	return 2;
@@ -300,6 +317,14 @@ namespace dbgl
     template<typename T> bool Hyperrectangle<T, 3>::operator!=(Hyperrectangle<T, 3> const& rhs) const
     {
 	return !(*this == rhs);
+    }
+
+    template<typename T> T Hyperrectangle<T, 3>::operator[](std::size_t const& index) const
+    {
+	if(index < getDimension())
+	    return m_pos[index];
+	else
+	    return m_pos[index - getDimension()] + m_extent[index - getDimension()];
     }
 
     template<typename T> constexpr unsigned int Hyperrectangle<T, 3>::getDimension()

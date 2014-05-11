@@ -102,6 +102,13 @@ namespace dbgl
 	     */
 	    bool operator!=(Hyperrectangle<T, D> const& rhs) const;
 	    /**
+	     * @brief Direct access operator
+	     * @param index Index of the component to access
+	     * @return Component \p index of the position of this hyperrectangle
+	     * @details The returned values are ordered: position.x, position.y, ..., position.x + extent.x, ...
+	     */
+	    T operator[](std::size_t const& index) const;
+	    /**
 	     * @brief Dimensionality of the hyperrectangle
 	     * @return Dimensionality of the hyperrectangle
 	     */
@@ -200,6 +207,13 @@ namespace dbgl
 	     */
 	    bool operator!=(Hyperrectangle<T, 2> const& rhs) const;
 	    /**
+	     * @brief Direct access operator
+	     * @param index Index of the component to access
+	     * @return Component \p index of this rectangle
+	     * @details The returned values are ordered: position.x, position.y, ..., position.x + extent.x, ...
+	     */
+	    T operator[](std::size_t const& index) const;
+	    /**
 	     * @brief Dimensionality of the rectangle
 	     * @return 2
 	     */
@@ -297,6 +311,13 @@ namespace dbgl
 	     * @return False in case both boxs are equal, otherwise true
 	     */
 	    bool operator!=(Hyperrectangle<T, 3> const& rhs) const;
+	    /**
+	     * @brief Direct access operator
+	     * @param index Index of the component to access
+	     * @return Component \p index of of this box
+	     * @details The returned values are ordered: position.x, position.y, ..., position.x + extent.x, ...
+	     */
+	    T operator[](std::size_t const& index) const;
 	    /**
 	     * @brief Dimensionality of the box
 	     * @return 3

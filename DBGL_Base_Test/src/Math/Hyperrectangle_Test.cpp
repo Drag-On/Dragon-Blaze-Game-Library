@@ -69,6 +69,11 @@ int testHyperrectangle()
     assert(rect2d_2Copy == copy);
     // !=
     assert(copy != rect2d);
+    // []
+    assert(copy.getPos()[0] == copy[0]);
+    assert(copy.getPos()[1] == copy[1]);
+    assert(copy.getPos()[0] + copy.getExtent()[0] == copy[2]);
+    assert(copy.getPos()[1] + copy.getExtent()[1] == copy[3]);
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

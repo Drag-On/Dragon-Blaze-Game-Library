@@ -95,6 +95,13 @@ int testKdTree()
     assert(move.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
     assert(copy.get(Vec2f(0,0)) == nullptr);
     assert(copy.size() == 0);
+    std::vector<typename KdTree<int, Rectangle<float>>::Container> volumdata = {
+	    {Rectangle<float>(Vec2f(0, 0), Vec2f(0.5f, 0.5f)), 0},
+	    {Rectangle<float>(Vec2f(-0.5f, 1), Vec2f(0.5f, 1)), 1},
+	    {Rectangle<float>(Vec2f(-0.5f, -0.5f), Vec2f(1.5f, 1.5f)), 2},
+	    {Rectangle<float>(Vec2f(-0.5f, -1), Vec2f(-0.5f, 1)), 3},
+    };
+    KdTree<int, Rectangle<float>> volumTree(volumdata.begin(), volumdata.end());
     LOG->info("OK!");
     LOG->info("Methods... ");
     // size
