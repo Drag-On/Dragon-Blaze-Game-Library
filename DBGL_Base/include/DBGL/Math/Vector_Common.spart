@@ -38,7 +38,7 @@ template<TEMPLATE_LIST> Vector<T,N>::~Vector()
 {
 }
 
-template<TEMPLATE_LIST> std::size_t Vector<T,N>::getDimension()
+template<TEMPLATE_LIST> constexpr std::size_t Vector<T,N>::getDimension()
 {
 	return N;
 }

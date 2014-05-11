@@ -104,7 +104,7 @@ namespace dbgl
 	return !(*this == rhs);
     }
 
-    template<typename T, unsigned int D> unsigned int Hyperrectangle<T, D>::getDimension()
+    template<typename T, unsigned int D> constexpr unsigned int Hyperrectangle<T, D>::getDimension()
     {
 	return D;
     }
@@ -203,7 +203,7 @@ namespace dbgl
 	return !(*this == rhs);
     }
 
-    template<typename T> unsigned int Hyperrectangle<T, 2>::getDimension()
+    template<typename T> constexpr unsigned int Hyperrectangle<T, 2>::getDimension()
     {
 	return 2;
     }
@@ -302,7 +302,7 @@ namespace dbgl
 	return !(*this == rhs);
     }
 
-    template<typename T> unsigned int Hyperrectangle<T, 3>::getDimension()
+    template<typename T> constexpr unsigned int Hyperrectangle<T, 3>::getDimension()
     {
 	return 3;
     }

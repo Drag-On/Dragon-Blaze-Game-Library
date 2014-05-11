@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// @brief Returns the dimension of this vector
 	/// </summary>
-	static std::size_t getDimension();
+	static constexpr std::size_t getDimension();
 	/// <summary>
 	/// @brief Returns the squared length of this vector
 	/// </summary>

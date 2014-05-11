@@ -38,11 +38,11 @@ namespace dbgl
 	    /// <summary>
 	    /// @brief Gets the amount of columns of this matrix
 	    /// </summary>
-	    static int getWidth();
+	    static constexpr int getWidth();
 	    /// <summary>
 	    /// @brief Gets the amount of lines of this matrix
 	    /// </summary>
-	    static int getHeight();
+	    static constexpr int getHeight();
 	    /// <summary>
 	    /// @brief Returns a transposed copy of this matrix
 	    /// </summary>

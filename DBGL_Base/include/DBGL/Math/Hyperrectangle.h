@@ -105,7 +105,7 @@ namespace dbgl
 	     * @brief Dimensionality of the hyperrectangle
 	     * @return Dimensionality of the hyperrectangle
 	     */
-	    static unsigned int getDimension();
+	    static constexpr unsigned int getDimension();
 	private:
 	    Vector<T, D> m_pos;
 	    Vector<T, D> m_extent;
@@ -203,7 +203,7 @@ namespace dbgl
 	     * @brief Dimensionality of the rectangle
 	     * @return 2
 	     */
-	    static unsigned int getDimension();
+	    static constexpr unsigned int getDimension();
 	private:
 	    Vector2<T> m_pos;
 	    Vector2<T> m_extent;
@@ -301,7 +301,7 @@ namespace dbgl
 	     * @brief Dimensionality of the box
 	     * @return 3
 	     */
-	    static unsigned int getDimension();
+	    static constexpr unsigned int getDimension();
 	private:
 	    Vector3<T> m_pos;
 	    Vector3<T> m_extent;
