@@ -13,6 +13,7 @@
 
 #include "Vector.h"
 #include "Vector2.h"
+#include "Vector3.h"
 
 namespace dbgl
 {
@@ -151,12 +152,86 @@ namespace dbgl
 	    bool operator!=(Hyperrectangle<T, 2> const& rhs) const;
 	    /**
 	     * @brief Dimensionality of the rectangle
-	     * @return Dimensionality of the rectangle
+	     * @return 2
 	     */
 	    static unsigned int getDimension();
 	private:
 	    Vector2<T> m_pos;
 	    Vector2<T> m_extent;
+    };
+
+    /**
+     * @brief Box (i.e. 3 dimensions)
+     */
+    template<typename T> using Box = Hyperrectangle<T, 3>;
+
+    /**
+     * @brief A box (i.e. 3 dimensions)
+     */
+    template<typename T> class Hyperrectangle<T, 3>
+    {
+	public:
+	    /**
+	     * @brief Constructs a box located at the origin with extent 1
+	     */
+	    Hyperrectangle();
+	    /**
+	     * @brief Constructs a box from a position vector and an extent vector
+	     * @param pos Coordinates to use
+	     * @param extent Extent to use
+	     */
+	    Hyperrectangle(Vector<T, 3> const& pos, Vector<T, 3> const& extent);
+	    /**
+	     * @brief Copies a box
+	     * @param other Box to copy
+	     */
+	    Hyperrectangle(Hyperrectangle<T, 3> const& other);
+	    /**
+	     * @brief Provides access to the boxs coordinates
+	     * @return Position of the box
+	     */
+	    Vector3<T> const& getPos() const;
+	    /**
+	     * @brief Provides access to the boxs coordinates
+	     * @return Position of the box
+	     */
+	    Vector3<T>& pos();
+	    /**
+	     * @brief Provides access to the boxs extent
+	     * @return Extent of the box
+	     */
+	    Vector3<T> const& getExtent() const;
+	    /**
+	     * @brief Provides access to the boxs extent
+	     * @return Extent of the box
+	     */
+	    Vector3<T>& extent();
+	    /**
+	     * @brief Assigns another box by copying its values
+	     * @param rhs Box to copy
+	     * @return Reference to this box
+	     */
+	    Hyperrectangle<T, 3>& operator=(Hyperrectangle<T, 3> const& rhs);
+	    /**
+	     * @brief Value comparison
+	     * @param rhs Box to compare
+	     * @return True in case both boxs are equal, otherwise false
+	     */
+	    bool operator==(Hyperrectangle<T, 3> const& rhs) const;
+	    /**
+	     * @brief Value comparison
+	     * @param rhs Box to compare
+	     * @return False in case both boxs are equal, otherwise true
+	     */
+	    bool operator!=(Hyperrectangle<T, 3> const& rhs) const;
+	    /**
+	     * @brief Dimensionality of the box
+	     * @return 3
+	     */
+	    static unsigned int getDimension();
+	private:
+	    Vector3<T> m_pos;
+	    Vector3<T> m_extent;
     };
 }
 

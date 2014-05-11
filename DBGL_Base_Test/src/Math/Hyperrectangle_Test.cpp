@@ -28,6 +28,7 @@ int testHyperrectangle()
     Hyperrectangle<float, 2> rect2d_2(Vec2f(1, 0.5f), Vec2f(8, 10));
     Hyperrectangle<float, 2> rect2d_2Copy(rect2d_2);
     Rectangle<double> rect(Vec2d(2, 2), Vec2d(42, 23));
+    Box<int> box(Vec3i(1, 3, 3), Vec3i(7, 1, 1));
     assert(rect2d.getPos() == Vec2f(0, 0));
     assert(rect2d.getExtent() == Vec2f(1, 1));
     assert(rect2d_2.getPos() == Vec2f(1, 0.5f));
@@ -36,6 +37,8 @@ int testHyperrectangle()
     assert(rect2d_2Copy.getExtent() == rect2d_2.getExtent());
     assert(rect.getPos() == Vec2d(2, 2));
     assert(rect.getExtent() == Vec2d(42, 23));
+    assert(box.getPos() == Vec3i(1, 3, 3));
+    assert(box.getExtent() == Vec3i(7, 1, 1));
     LOG->info("OK!");
     LOG->info("Methods... ");
     // ...

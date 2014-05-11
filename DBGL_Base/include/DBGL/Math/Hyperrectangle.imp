@@ -146,5 +146,74 @@ namespace dbgl
     {
 	return 2;
     }
+
+    /*
+     * Box
+     */
+
+    template<typename T> Hyperrectangle<T, 3>::Hyperrectangle()
+    {
+	for (unsigned int i = 0; i < 2; i++)
+	{
+	    m_pos[i] = 0;
+	    m_extent[i] = 1;
+	}
+    }
+
+    template<typename T> Hyperrectangle<T, 3>::Hyperrectangle(Vector<T, 3> const& pos,
+	    Vector<T, 3> const& extent)
+    {
+	m_pos = pos;
+	m_extent = extent;
+    }
+
+    template<typename T> Hyperrectangle<T, 3>::Hyperrectangle(Hyperrectangle<T, 3> const& other)
+    {
+	m_pos = other.m_pos;
+	m_extent = other.m_extent;
+    }
+
+    template<typename T> Vector3<T> const& Hyperrectangle<T, 3>::getPos() const
+    {
+	return m_pos;
+    }
+
+    template<typename T> Vector3<T>& Hyperrectangle<T, 3>::pos()
+    {
+	return m_pos;
+    }
+
+    template<typename T> Vector3<T> const& Hyperrectangle<T, 3>::getExtent() const
+    {
+	return m_extent;
+    }
+
+    template<typename T> Vector3<T>& Hyperrectangle<T, 3>::extent()
+    {
+	return m_extent;
+    }
+
+    template<typename T> Hyperrectangle<T, 3>& Hyperrectangle<T, 3>::operator=(
+	    Hyperrectangle<T, 3> const& rhs)
+    {
+	m_pos = rhs.m_pos;
+	m_extent = rhs.m_extent;
+	return *this;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 3>::operator==(Hyperrectangle<T, 3> const& rhs) const
+    {
+	return (m_pos == rhs.m_pos && m_extent == rhs.m_extent);
+    }
+
+    template<typename T> bool Hyperrectangle<T, 3>::operator!=(Hyperrectangle<T, 3> const& rhs) const
+    {
+	return !(*this == rhs);
+    }
+
+    template<typename T> unsigned int Hyperrectangle<T, 3>::getDimension()
+    {
+	return 3;
+    }
 }
 
