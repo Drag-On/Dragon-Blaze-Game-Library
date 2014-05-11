@@ -29,7 +29,8 @@ namespace dbgl
      * 		It is possible to add multiple points with the same coordinates, however methods
      * 		like get() and remove() only expect one, i.e. it's undefined which one they use.
      * @note This implementation is meant to be used with dbgl::Vector or dbgl::Hyperrectangle
-     * 	     as Point
+     * 	     as Point, however, using hyperrectangles won't make this implementation consider
+     * 	     volumetric information. It will still work on points.
      */
     template<typename Data, typename Point> class KdTree : public AbstractTree
     {
