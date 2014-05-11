@@ -59,11 +59,18 @@ class KdTreePrintVisitor2
 	}
 };
 
-void checkKNearestNeighbor(std::vector<typename KdTree<int, Vec2f>::Container> result, std::vector<int> needed)
+void checkResult(std::vector<typename KdTree<int, Vec2f>::Container> result, std::vector<int> needed)
 {
-    assert(result.size() == needed.size());
     for(auto item : result)
-	assert(std::find(needed.begin(), needed.end(), item.data) != needed.end());
+    {
+	auto it = std::find(needed.begin(), needed.end(), item.data);
+	if(it == needed.end())
+	{
+	    LOG->error("Item %d was returned wrongly.", item.data);
+	    assert(false);
+	}
+    }
+    assert(result.size() == needed.size());
 }
 
 int testKdTree()
@@ -156,31 +163,50 @@ int testKdTree()
     // findKNearestNeighbors
     std::vector<typename KdTree<int, Vec2f>::Container> list;
     tree2.findKNearestNeighbors(Vec2f(0.5f, 0), 3, list);
-    checkKNearestNeighbor(list, {0, 3, 1});
+    checkResult(list, {0, 3, 1});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.5f, 0), 4, list);
-    checkKNearestNeighbor(list, {0, 3, 1, 4});
+    checkResult(list, {0, 3, 1, 4});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 1, list);
-    checkKNearestNeighbor(list, {0});
+    checkResult(list, {0});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 2, list);
-    checkKNearestNeighbor(list, {0, 3});
+    checkResult(list, {0, 3});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 3, list);
-    checkKNearestNeighbor(list, {0, 3, 5});
+    checkResult(list, {0, 3, 5});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 4, list);
-    checkKNearestNeighbor(list, {0, 3, 5, 1});
+    checkResult(list, {0, 3, 5, 1});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 5, list);
-    checkKNearestNeighbor(list, {0, 3, 5, 1, 4});
+    checkResult(list, {0, 3, 5, 1, 4});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 6, list);
-    checkKNearestNeighbor(list, {0, 3, 5, 1, 4, 2});
+    checkResult(list, {0, 3, 5, 1, 4, 2});
     list.clear();
     tree2.findKNearestNeighbors(Vec2f(0.2f, -0.25f), 7, list);
-    checkKNearestNeighbor(list, {0, 3, 5, 1, 4, 2});
+    checkResult(list, {0, 3, 5, 1, 4, 2});
+    // findRange
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(0, 0), Vec2f(1, 1)), list);
+    checkResult(list, {0, 1, 4});
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(0, -0.5f), Vec2f(1, 1)), list);
+    checkResult(list, {0, 1, 4, 3});
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(-1, 1), Vec2f(2, -1.4f)), list);
+    checkResult(list, {0, 1, 4, 2});
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(-1, -1), Vec2f(2, 2)), list);
+    checkResult(list, {0, 1, 4, 3, 2, 5});
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(0, 0), Vec2f(0, 0)), list);
+    checkResult(list, {0});
+    list.clear();
+    tree2.findRange(Rectangle<float>(Vec2f(1, 1), Vec2f(0, 0)), list);
+    checkResult(list, {});
     // getAll
     auto allNodes = tree2.getAll();
     assert(allNodes.size() == tree2.size());
