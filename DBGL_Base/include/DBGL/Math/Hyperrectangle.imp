@@ -1,0 +1,80 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<typename T, unsigned int D> Hyperrectangle<T, D>::Hyperrectangle()
+    {
+	for (unsigned int i = 0; i < D; i++)
+	{
+	    m_pos[i] = 0;
+	    m_extent[i] = 1;
+	}
+    }
+
+    template<typename T, unsigned int D> Hyperrectangle<T, D>::Hyperrectangle(Vector<T, D> const& pos,
+	    Vector<T, D> const& extent)
+    {
+	m_pos = pos;
+	m_extent = extent;
+    }
+
+    template<typename T, unsigned int D> Hyperrectangle<T, D>::Hyperrectangle(Hyperrectangle const& other)
+    {
+	m_pos = other.m_pos;
+	m_extent = other.m_extent;
+    }
+
+    template<typename T, unsigned int D> Vector<T, D> const& Hyperrectangle<T, D>::getPos() const
+    {
+	return m_pos;
+    }
+
+    template<typename T, unsigned int D> Vector<T, D>& Hyperrectangle<T, D>::pos()
+    {
+	return m_pos;
+    }
+
+    template<typename T, unsigned int D> Vector<T, D> const& Hyperrectangle<T, D>::getExtent() const
+    {
+	return m_extent;
+    }
+
+    template<typename T, unsigned int D> Vector<T, D>& Hyperrectangle<T, D>::extent()
+    {
+	return m_extent;
+    }
+
+    template<typename T, unsigned int D> Hyperrectangle<T, D>& Hyperrectangle<T, D>::operator=(
+	    Hyperrectangle<T, D> const& rhs)
+    {
+	m_pos = rhs.m_pos;
+	m_extent = rhs.m_extent;
+	return *this;
+    }
+
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::operator==(
+	    Hyperrectangle<T, D> const& rhs) const
+    {
+	return (m_pos == rhs.m_pos && m_extent == rhs.m_extent);
+    }
+
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::operator!=(
+	    Hyperrectangle<T, D> const& rhs) const
+    {
+	return !(*this == rhs);
+    }
+
+    template<typename T, unsigned int D> unsigned int Hyperrectangle<T, D>::getDimension()
+    {
+	return D;
+    }
+}
+
