@@ -63,7 +63,7 @@ namespace dbgl
 	     * @param point Point to check
 	     * @return True in case \p point is within (or on) the bounds of this hyperrectangle, otherwise false
 	     */
-	    bool isIn(Vector<T, D> const& point) const;
+	    bool contains(Vector<T, D> const& point) const;
 	    /**
 	     * @brief Checks if the passed hyperrectangle overlaps with this one
 	     * @param other Hyperrectangle to check
@@ -149,7 +149,7 @@ namespace dbgl
 	     * @param point Point to check
 	     * @return True in case \p point is within (or on) the bounds of this rectangle, otherwise false
 	     */
-	    bool isIn(Vector<T, 2> const& point) const;
+	    bool contains(Vector<T, 2> const& point) const;
 	    /**
 	     * @brief Checks if the passed rectangle overlaps with this one
 	     * @param other Rectangle to check
@@ -235,7 +235,7 @@ namespace dbgl
 	     * @param point Point to check
 	     * @return True in case \p point is within (or on) the bounds of this box, otherwise false
 	     */
-	    bool isIn(Vector<T, 3> const& point) const;
+	    bool contains(Vector<T, 3> const& point) const;
 	    /**
 	     * @brief Checks if the passed box overlaps with this one
 	     * @param other Box to check

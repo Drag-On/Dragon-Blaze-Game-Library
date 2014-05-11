@@ -41,11 +41,11 @@ int testHyperrectangle()
     assert(box.getExtent() == Vec3i(7, 1, 1));
     LOG->info("OK!");
     LOG->info("Methods... ");
-    // isIn
-    assert(rect.isIn(Vec2d(0, 0)) == false);
-    assert(rect.isIn(Vec2d(2, 2)));
-    assert(rect.isIn(Vec2d(2.1, 3)));
-    assert(rect.isIn(Vec2d(44.1, 3)) == false);
+    // contains
+    assert(rect.contains(Vec2d(0, 0)) == false);
+    assert(rect.contains(Vec2d(2, 2)));
+    assert(rect.contains(Vec2d(2.1, 3)));
+    assert(rect.contains(Vec2d(44.1, 3)) == false);
     // overlaps
     assert(rect.overlaps(Rectangle<double>(Vec2d(0, 3), Vec2d(50, 1))));
     assert(rect.overlaps(Rectangle<double>(Vec2d(0, 0), Vec2d(1, 1))) == false);

@@ -53,7 +53,7 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::isIn(Vector<T, D> const& point) const
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::contains(Vector<T, D> const& point) const
     {
 	for(unsigned int i = 0; i < D; i++)
 	{
@@ -144,7 +144,7 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T> bool Hyperrectangle<T, 2>::isIn(Vector<T, 2> const& point) const
+    template<typename T> bool Hyperrectangle<T, 2>::contains(Vector<T, 2> const& point) const
     {
 	for(unsigned int i = 0; i < 2; i++)
 	{
@@ -233,7 +233,7 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T> bool Hyperrectangle<T, 3>::isIn(Vector<T, 3> const& point) const
+    template<typename T> bool Hyperrectangle<T, 3>::contains(Vector<T, 3> const& point) const
     {
 	for(unsigned int i = 0; i < 3; i++)
 	{
