@@ -29,6 +29,7 @@ int testHyperrectangle()
     Hyperrectangle<float, 2> rect2d_2Copy(rect2d_2);
     Rectangle<double> rect(Vec2d(2, 2), Vec2d(42, 23));
     Box<int> box(Vec3i(1, 3, 3), Vec3i(7, 1, 1));
+    Rectangle<double> weirdRect(Vec2d(5, 5), Vec2d(-5, -5));
     assert(rect2d.getPos() == Vec2f(0, 0));
     assert(rect2d.getExtent() == Vec2f(1, 1));
     assert(rect2d_2.getPos() == Vec2f(1, 0.5f));
@@ -46,11 +47,16 @@ int testHyperrectangle()
     assert(rect.contains(Vec2d(2, 2)));
     assert(rect.contains(Vec2d(2.1, 3)));
     assert(rect.contains(Vec2d(44.1, 3)) == false);
+    assert(weirdRect.contains(Vec2d(0, 0)));
+    assert(weirdRect.contains(Vec2d(1, 1.5f)));
+    assert(weirdRect.contains(Vec2d(-1, 4)) == false);
     // overlaps
     assert(rect.overlaps(Rectangle<double>(Vec2d(0, 3), Vec2d(50, 1))));
     assert(rect.overlaps(Rectangle<double>(Vec2d(0, 0), Vec2d(1, 1))) == false);
     assert(rect.overlaps(Rectangle<double>(Vec2d(2, 3), Vec2d(0, 0))));
     assert(rect.overlaps(Rectangle<double>(Vec2d(-4, 10), Vec2d(15, 1))));
+    assert(rect.overlaps(weirdRect));
+    assert(weirdRect.overlaps(Rectangle<double>(Vec2d(-1, 1), Vec2d(1.5f, 1))));
     LOG->info("OK!");
     LOG->info("Operators... ");
     // =
