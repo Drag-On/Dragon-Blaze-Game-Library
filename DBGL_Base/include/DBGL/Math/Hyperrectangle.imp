@@ -26,7 +26,8 @@ namespace dbgl
 	m_extent = extent;
     }
 
-    template<typename T, unsigned int D> Hyperrectangle<T, D>::Hyperrectangle(Hyperrectangle const& other)
+    template<typename T, unsigned int D> Hyperrectangle<T, D>::Hyperrectangle(
+	    Hyperrectangle<T, D> const& other)
     {
 	m_pos = other.m_pos;
 	m_extent = other.m_extent;
@@ -75,6 +76,75 @@ namespace dbgl
     template<typename T, unsigned int D> unsigned int Hyperrectangle<T, D>::getDimension()
     {
 	return D;
+    }
+
+    /*
+     * Rectangle
+     */
+
+    template<typename T> Hyperrectangle<T, 2>::Hyperrectangle()
+    {
+	for (unsigned int i = 0; i < 2; i++)
+	{
+	    m_pos[i] = 0;
+	    m_extent[i] = 1;
+	}
+    }
+
+    template<typename T> Hyperrectangle<T, 2>::Hyperrectangle(Vector<T, 2> const& pos,
+	    Vector<T, 2> const& extent)
+    {
+	m_pos = pos;
+	m_extent = extent;
+    }
+
+    template<typename T> Hyperrectangle<T, 2>::Hyperrectangle(Hyperrectangle<T, 2> const& other)
+    {
+	m_pos = other.m_pos;
+	m_extent = other.m_extent;
+    }
+
+    template<typename T> Vector2<T> const& Hyperrectangle<T, 2>::getPos() const
+    {
+	return m_pos;
+    }
+
+    template<typename T> Vector2<T>& Hyperrectangle<T, 2>::pos()
+    {
+	return m_pos;
+    }
+
+    template<typename T> Vector2<T> const& Hyperrectangle<T, 2>::getExtent() const
+    {
+	return m_extent;
+    }
+
+    template<typename T> Vector2<T>& Hyperrectangle<T, 2>::extent()
+    {
+	return m_extent;
+    }
+
+    template<typename T> Hyperrectangle<T, 2>& Hyperrectangle<T, 2>::operator=(
+	    Hyperrectangle<T, 2> const& rhs)
+    {
+	m_pos = rhs.m_pos;
+	m_extent = rhs.m_extent;
+	return *this;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 2>::operator==(Hyperrectangle<T, 2> const& rhs) const
+    {
+	return (m_pos == rhs.m_pos && m_extent == rhs.m_extent);
+    }
+
+    template<typename T> bool Hyperrectangle<T, 2>::operator!=(Hyperrectangle<T, 2> const& rhs) const
+    {
+	return !(*this == rhs);
+    }
+
+    template<typename T> unsigned int Hyperrectangle<T, 2>::getDimension()
+    {
+	return 2;
     }
 }
 
