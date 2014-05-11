@@ -59,6 +59,18 @@ namespace dbgl
 	     */
 	    Vector<T, D>& extent();
 	    /**
+	     * @brief Checks if the passed coordinates are within the bounds of this hyperrectangle
+	     * @param point Point to check
+	     * @return True in case \p point is within (or on) the bounds of this hyperrectangle, otherwise false
+	     */
+	    bool isIn(Vector<T, D> const& point) const;
+	    /**
+	     * @brief Checks if the passed hyperrectangle overlaps with this one
+	     * @param other Hyperrectangle to check
+	     * @return True in case \p other overlaps with (or touches) this hyperrectangle, otherwise false
+	     */
+	    bool overlaps(Hyperrectangle<T, D> const& other) const;
+	    /**
 	     * @brief Assigns another hyperrectangle by copying its values
 	     * @param rhs Hyperrectangle to copy
 	     * @return Reference to this hyperrectangle
@@ -133,6 +145,18 @@ namespace dbgl
 	     */
 	    Vector2<T>& extent();
 	    /**
+	     * @brief Checks if the passed coordinates are within the bounds of this rectangle
+	     * @param point Point to check
+	     * @return True in case \p point is within (or on) the bounds of this rectangle, otherwise false
+	     */
+	    bool isIn(Vector<T, 2> const& point) const;
+	    /**
+	     * @brief Checks if the passed rectangle overlaps with this one
+	     * @param other Rectangle to check
+	     * @return True in case \p other overlaps with (or touches) this rectangle, otherwise false
+	     */
+	    bool overlaps(Hyperrectangle<T, 2> const& other) const;
+	    /**
 	     * @brief Assigns another rectangle by copying its values
 	     * @param rhs Rectangle to copy
 	     * @return Reference to this rectangle
@@ -206,6 +230,18 @@ namespace dbgl
 	     * @return Extent of the box
 	     */
 	    Vector3<T>& extent();
+	    /**
+	     * @brief Checks if the passed coordinates are within the bounds of this box
+	     * @param point Point to check
+	     * @return True in case \p point is within (or on) the bounds of this box, otherwise false
+	     */
+	    bool isIn(Vector<T, 3> const& point) const;
+	    /**
+	     * @brief Checks if the passed box overlaps with this one
+	     * @param other Box to check
+	     * @return True in case \p other overlaps with (or touches) this box, otherwise false
+	     */
+	    bool overlaps(Hyperrectangle<T, 3> const& other) const;
 	    /**
 	     * @brief Assigns another box by copying its values
 	     * @param rhs Box to copy

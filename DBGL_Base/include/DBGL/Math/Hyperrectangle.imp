@@ -53,6 +53,26 @@ namespace dbgl
 	return m_extent;
     }
 
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::isIn(Vector<T, D> const& point) const
+    {
+	for(unsigned int i = 0; i < D; i++)
+	{
+	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
+    }
+
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::overlaps(Hyperrectangle<T, D> const& other) const
+    {
+	for(unsigned int i = 0; i < D; i++)
+	{
+	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
+    }
+
     template<typename T, unsigned int D> Hyperrectangle<T, D>& Hyperrectangle<T, D>::operator=(
 	    Hyperrectangle<T, D> const& rhs)
     {
@@ -124,6 +144,26 @@ namespace dbgl
 	return m_extent;
     }
 
+    template<typename T> bool Hyperrectangle<T, 2>::isIn(Vector<T, 2> const& point) const
+    {
+	for(unsigned int i = 0; i < 2; i++)
+	{
+	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 2>::overlaps(Hyperrectangle<T, 2> const& other) const
+    {
+	for(unsigned int i = 0; i < 2; i++)
+	{
+	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
+    }
+
     template<typename T> Hyperrectangle<T, 2>& Hyperrectangle<T, 2>::operator=(
 	    Hyperrectangle<T, 2> const& rhs)
     {
@@ -191,6 +231,26 @@ namespace dbgl
     template<typename T> Vector3<T>& Hyperrectangle<T, 3>::extent()
     {
 	return m_extent;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 3>::isIn(Vector<T, 3> const& point) const
+    {
+	for(unsigned int i = 0; i < 3; i++)
+	{
+	    if(point[i] < m_pos[i] || point[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
+    }
+
+    template<typename T> bool Hyperrectangle<T, 3>::overlaps(Hyperrectangle<T, 3> const& other) const
+    {
+	for(unsigned int i = 0; i < 3; i++)
+	{
+	    if(other.m_pos[i] + other.m_extent[i] < m_pos[i] || other.m_pos[i] > m_pos[i] + m_extent[i])
+		return false;
+	}
+	return true;
     }
 
     template<typename T> Hyperrectangle<T, 3>& Hyperrectangle<T, 3>::operator=(
