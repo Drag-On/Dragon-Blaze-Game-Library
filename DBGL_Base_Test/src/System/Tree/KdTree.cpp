@@ -21,11 +21,11 @@ class KdTreePrintVisitor1 : public AbstractTreeVisitor
     public:
 	void visit(KdTree<int, Vec2f>& tree)
 	{
-	    LOG->info("Visiting tree with %d elements.", tree.size());
+	    LOG->info("Visiting tree with % elements.", tree.size());
 	}
 	void visit(KdTree<int, Vec2f>::Node& node)
 	{
-	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    LOG->info("Visiting node at point (%, %).", node.point.x(), node.point.y());
 	    if(node.leftChild != nullptr)
 		node.leftChild->accept(*this);
 	    if(node.rightChild != nullptr)
@@ -47,11 +47,11 @@ class KdTreePrintVisitor2
     public:
 	void visit(KdTree<int, Vec2f>& tree)
 	{
-	    LOG->info("Visiting tree with %d elements.", tree.size());
+	    LOG->info("Visiting tree with % elements.", tree.size());
 	}
 	void visit(KdTree<int, Vec2f>::Node& node)
 	{
-	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    LOG->info("Visiting node at point (%, %).", node.point.x(), node.point.y());
 	    if(node.leftChild != nullptr)
 		node.leftChild->accept(*this);
 	    if(node.rightChild != nullptr)
@@ -66,7 +66,7 @@ void checkResult(std::vector<typename KdTree<int, Vec2f>::Container> result, std
 	auto it = std::find(needed.begin(), needed.end(), item.data);
 	if(it == needed.end())
 	{
-	    LOG->error("Item %d was returned wrongly.", item.data);
+	    LOG->error("Item % was returned wrongly.", item.data);
 	    assert(false);
 	}
     }

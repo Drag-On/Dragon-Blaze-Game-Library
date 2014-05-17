@@ -42,7 +42,7 @@ void inputCallback(Window::InputEventArgs const& args)
     char charRepresentation = Input::keyToChar(args.key);
     if(charRepresentation == '\0')
 	charRepresentation = ' ';
-    LOG->debug("Key \"%s\" (char \'%c\') %s.", Input::keyToString(args.key).c_str(), charRepresentation, whatHappened.c_str());
+    LOG->debug("Key \"%\" (char \'%\') %.", Input::keyToString(args.key).c_str(), charRepresentation, whatHappened.c_str());
 }
 
 void framebufferResizeCallback(Window::FramebufferResizeEventArgs const& args)

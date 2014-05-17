@@ -306,7 +306,7 @@ namespace dbgl
 	    inStream.close();
 	}
 	else
-	    LOG->error("Unable to open %s.", path);
+	    LOG->error("Unable to open %.", path);
 	return code;
     }
 
@@ -366,7 +366,7 @@ namespace dbgl
 	GLint result = GL_FALSE;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 	if(result == GL_FALSE)
-	LOG->error("Error while compiling shader %s", fileName);
+	LOG->error("Error while compiling shader %", fileName);
 	printLog(id, result);
 	return id;
     }
