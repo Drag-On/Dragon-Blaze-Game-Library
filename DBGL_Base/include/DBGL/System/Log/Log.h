@@ -23,7 +23,7 @@
 #include <cstring>
 #include <ctime>
 
-#define LOG dbgl::Log::get()
+#define LOG dbgl::Log::getDefault()
 
 namespace dbgl
 {
@@ -34,35 +34,40 @@ namespace dbgl
     {
 	public:
 	    /**
-	     * @brief
+	     * @brief Log severity level
 	     */
 	    enum class Level
 	    {
-		DBG, //!< DBG
-		INFO,//!< INFO
-		WARN,//!< WARN
-		ERR  //!< ERR
+		DBG, //!< DBG Log all messages
+		INFO,//!< INFO Log all messages marked as "info", "warning" or "error"
+		WARN,//!< WARN Log all messages marked as "warning" or "error"
+		ERR  //!< ERR Log all messages marked as "error"
 	    };
 
 	    /**
-	     * Constructor
+	     * @brief Constructor
+	     * @param filename Path and name of the file to write to
+	     * @param bashOutput Indicates if all log messages shall be mirrored on std::out / std::err
+	     * @param redirectStd Indicates if all mesages to std::out / std::err shall be written to log as well
 	     */
-	    Log();
+	    Log(std::string filename, bool bashOutput = true, bool redirectStd = false);
 
 	    /**
-	     * Destructor
+	     * @brief Destructor
 	     */
 	    virtual ~Log();
 
 	    /**
-	     * @return Pointer to log object
+	     * @brief Creates a default logfile if not already present
+	     * @note If you use this method, you also need to call freeDefault()
+	     * @return Pointer to default logfile
 	     */
-	    static Log* get();
+	    static Log* getDefault();
 
 	    /**
-	     * Free memory of log object
+	     * @brief Free memory of default log if present
 	     */
-	    static void del();
+	    static void freeDefault();
 
 	    /**
 	     * @brief Set the severity of messages to log
@@ -104,6 +109,9 @@ namespace dbgl
 
 	private:
 	    Level m_logLevel;
+	    std::string m_filename;
+	    bool m_bashOutput = true;
+	    bool m_redirectStd = false;
 	    std::streambuf* m_pOldCout, *m_pOldCerr;
 
 	    static const int m_maxBuffer = 1024;

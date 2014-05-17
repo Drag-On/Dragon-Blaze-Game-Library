@@ -48,6 +48,6 @@ int main()
 	testKdTree();
 
 	LOG->info("Tests done!");
-	LOG->del();
+	LOG->freeDefault();
 	return 0;
 }

@@ -19,9 +19,12 @@ namespace dbgl
     Log::Logger Log::wrn(Level::WARN);
     Log::Logger Log::err(Level::ERR);
 
-    Log::Log()
+    Log::Log(std::string filename, bool bashOutput, bool redirectStd)
     {
 	m_logLevel = Level::WARN;
+	m_filename = filename;
+	m_bashOutput = bashOutput;
+	m_redirectStd = redirectStd;
 
 	// Get current time
 	auto time = getCurTime(true);
@@ -33,32 +36,36 @@ namespace dbgl
 	writeLog("-----------------\n");
 
 	// Redirect std streams
-	m_pOldCout = std::cout.rdbuf(inf.rdbuf());
-	m_pOldCerr = std::cerr.rdbuf(err.rdbuf());
+	if (m_redirectStd)
+	{
+	    m_pOldCout = std::cout.rdbuf(inf.rdbuf());
+	    m_pOldCerr = std::cerr.rdbuf(err.rdbuf());
+	}
     }
 
     Log::~Log()
     {
 	// Restore original std streams
-	std::cout.rdbuf(m_pOldCout);
-	std::cerr.rdbuf(m_pOldCerr);
+	if (m_redirectStd)
+	{
+	    std::cout.rdbuf(m_pOldCout);
+	    std::cerr.rdbuf(m_pOldCerr);
+	}
     }
 
-    Log* Log::get()
+    Log* Log::getDefault()
     {
 	if (!Log::s_pInstance)
-	{
-	    Log::s_pInstance = new Log();
-	}
+	    Log::s_pInstance = new Log("Logfile.txt", true, true);
 	return Log::s_pInstance;
     }
 
-    void Log::del()
+    void Log::freeDefault()
     {
 	if (Log::s_pInstance)
 	{
 	    delete (Log::s_pInstance);
-	    Log::s_pInstance = NULL;
+	    Log::s_pInstance = nullptr;
 	}
     }
 
@@ -69,7 +76,7 @@ namespace dbgl
 
     void Log::writeLog(std::string msg)
     {
-	std::ofstream out("Logfile.txt", std::ios::app);
+	std::ofstream out(m_filename, std::ios::app);
 	out.write(msg.c_str(), msg.length());
 	out.close();
     }

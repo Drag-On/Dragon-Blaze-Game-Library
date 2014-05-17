@@ -18,8 +18,12 @@ namespace dbgl
 	    this->format(msg, format, args...);
 
 	    auto time = getCurTime();
-	    fprintf(stdout, "%s: DEBUG: %s\n", time.c_str(), msg.c_str());
-	    fflush (stdout);
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stdout, "%s: DEBUG: %s\n", time.c_str(), msg.c_str());
+		fflush (stdout);
+	    }
 
 	    writeLog("%s: DEBUG: %s\n" + time + msg);
 	}
@@ -33,8 +37,12 @@ namespace dbgl
 	    this->format(msg, format, args...);
 
 	    auto time = getCurTime();
-	    fprintf(stdout, "%s: INFO: %s\n", time.c_str(), msg.c_str());
-	    fflush (stdout);
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stdout, "%s: INFO: %s\n", time.c_str(), msg.c_str());
+		fflush (stdout);
+	    }
 
 	    writeLog("%s: INFO: %s\n" + time + msg);
 	}
@@ -48,8 +56,12 @@ namespace dbgl
 	    this->format(msg, format, args...);
 
 	    auto time = getCurTime();
-	    fprintf(stderr, "%s: WARNING: %s\n", time.c_str(), msg.c_str());
-	    fflush (stderr);
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stderr, "%s: WARNING: %s\n", time.c_str(), msg.c_str());
+		fflush (stderr);
+	    }
 
 	    writeLog("%s: WARNING: %s\n" + time + msg);
 	}
@@ -63,8 +75,12 @@ namespace dbgl
 	    this->format(msg, format, args...);
 
 	    auto time = getCurTime();
-	    fprintf(stderr, "%s: ERROR: %s\n", time.c_str(), msg.c_str());
-	    fflush (stderr);
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stderr, "%s: ERROR: %s\n", time.c_str(), msg.c_str());
+		fflush (stderr);
+	    }
 
 	    writeLog("%s: ERROR: %s\n" + time + msg);
 	}
