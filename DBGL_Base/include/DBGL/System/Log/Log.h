@@ -17,6 +17,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <stdexcept>
 #include <stdio.h>
 #include <cstdarg>
 #include <cstring>
@@ -71,27 +72,35 @@ namespace dbgl
 
 	    /**
 	     * @brief Logs messages in case the logger is in debug mode
-	     * @param msg Message to log
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
 	     */
-	    void debug(const char* msg, ...);
+	    template <typename... Args> void debug(const char* format, Args... args);
 
 	    /**
 	     * @brief Logs messages in case the logger is in info mode or lower
-	     * @param msg Message to log
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
 	     */
-	    void info(const char* msg, ...);
+	    template <typename... Args> void info(const char* format, Args... args);
 
 	    /**
 	     * @brief Logs messages in case the logger is in warning mode or lower
-	     * @param msg Message to log
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
 	     */
-	    void warning(const char* msg, ...);
+	    template <typename... Args> void warning(const char* format, Args... args);
 
 	    /**
-	     * @brief Logs messages
-	     * @param msg Message to log
+	     * @brief Logs messages in case the logger is in error mode or lower
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
 	     */
-	    void error(const char* msg, ...);
+	    template <typename... Args> void error(const char* format, Args... args);
 
 	private:
 	    Level m_logLevel;
@@ -104,7 +113,7 @@ namespace dbgl
 	     * @brief Writes a message to logfile
 	     * @param msg Message to write
 	     */
-	    void writeLog(const char* msg, ...);
+	    void writeLog(std::string msg);
 
 	    /**
 	     * @brief Generates a string with current date and time.
@@ -112,6 +121,21 @@ namespace dbgl
 	     * @return A string with the current time
 	     */
 	    std::string getCurTime(bool date = false);
+
+	    /**
+	     * @brief Formats a message
+	     * @param[out] msg String to write message to
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     */
+	    template <typename T, typename... Args> void format(std::string& msg, const char* format, T val, Args... args);
+
+	    /**
+	     * @brief Dummy method used to stop recursion
+	     * @param[out] msg String to write message to
+	     * @param format Format string
+	     */
+	    void format(std::string& msg, const char* format);
 
 	    /**
 	     * @brief Inner class used for streams
@@ -154,6 +178,9 @@ namespace dbgl
     };
 
 } /* namespace dbgl */
+
+
+#include "Log.imp"
 
 #endif /* LOG_H_ */
 

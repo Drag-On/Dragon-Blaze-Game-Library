@@ -18,6 +18,40 @@ int testLog()
     LOG->info("Streams...");
     std::cout << "This should go to the info stream";
     std::cerr << "This should go to the error stream";
+    LOG->info("Methods...");
+    LOG->debug("Hello world!");
+    LOG->debug("Gimme a number: %.", 42);
+    LOG->debug("Here, take %$ and buy a nice %.", 1.5f, "dragon");
+    try
+    {
+	LOG->debug("This! Has! Too! Many! ARGUMENTS!", "Bwahaha");
+    }
+    catch(...)
+    {
+	try
+	{
+	    std::rethrow_exception(std::current_exception());
+	}
+	catch(const std::exception& e)
+	{
+	    LOG->warning("Thrown: %", e.what());
+	}
+    }
+    try
+    {
+	LOG->debug("Not enough arguments % %.", "passed");
+    }
+    catch(...)
+    {
+	try
+	{
+	    std::rethrow_exception(std::current_exception());
+	}
+	catch(const std::exception& e)
+	{
+	    LOG->warning("Thrown: %", e.what());
+	}
+    }
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

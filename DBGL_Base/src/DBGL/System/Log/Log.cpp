@@ -29,7 +29,7 @@ namespace dbgl
 	writeLog("-----------------\n");
 	writeLog("-----Logfile-----\n");
 	writeLog("-----------------\n");
-	writeLog("%s\n", time.c_str());
+	writeLog("%s\n" + time);
 	writeLog("-----------------\n");
 
 	// Redirect std streams
@@ -67,98 +67,10 @@ namespace dbgl
 	m_logLevel = lvl;
     }
 
-    void Log::debug(const char* msg, ...)
+    void Log::writeLog(std::string msg)
     {
-	if (m_logLevel <= Level::DBG)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    auto time = getCurTime();
-	    fprintf(stdout, "%s: DEBUG: %s\n", time.c_str(), buffer);
-	    fflush (stdout);
-
-	    writeLog("%s: DEBUG: %s\n", time.c_str(), buffer);
-	}
-    }
-
-    void Log::info(const char* msg, ...)
-    {
-	if (m_logLevel <= Level::INFO)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    auto time = getCurTime();
-	    fprintf(stdout, "%s: INFO: %s\n", time.c_str(), buffer);
-	    fflush (stdout);
-
-	    writeLog("%s: INFO: %s\n", time.c_str(), buffer);
-	}
-    }
-
-    void Log::warning(const char* msg, ...)
-    {
-	if (m_logLevel <= Level::WARN)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    auto time = getCurTime();
-	    fprintf(stderr, "%s: WARNING: %s\n", time.c_str(), buffer);
-	    fflush (stderr);
-
-	    writeLog("%s: WARNING: %s\n", time.c_str(), buffer);
-	}
-    }
-
-    void Log::error(const char* msg, ...)
-    {
-	if (m_logLevel <= Level::ERR)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    auto time = getCurTime();
-	    fprintf(stderr, "%s: ERROR: %s\n", time.c_str(), buffer);
-	    fflush (stderr);
-
-	    writeLog("%s: ERROR: %s\n", time.c_str(), buffer);
-	}
-    }
-
-    void Log::writeLog(const char* msg, ...)
-    {
-	char buffer[m_maxBuffer]; // Buffer for arguments
-	va_list pArgList; // List of arguments
-
-	// Make string from arguments
-	va_start(pArgList, msg);
-	vsprintf(buffer, msg, pArgList);
-	va_end(pArgList);
-
 	std::ofstream out("Logfile.txt", std::ios::app);
-	out.write(buffer, strlen(buffer));
+	out.write(msg.c_str(), msg.length());
 	out.close();
     }
 
@@ -171,6 +83,21 @@ namespace dbgl
 	std::strftime(buf, sizeof(buf), date?"%c":"%X", std::localtime(&now_c));
 
 	return std::string(buf);
+    }
+
+    void Log::format(std::string& msg, const char* format)
+    {
+	while (*format)
+	{
+	    if (*format == '%')
+	    {
+		if (*(format + 1) == '%')
+		    ++format;
+		else
+		    throw std::runtime_error("Format string invalid. Missing arguments.");
+	    }
+	    msg += *format++;
+	}
     }
 
     Log::Logger::LogBuf::LogBuf(Level loglevel) : m_loglevel(loglevel)
