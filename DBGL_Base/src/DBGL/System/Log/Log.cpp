@@ -32,7 +32,7 @@ namespace dbgl
 	writeLog("-----------------\n");
 	writeLog("-----Logfile-----\n");
 	writeLog("-----------------\n");
-	writeLog("%s\n" + time);
+	writeLog(time + "\n");
 	writeLog("-----------------\n");
 
 	// Redirect std streams

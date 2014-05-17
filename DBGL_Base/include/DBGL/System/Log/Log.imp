@@ -25,7 +25,7 @@ namespace dbgl
 		fflush (stdout);
 	    }
 
-	    writeLog("%s: DEBUG: %s\n" + time + msg);
+	    writeLog(time + ": DEBUG: " + msg + "\n");
 	}
     }
 
@@ -44,7 +44,7 @@ namespace dbgl
 		fflush (stdout);
 	    }
 
-	    writeLog("%s: INFO: %s\n" + time + msg);
+	    writeLog(time + ": INFO: " + msg + "\n");
 	}
     }
 
@@ -63,7 +63,7 @@ namespace dbgl
 		fflush (stderr);
 	    }
 
-	    writeLog("%s: WARNING: %s\n" + time + msg);
+	    writeLog(time + ": WARNING: " + msg + "\n");
 	}
     }
 
@@ -82,7 +82,7 @@ namespace dbgl
 		fflush (stderr);
 	    }
 
-	    writeLog("%s: ERROR: %s\n" + time + msg);
+	    writeLog(time + ": ERROR: " + msg + "\n");
 	}
     }
 
