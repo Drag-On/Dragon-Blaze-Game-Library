@@ -52,6 +52,42 @@ int testLog()
 	    LOG->warning("Thrown: %", e.what());
 	}
     }
+    LOG->debug("Print this number with 5 digits: %{5}.", 1.2345678);
+    LOG->debug("Print this number with 3 digits: %{3}.", 1.2345678);
+    LOG->debug("Print this number with 10 digits: %{10}.", 1.2345678);
+    LOG->debug("Print this number with 6 digits: %{6}.", 13.37);
+    LOG->debug("This is not a specifier: %%{15}.");
+    LOG->debug("This is weird, but it %{5}.", "works");
+    try
+    {
+	LOG->debug("This is broken %{4.", 4);
+    }
+    catch(...)
+    {
+	try
+	{
+	    std::rethrow_exception(std::current_exception());
+	}
+	catch(const std::exception& e)
+	{
+	    LOG->warning("Thrown: %", e.what());
+	}
+    }
+    try
+    {
+	LOG->debug("This is broken as well: %{-4}.", 4);
+    }
+    catch(...)
+    {
+	try
+	{
+	    std::rethrow_exception(std::current_exception());
+	}
+	catch(const std::exception& e)
+	{
+	    LOG->warning("Thrown: %", e.what());
+	}
+    }
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

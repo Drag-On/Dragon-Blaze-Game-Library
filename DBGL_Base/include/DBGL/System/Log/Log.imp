@@ -97,6 +97,23 @@ namespace dbgl
 		else
 		{
 		    std::stringstream stream;
+		    if (*(format + 1) == '{')
+		    {
+			// Precision specifier
+			std::stringstream precisionStream;
+			std::string precisionString(format + 2);
+			auto end = precisionString.find('}');
+			if(end == std::string::npos)
+			    throw std::runtime_error("Format string invalid. Precision specifier not complete. Add closing curly bracket.");
+			precisionStream << precisionString.substr(0, end);
+			std::streamsize precision = 7;
+			precisionStream >> precision;
+			if (precision <= 0)
+			    throw std::runtime_error("Format string invalid. Precision specifier must not be negative.");
+			stream.setf(stream.fixed);
+			stream.precision(precision);
+			format += end + 2;
+		    }
 		    stream << val;
 		    msg += stream.str();
 		    this->format(msg, format + 1, args...);

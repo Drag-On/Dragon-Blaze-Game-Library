@@ -80,6 +80,7 @@ namespace dbgl
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
 	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void debug(const char* format, Args... args);
 
@@ -88,6 +89,7 @@ namespace dbgl
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
 	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void info(const char* format, Args... args);
 
@@ -96,6 +98,7 @@ namespace dbgl
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
 	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void warning(const char* format, Args... args);
 
@@ -104,6 +107,7 @@ namespace dbgl
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
 	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void error(const char* format, Args... args);
 
@@ -135,6 +139,8 @@ namespace dbgl
 	     * @param[out] msg String to write message to
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename T, typename... Args> void format(std::string& msg, const char* format, T val, Args... args);
 
@@ -142,6 +148,8 @@ namespace dbgl
 	     * @brief Dummy method used to stop recursion
 	     * @param[out] msg String to write message to
 	     * @param format Format string
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    void format(std::string& msg, const char* format);
 
