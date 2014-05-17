@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "Texture.h"
 
 namespace dbgl

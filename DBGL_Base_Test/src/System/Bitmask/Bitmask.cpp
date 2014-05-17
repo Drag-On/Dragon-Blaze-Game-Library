@@ -69,10 +69,10 @@ int testBitmask()
     bitfieldSmall.toggle(forgetThis);
     assert(bitfieldSmall.isSet(forgetThis));
     // toString
-    Log::inf << "bitfield1: " << bitfield1.toString() << std::flush;
-    Log::inf << "bitfield2: " << bitfield2.toString() << std::flush;
-    Log::inf << "bitfield3: " << bitfield3.toString() << std::flush;
-    Log::inf << "bitfieldSmall: " << bitfieldSmall.toString() << std::flush;
+    LOG->info("bitfield1: %s", bitfield1.toString().c_str());
+    LOG->info("bitfield2: %s", bitfield2.toString().c_str());
+    LOG->info("bitfield3: %s", bitfield3.toString().c_str());
+    LOG->info("bitfieldSmall: %s", bitfieldSmall.toString().c_str());
     LOG->info("OK!");
     LOG->info("Operators... ");
     unsigned int foo = bitfield1;

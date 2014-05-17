@@ -16,14 +16,8 @@ int testLog()
 {
     LOG->info("Starting Log test suite...");
     LOG->info("Streams...");
-    int test = 42;
-    bool foo = true;
-    Log::inf << "This goes to the info stream. "  << test << " " << foo << std::flush;
-    Log::dbg << "This goes to the debug stream. " << test << " " << foo << std::flush;
-    Log::wrn << "This goes to the warning stream. " << test << " " << foo << std::flush;
-    Log::err << "This goes to the error stream. " << test << " " << foo << std::flush;
-    std::cout << "This should go to the info stream, too";
-    std::cerr << "This should go to the error stream, too";
+    std::cout << "This should go to the info stream";
+    std::cerr << "This should go to the error stream";
     LOG->info("OK!");
     LOG->info("Done!");
     return 0;

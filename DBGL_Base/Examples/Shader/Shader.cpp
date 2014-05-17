@@ -280,7 +280,7 @@ void renderCallback(Window::RenderEventArgs const& args)
 
 int main()
 {
-    LOG->setLogLevel(DBG);
+    LOG->setLogLevel(Log::Level::DBG);
     // Create window
     pWnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it

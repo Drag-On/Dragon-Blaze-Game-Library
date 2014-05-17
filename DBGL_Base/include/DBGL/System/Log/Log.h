@@ -14,33 +14,34 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
 #include <fstream>
+#include <string>
+#include <chrono>
+#include <stdio.h>
 #include <cstdarg>
-#include <string.h>
-#include <time.h>
+#include <cstring>
+#include <ctime>
 
 #define LOG dbgl::Log::get()
 
 namespace dbgl
 {
     /**
-     * Defines what is actually logged
-     */
-    enum LOGLEVEL
-    {
-	DBG,
-	INFO,
-	WARN,
-	ERR
-    };
-
-    /**
      * @brief Implements methods to log errors to standard output and logfile
      */
     class Log
     {
 	public:
+	    /**
+	     * @brief
+	     */
+	    enum class Level
+	    {
+		DBG, //!< DBG
+		INFO,//!< INFO
+		WARN,//!< WARN
+		ERR  //!< ERR
+	    };
 
 	    /**
 	     * Constructor
@@ -66,7 +67,7 @@ namespace dbgl
 	     * @brief Set the severity of messages to log
 	     * @param lvl Minimum level messages need to have to be logged
 	     */
-	    void setLogLevel(int lvl);
+	    void setLogLevel(Level lvl);
 
 	    /**
 	     * @brief Logs messages in case the logger is in debug mode
@@ -93,7 +94,7 @@ namespace dbgl
 	    void error(const char* msg, ...);
 
 	private:
-	    int m_logLevel;
+	    Level m_logLevel;
 	    std::streambuf* m_pOldCout, *m_pOldCerr;
 
 	    static const int m_maxBuffer = 1024;
@@ -106,11 +107,11 @@ namespace dbgl
 	    void writeLog(const char* msg, ...);
 
 	    /**
-	     * @brief Generates a string with current date and time. Needs to be deleted manually!
+	     * @brief Generates a string with current date and time.
 	     * @param date Flag indicating, if a date string should be appended
 	     * @return A string with the current time
 	     */
-	    const char* getCurTime(bool date = false);
+	    std::string getCurTime(bool date = false);
 
 	    /**
 	     * @brief Inner class used for streams
@@ -124,17 +125,16 @@ namespace dbgl
 		    class LogBuf: public std::stringbuf
 		    {
 			private:
-			    LOGLEVEL m_loglevel;
+			    Level m_loglevel;
 			public:
-			    LogBuf(LOGLEVEL loglevel);
+			    LogBuf(Level loglevel);
 			    ~LogBuf();
 			    int sync();
 		    };
 		public:
-		    Logger(LOGLEVEL loglevel);
+		    Logger(Level loglevel);
 		    ~Logger();
 	    };
-	public:
 	    /**
 	     * @brief Debug stream
 	     */

@@ -29,7 +29,7 @@ int testHyperrectangle();
 
 int main()
 {
-	LOG->setLogLevel((int)dbgl::LOGLEVEL::DBG);
+	LOG->setLogLevel(dbgl::Log::Level::DBG);
 	LOG->info("DBGL Version %s", DBGL_VERSION_FULL);
 
 	testLog();
