@@ -33,7 +33,7 @@ namespace dbgl
 	Texture* pTex = loader.load(path, flags);
 	if (pTex == nullptr)
 	{
-	    LOG->warning("Texture % not loaded!", path.c_str());
+	    LOG.warning("Texture % not loaded!", path.c_str());
 	}
 	return pTex;
     }

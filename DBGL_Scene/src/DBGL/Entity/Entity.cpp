@@ -45,7 +45,7 @@ namespace dbgl
 	// Check if component of that type already exists
 	if(m_Components.find(typeid(Component)) != m_Components.end())
 	{
-	    LOG->warning("Tried to add a component to entity % which was already there.", m_Name);
+	    LOG.warning("Tried to add a component to entity % which was already there.", m_Name);
 	    return dynamic_cast<Component*>(m_Components[typeid(Component)]);
 	}
 

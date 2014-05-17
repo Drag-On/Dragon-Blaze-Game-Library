@@ -53,9 +53,6 @@ namespace dbgl
 
 	// Terminate glfw context
 	glfwTerminate();
-
-	// Free logfile
-	LOG->freeDefault();
     }
 
     bool WindowManager::isRunning() const
@@ -80,7 +77,7 @@ namespace dbgl
 
     void WindowManager::errorCallback(int error, const char* description)
     {
-	LOG->error("Error %: %!", error, description);
+	LOG.error("Error %: %!", error, description);
     }
 
     void WindowManager::closeCallback(GLFWwindow* window)

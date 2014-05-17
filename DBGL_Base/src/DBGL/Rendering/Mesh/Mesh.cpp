@@ -99,7 +99,7 @@ namespace dbgl
 	    }
 	    default:
 	    {
-		LOG->warning("Format of file % not recognized", path.c_str());
+		LOG.warning("Format of file % not recognized", path.c_str());
 		return nullptr;
 	    }
 	}

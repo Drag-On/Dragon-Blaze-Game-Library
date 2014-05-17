@@ -29,8 +29,8 @@ int testHyperrectangle();
 
 int main()
 {
-	LOG->setLogLevel(dbgl::Log::Level::DBG);
-	LOG->info("DBGL Version %", DBGL_VERSION_FULL);
+	LOG.setLogLevel(dbgl::Log::Level::DBG);
+	LOG.info("DBGL Version %", DBGL_VERSION_FULL);
 
 	testLog();
 	testVector2();
@@ -47,7 +47,6 @@ int main()
 	testBitmask();
 	testKdTree();
 
-	LOG->info("Tests done!");
-	LOG->freeDefault();
+	LOG.info("Tests done!");
 	return 0;
 }

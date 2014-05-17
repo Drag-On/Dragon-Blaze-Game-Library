@@ -271,7 +271,7 @@ namespace dbgl
     	// Check if factor is valid
     	if(factor < 0 || factor > 1)
     	{
-    		LOG->warning("Quaternion lerp factor out of range!");
+    		LOG.warning("Quaternion lerp factor out of range!");
     		factor = (factor < 0) ? 0 : 1;
     	}
     	return (*this) * (1 - factor) + (other * factor);

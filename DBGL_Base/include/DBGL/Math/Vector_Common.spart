@@ -237,7 +237,7 @@ template<TEMPLATE_LIST> T& Vector<T,N>::operator[](std::size_t const& index)
 		return m_elements[index];
 	else
 	{
-		LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
+		LOG.error("Tried to access element %d of %d-length vector!", index, getDimension());
 		exit(EXIT_FAILURE);
 	}
 }
@@ -248,7 +248,7 @@ template<TEMPLATE_LIST> const T& Vector<T,N>::operator[](std::size_t const& inde
 		return m_elements[index];
 	else
 	{
-		LOG->error("Tried to access element %d of %d-length vector!", index, getDimension());
+		LOG.error("Tried to access element %d of %d-length vector!", index, getDimension());
 		exit(EXIT_FAILURE);
 	}
 }

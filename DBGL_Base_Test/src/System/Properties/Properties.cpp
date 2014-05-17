@@ -20,11 +20,11 @@ using namespace dbgl;
 
 int testProperties()
 {
-    LOG->info("Starting Properties test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Properties test suite...");
+    LOG.info("Constructors... ");
     Properties prop;
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // Test if it works without content
     assert(prop.getStringValue("test") == "");
     // Load file
@@ -44,11 +44,11 @@ int testProperties()
     assert(prop.getStringValue("bar") == "string-bar");
     assert(prop.getStringValue("baz") == "-barbaz");
     assert(prop.getStringValue("string") == "SURPRISE!");
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     assert(prop["string"] == "SURPRISE!");
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

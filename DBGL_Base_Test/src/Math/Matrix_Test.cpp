@@ -21,8 +21,8 @@ using namespace dbgl;
 
 int testMatrix()
 {
-    LOG->info("Starting Matrix test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Matrix test suite...");
+    LOG.info("Constructors... ");
     // Default
     Matrix<float,3,2> mat;
     assert(mat[0][0] == 1);
@@ -35,8 +35,8 @@ int testMatrix()
     mat2[0][1] = 2;
     Matrix<float,3,2> mat3(mat2);
     assert(mat3[0][0] == 3 && mat3[0][1] == 2);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getWidth / height
     assert(mat.getWidth() == 3);
     assert(mat.getHeight() == 2);
@@ -52,8 +52,8 @@ int testMatrix()
     {
 	assert(mat3.getDataPointer()[i] == mat3[i / mat3.getHeight()][i % mat3.getHeight()]);
     }
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     // =
     mat = mat2;
     assert(mat == mat2);
@@ -104,8 +104,8 @@ int testMatrix()
     // []
     mat3 = Matrix<float,3,2>();
     assert(mat3[0][0] == 1 && mat3[1][0] == 0);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

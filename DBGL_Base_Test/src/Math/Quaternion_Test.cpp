@@ -23,8 +23,8 @@ using namespace dbgl;
 
 int testQuaternion()
 {
-    LOG->info("Starting Quaternion test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Quaternion test suite...");
+    LOG.info("Constructors... ");
     QuatF quat1;
     QuatF quat2 = QuatF(1, 3, -2.5, 0);
     QuatF quat3 = QuatF(Vec3f(1, 0, 0), pi_2());
@@ -39,8 +39,8 @@ int testQuaternion()
     assert((quat5 * Vec3f(1, 1, 0)).isSimilar(Vec3f(-1, 1, 0)));
     assert((quat6 * Vec3f(1, 0, 0)).isSimilar(Vec3f(1, 1, 0).normalize()));
     assert((quat6 * Vec3f(0, 1, 0)).isSimilar(Vec3f(1, 1, 0).cross(Vec3f(1, 0, 0).normalize())));
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // x, y, z, w
     auto temp = quat1;
     temp.x() = 1;
@@ -112,8 +112,8 @@ int testQuaternion()
     temp2 = QuatF(Vec3f(0, 0, 0));
     assert(temp.rotateTowards(temp2, pi_2()).isSimilar(temp2));
     assert(temp2.rotateTowards(temp, pi_4()).isSimilarRot(QuatF(pi_4(), 0, 0)));
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     // =
     temp = quat3;
     assert(temp.isSimilar(quat3, 0));
@@ -156,8 +156,8 @@ int testQuaternion()
     Mat4f mat = quat1;
     assert(mat.isIdentity());
     // That's it!
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

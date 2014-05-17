@@ -197,7 +197,7 @@ namespace dbgl
 			return m_columns[index];
 		else
 		{
-			LOG->error("Tried to access column % of %-width matrix!", index, getWidth());
+			LOG.error("Tried to access column % of %-width matrix!", index, getWidth());
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -208,7 +208,7 @@ namespace dbgl
 			return m_columns[index];
 		else
 		{
-			LOG->error("Tried to access column % of %-width matrix!", index, getWidth());
+			LOG.error("Tried to access column % of %-width matrix!", index, getWidth());
 			exit(EXIT_FAILURE);
 		}
 	}

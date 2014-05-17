@@ -16,7 +16,7 @@ namespace dbgl
     {
 	if (!glfwInit())
 	{
-	    LOG->error("Failed to initialize GLFW!");
+	    LOG.error("Failed to initialize GLFW!");
 	    exit(EXIT_FAILURE);
 	}
 
@@ -55,7 +55,7 @@ namespace dbgl
 	m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
 	if (!m_pWndHandle)
 	{
-	    LOG->error("Failed to create new window!");
+	    LOG.error("Failed to create new window!");
 	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
@@ -74,7 +74,7 @@ namespace dbgl
 	glewExperimental = true;// For core profile
 	if (glewInit() != GLEW_OK)
 	{
-	    LOG->error("Failed to initialize GLEW!");
+	    LOG.error("Failed to initialize GLEW!");
 	    exit(EXIT_FAILURE);
 	}
     }

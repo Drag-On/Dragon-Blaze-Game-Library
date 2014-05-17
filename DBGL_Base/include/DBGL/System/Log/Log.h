@@ -59,15 +59,9 @@ namespace dbgl
 
 	    /**
 	     * @brief Creates a default logfile if not already present
-	     * @note If you use this method, you also need to call freeDefault()
 	     * @return Pointer to default logfile
 	     */
-	    static Log* getDefault();
-
-	    /**
-	     * @brief Free memory of default log if present
-	     */
-	    static void freeDefault();
+	    static Log& getDefault();
 
 	    /**
 	     * @brief Set the severity of messages to log
@@ -119,7 +113,6 @@ namespace dbgl
 	    std::streambuf* m_pOldCout, *m_pOldCerr;
 
 	    static const int m_maxBuffer = 1024;
-	    static Log* s_pInstance;
 
 	    /**
 	     * @brief Writes a message to logfile

@@ -22,8 +22,8 @@ using namespace dbgl;
 
 int testMatrix2x2()
 {
-    LOG->info("Starting Matrix2x2 test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Matrix2x2 test suite...");
+    LOG.info("Constructors... ");
     // Default
     Mat2f mat;
     assert(mat[0][0] == 1);
@@ -36,8 +36,8 @@ int testMatrix2x2()
     mat2[0][1] = 2;
     Matrix2x2<float> mat3(mat2);
     assert(mat3[0][0] == 3 && mat3[0][1] == 2);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getWidth / height
     assert(mat.getWidth() == 2);
     assert(mat.getHeight() == 2);
@@ -75,8 +75,8 @@ int testMatrix2x2()
     res = (Mat2f::makeScale(2, 0.5) * Vector2<float>(1, 1));
     assert(std::abs(res[0] - 2) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     // =
     mat = mat2;
     assert(mat == mat2);
@@ -123,8 +123,8 @@ int testMatrix2x2()
     // []
     mat3 = Matrix2x2<float>();
     assert(mat3[0][0] == 1 && mat3[1][0] == 0);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

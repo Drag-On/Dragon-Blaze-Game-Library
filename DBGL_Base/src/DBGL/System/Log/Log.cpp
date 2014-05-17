@@ -13,7 +13,6 @@
 namespace dbgl
 {
     // Init static variables
-    Log* Log::s_pInstance = nullptr;
     Log::Logger Log::dbg(Level::DBG);
     Log::Logger Log::inf(Level::INFO);
     Log::Logger Log::wrn(Level::WARN);
@@ -53,20 +52,11 @@ namespace dbgl
 	}
     }
 
-    Log* Log::getDefault()
+    Log& Log::getDefault()
     {
-	if (!Log::s_pInstance)
-	    Log::s_pInstance = new Log("Logfile.txt", true, true);
-	return Log::s_pInstance;
-    }
-
-    void Log::freeDefault()
-    {
-	if (Log::s_pInstance)
-	{
-	    delete (Log::s_pInstance);
-	    Log::s_pInstance = nullptr;
-	}
+	// This ensures lazy loading
+	static Log instance("Logfile.txt", true, true);
+	return instance;
     }
 
     void Log::setLogLevel(Level lvl)
@@ -121,16 +111,16 @@ namespace dbgl
 	switch(m_loglevel)
 	{
 	    case Level::DBG:
-		LOG->debug(str().c_str());
+		LOG.debug(str().c_str());
 		break;
 	    case Level::INFO:
-		LOG->info(str().c_str());
+		LOG.info(str().c_str());
 		break;
 	    case Level::WARN:
-		LOG->warning(str().c_str());
+		LOG.warning(str().c_str());
 		break;
 	    case Level::ERR:
-		LOG->error(str().c_str());
+		LOG.error(str().c_str());
 		break;
 	}
 	str("");

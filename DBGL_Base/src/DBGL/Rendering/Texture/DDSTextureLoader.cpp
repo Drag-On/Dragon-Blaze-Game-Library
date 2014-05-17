@@ -26,7 +26,7 @@ namespace dbgl
 	    file.read(filecode, 4);
 	    if (strncmp(filecode, "DDS ", 4) != 0)
 	    {
-		LOG->warning("File % is not a valid DDS file", path.c_str());
+		LOG.warning("File % is not a valid DDS file", path.c_str());
 		file.close();
 		return BogusTextureLoader().load("");
 	    }
@@ -60,7 +60,7 @@ namespace dbgl
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			break;
 		    default:
-			LOG->warning("File % is not DXT1-, DXT3- or DXT5-compressed", path.c_str());
+			LOG.warning("File % is not DXT1-, DXT3- or DXT5-compressed", path.c_str());
 			delete[] buffer;
 			return nullptr;
 			break;
@@ -103,7 +103,7 @@ namespace dbgl
 	    }
 	    return new Texture(texID);
 	}
-	LOG->warning("Texture file % could not be opened.", path.c_str());
+	LOG.warning("Texture file % could not be opened.", path.c_str());
 	return BogusTextureLoader().load("");
     }
 
