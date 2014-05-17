@@ -16,6 +16,7 @@
 #include <vector>
 #include <stdexcept>
 #include "AbstractTree.h"
+#include "DBGL/Math/Hyperrectangle.h"
 
 namespace dbgl
 {
@@ -27,6 +28,7 @@ namespace dbgl
      * 		one data object.
      * 		It is possible to add multiple points with the same coordinates, however methods
      * 		like get() and remove() only expect one, i.e. it's undefined which one they use.
+     * @note This implementation is meant to be used with dbgl::Vector as Point.
      */
     template<typename Data, typename Point> class KdTree : public AbstractTree
     {
@@ -156,16 +158,22 @@ namespace dbgl
 	     * @brief Finds the nearest neighbor to point
 	     * @param point Point to find the nearest neighbor for
 	     * @param nearest Location of the nearest neighbor will be copied here
-	     * @param data Data attached to the nearest neighbor will be copied here
+	     * @param[out] data Data attached to the nearest neighbor will be copied here
 	     */
 	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data) const;
 	    /**
 	     * @brief Finds the k nearest neighbors to point
 	     * @param point Point to find the nearest neighbors for
 	     * @param k Amount of nearest neighbors to find
-	     * @param nearest This list will be filled with the found nearest neighbors
+	     * @param[out] nearest This list will be filled with the found nearest neighbors
 	     */
 	    void findKNearestNeighbors(Point const& point, unsigned int k, std::vector<Container>& nearest) const;
+	    /**
+	     * @brief Finds all points within \p range
+	     * @param range Range to find all points in
+	     * @param[out] result This list will be filled with the found points
+	     */
+	    void findRange(Hyperrectangle<float, Point::getDimension()> const& range, std::vector<Container>& result) const;
 	    /**
 	     * @brief Collects all nodes stored in the tree
 	     * @return The list of all nodes
@@ -300,6 +308,15 @@ namespace dbgl
 	     */
 	    void findKNearestNeighbors(Point const& point, unsigned int k, Node const& node,
 		    std::vector<NearestNeighbor>& currentBest, bool goDown, unsigned int curDepth) const;
+	    /**
+	     * @brief Recursively finds all points within \p range
+	     * @param range Range to find points in
+	     * @param node Node to start search
+	     * @param curDepth Current depth
+	     * @param result[out] Matching nodes will be appended here
+	     */
+	    void findRange(Hyperrectangle<float, Point::getDimension()> const& range, Node const& node,
+		    unsigned int curDepth, std::vector<Container>& result) const;
 
 	    /**
 	     * @brief Pointer to root node

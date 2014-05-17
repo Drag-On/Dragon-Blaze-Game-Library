@@ -25,6 +25,7 @@ int testQuaternion();
 int testProperties();
 int testBitmask();
 int testKdTree();
+int testHyperrectangle();
 
 int main()
 {
@@ -41,6 +42,7 @@ int main()
 	testMatrix4x4();
 	testMatrix();
 	testQuaternion();
+	testHyperrectangle();
 	testProperties();
 	testBitmask();
 	testKdTree();
