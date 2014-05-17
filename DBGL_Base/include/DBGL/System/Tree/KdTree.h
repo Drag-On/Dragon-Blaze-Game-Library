@@ -173,7 +173,7 @@ namespace dbgl
 	    /**
 	     * @brief Finds all points within \p range
 	     * @param range Range to find all points in
-	     * @param[out] result This list will be filled with the found nearest neighbors
+	     * @param[out] result This list will be filled with the found points
 	     */
 	    void findRange(Hyperrectangle<float, Point::getDimension()> const& range, std::vector<Container>& result) const;
 	    /**
