@@ -28,7 +28,7 @@ int testProperties()
     // Test if it works without content
     assert(prop.getStringValue("test") == "");
     // Load file
-    prop.load("TestProperties.txt");
+    prop.read("TestProperties.txt");
     // Access methods
     assert(prop.getStringValue("string") == "foo");
     assert(prop.getStringValue("string2") == "double declaration   ");
@@ -39,11 +39,14 @@ int testProperties()
     assert(prop.getBoolValue("bool") == true);
     assert(prop.getBoolValue("bool2") == false);
     assert(prop.getStringValue("foobar") == "");
+    // interpret
     prop.interpret("-foo true -bar string-bar -baz -barbaz -string SURPRISE! error");
     assert(prop.getBoolValue("foo") == true);
     assert(prop.getStringValue("bar") == "string-bar");
     assert(prop.getStringValue("baz") == "-barbaz");
     assert(prop.getStringValue("string") == "SURPRISE!");
+    // write
+    prop.write("TestPropertiesCopy.txt");
     LOG.info("OK!");
     LOG.info("Operators... ");
     assert(prop["string"] == "SURPRISE!");

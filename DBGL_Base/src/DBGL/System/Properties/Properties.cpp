@@ -12,8 +12,9 @@
 
 namespace dbgl
 {
-    bool Properties::load(const std::string path)
+    bool Properties::read(const std::string path)
     {
+	m_filename = path;
 	// Open file
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in);
@@ -61,9 +62,10 @@ namespace dbgl
 		    // Add property
 		m_properties[tokens[0]] = tokens[1];
 	    }
+	    file.close();
 	    return true;
 	}
-	LOG.warning("Properties file \"%\" not found!", path.c_str());
+	LOG.warning("Properties file \"%\" could not be opened!", path.c_str());
 	return false;
     }
 
@@ -110,6 +112,94 @@ namespace dbgl
 	}
     }
 
+    // TODO: Write properties that have not been in the file before
+    bool Properties::write()
+    {
+	// Open original file and new file
+	std::ifstream inFile;
+	std::ofstream outFile;
+	inFile.open(m_filename, std::ios::in);
+	outFile.open(m_filename + ".tmp", std::ios::out);
+	if (inFile.is_open() && outFile.is_open())
+	{
+	    // Seek to beginning
+	    inFile.seekg(0, std::ios::beg);
+	    int lineNo = -1;
+	    // Scan whole inFile
+	    while (inFile.good())
+	    {
+		// Increase line number
+		lineNo++;
+		// Read line
+		std::string line;
+		std::getline(inFile, line);
+		// Take over empty lines and comments
+		if (line.length() == 0 || line.substr(0, m_cmntSymbol.size()) == m_cmntSymbol)
+		{
+		    outFile << line;
+		    continue;
+		}
+		// It's a key-value pair
+		// Split on key-value-separator
+		auto start = 0U;
+		auto end = line.find(m_keyValueSep);
+		std::string key = line.substr(start, end - start);
+		// Erase trailing spaces
+		key.erase(key.find_last_not_of(' ') + 1);
+		// Check if property exists in memory
+		if (m_properties.find(key) != m_properties.end())
+		{
+		    // Exists, write data from memory
+		    outFile << key << m_keyValueSep << getStringValue(key) << "\n";
+		}
+		else
+		{
+		    // Doesn't exist in memory, take over original line
+		    outFile << line;
+		}
+	    }
+	    inFile.close();
+	    outFile.close();
+	    // Remove original file
+	    if(!std::remove(m_filename.c_str()))
+	    {
+		LOG.warning("Properties file \"%\" could not be deleted. See \"%\".", m_filename, m_filename + ".tmp");
+		return false;
+	    }
+	    // Rename new file to original name
+	    if(!std::rename((m_filename + ".tmp").c_str(), m_filename.c_str()))
+	    {
+		LOG.warning("Properties file \"%\" could not be written. See \"%\".", m_filename, m_filename + ".tmp");
+		return false;
+	    }
+	    return true;
+	}
+	LOG.warning("Properties file \"%\" could not be opened!", m_filename);
+	return false;
+    }
+
+    bool Properties::write(std::string path)
+    {
+	if(path == m_filename)
+	    return write();
+	else
+	{
+	    // Write to some other file
+	    std::ofstream outFile;
+	    outFile.open(path, std::ios::out);
+	    if (outFile.is_open())
+	    {
+		// Iterate all properties in memory
+		for(auto it = m_properties.begin(); it != m_properties.end(); ++it)
+		    outFile << it->first << m_keyValueSep << it->second << "\n";
+		outFile.close();
+		return true;
+	    }
+	    LOG.warning("Properties file \"%\" could not be opened!", path);
+	    return false;
+	}
+    }
+
     void Properties::setValue(std::string key, std::string value)
     {
 	// Check if property already exists
@@ -148,9 +238,9 @@ namespace dbgl
 	return b;
     }
 
-    std::string Properties::operator[](std::string key)
+    std::string& Properties::operator[](std::string key)
     {
-	return getStringValue(key);
+	return m_properties[key];
     }
 
     void Properties::setCommentQualifier(std::string cmntQualifier)
