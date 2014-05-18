@@ -136,7 +136,7 @@ namespace dbgl
 		// Take over empty lines and comments
 		if (line.length() == 0 || line.substr(0, m_cmntSymbol.size()) == m_cmntSymbol)
 		{
-		    outFile << line;
+		    outFile << line << "\n";
 		    continue;
 		}
 		// It's a key-value pair
@@ -161,13 +161,13 @@ namespace dbgl
 	    inFile.close();
 	    outFile.close();
 	    // Remove original file
-	    if(!std::remove(m_filename.c_str()))
+	    if(std::remove(m_filename.c_str()) != 0)
 	    {
 		LOG.warning("Properties file \"%\" could not be deleted. See \"%\".", m_filename, m_filename + ".tmp");
 		return false;
 	    }
 	    // Rename new file to original name
-	    if(!std::rename((m_filename + ".tmp").c_str(), m_filename.c_str()))
+	    if(std::rename((m_filename + ".tmp").c_str(), m_filename.c_str()) != 0)
 	    {
 		LOG.warning("Properties file \"%\" could not be written. See \"%\".", m_filename, m_filename + ".tmp");
 		return false;

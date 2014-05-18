@@ -18,6 +18,19 @@
 
 using namespace dbgl;
 
+void testProp(Properties& prop)
+{
+    assert(prop.getStringValue("string") == "foo");
+    assert(prop.getStringValue("string2") == "double declaration   ");
+    assert(prop.getIntValue("int") == 1);
+    assert(prop.getIntValue("int2") == 42);
+    assert(prop.getFloatValue("float") == 3.141f);
+    assert(prop.getFloatValue("float2") == 13.0f);
+    assert(prop.getBoolValue("bool") == true);
+    assert(prop.getBoolValue("bool2") == false);
+    assert(prop.getStringValue("foobar") == "");
+}
+
 int testProperties()
 {
     LOG.info("Starting Properties test suite...");
@@ -30,23 +43,19 @@ int testProperties()
     // Load file
     prop.read("TestProperties.txt");
     // Access methods
-    assert(prop.getStringValue("string") == "foo");
-    assert(prop.getStringValue("string2") == "double declaration   ");
-    assert(prop.getIntValue("int") == 1);
-    assert(prop.getIntValue("int2") == 42);
-    assert(prop.getFloatValue("float") == 3.141f);
-    assert(prop.getFloatValue("float2") == 13.0f);
-    assert(prop.getBoolValue("bool") == true);
-    assert(prop.getBoolValue("bool2") == false);
-    assert(prop.getStringValue("foobar") == "");
+    testProp(prop);
+    // write
+    prop.write("TestPropertiesCopy.txt");
+    Properties copy;
+    copy.read("TestPropertiesCopy.txt");
+    testProp(copy);
+    prop.write();
     // interpret
     prop.interpret("-foo true -bar string-bar -baz -barbaz -string SURPRISE! error");
     assert(prop.getBoolValue("foo") == true);
     assert(prop.getStringValue("bar") == "string-bar");
     assert(prop.getStringValue("baz") == "-barbaz");
     assert(prop.getStringValue("string") == "SURPRISE!");
-    // write
-    prop.write("TestPropertiesCopy.txt");
     LOG.info("OK!");
     LOG.info("Operators... ");
     assert(prop["string"] == "SURPRISE!");
