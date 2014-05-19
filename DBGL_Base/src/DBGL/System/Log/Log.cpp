@@ -10,6 +10,28 @@
 
 #include "DBGL/System/Log/Log.h"
 
+// These headers are not included in Log.h by purpose. They pollute the whole namespace.
+#ifdef _WIN32
+    /**
+     * @brief OS dependent namespace for win32
+     */
+    namespace OS_Win32
+    {
+#undef _MSC_EXTENSIONS
+	#include <windows.h>
+    }
+#endif
+
+#ifdef __linux__
+    /**
+     * @brief OS dependent namespace for linux
+     */
+    namespace OS_Linux
+    {
+	#include <sys/utsname.h>
+    }
+#endif
+
 namespace dbgl
 {
     // Init static variables
@@ -28,11 +50,12 @@ namespace dbgl
 	// Get current time
 	auto time = getCurTime(true);
 
-	writeLog("-----------------\n");
-	writeLog("-----Logfile-----\n");
-	writeLog("-----------------\n");
-	writeLog(time + "\n");
-	writeLog("-----------------\n");
+	writeLog("#######################################\n");
+	writeLog("## Logfile\n");
+	writeLog("#######################################\n");
+	writeLog("# Date: " + time + "\n");
+	writeLog("# OS: " + getOSDescription() + "\n");
+	writeLog("#######################################\n");
 
 	// Redirect std streams
 	if (m_redirectStd)
@@ -80,6 +103,51 @@ namespace dbgl
 	std::strftime(buf, sizeof(buf), date?"%c":"%X", std::localtime(&now_c));
 
 	return std::string(buf);
+    }
+
+    std::string Log::getOSDescription()
+    {
+	std::stringstream osDesc;
+#ifdef _WIN32
+	osDesc << "Windows ";
+	OS_Win32::OSVERSIONINFO version;
+	version.dwOSVersionInfoSize = sizeof(OS_Win32::OSVERSIONINFO);
+	OS_Win32::GetVersionEx(&version);
+	switch (version.dwPlatformId)
+	{
+	    case VER_PLATFORM_WIN32s:
+		osDesc << version.dwMajorVersion << "." << version.dwMinorVersion;
+		break;
+	    case VER_PLATFORM_WIN32_WINDOWS:
+		if (version.dwMinorVersion == 0)
+		    osDesc << "95";
+		else if (version.dwMinorVersion == 10)
+		    osDesc << "98";
+		else if (version.dwMinorVersion == 90)
+		    osDesc << "ME";
+		break;
+	    case VER_PLATFORM_WIN32_NT:
+		if (version.dwMajorVersion == 5 && version.dwMinorVersion == 0)
+		    osDesc << "2000 with " << version.szCSDVersion;
+		else if (version.dwMajorVersion == 5 && version.dwMinorVersion == 1)
+		    osDesc << "XP " << std::string(version.szCSDVersion);
+		else if (version.dwMajorVersion <= 4)
+		    osDesc << "NT " << version.dwMajorVersion << std::string(".") << version.dwMinorVersion << " with "
+			    << std::string(version.szCSDVersion);
+		else
+		    osDesc << version.dwMajorVersion << "." << version.dwMinorVersion;
+		break;
+	}
+#endif
+#ifdef __linux__
+	osDesc << "Linux";
+	// TODO: More detailed description
+	// int uname(struct utsname *buf);
+#endif
+#ifdef __APPLE__
+	osDesc << "OSX";
+#endif
+	return osDesc.str();
     }
 
     void Log::format(std::string& msg, const char* format)

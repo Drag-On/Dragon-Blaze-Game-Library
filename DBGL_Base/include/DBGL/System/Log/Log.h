@@ -128,6 +128,12 @@ namespace dbgl
 	    std::string getCurTime(bool date = false);
 
 	    /**
+	     * @brief Generates a brief OS description
+	     * @return String describing the operating system running the application
+	     */
+	    std::string getOSDescription();
+
+	    /**
 	     * @brief Formats a message
 	     * @param[out] msg String to write message to
 	     * @param format Format string
