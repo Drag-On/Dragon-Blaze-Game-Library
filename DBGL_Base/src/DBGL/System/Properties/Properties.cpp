@@ -117,10 +117,9 @@ namespace dbgl
     {
 	// Open original file and new file
 	std::ifstream inFile;
-	std::ofstream outFile;
+	std::stringstream stringStream;
 	inFile.open(m_filename, std::ios::in);
-	outFile.open(m_filename + ".tmp", std::ios::out);
-	if (inFile.is_open() && outFile.is_open())
+	if (inFile.is_open())
 	{
 	    // Seek to beginning
 	    inFile.seekg(0, std::ios::beg);
@@ -136,7 +135,7 @@ namespace dbgl
 		// Take over empty lines and comments
 		if (line.length() == 0 || line.substr(0, m_cmntSymbol.size()) == m_cmntSymbol)
 		{
-		    outFile << line << "\n";
+		    stringStream << line << "\n";
 		    continue;
 		}
 		// It's a key-value pair
@@ -150,32 +149,36 @@ namespace dbgl
 		if (m_properties.find(key) != m_properties.end())
 		{
 		    // Exists, write data from memory
-		    outFile << key << m_keyValueSep << getStringValue(key) << "\n";
+		    stringStream << key << m_keyValueSep << getStringValue(key) << "\n";
 		}
 		else
 		{
 		    // Doesn't exist in memory, take over original line
-		    outFile << line;
+		    stringStream << line << "\n";
 		}
 	    }
 	    inFile.close();
-	    outFile.close();
-	    // Remove original file
-	    if(std::remove(m_filename.c_str()) != 0)
-	    {
-		LOG.warning("Properties file \"%\" could not be deleted. See \"%\".", m_filename, m_filename + ".tmp");
-		return false;
-	    }
-	    // Rename new file to original name
-	    if(std::rename((m_filename + ".tmp").c_str(), m_filename.c_str()) != 0)
-	    {
-		LOG.warning("Properties file \"%\" could not be written. See \"%\".", m_filename, m_filename + ".tmp");
-		return false;
-	    }
+	}
+	else
+	{
+	    LOG.warning("Properties file \"%\" could not be opened for reading!", m_filename);
+	    return false;
+	}
+	// Replace file with new content
+	std::ofstream outFile;
+	outFile.open(m_filename, std::ios::out | std::ios::trunc);
+	if (outFile.is_open())
+	{
+	    stringStream.seekg(0, std::ios::beg);
+	    // Write previously buffered stringstream back to file
+	    outFile << stringStream.rdbuf();
 	    return true;
 	}
-	LOG.warning("Properties file \"%\" could not be opened!", m_filename);
-	return false;
+	else
+	{
+	    LOG.warning("Properties file \"%\" could not be opened for writing!", m_filename);
+	    return false;
+	}
     }
 
     bool Properties::write(std::string path)
