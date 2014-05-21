@@ -97,13 +97,13 @@ namespace dbgl
      * @param degrees Angle to convert
      * @return The angle in radians
      */
-    template<typename T> T toRadians(T degrees);
+    template<typename T> constexpr T toRadians(T degrees);
     /**
      * @brief Converts radians into degrees
      * @param radians Angle to convert
      * @return The angle in degrees
      */
-    template<typename T> T toDegrees(T radians);
+    template<typename T> constexpr T toDegrees(T radians);
 }
 
 #include "Utility.imp"

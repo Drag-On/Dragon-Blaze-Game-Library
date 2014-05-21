@@ -21,12 +21,12 @@ namespace dbgl
 	return std::abs(a - b) <= std::numeric_limits<T>::epsilon() * std::max(std::abs(a), std::abs(b)) * ulp;
     }
 
-    template<typename T> T toRadians(T degrees)
+    template<typename T> constexpr T toRadians(T degrees)
     {
 	return degrees * (pi() / 180);
     }
 
-    template<typename T> T toDegrees(T radians)
+    template<typename T> constexpr T toDegrees(T radians)
     {
 	return radians * (180 / pi());
     }
