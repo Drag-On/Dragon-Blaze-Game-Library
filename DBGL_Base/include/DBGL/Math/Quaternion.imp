@@ -128,7 +128,7 @@ namespace dbgl
 		{
 			// Guess a random axis
 			axis = start.cross(Vector3<T>(1, 0, 0));
-			if (dbgl::isSimilar(axis.getSquaredLength(), 0)) // Dammit!
+			if (dbgl::isSimilar(axis.getSquaredLength(), 0.0f)) // Dammit!
 				axis = start.cross(Vector3<T>(0, 1, 0));
 			axis.normalize();
 			// Initialize
@@ -169,7 +169,7 @@ namespace dbgl
     	{
 			for(int i = 0; i < m_data.getDimension(); i++)
 			{
-				if(!dbgl::isSimilar(m_data[i], other.m_data[i], precision))
+				if(!dbgl::isSimilar(m_data[i], other.m_data[i], T(precision)))
 					return false;
 			}
     	}
@@ -178,7 +178,7 @@ namespace dbgl
     
     template <typename T> bool Quaternion<T>::isSimilarRot(Quaternion<T> const& other, double precision) const
 	{
-    	return (dbgl::isSimilar(dot(other) - 1, 0, precision));
+    	return (dbgl::isSimilar(dot(other) - 1.0f, 0.0f, (float) precision));
 	}
     
     template <typename T> bool Quaternion<T>::isUnit() const

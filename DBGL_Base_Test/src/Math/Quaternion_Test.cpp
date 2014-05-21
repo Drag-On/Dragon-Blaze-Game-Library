@@ -33,7 +33,7 @@ int testQuaternion()
     QuatF quat6 = QuatF(Vec3f(1, 0, 0), Vec3f(1, 1, 0), Vec3f(1, 1, 0).cross(Vec3f(1, 0, 0)));
     assert(quat5.getAngles().x() == 0);
     assert(quat5.getAngles().y() == 0);
-    assert(isSimilar(quat5.getAngles().z(), pi_2()));
+    assert(isSimilar(quat5.getAngles().z(), (float)pi_2()));
     assert((quat5 * Vec3f(1, 0, 0)).isSimilar(Vec3f(0, 1, 0)));
     assert((quat5 * Vec3f(0, 1, 0)).isSimilar(Vec3f(-1, 0, 0)));
     assert((quat5 * Vec3f(1, 1, 0)).isSimilar(Vec3f(-1, 1, 0)));
@@ -61,21 +61,21 @@ int testQuaternion()
     assert((Mat4f::makeRotation(pi_2(), pi_4(), 0) * Vec4f(0, 0, 1, 0)).isSimilar(quat4.getMatrix() * Vec4f(0, 0, 1, 0)));
     assert((Mat4f::makeRotationZ(pi_2()) * Vec4f(0, 1, 0, 0)).isSimilar(quat5.getMatrix() * Vec4f(0, 1, 0, 0)));
     // getAngles
-    assert(isSimilar(quat4.getAngles()[0], pi_2()));
-    assert(isSimilar(quat4.getAngles()[1], pi_4()));
-    assert(isSimilar(quat4.getAngles()[2], 0));
+    assert(isSimilar(quat4.getAngles()[0], (float) pi_2()));
+    assert(isSimilar(quat4.getAngles()[1], (float)pi_4()));
+    assert(isSimilar(quat4.getAngles()[2], 0.0f));
     // getSquaredLength
     assert(quat1.getSquaredLength() == 1);
     // getLength
     assert(quat1.getLength() == 1);
-    assert(isSimilar(quat2.getLength(), std::sqrt(1*1 + 3*3 +2.5*2.5)));
+    assert(isSimilar(quat2.getLength(), (float) std::sqrt(1*1 + 3*3 +2.5*2.5)));
     assert(isSimilar(quat3.getLength(), std::sqrt(quat3.x()*quat3.x() + quat3.y()*quat3.y() + quat3.z()*quat3.z() + quat3.w()*quat3.w())));
     assert(isSimilar(quat4.getLength(), std::sqrt(quat4.x()*quat4.x() + quat4.y()*quat4.y() + quat4.z()*quat4.z() + quat4.w()*quat4.w())));
     // getNormalized
-    assert(isSimilar(quat4.getNormalized().getLength(), 1));
+    assert(isSimilar(quat4.getNormalized().getLength(), 1.0f));
     // normalize
     temp = quat4;
-    assert(isSimilar(temp.normalize().getLength(), 1));
+    assert(isSimilar(temp.normalize().getLength(), 1.0f));
     // getConjugated
     assert(isSimilar(quat2.getConjugated().x(), -quat2.x()));
     assert(isSimilar(quat2.getConjugated().y(), -quat2.y()));

@@ -13,6 +13,7 @@
 #include "DBGL/System/Log/Log.h"
 
 int testLog();
+int testUtility();
 int testVector2();
 int testVector3();
 int testVector4();
@@ -33,6 +34,7 @@ int main()
 	LOG.info("DBGL Version %", DBGL_VERSION_FULL);
 
 	testLog();
+	testUtility();
 	testVector2();
 	testVector3();
 	testVector4();
