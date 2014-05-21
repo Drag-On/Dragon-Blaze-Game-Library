@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
+#include <type_traits>
 #include "AbstractTree.h"
 #include "DBGL/Math/Hyperrectangle.h"
 
@@ -32,6 +33,8 @@ namespace dbgl
      */
     template<typename Data, typename Point> class KdTree : public AbstractTree
     {
+	private:
+	    using PrecisionType = typename std::remove_reference<decltype((*((Point*)(0)))[0])>::type;
 	public:
 	    /**
 	     * @brief Container struct used to create a k-d tree from a list
@@ -157,7 +160,7 @@ namespace dbgl
 	    /**
 	     * @brief Finds the nearest neighbor to point
 	     * @param point Point to find the nearest neighbor for
-	     * @param nearest Location of the nearest neighbor will be copied here
+	     * @param[out] nearest Location of the nearest neighbor will be copied here
 	     * @param[out] data Data attached to the nearest neighbor will be copied here
 	     */
 	    void findNearestNeighbor(Point const& point, Point& nearest, Data& data) const;
@@ -173,7 +176,7 @@ namespace dbgl
 	     * @param range Range to find all points in
 	     * @param[out] result This list will be filled with the found points
 	     */
-	    void findRange(Hyperrectangle<float, Point::getDimension()> const& range, std::vector<Container>& result) const;
+	    void findRange(Hyperrectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const;
 	    /**
 	     * @brief Collects all nodes stored in the tree
 	     * @return The list of all nodes
@@ -315,7 +318,7 @@ namespace dbgl
 	     * @param curDepth Current depth
 	     * @param result[out] Matching nodes will be appended here
 	     */
-	    void findRange(Hyperrectangle<float, Point::getDimension()> const& range, Node const& node,
+	    void findRange(Hyperrectangle<PrecisionType, Point::getDimension()> const& range, Node const& node,
 		    unsigned int curDepth, std::vector<Container>& result) const;
 
 	    /**
