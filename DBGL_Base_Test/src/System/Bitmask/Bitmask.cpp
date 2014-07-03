@@ -25,8 +25,8 @@ const char forgetThis = 1 << 7;
 
 int testBitmask()
 {
-    LOG->info("Starting Bitmask test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Bitmask test suite...");
+    LOG.info("Constructors... ");
     Bitmask<> bitfield1;
     assert(bitfield1.getSize() == sizeof(int) * CHAR_BIT);
     assert(!bitfield1.isSet(needCake));
@@ -42,8 +42,8 @@ int testBitmask()
     assert(bitfield3.isSet(bitfield2));
     assert(reallyNeedCake(needCake | needChocolate));
     Bitmask<char> bitfieldSmall;
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getSize
     assert(bitfield2.getSize() == sizeof(int) * CHAR_BIT);
     assert(bitfieldSmall.getSize() == CHAR_BIT);
@@ -69,16 +69,16 @@ int testBitmask()
     bitfieldSmall.toggle(forgetThis);
     assert(bitfieldSmall.isSet(forgetThis));
     // toString
-    Log::inf << "bitfield1: " << bitfield1.toString() << std::flush;
-    Log::inf << "bitfield2: " << bitfield2.toString() << std::flush;
-    Log::inf << "bitfield3: " << bitfield3.toString() << std::flush;
-    Log::inf << "bitfieldSmall: " << bitfieldSmall.toString() << std::flush;
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("bitfield1: %", bitfield1.toString());
+    LOG.info("bitfield2: %", bitfield2.toString());
+    LOG.info("bitfield3: %", bitfield3.toString());
+    LOG.info("bitfieldSmall: %", bitfieldSmall.toString());
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     unsigned int foo = bitfield1;
     assert(foo | bitfield1);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

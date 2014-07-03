@@ -1,13 +1,13 @@
 # This is a comment
 
-string = foo
-int = 1 
+string=foo
+int=1 
 #another comment
 float=3.141
 
-bool = true
-bool2 = false # this might work
-int2 = 42 # but it's
-float2= 13#not reliable
-string2 = # this is not misformatted as it's a string
-string2 = double declaration   
+bool=true
+bool2=false # this might work
+int2=42 # but it's
+float2=13#not reliable
+string2=double declaration   
+string2=double declaration   

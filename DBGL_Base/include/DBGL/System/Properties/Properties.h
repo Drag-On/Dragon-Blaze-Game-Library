@@ -17,6 +17,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cstdio>
 #include <unordered_map>
 #include "DBGL/System/Log/Log.h"
 
@@ -33,20 +34,31 @@ namespace dbgl
 	     * @param path Path of the file to use
 	     * @return True in case the file could be loaded, otherwise false
 	     */
-	    bool load(const std::string path);
+	    bool read(const std::string path);
 	    /**
 	     * @brief Interprets a line
-	     * @details Reads in -key value pairs
+	     * @details Reads in "-key value" pairs
 	     * @param line String to parse
 	     */
 	    void interpret(const std::string line);
 	    /**
 	     * @brief Interprets an array
-	     * @details Reads in -key value pairs
+	     * @details Reads in "-key value" pairs
 	     * @param argc Amount of arguments
 	     * @param argv Actual arguments
 	     */
 	    void interpret(int argc, char** argv);
+	    /**
+	     * @brief Writes the properties back to file
+	     * @return True in case the file was written, otherwise false
+	     */
+	    bool write();
+	    /**
+	     * @brief Writes the properties back to file
+	     * @param path Path to write to
+	     * @return True in case the file was written, otherwise false
+	     */
+	    bool write(std::string path);
 	    /**
 	     * @brief Manually sets a property, overwriting any previous values
 	     * @param key Key of the property
@@ -78,9 +90,9 @@ namespace dbgl
 	    bool getBoolValue(std::string key);
 	    /**
 	     * @param key Key to get the value for
-	     * @return Value associated with the passed key or "" if not found
+	     * @return Reference to value associated with the passed key. Creates key if not found.
 	     */
-	    std::string operator[](std::string key);
+	    std::string& operator[](std::string key);
 	    /**
 	     * @param cmntQualifier String that qualifies lines as comments
 	     */
@@ -94,6 +106,7 @@ namespace dbgl
 	     */
 	    void setKeyPrefix(std::string prefix);
 	private:
+	    std::string m_filename;
 	    std::string m_cmntSymbol = "#";
 	    std::string m_keyValueSep = "=";
 	    std::string m_keyPrefix = "-";

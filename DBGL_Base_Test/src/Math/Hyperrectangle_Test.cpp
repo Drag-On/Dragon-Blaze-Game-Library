@@ -22,8 +22,8 @@ using namespace dbgl;
 
 int testHyperrectangle()
 {
-    LOG->info("Starting Hyperrectangle test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Hyperrectangle test suite...");
+    LOG.info("Constructors... ");
     Hyperrectangle<float, 2> rect2d;
     Hyperrectangle<float, 2> rect2d_2(Vec2f(1, 0.5f), Vec2f(8, 10));
     Hyperrectangle<float, 2> rect2d_2Copy(rect2d_2);
@@ -40,8 +40,8 @@ int testHyperrectangle()
     assert(rect.getExtent() == Vec2d(42, 23));
     assert(box.getPos() == Vec3i(1, 3, 3));
     assert(box.getExtent() == Vec3i(7, 1, 1));
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // contains
     assert(rect.contains(Vec2d(0, 0)) == false);
     assert(rect.contains(Vec2d(2, 2)));
@@ -57,8 +57,8 @@ int testHyperrectangle()
     assert(rect.overlaps(Rectangle<double>(Vec2d(-4, 10), Vec2d(15, 1))));
     assert(rect.overlaps(weirdRect));
     assert(weirdRect.overlaps(Rectangle<double>(Vec2d(-1, 1), Vec2d(1.5f, 1))));
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     // =
     auto copy(rect2d);
     copy = rect2d_2;
@@ -74,8 +74,8 @@ int testHyperrectangle()
     assert(copy.getPos()[1] == copy[1]);
     assert(copy.getPos()[0] + copy.getExtent()[0] == copy[2]);
     assert(copy.getPos()[1] + copy.getExtent()[1] == copy[3]);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

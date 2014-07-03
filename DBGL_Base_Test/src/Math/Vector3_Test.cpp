@@ -21,8 +21,8 @@ using namespace dbgl;
 
 int testVector3()
 {
-    LOG->info("Starting Vector3 test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Vector3 test suite...");
+    LOG.info("Constructors... ");
     Vector3<float> vec;
     assert(vec[0] == 0);
     assert(vec[1] == 0);
@@ -35,8 +35,8 @@ int testVector3()
     assert(vec3[0] == -1.5f);
     assert(vec3[1] == 3);
     assert(vec3[2] == 15);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getDimension()
     assert(vec.getDimension() == 3);
     // x()
@@ -76,8 +76,8 @@ int testVector3()
     // getDataPointer
     for(unsigned int i = 0; i < test.getDimension(); i++)
     assert(test.getDataPointer()[i] == test[i]);
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     vec2[0] = -1.5;
     vec2[1] = 3;
     // =
@@ -143,8 +143,8 @@ int testVector3()
     vec3 /= 0.5;
     assert(vec3[0] == -3);
     assert(vec3[1] == 6);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

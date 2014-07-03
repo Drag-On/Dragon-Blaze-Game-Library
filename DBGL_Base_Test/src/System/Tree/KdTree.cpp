@@ -21,11 +21,11 @@ class KdTreePrintVisitor1 : public AbstractTreeVisitor
     public:
 	void visit(KdTree<int, Vec2f>& tree)
 	{
-	    LOG->info("Visiting tree with %d elements.", tree.size());
+	    LOG.info("Visiting tree with % elements.", tree.size());
 	}
 	void visit(KdTree<int, Vec2f>::Node& node)
 	{
-	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    LOG.info("Visiting node at point (%, %).", node.point.x(), node.point.y());
 	    if(node.leftChild != nullptr)
 		node.leftChild->accept(*this);
 	    if(node.rightChild != nullptr)
@@ -38,7 +38,7 @@ class KdTreePrintVisitor1 : public AbstractTreeVisitor
 	    else if(typeid(visitable) == typeid(KdTree<int, Vec2f>::Node&))
 		visit((KdTree<int, Vec2f>::Node&) visitable);
 	    else
-		LOG->info("I've got no clue what I'm visiting.");
+		LOG.info("I've got no clue what I'm visiting.");
 	}
 };
 
@@ -47,11 +47,11 @@ class KdTreePrintVisitor2
     public:
 	void visit(KdTree<int, Vec2f>& tree)
 	{
-	    LOG->info("Visiting tree with %d elements.", tree.size());
+	    LOG.info("Visiting tree with % elements.", tree.size());
 	}
 	void visit(KdTree<int, Vec2f>::Node& node)
 	{
-	    LOG->info("Visiting node at point (%f, %f).", node.point.x(), node.point.y());
+	    LOG.info("Visiting node at point (%, %).", node.point.x(), node.point.y());
 	    if(node.leftChild != nullptr)
 		node.leftChild->accept(*this);
 	    if(node.rightChild != nullptr)
@@ -66,7 +66,7 @@ void checkResult(std::vector<typename KdTree<int, Vec2f>::Container> result, std
 	auto it = std::find(needed.begin(), needed.end(), item.data);
 	if(it == needed.end())
 	{
-	    LOG->error("Item %d was returned wrongly.", item.data);
+	    LOG.error("Item % was returned wrongly.", item.data);
 	    assert(false);
 	}
     }
@@ -75,8 +75,8 @@ void checkResult(std::vector<typename KdTree<int, Vec2f>::Container> result, std
 
 int testKdTree()
 {
-    LOG->info("Starting KdTree test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting KdTree test suite...");
+    LOG.info("Constructors... ");
     KdTree<int, Vec2f> tree;
     std::vector<typename KdTree<int, Vec2f>::Container> data = {
 	    {Vec2f(0, 0), 0},
@@ -102,8 +102,8 @@ int testKdTree()
 	    {Rectangle<float>(Vec2f(-0.5f, -1), Vec2f(-0.5f, 1)), 3},
     };
     KdTree<int, Rectangle<float>> volumTree(volumdata.begin(), volumdata.end());
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // size
     assert(tree.size() == 0);
     assert(tree2.size() == data.size());
@@ -228,12 +228,12 @@ int testKdTree()
     assert(tree.get(Vec2f(-0.5f, 0)) == nullptr);
     // Visitor pattern
     KdTreePrintVisitor1 visitor;
-    LOG->info("Tree1:");
+    LOG.info("Tree1:");
     tree.accept(visitor);
     KdTreePrintVisitor2 visitor2;
-    LOG->info("(Former) Tree2:");
+    LOG.info("(Former) Tree2:");
     move.accept<KdTreePrintVisitor2>(visitor2);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }

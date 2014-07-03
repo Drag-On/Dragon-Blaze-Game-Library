@@ -15,7 +15,7 @@ namespace dbgl
     ShaderProgram::ShaderProgram(const char* vert, const char* frag,
 	    bool isFiles)
     {
-	LOG->info("Creating shader program...");
+	LOG.info("Creating shader program...");
 	std::string vertCode, fragCode;
 	if (isFiles)
 	{
@@ -46,7 +46,7 @@ namespace dbgl
 	glLinkProgram(_shaderProgram);
 	glGetProgramiv(_shaderProgram, GL_LINK_STATUS, &linkOk);
 	if (!linkOk)
-	LOG->error("Error while linking shaders.");
+	LOG.error("Error while linking shaders.");
 	printLog(_shaderProgram, linkOk);
 
 	// Delete vertex- and fragment shader objects again
@@ -306,7 +306,7 @@ namespace dbgl
 	    inStream.close();
 	}
 	else
-	    LOG->error("Unable to open %s.", path);
+	    LOG.error("Unable to open %.", path);
 	return code;
     }
 
@@ -321,7 +321,7 @@ namespace dbgl
 	    glGetProgramiv(object, GL_INFO_LOG_LENGTH, &logLength);
 	else
 	{
-	    LOG->warning(
+	    LOG.warning(
 		    "Tried to print compile log for an object that is not a shader or program.");
 	    return;
 	}
@@ -339,9 +339,9 @@ namespace dbgl
 		msg[logLength - 2] = 0;
 
 	    if (ok)
-		LOG->info(msg);
+		LOG.info(msg);
 		else
-		LOG->error(msg);
+		LOG.error(msg);
 	    delete (msg);
 	}
     }
@@ -351,7 +351,7 @@ namespace dbgl
     {
 	if (code == NULL)
 	{
-	    LOG->error("Error compiling NULL shader");
+	    LOG.error("Error compiling NULL shader");
 	    return -1;
 	}
 
@@ -366,7 +366,7 @@ namespace dbgl
 	GLint result = GL_FALSE;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 	if(result == GL_FALSE)
-	LOG->error("Error while compiling shader %s", fileName);
+	LOG.error("Error while compiling shader %", fileName);
 	printLog(id, result);
 	return id;
     }

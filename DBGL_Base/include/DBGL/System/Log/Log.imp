@@ -1,0 +1,129 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template <typename... Args> void Log::debug(const char* format, Args... args)
+    {
+	if (m_logLevel <= Level::DBG)
+	{
+	    std::string msg = "";
+	    this->format(msg, format, args...);
+
+	    auto time = getCurTime();
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stdout, "%s: DEBUG: %s\n", time.c_str(), msg.c_str());
+		fflush (stdout);
+	    }
+
+	    writeLog(time + ": DEBUG: " + msg + "\n");
+	}
+    }
+
+    template <typename... Args> void Log::info(const char* format, Args... args)
+    {
+	if (m_logLevel <= Level::DBG)
+	{
+	    std::string msg = "";
+	    this->format(msg, format, args...);
+
+	    auto time = getCurTime();
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stdout, "%s: INFO: %s\n", time.c_str(), msg.c_str());
+		fflush (stdout);
+	    }
+
+	    writeLog(time + ": INFO: " + msg + "\n");
+	}
+    }
+
+    template <typename... Args> void Log::warning(const char* format, Args... args)
+    {
+	if (m_logLevel <= Level::DBG)
+	{
+	    std::string msg = "";
+	    this->format(msg, format, args...);
+
+	    auto time = getCurTime();
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stderr, "%s: WARNING: %s\n", time.c_str(), msg.c_str());
+		fflush (stderr);
+	    }
+
+	    writeLog(time + ": WARNING: " + msg + "\n");
+	}
+    }
+
+    template <typename... Args> void Log::error(const char* format, Args... args)
+    {
+	if (m_logLevel <= Level::ERR)
+	{
+	    std::string msg = "";
+	    this->format(msg, format, args...);
+
+	    auto time = getCurTime();
+
+	    if (m_bashOutput)
+	    {
+		fprintf(stderr, "%s: ERROR: %s\n", time.c_str(), msg.c_str());
+		fflush (stderr);
+	    }
+
+	    writeLog(time + ": ERROR: " + msg + "\n");
+	}
+    }
+
+    template <typename T, typename... Args> void Log::format(std::string& msg, const char* format, T val, Args... args)
+    {
+	while (*format)
+	{
+	    if (*format == '%')
+	    {
+		if (*(format + 1) == '%')
+		    ++format;
+		else
+		{
+		    std::stringstream stream;
+		    if (*(format + 1) == '{')
+		    {
+			// Precision specifier
+			std::stringstream precisionStream;
+			std::string precisionString(format + 2);
+			auto end = precisionString.find('}');
+			if(end == std::string::npos)
+			    throw std::runtime_error("Format string invalid. Precision specifier not complete. Add closing curly bracket.");
+			precisionStream << precisionString.substr(0, end);
+			std::streamsize precision = 7;
+			precisionStream >> precision;
+			if (precision <= 0)
+			    throw std::runtime_error("Format string invalid. Precision specifier must not be negative.");
+			stream.setf(stream.fixed);
+			stream.precision(precision);
+			format += end + 2;
+		    }
+		    stream << val;
+		    msg += stream.str();
+		    this->format(msg, format + 1, args...);
+		    return;
+		}
+	    }
+	    msg += *format++;
+	}
+	throw std::logic_error("Too many arguments provided.");
+    }
+}
+
+

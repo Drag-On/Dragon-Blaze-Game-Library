@@ -13,6 +13,7 @@
 #include "DBGL/System/Log/Log.h"
 
 int testLog();
+int testUtility();
 int testVector2();
 int testVector3();
 int testVector4();
@@ -29,10 +30,11 @@ int testHyperrectangle();
 
 int main()
 {
-	LOG->setLogLevel((int)dbgl::LOGLEVEL::DBG);
-	LOG->info("DBGL Version %s", DBGL_VERSION_FULL);
+	LOG.setLogLevel(dbgl::Log::Level::DBG);
+	LOG.info("DBGL Version %", DBGL_VERSION_FULL);
 
 	testLog();
+	testUtility();
 	testVector2();
 	testVector3();
 	testVector4();
@@ -47,7 +49,6 @@ int main()
 	testBitmask();
 	testKdTree();
 
-	LOG->info("Tests done!");
-	LOG->del();
+	LOG.info("Tests done!");
 	return 0;
 }

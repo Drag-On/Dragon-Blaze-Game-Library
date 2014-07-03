@@ -35,7 +35,7 @@ namespace dbgl
 	    unsigned char colorPaletteType = header[1];
 	    if (colorPaletteType != 0)
 	    {
-		LOG->warning("TGA files with palettes currently not supported.");
+		LOG.warning("TGA files with palettes currently not supported.");
 		file.close();
 		return BogusTextureLoader().load("");
 	    }
@@ -46,7 +46,7 @@ namespace dbgl
 		unsigned char imageType = header[2];
 		if(imageType != 2 && imageType != 3)
 		{
-		    LOG->warning("TGA files in other modes than uncompressed RGB or monochrome currently not supported.");
+		    LOG.warning("TGA files in other modes than uncompressed RGB or monochrome currently not supported.");
 		    file.close();
 		    return BogusTextureLoader().load("");
 		}

@@ -38,7 +38,7 @@ namespace dbgl
 	// Check if valid
 	if (entity.pMesh == NULL || entity.pShader == NULL)
 	{
-	    LOG->warning("Invalid render attempt.");
+	    LOG.warning("Invalid render attempt.");
 	    return;
 	}
 

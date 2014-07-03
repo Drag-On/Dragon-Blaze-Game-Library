@@ -1,0 +1,72 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief OS dependent namespace for win32
+ * @details windows.h is included into this namespace
+ */
+namespace OS_Win32
+{
+    #undef _MSC_EXTENSIONS
+    #include <windows.h>
+}
+
+OS::Type OS::getType()
+{
+    OS_Win32::OSVERSIONINFO version;
+    version.dwOSVersionInfoSize = sizeof(OS_Win32::OSVERSIONINFO);
+    OS_Win32::GetVersionEx(&version);
+    
+    OS::Type type;
+    type.name = "Windows";
+    type.major = version.dwMajorVersion;
+    type.minor = version.dwMinorVersion;
+    
+    switch (version.dwPlatformId)
+    {
+	case VER_PLATFORM_WIN32s:
+	    break;
+	case VER_PLATFORM_WIN32_WINDOWS:
+	    if (version.dwMinorVersion == 0)
+		type.derivative = "95";
+	    else if (version.dwMinorVersion == 10)
+		type.derivative = "98";
+	    else if (version.dwMinorVersion == 90)
+		type.derivative = "ME";
+	    break;
+	case VER_PLATFORM_WIN32_NT:
+	    if (version.dwMajorVersion == 5 && version.dwMinorVersion == 0)
+	    {
+		type.derivative = "2000";
+		type.descr = version.szCSDVersion;
+	    }
+	    else if (version.dwMajorVersion == 5 && version.dwMinorVersion == 1)
+	    {
+		type.derivative = "XP";
+		type.descr = version.szCSDVersion;
+	    }
+	    else if (version.dwMajorVersion <= 4)
+	    {
+		type.derivative = "NT";
+		type.descr = version.szCSDVersion;
+	    }
+	    else if (version.dwMajorVersion == 6 && version.dwMinorVersion == 0)
+		type.derivative = "Vista";
+	    else if (version.dwMajorVersion == 6 && version.dwMinorVersion == 1)
+		type.derivative = "7";
+	    else if (version.dwMajorVersion == 6 && version.dwMinorVersion == 2)
+		type.derivative = "8";
+	    else
+	    type.derivative = "Unknown derivative";
+	    break;
+    }
+
+    return type;
+}

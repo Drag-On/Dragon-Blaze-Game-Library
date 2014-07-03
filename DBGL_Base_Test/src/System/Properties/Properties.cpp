@@ -18,18 +18,8 @@
 
 using namespace dbgl;
 
-int testProperties()
+void testProp(Properties& prop)
 {
-    LOG->info("Starting Properties test suite...");
-    LOG->info("Constructors... ");
-    Properties prop;
-    LOG->info("OK!");
-    LOG->info("Methods... ");
-    // Test if it works without content
-    assert(prop.getStringValue("test") == "");
-    // Load file
-    prop.load("TestProperties.txt");
-    // Access methods
     assert(prop.getStringValue("string") == "foo");
     assert(prop.getStringValue("string2") == "double declaration   ");
     assert(prop.getIntValue("int") == 1);
@@ -39,16 +29,38 @@ int testProperties()
     assert(prop.getBoolValue("bool") == true);
     assert(prop.getBoolValue("bool2") == false);
     assert(prop.getStringValue("foobar") == "");
+}
+
+int testProperties()
+{
+    LOG.info("Starting Properties test suite...");
+    LOG.info("Constructors... ");
+    Properties prop;
+    LOG.info("OK!");
+    LOG.info("Methods... ");
+    // Test if it works without content
+    assert(prop.getStringValue("test") == "");
+    // Load file
+    prop.read("TestProperties.txt");
+    // Access methods
+    testProp(prop);
+    // write
+    prop.write("TestPropertiesCopy.txt");
+    Properties copy;
+    copy.read("TestPropertiesCopy.txt");
+    testProp(copy);
+    prop.write();
+    // interpret
     prop.interpret("-foo true -bar string-bar -baz -barbaz -string SURPRISE! error");
     assert(prop.getBoolValue("foo") == true);
     assert(prop.getStringValue("bar") == "string-bar");
     assert(prop.getStringValue("baz") == "-barbaz");
     assert(prop.getStringValue("string") == "SURPRISE!");
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     assert(prop["string"] == "SURPRISE!");
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

@@ -22,8 +22,8 @@ using namespace dbgl;
 
 int testMatrix3x3()
 {
-    LOG->info("Starting Matrix3x3 test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Matrix3x3 test suite...");
+    LOG.info("Constructors... ");
     // Default
     Matrix3x3<float> mat;
     assert(mat[0][0] == 1);
@@ -36,8 +36,8 @@ int testMatrix3x3()
     mat2[0][1] = 2;
     Matrix3x3<float> mat3(mat2);
     assert(mat3[0][0] == 3 && mat3[0][1] == 2);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getWidth / height
     assert(mat.getWidth() == 3);
     assert(mat.getHeight() == 3);
@@ -107,8 +107,8 @@ int testMatrix3x3()
     assert(std::abs(res[0] - 2) <= 0.01);
     assert(std::abs(res[1] - 0.5) <= 0.01);
     assert(std::abs(res[2] - 6) <= 0.01);
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     // =
     mat = mat2;
     assert(mat == mat2);
@@ -155,8 +155,8 @@ int testMatrix3x3()
     // []
     mat3 = Matrix3x3<float>();
     assert(mat3[0][0] == 1 && mat3[1][0] == 0);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

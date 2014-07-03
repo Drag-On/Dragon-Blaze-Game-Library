@@ -21,8 +21,8 @@ using namespace dbgl;
 
 int testVector2()
 {
-    LOG->info("Starting Vector2 test suite...");
-    LOG->info("Constructors... ");
+    LOG.info("Starting Vector2 test suite...");
+    LOG.info("Constructors... ");
     Vector2<float> vec;
     assert(vec[0] == 0);
     assert(vec[1] == 0);
@@ -41,8 +41,8 @@ int testVector2()
     Vector2<double> vec6(23.444, 3.141);
     assert(vec6[0] == 23.444);
     assert(vec6[1] == 3.141);
-    LOG->info("OK!");
-    LOG->info("Methods... ");
+    LOG.info("OK!");
+    LOG.info("Methods... ");
     // getDimension()
     assert(vec.getDimension() == 2);
     // x()
@@ -74,8 +74,8 @@ int testVector2()
     // getDataPointer
     for(unsigned int i = 0; i < test.getDimension(); i++)
     assert(test.getDataPointer()[i] == test[i]);
-    LOG->info("OK!");
-    LOG->info("Operators... ");
+    LOG.info("OK!");
+    LOG.info("Operators... ");
     vec2[0] = -1.5;
     vec2[1] = 3;
     // =
@@ -141,8 +141,8 @@ int testVector2()
     vec3 /= 0.5;
     assert(vec3[0] == -3);
     assert(vec3[1] == 6);
-    LOG->info("OK!");
-    LOG->info("Done!");
+    LOG.info("OK!");
+    LOG.info("Done!");
     return 0;
 }
 

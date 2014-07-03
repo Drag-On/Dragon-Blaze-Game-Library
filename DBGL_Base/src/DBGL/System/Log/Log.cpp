@@ -12,219 +12,98 @@
 
 namespace dbgl
 {
-
     // Init static variables
-    Log* Log::s_pInstance = nullptr;
-    Log::Logger Log::dbg(LOGLEVEL::DBG);
-    Log::Logger Log::inf(LOGLEVEL::INFO);
-    Log::Logger Log::wrn(LOGLEVEL::WARN);
-    Log::Logger Log::err(LOGLEVEL::ERR);
+    Log::Logger Log::dbg(Level::DBG);
+    Log::Logger Log::inf(Level::INFO);
+    Log::Logger Log::wrn(Level::WARN);
+    Log::Logger Log::err(Level::ERR);
 
-    /**
-     * Constructor
-     */
-    Log::Log()
+    Log::Log(std::string filename, bool bashOutput, bool redirectStd)
     {
-	m_logLevel = WARN;
+	m_logLevel = Level::WARN;
+	m_filename = filename;
+	m_bashOutput = bashOutput;
+	m_redirectStd = redirectStd;
 
 	// Get current time
-	const char* time = getCurTime(true);
+	auto time = getCurTime(true);
 
-	writeLog("-----------------\n");
-	writeLog("-----Logfile-----\n");
-	writeLog("-----------------\n");
-	writeLog("%s\n", time);
-	writeLog("-----------------\n");
-
-	delete[] (time);
+	writeLog("#######################################\n");
+	writeLog("## Logfile\n");
+	writeLog("#######################################\n");
+	writeLog("# Date: " + time + "\n");
+	writeLog("# OS: " + getOSDescription() + "\n");
+	writeLog("#######################################\n");
 
 	// Redirect std streams
-	m_pOldCout = std::cout.rdbuf(inf.rdbuf());
-	m_pOldCerr = std::cerr.rdbuf(err.rdbuf());
+	if (m_redirectStd)
+	{
+	    m_pOldCout = std::cout.rdbuf(inf.rdbuf());
+	    m_pOldCerr = std::cerr.rdbuf(err.rdbuf());
+	}
     }
 
-    /**
-     * Destructor
-     */
     Log::~Log()
     {
 	// Restore original std streams
-	std::cout.rdbuf(m_pOldCout);
-	std::cerr.rdbuf(m_pOldCerr);
-    }
-
-    /**
-     * @return Pointer to log object
-     */
-    Log* Log::get()
-    {
-	if (!Log::s_pInstance)
+	if (m_redirectStd)
 	{
-	    Log::s_pInstance = new Log();
-	}
-	return Log::s_pInstance;
-    }
-
-    /**
-     * Free memory of log object
-     */
-    void Log::del()
-    {
-	if (Log::s_pInstance)
-	{
-	    delete (Log::s_pInstance);
-	    Log::s_pInstance = NULL;
+	    std::cout.rdbuf(m_pOldCout);
+	    std::cerr.rdbuf(m_pOldCerr);
 	}
     }
 
-    /**
-     * @brief Set the severity of messages to log
-     * @param lvl Minimum level messages need to have to be logged
-     */
-    void Log::setLogLevel(int lvl)
+    Log& Log::getDefault()
+    {
+	// This ensures lazy loading
+	static Log instance("Logfile.txt", true, true);
+	return instance;
+    }
+
+    void Log::setLogLevel(Level lvl)
     {
 	m_logLevel = lvl;
     }
 
-    /**
-     * @brief Logs messages in case the logger is in debug mode
-     * @param msg Message to log
-     */
-    void Log::debug(const char* msg, ...)
+    void Log::writeLog(std::string msg)
     {
-	if (m_logLevel <= DBG)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    const char* time = getCurTime();
-	    fprintf(stdout, "%s: DEBUG: %s\n", time, buffer);
-	    fflush (stdout);
-
-	    writeLog("%s: DEBUG: %s\n", time, buffer);
-	    delete (time);
-	}
-    }
-
-    /**
-     * @brief Logs messages in case the logger is in info mode or lower
-     * @param msg Message to log
-     */
-    void Log::info(const char* msg, ...)
-    {
-	if (m_logLevel <= INFO)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    const char* time = getCurTime();
-	    fprintf(stdout, "%s: INFO: %s\n", time, buffer);
-	    fflush (stdout);
-
-	    writeLog("%s: INFO: %s\n", time, buffer);
-	    delete (time);
-	}
-    }
-
-    /**
-     * @brief Logs messages in case the logger is in warning mode or lower
-     * @param msg Message to log
-     */
-    void Log::warning(const char* msg, ...)
-    {
-	if (m_logLevel <= WARN)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    const char* time = getCurTime();
-	    fprintf(stderr, "%s: WARNING: %s\n", time, buffer);
-	    fflush (stderr);
-
-	    writeLog("%s: WARNING: %s\n", time, buffer);
-	    delete (time);
-	}
-    }
-
-    /**
-     * @brief Logs messages
-     * @param msg Message to log
-     */
-    void Log::error(const char* msg, ...)
-    {
-	if (m_logLevel <= ERR)
-	{
-	    char buffer[m_maxBuffer]; // Buffer for arguments
-	    va_list pArgList; // List of arguments
-
-	    // Make string from arguments
-	    va_start(pArgList, msg);
-	    vsprintf(buffer, msg, pArgList);
-	    va_end(pArgList);
-
-	    const char* time = getCurTime();
-	    fprintf(stderr, "%s: ERROR: %s\n", time, buffer);
-	    fflush (stderr);
-
-	    writeLog("%s: ERROR: %s\n", time, buffer);
-	    delete (time);
-	}
-    }
-
-    /**
-     * @brief Writes a message to logfile
-     * @param msg Message to write
-     */
-    void Log::writeLog(const char* msg, ...)
-    {
-	char buffer[m_maxBuffer]; // Buffer for arguments
-	va_list pArgList; // List of arguments
-
-	// Make string from arguments
-	va_start(pArgList, msg);
-	vsprintf(buffer, msg, pArgList);
-	va_end(pArgList);
-
-	std::ofstream out("Logfile.txt", std::ios::app);
-	out.write(buffer, strlen(buffer));
+	std::ofstream out(m_filename, std::ios::app);
+	out.write(msg.c_str(), msg.length());
 	out.close();
     }
 
-    /**
-     * @brief Generates a string with current date and time. Needs to be deleted manually!
-     * @param date Flag indicating, if a date string should be appended
-     * @return A string with the current time
-     */
-    const char* Log::getCurTime(bool date)
+    std::string Log::getCurTime(bool date)
     {
-	// Get current time
-	time_t now = time(0);
-	struct tm tstruct;
-	char* buf = new char[80];
-	tstruct = *localtime(&now);
-	if (date)
-	    strftime(buf, 80, "%Y-%m-%d.%X", &tstruct);
-	else
-	    strftime(buf, 80, "%X", &tstruct);
-	return buf;
+	auto now = std::chrono::system_clock::now();
+	auto now_c = std::chrono::system_clock::to_time_t(now);
+
+	char buf[m_maxBuffer];
+	std::strftime(buf, sizeof(buf), date?"%c":"%X", std::localtime(&now_c));
+
+	return std::string(buf);
     }
 
-    Log::Logger::LogBuf::LogBuf(LOGLEVEL loglevel) : m_loglevel(loglevel)
+    std::string Log::getOSDescription()
+    {
+	return OS::getDescripion();
+    }
+
+    void Log::format(std::string& msg, const char* format)
+    {
+	while (*format)
+	{
+	    if (*format == '%')
+	    {
+		if (*(format + 1) == '%')
+		    ++format;
+		else
+		    throw std::runtime_error("Format string invalid. Missing arguments.");
+	    }
+	    msg += *format++;
+	}
+    }
+
+    Log::Logger::LogBuf::LogBuf(Level loglevel) : m_loglevel(loglevel)
     {
     }
 
@@ -237,24 +116,24 @@ namespace dbgl
     {
 	switch(m_loglevel)
 	{
-	    case DBG:
-		LOG->debug(str().c_str());
+	    case Level::DBG:
+		LOG.debug(str().c_str());
 		break;
-	    case INFO:
-		LOG->info(str().c_str());
+	    case Level::INFO:
+		LOG.info(str().c_str());
 		break;
-	    case WARN:
-		LOG->warning(str().c_str());
+	    case Level::WARN:
+		LOG.warning(str().c_str());
 		break;
-	    case ERR:
-		LOG->error(str().c_str());
+	    case Level::ERR:
+		LOG.error(str().c_str());
 		break;
 	}
 	str("");
 	return 0;
     }
 
-    Log::Logger::Logger(LOGLEVEL loglevel) : std::ostream(new LogBuf(loglevel))
+    Log::Logger::Logger(Level loglevel) : std::ostream(new LogBuf(loglevel))
     {
     }
 

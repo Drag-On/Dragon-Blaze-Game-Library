@@ -8,10 +8,14 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef TOOLS_H_
-#define TOOLS_H_
+#ifndef UTILITY_H_
+#define UTILITY_H_
 
 #include <cmath>
+#include <limits>
+#include <iomanip>
+#include <iostream>
+#include <type_traits>
 
 namespace dbgl
 {
@@ -78,19 +82,30 @@ namespace dbgl
      * @param precision How close they need to be
      * @return True in case they are similar, otherwise false
      */
-    bool isSimilar(float a, float b, float precision = 0.01);
+    template<typename T> bool isSimilar(T a, T b, T precision = 0.01);
+    /**
+     * @brief Checks if two values are similar using units in the last place
+     * @param a First value
+     * @param b Second value
+     * @param ulp Units in last place
+     * @return True in case they are similar, otherwise false
+     */
+    template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(
+	    T a, T b, int ulp);
     /**
      * @brief Converts degrees into radians
      * @param degrees Angle to convert
      * @return The angle in radians
      */
-    template<typename T> T toRadians(T degrees);
+    template<typename T> constexpr T toRadians(T degrees);
     /**
      * @brief Converts radians into degrees
      * @param radians Angle to convert
      * @return The angle in degrees
      */
-    template<typename T> T toDegrees(T radians);
+    template<typename T> constexpr T toDegrees(T radians);
 }
 
-#endif /* TOOLS_H_ */
+#include "Utility.imp"
+
+#endif

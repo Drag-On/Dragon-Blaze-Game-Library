@@ -19,13 +19,13 @@ namespace dbgl
 	Mesh* mesh = nullptr;
 	if(!loadData(path, flags))
 	{
-	    LOG->error("Loading file %s failed.", path.c_str());
+	    LOG.error("Loading file % failed.", path.c_str());
 	    return nullptr;
 	}
 	mesh = interpret(flags);
 	if(!mesh)
 	{
-	    LOG->error("Postprocessing of file %s failed.", path.c_str());
+	    LOG.error("Postprocessing of file % failed.", path.c_str());
 	    return nullptr;
 	}
 
@@ -37,8 +37,7 @@ namespace dbgl
 	if (flags.isSet(Mesh::SendToGPU))
 	    mesh->updateBuffers();
 
-	Log::inf << "Loaded model " << path << " with " << mesh->getIndices().size() / 3 << " faces, ";
-	Log::inf << mesh->getVertices().size() << " vertices." << std::flush;
+	LOG.info("Loaded model % with % faces, % vertices.", path.c_str(), mesh->getIndices().size() / 3, mesh->getVertices().size());
 
 	return mesh;
     }
@@ -86,11 +85,11 @@ namespace dbgl
 			coords.push_back(curCoord);
 		    // Everything after the 3rd coordinate will be discarded, so warn
 		    if (coords.size() > 3)
-			LOG->warning("File %s has vertex definitions with more than 3 coordinates", path.c_str());
+			LOG.warning("File % has vertex definitions with more than 3 coordinates", path.c_str());
 		    // If less than 3 coordinates the file is misformatted
 		    else if(coords.size() < 3)
 		    {
-			LOG->error("File %s has vertex definitions with less than 3 coordinates", path.c_str());
+			LOG.error("File % has vertex definitions with less than 3 coordinates", path.c_str());
 			file.close();
 			return false;
 		    }
@@ -106,11 +105,11 @@ namespace dbgl
 			uvs.push_back(curUv);
 		    // Everything after the 3rd coordinate will be discarded, so warn
 		    if (uvs.size() > 3)
-			LOG->warning("File %s has UV definitions with more than 3 coordinates", path.c_str());
+			LOG.warning("File % has UV definitions with more than 3 coordinates", path.c_str());
 		    // If less than 2 coordinates the file is misformatted
 		    else if(uvs.size() < 2)
 		    {
-			LOG->error("File %s has UV definitions with less than 2 coordinates", path.c_str());
+			LOG.error("File % has UV definitions with less than 2 coordinates", path.c_str());
 			file.close();
 			return false;
 		    }
@@ -126,11 +125,11 @@ namespace dbgl
 			normals.push_back(curCoord);
 		    // Everything after the 3rd coordinate will be discarded, so warn
 		    if (normals.size() > 3)
-			LOG->warning("File %s has normal definitions with more than 3 coordinates", path.c_str());
+			LOG.warning("File % has normal definitions with more than 3 coordinates", path.c_str());
 		    // If less than 3 coordinates the file is misformatted
 		    else if(normals.size() < 3)
 		    {
-			LOG->error("File %s has normal definitions with less than 3 coordinates", path.c_str());
+			LOG.error("File % has normal definitions with less than 3 coordinates", path.c_str());
 			file.close();
 			return false;
 		    }
@@ -146,7 +145,7 @@ namespace dbgl
 		    {
 			if (j >= 3)
 			{
-			    LOG->warning("File %s contains polygons with more than 3 vertices", path.c_str());
+			    LOG.warning("File % contains polygons with more than 3 vertices", path.c_str());
 			    break;
 			}
 			std::string curElement;
@@ -178,7 +177,7 @@ namespace dbgl
 				}
 				default:
 				{
-				    LOG->warning("File %s misformatted: more than 3 indices", path.c_str());
+				    LOG.warning("File % misformatted: more than 3 indices", path.c_str());
 				    break;
 				}
 			    }
@@ -201,7 +200,7 @@ namespace dbgl
 	}
 	else
 	{
-	    LOG->warning("File %s not found", path.c_str());
+	    LOG.warning("File % not found", path.c_str());
 	    return false;
 	}
     }
@@ -225,7 +224,7 @@ namespace dbgl
 		else
 		{
 		    // This should never happen
-		    LOG->warning("Misformatted mesh: Vertex index points to non-existent vertex.");
+		    LOG.warning("Misformatted mesh: Vertex index points to non-existent vertex.");
 		    return nullptr;
 		}
 		// Get UV

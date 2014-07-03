@@ -8,22 +8,27 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Math/Utility.h"
-
 namespace dbgl
 {
-    bool isSimilar(float a, float b, float precision)
+    template<typename T> bool isSimilar(T a, T b, T precision)
     {
-	return std::abs(a - b) < precision;
+	return std::abs(a - b) <= precision;
     }
 
-    template<typename T> T toRadians(T degrees)
+    template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(
+	    T a, T b, int ulp)
+    {
+	return std::abs(a - b) <= std::numeric_limits<T>::epsilon() * std::max(std::abs(a), std::abs(b)) * ulp;
+    }
+
+    template<typename T> constexpr T toRadians(T degrees)
     {
 	return degrees * (pi() / 180);
     }
 
-    template<typename T> T toDegrees(T radians)
+    template<typename T> constexpr T toDegrees(T radians)
     {
 	return radians * (180 / pi());
     }
 }
+
