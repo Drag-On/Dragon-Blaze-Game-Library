@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <limits>
+#include <string>
 
 namespace dbgl
 {
@@ -67,15 +68,7 @@ namespace dbgl
 	    /**
 	     * @brief Type of a vertex attribute
 	     */
-	    enum class AttribType : char
-	    {
-		VERTEX = 0,//!< VERTEX
-		NORMAL,    //!< NORMAL
-		UV,        //!< UV
-		TANGENT,   //!< TANGENT
-		BITANGENT, //!< BITANGENT
-		OTHER,     //!< OTHER
-	    };
+	    using AttribId = unsigned int;
 	    /**
 	     * @brief Supported blend modes
 	     */
@@ -136,7 +129,7 @@ namespace dbgl
 	protected:
 	    struct VertexFormat
 	    {
-		AttribType type;
+		AttribId id;
 		unsigned int size;
 		AttribFormat format;
 	    };
@@ -144,7 +137,7 @@ namespace dbgl
 	    /**
 	     * @brief Destructor
 	     */
-	    virtual ~AbstractRenderer() = 0;
+	    virtual ~AbstractRenderer() = default;
 	    /**
 	     * @brief Generates a vertex buffer
 	     * @param size Size of the buffer to create
@@ -189,13 +182,13 @@ namespace dbgl
 	    virtual void fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data) = 0;
 	    /**
 	     * @brief Registers a new vertex format
-	     * @param type Attribute type
+	     * @param id Attribute ID
 	     * @param size Amount of attributes to pass
 	     * @param format Attribute format
 	     * @param offset Offset
 	     * @return Identifier of the newly registered vertex format
 	     */
-	    virtual VertexFormatId regVertexFormat(AttribType type, unsigned int size, AttribFormat format) = 0;
+	    virtual VertexFormatId regVertexFormat(AttribId id, unsigned int size, AttribFormat format) = 0;
 	    /**
 	     * @brief Initializes a vertex buffer to be used on the next draw call
 	     * @param vertBuffer Identifier of the vertex buffer to use

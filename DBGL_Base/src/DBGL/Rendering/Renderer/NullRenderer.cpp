@@ -14,69 +14,69 @@ namespace dbgl
 {
     NullRenderer::~NullRenderer()
     {
-	LOG->debug("Destructing renderer.");
+	LOG.debug("Destructing renderer.");
     }
 
     auto NullRenderer::genVertexBuffer(BufferType type, unsigned int size, const void* /* data */) -> VertexBufferId
     {
-	LOG->debug("Generating vertex buffer of type %d, size %d.", type, size);
+	LOG.debug("Generating vertex buffer of type %, size %.", type==BufferType::STATIC?"Static":"Dynamic", size);
 	return 0;
     }
 
     void NullRenderer::delVertexBuffer(VertexBufferId id)
     {
-	LOG->debug("Deleting vertex buffer %d.", id);
+	LOG.debug("Deleting vertex buffer %.", id);
     }
 
-    void NullRenderer::fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* data)
+    void NullRenderer::fillVertexBuffer(VertexBufferId id, BufferType type, unsigned int size, const void* /*data*/)
     {
-	LOG->debug("Filling vertex buffer %d of type %d and size %d.", id, type, size);
+	LOG.debug("Filling vertex buffer % of type % and size %.", id, type==BufferType::STATIC?"Static":"Dynamic", size);
     }
 
     auto NullRenderer::genIndexBuffer(BufferType type, unsigned int size, const void* /* data */) -> IndexBufferId
     {
-	LOG->debug("Generating index buffer of type %d, size %d.", type, size);
+	LOG.debug("Generating index buffer of type %, size %.", type==BufferType::STATIC?"Static":"Dynamic", size);
 	return 0;
     }
 
     void NullRenderer::delIndexBuffer(IndexBufferId id)
     {
-	LOG->debug("Deleting index buffer %d.", id);
+	LOG.debug("Deleting index buffer %.", id);
     }
 
-    void NullRenderer::fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* data)
+    void NullRenderer::fillIndexBuffer(IndexBufferId id, BufferType type, unsigned int size, const void* /*data*/)
     {
-	LOG->debug("Filling index buffer %d of type %d and size %d.", id, type, size);
+	LOG.debug("Filling index buffer % of type % and size %.", id, type==BufferType::STATIC?"Static":"Dynamic", size);
     }
 
-    auto NullRenderer::regVertexFormat(AttribType type, unsigned int size, AttribFormat format) -> VertexFormatId
+    auto NullRenderer::regVertexFormat(AttribId id, unsigned int size, AttribFormat /*format*/) -> VertexFormatId
     {
-	LOG->debug("Registering vertex format of type %d, size %d, format %d and offset %d.", type, size, format);
+	LOG.debug("Registering vertex format with ID % and size %.", id, size);
 	return 0;
     }
 
-    void NullRenderer::useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat)
+    void NullRenderer::useVertexBuffer(VertexBufferId vertBuffer, VertexFormatId /*vertFormat*/)
     {
-	LOG->debug("Using vertex buffer %d.", vertBuffer);
+	LOG.debug("Using vertex buffer %.", vertBuffer);
     }
 
-    void NullRenderer::endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat)
+    void NullRenderer::endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId /*vertFormat*/)
     {
-	LOG->debug("Ending use of vertex buffer %d.", vertBuffer);
+	LOG.debug("Ending use of vertex buffer %.", vertBuffer);
     }
 
     void NullRenderer::useIndexBuffer(IndexBufferId indexBuffer)
     {
-	LOG->debug("Using index buffer %d.", indexBuffer);
+	LOG.debug("Using index buffer %.", indexBuffer);
     }
 
     void NullRenderer::endUseIndexBuffer(IndexBufferId indexBuffer)
     {
-	LOG->debug("Ending use of index buffer %d.", indexBuffer);
+	LOG.debug("Ending use of index buffer %.", indexBuffer);
     }
 
     void NullRenderer::drawElements(PolygonMode /* mode */)
     {
-	LOG->debug("Drawing elements.");
+	LOG.debug("Drawing elements.");
     }
 }

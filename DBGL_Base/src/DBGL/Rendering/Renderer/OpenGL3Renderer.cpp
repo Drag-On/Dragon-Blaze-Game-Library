@@ -113,10 +113,10 @@ namespace dbgl
 	}
     }
 
-    auto OpenGL3Renderer::regVertexFormat(AttribType type, unsigned int size, AttribFormat format) -> VertexFormatId
+    auto OpenGL3Renderer::regVertexFormat(AttribId id, unsigned int size, AttribFormat format) -> VertexFormatId
     {
 	static VertexFormatId nextId = 0;
-	m_vertexFormats[nextId] = {type, size, format};
+	m_vertexFormats[nextId] = {id, size, format};
 	nextId++;
 	return nextId - 1;
     }
@@ -130,7 +130,7 @@ namespace dbgl
 	    auto format = vertFormatIt->second;
 	    auto vertBuffer = vertBufferIt->second;
 	    auto oGlFormat = convertAttributeFormat(format.format);
-	    GLuint glType = static_cast<GLuint>(format.type);
+	    GLuint glType = static_cast<GLuint>(format.id);
 
 	    glEnableVertexAttribArray(glType);
 	    glBindBuffer(GL_ARRAY_BUFFER, vertBuffer.id);
@@ -149,7 +149,7 @@ namespace dbgl
 	if (vertFormatIt != m_vertexFormats.end())
 	{
 	    auto format = vertFormatIt->second;
-	    GLuint glType = static_cast<GLuint>(format.type);
+	    GLuint glType = static_cast<GLuint>(format.id);
 	    glDisableVertexAttribArray(glType);
 	}
     }
