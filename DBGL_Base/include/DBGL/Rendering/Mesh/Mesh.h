@@ -13,13 +13,13 @@
 
 #include <stdexcept>
 #include <sstream>
-#include <GL/glew.h>
 #include "MeshLoader.h"
 #include "OBJMeshLoader.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/Bitmask/Bitmask.h"
 #include "DBGL/Math/Vector3.h"
 #include "DBGL/Math/Vector2.h"
+#include "DBGL/Rendering/Renderer/Renderer.h"
 
 namespace dbgl
 {
@@ -28,6 +28,19 @@ namespace dbgl
      */
     class Mesh
     {
+	private:
+	    std::vector<unsigned short> m_indices;
+	    Renderer::IndexBufferId m_indexBuffer = Renderer::INVALID_INDEX_BUFFER;
+	    std::vector<Vector3<float>> m_vertices;
+	    Renderer::VertexBufferId m_vertexBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	    std::vector<Vector3<float>> m_normals;
+	    Renderer::VertexBufferId m_normalBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	    std::vector<Vector2<float>> m_uv;
+	    Renderer::VertexBufferId m_uvBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	    std::vector<Vector3<float>> m_tangents;
+	    Renderer::VertexBufferId m_tangentBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	    std::vector<Vector3<float>> m_bitangents;
+	    Renderer::VertexBufferId m_bitangentBuffer = Renderer::INVALID_VERTEX_BUFFER;
 	public:
 	    /**
 	     * @brief File types that can be loaded
@@ -61,51 +74,51 @@ namespace dbgl
 	    /**
 	     * @return A const reference to the indices list
 	     */
-	    std::vector<unsigned short> const& getIndices() const;
+	    auto getIndices() const -> decltype(m_indices) const&;
 	    /**
 	     * @return A const reference to the vertices list
 	     */
-	    std::vector<Vector3<GLfloat>> const& getVertices() const;
+	    auto getVertices() const -> decltype(m_vertices) const&;
 	    /**
 	     * @return A const reference to the normals list
 	     */
-	    std::vector<Vector3<GLfloat>> const& getNormals() const;
+	    auto getNormals() const -> decltype(m_normals) const&;
 	    /**
 	     * @return A const reference to the UVs list
 	     */
-	    std::vector<Vector2<GLfloat>> const& getUVs() const;
+	    auto getUVs() const -> decltype(m_uv) const&;
 	    /**
 	     * @return A const reference to the tangents list
 	     */
-	    std::vector<Vector3<GLfloat>> const& getTangents() const;
+	    auto getTangents() const -> decltype(m_tangents) const&;
 	    /**
 	     * @return A const reference to the bitangents list
 	     */
-	    std::vector<Vector3<GLfloat>> const& getBitangents() const;
+	    auto getBitangents() const -> decltype(m_bitangents) const&;
 	    /**
 	     * @return A reference to the indices list
 	     */
-	    std::vector<unsigned short>& indices();
+	    auto indices() -> decltype(m_indices)&;
 	    /**
 	     * @return A reference to the vertices list
 	     */
-	    std::vector<Vector3<GLfloat>>& vertices();
+	    auto vertices() -> decltype(m_vertices)&;
 	    /**
 	     * @return A reference to the normals list
 	     */
-	    std::vector<Vector3<GLfloat>>& normals();
+	    auto normals() -> decltype(m_normals)&;
 	    /**
 	     * @return A reference to the UVs list
 	     */
-	    std::vector<Vector2<GLfloat>>& uvs();
+	    auto uvs() -> decltype(m_uv)&;
 	    /**
 	     * @return A reference to the tangents list
 	     */
-	    std::vector<Vector3<GLfloat>>& tangents();
+	    auto tangents() -> decltype(m_tangents)&;
 	    /**
 	     * @return A reference to the bitangents list
 	     */
-	    std::vector<Vector3<GLfloat>>& bitangents();
+	    auto bitangents() -> decltype(m_bitangents)&;
 	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
@@ -188,37 +201,6 @@ namespace dbgl
 	     * 		time to finish.
 	     */
 	    void removeVertex(unsigned short i);
-	private:
-	    /**
-	     * @brief Generates a gl buffer
-	     * @return Buffer identifier or GL_INVALID_VALUE if something went wrong
-	     * @warning The generated buffer needs to be deleted using glDeleteBuffers
-	     */
-	    static GLuint generateBuffer();
-	    /**
-	     * @brief Fills a buffer with data
-	     * @param buffer Buffer to fill
-	     * @param target Type of buffer, e.g. GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER
-	     * @param size Buffer size
-	     * @param data Data to store
-	     * @param usage Expected usage, e.g. GL_STATIC_DRAW
-	     * @return Buffer identifier
-	     */
-	    static void fillBuffer(GLuint buffer, GLenum target, GLsizeiptr size,
-		    const GLvoid* data, GLenum usage);
-
-	    std::vector<unsigned short> m_indices;
-	    GLuint m_indexBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> m_vertices;
-	    GLuint m_vertexBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> m_normals;
-	    GLuint m_normalBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector2<GLfloat>> m_uv;
-	    GLuint m_uvBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> m_tangents;
-	    GLuint m_tangentBuffer = GL_INVALID_VALUE;
-	    std::vector<Vector3<GLfloat>> m_bitangents;
-	    GLuint m_bitangentBuffer = GL_INVALID_VALUE;
 
 	    friend class RenderContext;
 	    // So the render context can render

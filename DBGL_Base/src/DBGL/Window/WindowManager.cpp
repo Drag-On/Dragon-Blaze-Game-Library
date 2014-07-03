@@ -68,11 +68,12 @@ namespace dbgl
     WindowManager::WindowManager() : m_pShareWindow(NULL)
     {
 	glfwSetErrorCallback(WindowManager::errorCallback);
+	Renderer::set(new OpenGL3Renderer()); // TODO: Move this to some proper initialization routine
     }
 
     WindowManager::~WindowManager()
     {
-
+	delete Renderer::get();
     }
 
     void WindowManager::errorCallback(int error, const char* description)

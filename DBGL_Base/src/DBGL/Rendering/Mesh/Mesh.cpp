@@ -15,76 +15,76 @@ namespace dbgl
     Mesh::~Mesh()
     {
 	// Properly delete all buffers
-	if (m_indexBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_indexBuffer);
-	if (m_vertexBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_vertexBuffer);
-	if (m_normalBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_normalBuffer);
-	if (m_uvBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_uvBuffer);
-	if (m_tangentBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_tangentBuffer);
-	if (m_bitangentBuffer != GL_INVALID_VALUE)
-	    glDeleteBuffers(1, &m_bitangentBuffer);
+	if (m_indexBuffer != Renderer::INVALID_INDEX_BUFFER)
+	    Renderer::get()->delIndexBuffer(m_indexBuffer);
+	if (m_vertexBuffer != Renderer::INVALID_VERTEX_BUFFER)
+	    Renderer::get()->delVertexBuffer(m_vertexBuffer);
+	if (m_normalBuffer != Renderer::INVALID_VERTEX_BUFFER)
+	    Renderer::get()->delVertexBuffer(m_normalBuffer);
+	if (m_uvBuffer != Renderer::INVALID_VERTEX_BUFFER)
+	    Renderer::get()->delVertexBuffer(m_uvBuffer);
+	if (m_tangentBuffer != Renderer::INVALID_VERTEX_BUFFER)
+	    Renderer::get()->delVertexBuffer(m_tangentBuffer);
+	if (m_bitangentBuffer != Renderer::INVALID_VERTEX_BUFFER)
+	    Renderer::get()->delVertexBuffer(m_bitangentBuffer);
     }
 
-    std::vector<unsigned short> const& Mesh::getIndices() const
+    auto Mesh::getIndices() const -> decltype(m_indices) const&
     {
 	return m_indices;
     }
 
-    std::vector<Vector3<GLfloat>> const& Mesh::getVertices() const
+    auto Mesh::getVertices() const -> decltype(m_vertices) const&
     {
 	return m_vertices;
     }
 
-    std::vector<Vector3<GLfloat>> const& Mesh::getNormals() const
+    auto Mesh::getNormals() const -> decltype(m_normals) const&
     {
 	return m_normals;
     }
 
-    std::vector<Vector2<GLfloat>> const& Mesh::getUVs() const
+    auto Mesh::getUVs() const -> decltype(m_uv) const&
     {
 	return m_uv;
     }
 
-    std::vector<Vector3<GLfloat>> const& Mesh::getTangents() const
+    auto Mesh::getTangents() const -> decltype(m_tangents) const&
     {
 	return m_tangents;
     }
 
-    std::vector<Vector3<GLfloat>> const& Mesh::getBitangents() const
+    auto Mesh::getBitangents() const -> decltype(m_bitangents) const&
     {
 	return m_bitangents;
     }
 
-    std::vector<unsigned short>& Mesh::indices()
+    auto Mesh::indices() -> decltype(m_indices)&
     {
 	return m_indices;
     }
 
-    std::vector<Vector3<GLfloat>>& Mesh::vertices()
+    auto Mesh::vertices() -> decltype(m_vertices)&
     {
 	return m_vertices;
     }
 
-    std::vector<Vector3<GLfloat>>& Mesh::normals()
+    auto Mesh::normals() -> decltype(m_normals)&
     {
 	return m_normals;
     }
 
-    std::vector<Vector2<GLfloat>>& Mesh::uvs()
+    auto Mesh::uvs() -> decltype(m_uv)&
     {
 	return m_uv;
     }
 
-    std::vector<Vector3<GLfloat>>& Mesh::tangents()
+    auto Mesh::tangents() -> decltype(m_tangents)&
     {
 	return m_tangents;
     }
 
-    std::vector<Vector3<GLfloat>>& Mesh::bitangents()
+    auto Mesh::bitangents() -> decltype(m_bitangents)&
     {
 	return m_bitangents;
     }
@@ -354,59 +354,56 @@ namespace dbgl
 
     Mesh::Mesh()
     {
-	m_vertexBuffer = GL_INVALID_VALUE;
-	m_indexBuffer = GL_INVALID_VALUE;
-	m_normalBuffer = GL_INVALID_VALUE;
-	m_uvBuffer = GL_INVALID_VALUE;
+	m_vertexBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	m_indexBuffer = Renderer::INVALID_INDEX_BUFFER;
+	m_normalBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	m_uvBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	m_tangentBuffer = Renderer::INVALID_VERTEX_BUFFER;
+	m_bitangentBuffer = Renderer::INVALID_VERTEX_BUFFER;
     }
 
     void Mesh::updateBuffers()
     {
-	if (m_vertexBuffer == GL_INVALID_VALUE)
-	    m_vertexBuffer = generateBuffer();
-	fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER,
-		m_vertices.size() * sizeof(Vec3f), &m_vertices[0],
-		GL_STATIC_DRAW);
+	if (m_vertexBuffer == Renderer::INVALID_VERTEX_BUFFER)
+	    m_vertexBuffer = Renderer::get()->genVertexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	Renderer::get()->fillVertexBuffer(m_vertexBuffer, Renderer::BufferType::STATIC,
+		m_vertices.size() * sizeof(Vec3f), &m_vertices[0]);
 
-	if (m_indexBuffer == GL_INVALID_VALUE)
-	    m_indexBuffer = generateBuffer();
-	fillBuffer(m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
-		m_indices.size() * sizeof(unsigned short), &m_indices[0],
-		GL_STATIC_DRAW);
+	if (m_indexBuffer == Renderer::INVALID_INDEX_BUFFER)
+	    m_indexBuffer = Renderer::get()->genIndexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	Renderer::get()->fillIndexBuffer(m_indexBuffer, Renderer::BufferType::STATIC,
+		m_indices.size() * sizeof(unsigned short), &m_indices[0]);
 
 	if (m_normals.size() > 0)
 	{
-	    if (m_normalBuffer == GL_INVALID_VALUE)
-		m_normalBuffer = generateBuffer();
-	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER,
-		    m_normals.size() * sizeof(Vec3f), &m_normals[0],
-		    GL_STATIC_DRAW);
+	    if (m_normalBuffer == Renderer::INVALID_VERTEX_BUFFER)
+		m_normalBuffer = Renderer::get()->genVertexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	    Renderer::get()->fillVertexBuffer(m_normalBuffer, Renderer::BufferType::STATIC,
+		    m_normals.size() * sizeof(Vec3f), &m_normals[0]);
 	}
 
 	if (m_uv.size() > 0)
 	{
-	    if (m_uvBuffer == GL_INVALID_VALUE)
-		m_uvBuffer = generateBuffer();
-	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uv.size() * sizeof(Vec2f),
-		    &m_uv[0], GL_STATIC_DRAW);
+	    if (m_uvBuffer == Renderer::INVALID_VERTEX_BUFFER)
+		m_uvBuffer = Renderer::get()->genVertexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	    Renderer::get()->fillVertexBuffer(m_uvBuffer, Renderer::BufferType::STATIC,
+		    m_uv.size() * sizeof(Vec2f), &m_uv[0]);
 	}
 
 	if (m_tangents.size() > 0)
 	{
-	    if (m_tangentBuffer == GL_INVALID_VALUE)
-		m_tangentBuffer = generateBuffer();
-	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER,
-		    m_tangents.size() * sizeof(Vec3f), &m_tangents[0],
-		    GL_STATIC_DRAW);
+	    if (m_tangentBuffer == Renderer::INVALID_VERTEX_BUFFER)
+		m_tangentBuffer = Renderer::get()->genVertexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	    Renderer::get()->fillVertexBuffer(m_tangentBuffer, Renderer::BufferType::STATIC,
+		    m_tangents.size() * sizeof(Vec3f), &m_tangents[0]);
 	}
 
 	if (m_bitangents.size() > 0)
 	{
-	    if (m_bitangentBuffer == GL_INVALID_VALUE)
-		m_bitangentBuffer = generateBuffer();
-	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER,
-		    m_bitangents.size() * sizeof(Vec3f), &m_bitangents[0],
-		    GL_STATIC_DRAW);
+	    if (m_bitangentBuffer == Renderer::INVALID_VERTEX_BUFFER)
+		m_bitangentBuffer = Renderer::get()->genVertexBuffer(Renderer::BufferType::STATIC, 0, nullptr);
+	    Renderer::get()->fillVertexBuffer(m_bitangentBuffer, Renderer::BufferType::STATIC,
+		    m_bitangents.size() * sizeof(Vec3f), &m_bitangents[0]);
 	}
     }
 
@@ -543,20 +540,6 @@ namespace dbgl
 		(*it)--;
 	    }
 	}
-    }
-
-    GLuint Mesh::generateBuffer()
-    {
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	return buffer;
-    }
-
-    void Mesh::fillBuffer(GLuint buffer, GLenum target, GLsizeiptr size,
-	    const GLvoid* data, GLenum usage)
-    {
-	glBindBuffer(target, buffer);
-	glBufferData(target, size, data, usage);
     }
 }
 

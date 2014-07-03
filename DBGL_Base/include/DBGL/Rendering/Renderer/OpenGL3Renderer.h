@@ -13,7 +13,7 @@
 
 #include <GL/glew.h>
 #include <map>
-#include "AbstractRenderer.h"
+#include "Renderer.h"
 #include "NullRenderer.h"
 
 namespace dbgl

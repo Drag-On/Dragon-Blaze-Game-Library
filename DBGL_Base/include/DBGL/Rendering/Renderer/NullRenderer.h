@@ -11,12 +11,12 @@
 #ifndef NULLRENDERER_H_
 #define NULLRENDERER_H_
 
-#include "AbstractRenderer.h"
+#include "Renderer.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
 {
-    class NullRenderer: public AbstractRenderer
+    class NullRenderer: public Renderer
     {
 	public:
 	    virtual ~NullRenderer();

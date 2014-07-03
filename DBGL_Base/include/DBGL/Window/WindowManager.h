@@ -15,6 +15,8 @@
 #include <map>#include <GL/glew.h>#include <GLFW/glfw3.h>
 #include "Window.h"
 #include "DBGL/System/Log/Log.h"
+#include "DBGL/Rendering/Renderer/Renderer.h"
+#include "DBGL/Rendering/Renderer/OpenGL3Renderer.h"
 
 namespace dbgl
 {
