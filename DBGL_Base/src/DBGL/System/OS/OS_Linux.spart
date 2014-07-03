@@ -1,0 +1,28 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief OS dependent namespace for linux
+ * @details sys/utsname.h is included into this namespace
+ */
+namespace OS_Linux
+{
+    #include <sys/utsname.h>
+}
+
+OS::Type OS::getType()
+{
+    OS::Type type;
+
+    type.name = "Linux";
+    // TODO: More detailed description
+    // int uname(struct utsname *buf);
+    return type;
+}
