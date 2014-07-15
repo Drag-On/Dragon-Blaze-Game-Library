@@ -16,6 +16,11 @@ namespace dbgl
 	    unsigned int frameHeight) :
 	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
     {
+	m_verticesFormatId = Renderer::get()->regVertexFormat(0, 3, Renderer::AttribFormat::FLOAT);
+	m_uvFormatId = Renderer::get()->regVertexFormat(1, 2, Renderer::AttribFormat::FLOAT);
+	m_normalsFormatId = Renderer::get()->regVertexFormat(2, 3, Renderer::AttribFormat::FLOAT);
+	m_tangentsFormatId = Renderer::get()->regVertexFormat(3, 3, Renderer::AttribFormat::FLOAT);
+	m_bitangentsFormatId = Renderer::get()->regVertexFormat(4, 3, Renderer::AttribFormat::FLOAT);
     }
 
     RenderContext::~RenderContext()
@@ -38,89 +43,42 @@ namespace dbgl
     {
 	// Bind vertex buffer : 0
 	if (mesh.m_vertices.size() > 0)
-	{
-	    glEnableVertexAttribArray(0);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh.m_vertexBuffer);
-	    glVertexAttribPointer(0,	// attribute
-		    3,			// size
-		    GL_FLOAT,		// type
-		    GL_FALSE,		// normalized?
-		    0,			// stride
-		    (void*) 0);		// offset
-	}
+	    Renderer::get()->useVertexBuffer(mesh.m_vertexBuffer, m_verticesFormatId);
 
 	// Bind UV buffer : 1
 	if (mesh.m_uv.size() > 0)
-	{
-	    glEnableVertexAttribArray(1);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh.m_uvBuffer);
-	    glVertexAttribPointer(1,	// attribute
-		    2,			// size
-		    GL_FLOAT,		// type
-		    GL_FALSE,		// normalized?
-		    0,			// stride
-		    (void*) 0);		// offset
-	}
+	    Renderer::get()->useVertexBuffer(mesh.m_uvBuffer, m_uvFormatId);
 
 	// Bind normal buffer : 2
 	if (mesh.m_normals.size() > 0)
-	{
-	    glEnableVertexAttribArray(2);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh.m_normalBuffer);
-	    glVertexAttribPointer(2,	// attribute
-		    3,			// size
-		    GL_FLOAT,		// type
-		    GL_FALSE,		// normalized?
-		    0,			// stride
-		    (void*) 0);		// offset
-	}
+	    Renderer::get()->useVertexBuffer(mesh.m_normalBuffer, m_normalsFormatId);
 
 	// Bind tangent buffer : 3
 	if (mesh.m_tangents.size() > 0)
-	{
-	    glEnableVertexAttribArray(3);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh.m_tangentBuffer);
-	    glVertexAttribPointer(3,	// attribute
-		    3,			// size
-		    GL_FLOAT,		// type
-		    GL_FALSE,		// normalized?
-		    0,			// stride
-		    (void*) 0);		// offset
-	}
+	    Renderer::get()->useVertexBuffer(mesh.m_tangentBuffer, m_tangentsFormatId);
 
 	// Bind bitangent buffer : 4
 	if (mesh.m_bitangents.size() > 0)
-	{
-	    glEnableVertexAttribArray(4);
-	    glBindBuffer(GL_ARRAY_BUFFER, mesh.m_bitangentBuffer);
-	    glVertexAttribPointer(4,	// attribute
-		    3,			// size
-		    GL_FLOAT,		// type
-		    GL_FALSE,		// normalized?
-		    0,			// stride
-		    (void*) 0);		// offset
-	}
+	    Renderer::get()->useVertexBuffer(mesh.m_bitangentBuffer, m_bitangentsFormatId);
 
 	// Index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.m_indexBuffer);
+	Renderer::get()->useIndexBuffer(mesh.m_indexBuffer);
 
 	// Draw!
-	glDrawElements(GL_TRIANGLES,	// mode
-		mesh.m_indices.size(),	// count
-		GL_UNSIGNED_SHORT,	// type
-		(void*) 0);		// offset
+	Renderer::get()->drawElements(Renderer::PolygonMode::TRIANGLE, mesh.m_indices.size(), Renderer::AttribFormat::SHORT);
 
 	// Disable buffers
 	if (mesh.m_vertices.size() > 0)
-	    glDisableVertexAttribArray(0);
+	    Renderer::get()->endUseVertexBuffer(mesh.m_vertexBuffer, m_verticesFormatId);
 	if (mesh.m_uv.size() > 0)
-	    glDisableVertexAttribArray(1);
+	    Renderer::get()->endUseVertexBuffer(mesh.m_uvBuffer, m_uvFormatId);
 	if (mesh.m_normals.size() > 0)
-	    glDisableVertexAttribArray(2);
+	    Renderer::get()->endUseVertexBuffer(mesh.m_normalBuffer, m_normalsFormatId);
 	if (mesh.m_tangents.size() > 0)
-	    glDisableVertexAttribArray(3);
+	    Renderer::get()->endUseVertexBuffer(mesh.m_tangentBuffer, m_tangentsFormatId);
 	if (mesh.m_bitangents.size() > 0)
-	    glDisableVertexAttribArray(4);
+	    Renderer::get()->endUseVertexBuffer(mesh.m_bitangentBuffer, m_bitangentsFormatId);
+	Renderer::get()->endUseIndexBuffer(mesh.m_indexBuffer);
     }
 
     void RenderContext::preRender()

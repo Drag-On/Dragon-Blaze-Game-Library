@@ -33,10 +33,11 @@ namespace dbgl
 	    virtual void endUseVertexBuffer(VertexBufferId vertBuffer, VertexFormatId vertFormat);
 	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
 	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
-//	    virtual void drawElements(PolygonMode mode);
+	    virtual void drawElements(PolygonMode mode, unsigned int size, AttribFormat format);
 	private:
 	    GLenum convertBufferType(BufferType type);
-	    GLenum convertAttributeFormat(AttribFormat format);
+	    GLenum convertAttributeFormat(AttribFormat format, bool unsign = false);
+	    GLenum convertPolygonMode(PolygonMode mode);
 
 	    struct IndexBuffer
 	    {

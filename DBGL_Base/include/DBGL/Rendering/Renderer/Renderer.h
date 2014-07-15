@@ -231,7 +231,7 @@ namespace dbgl
 	     * @brief Draws elements using the currently used index- and vertex buffers
 	     * @param mode Primitive format used
 	     */
-	    virtual void drawElements(PolygonMode mode) = 0;
+	    virtual void drawElements(PolygonMode mode, unsigned int size, AttribFormat format) = 0;
     };
 }
 

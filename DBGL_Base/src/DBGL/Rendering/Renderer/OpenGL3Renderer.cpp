@@ -168,6 +168,14 @@ namespace dbgl
     {
     }
 
+    void OpenGL3Renderer::drawElements(PolygonMode mode, unsigned int size, AttribFormat format)
+    {
+	glDrawElements(convertPolygonMode(mode),	// mode
+		size,					// count
+		convertAttributeFormat(format, true),	// type
+		(void*) 0);				// offset
+    }
+
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
     {
 	switch(type)
@@ -180,16 +188,32 @@ namespace dbgl
 	return GL_INVALID_ENUM;
     }
 
-    GLenum OpenGL3Renderer::convertAttributeFormat(AttribFormat format)
+    GLenum OpenGL3Renderer::convertAttributeFormat(AttribFormat format, bool unsign)
     {
 	switch(format)
 	{
 	    case AttribFormat::FLOAT:
 		return GL_FLOAT;
 	    case AttribFormat::SHORT:
-		return GL_SHORT;
+		if(unsign)
+		    return GL_UNSIGNED_SHORT;
+		else
+		    return GL_SHORT;
 	    case AttribFormat::BYTE:
-		return GL_BYTE;
+		if(unsign)
+		    return GL_UNSIGNED_BYTE;
+		else
+		    return GL_BYTE;
+	}
+	return GL_INVALID_ENUM;
+    }
+
+    GLenum OpenGL3Renderer::convertPolygonMode(PolygonMode mode)
+    {
+	switch(mode)
+	{
+	    case PolygonMode::TRIANGLE:
+		return GL_TRIANGLES;
 	}
 	return GL_INVALID_ENUM;
     }

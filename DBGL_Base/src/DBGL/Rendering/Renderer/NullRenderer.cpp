@@ -75,8 +75,8 @@ namespace dbgl
 	LOG.debug("Ending use of index buffer %.", indexBuffer);
     }
 
-    void NullRenderer::drawElements(PolygonMode /* mode */)
+    void NullRenderer::drawElements(PolygonMode /* mode */, unsigned int size, AttribFormat /* format */)
     {
-	LOG.debug("Drawing elements.");
+	LOG.debug("Drawing % elements.", size);
     }
 }

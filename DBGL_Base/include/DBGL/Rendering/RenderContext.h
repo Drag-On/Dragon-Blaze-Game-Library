@@ -17,6 +17,7 @@
 #include "Mesh/Mesh.h"
 #include "ShaderProgram.h"
 #include "Texture/Texture.h"
+#include "Renderer/Renderer.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -71,6 +72,12 @@ namespace dbgl
 	     */
 	    unsigned int m_frameHeight;
 	private:
+	    Renderer::VertexFormatId m_verticesFormatId;
+	    Renderer::VertexFormatId m_uvFormatId;
+	    Renderer::VertexFormatId m_normalsFormatId;
+	    Renderer::VertexFormatId m_tangentsFormatId;
+	    Renderer::VertexFormatId m_bitangentsFormatId;
+
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
 	     * 	      been set up accordingly. This method does not touch any matrices,
