@@ -47,6 +47,23 @@ namespace dbgl
 	    using VertexFormatId = unsigned int;
 
 	    /**
+	     * @brief Identifier for textures
+	     */
+	    using TextureBuffer2dId = unsigned int;
+	    /**
+	     * @brief Value for specifying an invalid vertex buffer
+	     */
+	    static constexpr TextureBuffer2dId INVALID_TEXTURE_BUFFER_2D = std::numeric_limits<TextureBuffer2dId>::max();
+	    /**
+	     * @brief Format used by a texture
+	     */
+	    enum class TextureFormat : char
+	    {
+		RGB,//!< RGB
+		BGR,//!< BGR
+	    };
+
+	    /**
 	     * @brief Type of buffer
 	     */
 	    enum class BufferType : char
@@ -232,6 +249,41 @@ namespace dbgl
 	     * @param mode Primitive format used
 	     */
 	    virtual void drawElements(PolygonMode mode, unsigned int size, AttribFormat format) = 0;
+	    /**
+	     * @brief Changes the viewport to a new resolution
+	     * @param width New viewport width
+	     * @param height New viewport height
+	     */
+	    virtual void changeViewport(unsigned int width, unsigned int height) = 0;
+	    /**
+	     * @brief Generates a texture and binds it to the graphics memory
+	     * @param width Texture width
+	     * @param height Texture height
+	     * @param data Actual data in a contiguous block of memory
+	     * @param level Amount of mip levels
+	     * @param texFormat Texture format
+	     * @param format Format of each pixel
+	     * @return ID of the generated texture
+	     */
+	    virtual TextureBuffer2dId genTextureBuffer2d(unsigned int width, unsigned int height, const void* data,
+		    unsigned int level, TextureFormat texFormat, AttribFormat format) = 0;
+	    /**
+	     * @brief Removes the texture with ID \p id from the graphics memory
+	     * @param id ID of the texture to remove
+	     */
+	    virtual void delTextureBuffer2d(TextureBuffer2dId id) = 0;
+	    /**
+	     * @brief Binds a new texture to an already created buffer
+	     * @param id Texture buffer ID
+	     * @param width Texture width
+	     * @param height Texture height
+	     * @param data Actual data in a contiguous block of memory
+	     * @param level Amount of mip levels
+	     * @param texFormat Texture format
+	     * @param format Format of each pixel
+	     */
+	    virtual void fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
+		    const void* data, unsigned int level, TextureFormat texFormat, AttribFormat format) = 0;
     };
 }
 

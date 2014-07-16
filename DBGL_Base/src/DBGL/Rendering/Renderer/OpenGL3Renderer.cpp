@@ -176,6 +176,46 @@ namespace dbgl
 		(void*) 0);				// offset
     }
 
+    void OpenGL3Renderer::changeViewport(unsigned int width, unsigned int height)
+    {
+	glViewport(0, 0, width, height);
+    }
+
+    auto OpenGL3Renderer::genTextureBuffer2d(unsigned int width, unsigned int height, const void* data,
+	    unsigned int level, TextureFormat texFormat, AttribFormat format) -> TextureBuffer2dId
+    {
+	static TextureBuffer2dId nextId = 0;
+	// Create buffer
+	GLuint buffer;
+	glGenTextures(1, &buffer);
+	if (buffer != GL_INVALID_VALUE)
+	{
+	    if (width * height > 0)
+	    {
+		// Fill
+		glBindTexture(GL_TEXTURE_2D, buffer);
+		auto type = convertAttributeFormat(format, true);
+		glTexImage2D(GL_TEXTURE_2D, level, GL_RGB, width, height, 0, convertTextureFormat(texFormat), type, data);
+	    }
+	    // Store mapping between OpenGL identifiers and our identifiers
+	    m_tex2dBuffers[nextId] = buffer;
+	    nextId++;
+	    return nextId - 1;
+	}
+	return INVALID_TEXTURE_BUFFER_2D;
+    }
+
+    void OpenGL3Renderer::delTextureBuffer2d(TextureBuffer2dId id)
+    {
+	LOG.debug("Deleting 2D texture with ID %", id);
+    }
+
+    void OpenGL3Renderer::fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
+	    const void* /* data */, unsigned int level, TextureFormat /* texFormat */, AttribFormat /* format */)
+    {
+	LOG.debug("Filling texture buffer % with a texture of size % x %, mip level %.", id, width, height, level);
+    }
+
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
     {
 	switch(type)
@@ -214,6 +254,18 @@ namespace dbgl
 	{
 	    case PolygonMode::TRIANGLE:
 		return GL_TRIANGLES;
+	}
+	return GL_INVALID_ENUM;
+    }
+
+    GLenum OpenGL3Renderer::convertTextureFormat(TextureFormat format)
+    {
+	switch(format)
+	{
+	    case TextureFormat::BGR:
+		return GL_BGR;
+	    case TextureFormat::RGB:
+		return GL_RGB;
 	}
 	return GL_INVALID_ENUM;
     }

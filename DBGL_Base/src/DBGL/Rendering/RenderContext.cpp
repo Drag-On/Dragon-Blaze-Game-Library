@@ -83,7 +83,7 @@ namespace dbgl
 
     void RenderContext::preRender()
     {
-	glViewport(0, 0, m_frameWidth, m_frameHeight);
+	Renderer::get()->changeViewport(m_frameWidth, m_frameHeight);
     }
 
     void RenderContext::postRender()

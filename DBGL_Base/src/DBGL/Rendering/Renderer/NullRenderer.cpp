@@ -79,4 +79,27 @@ namespace dbgl
     {
 	LOG.debug("Drawing % elements.", size);
     }
+
+    void NullRenderer::changeViewport(unsigned int width, unsigned int height)
+    {
+	LOG.debug("Changing viewport resolution to % x %.", width, height);
+    }
+
+    auto NullRenderer::genTextureBuffer2d(unsigned int width, unsigned int height, const void* /* data */,
+	    unsigned int level, TextureFormat /* texFormat */, AttribFormat /* format */) -> TextureBuffer2dId
+    {
+	LOG.debug("Generating 2D texture of size % x %, mip level %.", width, height, level);
+	return 0;
+    }
+
+    void NullRenderer::delTextureBuffer2d(TextureBuffer2dId id)
+    {
+	LOG.debug("Deleting 2D texture with ID %", id);
+    }
+
+    void NullRenderer::fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
+	    const void* /* data */, unsigned int level, TextureFormat /* texFormat */, AttribFormat /* format */)
+    {
+	LOG.debug("Filling texture buffer % with a texture of size % x %, mip level %.", id, width, height, level);
+    }
 }

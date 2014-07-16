@@ -34,10 +34,17 @@ namespace dbgl
 	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
 	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
 	    virtual void drawElements(PolygonMode mode, unsigned int size, AttribFormat format);
+	    virtual void changeViewport(unsigned int width, unsigned int height);
+	    virtual TextureBuffer2dId genTextureBuffer2d(unsigned int width, unsigned int height, const void* data,
+		    unsigned int level, TextureFormat texFormat, AttribFormat format);
+	    virtual void delTextureBuffer2d(TextureBuffer2dId id);
+	    virtual void fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
+		    const void* data, unsigned int level, TextureFormat texFormat, AttribFormat format);
 	private:
 	    GLenum convertBufferType(BufferType type);
 	    GLenum convertAttributeFormat(AttribFormat format, bool unsign = false);
 	    GLenum convertPolygonMode(PolygonMode mode);
+	    GLenum convertTextureFormat(TextureFormat format);
 
 	    struct IndexBuffer
 	    {
@@ -49,10 +56,12 @@ namespace dbgl
 		    GLuint id;
 		    GLsizei size;
 	    };
+	    using TextureBuffer2d = GLuint;
 
 	    std::map<VertexBufferId, VertexBuffer> m_vertexBuffers;
 	    std::map<IndexBufferId, IndexBuffer> m_indexBuffers;
 	    std::map<VertexFormatId, VertexFormat> m_vertexFormats;
+	    std::map<TextureBuffer2dId, TextureBuffer2d> m_tex2dBuffers;
     };
 }
 

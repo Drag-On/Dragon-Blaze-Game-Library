@@ -32,6 +32,12 @@ namespace dbgl
 	    virtual void useIndexBuffer(IndexBufferId indexBuffer);
 	    virtual void endUseIndexBuffer(IndexBufferId indexBuffer);
 	    virtual void drawElements(PolygonMode mode, unsigned int size, AttribFormat format);
+	    virtual void changeViewport(unsigned int width, unsigned int height);
+	    virtual TextureBuffer2dId genTextureBuffer2d(unsigned int width, unsigned int height, const void* data,
+		    unsigned int level, TextureFormat texFormat, AttribFormat format);
+	    virtual void delTextureBuffer2d(TextureBuffer2dId id);
+	    virtual void fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
+		    const void* data, unsigned int level, TextureFormat texFormat, AttribFormat format);
     };
 }
 

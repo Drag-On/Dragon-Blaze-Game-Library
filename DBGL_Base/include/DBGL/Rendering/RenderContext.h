@@ -11,7 +11,6 @@
 #ifndef RENDERCONTEXT_H_
 #define RENDERCONTEXT_H_
 
-#include <GL/glew.h>
 #include <vector>
 #include <algorithm>
 #include "Mesh/Mesh.h"
