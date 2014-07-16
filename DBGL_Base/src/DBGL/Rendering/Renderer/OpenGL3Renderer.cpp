@@ -48,7 +48,7 @@ namespace dbgl
 	auto it = m_vertexBuffers.find(id);
 	if(it != m_vertexBuffers.end())
 	{
-	    auto glId = it->first;
+	    auto glId = it->second.id;
 	    glDeleteBuffers(1, &glId);
 	    m_vertexBuffers.erase(it);
 	}
@@ -94,7 +94,7 @@ namespace dbgl
 	auto it = m_indexBuffers.find(id);
 	if(it != m_indexBuffers.end())
 	{
-	    auto glId = it->first;
+	    auto glId = it->second.id;
 	    glDeleteBuffers(1, &glId);
 	    m_indexBuffers.erase(it);
 	}
@@ -207,13 +207,27 @@ namespace dbgl
 
     void OpenGL3Renderer::delTextureBuffer2d(TextureBuffer2dId id)
     {
-	LOG.debug("Deleting 2D texture with ID %", id);
+	auto it = m_tex2dBuffers.find(id);
+	if(it != m_tex2dBuffers.end())
+	{
+	    auto glId = it->second;
+	    glDeleteTextures(1, &glId);
+	    m_tex2dBuffers.erase(it);
+	}
     }
 
     void OpenGL3Renderer::fillTextureBuffer2d(TextureBuffer2dId id, unsigned int width, unsigned int height,
-	    const void* /* data */, unsigned int level, TextureFormat /* texFormat */, AttribFormat /* format */)
+	    const void* data, unsigned int level, TextureFormat texFormat, AttribFormat format)
     {
-	LOG.debug("Filling texture buffer % with a texture of size % x %, mip level %.", id, width, height, level);
+	auto it = m_tex2dBuffers.find(id);
+	if(it != m_tex2dBuffers.end())
+	{
+	    auto texID = it->second;
+	    glBindTexture(GL_TEXTURE_2D, texID);
+	    auto type = convertAttributeFormat(format, true);
+	    glTexImage2D(GL_TEXTURE_2D, level, GL_RGB, width, height, 0, convertTextureFormat(texFormat),
+		    type, data);
+	}
     }
 
     GLenum OpenGL3Renderer::convertBufferType(BufferType type)
