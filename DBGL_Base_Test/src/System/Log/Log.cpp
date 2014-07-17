@@ -8,6 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include "cute.h"
 #include "DBGL/System/Log/Log.h"
 
 using namespace dbgl;

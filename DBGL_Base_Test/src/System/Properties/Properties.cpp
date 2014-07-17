@@ -12,7 +12,7 @@
 #define PROPERTIES_CPP_
 
 #include <cstdio>
-#include <cassert>
+#include "cute.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/Properties/Properties.h"
 
@@ -20,15 +20,15 @@ using namespace dbgl;
 
 void testProp(Properties& prop)
 {
-    assert(prop.getStringValue("string") == "foo");
-    assert(prop.getStringValue("string2") == "double declaration   ");
-    assert(prop.getIntValue("int") == 1);
-    assert(prop.getIntValue("int2") == 42);
-    assert(prop.getFloatValue("float") == 3.141f);
-    assert(prop.getFloatValue("float2") == 13.0f);
-    assert(prop.getBoolValue("bool") == true);
-    assert(prop.getBoolValue("bool2") == false);
-    assert(prop.getStringValue("foobar") == "");
+    ASSERT(prop.getStringValue("string") == "foo");
+    ASSERT(prop.getStringValue("string2") == "double declaration   ");
+    ASSERT(prop.getIntValue("int") == 1);
+    ASSERT(prop.getIntValue("int2") == 42);
+    ASSERT(prop.getFloatValue("float") == 3.141f);
+    ASSERT(prop.getFloatValue("float2") == 13.0f);
+    ASSERT(prop.getBoolValue("bool") == true);
+    ASSERT(prop.getBoolValue("bool2") == false);
+    ASSERT(prop.getStringValue("foobar") == "");
 }
 
 int testProperties()
@@ -39,7 +39,7 @@ int testProperties()
     LOG.info("OK!");
     LOG.info("Methods... ");
     // Test if it works without content
-    assert(prop.getStringValue("test") == "");
+    ASSERT(prop.getStringValue("test") == "");
     // Load file
     prop.read("TestProperties.txt");
     // Access methods
@@ -52,13 +52,13 @@ int testProperties()
     prop.write();
     // interpret
     prop.interpret("-foo true -bar string-bar -baz -barbaz -string SURPRISE! error");
-    assert(prop.getBoolValue("foo") == true);
-    assert(prop.getStringValue("bar") == "string-bar");
-    assert(prop.getStringValue("baz") == "-barbaz");
-    assert(prop.getStringValue("string") == "SURPRISE!");
+    ASSERT(prop.getBoolValue("foo") == true);
+    ASSERT(prop.getStringValue("bar") == "string-bar");
+    ASSERT(prop.getStringValue("baz") == "-barbaz");
+    ASSERT(prop.getStringValue("string") == "SURPRISE!");
     LOG.info("OK!");
     LOG.info("Operators... ");
-    assert(prop["string"] == "SURPRISE!");
+    ASSERT(prop["string"] == "SURPRISE!");
     LOG.info("OK!");
     LOG.info("Done!");
     return 0;

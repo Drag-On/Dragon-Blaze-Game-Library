@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include <cassert>
+#include "cute.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/Bitmask/Bitmask.h"
 
@@ -28,46 +28,46 @@ int testBitmask()
     LOG.info("Starting Bitmask test suite...");
     LOG.info("Constructors... ");
     Bitmask<> bitfield1;
-    assert(bitfield1.getSize() == sizeof(int) * CHAR_BIT);
-    assert(!bitfield1.isSet(needCake));
-    assert(!bitfield1.isSet(needCookies));
-    assert(!bitfield1.isSet(needChocolate));
+    ASSERT(bitfield1.getSize() == sizeof(int) * CHAR_BIT);
+    ASSERT(!bitfield1.isSet(needCake));
+    ASSERT(!bitfield1.isSet(needCookies));
+    ASSERT(!bitfield1.isSet(needChocolate));
     Bitmask<> bitfield2(needCookies);
-    assert(bitfield2.getSize() == sizeof(int) * CHAR_BIT);
-    assert(bitfield2.isSet(needCookies));
-    assert(!bitfield2.isSet(needCake));
-    assert(!bitfield2.isSet(needChocolate));
+    ASSERT(bitfield2.getSize() == sizeof(int) * CHAR_BIT);
+    ASSERT(bitfield2.isSet(needCookies));
+    ASSERT(!bitfield2.isSet(needCake));
+    ASSERT(!bitfield2.isSet(needChocolate));
     Bitmask<> bitfield3(bitfield2);
-    assert(bitfield3.getSize() == bitfield2.getSize());
-    assert(bitfield3.isSet(bitfield2));
-    assert(reallyNeedCake(needCake | needChocolate));
+    ASSERT(bitfield3.getSize() == bitfield2.getSize());
+    ASSERT(bitfield3.isSet(bitfield2));
+    ASSERT(reallyNeedCake(needCake | needChocolate));
     Bitmask<char> bitfieldSmall;
     LOG.info("OK!");
     LOG.info("Methods... ");
     // getSize
-    assert(bitfield2.getSize() == sizeof(int) * CHAR_BIT);
-    assert(bitfieldSmall.getSize() == CHAR_BIT);
+    ASSERT(bitfield2.getSize() == sizeof(int) * CHAR_BIT);
+    ASSERT(bitfieldSmall.getSize() == CHAR_BIT);
     // set
     bitfield1.set(needChocolate | needCake);
-    assert(bitfield1.isSet(needChocolate | needCake));
+    ASSERT(bitfield1.isSet(needChocolate | needCake));
     bitfieldSmall.set(important | veryImportant | forgetThis);
-    assert(bitfieldSmall.isSet(important | veryImportant | forgetThis));
+    ASSERT(bitfieldSmall.isSet(important | veryImportant | forgetThis));
     bitfieldSmall.set(1 << 5);
-    assert(bitfieldSmall.isSet(1 << 5));
+    ASSERT(bitfieldSmall.isSet(1 << 5));
     bitfieldSmall.set(needChocolate); // Implicit conversion works as long as it fits
-    assert(bitfieldSmall.isSet(needChocolate));
+    ASSERT(bitfieldSmall.isSet(needChocolate));
     // clear
     bitfield1.clear(needChocolate);
-    assert(!bitfield1.isSet(needChocolate));
+    ASSERT(!bitfield1.isSet(needChocolate));
     bitfieldSmall.clear(forgetThis);
-    assert(!bitfieldSmall.isSet(forgetThis));
+    ASSERT(!bitfieldSmall.isSet(forgetThis));
     // toggle
     bitfield1.toggle(needChocolate | needCookies);
-    assert(bitfield1.isSet(needChocolate | needCookies));
+    ASSERT(bitfield1.isSet(needChocolate | needCookies));
     bitfield1.toggle(needChocolate | needCookies);
-    assert(!bitfield1.isSet(needChocolate | needCookies));
+    ASSERT(!bitfield1.isSet(needChocolate | needCookies));
     bitfieldSmall.toggle(forgetThis);
-    assert(bitfieldSmall.isSet(forgetThis));
+    ASSERT(bitfieldSmall.isSet(forgetThis));
     // toString
     LOG.info("bitfield1: %", bitfield1.toString());
     LOG.info("bitfield2: %", bitfield2.toString());
@@ -76,7 +76,7 @@ int testBitmask()
     LOG.info("OK!");
     LOG.info("Operators... ");
     unsigned int foo = bitfield1;
-    assert(foo | bitfield1);
+    ASSERT(foo | bitfield1);
     LOG.info("OK!");
     LOG.info("Done!");
     return 0;

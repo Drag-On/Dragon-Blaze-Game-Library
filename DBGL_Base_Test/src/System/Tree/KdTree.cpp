@@ -8,6 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include "cute.h"
 #include <vector>
 #include "DBGL/System/Tree/KdTree.h"
 #include "DBGL/System/Tree/AbstractTreeVisitor.h"
@@ -67,10 +68,10 @@ void checkResult(std::vector<typename KdTree<int, Vec2f>::Container> result, std
 	if(it == needed.end())
 	{
 	    LOG.error("Item % was returned wrongly.", item.data);
-	    assert(false);
+	    ASSERT(false);
 	}
     }
-    assert(result.size() == needed.size());
+    ASSERT(result.size() == needed.size());
 }
 
 int testKdTree()
@@ -88,13 +89,13 @@ int testKdTree()
     };
     KdTree<int, Vec2f> tree2(data.begin(), data.end());
     auto copy(tree2);
-    assert(*copy.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
-    assert(copy.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
+    ASSERT(*copy.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
+    ASSERT(copy.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
     auto move = std::move(copy);
-    assert(*move.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
-    assert(move.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
-    assert(copy.get(Vec2f(0,0)) == nullptr);
-    assert(copy.size() == 0);
+    ASSERT(*move.get(Vec2f(0,0)) == *tree2.get(Vec2f(0,0)));
+    ASSERT(move.get(Vec2f(0,0)) != tree2.get(Vec2f(0,0)));
+    ASSERT(copy.get(Vec2f(0,0)) == nullptr);
+    ASSERT(copy.size() == 0);
     std::vector<typename KdTree<int, Rectangle<float>>::Container> volumdata = {
 	    {Rectangle<float>(Vec2f(0, 0), Vec2f(0.5f, 0.5f)), 0},
 	    {Rectangle<float>(Vec2f(-0.5f, 1), Vec2f(0.5f, 1)), 1},
@@ -105,68 +106,68 @@ int testKdTree()
     LOG.info("OK!");
     LOG.info("Methods... ");
     // size
-    assert(tree.size() == 0);
-    assert(tree2.size() == data.size());
+    ASSERT(tree.size() == 0);
+    ASSERT(tree2.size() == data.size());
     // get
-    assert(tree.get(Vec2f()) == nullptr);
-    assert(*tree2.get(Vec2f()) == 0);
-    assert(*tree2.get(Vec2f(1, 0)) == 1);
-    assert(*tree2.get(Vec2f(-1, 1)) == 2);
-    assert(*tree2.get(Vec2f(0.5f, -0.5f)) == 3);
-    assert(*tree2.get(Vec2f(0.75f, 0.5f)) == 4);
-    assert(*tree2.get(Vec2f(-0.5f, -0.5f)) == 5);
-    assert(tree2.get(Vec2f(300, 0)) == nullptr);
+    ASSERT(tree.get(Vec2f()) == nullptr);
+    ASSERT(*tree2.get(Vec2f()) == 0);
+    ASSERT(*tree2.get(Vec2f(1, 0)) == 1);
+    ASSERT(*tree2.get(Vec2f(-1, 1)) == 2);
+    ASSERT(*tree2.get(Vec2f(0.5f, -0.5f)) == 3);
+    ASSERT(*tree2.get(Vec2f(0.75f, 0.5f)) == 4);
+    ASSERT(*tree2.get(Vec2f(-0.5f, -0.5f)) == 5);
+    ASSERT(tree2.get(Vec2f(300, 0)) == nullptr);
     // getSimilar
-    assert(tree.getSimilar(Vec2f()) == nullptr);
-    assert(*tree2.getSimilar(Vec2f()) == 0);
-    assert(*tree2.getSimilar(Vec2f(1.00001, 0)) == 1);
-    assert(*tree2.getSimilar(Vec2f(-1, 1.000134)) == 2);
-    assert(*tree2.getSimilar(Vec2f(0.5f, -0.5f)) == 3);
-    assert(*tree2.getSimilar(Vec2f(0.75023f, 0.5f)) == 4);
-    assert(*tree2.getSimilar(Vec2f(-0.5f, -0.5f)) == 5);
-    assert(tree2.getSimilar(Vec2f(300, 0)) == nullptr);
-    assert(*tree2.getSimilar(Vec2f(300, 0), 299.1) == 1);
+    ASSERT(tree.getSimilar(Vec2f()) == nullptr);
+    ASSERT(*tree2.getSimilar(Vec2f()) == 0);
+    ASSERT(*tree2.getSimilar(Vec2f(1.00001, 0)) == 1);
+    ASSERT(*tree2.getSimilar(Vec2f(-1, 1.000134)) == 2);
+    ASSERT(*tree2.getSimilar(Vec2f(0.5f, -0.5f)) == 3);
+    ASSERT(*tree2.getSimilar(Vec2f(0.75023f, 0.5f)) == 4);
+    ASSERT(*tree2.getSimilar(Vec2f(-0.5f, -0.5f)) == 5);
+    ASSERT(tree2.getSimilar(Vec2f(300, 0)) == nullptr);
+    ASSERT(*tree2.getSimilar(Vec2f(300, 0), 299.1) == 1);
     // insert
     tree.insert(Vec2f(), 300);
     tree.insert(Vec2f(-1, 0), 42);
     tree.insert(Vec2f(-0.5f, 0), 23);
-    assert(tree.size() == 3);
-    assert(*tree.get(Vec2f()) == 300);
-    assert(*tree.get(Vec2f(-1, 0)) == 42);
-    assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
-    assert(tree.get(Vec2f(42, 42)) == nullptr);
+    ASSERT(tree.size() == 3);
+    ASSERT(*tree.get(Vec2f()) == 300);
+    ASSERT(*tree.get(Vec2f(-1, 0)) == 42);
+    ASSERT(*tree.get(Vec2f(-0.5f, 0)) == 23);
+    ASSERT(tree.get(Vec2f(42, 42)) == nullptr);
     // remove
-    assert(tree.remove(Vec2f(42, 42)) == false);
-    assert(tree.size() == 3);
-    assert(tree.remove(Vec2f()) == true);
-    assert(tree.size() == 2);
-    assert(*tree.get(Vec2f(-1, 0)) == 42);
-    assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
-    assert(tree.get(Vec2f()) == nullptr);
+    ASSERT(tree.remove(Vec2f(42, 42)) == false);
+    ASSERT(tree.size() == 3);
+    ASSERT(tree.remove(Vec2f()) == true);
+    ASSERT(tree.size() == 2);
+    ASSERT(*tree.get(Vec2f(-1, 0)) == 42);
+    ASSERT(*tree.get(Vec2f(-0.5f, 0)) == 23);
+    ASSERT(tree.get(Vec2f()) == nullptr);
     // balance
     tree.balance();
-    assert(tree.size() == 2);
-    assert(*tree.get(Vec2f(-1, 0)) == 42);
-    assert(*tree.get(Vec2f(-0.5f, 0)) == 23);
+    ASSERT(tree.size() == 2);
+    ASSERT(*tree.get(Vec2f(-1, 0)) == 42);
+    ASSERT(*tree.get(Vec2f(-0.5f, 0)) == 23);
     // findNearestNeighbor
     Vec2f neighbor;
     int neighborData;
     tree2.findNearestNeighbor(Vec2f(0.25f, 0.25f), neighbor, neighborData);
-    assert(neighborData == 0);
+    ASSERT(neighborData == 0);
     tree2.findNearestNeighbor(Vec2f(), neighbor, neighborData);
-    assert(neighborData == 0);
+    ASSERT(neighborData == 0);
     tree2.findNearestNeighbor(Vec2f(0.5f, 0.5f), neighbor, neighborData);
-    assert(neighborData == 4);
+    ASSERT(neighborData == 4);
     tree2.findNearestNeighbor(Vec2f(-1, 0), neighbor, neighborData);
-    assert(neighborData == 5);
+    ASSERT(neighborData == 5);
     tree2.findNearestNeighbor(Vec2f(-2, 100), neighbor, neighborData);
-    assert(neighborData == 2);
+    ASSERT(neighborData == 2);
     tree2.findNearestNeighbor(Vec2f(1.5f, 0.5f), neighbor, neighborData);
-    assert(neighborData == 1);
+    ASSERT(neighborData == 1);
     tree2.findNearestNeighbor(Vec2f(0.5f, -0.5f), neighbor, neighborData);
-    assert(neighborData == 3);
+    ASSERT(neighborData == 3);
     tree2.findNearestNeighbor(Vec2f(0.5f, 0), neighbor, neighborData);
-    assert(neighborData == 0 || neighborData == 3 || neighborData == 1);
+    ASSERT(neighborData == 0 || neighborData == 3 || neighborData == 1);
     // findKNearestNeighbors
     std::vector<typename KdTree<int, Vec2f>::Container> list;
     tree2.findKNearestNeighbors(Vec2f(0.5f, 0), 3, list);
@@ -216,16 +217,16 @@ int testKdTree()
     checkResult(list, {});
     // getAll
     auto allNodes = tree2.getAll();
-    assert(allNodes.size() == tree2.size());
+    ASSERT(allNodes.size() == tree2.size());
     allNodes = tree.getAll();
-    assert(allNodes.size() == tree.size());
+    ASSERT(allNodes.size() == tree.size());
     // clear
     tree.clear();
     tree2.clear();
-    assert(tree.size() == 0);
-    assert(tree2.size() == 0);
-    assert(tree.get(Vec2f(-1, 0)) == nullptr);
-    assert(tree.get(Vec2f(-0.5f, 0)) == nullptr);
+    ASSERT(tree.size() == 0);
+    ASSERT(tree2.size() == 0);
+    ASSERT(tree.get(Vec2f(-1, 0)) == nullptr);
+    ASSERT(tree.get(Vec2f(-0.5f, 0)) == nullptr);
     // Visitor pattern
     KdTreePrintVisitor1 visitor;
     LOG.info("Tree1:");
