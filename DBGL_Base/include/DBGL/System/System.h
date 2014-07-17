@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "DBGL/System/DBGLApplication.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/Window/WindowManager.h"
 
@@ -23,6 +24,11 @@ namespace dbgl
      * @brief Sets up DBGL
      */
     void initialize();
+    /**
+     * @brief Sets up DBGL
+     * @param app Pointer to instance of a class derived from DBGLApplication
+     */
+    void initialize(DBGLApplication* app);
     /**
      * @brief Terminates DBGL and frees some remaining memory
      */

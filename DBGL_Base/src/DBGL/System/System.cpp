@@ -12,6 +12,11 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Used if a DBGLApplication is passed to initialize()
+     */
+    static DBGLApplication* pApp = nullptr;
+
     void initialize()
     {
 	// Initialize GLFW
@@ -22,8 +27,18 @@ namespace dbgl
 	}
     }
 
+    void initialize(DBGLApplication* app)
+    {
+	initialize();
+	app->init();
+	pApp = app;
+    }
+
     void terminate()
     {
+	if(pApp != nullptr)
+	    pApp->terminate();
+
 	// Terminate windows
 	WindowManager::get()->terminate();
     }
