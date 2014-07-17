@@ -53,7 +53,7 @@ namespace dbgl
 	
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeRotation(T angle)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -65,14 +65,14 @@ namespace dbgl
 	
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T factor)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		mat *= factor;
 		return mat;
 	}
 	
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T x, T y)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		mat[0][0] *= x;
 		mat[1][1] *= y;
 		return mat;

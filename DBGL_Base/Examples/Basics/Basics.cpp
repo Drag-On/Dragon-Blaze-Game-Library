@@ -22,15 +22,15 @@
 
 using namespace dbgl;
 
-Mesh* pMesh;
-ShaderProgram* pShader;
-Texture* pTexture;
-Camera* pCam;
-Mat4f view, projection;
+Mesh* pMesh = nullptr;
+ShaderProgram* pShader = nullptr;
+Texture* pTexture = nullptr;
+Camera* pCam = nullptr;
+Mat4f view{}, projection{};
 
 void inputCallback(Window::InputEventArgs const& args)
 {
-    std::string whatHappened;
+    std::string whatHappened = "";
     if(args.input.isPressed(args.key))
 	whatHappened = "has been pressed";
     else if(args.input.isReleased(args.key))
@@ -95,7 +95,7 @@ int main()
     pWnd->init();
     // Add a camera
     Vec3f direction = Vec3f(1, -2.5, -3);
-    pCam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(1, 0, 0).cross(direction), pi_4(), 0.1, 10);
+    pCam = new Camera { Vec3f(-1, 2, 3), direction, Vec3f(1, 0, 0).cross(direction), pi_4(), 0.1, 10 };
     // Calculate model and view matrix
     view = Mat4f::makeView(pCam->position(),
 	    pCam->rotation() * Vec3f(0, 0, 1), pCam->rotation() * Vec3f(0, 1, 0));

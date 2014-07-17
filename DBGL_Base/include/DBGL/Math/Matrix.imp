@@ -45,7 +45,7 @@ namespace dbgl
 	
 	template<typename T, unsigned int N, unsigned int M> Matrix<T,M,N> Matrix<T,N,M>::getTransposed() const
 	{
-		Matrix<T,M,N> transposed;
+		Matrix<T,M,N> transposed{};
 		for(int x = 0; x < getWidth(); x++)
 			for(int y = 0; y < getHeight(); y++)
 				transposed[y][x] = (*this)[x][y];
@@ -118,7 +118,7 @@ namespace dbgl
 	
 	template<typename T, unsigned int N, unsigned int M> template <unsigned int O> const Matrix<T,M,O> Matrix<T,N,M>::operator*(Matrix<T,O,N> const& rhs) const
 	{
-		Matrix<T,M,O> mat;
+		Matrix<T,M,O> mat{};
 		for(int x = 0; x < M; x++)
 			for(int y = 0; y < O; y++)
 			{
@@ -131,7 +131,7 @@ namespace dbgl
 	
 	template<typename T, unsigned int N, unsigned int M> const Vector<T,M> Matrix<T,N,M>::operator*(Vector<T,N> const& rhs) const
 	{
-		Vector<T,M> vec;
+		Vector<T,M> vec{};
 		for(int y = 0; y < getHeight(); y++)
 			for(int x = 0; x < getWidth(); x++)
 				vec[y] += (*this)[x][y] * rhs[x];

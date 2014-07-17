@@ -26,14 +26,14 @@
 
 using namespace dbgl;
 
-Window* pWnd;
-Mesh* pMeshPyramid;
-Mesh* pMeshBox;
-Mesh* pMeshIco;
-ShaderProgram* pShader;
-Texture* pTexture;
-Camera* pCam;
-Mat4f view, projection;
+Window* pWnd = nullptr;
+Mesh* pMeshPyramid = nullptr;
+Mesh* pMeshBox = nullptr;
+Mesh* pMeshIco = nullptr;
+ShaderProgram* pShader = nullptr;
+Texture* pTexture = nullptr;
+Camera* pCam = nullptr;
+Mat4f view{}, projection{};
 float mouseSpeed = 1.5, moveSpeed = 2.5;
 
 void scrollCallback(Window::ScrollEventArgs const& args)
@@ -57,7 +57,7 @@ void updateCallback(Window::UpdateEventArgs const& args)
     auto deltaTime = args.deltaTime;
 
     // Update mouse
-    double x, y;
+    double x=0, y=0;
     pWnd->getCursorPos(x, y);
     float horizontal = deltaTime * mouseSpeed
 	    * float(pWnd->getFrameWidth() / 2 - x);
@@ -150,8 +150,8 @@ int main()
     pWnd->init();
     // Add a camera
     Vec3f direction = Vec3f(6, -2, 0);
-    pCam = new Camera(Vec3f(-1, 2, 3), Vec3f(6, -2, 0), Vec3f(0, 0, 1).cross(direction), pi_4(),
-	    0.1, 100);
+    pCam = new Camera {Vec3f(-1, 2, 3), Vec3f(6, -2, 0), Vec3f(0, 0, 1).cross(direction), pi_4(),
+	    0.1, 100};
     view = Mat4f::makeView(pCam->position(),
     	    pCam->rotation() * Vec3f(0, 0, 1), pCam->rotation() * Vec3f(0, 1, 0));
     projection = Mat4f::makeProjection(pCam->getFieldOfView(),

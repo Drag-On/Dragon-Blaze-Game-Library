@@ -37,7 +37,7 @@ namespace dbgl
 	    DelegateType, EventArgs>::DelegatePtr Event<DelegateType, EventArgs>::addListener(
 	    DelegateType listener)
     {
-		DelegatePtr ptr(new DelegateType(listener));
+		DelegatePtr ptr(new DelegateType{listener});
 		m_delegates.insert(ptr);
 		return ptr;
     }

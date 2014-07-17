@@ -37,7 +37,7 @@ namespace dbgl
 
 	template<typename T, unsigned int N> Vector<T,N>::Vector(int n, ...)
 	{
-		va_list args;
+		va_list args{};
 		va_start(args, n);
 		
 		for (int i = 0; i < n && i < getDimension(); i++)
@@ -62,7 +62,7 @@ namespace dbgl
 	
 	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
 	{
-		va_list args;
+		va_list args{};
 		va_start(args, n);
 		
 		for (int i = 0; i < n && i < getDimension(); i++)
@@ -87,7 +87,7 @@ namespace dbgl
 	
 	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
 	{
-		va_list args;
+		va_list args{};
 		va_start(args, n);
 		
 		for (int i = 0; i < n && i < getDimension(); i++)
@@ -112,7 +112,7 @@ namespace dbgl
 	
 	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
 	{
-		va_list args;
+		va_list args{};
 		va_start(args, n);
 		
 		for (int i = 0; i < n && i < getDimension(); i++)

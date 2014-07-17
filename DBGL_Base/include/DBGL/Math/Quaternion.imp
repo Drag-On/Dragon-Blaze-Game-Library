@@ -121,7 +121,7 @@ namespace dbgl
 		dest.normalize();
 	 
 		float cosTheta = start * dest;
-		Vector3<T> axis;
+		Vector3<T> axis{};
 	 
 		// Check if vectors are in opposite direction
 		if (cosTheta == -1)
@@ -188,7 +188,7 @@ namespace dbgl
     
     template <typename T> Matrix4x4<T> Quaternion<T>::getMatrix() const
 	{   	
-    	Matrix4x4<T> mat;
+    	Matrix4x4<T> mat{};
 	    mat[0][0] = 1 - 2 * y() * y() - 2 * z() * z();
 	    mat[0][1] = 2 * x() * y() + 2 * w() * z();
 	    mat[0][2] = 2 * x() * z() - 2 * w() * y();
@@ -203,7 +203,7 @@ namespace dbgl
     
     template <typename T> Vector3<T> Quaternion<T>::getAngles() const
 	{
-		Vector3<T> angles;
+		Vector3<T> angles{};
 		angles[0] = atan2(2 * (y() * z() + w() * x()),
 				w() * w() - x() * x() - y() * y() + z() * z());
 		angles[1] = asin(-2 * (x() * z() - w() * y()));
@@ -382,7 +382,7 @@ namespace dbgl
     
     template <typename T> const Vector3<T> Quaternion<T>::operator*(Vector3<T> const& rhs) const
 	{
-    	Vector3<T> cross1, cross2;
+    	Vector3<T> cross1{}, cross2{};
 		auto quatVec = Vector3<T>(x(), y(), z());
 		cross1 = quatVec.cross(rhs);
 		cross2 = quatVec.cross(cross1);

@@ -25,17 +25,19 @@
 
 using namespace dbgl;
 
-Window* pWnd;
-Mesh* pMeshPyramid, *pMeshBox, *pMeshIco, *pMeshPlane, *pMeshSphere, *pMeshPillar;
-ShaderProgram* pShaderDiffSpec, *pShaderNorm, *pShaderNoLight;
-Texture* pTexBricks, *pTexBricksNormal, *pTexBricksSpecular, *pTexWhite, *pTexMarble, *pTexMarbleNormal, *pTexMarbleSpecular;
-Camera* pCam;
-Mat4f view, projection;
+Window* pWnd = nullptr;
+Mesh* pMeshPyramid = nullptr, *pMeshBox = nullptr, *pMeshIco = nullptr, *pMeshPlane = nullptr, *pMeshSphere =
+	nullptr, *pMeshPillar = nullptr;
+ShaderProgram* pShaderDiffSpec = nullptr, *pShaderNorm = nullptr, *pShaderNoLight = nullptr;
+Texture* pTexBricks = nullptr, *pTexBricksNormal = nullptr, *pTexBricksSpecular = nullptr, *pTexWhite =
+	nullptr, *pTexMarble = nullptr, *pTexMarbleNormal = nullptr, *pTexMarbleSpecular = nullptr;
+Camera* pCam = nullptr;
+Mat4f view{}, projection{};
 Vec3f light1Pos = Vec3f(0, 3, 3), lightColor = Vec3f(1.0f, 0.5f, 0.0f) * 15; // Orange
 Vec3f light2Pos = Vec3f(1, 2, 4.5f), light2Color = Vec3f(0.5f, 0.5f, 1.0f) * 25; // Blue-ish
-Vec3f light1Offset, light2Offset; // For movement of light
+Vec3f light1Offset{}, light2Offset{}; // For movement of light
 Vec3f matSpecular = Vec3f(0.1, 0.1, 0.2);
-float mouseSpeed = 3.0f, moveSpeed = 2.5;
+float mouseSpeed = 3.0f, moveSpeed = 2.5f;
 float icoAngle = 0;
 
 void scrollCallback(Window::ScrollEventArgs const& args)
@@ -59,7 +61,7 @@ void updateCallback(Window::UpdateEventArgs const& args)
     auto deltaTime = args.deltaTime;
 
     // Update mouse
-    double x, y;
+    double x = 0, y = 0;
     pWnd->getCursorPos(x, y);
     double horizontal = deltaTime * mouseSpeed
 	    * (pWnd->getFrameWidth() / 2.0 - x);
@@ -103,7 +105,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     auto rc = args.rc;
 
     // We'll need some matrices later on
-    Mat4f model, mv, mvp;
+    Mat4f model{}, mv{}, mvp{};
 
     // Real position of the lights
     Vec3f light1RealPos = light1Pos + light1Offset;
@@ -287,8 +289,8 @@ int main()
     pWnd->init();
     // Add a camera
     Vec3f direction = Vec3f(6, -2, 0);
-    pCam = new Camera(Vec3f(-1, 2, 3), direction, Vec3f(0, 0, 1).cross(direction), pi_4(),
-	    0.1, 100);
+    pCam = new Camera {Vec3f(-1, 2, 3), direction, Vec3f(0, 0, 1).cross(direction), pi_4(),
+	    0.1, 100};
     // Load meshes, shader and texture
     pMeshPyramid = Mesh::makePyramid(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pMeshBox = Mesh::makeCube(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
@@ -296,9 +298,9 @@ int main()
     pMeshIco = Mesh::load(Mesh::OBJ,"../common/Icosahedron.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pMeshSphere = Mesh::load(Mesh::OBJ,"../common/Sphere.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     pMeshPillar = Mesh::load(Mesh::OBJ, "../common/Pillar.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
-    pShaderNoLight = new ShaderProgram("../common/NoLight.vert", "../common/NoLight.frag");
-    pShaderDiffSpec = new ShaderProgram("../common/DiffSpec.vert", "../common/DiffSpec.frag");
-    pShaderNorm = new ShaderProgram("../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag");
+    pShaderNoLight = new ShaderProgram {"../common/NoLight.vert", "../common/NoLight.frag"};
+    pShaderDiffSpec = new ShaderProgram{"../common/DiffSpec.vert", "../common/DiffSpec.frag"};
+    pShaderNorm = new ShaderProgram{"../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag"};
     pTexBricks = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
     pTexBricksNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
     pTexBricksSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");

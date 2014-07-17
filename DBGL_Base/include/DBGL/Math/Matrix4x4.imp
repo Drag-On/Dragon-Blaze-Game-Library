@@ -177,7 +177,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeTranslation(T x, T y, T z)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat[3][0] = x;
 		mat[3][1] = y;
 		mat[3][2] = z;
@@ -186,7 +186,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeTranslation(Vector3<T> translation)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat[3][0] = translation.x();
 		mat[3][1] = translation.y();
 		mat[3][2] = translation.z();
@@ -195,7 +195,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationX(T angle)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[1][1] = cosAngle;
@@ -207,7 +207,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationY(T angle)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -219,7 +219,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotationZ(T angle)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -237,7 +237,7 @@ namespace dbgl
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeRotation(Vector3<T> vec, T angle)
 	{
 		vec.normalize();
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = vec[0] * vec[0] * (1 - cosAngle) + cosAngle;
@@ -254,7 +254,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T factor)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat[0][0] = factor;
 		mat[1][1] = factor;
 		mat[2][2] = factor;
@@ -264,7 +264,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(T x, T y, T z)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat[0][0] = x;
 		mat[1][1] = y;
 		mat[2][2] = z;
@@ -274,7 +274,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeScale(Vector3<T> scale)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat[0][0] = scale.x();
 		mat[1][1] = scale.y();
 		mat[2][2] = scale.z();
@@ -284,7 +284,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeView(Vector3<T> const& pos, Vector3<T> const& direction, Vector3<T> const& up)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat.view(pos, direction, up);
 		return mat;
 	}
@@ -315,7 +315,7 @@ namespace dbgl
 	
 	template<typename T> Matrix4x4<T> Matrix4x4<T>::makeProjection(T fieldOfView, T aspectRatio, T near, T far)
 	{
-		Matrix4x4<T> mat;
+		Matrix4x4<T> mat{};
 		mat.projection(fieldOfView, aspectRatio, near, far);
 		return mat;
 	}

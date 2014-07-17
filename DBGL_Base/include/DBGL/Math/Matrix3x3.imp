@@ -60,7 +60,7 @@ namespace dbgl
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotationX(T angle)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[1][1] = cosAngle;
@@ -72,7 +72,7 @@ namespace dbgl
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotationY(T angle)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -84,7 +84,7 @@ namespace dbgl
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotationZ(T angle)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = cosAngle;
@@ -102,7 +102,7 @@ namespace dbgl
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotation(Vector3<T> vec, T angle)
 	{
 		vec.normalize();
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		T cosAngle = cos(angle);
 		T sinAngle = sin(angle);
 		mat[0][0] = vec[0] * vec[0] * (1 - cosAngle) + cosAngle;
@@ -119,14 +119,14 @@ namespace dbgl
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeScale(T factor)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		mat *= factor;
 		return mat;
 	}
 	
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeScale(T x, T y, T z)
 	{
-		BaseMatrixType mat;
+		BaseMatrixType mat{};
 		mat[0][0] *= x;
 		mat[1][1] *= y;
 		mat[2][2] *= z;

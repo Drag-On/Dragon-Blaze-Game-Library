@@ -69,7 +69,7 @@ namespace dbgl
 
     template<typename Data, typename Point> auto KdTree<Data, Point>::copyNode(Node& node) const -> Node*
     {
-	Node* pNewNode = new Node();
+	Node* pNewNode = new Node {};
 	pNewNode->point = node.point;
 	pNewNode->data = node.data;
 	if (node.leftChild != nullptr)
@@ -201,7 +201,7 @@ namespace dbgl
 	    insert(point, data, *m_pRoot, 0);
 	else
 	{
-	    m_pRoot = new Node();
+	    m_pRoot = new Node {};
 	    m_pRoot->point = point;
 	    m_pRoot->data = data;
 	}
@@ -215,7 +215,7 @@ namespace dbgl
 	// Check if we can insert here
 	if (point[axis] <= node.point[axis] && node.leftChild == nullptr)
 	{
-	    node.leftChild = new Node();
+	    node.leftChild = new Node {};
 	    node.leftChild->point = point;
 	    node.leftChild->data = data;
 	    node.leftChild->parent = &node;
@@ -223,7 +223,7 @@ namespace dbgl
 	}
 	else if (point[axis] > node.point[axis] && node.rightChild == nullptr)
 	{
-	    node.rightChild = new Node();
+	    node.rightChild = new Node {};
 	    node.rightChild->point = point;
 	    node.rightChild->data = data;
 	    node.rightChild->parent = &node;
@@ -239,7 +239,7 @@ namespace dbgl
     template<typename Data, typename Point> bool KdTree<Data, Point>::remove(Point const& point)
     {
 	// Check if the node to delete exists
-	unsigned int level;
+	unsigned int level {};
 	auto node2Delete = searchFor(point, m_pRoot, 0, &level);
 	if (node2Delete == nullptr)
 	    return false;
@@ -266,7 +266,7 @@ namespace dbgl
     template<typename Data, typename Point> auto KdTree<Data, Point>::getAllChildren(
 	    Node const& node) const -> std::vector<Container>
     {
-	std::vector<Container> list;
+	std::vector<Container> list {};
 	if (node.leftChild != nullptr)
 	    getAllNodes(*node.leftChild, list);
 	if (node.rightChild != nullptr)
@@ -310,7 +310,7 @@ namespace dbgl
     template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(Point const& point,
 	    Point& nearest, Data& data) const
     {
-	NearestNeighbor curBest;
+	NearestNeighbor curBest {};
 	findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
 	nearest = curBest.pNode->point;
 	data = curBest.pNode->data;
@@ -376,7 +376,7 @@ namespace dbgl
 	if (k > size())
 	    k = size();
 
-	std::vector<NearestNeighbor> curBest;
+	std::vector<NearestNeighbor> curBest {};
 	findKNearestNeighbors(point, k, *m_pRoot, curBest, true, 0);
 	for (auto nn : curBest)
 	    nearest.push_back( { nn.pNode->point, nn.pNode->data });
@@ -421,7 +421,7 @@ namespace dbgl
 		}
 		else
 		{
-		    NearestNeighbor nn;
+		    NearestNeighbor nn {};
 		    nn.pNode = &node;
 		    nn.sqDist = (point - node.point).getSquaredLength();
 		    currentBest.push_back(nn);
@@ -434,7 +434,7 @@ namespace dbgl
 	auto sqLengthCur = (point - node.point).getSquaredLength();
 	if (currentBest.size() < k)
 	{
-	    NearestNeighbor nn;
+	    NearestNeighbor nn {};
 	    nn.pNode = &node;
 	    nn.sqDist = sqLengthCur;
 	    currentBest.push_back(nn);

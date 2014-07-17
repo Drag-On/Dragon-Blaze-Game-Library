@@ -96,11 +96,11 @@ namespace dbgl
 		    ++format;
 		else
 		{
-		    std::stringstream stream;
+		    std::stringstream stream{};
 		    if (*(format + 1) == '{')
 		    {
 			// Precision specifier
-			std::stringstream precisionStream;
+			std::stringstream precisionStream{};
 			std::string precisionString(format + 2);
 			auto end = precisionString.find('}');
 			if(end == std::string::npos)
