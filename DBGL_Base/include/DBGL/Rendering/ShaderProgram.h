@@ -12,9 +12,8 @@
 #define SHADERPROGRAM_H_
 
 #include <map>
+#include <string>
 #include <GL/glew.h>
-#include <stdlib.h>
-#include <string.h>
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -42,7 +41,7 @@ namespace dbgl
 		ITMV,        //!< ITMV
 		TEX_DIFFUSE, //!< TEX_DIFFUSE
 		TEX_NORMAL,  //!< TEX_NORMAL
-		TEX_SPECULAR,//!< TEX_SPECULAR
+		TEX_SPECULAR,  //!< TEX_SPECULAR
 		COLOR,       //!< COLOR
 		BOGUS,       //!< BOGUS
 	    };
@@ -53,8 +52,7 @@ namespace dbgl
 	     * @param frag Code of the fragment shader
 	     * @param isFiles Indicates, if vert and frag contain only paths of files that contain the code
 	     */
-	    ShaderProgram(const char* vert, const char* frag, bool isFiles =
-		    true);
+	    ShaderProgram(const std::string vert, const std::string frag, bool isFiles = true);
 
 	    /**
 	     * Destructor
@@ -71,14 +69,14 @@ namespace dbgl
 	     * @param name Name of the shader attribute
 	     * @return The attributes id
 	     */
-	    GLint getAttributeHandle(const char* name) const;
+	    GLint getAttributeHandle(const std::string name) const;
 
 	    /**
 	     * @brief Returns the handle for a shader uniform by it's name
 	     * @param name Name of the shader uniform
 	     * @return The uniform id
 	     */
-	    GLint getUniformHandle(const char* name) const;
+	    GLint getUniformHandle(const std::string name) const;
 
 	    /**
 	     * @brief Binds a texture to a certain texture location
@@ -108,7 +106,6 @@ namespace dbgl
 	     * @param value New value
 	     */
 	    void setUniformFloat3(GLint handle, const float value[3]) const;
-
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -179,8 +176,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatArray(GLint handle, unsigned int count,
-		    const float* values) const;
+	    void setUniformFloatArray(GLint handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -188,8 +184,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat2Array(GLint handle, unsigned int count,
-		    const float* values) const;
+	    void setUniformFloat2Array(GLint handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -197,8 +192,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat3Array(GLint handle, unsigned int count,
-		    const float* values) const;
+	    void setUniformFloat3Array(GLint handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -206,8 +200,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat4Array(GLint handle, unsigned int count,
-		    const float* values) const;
+	    void setUniformFloat4Array(GLint handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -215,8 +208,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformIntArray(GLint handle, unsigned int count,
-		    const int* values) const;
+	    void setUniformIntArray(GLint handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -224,8 +216,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt2Array(GLint handle, unsigned int count,
-		    const int* values) const;
+	    void setUniformInt2Array(GLint handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -233,8 +224,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt3Array(GLint handle, unsigned int count,
-		    const int* values) const;
+	    void setUniformInt3Array(GLint handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -242,8 +232,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt4Array(GLint handle, unsigned int count,
-		    const int* values) const;
+	    void setUniformInt4Array(GLint handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -252,8 +241,8 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix2Array(GLint handle, unsigned int count,
-		    bool transpose, const float* values) const;
+	    void setUniformFloatMatrix2Array(GLint handle, unsigned int count, bool transpose,
+		    const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -262,8 +251,8 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix3Array(GLint handle, unsigned int count,
-		    bool transpose, const float* values) const;
+	    void setUniformFloatMatrix3Array(GLint handle, unsigned int count, bool transpose,
+		    const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -272,8 +261,8 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix4Array(GLint handle, unsigned int count,
-		    bool transpose, const float* values) const;
+	    void setUniformFloatMatrix4Array(GLint handle, unsigned int count, bool transpose,
+		    const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -332,7 +321,7 @@ namespace dbgl
 	     * @param path Path of the file to read
 	     * @return Content of the read file
 	     */
-	    std::string readFile(const char* path);
+	    std::string readFile(const std::string path);
 
 	    /**
 	     * @brief Prints the output of a shader compile process to LOG
@@ -348,8 +337,7 @@ namespace dbgl
 	     * @param fileName Name of the file if the shader is compiled from a file
 	     * @return The compiled shader or 0 in case something went wrong
 	     */
-	    GLuint compile(const char* code, GLenum type, const char* fileName =
-		    "");
+	    GLuint compile(const std::string code, GLenum type, const std::string fileName = "");
     };
 }
 

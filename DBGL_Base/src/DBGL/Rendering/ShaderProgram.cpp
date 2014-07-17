@@ -12,11 +12,10 @@
 
 namespace dbgl
 {
-    ShaderProgram::ShaderProgram(const char* vert, const char* frag,
-	    bool isFiles)
+    ShaderProgram::ShaderProgram(const std::string vert, const std::string frag, bool isFiles)
     {
 	LOG.info("Creating shader program...");
-	std::string vertCode, fragCode;
+	std::string vertCode = "", fragCode = "";
 	if (isFiles)
 	{
 	    // Read vertex shader code from file
@@ -32,9 +31,9 @@ namespace dbgl
 	}
 
 	// Compile shaders
-	GLuint vsId, fsId;
-	const char* vertFileName = isFiles ? vert : "";
-	const char* fragFileName = isFiles ? frag : "";
+	GLuint vsId = 0, fsId = 0;
+	const std::string vertFileName = isFiles ? vert : "";
+	const std::string fragFileName = isFiles ? frag : "";
 	vsId = compile(vertCode.c_str(), GL_VERTEX_SHADER, vertFileName);
 	fsId = compile(fragCode.c_str(), GL_FRAGMENT_SHADER, fragFileName);
 
@@ -67,14 +66,14 @@ namespace dbgl
 	glUseProgram(_shaderProgram);
     }
 
-    GLint ShaderProgram::getAttributeHandle(const char* name) const
+    GLint ShaderProgram::getAttributeHandle(const std::string name) const
     {
-	return glGetAttribLocation(_shaderProgram, name);
+	return glGetAttribLocation(_shaderProgram, name.c_str());
     }
 
-    GLint ShaderProgram::getUniformHandle(const char* name) const
+    GLint ShaderProgram::getUniformHandle(const std::string name) const
     {
-	return glGetUniformLocation(_shaderProgram, name);
+	return glGetUniformLocation(_shaderProgram, name.c_str());
     }
 
     void ShaderProgram::bindTexture(int texLocation, int texType, GLuint texHandle) const
@@ -229,7 +228,7 @@ namespace dbgl
 
     ShaderProgram* ShaderProgram::createSimpleShader()
     {
-	const char* vertexShader = "#version 330 core\n"
+	const std::string vertexShader = "#version 330 core\n"
 		"layout(location = 0) in vec3 vertexPos;\n"
 		"layout(location = 1) in vec2 vertexUV;\n"
 		"layout(location = 2) in vec3 normal;\n"
@@ -242,7 +241,7 @@ namespace dbgl
 		"uv = vertexUV;\n"
 		"normal_cam = normalize((ITMV * vec4(normal, 0)).xyz);\n"
 		"}";
-	const char* fragmentShader = "#version 330 core\n"
+	const std::string fragmentShader = "#version 330 core\n"
 		"in vec3 normal_cam;\n"
 		"in vec2 uv;\n"
 		"out vec3 color;\n"
@@ -252,12 +251,12 @@ namespace dbgl
 		"variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));\n"
 		"color = texture(tex_diffuse, uv).rgb * variance;\n"
 		"}";
-	return new ShaderProgram(vertexShader, fragmentShader, false);
+	return new ShaderProgram { vertexShader, fragmentShader, false };
     }
 
     ShaderProgram* ShaderProgram::createSimpleColorShader()
         {
-    	const char* vertexShader = "#version 330 core\n"
+    	const std::string vertexShader = "#version 330 core\n"
     		"layout(location = 0) in vec3 vertexPos;\n"
     		"layout(location = 2) in vec3 normal;\n"
     		"out vec3 normal_cam;\n"
@@ -267,7 +266,7 @@ namespace dbgl
     		"gl_Position = MVP * vec4(vertexPos, 1);\n"
     		"normal_cam = normalize((ITMV * vec4(normal, 0)).xyz);\n"
     		"}";
-    	const char* fragmentShader = "#version 330 core\n"
+    	const std::string fragmentShader = "#version 330 core\n"
     		"in vec3 normal_cam;\n"
     		"out vec3 color;\n"
     		"uniform vec3 v3_color;\n"
@@ -276,7 +275,7 @@ namespace dbgl
     		"variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));\n"
     		"color = v3_color * variance;\n"
     		"}";
-    	return new ShaderProgram(vertexShader, fragmentShader, false);
+	return new ShaderProgram { vertexShader, fragmentShader, false };
         }
 
     void ShaderProgram::checkUniforms()
@@ -288,15 +287,15 @@ namespace dbgl
 	    Uniform uniform = static_cast<Uniform>(val);
 	    auto foo = uniformNames.find(uniform);
 	    std::string name = foo->second;
-	    const char* nameCstr = name.c_str();
+	    const std::string nameCstr = name.c_str();
 	    GLint handle = getUniformHandle(nameCstr);
 	    _uniformHandles[uniform] = handle;
 	}
     }
 
-    std::string ShaderProgram::readFile(const char* path)
+    std::string ShaderProgram::readFile(const std::string path)
     {
-	std::string code;
+	std::string code = "";
 	std::ifstream inStream(path, std::ios::in);
 	if (inStream.is_open())
 	{
@@ -327,7 +326,7 @@ namespace dbgl
 	}
 	if (logLength > 0)
 	{
-	    char* msg = new char[logLength];
+	    char* msg = new char[logLength] {};
 
 	    // Get actual log
 	    if (glIsShader(object))
@@ -340,16 +339,17 @@ namespace dbgl
 
 	    if (ok)
 		LOG.info(msg);
-		else
+	    else
 		LOG.error(msg);
-	    delete (msg);
+
+	    delete [] msg;
 	}
     }
 
-    GLuint ShaderProgram::compile(const char* code, GLenum type,
-	    const char* fileName)
+    GLuint ShaderProgram::compile(const std::string code, GLenum type,
+	    const std::string fileName)
     {
-	if (code == NULL)
+	if (code.length() == 0)
 	{
 	    LOG.error("Error compiling NULL shader");
 	    return -1;
@@ -359,7 +359,8 @@ namespace dbgl
 	GLuint id = glCreateShader(type);
 
 	// Compile
-	glShaderSource(id, 1, &code , NULL);
+	const char* codePtr = code.c_str();
+	glShaderSource(id, 1, &codePtr, NULL);
 	glCompileShader(id);
 
 	// Check if everything went right
