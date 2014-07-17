@@ -11,10 +11,8 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include <stdlib.h>
 #include <string>
 #include <functional>
-#include <set>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "DBGL/Math/Vector3.h"
@@ -746,11 +744,13 @@ namespace dbgl
 	    /**
 	     * GLFW window handle
 	     */
-	    GLFWwindow* m_pWndHandle = NULL;
+	    GLFWwindow* m_pWndHandle = nullptr;
+// TODO: Use GLEW MX for support of multiple windows
+//	    GLEWContext* m_pGlewContext = nullptr;
 	    /**
 	     * @brief Render context
 	     */
-	    RenderContext* m_pRenderContext = NULL;
+	    RenderContext* m_pRenderContext = nullptr;
 
 	private:
 	    CloseEventType m_closeCallbacks;

@@ -10,6 +10,7 @@
 
 #include <functional>
 #include <cmath>
+#include "DBGL/System/System.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/Bitmask/Bitmask.h"
 #include "DBGL/Window/WindowManager.h"
@@ -144,6 +145,8 @@ void renderCallback(Window::RenderEventArgs const& args)
 int main()
 {
     LOG.setLogLevel(Log::Level::DBG);
+    // Init
+    dbgl::initialize();
     // Create window
     pWnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
@@ -183,7 +186,7 @@ int main()
     delete pCam;
     // delete pWnd; // No need for this as windows will delete themselves when closed
     // Free remaining internal resources
-    WindowManager::get()->terminate();
+    dbgl::terminate();
     return 0;
 }
 

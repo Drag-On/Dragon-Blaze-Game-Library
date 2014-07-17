@@ -14,12 +14,6 @@ namespace dbgl
 {
     Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen)
     {
-	if (!glfwInit())
-	{
-	    LOG.error("Failed to initialize GLFW!");
-	    exit(EXIT_FAILURE);
-	}
-
 	m_title = title;
 	if(fullscreen)
 	{
@@ -50,14 +44,13 @@ namespace dbgl
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 	if(fullscreen)
-	m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
+	    m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
-	m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
+	    m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
 	if (!m_pWndHandle)
 	{
 	    LOG.error("Failed to create new window!");
 	    glfwTerminate();
-	    exit(EXIT_FAILURE);
 	}
 
 	m_windowedX = getX();
@@ -75,6 +68,7 @@ namespace dbgl
 	if (glewInit() != GLEW_OK)
 	{
 	    LOG.error("Failed to initialize GLEW!");
+	    glfwTerminate();
 	    exit(EXIT_FAILURE);
 	}
     }
