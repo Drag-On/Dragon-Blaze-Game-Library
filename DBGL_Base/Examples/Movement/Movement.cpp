@@ -173,9 +173,9 @@ int main()
     // Show window
     pWnd->show();
     // Run update loop
-    while (WindowManager::get()->isRunning())
+    while (dbgl::isRunning())
     {
-	WindowManager::get()->update();
+	dbgl::update();
     }
     // Clean up
     delete pMeshPyramid;

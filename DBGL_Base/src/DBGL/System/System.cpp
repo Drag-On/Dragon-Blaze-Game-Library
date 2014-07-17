@@ -27,4 +27,14 @@ namespace dbgl
 	// Terminate windows
 	WindowManager::get()->terminate();
     }
+
+    bool isRunning()
+    {
+	return WindowManager::get()->isRunning();
+    }
+
+    void update()
+    {
+	WindowManager::get()->update();
+    }
 }

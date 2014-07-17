@@ -27,6 +27,15 @@ namespace dbgl
      * @brief Terminates DBGL and frees some remaining memory
      */
     void terminate();
+    /**
+     * @brief Checks if dbgl is up and running
+     * @return true in case everything is allright, otherwise false
+     */
+    bool isRunning();
+    /**
+     * @brief Updates everything within dbgl. Every call equals one "frame"
+     */
+    void update();
 }
 
 #endif /* SYSTEM_H_ */
