@@ -26,7 +26,7 @@ namespace dbgl
 	     * @param scale Initial scale
 	     * @param rot Initial rotation
 	     */
-	    TransformComponent(Vec3f pos = {}, Vec3f scale = {}, QuatF rot = {});
+	    TransformComponent(Vec3f pos = {0.0f, 0.0f, 0.0f}, Vec3f scale = {1.0f, 1.0f, 1.0f}, QuatF rot = {0.0f, 0.0f, 0.0f, 1.0f});
 	    /**
 	     * @return Reference to position
 	     */
