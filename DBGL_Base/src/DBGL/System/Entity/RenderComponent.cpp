@@ -52,8 +52,8 @@ namespace dbgl
 	auto scale = transform->scale();
 	auto pShader = m_pMaterial->getShader();
 	auto cam = m_pEnvironment->getCamera();
-	auto frameWidth = rc->getWidth();
-	auto frameHeight = rc->getHeight();
+	float frameWidth = rc->getWidth();
+	float frameHeight = rc->getHeight();
 
 	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
 	Mat4f itmMat = modelMat.getInverted().transpose();
