@@ -20,10 +20,10 @@
 #include <algorithm>
 #include "DBGL/System/Log/Log.h"
 
-class RenderContext;
-
 namespace dbgl
 {
+    class RenderContext;
+
     /**
      * @brief Game entity which can hold components of different types
      */
