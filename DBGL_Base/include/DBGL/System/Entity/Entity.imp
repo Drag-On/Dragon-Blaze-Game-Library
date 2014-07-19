@@ -8,21 +8,21 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Rendering/Material/Material.h"
 
 namespace dbgl
 {
-    Material::Material(ShaderProgram& shaderProgram) : m_pShaderProgram(&shaderProgram)
+
+    template<class T> std::shared_ptr<T> Entity::getComponent()
     {
+	std::type_index index(typeid(T));
+	if (m_components.count(index) != 0)
+	{
+	    return std::static_pointer_cast<T>(m_components[index]);
+	}
+	else
+	{
+	    return std::shared_ptr<T> {};
+	}
     }
 
-    void Material::prepare()
-    {
-	m_pShaderProgram->use();
-    }
-
-    ShaderProgram* Material::getShader() const
-    {
-	return m_pShaderProgram;
-    }
 }

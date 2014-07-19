@@ -52,6 +52,16 @@ namespace dbgl
 	     * @param height New height of the framebuffer
 	     */
 	    void changeSize(unsigned int width, unsigned int height);
+	    /**
+	     * @brief Provides the render width
+	     * @return Width of the render context
+	     */
+	    unsigned int getWidth() const;
+	    /**
+	     * @brief Provides the render height
+	     * @return Height of the render context
+	     */
+	    unsigned int getHeight() const;
 	protected:
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame

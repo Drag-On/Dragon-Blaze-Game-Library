@@ -8,21 +8,17 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Rendering/Material/Material.h"
+#include "DBGL/Rendering/Environment/Environment.h"
 
 namespace dbgl
 {
-    Material::Material(ShaderProgram& shaderProgram) : m_pShaderProgram(&shaderProgram)
+    Environment::Environment(Camera& cam) : m_pCamera(&cam)
     {
+
     }
 
-    void Material::prepare()
+    Camera* Environment::getCamera() const
     {
-	m_pShaderProgram->use();
-    }
-
-    ShaderProgram* Material::getShader() const
-    {
-	return m_pShaderProgram;
+	return m_pCamera;
     }
 }

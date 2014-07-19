@@ -51,19 +51,6 @@ namespace dbgl
 	return false;
     }
 
-    template<class T> std::shared_ptr<T> Entity::getComponent()
-    {
-	std::type_index index(typeid(T));
-	if (m_components.count(index) != 0)
-	{
-	    return std::static_pointer_cast<T>(m_components[index]);
-	}
-	else
-	{
-	    return std::shared_ptr<T> {};
-	}
-    }
-
     void Entity::update(double deltaTime)
     {
 	for (auto it = m_updateComponents.begin(); it != m_updateComponents.end(); ++it)

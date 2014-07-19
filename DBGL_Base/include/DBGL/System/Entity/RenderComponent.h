@@ -11,10 +11,13 @@
 #ifndef RENDERCOMPONENT_H_
 #define RENDERCOMPONENT_H_
 
+#include <memory>
 #include "Entity.h"
+#include "TransformComponent.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Rendering/Material/Material.h"
 #include "DBGL/Rendering/Mesh/Mesh.h"
+#include "DBGL/Rendering/Environment/Environment.h"
 
 namespace dbgl
 {
@@ -23,8 +26,11 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Initializes this render component
+	     * @param mesh Mesh to render
+	     * @param mat Material to use
+	     * @param env Environment to use for rendering
 	     */
-	    RenderComponent(Mesh& mesh, Material& mat);
+	    RenderComponent(Mesh& mesh, Material& mat, Environment& env);
 	    /**
 	     * @brief Updates this component
 	     * @param deltaTime Time since last update
@@ -46,8 +52,11 @@ namespace dbgl
 	     */
 	    virtual bool needRender() const = 0;
 	private:
+	    void prepareMatrices(TransformComponent* transform, RenderContext const* rc);
+
 	    Mesh* m_pMesh;
 	    Material* m_pMaterial;
+	    Environment* m_pEnvironment;
     };
 }
 

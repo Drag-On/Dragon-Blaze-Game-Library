@@ -104,7 +104,7 @@ namespace dbgl
 	if (m_pRenderContext != NULL)
 	    delete m_pRenderContext;
 
-	m_pRenderContext = new RenderContext { getFrameWidth(), getFrameHeight() };
+	m_pRenderContext = new RenderContext { (unsigned int) getFrameWidth(), (unsigned int) getFrameHeight() };
     }
 
     void Window::init(Bitmask<> options)

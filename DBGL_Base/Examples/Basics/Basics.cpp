@@ -18,7 +18,7 @@
 #include "DBGL/Rendering/Mesh/Mesh.h"
 #include "DBGL/Rendering/ShaderProgram.h"
 #include "DBGL/Rendering/Texture/Texture.h"
-#include "DBGL/Rendering/Camera.h"
+#include "DBGL/Rendering/Environment/Camera.h"
 #include "DBGL/Math/Utility.h"
 
 using namespace dbgl;

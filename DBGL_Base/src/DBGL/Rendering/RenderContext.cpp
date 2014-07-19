@@ -12,8 +12,7 @@
 
 namespace dbgl
 {
-    RenderContext::RenderContext(unsigned int frameWidth,
-	    unsigned int frameHeight) :
+    RenderContext::RenderContext(unsigned int frameWidth, unsigned int frameHeight) :
 	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
     {
     }
@@ -32,6 +31,16 @@ namespace dbgl
     {
 	m_frameWidth = width;
 	m_frameHeight = height;
+    }
+
+    unsigned int RenderContext::getWidth() const
+    {
+	return m_frameWidth;
+    }
+
+    unsigned int RenderContext::getHeight() const
+    {
+	return m_frameHeight;
     }
 
     void RenderContext::renderMesh(Mesh const& mesh) const

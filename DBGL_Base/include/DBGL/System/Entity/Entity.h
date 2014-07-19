@@ -115,6 +115,6 @@ namespace dbgl
     };
 }
 
-
+#include "Entity.imp"
 
 #endif /* ENTITY_H_ */
