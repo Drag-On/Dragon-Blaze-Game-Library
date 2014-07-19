@@ -21,7 +21,7 @@
 
 namespace dbgl
 {
-    class RenderComponent : Entity::Component
+    class RenderComponent : public Entity::Component
     {
 	public:
 	    /**
