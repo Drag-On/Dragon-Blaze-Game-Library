@@ -21,6 +21,8 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/Movement"
 				 "${PROJECT_BINARY_DIR}/Movement")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Shader"
 				 "${PROJECT_BINARY_DIR}/Shader")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Entities"
+				 "${PROJECT_BINARY_DIR}/Entities")
 				 
 ######################################################################
 ### Copy common resource folder
