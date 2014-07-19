@@ -12,19 +12,19 @@
 
 namespace dbgl
 {
-    void RenderComponent::init()
+    RenderComponent::RenderComponent(Mesh& mesh, Material& mat) : m_pMesh(&mesh), m_pMaterial(&mat)
     {
-	//TODO: TBD
     }
 
-    void RenderComponent::update(Entity* owner, double deltaTime)
+    void RenderComponent::update(Entity* /* owner */, double /* deltaTime */)
     {
-	//TODO: TBD
+	// No update needed
     }
 
     void RenderComponent::render(Entity* /* owner */, RenderContext const* rc)
     {
-	//TODO: TBD
+	m_pMaterial->prepare();
+	rc->draw(*m_pMesh);
     }
 
     bool RenderComponent::needUpdate() const

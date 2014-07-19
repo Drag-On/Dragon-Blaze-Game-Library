@@ -13,6 +13,8 @@
 
 #include "Entity.h"
 #include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Rendering/Material/Material.h"
+#include "DBGL/Rendering/Mesh/Mesh.h"
 
 namespace dbgl
 {
@@ -22,7 +24,7 @@ namespace dbgl
 	    /**
 	     * @brief Initializes this render component
 	     */
-	    void init(); // TODO: Take render info like shader, texture ...
+	    RenderComponent(Mesh& mesh, Material& mat);
 	    /**
 	     * @brief Updates this component
 	     * @param deltaTime Time since last update
@@ -44,6 +46,8 @@ namespace dbgl
 	     */
 	    virtual bool needRender() const = 0;
 	private:
+	    Mesh* m_pMesh;
+	    Material* m_pMaterial;
     };
 }
 

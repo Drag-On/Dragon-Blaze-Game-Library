@@ -20,8 +20,6 @@
 #include <algorithm>
 #include "DBGL/System/Log/Log.h"
 
-class TransformComponent;
-class RenderComponent;
 class RenderContext;
 
 namespace dbgl

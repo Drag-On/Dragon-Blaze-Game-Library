@@ -12,11 +12,8 @@
 
 namespace dbgl
 {
-    void TransformComponent::init(Vec3f pos, Vec3f scale, QuatF rot)
+    TransformComponent::TransformComponent(Vec3f pos, Vec3f scale, QuatF rot) : m_position(pos), m_scale(scale), m_rotation(rot)
     {
-	m_position = pos;
-	m_scale = scale;
-	m_rotation = rot;
     }
 
     Vec3f& TransformComponent::position()
