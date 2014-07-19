@@ -104,7 +104,7 @@ namespace dbgl
 	if (m_pRenderContext != NULL)
 	    delete m_pRenderContext;
 
-	m_pRenderContext = new RenderContext(getFrameWidth(), getFrameHeight());
+	m_pRenderContext = new RenderContext { getFrameWidth(), getFrameHeight() };
     }
 
     void Window::init(Bitmask<> options)
@@ -190,14 +190,14 @@ namespace dbgl
 
     int Window::getWidth() const
     {
-	int width, height;
+	int width {}, height {};
 	glfwGetWindowSize(m_pWndHandle, &width, &height);
 	return width;
     }
 
     int Window::getHeight() const
     {
-	int width, height;
+	int width {}, height {};
 	glfwGetWindowSize(m_pWndHandle, &width, &height);
 	return height;
     }
@@ -209,28 +209,28 @@ namespace dbgl
 
     int Window::getFrameWidth() const
     {
-	int width, height;
+	int width {}, height {};
 	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
 	return width;
     }
 
     int Window::getFrameHeight() const
     {
-	int width, height;
+	int width {}, height {};
 	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
 	return height;
     }
 
     int Window::getX() const
     {
-	int x, y;
+	int x {}, y {};
 	glfwGetWindowPos(m_pWndHandle, &x, &y);
 	return x;
     }
 
     int Window::getY() const
     {
-	int x, y;
+	int x {}, y {};
 	glfwGetWindowPos(m_pWndHandle, &x, &y);
 	return y;
     }
@@ -519,9 +519,9 @@ namespace dbgl
 
     Window::InputEventType::DelegatePtr Window::addInputCallback(InputCallbackType const& callback)
     {
-	if(!m_inputKeyDelegate)
+	if(m_inputKeyDelegate == nullptr)
 	    m_inputKeyDelegate = addKeyCallback(std::bind(&dbgl::Window::keyCallback, this, std::placeholders::_1));
-	if(!m_inputMouseDelegate)
+	if(m_inputMouseDelegate == nullptr)
 	    m_inputMouseDelegate = addMouseButtonCallback(std::bind(&dbgl::Window::mouseButtonCallback, this, std::placeholders::_1));
 	return m_inputCallbacks.addListener(callback);
     }

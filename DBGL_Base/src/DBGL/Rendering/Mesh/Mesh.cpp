@@ -117,7 +117,7 @@ namespace dbgl
 
     Mesh* Mesh::makeTriangle(Bitmask<> flags)
     {
-	Mesh* mesh = new Mesh();
+	Mesh* mesh = new Mesh {};
 	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(1, -1, 0), Vec3f(0, 1, 0)};
 
@@ -142,7 +142,7 @@ namespace dbgl
 
     Mesh* Mesh::makePlane(Bitmask<> flags)
     {
-	Mesh* mesh = new Mesh();
+	Mesh* mesh = new Mesh {};
 	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(-1, 1, 0), Vec3f(1, 1, 0), Vec3f(1, -1, 0)};
 
@@ -167,7 +167,7 @@ namespace dbgl
 
     Mesh* Mesh::makeCube(Bitmask<> flags)
     {
-	Mesh* mesh = new Mesh();
+	Mesh* mesh = new Mesh {};
 
 	// Define vertices
 	mesh->m_vertices =
@@ -267,7 +267,7 @@ namespace dbgl
 
     Mesh* Mesh::makePyramid(Bitmask<> flags)
     {
-	Mesh* mesh = new Mesh();
+	Mesh* mesh = new Mesh {};
 
 	// Define vertices
 	mesh->m_vertices =
@@ -493,7 +493,7 @@ namespace dbgl
 	// Check if i is valid
 	if (i >= m_vertices.size())
 	{
-	    std::stringstream msg;
+	    std::stringstream msg {};
 	    msg << "Vertex index out of bounds: " << i;
 	    throw std::out_of_range(msg.str());
 	}
@@ -547,7 +547,7 @@ namespace dbgl
 
     GLuint Mesh::generateBuffer()
     {
-	GLuint buffer;
+	GLuint buffer {};
 	glGenBuffers(1, &buffer);
 	return buffer;
     }
