@@ -40,17 +40,17 @@ namespace dbgl
 	     * @brief Called upon render process
 	     * @param rc RenderContext to draw to
 	     */
-	    virtual void render(Entity* owner, RenderContext const* rc) = 0;
+	    virtual void render(Entity* owner, RenderContext const* rc);
 	    /**
 	     * @brief Determines whether this component wants to be updated
 	     * @return True if needs to be updated, otherwise false
 	     */
-	    virtual bool needUpdate() const = 0;
+	    virtual bool needUpdate() const;
 	    /**
 	     * @brief Determines whether this component wants to be rendered
 	     * @return True if needs to be rendered, otherwise false
 	     */
-	    virtual bool needRender() const = 0;
+	    virtual bool needRender() const;
 	private:
 	    void prepareMatrices(TransformComponent* transform, RenderContext const* rc);
 
