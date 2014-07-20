@@ -45,6 +45,7 @@ namespace dbgl
 	    Texture* m_pDiffuse;
 	    Texture* m_pNormal;
 	    Texture* m_pSpecular;
+	    // TODO: Specular color, specular width
     };
 }
 
