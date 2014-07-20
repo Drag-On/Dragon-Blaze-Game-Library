@@ -39,14 +39,14 @@ namespace dbgl
 
 	// Link shaders
 	GLint linkOk = GL_FALSE;
-	_shaderProgram = glCreateProgram();
-	glAttachShader(_shaderProgram, vsId);
-	glAttachShader(_shaderProgram, fsId);
-	glLinkProgram(_shaderProgram);
-	glGetProgramiv(_shaderProgram, GL_LINK_STATUS, &linkOk);
+	m_shaderProgram = glCreateProgram();
+	glAttachShader(m_shaderProgram, vsId);
+	glAttachShader(m_shaderProgram, fsId);
+	glLinkProgram(m_shaderProgram);
+	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &linkOk);
 	if (!linkOk)
 	LOG.error("Error while linking shaders.");
-	printLog(_shaderProgram, linkOk);
+	printLog(m_shaderProgram, linkOk);
 
 	// Delete vertex- and fragment shader objects again
 	glDeleteShader(vsId);
@@ -58,22 +58,22 @@ namespace dbgl
 
     ShaderProgram::~ShaderProgram()
     {
-	glDeleteProgram(_shaderProgram);
+	glDeleteProgram(m_shaderProgram);
     }
 
     void ShaderProgram::use() const
     {
-	glUseProgram(_shaderProgram);
+	glUseProgram(m_shaderProgram);
     }
 
     GLint ShaderProgram::getAttributeHandle(const std::string name) const
     {
-	return glGetAttribLocation(_shaderProgram, name.c_str());
+	return glGetAttribLocation(m_shaderProgram, name.c_str());
     }
 
     GLint ShaderProgram::getUniformHandle(const std::string name) const
     {
-	return glGetUniformLocation(_shaderProgram, name.c_str());
+	return glGetUniformLocation(m_shaderProgram, name.c_str());
     }
 
     void ShaderProgram::bindTexture(int texLocation, int texType, GLuint texHandle) const
@@ -218,12 +218,17 @@ namespace dbgl
 
     GLuint ShaderProgram::getHandle() const
     {
-	return _shaderProgram;
+	return m_shaderProgram;
     }
 
     GLint ShaderProgram::getDefaultUniformHandle(Uniform uniform) const
     {
-	return _uniformHandles.find(uniform)->second;
+	return m_uniformHandles.find(uniform)->second;
+    }
+
+    std::string ShaderProgram::getDefaultUniformName(Uniform uniform)
+    {
+	return uniformNames.at(uniform);
     }
 
     ShaderProgram* ShaderProgram::createSimpleShader()
@@ -289,7 +294,7 @@ namespace dbgl
 	    std::string name = foo->second;
 	    const std::string nameCstr = name.c_str();
 	    GLint handle = getUniformHandle(nameCstr);
-	    _uniformHandles[uniform] = handle;
+	    m_uniformHandles[uniform] = handle;
 	}
     }
 
@@ -387,6 +392,11 @@ namespace dbgl
         { ShaderProgram::TEX_NORMAL, "tex_normal" },
         { ShaderProgram::TEX_SPECULAR, "tex_specular" },
         { ShaderProgram::COLOR, "v3_color" },
+        { ShaderProgram::LIGHTS, "lights" },
+        { ShaderProgram::AMOUNTLIGHTS, "i_numLights" },
+        { ShaderProgram::LIGHT_POS, "v3_position_w" },
+        { ShaderProgram::LIGHT_COLOR, "v3_color" },
+        { ShaderProgram::AMBIENT, "v3_ambientLight" },
         { ShaderProgram::BOGUS, "" },
     };
 }

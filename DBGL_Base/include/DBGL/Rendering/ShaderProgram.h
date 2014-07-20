@@ -41,8 +41,13 @@ namespace dbgl
 		ITMV,        //!< ITMV
 		TEX_DIFFUSE, //!< TEX_DIFFUSE
 		TEX_NORMAL,  //!< TEX_NORMAL
-		TEX_SPECULAR,  //!< TEX_SPECULAR
+		TEX_SPECULAR,//!< TEX_SPECULAR
 		COLOR,       //!< COLOR
+		LIGHTS,	     //!< LIGHTS
+		AMOUNTLIGHTS,//!< AMOUNTLIGHTS
+		LIGHT_POS,   //!< LIGHT_POS
+		LIGHT_COLOR, //!< LIGHT_COLOR
+		AMBIENT,     //!< AMBIENT
 		BOGUS,       //!< BOGUS
 	    };
 
@@ -285,6 +290,13 @@ namespace dbgl
 	    GLint getDefaultUniformHandle(Uniform uniform) const;
 
 	    /**
+	     * @brief Returns the expected name of a default uniform.
+	     * @param uniform Uniform to get the name for
+	     * @return The uniform name
+	     */
+	    static std::string getDefaultUniformName(Uniform uniform);
+
+	    /**
 	     * @brief Creates a very simple shader program, mainly intended
 	     * 	      for testing purposes
 	     * @details Two-sided diffuse lighting with light coming from the camera,
@@ -305,8 +317,8 @@ namespace dbgl
 	    static ShaderProgram* createSimpleColorShader();
 
 	private:
-	    GLuint _shaderProgram; // GL shader program handle
-	    std::map<Uniform, GLint> _uniformHandles;
+	    GLuint m_shaderProgram; // GL shader program handle
+	    std::map<Uniform, GLint> m_uniformHandles;
 
 	    static std::map<Uniform, std::string> uniformNames;
 
