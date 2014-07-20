@@ -31,6 +31,7 @@ namespace dbgl
 		POINT,      //!< POINT A point light, illuminating everything around it
 		SPOT,       //!< SPOT A spot light, illuminating everything along a certain direction within a cone of light
 		DIRECTIONAL,//!< DIRECTIONAL A directional light, illuminating everything along a certain direction
+		AMBIENT,    //!< AMBIENT An ambient light which illuminates everything
 	    };
 
 	    /**
