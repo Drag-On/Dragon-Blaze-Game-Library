@@ -391,6 +391,8 @@ namespace dbgl
         { ShaderProgram::TEX_DIFFUSE, "tex_diffuse" },
         { ShaderProgram::TEX_NORMAL, "tex_normal" },
         { ShaderProgram::TEX_SPECULAR, "tex_specular" },
+        { ShaderProgram::SPEC_COLOR, "mat.v3_specColor" },
+        { ShaderProgram::SPEC_WIDTH, "mat.f_specWidth" },
         { ShaderProgram::COLOR, "v3_color" },
         { ShaderProgram::LIGHTS, "lights" },
         { ShaderProgram::AMOUNTLIGHTS, "i_numLights" },
