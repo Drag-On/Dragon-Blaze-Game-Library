@@ -29,7 +29,10 @@ namespace dbgl
 
     void Environment::addLight(Entity const* light)
     {
-	m_lights.push_back(light);
+	if(light->getComponent<LightComponent>())
+	    m_lights.push_back(light);
+	else
+	    LOG.warning("Tried to add a light entity to environment which doesn't have a LightComponent attached.");
     }
 
     void Environment::removeLight(Entity const* light)

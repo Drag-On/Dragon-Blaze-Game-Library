@@ -14,6 +14,7 @@
 #include <vector>
 #include "Camera.h"
 #include "DBGL/System/Entity/Entity.h"
+#include "DBGL/System/Entity/LightComponent.h"
 
 namespace dbgl
 {
