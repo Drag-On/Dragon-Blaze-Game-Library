@@ -13,6 +13,7 @@
 
 #include "Material.h"
 #include "DBGL/Rendering/Texture/Texture.h"
+#include "DBGL/Math/Vector3.h"
 
 namespace dbgl
 {
@@ -35,17 +36,68 @@ namespace dbgl
 	     * 	     nullptr for those arguments to disable them. The shader needs to know how to handle the data
 	     * 	     that's passed to it.
 	     */
-	    Material2DTex(ShaderProgram& shaderProgram, Texture& diffuse, Texture* pNormal, Texture* pSpecular);
+	    Material2DTex(ShaderProgram const& shaderProgram, Texture const& diffuse, Texture const* pNormal, Texture const* pSpecular);
 	    /**
 	     * @brief Prepares this material to be used in the next render process(es).
 	     */
-	    virtual void prepare();
+	    virtual void prepare() const;
+	    /**
+	     * @brief Provides read-access to the diffuse texture
+	     * @return Pointer to the currently used diffuse texture
+	     */
+	    Texture const* getDiffuse() const;
+	    /**
+	     * @brief Changes the diffuse texture to the passed new texture
+	     * @param diffuse New diffuse texture
+	     */
+	    void setDiffuse(Texture const& diffuse);
+	    /**
+	     * @brief Provides read-access to the normal texture
+	     * @return Pointer to the currently used normal texture
+	     */
+	    Texture const* getNormal() const;
+	    /**
+	     * @brief Changes the normal texture to the passed new texture
+	     * @param normal New normal texture
+	     */
+	    void setNormal(Texture const& normal);
+	    /**
+	     * @brief Provides read-access to the specular texture
+	     * @return Pointer to the currently used specular texture
+	     */
+	    Texture const* getSpecular() const;
+	    /**
+	     * @brief Changes the specular texture to the passed new texture
+	     * @param specular New normal texture
+	     */
+	    void setSpecular(Texture const& specular);
+	    /**
+	     * @brief Provides read-access to the specular color
+	     * @return Pointer to the currently used specular color
+	     */
+	    Vec3f const& getSpecColor() const;
+	    /**
+	     * Changes the specular color to the passed new color
+	     * @param color New color
+	     */
+	    void setSpecColor(Vec3f const& color);
+	    /**
+	     * @brief Provides read-access to the specular width
+	     * @return Pointer to the currently used specular width
+	     */
+	    float getSpecWidth() const;
+	    /**
+	     * @brief Changes the specular width to the passed new value
+	     * @param width New specular width
+	     */
+	    void setSpecWidth(float width);
 
 	private:
-	    Texture* m_pDiffuse;
-	    Texture* m_pNormal;
-	    Texture* m_pSpecular;
-	    // TODO: Specular color, specular width
+	    Texture const* m_pDiffuse;
+	    Texture const* m_pNormal;
+	    Texture const* m_pSpecular;
+	    Vec3f m_specColor = {1.0f, 1.0f, 1.0f};
+	    float m_specWidth = 5.0f;
     };
 }
 

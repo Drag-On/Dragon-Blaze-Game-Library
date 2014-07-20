@@ -12,16 +12,16 @@
 
 namespace dbgl
 {
-    Material::Material(ShaderProgram& shaderProgram) : m_pShaderProgram(&shaderProgram)
+    Material::Material(ShaderProgram const& shaderProgram) : m_pShaderProgram(&shaderProgram)
     {
     }
 
-    void Material::prepare()
+    void Material::prepare() const
     {
 	m_pShaderProgram->use();
     }
 
-    ShaderProgram* Material::getShader() const
+    ShaderProgram const* Material::getShader() const
     {
 	return m_pShaderProgram;
     }

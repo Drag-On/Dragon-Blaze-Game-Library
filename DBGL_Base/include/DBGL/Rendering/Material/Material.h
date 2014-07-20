@@ -27,7 +27,7 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param shaderProgram Shader to use
 	     */
-	    Material(ShaderProgram& shaderProgram);
+	    Material(ShaderProgram const& shaderProgram);
 	    /**
 	     * @brief Destructor
 	     */
@@ -35,14 +35,14 @@ namespace dbgl
 	    /**
 	     * @brief Prepares this material to be used in the next render process(es).
 	     */
-	    virtual void prepare();
+	    virtual void prepare() const;
 	    /**
 	     * @return Pointer to the shader attached to this material
 	     */
-	    ShaderProgram* getShader() const;
+	    ShaderProgram const* getShader() const;
 
 	protected:
-	    ShaderProgram* m_pShaderProgram;
+	    ShaderProgram const* m_pShaderProgram;
     };
 }
 

@@ -12,13 +12,13 @@
 
 namespace dbgl
 {
-    Material2DTex::Material2DTex(ShaderProgram& shaderProgram, Texture& diffuse, Texture* pNormal,
-	    Texture* pSpecular) :
+    Material2DTex::Material2DTex(ShaderProgram const& shaderProgram, Texture const& diffuse, Texture const* pNormal,
+	    Texture const* pSpecular) :
 	    Material(shaderProgram), m_pDiffuse(&diffuse), m_pNormal(pNormal), m_pSpecular(pSpecular)
     {
     }
 
-    void Material2DTex::prepare()
+    void Material2DTex::prepare() const
     {
 	// Call base class
 	Material::prepare();
@@ -50,6 +50,67 @@ namespace dbgl
 	    glBindTexture(GL_TEXTURE_2D, m_pSpecular->getHandle());
 	    m_pShaderProgram->setUniformSampler(specularId, 2);
 	}
+	// Send specular color and width if the shader wants it
+	GLint specularColorId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_COLOR);
+	if (specularColorId >= 0)
+	{
+	    m_pShaderProgram->setUniformFloat3(specularColorId, m_specColor.getDataPointer());
+	}
+	GLint specularWidthId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_WIDTH);
+	if (specularWidthId >= 0)
+	{
+	    m_pShaderProgram->setUniformFloat(specularWidthId, m_specWidth);
+	}
+    }
+
+    Texture const* Material2DTex::getDiffuse() const
+    {
+	return m_pDiffuse;
+    }
+
+    void Material2DTex::setDiffuse(Texture const& diffuse)
+    {
+	m_pDiffuse = &diffuse;
+    }
+
+    Texture const* Material2DTex::getNormal() const
+    {
+	return m_pNormal;
+    }
+
+    void Material2DTex::setNormal(Texture const& normal)
+    {
+	m_pNormal = &normal;
+    }
+
+    Texture const* Material2DTex::getSpecular() const
+    {
+	return m_pSpecular;
+    }
+
+    void Material2DTex::setSpecular(Texture const& specular)
+    {
+	m_pSpecular = &specular;
+    }
+
+    Vec3f const& Material2DTex::getSpecColor() const
+    {
+	return m_specColor;
+    }
+
+    void Material2DTex::setSpecColor(Vec3f const& color)
+    {
+	m_specColor = color;
+    }
+
+    float Material2DTex::getSpecWidth() const
+    {
+	return m_specWidth;
+    }
+
+    void Material2DTex::setSpecWidth(float width)
+    {
+	m_specWidth = width;
     }
 
 }
