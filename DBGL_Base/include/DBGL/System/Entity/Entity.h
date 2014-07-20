@@ -76,7 +76,7 @@ namespace dbgl
 	    /**
 	     * @return Entity name
 	     */
-	    std::string const& getName();
+	    std::string const& getName() const;
 	    /**
 	     * @brief Creates a component of a certain type and adds it to this entity
 	     * @return Reference to the newly created component
@@ -96,6 +96,12 @@ namespace dbgl
 	     * @details Component must be a (sub-)type of Component
 	     */
 	    template<class T> std::shared_ptr<T> getComponent();
+	    /**
+	     * @brief Provides read access to a component
+	     * @return Pointer to the requested component or nullptr if no component of has been found
+	     * @details Component must be a (sub-)type of Component
+	     */
+	    template<class T> std::shared_ptr<T> const getComponent() const;
 	    /**
 	     * @brief Updates all components
 	     * @param deltaTime Time since last update

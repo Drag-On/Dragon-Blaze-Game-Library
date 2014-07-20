@@ -16,7 +16,7 @@ namespace dbgl
     {
     }
 
-    std::string const& Entity::getName()
+    std::string const& Entity::getName() const
     {
 	return m_name;
     }
