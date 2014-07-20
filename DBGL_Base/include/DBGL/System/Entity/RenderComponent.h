@@ -14,6 +14,7 @@
 #include <memory>
 #include "Entity.h"
 #include "TransformComponent.h"
+#include "LightComponent.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Rendering/Material/Material.h"
 #include "DBGL/Rendering/Mesh/Mesh.h"
@@ -53,6 +54,7 @@ namespace dbgl
 	    virtual bool needRender() const;
 	private:
 	    void prepareMatrices(TransformComponent* transform, RenderContext const* rc);
+	    void prepareLights();
 
 	    Mesh* m_pMesh;
 	    Material* m_pMaterial;

@@ -29,6 +29,7 @@ namespace dbgl
 
 	// Calculate matrices and send them to shader
 	prepareMatrices(owner->getComponent<TransformComponent>().get(), rc);
+	prepareLights();
 
 	// Draw mesh!
 	rc->draw(*m_pMesh);
@@ -114,6 +115,64 @@ namespace dbgl
 	{
 	    pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,
 		    (itvMat * itmMat).getDataPointer());
+	}
+    }
+
+    void RenderComponent::prepareLights()
+    {
+	// Shortcut to shader
+	auto pShader = m_pMaterial->getShader();
+
+	// Shortcut to lights
+	auto lights = m_pEnvironment->getLights();
+	decltype(lights) ambientLights{};
+
+	// Gain all needed uniform handles
+	auto lightArrName = ShaderProgram::getDefaultUniformName(ShaderProgram::LIGHTS);
+	auto lightPosName = ShaderProgram::getDefaultUniformName(ShaderProgram::LIGHT_POS);
+	auto lightColorName = ShaderProgram::getDefaultUniformName(ShaderProgram::LIGHT_COLOR);
+	struct LightData
+	{
+		GLint position;
+		GLint color;
+	};
+	std::vector<LightData> lightIds {};
+	for(auto it = lights.begin(); it != lights.end(); ++it)
+	{
+	    // Sort ambient lights into different list
+	    if((*it)->getComponent<LightComponent>()->type() == LightComponent::LightType::AMBIENT)
+	    {
+		ambientLights.push_back(*it);
+		lights.erase(it);
+	    }
+	    else // Otherwise just get the right uniform handles
+	    {
+		int i = std::distance(lights.begin(), it);
+		lightIds.push_back({pShader->getUniformHandle(lightArrName + "[" + std::to_string(i) + "]." + lightPosName),
+				    pShader->getUniformHandle(lightArrName + "[" + std::to_string(i) + "]." + lightColorName)});
+	    }
+	}
+	GLint numLightsId = pShader->getDefaultUniformHandle(ShaderProgram::AMOUNTLIGHTS);
+	GLint ambientId = pShader->getDefaultUniformHandle(ShaderProgram::AMBIENT);
+
+	// Calculate ambient light and pass it over
+	Vec3f ambient{0.0f, 0.0f, 0.0f};
+	for(auto am : ambientLights)
+	{
+	    auto comp = am->getComponent<LightComponent>();
+	    ambient += comp->color() * comp->power();
+	}
+	pShader->setUniformFloat3(ambientId, ambient.getDataPointer());
+
+	// Pass other lights
+	pShader->setUniformInt(numLightsId, lightIds.size());
+	for(unsigned int i = 0; i < lightIds.size(); i++)
+	{
+	    auto transform = lights[i]->getComponent<TransformComponent>();
+	    auto light = lights[i]->getComponent<LightComponent>();
+	    auto lightColor = light->color() * light->power();
+	    pShader->setUniformFloat3(lightIds[i].position, transform->position().getDataPointer());
+	    pShader->setUniformFloat3(lightIds[i].color, lightColor.getDataPointer());
 	}
     }
 }
