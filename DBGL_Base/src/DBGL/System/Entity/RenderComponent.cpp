@@ -144,6 +144,7 @@ namespace dbgl
 	    {
 		ambientLights.push_back(*it);
 		lights.erase(it);
+		--it;
 	    }
 	    else // Otherwise just get the right uniform handles
 	    {
@@ -166,13 +167,13 @@ namespace dbgl
 
 	// Pass other lights
 	pShader->setUniformInt(numLightsId, lightIds.size());
-	for(unsigned int i = 0; i < lightIds.size(); i++)
+	for(unsigned int j = 0; j < lightIds.size(); j++)
 	{
-	    auto transform = lights[i]->getComponent<TransformComponent>();
-	    auto light = lights[i]->getComponent<LightComponent>();
+	    auto transform = lights[j]->getComponent<TransformComponent>();
+	    auto light = lights[j]->getComponent<LightComponent>();
 	    auto lightColor = light->color() * light->power();
-	    pShader->setUniformFloat3(lightIds[i].position, transform->position().getDataPointer());
-	    pShader->setUniformFloat3(lightIds[i].color, lightColor.getDataPointer());
+	    pShader->setUniformFloat3(lightIds[j].position, transform->position().getDataPointer());
+	    pShader->setUniformFloat3(lightIds[j].color, lightColor.getDataPointer());
 	}
     }
 }

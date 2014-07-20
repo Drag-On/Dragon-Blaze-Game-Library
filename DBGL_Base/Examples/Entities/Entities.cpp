@@ -14,6 +14,7 @@
 #include "DBGL/System/Entity/Entity.h"
 #include "DBGL/System/Entity/TransformComponent.h"
 #include "DBGL/System/Entity/RenderComponent.h"
+#include "DBGL/System/Entity/LightComponent.h"
 #include "DBGL/Window/WindowManager.h"
 #include "DBGL/Window/SimpleWindow.h"
 #include "DBGL/Window/Input.h"
@@ -91,10 +92,12 @@ int main()
     Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
     pCam = new Camera { Vec3f(0.0f, 0.0f, 4.0f), direction, up, pi_4(), 0.1f, 100.0f };
     // Load mesh, shader, texture...
-    Mesh* pMeshBox = Mesh::makeCube();
-    ShaderProgram* pShader = ShaderProgram::createSimpleShader();
-    Texture* pTexture = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
-    Material2DTex material {*pShader, *pTexture, nullptr, nullptr};
+    Mesh* pMeshBox = Mesh::makeCube(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+    ShaderProgram* pShader = new ShaderProgram{"../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag"};
+    Texture* pTexDiffuse = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
+    Texture*pTexNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
+    Texture* pTexSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
+    Material2DTex material {*pShader, *pTexDiffuse, pTexNormal, pTexSpecular};
     Environment environment {*pCam};
     // Create entity
     pEntity = new Entity{};
@@ -104,6 +107,28 @@ int main()
     pEntity->addComponent(transform);
     auto render = std::make_shared<RenderComponent>(*pMeshBox, material, environment);
     pEntity->addComponent(render);
+    // Create lights
+    // Ambient light
+    Entity lightAmb{};
+    auto lightCompAmb = std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f);
+    lightAmb.addComponent(lightCompAmb);
+    environment.addLight(&lightAmb);
+    // First point light
+    Entity light{};
+    auto transformLight = std::make_shared<TransformComponent>();
+    transformLight->position() = Vec3f{2.0f, 5.0f, 2.0f};
+    light.addComponent(transformLight);
+    auto lightComp = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f);
+    light.addComponent(lightComp);
+    environment.addLight(&light);
+    // Second point light
+    Entity light2{};
+    auto transformLight2 = std::make_shared<TransformComponent>();
+    transformLight2->position() = Vec3f{-2.0f, 4.0f, 3.0f};
+    light2.addComponent(transformLight2);
+    auto lightComp2 = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f);
+    light2.addComponent(lightComp2);
+    environment.addLight(&light2);
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
@@ -117,7 +142,7 @@ int main()
     // Clean up
     delete pMeshBox;
     delete pShader;
-    delete pTexture;
+    delete pTexDiffuse;
     delete pCam;
     delete pEntity;
     // delete pWnd; // No need for this as windows will delete themselves when closed
