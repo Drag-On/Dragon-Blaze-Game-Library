@@ -66,5 +66,25 @@ namespace dbgl
 	return m_direction;
     }
 
+    void LightComponent::update(Entity* /* owner */, double /* deltaTime */)
+    {
+	// No update needed
+    }
+
+    void LightComponent::render(Entity* /* owner */, RenderContext const* /* rc */)
+    {
+	// No rendering needed
+    }
+
+    bool LightComponent::needUpdate() const
+    {
+	return false;
+    }
+
+    bool LightComponent::needRender() const
+    {
+	return false;
+    }
+
 }
 

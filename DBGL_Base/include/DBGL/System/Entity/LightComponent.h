@@ -91,6 +91,26 @@ namespace dbgl
 	     * @return The light's direction
 	     */
 	    Vec3f const& direction() const;
+	    /**
+	     * @brief Updates this component
+	     * @param deltaTime Time since last update
+	     */
+	    virtual void update(Entity* owner, double deltaTime);
+	    /**
+	     * @brief Called upon render process
+	     * @param rc RenderContext to draw to
+	     */
+	    virtual void render(Entity* owner, RenderContext const* rc);
+	    /**
+	     * @brief Determines whether this component wants to be updated
+	     * @return True if needs to be updated, otherwise false
+	     */
+	    virtual bool needUpdate() const;
+	    /**
+	     * @brief Determines whether this component wants to be rendered
+	     * @return True if needs to be rendered, otherwise false
+	     */
+	    virtual bool needRender() const;
 
 	private:
 	    /**
