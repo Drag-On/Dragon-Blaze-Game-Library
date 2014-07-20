@@ -63,7 +63,7 @@ namespace dbgl
 	    /**
 	     * @return GL texture handle
 	     */
-	    GLuint getHandle();
+	    GLuint getHandle() const;
 	    /**
 	     * @brief Constructs a new texture on the heap
 	     * @details Needs to be freed manually!

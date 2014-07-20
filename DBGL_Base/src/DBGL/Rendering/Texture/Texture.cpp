@@ -22,7 +22,7 @@ namespace dbgl
 	glDeleteTextures(1, &m_textureId);
     }
 
-    GLuint Texture::getHandle()
+    GLuint Texture::getHandle() const
     {
 	return m_textureId;
     }
