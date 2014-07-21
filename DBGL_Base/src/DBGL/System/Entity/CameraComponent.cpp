@@ -46,4 +46,24 @@ namespace dbgl
 	return m_far;
     }
 
+    void CameraComponent::update(Entity* /* owner */, double /* deltaTime */)
+    {
+	// No update needed
+    }
+
+    void CameraComponent::render(Entity* /* owner */, RenderContext const* /* rc */)
+    {
+	// No rendering needed
+    }
+
+    bool CameraComponent::needUpdate() const
+    {
+	return false;
+    }
+
+    bool CameraComponent::needRender() const
+    {
+	return false;
+    }
+
 }

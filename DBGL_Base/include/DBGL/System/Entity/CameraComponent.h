@@ -12,6 +12,7 @@
 #define CAMERACOMPONENT_H_
 
 #include "Entity.h"
+#include "DBGL/Math/Utility.h"
 
 namespace dbgl
 {
@@ -27,7 +28,7 @@ namespace dbgl
 	     * @param near Near clipping plane
 	     * @param far Far clipping plane
 	     */
-	    CameraComponent(float fieldOfView = 2.0943951f, float near = 0.1f, float far = 100.0f);
+	    CameraComponent(float fieldOfView = pi_4(), float near = 0.1f, float far = 100.0f);
 	    /**
 	     * @brief Provides access to the opening angle
 	     * @return Reference to the opening angle variable
@@ -58,6 +59,26 @@ namespace dbgl
 	     * @return Reference to the far clipping plane variable
 	     */
 	    float const& far() const;
+	    /**
+	     * @brief Updates this component
+	     * @param deltaTime Time since last update
+	     */
+	    virtual void update(Entity* owner, double deltaTime);
+	    /**
+	     * @brief Called upon render process
+	     * @param rc RenderContext to draw to
+	     */
+	    virtual void render(Entity* owner, RenderContext const* rc);
+	    /**
+	     * @brief Determines whether this component wants to be updated
+	     * @return True if needs to be updated, otherwise false
+	     */
+	    virtual bool needUpdate() const;
+	    /**
+	     * @brief Determines whether this component wants to be rendered
+	     * @return True if needs to be rendered, otherwise false
+	     */
+	    virtual bool needRender() const;
 
 	private:
 	    float m_fieldOfView, m_near, m_far;
