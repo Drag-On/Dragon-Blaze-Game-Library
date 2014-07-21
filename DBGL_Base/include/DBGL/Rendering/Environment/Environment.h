@@ -14,7 +14,9 @@
 #include <vector>
 #include "Camera.h"
 #include "DBGL/System/Entity/Entity.h"
+#include "DBGL/System/Entity/CameraComponent.h"
 #include "DBGL/System/Entity/LightComponent.h"
+#include "DBGL/System/Entity/TransformComponent.h"
 
 namespace dbgl
 {
@@ -26,19 +28,19 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Constructor
-	     * @param cam Camera to use
+	     * @param cam Camera to use. Must have a camera- and a transform component.
 	     */
-	    Environment(Camera& cam);
+	    Environment(Entity const& cam);
 	    /**
 	     * @brief Retrieve the camera
 	     * @return Current camera
 	     */
-	    Camera* getCamera() const;
+	    Entity const* getCamera() const;
 	    /**
 	     * @brief Sets a new active camera
-	     * @param cam Camera to use
+	     * @param cam Camera to use. Must have a camera- and a transform component.
 	     */
-	    void setCamera(Camera& cam);
+	    void setCamera(Entity const& cam);
 	    /**
 	     * @brief Adds a new light to the environment
 	     * @param light Light to add
@@ -59,7 +61,7 @@ namespace dbgl
 	    /**
 	     * @brief Currently active camera
 	     */
-	    Camera* m_pCamera;
+	    Entity const* m_pCamera;
 	    /**
 	     * @brief All entities that emit light
 	     */

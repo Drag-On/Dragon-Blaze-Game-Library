@@ -15,6 +15,7 @@
 #include "DBGL/System/Entity/TransformComponent.h"
 #include "DBGL/System/Entity/RenderComponent.h"
 #include "DBGL/System/Entity/LightComponent.h"
+#include "DBGL/System/Entity/CameraComponent.h"
 #include "DBGL/Window/WindowManager.h"
 #include "DBGL/Window/SimpleWindow.h"
 #include "DBGL/Window/Input.h"
@@ -30,8 +31,8 @@
 using namespace dbgl;
 
 Window* pWnd = nullptr;
-Camera* pCam = nullptr;
 Entity* pEntity = nullptr;
+Entity* pCam = nullptr;
 float mouseSpeed = 1.5, moveSpeed = 2.5;
 
 void updateCallback(Window::UpdateEventArgs const& args)
@@ -45,26 +46,28 @@ void updateCallback(Window::UpdateEventArgs const& args)
 	    * float(pWnd->getFrameWidth() / 2 - x);
     float vertical = deltaTime * mouseSpeed
 	    * float(pWnd->getFrameHeight() / 2 - y);
-    pCam->rotate(horizontal, -vertical);
+    auto transform = pCam->getComponent<TransformComponent>();
+    auto curRotation = transform->rotation();
+    transform->rotation() = QuatF(Vec3f(0, horizontal, 0)) * curRotation * QuatF(Vec3f(-vertical, 0, 0));
     // Camera vectors
-    Vec3f direction = pCam->rotation() * Vec3f(0, 0, 1);
-    Vec3f right = pCam->rotation() * Vec3f(-1, 0, 0);
+    Vec3f direction = transform->rotation() * Vec3f(0, 0, 1);
+    Vec3f right = transform->rotation() * Vec3f(-1, 0, 0);
     // Reset mouse position to center of the screen
     pWnd->setCursorPos(pWnd->getFrameWidth() / 2, pWnd->getFrameHeight() / 2);
 
     // Update keyboard
     if (pWnd->getKey(Input::Key::KEY_W) == Input::KeyState::DOWN)
-	pCam->position() += direction * deltaTime * moveSpeed;
+	transform->position() += direction * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_A) == Input::KeyState::DOWN)
-	pCam->position() -= right * deltaTime * moveSpeed;
+	transform->position() -= right * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_S) == Input::KeyState::DOWN)
-	pCam->position() -= direction * deltaTime * moveSpeed;
+	transform->position() -= direction * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_D) == Input::KeyState::DOWN)
-	pCam->position() += right * deltaTime * moveSpeed;
+	transform->position() += right * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_E) == Input::KeyState::DOWN)
-	pCam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+	transform->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_Q) == Input::KeyState::DOWN)
-	pCam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+	transform->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
 
     // Update entity
     pEntity->update(deltaTime);
@@ -87,10 +90,6 @@ int main()
     pWnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
     pWnd->init();
-    // Add a camera
-    Vec3f direction = Vec3f(-0.0f, 0.0f, -1.0f);
-    Vec3f up = Vec3f(0.0f, 1.0f, 0.0f);
-    pCam = new Camera { Vec3f(0.0f, 0.0f, 4.0f), direction, up, pi_4(), 0.1f, 100.0f };
     // Load mesh, shader, texture...
     Mesh* pMeshBox = Mesh::makeCube(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
     ShaderProgram* pShader = new ShaderProgram{"../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag"};
@@ -98,8 +97,17 @@ int main()
     Texture*pTexNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
     Texture* pTexSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
     Material2DTex material {*pShader, *pTexDiffuse, pTexNormal, pTexSpecular};
+    // Create entity for the camera
+    pCam = new Entity{};
+    auto transformCam = std::make_shared<TransformComponent>();
+    transformCam->position() = Vec3f{0.0f, 0.0f, 4.0f};
+    transformCam->rotation().fromVectors(Vec3f{0.0f, 0.0f, 1.0f}, Vec3f{0.0f, 0.0f, -1.0f}, Vec3f{0.0f, 1.0f, 0.0f});
+    pCam->addComponent(transformCam);
+    auto camComp = std::make_shared<CameraComponent>();
+    pCam->addComponent(camComp);
+    // Add the camera to the environment
     Environment environment {*pCam};
-    // Create entity
+    // Create entity for a box
     pEntity = new Entity{};
     auto transform = std::make_shared<TransformComponent>();
     transform->position() = Vec3f{0.0f, 0.0f, 0.0f};

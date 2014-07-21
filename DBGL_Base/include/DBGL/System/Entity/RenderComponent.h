@@ -15,6 +15,7 @@
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "LightComponent.h"
+#include "CameraComponent.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Rendering/Material/Material.h"
 #include "DBGL/Rendering/Mesh/Mesh.h"

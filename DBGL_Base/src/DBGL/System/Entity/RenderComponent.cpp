@@ -52,18 +52,20 @@ namespace dbgl
 	auto rotation = transform->rotation();
 	auto scale = transform->scale();
 	auto pShader = m_pMaterial->getShader();
-	auto cam = m_pEnvironment->getCamera();
+	auto camTrans = m_pEnvironment->getCamera()->getComponent<TransformComponent>();
+	auto camComp = m_pEnvironment->getCamera()->getComponent<CameraComponent>();
+	Camera cam{camTrans->position(), camTrans->rotation(), camComp->fieldOfView(), camComp->near(), camComp->far()};
 	float frameWidth = rc->getWidth();
 	float frameHeight = rc->getHeight();
 
 	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
 	Mat4f itmMat = modelMat.getInverted().transpose();
 	Vec3f direction{}, up{};
-	cam->getOrientation(&direction, &up, nullptr);
-	Mat4f viewMat = Mat4f::makeView(cam->position(), direction, up);
+	cam.getOrientation(&direction, &up, nullptr);
+	Mat4f viewMat = Mat4f::makeView(cam.position(), direction, up);
 	Mat4f itvMat = viewMat.getInverted().transpose();
-	Mat4f projMat = Mat4f::makeProjection(cam->getFieldOfView(), frameWidth / frameHeight, cam->getNear(),
-		cam->getFar());
+	Mat4f projMat = Mat4f::makeProjection(cam.getFieldOfView(), frameWidth / frameHeight, cam.getNear(),
+		cam.getFar());
 	// Send model matrix if the shader wants it
 	GLint modelId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
 	if (modelId >= 0)

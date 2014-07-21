@@ -12,19 +12,22 @@
 
 namespace dbgl
 {
-    Environment::Environment(Camera& cam) : m_pCamera(&cam)
+    Environment::Environment(Entity const& cam)
     {
-
+	setCamera(cam);
     }
 
-    Camera* Environment::getCamera() const
+    Entity const* Environment::getCamera() const
     {
 	return m_pCamera;
     }
 
-    void Environment::setCamera(Camera& cam)
+    void Environment::setCamera(Entity const& cam)
     {
-	m_pCamera = &cam;
+	if(cam.getComponent<CameraComponent>() && cam.getComponent<TransformComponent>())
+	    m_pCamera = &cam;
+	else
+	    throw std::invalid_argument("Passed camera entity without camera- or transform component to environment.");
     }
 
     void Environment::addLight(Entity const* light)
