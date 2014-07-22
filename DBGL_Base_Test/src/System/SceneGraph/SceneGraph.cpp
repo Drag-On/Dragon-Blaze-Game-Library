@@ -28,6 +28,12 @@ class SceneGraphPrintVisitor
 	}
 };
 
+void visitAll(SceneGraph& sg)
+{
+    SceneGraphPrintVisitor visitor{};
+    sg.accept(visitor);
+}
+
 int testSceneGraph()
 {
     LOG.info("Starting SceneGraph test suite...");
@@ -37,8 +43,13 @@ int testSceneGraph()
     ASSERT_EQUAL(sg.getRootEntity(), nullptr);
     LOG.info("OK!");
     LOG.info("Methods... ");
-    SceneGraphPrintVisitor visitor{};
-    sg.accept(visitor);
+    // Print all nodes (should be zero)
+    visitAll(sg);
+    // Add a root node
+    Entity entity1{"1"};
+    SceneGraph::SceneNode rootNode{&entity1};
+    sg.setRoot(&rootNode);
+    visitAll(sg);
     LOG.info("OK!");
     LOG.info("Operators... ");
 

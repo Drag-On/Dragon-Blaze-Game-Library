@@ -52,9 +52,14 @@ namespace dbgl
 	return m_pRoot;
     }
 
+    void SceneGraph::setRoot(SceneNode* root)
+    {
+	m_pRoot = root;
+    }
+
     Entity* SceneGraph::getRootEntity() const
     {
-	if(m_pRoot != nullptr)
+	if (m_pRoot != nullptr)
 	    return m_pRoot->getEntity();
 	else
 	    return nullptr;

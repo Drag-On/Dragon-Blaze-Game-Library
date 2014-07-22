@@ -84,6 +84,11 @@ namespace dbgl
 	     */
 	    SceneNode* getRoot() const;
 	    /**
+	     * @brief Sets a new root node
+	     * @param root New root
+	     */
+	    void setRoot(SceneNode* root);
+	    /**
 	     * @brief Provides access to the root entity
 	     * @return The entity held by the root node or nullptr if scene graph is empty
 	     */
