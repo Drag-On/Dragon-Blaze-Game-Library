@@ -59,6 +59,8 @@ int testProperties()
     LOG.info("OK!");
     LOG.info("Operators... ");
     ASSERT(prop["string"] == "SURPRISE!");
+    // delete created copy
+    remove("TestPropertiesCopy.txt");
     LOG.info("OK!");
     LOG.info("Done!");
     return 0;
