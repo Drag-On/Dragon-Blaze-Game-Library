@@ -15,10 +15,8 @@
 
 using namespace dbgl;
 
-int testUtility()
+void testIsSimilar()
 {
-    LOG.info("Starting Utility test suite...");
-    LOG.info("Methods... ");
     // isSimilar (direct)
     ASSERT(isSimilar(1.1f, 1.2f, 0.15f));
     ASSERT(!isSimilar(1.1f, 1.3f, 0.15f));
@@ -29,11 +27,25 @@ int testUtility()
     ASSERT(isSimilar(1.1f, 1.1f + 2 * std::numeric_limits<float>::epsilon(), 2));
     ASSERT(!isSimilar(1.1f, 1.1f + 3 * std::numeric_limits<float>::epsilon(), 2));
     ASSERT(isSimilar(1.1f, 1.1f + 3 * std::numeric_limits<float>::epsilon(), 3));
+}
+
+void testToRadians()
+{
     // toRadians
     ASSERT(isSimilar(toRadians(90.0), pi_2(), 2));
+}
+
+void testToDegrees()
+{
     // toDegrees
     ASSERT(isSimilar(toDegrees(pi_2()), 90.0, 2));
-    LOG.info("OK!");
-    LOG.info("Done!");
-    return 0;
+}
+
+cute::suite testUtility()
+{
+    cute::suite s{};
+    s.push_back(CUTE(testIsSimilar));
+    s.push_back(CUTE(testToRadians));
+    s.push_back(CUTE(testToDegrees));
+    return s;
 }
