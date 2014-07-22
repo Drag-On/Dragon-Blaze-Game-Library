@@ -9,7 +9,7 @@
 
 cute::suite testLog();
 cute::suite testUtility();
-int testVector2();
+cute::suite testVector2();
 int testVector3();
 int testVector4();
 int testVector();
@@ -32,10 +32,10 @@ void runAllTests(int argc, char const *argv[])
 
     runner(testLog(), "Log");
     runner(testUtility(), "Utility");
+    runner(testVector2(), "Vector2");
 
     cute::suite s {};
     //TODO add your test here
-    s.push_back(CUTE(testVector2));
     s.push_back(CUTE(testVector3));
     s.push_back(CUTE(testVector4));
     s.push_back(CUTE(testVector));
