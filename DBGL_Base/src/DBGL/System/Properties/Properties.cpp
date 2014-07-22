@@ -135,7 +135,9 @@ namespace dbgl
 		// Take over empty lines and comments
 		if (line.length() == 0 || line.substr(0, m_cmntSymbol.size()) == m_cmntSymbol)
 		{
-		    stringStream << line << "\n";
+		    stringStream << line;
+		    if(!inFile.eof())
+			stringStream << "\n";
 		    continue;
 		}
 		// It's a key-value pair
@@ -149,12 +151,16 @@ namespace dbgl
 		if (m_properties.find(key) != m_properties.end())
 		{
 		    // Exists, write data from memory
-		    stringStream << key << m_keyValueSep << getStringValue(key) << "\n";
+		    stringStream << key << m_keyValueSep << getStringValue(key);
+		    if(!inFile.eof())
+			stringStream << "\n";
 		}
 		else
 		{
 		    // Doesn't exist in memory, take over original line
-		    stringStream << line << "\n";
+		    stringStream << line;
+		    if(!inFile.eof())
+			stringStream << "\n";
 		}
 	    }
 	    inFile.close();

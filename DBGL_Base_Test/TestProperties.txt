@@ -11,12 +11,3 @@ int2=42 # but it's
 float2=13#not reliable
 string2=double declaration   
 string2=double declaration   
-
-
-
-
-
-
-
-
-
