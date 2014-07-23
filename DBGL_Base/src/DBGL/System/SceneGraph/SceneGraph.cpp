@@ -12,26 +12,26 @@
 
 namespace dbgl
 {
-    SceneGraph::SceneNode::SceneNode(Entity* entity) : m_pEntity(entity)
+    SceneGraph::Node::Node(Entity* entity) : m_pEntity(entity)
     {
     }
 
-    Entity* SceneGraph::SceneNode::getEntity() const
+    Entity* SceneGraph::Node::getEntity() const
     {
 	return m_pEntity;
     }
 
-    auto SceneGraph::SceneNode::getChildren() const -> std::set<SceneNode*> const&
+    auto SceneGraph::Node::getChildren() const -> std::set<Node*> const&
     {
 	return m_childNodes;
     }
 
-    void SceneGraph::SceneNode::addChild(SceneNode* child)
+    void SceneGraph::Node::addChild(Node* child)
     {
 	m_childNodes.insert(child);
     }
 
-    void SceneGraph::SceneNode::removeChild(SceneNode* child)
+    void SceneGraph::Node::removeChild(Node* child)
     {
 	m_childNodes.erase(child);
     }
@@ -47,12 +47,12 @@ namespace dbgl
 	    m_pRoot->accept(visitor);
     }
 
-    SceneGraph::SceneNode* SceneGraph::getRoot() const
+    SceneGraph::Node* SceneGraph::getRoot() const
     {
 	return m_pRoot;
     }
 
-    void SceneGraph::setRoot(SceneNode* root)
+    void SceneGraph::setRoot(Node* root)
     {
 	m_pRoot = root;
     }

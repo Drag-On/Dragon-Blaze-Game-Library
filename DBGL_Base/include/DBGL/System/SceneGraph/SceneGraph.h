@@ -23,14 +23,14 @@ namespace dbgl
 	    /**
 	     * @brief A node within a scene graph.
 	     */
-	    class SceneNode: public AbstractTree::Node
+	    class Node: public AbstractTree::Node
 	    {
 		public:
 		    /**
 		     * @brief Constructor
 		     * @param entity Entity to hold
 		     */
-		    SceneNode(Entity* entity);
+		    Node(Entity* entity);
 		    /**
 		     * @brief Provides read access to the entity
 		     * @return The entity of this node
@@ -40,28 +40,28 @@ namespace dbgl
 		     * @brief Provides access to this node's children
 		     * @return The node's children
 		     */
-		    std::set<SceneNode*> const& getChildren() const;
+		    std::set<Node*> const& getChildren() const;
 		    /**
 		     * @brief Adds a new child node
 		     * @param child New child
 		     */
-		    void addChild(SceneNode* child);
+		    void addChild(Node* child);
 		    /**
 		     * @brief Removes a child node
 		     * @param child Node to remove
 		     */
-		    void removeChild(SceneNode* child);
+		    void removeChild(Node* child);
 		    /**
 		     * @brief Accepts a visitor
 		     * @param visitor Visitor to accept
 		     */
 		    template<class Visitor> void accept(Visitor& visitor)
 		    {
-			AbstractTree::Node::accept<Visitor, SceneNode*>(visitor);
+			AbstractTree::Node::accept<Visitor, Node*>(visitor);
 		    }
 		private:
 		    Entity* m_pEntity;
-		    std::set<SceneNode*> m_childNodes;
+		    std::set<Node*> m_childNodes;
 	    };
 
 	    /**
@@ -82,19 +82,19 @@ namespace dbgl
 	     * @brief Provides access to the root node
 	     * @return The root node or nullptr if scene graph is empty
 	     */
-	    SceneNode* getRoot() const;
+	    Node* getRoot() const;
 	    /**
 	     * @brief Sets a new root node
 	     * @param root New root
 	     */
-	    void setRoot(SceneNode* root);
+	    void setRoot(Node* root);
 	    /**
 	     * @brief Provides access to the root entity
 	     * @return The entity held by the root node or nullptr if scene graph is empty
 	     */
 	    Entity* getRootEntity() const;
 	private:
-	    SceneNode* m_pRoot = nullptr;
+	    Node* m_pRoot = nullptr;
     };
 }
 
