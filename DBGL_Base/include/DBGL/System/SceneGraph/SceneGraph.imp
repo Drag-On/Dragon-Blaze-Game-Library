@@ -34,11 +34,19 @@ namespace dbgl
 	m_childNodes.erase(child);
     }
 
-    template<typename T> template<class Visitor> void SceneGraph<T>::accept(Visitor& visitor)
+    template<typename T> auto SceneGraph<T>::Node::getParent() const -> Node*
     {
-	AbstractTree::accept<Visitor, SceneGraph*>(visitor);
-	if (m_pRoot != nullptr)
-	    m_pRoot->accept<Visitor>(visitor);
+	return m_pParent;
+    }
+
+    template<typename T> void SceneGraph<T>::Node::setParent(Node* parent)
+    {
+	m_pParent = parent;
+    }
+
+    template<typename T> template<class Visitor> void SceneGraph<T>::Node::accept(Visitor& visitor)
+    {
+	AbstractTree::Node::accept<Visitor, Node*>(visitor);
     }
 
     template<typename T> SceneGraph<T>::~SceneGraph()
@@ -50,6 +58,13 @@ namespace dbgl
 	AbstractTree::accept(visitor);
 	if (m_pRoot != nullptr)
 	    m_pRoot->accept(visitor);
+    }
+
+    template<typename T> template<class Visitor> void SceneGraph<T>::accept(Visitor& visitor)
+    {
+	AbstractTree::accept<Visitor, SceneGraph*>(visitor);
+	if (m_pRoot != nullptr)
+	    m_pRoot->accept<Visitor>(visitor);
     }
 
     template<typename T> typename SceneGraph<T>::Node* SceneGraph<T>::getRoot() const

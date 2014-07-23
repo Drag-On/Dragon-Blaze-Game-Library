@@ -51,15 +51,23 @@ namespace dbgl
 		     */
 		    void removeChild(Node* child);
 		    /**
+		     * @brief Provides access to this node's parent
+		     * @return The parent node of this node or nullptr if none
+		     */
+		    Node* getParent() const;
+		    /**
+		     * @brief Replaces the current parent node with a new one
+		     * @param parent Node to attach this node to
+		     */
+		    void setParent(Node* parent);
+		    /**
 		     * @brief Accepts a visitor
 		     * @param visitor Visitor to accept
 		     */
-		    template<class Visitor> void accept(Visitor& visitor)
-		    {
-			AbstractTree::Node::accept<Visitor, Node*>(visitor);
-		    }
+		    template<class Visitor> void accept(Visitor& visitor);
 		private:
 		    T* m_pEntity;
+		    Node* m_pParent = nullptr;
 		    std::set<Node*> m_childNodes;
 	    };
 
