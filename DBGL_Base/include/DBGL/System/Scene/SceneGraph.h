@@ -16,6 +16,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief A scene graph which can be used to structure entities
+     */
     template<typename T> class SceneGraph : public AbstractTree
     {
 	public:
