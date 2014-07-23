@@ -12,7 +12,7 @@
 #include "cute.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/Entity/Entity.h"
-#include "DBGL/System/SceneGraph/SceneGraph.h"
+#include "DBGL/System/Scene/SceneGraph.h"
 
 using namespace dbgl;
 
