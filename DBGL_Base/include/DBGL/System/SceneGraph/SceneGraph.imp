@@ -10,11 +10,64 @@
 
 namespace dbgl
 {
-    template<class Visitor> void SceneGraph::accept(Visitor& visitor)
+    template<typename T> SceneGraph<T>::Node::Node(T* entity) : m_pEntity(entity)
+    {
+    }
+
+    template<typename T> T* SceneGraph<T>::Node::getEntity() const
+    {
+	return m_pEntity;
+    }
+
+    template<typename T> auto SceneGraph<T>::Node::getChildren() const -> std::set<Node*> const&
+    {
+	return m_childNodes;
+    }
+
+    template<typename T> void SceneGraph<T>::Node::addChild(Node* child)
+    {
+	m_childNodes.insert(child);
+    }
+
+    template<typename T> void SceneGraph<T>::Node::removeChild(Node* child)
+    {
+	m_childNodes.erase(child);
+    }
+
+    template<typename T> template<class Visitor> void SceneGraph<T>::accept(Visitor& visitor)
     {
 	AbstractTree::accept<Visitor, SceneGraph*>(visitor);
 	if (m_pRoot != nullptr)
 	    m_pRoot->accept<Visitor>(visitor);
+    }
+
+    template<typename T> SceneGraph<T>::~SceneGraph()
+    {
+    }
+
+    template<typename T> void SceneGraph<T>::accept(AbstractTreeVisitor& visitor)
+    {
+	AbstractTree::accept(visitor);
+	if (m_pRoot != nullptr)
+	    m_pRoot->accept(visitor);
+    }
+
+    template<typename T> typename SceneGraph<T>::Node* SceneGraph<T>::getRoot() const
+    {
+	return m_pRoot;
+    }
+
+    template<typename T> void SceneGraph<T>::setRoot(Node* root)
+    {
+	m_pRoot = root;
+    }
+
+    template<typename T> T* SceneGraph<T>::getRootEntity() const
+    {
+	if (m_pRoot != nullptr)
+	    return m_pRoot->getEntity();
+	else
+	    return nullptr;
     }
 }
 

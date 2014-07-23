@@ -12,12 +12,11 @@
 #define SCENEGRAPH_H_
 
 #include <set>
-#include "DBGL/System/Entity/Entity.h"
 #include "DBGL/System/Tree/AbstractTree.h"
 
 namespace dbgl
 {
-    class SceneGraph : public AbstractTree
+    template<typename T> class SceneGraph : public AbstractTree
     {
 	public:
 	    /**
@@ -30,12 +29,12 @@ namespace dbgl
 		     * @brief Constructor
 		     * @param entity Entity to hold
 		     */
-		    Node(Entity* entity);
+		    Node(T* entity);
 		    /**
 		     * @brief Provides read access to the entity
 		     * @return The entity of this node
 		     */
-		    Entity* getEntity() const;
+		    T* getEntity() const;
 		    /**
 		     * @brief Provides access to this node's children
 		     * @return The node's children
@@ -60,7 +59,7 @@ namespace dbgl
 			AbstractTree::Node::accept<Visitor, Node*>(visitor);
 		    }
 		private:
-		    Entity* m_pEntity;
+		    T* m_pEntity;
 		    std::set<Node*> m_childNodes;
 	    };
 
@@ -92,7 +91,7 @@ namespace dbgl
 	     * @brief Provides access to the root entity
 	     * @return The entity held by the root node or nullptr if scene graph is empty
 	     */
-	    Entity* getRootEntity() const;
+	    T* getRootEntity() const;
 	private:
 	    Node* m_pRoot = nullptr;
     };
