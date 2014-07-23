@@ -22,7 +22,7 @@ int testProperties();
 int testBitmask();
 int testKdTree();
 int testHyperrectangle();
-int testSceneGraph();
+cute::suite testSceneGraph();
 
 void runAllTests(int argc, char const *argv[])
 {
@@ -33,6 +33,8 @@ void runAllTests(int argc, char const *argv[])
     runner(testLog(), "Log");
     runner(testUtility(), "Utility");
     runner(testVector2(), "Vector2");
+
+    runner(testSceneGraph(), "SceneGraph");
 
     cute::suite s {};
     //TODO add your test here
@@ -48,7 +50,6 @@ void runAllTests(int argc, char const *argv[])
     s.push_back(CUTE(testBitmask));
     s.push_back(CUTE(testKdTree));
     s.push_back(CUTE(testHyperrectangle));
-    s.push_back(CUTE(testSceneGraph));
 
     runner(s, "AllTests");
 }
