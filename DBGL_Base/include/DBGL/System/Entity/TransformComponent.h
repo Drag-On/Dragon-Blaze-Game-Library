@@ -28,27 +28,27 @@ namespace dbgl
 	     */
 	    TransformComponent(Vec3f pos = {0.0f, 0.0f, 0.0f}, Vec3f scale = {1.0f, 1.0f, 1.0f}, QuatF rot = {0.0f, 0.0f, 0.0f, 1.0f});
 	    /**
-	     * @return Reference to position
+	     * @return Reference to local position
 	     */
 	    Vec3f& position();
 	    /**
-	     * @return Reference to scale
+	     * @return Reference to local scale
 	     */
 	    Vec3f& scale();
 	    /**
-	     * @return Reference to rotation
+	     * @return Reference to local rotation
 	     */
 	    QuatF& rotation();
 	    /**
-	     * @return Reference to position
+	     * @return Reference to local position
 	     */
 	    Vec3f const& position() const;
 	    /**
-	     * @return Reference to scale
+	     * @return Reference to local scale
 	     */
 	    Vec3f const& scale() const;
 	    /**
-	     * @return Reference to rotation
+	     * @return Reference to local rotation
 	     */
 	    QuatF const& rotation() const;
 	    /**
