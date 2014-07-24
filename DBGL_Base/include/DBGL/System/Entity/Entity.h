@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include "DBGL/System/Scene/SceneGraph.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -62,6 +63,15 @@ namespace dbgl
 		     * @return True if needs to be rendered, otherwise false
 		     */
 		    virtual bool needRender() const = 0;
+		    /**
+		     * @brief Provides access to the entity owning this component
+		     * @return Pointer to the entity owning this component
+		     */
+		    Entity const* getOwner() const;
+		private:
+		    Entity* m_pOwner = nullptr;
+
+		    friend class Entity;
 	    };
 
 	    /**
@@ -112,12 +122,18 @@ namespace dbgl
 	     * @param rc Context to render to
 	     */
 	    void render(RenderContext const* rc);
+	    /**
+	     * @brief Provides access to the scene node holding this entity
+	     * @return The scene node holding this entity or nullptr if none
+	     */
+	    SceneGraph<Entity>::Node* getSceneNode() const;
 
 	private:
 	    std::string m_name = "";
 	    std::unordered_map<std::type_index, std::shared_ptr<Component>> m_components;
 	    std::vector<std::shared_ptr<Component>> m_updateComponents;
 	    std::vector<std::shared_ptr<Component>> m_renderComponents;
+	    SceneGraph<Entity>::Node* m_pSceneNode = nullptr;
     };
 }
 

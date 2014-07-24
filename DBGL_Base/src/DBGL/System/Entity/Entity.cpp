@@ -12,6 +12,11 @@
 
 namespace dbgl
 {
+    Entity const* Entity::Component::getOwner() const
+    {
+	return m_pOwner;
+    }
+
     Entity::Entity(std::string name) : m_name(name)
     {
     }
@@ -32,6 +37,7 @@ namespace dbgl
 	}
 
 	m_components[std::type_index(typeid(*component))] = component;
+	component->m_pOwner = this;
 	if(component->needUpdate())
 	    m_updateComponents.push_back(component);
 	if(component->needRender())
@@ -46,6 +52,7 @@ namespace dbgl
 	    m_updateComponents.erase(std::find(m_updateComponents.begin(), m_updateComponents.end(), component));
 	    m_renderComponents.erase(std::find(m_renderComponents.begin(), m_renderComponents.end(), component));
 	    m_components.erase(it);
+	    component->m_pOwner = nullptr;
 	    return true;
 	}
 	return false;
@@ -65,5 +72,10 @@ namespace dbgl
 	{
 	    it->get()->render(this, rc);
 	}
+    }
+
+    SceneGraph<Entity>::Node* Entity::getSceneNode() const
+    {
+	return m_pSceneNode;
     }
 }
