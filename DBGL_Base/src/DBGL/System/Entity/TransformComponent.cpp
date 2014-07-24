@@ -64,7 +64,10 @@ namespace dbgl
 	{
 	    auto parentTransform = parent->getEntity()->getComponent<TransformComponent>();
 	    if (parentTransform)
+	    {
+		worldPos = parentTransform->m_rotation * worldPos;
 		worldPos += parentTransform->m_position;
+	    }
 	    parent = parent->getParent();
 	}
 	return worldPos;
