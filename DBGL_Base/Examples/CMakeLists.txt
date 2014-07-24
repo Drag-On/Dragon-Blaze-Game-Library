@@ -23,6 +23,8 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/Shader"
 				 "${PROJECT_BINARY_DIR}/Shader")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Entities"
 				 "${PROJECT_BINARY_DIR}/Entities")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Scene"
+				 "${PROJECT_BINARY_DIR}/Scene")
 				 
 ######################################################################
 ### Copy common resource folder
