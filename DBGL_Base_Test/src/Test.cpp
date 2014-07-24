@@ -10,7 +10,7 @@
 cute::suite testLog();
 cute::suite testUtility();
 cute::suite testVector2();
-int testVector3();
+cute::suite testVector3();
 int testVector4();
 int testVector();
 int testMatrix2x2();
@@ -33,12 +33,12 @@ void runAllTests(int argc, char const *argv[])
     runner(testLog(), "Log");
     runner(testUtility(), "Utility");
     runner(testVector2(), "Vector2");
+    runner(testVector3(), "Vector3");
 
     runner(testSceneGraph(), "SceneGraph");
 
     cute::suite s {};
     //TODO add your test here
-    s.push_back(CUTE(testVector3));
     s.push_back(CUTE(testVector4));
     s.push_back(CUTE(testVector));
     s.push_back(CUTE(testMatrix2x2));
