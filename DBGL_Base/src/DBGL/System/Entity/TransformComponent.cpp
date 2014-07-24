@@ -46,6 +46,11 @@ namespace dbgl
 	return m_rotation;
     }
 
+    Mat4f TransformComponent::transform() const
+    {
+	return Mat4f::makeTranslation(position()) * rotation().getMatrix() * Mat4f::makeScale(scale());
+    }
+
     Vec3f TransformComponent::worldPosition() const
     {
 	// TODO: cache world transform for better performance?
@@ -77,7 +82,10 @@ namespace dbgl
 	{
 	    auto parentTransform = parent->getEntity()->getComponent<TransformComponent>();
 	    if (parentTransform)
-		worldScale *= parentTransform->m_scale;
+	    {
+		for(unsigned int i = 0; i < worldScale.getDimension(); i++)
+		    worldScale[i] *= parentTransform->m_scale[i];
+	    }
 	    parent = parent->getParent();
 	}
 	return worldScale;
@@ -101,6 +109,23 @@ namespace dbgl
 	return worldRotation;
     }
 
+    Mat4f TransformComponent::worldTransform() const
+    {
+	// Use local transform as a start
+	Mat4f transform = Mat4f::makeTranslation(position()) * rotation().getMatrix() * Mat4f::makeScale(scale());
+	// If there are parent nodes multiply their rotations
+	SceneGraph<Entity>::Node* parent = nullptr;
+	if (getOwner()->getSceneNode())
+	    parent = getOwner()->getSceneNode()->getParent();
+	while (parent)
+	{
+	    auto parentTransform = parent->getEntity()->getComponent<TransformComponent>();
+	    if (parentTransform)
+		transform = parentTransform->transform() * transform;
+	    parent = parent->getParent();
+	}
+	return transform;
+    }
 
     void TransformComponent::update(Entity* /* owner */, double /* deltaTime */)
     {

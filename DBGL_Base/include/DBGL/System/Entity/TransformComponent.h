@@ -14,6 +14,7 @@
 #include "Entity.h"
 #include "DBGL/Math/Vector3.h"
 #include "DBGL/Math/Quaternion.h"
+#include "DBGL/Math/Matrix4x4.h"
 
 namespace dbgl
 {
@@ -52,6 +53,11 @@ namespace dbgl
 	     */
 	    QuatF const& rotation() const;
 	    /**
+	     * @brief Calculates the local transform matrix of this entity
+	     * @return The complete transform matrix
+	     */
+	    Mat4f transform() const;
+	    /**
 	     * @brief Calculates the position of this entity in world space, accounting for all parent entities
 	     * @return The position of this entity in world space
 	     */
@@ -66,6 +72,11 @@ namespace dbgl
 	     * @return The rotation of this entity in world space
 	     */
 	    QuatF worldRotation() const;
+	    /**
+	     * @brief Calculates the world transform matrix of this entity
+	     * @return The complete transform matrix
+	     */
+	    Mat4f worldTransform() const;
 	    /**
 	     * @brief Updates all components
 	     * @param deltaTime Time since last update
