@@ -134,6 +134,8 @@ namespace dbgl
 	    std::vector<std::shared_ptr<Component>> m_updateComponents;
 	    std::vector<std::shared_ptr<Component>> m_renderComponents;
 	    SceneGraph<Entity>::Node* m_pSceneNode = nullptr;
+
+	    friend class SceneGraph<Entity>::Node;
     };
 }
 

@@ -12,6 +12,12 @@ namespace dbgl
 {
     template<typename T> SceneGraph<T>::Node::Node(T* entity) : m_pEntity(entity)
     {
+	m_pEntity->m_pSceneNode = this;
+    }
+
+    template<typename T> SceneGraph<T>::Node::~Node()
+    {
+	m_pEntity->m_pSceneNode = nullptr;
     }
 
     template<typename T> T* SceneGraph<T>::Node::getEntity() const

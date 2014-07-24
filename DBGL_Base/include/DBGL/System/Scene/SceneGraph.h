@@ -34,6 +34,10 @@ namespace dbgl
 		     */
 		    Node(T* entity);
 		    /**
+		     * @brief Destructor
+		     */
+		    ~Node();
+		    /**
 		     * @brief Provides read access to the entity
 		     * @return The entity of this node
 		     */
