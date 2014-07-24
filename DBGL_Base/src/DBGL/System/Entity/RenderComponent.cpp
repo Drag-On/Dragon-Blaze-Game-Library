@@ -48,9 +48,9 @@ namespace dbgl
     void RenderComponent::prepareMatrices(TransformComponent* transform, RenderContext const* rc)
     {
 	// Calculate matrices
-	auto position = transform->position();
-	auto rotation = transform->rotation();
-	auto scale = transform->scale();
+	auto position = transform->worldPosition();
+	auto rotation = transform->worldRotation();
+	auto scale = transform->worldScale();
 	auto pShader = m_pMaterial->getShader();
 	auto camTrans = m_pEnvironment->getCamera()->getComponent<TransformComponent>();
 	auto camComp = m_pEnvironment->getCamera()->getComponent<CameraComponent>();

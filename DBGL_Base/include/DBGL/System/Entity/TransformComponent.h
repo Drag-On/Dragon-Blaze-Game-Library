@@ -40,6 +40,33 @@ namespace dbgl
 	     */
 	    QuatF& rotation();
 	    /**
+	     * @return Reference to position
+	     */
+	    Vec3f const& position() const;
+	    /**
+	     * @return Reference to scale
+	     */
+	    Vec3f const& scale() const;
+	    /**
+	     * @return Reference to rotation
+	     */
+	    QuatF const& rotation() const;
+	    /**
+	     * @brief Calculates the position of this entity in world space, accounting for all parent entities
+	     * @return The position of this entity in world space
+	     */
+	    Vec3f worldPosition() const;
+	    /**
+	     * @brief Calculates the scale of this entity in world space, accounting for all parent entities
+	     * @return The scale of this entity in world space
+	     */
+	    Vec3f worldScale() const;
+	    /**
+	     * @brief Calculates the rotation of this entity in world space, accounting for all parent entities
+	     * @return The rotation of this entity in world space
+	     */
+	    QuatF worldRotation() const;
+	    /**
 	     * @brief Updates all components
 	     * @param deltaTime Time since last update
 	     */
