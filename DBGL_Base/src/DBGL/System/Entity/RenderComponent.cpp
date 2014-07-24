@@ -48,9 +48,6 @@ namespace dbgl
     void RenderComponent::prepareMatrices(TransformComponent* transform, RenderContext const* rc)
     {
 	// Calculate matrices
-	auto position = transform->worldPosition();
-	auto rotation = transform->worldRotation();
-	auto scale = transform->worldScale();
 	auto pShader = m_pMaterial->getShader();
 	auto camTrans = m_pEnvironment->getCamera()->getComponent<TransformComponent>();
 	auto camComp = m_pEnvironment->getCamera()->getComponent<CameraComponent>();
@@ -58,7 +55,7 @@ namespace dbgl
 	float frameWidth = rc->getWidth();
 	float frameHeight = rc->getHeight();
 
-	Mat4f modelMat = Mat4f::makeTranslation(position) * rotation.getMatrix() * Mat4f::makeScale(scale);
+	Mat4f modelMat = transform->worldTransform();
 	Mat4f itmMat = modelMat.getInverted().transpose();
 	Vec3f direction{}, up{};
 	cam.getOrientation(&direction, &up, nullptr);
