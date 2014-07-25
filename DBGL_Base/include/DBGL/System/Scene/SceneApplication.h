@@ -16,6 +16,10 @@
 #include "DBGL/System/System.h"
 #include "DBGL/System/DBGLApplication.h"
 #include "DBGL/System/Entity/Entity.h"
+#include "DBGL/System/Entity/TransformComponent.h"
+#include "DBGL/System/Entity/RenderComponent.h"
+#include "DBGL/System/Entity/LightComponent.h"
+#include "DBGL/System/Entity/CameraComponent.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Window/Window.h"
 
@@ -62,6 +66,15 @@ namespace dbgl
 	     * @param entity Entity to delete
 	     */
 	    void deleteEntity(Entity* entity);
+	    /**
+	     * @brief Adds a transform component to \p entity
+	     * @param entity Entity to add a transform component to
+	     * @param pos Initial position
+	     * @param scale Initial scale
+	     * @param rot Initial rotation
+	     */
+	    void addTransformComponent(Entity* entity, Vec3f pos = {0, 0, 0}, Vec3f scale = {1, 1, 1}, QuatF rot = QuatF{});
+
 
 	    /**
 	     * @brief The scene graph

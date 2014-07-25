@@ -72,19 +72,13 @@ class MainHandler: public SceneApplication
 	    m_pEnvironment = new Environment {*m_pCam};
 	    // Create entity for a box
 	    m_pEntity = createEntity();
-	    auto transform = std::make_shared<TransformComponent>();
-	    transform->position() = Vec3f{0.0f, 0.0f, 0.0f};
-	    transform->rotation().fromAngleAxis({0.0f, 1.0f, 0.0f}, toRadians(30.0f));
-	    m_pEntity->addComponent(transform);
+	    addTransformComponent(m_pEntity, {0, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
 	    auto render = std::make_shared<RenderComponent>(*m_pMeshBox, *m_pMaterial, *m_pEnvironment);
 	    m_pEntity->addComponent(render);
 	    auto boxNode = m_sceneGraph.addNode(m_pEntity);
 	    // Create another box entity
 	    Entity* pOtherBox = createEntity();
-	    auto otherTransform = std::make_shared<TransformComponent>();
-	    otherTransform->position() = Vec3f{3.0f, 0.0f, 0.0f};
-	    otherTransform->rotation().fromAngleAxis({0.0f, 1.0f, 0.0f}, toRadians(30.0f));
-	    pOtherBox->addComponent(otherTransform);
+	    addTransformComponent(pOtherBox, {3, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
 	    auto otherRender = std::make_shared<RenderComponent>(*m_pMeshBox, *m_pMaterial, *m_pEnvironment);
 	    pOtherBox->addComponent(otherRender);
 	    boxNode->addChild(pOtherBox);
@@ -96,17 +90,13 @@ class MainHandler: public SceneApplication
 	    m_pEnvironment->addLight(pLightAmb);
 	    // First point light
 	    Entity* pLight = createEntity();
-	    auto transformLight = std::make_shared<TransformComponent>();
-	    transformLight->position() = Vec3f{2.0f, 5.0f, 2.0f};
-	    pLight->addComponent(transformLight);
+	    addTransformComponent(pLight, {2, 5, 2});
 	    auto lightComp = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f);
 	    pLight->addComponent(lightComp);
 	    m_pEnvironment->addLight(pLight);
 	    // Second point light
 	    Entity* light2 = createEntity();
-	    auto transformLight2 = std::make_shared<TransformComponent>();
-	    transformLight2->position() = Vec3f{-2.0f, 4.0f, 3.0f};
-	    light2->addComponent(transformLight2);
+	    addTransformComponent(light2, {-2, 4, 3});
 	    auto lightComp2 = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f);
 	    light2->addComponent(lightComp2);
 	    m_pEnvironment->addLight(light2);
