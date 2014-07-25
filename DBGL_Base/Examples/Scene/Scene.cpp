@@ -65,39 +65,38 @@ class MainHandler: public SceneApplication
 	    addTransformComp(m_pCam, {0, 0, 4}, {1, 1, 1}, QuatF{Vec3f{0.0f, 0.0f, 1.0f}, Vec3f{0.0f, 0.0f, -1.0f}, Vec3f{0.0f, 1.0f, 0.0f}});
 	    addComponent(m_pCam, std::make_shared<CameraComponent>());
 	    // Add the camera to the environment
-	    m_pEnvironment = new Environment {*m_pCam};
+	    m_environment.setCamera(m_pCam);
 	    // Create entity for a box
 	    m_pEntity = createEntity();
 	    addTransformComp(m_pEntity, {0, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
-	    addRenderComp(m_pEntity, *m_pMeshBox, *m_pMaterial, *m_pEnvironment);
+	    addRenderComp(m_pEntity, *m_pMeshBox, *m_pMaterial, m_environment);
 	    auto boxNode = m_sceneGraph.addNode(m_pEntity);
 	    // Create another box entity
 	    Entity* pOtherBox = createEntity();
 	    addTransformComp(pOtherBox, {3, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
-	    addRenderComp(pOtherBox, *m_pMeshBox, *m_pMaterial, *m_pEnvironment);
+	    addRenderComp(pOtherBox, *m_pMeshBox, *m_pMaterial, m_environment);
 	    boxNode->addChild(pOtherBox);
 	    // Create lights
 	    // Ambient light
 	    Entity* pLightAmb = createEntity();
 	    addComponent(pLightAmb, std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f));
-	    m_pEnvironment->addLight(pLightAmb);
+	    m_environment.addLight(pLightAmb);
 	    // First point light
 	    Entity* pLight = createEntity();
 	    addTransformComp(pLight, {2, 5, 2});
 	    addComponent(pLight, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f));
-	    m_pEnvironment->addLight(pLight);
+	    m_environment.addLight(pLight);
 	    // Second point light
 	    Entity* pLight2 = createEntity();
 	    addTransformComp(pLight2, {-2, 4, 3});
 	    addComponent(pLight2, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f));
-	    m_pEnvironment->addLight(pLight2);
+	    m_environment.addLight(pLight2);
 	}
 
 	virtual void terminate()
 	{
 	    // Clean up
 	    SceneApplication::terminate();
-	    delete m_pEnvironment;
 	    delete m_pMaterial;
 	    delete m_pMeshBox;
 	    delete m_pShader;
@@ -148,7 +147,6 @@ class MainHandler: public SceneApplication
     private:
 	Entity* m_pEntity = nullptr;
 	Entity* m_pCam = nullptr;
-	Environment* m_pEnvironment = nullptr;
 	float m_mouseSpeed = 1.5;
 	float m_moveSpeed = 2.5;
 	Mesh* m_pMeshBox = nullptr;

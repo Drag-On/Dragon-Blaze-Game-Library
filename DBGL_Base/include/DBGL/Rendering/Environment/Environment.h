@@ -30,7 +30,7 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param cam Camera to use. Must have a camera- and a transform component.
 	     */
-	    Environment(Entity const& cam);
+	    Environment(Entity const* cam = nullptr);
 	    /**
 	     * @brief Retrieve the camera
 	     * @return Current camera
@@ -40,7 +40,7 @@ namespace dbgl
 	     * @brief Sets a new active camera
 	     * @param cam Camera to use. Must have a camera- and a transform component.
 	     */
-	    void setCamera(Entity const& cam);
+	    void setCamera(Entity const* cam);
 	    /**
 	     * @brief Adds a new light to the environment
 	     * @param light Light to add
@@ -61,7 +61,7 @@ namespace dbgl
 	    /**
 	     * @brief Currently active camera
 	     */
-	    Entity const* m_pCamera;
+	    Entity const* m_pCamera = nullptr;
 	    /**
 	     * @brief All entities that emit light
 	     */

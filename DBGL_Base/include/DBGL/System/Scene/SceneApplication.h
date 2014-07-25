@@ -104,6 +104,10 @@ namespace dbgl
 	     */
 	    std::deque<Entity*> m_entities;
 	    /**
+	     * @brief Environment data
+	     */
+	    Environment m_environment;
+	    /**
 	     * @brief The used window
 	     */
 	    Window* m_pWindow;

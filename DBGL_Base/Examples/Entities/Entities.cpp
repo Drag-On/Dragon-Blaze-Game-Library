@@ -106,7 +106,7 @@ int main()
     auto camComp = std::make_shared<CameraComponent>();
     pCam->addComponent(camComp);
     // Add the camera to the environment
-    Environment environment {*pCam};
+    Environment environment {pCam};
     // Create entity for a box
     pEntity = new Entity{};
     auto transform = std::make_shared<TransformComponent>();
