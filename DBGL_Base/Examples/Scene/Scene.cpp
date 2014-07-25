@@ -61,8 +61,7 @@ class MainHandler: public SceneApplication
 	    SceneApplication::init();
 
 	    // Create entity for the camera
-	    m_pCam = new Entity{};
-	    m_entities.push_back(m_pCam);
+	    m_pCam = createEntity();
 	    auto transformCam = std::make_shared<TransformComponent>();
 	    transformCam->position() = Vec3f{0.0f, 0.0f, 4.0f};
 	    transformCam->rotation().fromVectors(Vec3f{0.0f, 0.0f, 1.0f}, Vec3f{0.0f, 0.0f, -1.0f}, Vec3f{0.0f, 1.0f, 0.0f});
@@ -72,8 +71,7 @@ class MainHandler: public SceneApplication
 	    // Add the camera to the environment
 	    m_pEnvironment = new Environment {*m_pCam};
 	    // Create entity for a box
-	    m_pEntity = new Entity{};
-	    m_entities.push_back(m_pEntity);
+	    m_pEntity = createEntity();
 	    auto transform = std::make_shared<TransformComponent>();
 	    transform->position() = Vec3f{0.0f, 0.0f, 0.0f};
 	    transform->rotation().fromAngleAxis({0.0f, 1.0f, 0.0f}, toRadians(30.0f));
@@ -82,8 +80,7 @@ class MainHandler: public SceneApplication
 	    m_pEntity->addComponent(render);
 	    auto boxNode = m_sceneGraph.addNode(m_pEntity);
 	    // Create another box entity
-	    Entity* pOtherBox = new Entity{};
-	    m_entities.push_back(pOtherBox);
+	    Entity* pOtherBox = createEntity();
 	    auto otherTransform = std::make_shared<TransformComponent>();
 	    otherTransform->position() = Vec3f{3.0f, 0.0f, 0.0f};
 	    otherTransform->rotation().fromAngleAxis({0.0f, 1.0f, 0.0f}, toRadians(30.0f));
@@ -93,14 +90,12 @@ class MainHandler: public SceneApplication
 	    boxNode->addChild(pOtherBox);
 	    // Create lights
 	    // Ambient light
-	    Entity* pLightAmb = new Entity{};
-	    m_entities.push_back(pLightAmb);
+	    Entity* pLightAmb = createEntity();
 	    auto lightCompAmb = std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f);
 	    pLightAmb->addComponent(lightCompAmb);
 	    m_pEnvironment->addLight(pLightAmb);
 	    // First point light
-	    Entity* pLight = new Entity{};
-	    m_entities.push_back(pLight);
+	    Entity* pLight = createEntity();
 	    auto transformLight = std::make_shared<TransformComponent>();
 	    transformLight->position() = Vec3f{2.0f, 5.0f, 2.0f};
 	    pLight->addComponent(transformLight);
@@ -108,8 +103,7 @@ class MainHandler: public SceneApplication
 	    pLight->addComponent(lightComp);
 	    m_pEnvironment->addLight(pLight);
 	    // Second point light
-	    Entity* light2 = new Entity{};
-	    m_entities.push_back(light2);
+	    Entity* light2 = createEntity();
 	    auto transformLight2 = std::make_shared<TransformComponent>();
 	    transformLight2->position() = Vec3f{-2.0f, 4.0f, 3.0f};
 	    light2->addComponent(transformLight2);
@@ -121,9 +115,7 @@ class MainHandler: public SceneApplication
 	virtual void terminate()
 	{
 	    // Clean up
-	    for(auto it = m_entities.begin(); it != m_entities.end(); ++it)
-		delete *it;
-	    m_entities.clear();
+	    SceneApplication::terminate();
 	    delete m_pEnvironment;
 	    delete m_pMaterial;
 	    delete m_pMeshBox;
@@ -173,7 +165,6 @@ class MainHandler: public SceneApplication
 	}
 
     private:
-	std::deque<Entity*> m_entities;
 	Entity* m_pEntity = nullptr;
 	Entity* m_pCam = nullptr;
 	Environment* m_pEnvironment = nullptr;

@@ -29,6 +29,7 @@ namespace dbgl
 	public:
 	    virtual void init();
 	    virtual void run();
+	    virtual void terminate();
 	protected:
 	    /**
 	     * @brief Updates all entities
@@ -49,16 +50,33 @@ namespace dbgl
 	     * @brief Loads all required resources
 	     */
 	    virtual void loadResources() = 0;
-
+	    /**
+	     * @brief Creates a new entity.
+	     * @details Creates a new entity and tracks it. It will be automatically freed on deconstruction.
+	     * @param name Name of the new entity
+	     * @return A pointer to the newly created entity
+	     */
+	    Entity* createEntity(std::string name = "");
+	    /**
+	     * @brief Deletes an entity and frees it's memory
+	     * @param entity Entity to delete
+	     */
+	    void deleteEntity(Entity* entity);
 
 	    /**
 	     * @brief The scene graph
 	     */
 	    SceneGraph<Entity> m_sceneGraph;
 	    /**
+	     * @brief List of all entities
+	     * @details All created entities will be tracked here. Every entity in this list will be deleted on deconstruction
+	     */
+	    std::deque<Entity*> m_entities;
+	    /**
 	     * @brief The used window
 	     */
 	    Window* m_pWindow;
+
     };
 }
 

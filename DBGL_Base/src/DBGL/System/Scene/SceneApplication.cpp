@@ -36,14 +36,22 @@ namespace dbgl
 	}
     }
 
+    void SceneApplication::terminate()
+    {
+	// Clean up
+	for (auto it = m_entities.begin(); it != m_entities.end(); ++it)
+	    delete *it;
+	m_entities.clear();
+    }
+
     void SceneApplication::update(Window::UpdateEventArgs const& args)
     {
 	// Pre-order traversal of the scene graph
-	std::stack<SceneGraph<Entity>::Node*> stack{};
+	std::stack<SceneGraph<Entity>::Node*> stack {};
 	stack.push(nullptr);
 	auto rootNodes = m_sceneGraph.getNodes();
 	SceneGraph<Entity>::Node* top = nullptr;
-	for(auto node : rootNodes)
+	for (auto node : rootNodes)
 	{
 	    top = node;
 	    while (top)
@@ -64,11 +72,11 @@ namespace dbgl
     void SceneApplication::render(Window::RenderEventArgs const& args)
     {
 	// Pre-order traversal of the scene graph
-	std::stack<SceneGraph<Entity>::Node*> stack{};
+	std::stack<SceneGraph<Entity>::Node*> stack {};
 	stack.push(nullptr);
 	auto rootNodes = m_sceneGraph.getNodes();
 	SceneGraph<Entity>::Node* top = nullptr;
-	for(auto node : rootNodes)
+	for (auto node : rootNodes)
 	{
 	    top = node;
 	    while (top)
@@ -84,5 +92,17 @@ namespace dbgl
 		stack.pop();
 	    }
 	}
+    }
+
+    Entity* SceneApplication::createEntity(std::string name)
+    {
+	auto entity = new Entity {name};
+	m_entities.push_back(entity);
+	return entity;
+    }
+
+    void SceneApplication::deleteEntity(Entity* entity)
+    {
+	m_entities.erase(std::find(m_entities.begin(), m_entities.end(), entity));
     }
 }
