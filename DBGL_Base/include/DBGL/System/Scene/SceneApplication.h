@@ -21,6 +21,10 @@
 #include "DBGL/System/Entity/LightComponent.h"
 #include "DBGL/System/Entity/CameraComponent.h"
 #include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Rendering/Mesh/Mesh.h"
+#include "DBGL/Rendering/Material/Material.h"
+#include "DBGL/Rendering/Environment/Camera.h"
+#include "DBGL/Rendering/Environment/Environment.h"
 #include "DBGL/Window/Window.h"
 
 namespace dbgl
@@ -73,7 +77,15 @@ namespace dbgl
 	     * @param scale Initial scale
 	     * @param rot Initial rotation
 	     */
-	    void addTransformComponent(Entity* entity, Vec3f pos = {0, 0, 0}, Vec3f scale = {1, 1, 1}, QuatF rot = QuatF{});
+	    void addTransformComp(Entity* entity, Vec3f pos = {0, 0, 0}, Vec3f scale = {1, 1, 1}, QuatF rot = QuatF{});
+	    /**
+	     * @brief Adds a render component to \p entity
+	     * @param entity Entity to add a render component to
+	     * @param mesh Mesh to use
+	     * @param mat Material to use
+	     * @param env Environment holding information such as camera...
+	     */
+	    void addRenderComp(Entity* entity, Mesh& mesh, Material& mat, Environment& env);
 
 
 	    /**

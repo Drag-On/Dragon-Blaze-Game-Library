@@ -106,9 +106,15 @@ namespace dbgl
 	m_entities.erase(std::find(m_entities.begin(), m_entities.end(), entity));
     }
 
-    void SceneApplication::addTransformComponent(Entity* entity, Vec3f pos, Vec3f scale, QuatF rot)
+    void SceneApplication::addTransformComp(Entity* entity, Vec3f pos, Vec3f scale, QuatF rot)
     {
 	auto transform = std::make_shared<TransformComponent>(pos, scale, rot);
 	entity->addComponent(transform);
+    }
+
+    void SceneApplication::addRenderComp(Entity* entity, Mesh& mesh, Material& mat, Environment& env)
+    {
+	auto render = std::make_shared<RenderComponent>(mesh, mat, env);
+	entity->addComponent(render);
     }
 }
