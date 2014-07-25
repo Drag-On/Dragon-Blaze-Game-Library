@@ -13,9 +13,11 @@
 
 #include <stack>
 #include "SceneGraph.h"
+#include "DBGL/System/System.h"
 #include "DBGL/System/DBGLApplication.h"
 #include "DBGL/System/Entity/Entity.h"
 #include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Window/Window.h"
 
 namespace dbgl
 {
@@ -25,24 +27,39 @@ namespace dbgl
     class SceneApplication : public DBGLApplication
     {
 	public:
+	    virtual void init();
+	    virtual void run();
+	protected:
 	    /**
 	     * @brief Updates all entities
-	     * @param deltaTime Time since last update
+	     * @param args Update event arguments
 	     */
-	    void update(float deltaTime);
+	    virtual void update(Window::UpdateEventArgs const& args);
 	    /**
 	     * @brief Renders all entities
-	     * @param rc Render context to draw to
+	     * @param args Render event arguments
 	     */
-	    void render(RenderContext const* rc);
-	protected:
+	    virtual void render(Window::RenderEventArgs const& args);
+	    /**
+	     * @brief Returns the window used by this application
+	     * @return A pointer to the used window
+	     */
+	    virtual Window* createWindow() = 0;
+	    /**
+	     * @brief Loads all required resources
+	     */
+	    virtual void loadResources() = 0;
+
+
 	    /**
 	     * @brief The scene graph
 	     */
 	    SceneGraph<Entity> m_sceneGraph;
+	    /**
+	     * @brief The used window
+	     */
+	    Window* m_pWindow;
     };
 }
-
-
 
 #endif /* SCENEAPPLICATION_H_ */

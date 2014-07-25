@@ -12,7 +12,31 @@
 
 namespace dbgl
 {
-    void SceneApplication::update(float deltaTime)
+    void SceneApplication::init()
+    {
+	// Create window
+	m_pWindow = createWindow();
+	// Initialize it
+	m_pWindow->init();
+	// Load required resources
+	loadResources();
+	// Add update- and render callback so we can draw the mesh
+	m_pWindow->addUpdateCallback(std::bind(&SceneApplication::update, this, std::placeholders::_1));
+	m_pWindow->addRenderCallback(std::bind(&SceneApplication::render, this, std::placeholders::_1));
+	// Show window
+	m_pWindow->show();
+    }
+
+    void SceneApplication::run()
+    {
+	// Run update loop
+	while (dbgl::isRunning())
+	{
+	    dbgl::update();
+	}
+    }
+
+    void SceneApplication::update(Window::UpdateEventArgs const& args)
     {
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack{};
@@ -20,7 +44,7 @@ namespace dbgl
 	auto top = m_sceneGraph.getRoot();
 	while(top)
 	{
-	    top->getEntity()->update(deltaTime);
+	    top->getEntity()->update(args.deltaTime);
 	    auto children = top->getChildren();
 	    for(auto it = children.rend(); it != children.rbegin(); --it)
 	    {
@@ -32,7 +56,7 @@ namespace dbgl
 	}
     }
 
-    void SceneApplication::render(RenderContext const* rc)
+    void SceneApplication::render(Window::RenderEventArgs const& args)
     {
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack{};
@@ -40,7 +64,7 @@ namespace dbgl
 	auto top = m_sceneGraph.getRoot();
 	while(top)
 	{
-	    top->getEntity()->render(rc);
+	    top->getEntity()->render(args.rc);
 	    auto children = top->getChildren();
 	    for(auto it = children.rend(); it != children.rbegin(); --it)
 	    {
