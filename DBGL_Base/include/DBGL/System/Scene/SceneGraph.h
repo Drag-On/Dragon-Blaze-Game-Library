@@ -18,7 +18,7 @@ namespace dbgl
 {
     /**
      * @brief A scene graph which can be used to structure entities.
-     * @note The scene graph will hold pointer to the passed entities, yet it does not manage their memory.
+     * @note The scene graph will hold pointers to the passed entities, yet it does not manage their memory.
      * 	     All entities will be wrapped in a node object which contains information about the tree structure,
      * 	     and which can be used to modify the tree. Those wrapper objects will be freed by the scene graph on
      * 	     destruction or when an entity gets removed from the tree. The held entities will be left untouched.
