@@ -121,5 +121,9 @@ namespace dbgl
     void SceneApplication::addComponent(Entity* entity, std::shared_ptr<Entity::Component> comp)
     {
 	entity->addComponent(comp);
+
+	// Check if a light component is being added
+	if(typeid(*comp.get()) == typeid(LightComponent))
+	    m_environment.addLight(entity);
     }
 }

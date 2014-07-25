@@ -80,17 +80,14 @@ class MainHandler: public SceneApplication
 	    // Ambient light
 	    Entity* pLightAmb = createEntity();
 	    addComponent(pLightAmb, std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f));
-	    m_environment.addLight(pLightAmb);
 	    // First point light
 	    Entity* pLight = createEntity();
 	    addTransformComp(pLight, {2, 5, 2});
 	    addComponent(pLight, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f));
-	    m_environment.addLight(pLight);
 	    // Second point light
 	    Entity* pLight2 = createEntity();
 	    addTransformComp(pLight2, {-2, 4, 3});
 	    addComponent(pLight2, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f));
-	    m_environment.addLight(pLight2);
 	}
 
 	virtual void terminate()

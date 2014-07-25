@@ -12,6 +12,7 @@
 #define SCENEAPPLICATION_H_
 
 #include <stack>
+#include <typeinfo>
 #include "SceneGraph.h"
 #include "DBGL/System/System.h"
 #include "DBGL/System/DBGLApplication.h"
