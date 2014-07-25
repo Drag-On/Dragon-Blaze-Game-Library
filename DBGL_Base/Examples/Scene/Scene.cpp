@@ -80,8 +80,7 @@ class MainHandler: public SceneApplication
 	    m_pEntity->addComponent(transform);
 	    auto render = std::make_shared<RenderComponent>(*m_pMeshBox, *m_pMaterial, *m_pEnvironment);
 	    m_pEntity->addComponent(render);
-	    m_pBoxNode = new SceneGraph<Entity>::Node{m_pEntity};
-	    m_sceneGraph.setRoot(m_pBoxNode);
+	    auto boxNode = m_sceneGraph.addNode(m_pEntity);
 	    // Create another box entity
 	    Entity* pOtherBox = new Entity{};
 	    m_entities.push_back(pOtherBox);
@@ -91,8 +90,7 @@ class MainHandler: public SceneApplication
 	    pOtherBox->addComponent(otherTransform);
 	    auto otherRender = std::make_shared<RenderComponent>(*m_pMeshBox, *m_pMaterial, *m_pEnvironment);
 	    pOtherBox->addComponent(otherRender);
-	    m_pOtherBoxNode = new SceneGraph<Entity>::Node{pOtherBox};
-	    m_pBoxNode->addChild(m_pOtherBoxNode);
+	    boxNode->addChild(pOtherBox);
 	    // Create lights
 	    // Ambient light
 	    Entity* pLightAmb = new Entity{};
@@ -126,8 +124,6 @@ class MainHandler: public SceneApplication
 	    for(auto it = m_entities.begin(); it != m_entities.end(); ++it)
 		delete *it;
 	    m_entities.clear();
-	    delete m_pOtherBoxNode;
-	    delete m_pBoxNode;
 	    delete m_pEnvironment;
 	    delete m_pMaterial;
 	    delete m_pMeshBox;
@@ -180,8 +176,6 @@ class MainHandler: public SceneApplication
 	std::deque<Entity*> m_entities;
 	Entity* m_pEntity = nullptr;
 	Entity* m_pCam = nullptr;
-	SceneGraph<Entity>::Node* m_pOtherBoxNode = nullptr;
-	SceneGraph<Entity>::Node* m_pBoxNode = nullptr;
 	Environment* m_pEnvironment = nullptr;
 	float m_mouseSpeed = 1.5;
 	float m_moveSpeed = 2.5;

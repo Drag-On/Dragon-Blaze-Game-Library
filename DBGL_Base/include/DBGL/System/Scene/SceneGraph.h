@@ -50,13 +50,14 @@ namespace dbgl
 		    /**
 		     * @brief Adds a new child node
 		     * @param child New child
+		     * @returns The node wrapping the new child
 		     */
-		    void addChild(Node* child);
+		    Node* addChild(T* child);
 		    /**
 		     * @brief Removes a child node
 		     * @param child Node to remove
 		     */
-		    void removeChild(Node* child);
+		    void removeChild(T* child);
 		    /**
 		     * @brief Provides access to this node's parent
 		     * @return The parent node of this node or nullptr if none
@@ -93,22 +94,23 @@ namespace dbgl
 	     */
 	    template<class Visitor> void accept(Visitor& visitor);
 	    /**
-	     * @brief Provides access to the root node
-	     * @return The root node or nullptr if scene graph is empty
+	     * @brief Provides access to the top-level nodes
+	     * @return List of all top-level nodes
 	     */
-	    Node* getRoot() const;
+	    std::set<Node*> const& getNodes() const;
 	    /**
-	     * @brief Sets a new root node
-	     * @param root New root
+	     * @brief Adds a new top-level node
+	     * @param node Entity to add. It will automatically be wrapped in a node
+	     * @returns The node wrapping the passed entity
 	     */
-	    void setRoot(Node* root);
+	    Node* addNode(T* entity);
 	    /**
-	     * @brief Provides access to the root entity
-	     * @return The entity held by the root node or nullptr if scene graph is empty
+	     * @brief Remove top-level node
+	     * @param node Entity to remove.
 	     */
-	    T* getRootEntity() const;
+	    void removeNode(T* entity);
 	private:
-	    Node* m_pRoot = nullptr;
+	    std::set<Node*> m_nodes;
     };
 }
 

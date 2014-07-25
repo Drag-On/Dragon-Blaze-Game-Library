@@ -41,18 +41,23 @@ namespace dbgl
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack{};
 	stack.push(nullptr);
-	auto top = m_sceneGraph.getRoot();
-	while(top)
+	auto rootNodes = m_sceneGraph.getNodes();
+	SceneGraph<Entity>::Node* top = nullptr;
+	for(auto node : rootNodes)
 	{
-	    top->getEntity()->update(args.deltaTime);
-	    auto children = top->getChildren();
-	    for(auto it = children.rend(); it != children.rbegin(); --it)
+	    top = node;
+	    while (top)
 	    {
-		SceneGraph<Entity>::Node* entity = *it;
-		stack.push(entity);
+		top->getEntity()->update(args.deltaTime);
+		auto children = top->getChildren();
+		for (auto it = children.rend(); it != children.rbegin(); --it)
+		{
+		    SceneGraph<Entity>::Node* entity = *it;
+		    stack.push(entity);
+		}
+		top = stack.top();
+		stack.pop();
 	    }
-	    top = stack.top();
-	    stack.pop();
 	}
     }
 
@@ -61,18 +66,23 @@ namespace dbgl
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack{};
 	stack.push(nullptr);
-	auto top = m_sceneGraph.getRoot();
-	while(top)
+	auto rootNodes = m_sceneGraph.getNodes();
+	SceneGraph<Entity>::Node* top = nullptr;
+	for(auto node : rootNodes)
 	{
-	    top->getEntity()->render(args.rc);
-	    auto children = top->getChildren();
-	    for(auto it = children.rend(); it != children.rbegin(); --it)
+	    top = node;
+	    while (top)
 	    {
-		SceneGraph<Entity>::Node* entity = *it;
-		stack.push(entity);
+		top->getEntity()->render(args.rc);
+		auto children = top->getChildren();
+		for (auto it = children.rend(); it != children.rbegin(); --it)
+		{
+		    SceneGraph<Entity>::Node* entity = *it;
+		    stack.push(entity);
+		}
+		top = stack.top();
+		stack.pop();
 	    }
-	    top = stack.top();
-	    stack.pop();
 	}
     }
 }

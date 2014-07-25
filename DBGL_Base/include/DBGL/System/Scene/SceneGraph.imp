@@ -18,6 +18,9 @@ namespace dbgl
     template<typename T> SceneGraph<T>::Node::~Node()
     {
 	m_pEntity->m_pSceneNode = nullptr;
+	// Delete all child nodes
+	for(auto node : m_childNodes)
+	    delete node;
     }
 
     template<typename T> T* SceneGraph<T>::Node::getEntity() const
@@ -30,16 +33,25 @@ namespace dbgl
 	return m_childNodes;
     }
 
-    template<typename T> void SceneGraph<T>::Node::addChild(Node* child)
+    template<typename T> auto SceneGraph<T>::Node::addChild(T* child) -> Node*
     {
-	child->m_pParent = this;
-	m_childNodes.insert(child);
+	auto node = new Node{child};
+	node->m_pParent = this;
+	m_childNodes.insert(node);
+	return node;
     }
 
-    template<typename T> void SceneGraph<T>::Node::removeChild(Node* child)
+    template<typename T> void SceneGraph<T>::Node::removeChild(T* child)
     {
-	child->m_pParent = nullptr;
-	m_childNodes.erase(child);
+	for(auto it = m_nodes.begin(); it != m_nodes.end(); ++it)
+	{
+	    if((*it)->getEntity() == child)
+	    {
+		delete *it;
+		m_nodes.erase(it);
+		return;
+	    }
+	}
     }
 
     template<typename T> auto SceneGraph<T>::Node::getParent() const -> Node*
@@ -59,38 +71,48 @@ namespace dbgl
 
     template<typename T> SceneGraph<T>::~SceneGraph()
     {
+	// Delete all nodes
+	for(auto node : m_nodes)
+	    delete node;
     }
 
     template<typename T> void SceneGraph<T>::accept(AbstractTreeVisitor& visitor)
     {
 	AbstractTree::accept(visitor);
-	if (m_pRoot != nullptr)
-	    m_pRoot->accept(visitor);
+	for(auto node : m_nodes)
+	    node->accept(visitor);
     }
 
     template<typename T> template<class Visitor> void SceneGraph<T>::accept(Visitor& visitor)
     {
 	AbstractTree::accept<Visitor, SceneGraph*>(visitor);
-	if (m_pRoot != nullptr)
-	    m_pRoot->accept<Visitor>(visitor);
+	for(auto node : m_nodes)
+	    node->accept<Visitor>(visitor);
     }
 
-    template<typename T> typename SceneGraph<T>::Node* SceneGraph<T>::getRoot() const
+    template<typename T> auto SceneGraph<T>::getNodes() const -> std::set<Node*> const&
     {
-	return m_pRoot;
+	return m_nodes;
     }
 
-    template<typename T> void SceneGraph<T>::setRoot(Node* root)
+    template<typename T> auto SceneGraph<T>::addNode(T* entity) -> Node*
     {
-	m_pRoot = root;
+	auto node = new Node{entity};
+	m_nodes.insert(node);
+	return node;
     }
 
-    template<typename T> T* SceneGraph<T>::getRootEntity() const
+    template<typename T> void SceneGraph<T>::removeNode(T* entity)
     {
-	if (m_pRoot != nullptr)
-	    return m_pRoot->getEntity();
-	else
-	    return nullptr;
+	for(auto it = m_nodes.begin(); it != m_nodes.end(); ++it)
+	{
+	    if((*it)->getEntity() == entity)
+	    {
+		delete *it;
+		m_nodes.erase(it);
+		return;
+	    }
+	}
     }
 }
 
