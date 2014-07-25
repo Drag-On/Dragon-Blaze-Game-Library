@@ -24,6 +24,10 @@ namespace dbgl
 
     void RenderComponent::render(Entity* owner, RenderContext const* rc)
     {
+	// Bail out if there is no camera or no transform component
+	if(!m_pEnvironment->getCamera() || !owner->getComponent<TransformComponent>())
+	    return;
+
 	// Send material properties to shader
 	m_pMaterial->prepare();
 
