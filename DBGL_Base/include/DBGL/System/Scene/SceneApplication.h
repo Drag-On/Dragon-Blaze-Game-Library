@@ -91,6 +91,7 @@ namespace dbgl
 	     * @brief Add a component to \p entity
 	     * @param entity Entity to add the component to
 	     * @param comp Component to add
+	     * @note This method will automatically pass \p entity to the environment if a light component is added
 	     */
 	    void addComponent(Entity* entity, std::shared_ptr<Entity::Component> comp);
 
