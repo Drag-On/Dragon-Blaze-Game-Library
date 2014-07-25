@@ -117,4 +117,9 @@ namespace dbgl
 	auto render = std::make_shared<RenderComponent>(mesh, mat, env);
 	entity->addComponent(render);
     }
+
+    void SceneApplication::addComponent(Entity* entity, std::shared_ptr<Entity::Component> comp)
+    {
+	entity->addComponent(comp);
+    }
 }

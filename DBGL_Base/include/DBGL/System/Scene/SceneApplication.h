@@ -86,6 +86,12 @@ namespace dbgl
 	     * @param env Environment holding information such as camera...
 	     */
 	    void addRenderComp(Entity* entity, Mesh& mesh, Material& mat, Environment& env);
+	    /**
+	     * @brief Add a component to \p entity
+	     * @param entity Entity to add the component to
+	     * @param comp Component to add
+	     */
+	    void addComponent(Entity* entity, std::shared_ptr<Entity::Component> comp);
 
 
 	    /**

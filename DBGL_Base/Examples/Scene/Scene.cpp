@@ -63,8 +63,7 @@ class MainHandler: public SceneApplication
 	    // Create entity for the camera
 	    m_pCam = createEntity();
 	    addTransformComp(m_pCam, {0, 0, 4}, {1, 1, 1}, QuatF{Vec3f{0.0f, 0.0f, 1.0f}, Vec3f{0.0f, 0.0f, -1.0f}, Vec3f{0.0f, 1.0f, 0.0f}});
-	    auto camComp = std::make_shared<CameraComponent>();
-	    m_pCam->addComponent(camComp);
+	    addComponent(m_pCam, std::make_shared<CameraComponent>());
 	    // Add the camera to the environment
 	    m_pEnvironment = new Environment {*m_pCam};
 	    // Create entity for a box
@@ -80,21 +79,18 @@ class MainHandler: public SceneApplication
 	    // Create lights
 	    // Ambient light
 	    Entity* pLightAmb = createEntity();
-	    auto lightCompAmb = std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f);
-	    pLightAmb->addComponent(lightCompAmb);
+	    addComponent(pLightAmb, std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f));
 	    m_pEnvironment->addLight(pLightAmb);
 	    // First point light
 	    Entity* pLight = createEntity();
 	    addTransformComp(pLight, {2, 5, 2});
-	    auto lightComp = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f);
-	    pLight->addComponent(lightComp);
+	    addComponent(pLight, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f));
 	    m_pEnvironment->addLight(pLight);
 	    // Second point light
-	    Entity* light2 = createEntity();
-	    addTransformComp(light2, {-2, 4, 3});
-	    auto lightComp2 = std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f);
-	    light2->addComponent(lightComp2);
-	    m_pEnvironment->addLight(light2);
+	    Entity* pLight2 = createEntity();
+	    addTransformComp(pLight2, {-2, 4, 3});
+	    addComponent(pLight2, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f));
+	    m_pEnvironment->addLight(pLight2);
 	}
 
 	virtual void terminate()
