@@ -26,6 +26,7 @@
 #include "DBGL/Rendering/ShaderProgram.h"
 #include "DBGL/Rendering/Texture/Texture.h"
 #include "DBGL/Rendering/Material/Material2DTex.h"
+#include "DBGL/Rendering/Material/MaterialColor.h"
 #include "DBGL/Rendering/Environment/Camera.h"
 #include "DBGL/Rendering/Environment/Environment.h"
 #include "DBGL/Math/Utility.h"
@@ -47,12 +48,12 @@ class MainHandler: public SceneApplication
 	virtual void loadResources()
 	{
 	    // Load mesh, shader, texture...
-	    m_pMeshBox = Mesh::makeCube(Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
-	    m_pShader = new ShaderProgram{"../common/DiffSpecNorm.vert", "../common/DiffSpecNorm.frag"};
+	    m_pMeshSphere = Mesh::load(Mesh::Type::OBJ, "../common/Sphere.obj", Mesh::SendToGPU | Mesh::Optimize | Mesh::GenerateTangentBase);
+	    m_pShader = new ShaderProgram{"../common/DiffSpec.vert", "../common/DiffSpec.frag"};
+	    m_pShaderNoLight = new ShaderProgram{"../common/NoLight.vert", "../common/NoLight.frag"};
 	    m_pTexDiffuse = Texture::load(Texture::DDS, "../common/Bricks01.DDS", Texture::FlipVertically);
-	    m_pTexNormal = Texture::load(Texture::TGA, "../common/Bricks01_normal.tga");
-	    m_pTexSpecular = Texture::load(Texture::TGA, "../common/Bricks01_specular.tga");
-	    m_pMaterial = new Material2DTex{*m_pShader, *m_pTexDiffuse, m_pTexNormal, m_pTexSpecular};
+	    m_pMaterial = new Material2DTex{*m_pShader, *m_pTexDiffuse, nullptr, nullptr};
+	    m_pMatColor = new MaterialColor{*m_pShaderNoLight, Vec3f{1, 1, 1}};
 	}
 
 	virtual void init()
@@ -69,12 +70,12 @@ class MainHandler: public SceneApplication
 	    // Create entity for a box
 	    m_pEntity = createEntity();
 	    addTransformComp(m_pEntity, {0, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
-	    addRenderComp(m_pEntity, *m_pMeshBox, *m_pMaterial, m_environment);
+	    addRenderComp(m_pEntity, *m_pMeshSphere, *m_pMaterial, m_environment);
 	    auto boxNode = m_sceneGraph.addNode(m_pEntity);
 	    // Create another box entity
 	    Entity* pOtherBox = createEntity();
 	    addTransformComp(pOtherBox, {3, 0, 0}, {1, 1, 1}, QuatF{{0.0f, 1.0f, 0.0f}, toRadians(30.0f)});
-	    addRenderComp(pOtherBox, *m_pMeshBox, *m_pMaterial, m_environment);
+	    addRenderComp(pOtherBox, *m_pMeshSphere, *m_pMaterial, m_environment);
 	    boxNode->addChild(pOtherBox);
 	    // Create lights
 	    // Ambient light
@@ -82,12 +83,16 @@ class MainHandler: public SceneApplication
 	    addComponent(pLightAmb, std::make_shared<LightComponent>(LightComponent::LightType::AMBIENT, Vec3f{1.0f, 1.0f, 1.0f}, 0.2f));
 	    // First point light
 	    Entity* pLight = createEntity();
-	    addTransformComp(pLight, {2, 5, 2});
+	    addTransformComp(pLight, {2, 5, 2}, {0.3f, 0.3f, 0.3f});
+	    addRenderComp(pLight, *m_pMeshSphere, *m_pMatColor, m_environment);
 	    addComponent(pLight, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{1.0f, 0.8f, 0.8f}, 20.0f));
+	    m_sceneGraph.addNode(pLight);
 	    // Second point light
 	    Entity* pLight2 = createEntity();
-	    addTransformComp(pLight2, {-2, 4, 3});
+	    addTransformComp(pLight2, {-3, 4, 3}, {0.3f, 0.3f, 0.3f});
+	    addRenderComp(pLight2, *m_pMeshSphere, *m_pMatColor, m_environment);
 	    addComponent(pLight2, std::make_shared<LightComponent>(LightComponent::LightType::POINT, Vec3f{0.8f, 0.8f, 1.0f}, 20.0f));
+	    m_sceneGraph.addNode(pLight2);
 	}
 
 	virtual void terminate()
@@ -95,11 +100,10 @@ class MainHandler: public SceneApplication
 	    // Clean up
 	    SceneApplication::terminate();
 	    delete m_pMaterial;
-	    delete m_pMeshBox;
+	    delete m_pMeshSphere;
 	    delete m_pShader;
+	    delete m_pShaderNoLight;
 	    delete m_pTexDiffuse;
-	    delete m_pTexNormal;
-	    delete m_pTexSpecular;
 	}
 
 	virtual void update(Window::UpdateEventArgs const& args)
@@ -146,12 +150,12 @@ class MainHandler: public SceneApplication
 	Entity* m_pCam = nullptr;
 	float m_mouseSpeed = 1.5;
 	float m_moveSpeed = 2.5;
-	Mesh* m_pMeshBox = nullptr;
+	Mesh* m_pMeshSphere = nullptr;
 	ShaderProgram* m_pShader = nullptr;
+	ShaderProgram* m_pShaderNoLight = nullptr;
 	Texture* m_pTexDiffuse = nullptr;
-	Texture* m_pTexNormal = nullptr;
-	Texture* m_pTexSpecular = nullptr;
 	Material2DTex* m_pMaterial = nullptr;
+	MaterialColor* m_pMatColor = nullptr;
 };
 
 
