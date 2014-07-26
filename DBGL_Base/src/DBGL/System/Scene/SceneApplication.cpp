@@ -48,11 +48,11 @@ namespace dbgl
     {
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack {};
-	stack.push(nullptr);
 	auto rootNodes = m_sceneGraph.getNodes();
 	SceneGraph<Entity>::Node* top = nullptr;
 	for (auto node : rootNodes)
 	{
+	    stack.push(nullptr);
 	    top = node;
 	    while (top)
 	    {
@@ -73,11 +73,11 @@ namespace dbgl
     {
 	// Pre-order traversal of the scene graph
 	std::stack<SceneGraph<Entity>::Node*> stack {};
-	stack.push(nullptr);
 	auto rootNodes = m_sceneGraph.getNodes();
 	SceneGraph<Entity>::Node* top = nullptr;
 	for (auto node : rootNodes)
 	{
+	    stack.push(nullptr);
 	    top = node;
 	    while (top)
 	    {
