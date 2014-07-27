@@ -22,7 +22,7 @@ namespace dbgl
 
     template <typename T> unsigned int Bitmask<T>::getSize() const
     {
-	    return sizeof(m_data) * CHAR_BIT;
+	    return sizeof(m_data) * std::numeric_limits<unsigned char>::digits;
     }
 
     template <typename T> void Bitmask<T>::set(Bitmask<T> mask)

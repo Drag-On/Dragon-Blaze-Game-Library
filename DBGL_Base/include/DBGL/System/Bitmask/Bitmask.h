@@ -13,6 +13,7 @@
 
 #include <string>
 #include <cmath>
+#include <limits>
 
 namespace dbgl
 {
