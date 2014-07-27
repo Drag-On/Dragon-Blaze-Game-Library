@@ -260,7 +260,7 @@ namespace dbgl
 		    else if (theta > 1.0)
 			theta = 1.0f;
 		    auto angle = std::acos(theta);
-		    bool uvCompatibility = useUv ? mesh->uvs()[vertIndex].isSimilar(uv, 0.001f) : true;
+		    bool uvCompatibility = useUv ? mesh->uvs()[vertIndex].isSimilar(uv, 0.000001f) : true;
 		    if (angle < m_normalCompatibilityAngle)
 		    {
 			auto prev = mesh->normals()[vertIndex];
