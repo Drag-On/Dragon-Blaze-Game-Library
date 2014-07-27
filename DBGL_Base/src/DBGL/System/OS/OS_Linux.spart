@@ -15,14 +15,40 @@
 namespace OS_Linux
 {
     #include <sys/utsname.h>
+    #include <sys/wait.h>
+    #include <unistd.h>
 }
 
 OS::Type OS::getType()
 {
     OS::Type type;
 
-    type.name = "Linux";
-    // TODO: More detailed description
-    // int uname(struct utsname *buf);
+    // Request version info from system
+    OS_Linux::utsname versionInfo;
+    OS_Linux::uname(&versionInfo);
+    // OS name
+    type.name = versionInfo.sysname;
+    // Split version on dots
+    std::string major, minor;
+    unsigned int dots = 0;
+    for(unsigned int i = 0; i < strlen(versionInfo.release); i++)
+    {
+        if(versionInfo.release[i] != '.')
+            if(dots == 0)
+                major += versionInfo.release[i];
+            else if(dots == 1)
+                minor += versionInfo.release[i];
+            else
+                break;
+        else
+            dots++;
+    }
+    type.major = std::stoi(major);
+    type.minor = std::stoi(minor);
+    // Derivative name
+    Properties prop;
+    prop.read("/etc/lsb-release");
+    type.derivative = prop.getStringValue("DISTRIB_DESCRIPTION");
+
     return type;
 }

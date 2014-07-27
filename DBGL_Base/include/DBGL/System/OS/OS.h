@@ -11,9 +11,11 @@
 #ifndef OS_H_
 #define OS_H_
 
-#include<string>
-#include<sstream>
-#include<cstring>
+#include <string>
+#include <sstream>
+#include <cstring>
+#include "DBGL/System/Log/Log.h"
+#include "DBGL/System/Properties/Properties.h"
 
 namespace dbgl
 {
