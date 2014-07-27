@@ -260,20 +260,41 @@ namespace dbgl
 		    else if (theta > 1.0)
 			theta = 1.0f;
 		    auto angle = std::acos(theta);
-		    bool uvCompatibility = useUv ? mesh->uvs()[vertIndex].isSimilar(uv, 0.01) : true;
-		    if ((angle < m_normalCompatibilityAngle) && uvCompatibility)
+		    bool uvCompatibility = useUv ? mesh->uvs()[vertIndex].isSimilar(uv, 0.001f) : true;
+		    if (angle < m_normalCompatibilityAngle)
 		    {
 			auto prev = mesh->normals()[vertIndex];
 
-			// They are compatible, now average normal and uv
+			// Normals are compatible, now average them
 			mesh->normals()[vertIndex] += normal;
 			mesh->normals()[vertIndex].normalize();
-			if (useUv)
+			normal = mesh->normals()[vertIndex];
+			if(uvCompatibility)
 			{
-			    mesh->uvs()[vertIndex] += uv;
-			    mesh->uvs()[vertIndex] /= 2;
+			    // UVs are compatible
+			    if (useUv)
+			    {
+				mesh->uvs()[vertIndex] += uv;
+				mesh->uvs()[vertIndex] /= 2;
+			    }
+			    compatible = true;
 			}
-			compatible = true;
+			else
+			{
+			    // Coordinates are the same and normals are compatible, but due to different
+			    // uvs a new vertex has to be added anyway. In order to gain a smooth surface
+			    // every vertex with the same coordinates will get the same (averaged) normal.
+			    // Every vertex with an ID less than vertIndex has already been tried and does
+			    // not have appropriate coordinates, but we still don't know about other
+			    // vertices with IDs higher than that.
+			    for(unsigned int i = vertIndex + 1; i < mesh->vertices().size(); i++)
+			    {
+				if (mesh->vertices()[i].isSimilar(vertex, 0.001))
+				{
+				    mesh->normals()[i] = normal;
+				}
+			    }
+			}
 		    }
 		}
 		if (!compatible)
