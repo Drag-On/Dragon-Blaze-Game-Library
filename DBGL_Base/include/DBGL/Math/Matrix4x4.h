@@ -20,130 +20,130 @@
 
 namespace dbgl
 {
-    /// <summary>
-    /// @brief Matrix of size 4 by 4
-    /// @author Jan Moeller
-    /// </summary>
+    /**
+     * @brief Matrix of size 4 by 4
+     * @author Jan Moeller
+     */
     template<typename T> class Matrix4x4 : public Matrix<T, 4, 4>
     {
 	    using BaseMatrixType = Matrix<T, 4, 4>;
 	public:
 	    // Constructors
-	    /// <summary>
-	    /// @brief Constructs a 3x3 identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Constructs a 3x3 identity matrix
+	     */
 	    Matrix4x4();
-	    /// <summary>
-	    /// @brief Copies another 3x3 matrix
-	    /// </summary>
+	    /**
+	     * @brief Copies another 3x3 matrix
+	     */
 	    Matrix4x4(const BaseMatrixType &other);
 	    // Destructors
 	    ~Matrix4x4();
 	    // Methods
-	    /// <summary>
-	    /// @brief Transposes this matrix
-	    /// </summary>
+	    /**
+	     * @brief Transposes this matrix
+	     */
 	    Matrix4x4<T>& transpose();
-	    /// <summary>
-	    /// @brief Inverts this matrix so that a multiplication with
-	    ///	   the original results in an identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Inverts this matrix so that a multiplication with
+	     * 	   the original results in an identity matrix
+	     */
 	    Matrix4x4<T>& invert();
-	    /// <summary>
-	    /// @brief Returns an inverted version of this matrix so that
-	    ///	   a multiplication with the original results in an
-	    ///	   identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Returns an inverted version of this matrix so that
+	     * 	   a multiplication with the original results in an
+	     * 	   identity matrix
+	     */
 	    Matrix4x4<T> getInverted() const;
-	    /// <summary>
-	    /// @brief Constructs a translation matrix from the given translation values
-	    /// @param x Amount to translate on the x axis
-	    /// @param y Amount to translate on the y axis
-	    /// @param z Amount to translate on the z axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a translation matrix from the given translation values
+	     * @param x Amount to translate on the x axis
+	     * @param y Amount to translate on the y axis
+	     * @param z Amount to translate on the z axis
+	     */
 	    static Matrix4x4<T> makeTranslation(T x, T y, T z);
-	    /// <summary>
-	    /// @brief Constructs a translation matrix from the given translation values
-	    /// @param translation Translation values
-	    /// </summary>
+	    /**
+	     * @brief Constructs a translation matrix from the given translation values
+	     * @param translation Translation values
+	     */
 	    static Matrix4x4<T> makeTranslation(Vector3<T> translation);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the x axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the x axis
+	     */
 	    static Matrix4x4<T> makeRotationX(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the y axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the y axis
+	     */
 	    static Matrix4x4<T> makeRotationY(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the z axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the z axis
+	     */
 	    static Matrix4x4<T> makeRotationZ(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angles
-	    /// @param xAngle Angle to rotate around the x axis
-	    /// @param yAngle Angle to rotate around the y axis
-	    /// @param zAngle Angle to rotate around the z axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angles
+	     * @param xAngle Angle to rotate around the x axis
+	     * @param yAngle Angle to rotate around the y axis
+	     * @param zAngle Angle to rotate around the z axis
+	     */
 	    static Matrix4x4<T> makeRotation(T xAngle, T yAngle, T zAngle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angles and vectors
-	    /// @param vec Vector to rotate around
-	    /// @param angle Angle to rotate around the x axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angles and vectors
+	     * @param vec Vector to rotate around
+	     * @param angle Angle to rotate around the x axis
+	     */
 	    static Matrix4x4<T> makeRotation(Vector3<T> vec, T angle);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factor
-	    /// @param factor Factor to scale by
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factor
+	     * @param factor Factor to scale by
+	     */
 	    static Matrix4x4<T> makeScale(T factor);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factors
-	    /// @param x Factor to scale by in x direction
-	    /// @param y Factor to scale by in y direction
-	    /// @param z Factor to scale by in z direction
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factors
+	     * @param x Factor to scale by in x direction
+	     * @param y Factor to scale by in y direction
+	     * @param z Factor to scale by in z direction
+	     */
 	    static Matrix4x4<T> makeScale(T x, T y, T z);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factors
-	    /// @param scale Factors to scale by
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factors
+	     * @param scale Factors to scale by
+	     */
 	    static Matrix4x4<T> makeScale(Vector3<T> scale);
-	    /// <summary>
-	    /// @brief Constructs a camera matrix from the given data
-	    /// @param pos Position of the camera in 3D space
-	    /// @param direction Direction the camera aims at
-	    /// @param up Vector that defines the camera up direction
-	    /// </summary>
+	    /**
+	     * @brief Constructs a camera matrix from the given data
+	     * @param pos Position of the camera in 3D space
+	     * @param direction Direction the camera aims at
+	     * @param up Vector that defines the camera up direction
+	     */
 	    static Matrix4x4<T> makeView(Vector3<T> const& pos,
 		    Vector3<T> const& direction, Vector3<T> const& up);
-	    /// <summary>
-	    /// @brief Makes this matrix a camera matrix from the given data
-	    /// @param pos Position of the camera in 3D space
-	    /// @param direction Direction the camera aims at
-	    /// @param up Vector that defines the camera up direction
-	    /// </summary>
+	    /**
+	     * @brief Makes this matrix a camera matrix from the given data
+	     * @param pos Position of the camera in 3D space
+	     * @param direction Direction the camera aims at
+	     * @param up Vector that defines the camera up direction
+	     */
 	    void view(Vector3<T> const& pos, Vector3<T> const& direction,
 		    Vector3<T> const& up);
-	    /// <summary>
-	    /// @brief Constructs a projection matrix from the given data
-	    /// @param fieldOfView Angle of aperture
-	    /// @param aspectRatio Aspect ratio of the display
-	    /// @param near Near clipping plane
-	    /// @param far Far clipping plane
-	    /// </summary>
+	    /**
+	     * @brief Constructs a projection matrix from the given data
+	     * @param fieldOfView Angle of aperture
+	     * @param aspectRatio Aspect ratio of the display
+	     * @param near Near clipping plane
+	     * @param far Far clipping plane
+	     */
 	    static Matrix4x4<T> makeProjection(T fieldOfView, T aspectRatio,
 		    T near, T far);
-	    /// <summary>
-	    /// @brief Makes this matrix a projection matrix from the given data
-	    /// @param fieldOfView Angle of aperture
-	    /// @param aspectRatio Aspect ratio of the display
-	    /// @param near Near clipping plane
-	    /// @param far Far clipping plane
-	    /// </summary>
+	    /**
+	     * @brief Makes this matrix a projection matrix from the given data
+	     * @param fieldOfView Angle of aperture
+	     * @param aspectRatio Aspect ratio of the display
+	     * @param near Near clipping plane
+	     * @param far Far clipping plane
+	     */
 	    void projection(T fieldOfView, T aspectRatio, T near, T far);
 	    // Operators
 	    using BaseMatrixType::operator=;
@@ -151,52 +151,52 @@ namespace dbgl
 	    using BaseMatrixType::operator-=;
 	    using BaseMatrixType::operator*=;
 	    using BaseMatrixType::operator/=;
-	    /// <summary>
-	    /// @brief Adds a matrix to this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Adds a matrix to this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix4x4<T> operator+(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Subtracts a matrix from this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Subtracts a matrix from this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix4x4<T> operator-(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix4x4<T> operator*(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix-vector multiplication
-	    /// @param rhs 2D Vector
-	    /// @return Resulting vector
-	    /// </summary>
+	    /**
+	     * @brief Matrix-vector multiplication
+	     * @param rhs 2D Vector
+	     * @return Resulting vector
+	     */
 	    const Vector4<T> operator*(Vector<T,4> const& rhs) const;
-	    /// <summary>
-	    /// @brief Scalar multiplication
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar multiplication
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix4x4<T> operator*(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication, assigning the resulting matrix to this
-	    /// @param rhs Other matrix
-	    /// @return Reference to this
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication, assigning the resulting matrix to this
+	     * @param rhs Other matrix
+	     * @return Reference to this
+	     */
 	    Matrix4x4<T>& operator*=(BaseMatrixType const& rhs);
-	    /// <summary>
-	    /// @brief Scalar division
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar division
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix4x4<T> operator/(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Unary minus
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Unary minus
+	     * @return Resulting matrix
+	     */
 	    Matrix4x4<T> operator-() const;
 
 	private:

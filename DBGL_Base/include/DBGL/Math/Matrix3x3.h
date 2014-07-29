@@ -17,80 +17,80 @@
 
 namespace dbgl
 {
-    /// <summary>
-    /// @brief Matrix of size 3 by 3
-    /// @author Jan Moeller
-    /// </summary>
+    /**
+     * @brief Matrix of size 3 by 3
+     * @author Jan Moeller
+     */
     template<typename T> class Matrix3x3 : public Matrix<T, 3, 3>
     {
 	    using BaseMatrixType = Matrix<T, 3, 3>;
 	public:
 	    // Constructors
-	    /// <summary>
-	    /// @brief Constructs a 3x3 identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Constructs a 3x3 identity matrix
+	     */
 	    Matrix3x3();
-	    /// <summary>
-	    /// @brief Copies another 3x3 matrix
-	    /// </summary>
+	    /**
+	     * @brief Copies another 3x3 matrix
+	     */
 	    Matrix3x3(const BaseMatrixType &other);
 	    // Destructors
 	    ~Matrix3x3();
 	    // Methods
-	    /// <summary>
-	    /// @brief Transposes this matrix
-	    /// </summary>
+	    /**
+	     * @brief Transposes this matrix
+	     */
 	    Matrix3x3<T>& transpose();
-	    /// <summary>
-	    /// @brief Inverts this matrix so that a multiplication with
-	    ///	   the original results in an identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Inverts this matrix so that a multiplication with
+	     * 	   the original results in an identity matrix
+	     */
 	    Matrix3x3<T>& invert();
-	    /// <summary>
-	    /// @brief Returns an inverted version of this matrix so that
-	    ///	   a multiplication with the original results in an
-	    ///	   identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Returns an inverted version of this matrix so that
+	     * 	   a multiplication with the original results in an
+	     * 	   identity matrix
+	     */
 	    Matrix3x3<T> getInverted() const;
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the x axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the x axis
+	     */
 	    static Matrix3x3<T> makeRotationX(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the y axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the y axis
+	     */
 	    static Matrix3x3<T> makeRotationY(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around the z axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the z axis
+	     */
 	    static Matrix3x3<T> makeRotationZ(T angle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angles
-	    /// @param xAngle Angle to rotate around the x axis
-	    /// @param yAngle Angle to rotate around the y axis
-	    /// @param zAngle Angle to rotate around the z axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angles
+	     * @param xAngle Angle to rotate around the x axis
+	     * @param yAngle Angle to rotate around the y axis
+	     * @param zAngle Angle to rotate around the z axis
+	     */
 	    static Matrix3x3<T> makeRotation(T xAngle, T yAngle, T zAngle);
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angles and vectors
-	    /// @param vec Vector to rotate around
-	    /// @param angle Angle to rotate around the x axis
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angles and vectors
+	     * @param vec Vector to rotate around
+	     * @param angle Angle to rotate around the x axis
+	     */
 	    static Matrix3x3<T> makeRotation(Vector3<T> vec, T angle);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factor
-	    /// @param factor Factor to scale by
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factor
+	     * @param factor Factor to scale by
+	     */
 	    static Matrix3x3<T> makeScale(T factor);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factors
-	    /// @param x Factor to scale by in x direction
-	    /// @param y Factor to scale by in y direction
-	    /// @param z Factor to scale by in z direction
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factors
+	     * @param x Factor to scale by in x direction
+	     * @param y Factor to scale by in y direction
+	     * @param z Factor to scale by in z direction
+	     */
 	    static Matrix3x3<T> makeScale(T x, T y, T z);
 	    // Operators
 	    using BaseMatrixType::operator=;
@@ -98,52 +98,52 @@ namespace dbgl
 	    using BaseMatrixType::operator-=;
 	    using BaseMatrixType::operator*=;
 	    using BaseMatrixType::operator/=;
-	    /// <summary>
-	    /// @brief Adds a matrix to this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Adds a matrix to this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix3x3<T> operator+(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Subtracts a matrix from this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Subtracts a matrix from this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix3x3<T> operator-(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix3x3<T> operator*(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix-vector multiplication
-	    /// @param rhs 2D Vector
-	    /// @return Resulting vector
-	    /// </summary>
+	    /**
+	     * @brief Matrix-vector multiplication
+	     * @param rhs 2D Vector
+	     * @return Resulting vector
+	     */
 	    const Vector3<T> operator*(Vector<T,3> const& rhs) const;
-	    /// <summary>
-	    /// @brief Scalar multiplication
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar multiplication
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix3x3<T> operator*(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication, assigning the resulting matrix to this
-	    /// @param rhs Other matrix
-	    /// @return Reference to this
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication, assigning the resulting matrix to this
+	     * @param rhs Other matrix
+	     * @return Reference to this
+	     */
 	    Matrix3x3<T>& operator*=(BaseMatrixType const& rhs);
-	    /// <summary>
-	    /// @brief Scalar division
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar division
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix3x3<T> operator/(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Unary minus
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Unary minus
+	     * @return Resulting matrix
+	     */
 	    Matrix3x3<T> operator-() const;
 
 	private:

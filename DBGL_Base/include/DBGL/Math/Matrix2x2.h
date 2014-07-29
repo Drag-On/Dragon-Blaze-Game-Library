@@ -17,56 +17,56 @@
 
 namespace dbgl
 {
-    /// <summary>
-    /// @brief Matrix of size 2 by 2
-    /// @author Jan Moeller
-    /// </summary>
+    /**
+     * @brief Matrix of size 2 by 2
+     * @author Jan Moeller
+     */
     template<typename T> class Matrix2x2 : public Matrix<T, 2, 2>
     {
 	    using BaseMatrixType = Matrix<T, 2, 2>;
 	public:
 	    // Constructors
-	    /// <summary>
-	    /// @brief Constructs a 2x2 identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Constructs a 2x2 identity matrix
+	     */
 	    Matrix2x2();
-	    /// <summary>
-	    /// @brief Copies another 2x2 matrix
-	    /// </summary>
+	    /**
+	     * @brief Copies another 2x2 matrix
+	     */
 	    Matrix2x2(const BaseMatrixType &other);
 	    // Destructors
 	    ~Matrix2x2();
 	    // Methods
-	    /// <summary>
-	    /// @brief Transposes this matrix
-	    /// </summary>
+	    /**
+	     * @brief Transposes this matrix
+	     */
 	    Matrix2x2<T>& transpose();
-	    /// <summary>
-	    /// @brief Inverts this matrix so that a multiplication with
-	    ///	   the original results in an identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Inverts this matrix so that a multiplication with
+	     * 	   the original results in an identity matrix
+	     */
 	    Matrix2x2<T>& invert();
-	    /// <summary>
-	    /// @brief Returns an inverted version of this matrix so that
-	    ///	   a multiplication with the original results in an
-	    ///	   identity matrix
-	    /// </summary>
+	    /**
+	     * @brief Returns an inverted version of this matrix so that
+	     * 	   a multiplication with the original results in an
+	     * 	   identity matrix
+	     */
 	    Matrix2x2<T> getInverted() const;
-	    /// <summary>
-	    /// @brief Constructs a rotation matrix from the given angle
-	    /// @param angle Angle to rotate around
-	    /// </summary>
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around
+	     */
 	    static Matrix2x2<T> makeRotation(T angle);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factor
-	    /// @param factor Factor to scale by
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factor
+	     * @param factor Factor to scale by
+	     */
 	    static Matrix2x2<T> makeScale(T factor);
-	    /// <summary>
-	    /// @brief Constructs a scale matrix from the given factors
-	    /// @param x Factor to scale by in x direction
-	    /// @param y Factor to scale by in y direction
-	    /// </summary>
+	    /**
+	     * @brief Constructs a scale matrix from the given factors
+	     * @param x Factor to scale by in x direction
+	     * @param y Factor to scale by in y direction
+	     */
 	    static Matrix2x2<T> makeScale(T x, T y);
 	    // Operators
 	    using BaseMatrixType::operator=;
@@ -74,52 +74,52 @@ namespace dbgl
 	    using BaseMatrixType::operator-=;
 	    using BaseMatrixType::operator*=;
 	    using BaseMatrixType::operator/=;
-	    /// <summary>
-	    /// @brief Adds a matrix to this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Adds a matrix to this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix2x2<T> operator+(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Subtracts a matrix from this matrix
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Subtracts a matrix from this matrix
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix2x2<T> operator-(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication
-	    /// @param rhs Other matrix
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication
+	     * @param rhs Other matrix
+	     * @return Resulting matrix
+	     */
 	    const Matrix2x2<T> operator*(BaseMatrixType const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix-vector multiplication
-	    /// @param rhs 2D Vector
-	    /// @return Resulting vector
-	    /// </summary>
+	    /**
+	     * @brief Matrix-vector multiplication
+	     * @param rhs 2D Vector
+	     * @return Resulting vector
+	     */
 	    const Vector2<T> operator*(Vector<T,2> const& rhs) const;
-	    /// <summary>
-	    /// @brief Scalar multiplication
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar multiplication
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix2x2<T> operator*(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Matrix multiplication, assigning the resulting matrix to this
-	    /// @param rhs Other matrix
-	    /// @return Reference to this
-	    /// </summary>
+	    /**
+	     * @brief Matrix multiplication, assigning the resulting matrix to this
+	     * @param rhs Other matrix
+	     * @return Reference to this
+	     */
 	    Matrix2x2<T>& operator*=(BaseMatrixType const& rhs);
-	    /// <summary>
-	    /// @brief Scalar division
-	    /// @param rhs Scalar
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Scalar division
+	     * @param rhs Scalar
+	     * @return Resulting matrix
+	     */
 	    const Matrix2x2<T> operator/(T const& rhs) const;
-	    /// <summary>
-	    /// @brief Unary minus
-	    /// @return Resulting matrix
-	    /// </summary>
+	    /**
+	     * @brief Unary minus
+	     * @return Resulting matrix
+	     */
 	    Matrix2x2<T> operator-() const;
 	private:
     };

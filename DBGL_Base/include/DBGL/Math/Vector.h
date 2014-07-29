@@ -35,29 +35,29 @@
 
 namespace dbgl
 {
-    /// <summary>
-    /// @brief Vector of arbitrary dimension
-    /// </summary>
+    /**
+     * @brief Vector of arbitrary dimension
+     */
     template<typename T, unsigned int N> class Vector
     {
 	public:
-	    /// <summary>
-	    /// @brief Constructs a new null vector
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new null vector
+	     */
 	    Vector();
-	    /// <summary>
-	    /// @brief Constructs a new vector and initializes it
-	    /// @param n Amount of passed parameters
-	    /// @param ... n initialization values
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new vector and initializes it
+	     * @param n Amount of passed parameters
+	     * @param ... n initialization values
+	     */
 	    Vector(int n, ...);
-	    /// <summary>
-	    /// @brief Copies a vector
-	    /// </summary>
+	    /**
+	     * @brief Copies a vector
+	     */
 	    Vector(const Vector<T, N> &other);
-	    /// <summary>
-	    /// @brief Destructor
-	    /// </summary>
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -65,31 +65,31 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /// <summary>
-    /// @brief Vector of arbitrary dimension
-    /// </summary>
+    /**
+     * @brief Vector of arbitrary dimension
+     */
     template<unsigned int N> class Vector<float, N>
     {
 	private:
 	    using T = float;
 	public:
-	    /// <summary>
-	    /// @brief Constructs a new null vector
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new null vector
+	     */
 	    Vector();
-	    /// <summary>
-	    /// @brief Constructs a new vector and initializes it
-	    /// @param n Amount of passed parameters
-	    /// @param ... n initialization values
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new vector and initializes it
+	     * @param n Amount of passed parameters
+	     * @param ... n initialization values
+	     */
 	    Vector(int n, ...);
-	    /// <summary>
-	    /// @brief Copies a vector
-	    /// </summary>
+	    /**
+	     * @brief Copies a vector
+	     */
 	    Vector(const Vector<T, N> &other);
-	    /// <summary>
-	    /// @brief Destructor
-	    /// </summary>
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -97,31 +97,31 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /// <summary>
-    /// @brief Vector of arbitrary dimension
-    /// </summary>
+    /**
+     * @brief Vector of arbitrary dimension
+     */
     template<unsigned int N> class Vector<char, N>
     {
 	private:
 	    using T = char;
 	public:
-	    /// <summary>
-	    /// @brief Constructs a new null vector
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new null vector
+	     */
 	    Vector();
-	    /// <summary>
-	    /// @brief Constructs a new vector and initializes it
-	    /// @param n Amount of passed parameters
-	    /// @param ... n initialization values
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new vector and initializes it
+	     * @param n Amount of passed parameters
+	     * @param ... n initialization values
+	     */
 	    Vector(int n, ...);
-	    /// <summary>
-	    /// @brief Copies a vector
-	    /// </summary>
+	    /**
+	     * @brief Copies a vector
+	     */
 	    Vector(const Vector<T, N> &other);
-	    /// <summary>
-	    /// @brief Destructor
-	    /// </summary>
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER
@@ -129,31 +129,31 @@ namespace dbgl
 	    #include "Vector_Common.hpart"
     };
 
-    /// <summary>
-    /// @brief Vector of arbitrary dimension
-    /// </summary>
+    /**
+     * @brief Vector of arbitrary dimension
+     */
     template<unsigned int N> class Vector<short, N>
     {
 	private:
 	    using T = short;
 	public:
-	    /// <summary>
-	    /// @brief Constructs a new null vector
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new null vector
+	     */
 	    Vector();
-	    /// <summary>
-	    /// @brief Constructs a new vector and initializes it
-	    /// @param n Amount of passed parameters
-	    /// @param ... n initialization values
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new vector and initializes it
+	     * @param n Amount of passed parameters
+	     * @param ... n initialization values
+	     */
 	    Vector(int n, ...);
-	    /// <summary>
-	    /// @brief Copies a vector
-	    /// </summary>
+	    /**
+	     * @brief Copies a vector
+	     */
 	    Vector(const Vector<T, N> &other);
-	    /// <summary>
-	    /// @brief Destructor
-	    /// </summary>
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Vector();
 
 	    #undef RETURN_QUALIFIER

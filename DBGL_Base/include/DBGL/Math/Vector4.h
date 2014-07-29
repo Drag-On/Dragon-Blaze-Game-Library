@@ -20,18 +20,18 @@
 
 namespace dbgl
 {
-    /// <summary>
-    /// @brief Vector of dimension 4
-    /// @author Jan Moeller
-    ///
-    /// @details Since it's not possible to implement dot product and
-    ///		 cross product as operator, * does the dot product. For
-    ///		 convenience there is a method getCrossProduct() which
-    ///		 returns a new vector containing the cross product of
-    ///		 this vector and another one. For the *= operator there
-    ///		 is an overload for the cross product, but not for the
-    ///		 dot product.
-    /// </summary>
+    /**
+     * @brief Vector of dimension 4
+     * @author Jan Moeller
+     *
+     * @details Since it's not possible to implement dot product and
+     * 		 cross product as operator, * does the dot product. For
+     * 		 convenience there is a method getCrossProduct() which
+     * 		 returns a new vector containing the cross product of
+     * 		 this vector and another one. For the *= operator there
+     * 		 is an overload for the cross product, but not for the
+     * 		 dot product.
+     */
     template<typename T> class Vector4 : public Vector<T, 4>
     {
 	private:
@@ -42,56 +42,56 @@ namespace dbgl
 
 	public:
 	    // Constructors
-	    /// <summary>
-	    /// @brief Constructs a new null vector
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new null vector
+	     */
 	    Vector4();
-	    /// <summary>
-	    /// @brief Constructs a new vector from the given coordinates
-	    /// </summary>
+	    /**
+	     * @brief Constructs a new vector from the given coordinates
+	     */
 	    Vector4(T x, T y, T z, T w);
-	    /// <summary>
-	    /// @brief Copies a vector
-	    /// </summary>
+	    /**
+	     * @brief Copies a vector
+	     */
 	    Vector4(const BaseVectorType &other);
 	    // Destructors
 	    ~Vector4();
 	    // Methods
-	    /// <summary>
-	    /// @brief Returns the vector's first element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's first element
+	     */
 	    const T& x() const;
-	    /// <summary>
-	    /// @brief Returns the vector's first element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's first element
+	     */
 	    T& x();
-	    /// <summary>
-	    /// @brief Returns the vector's second element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's second element
+	     */
 	    const T& y() const;
-	    /// <summary>
-	    /// @brief Returns the vector's second element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's second element
+	     */
 	    T& y();
-	    /// <summary>
-	    /// @brief Returns the vector's third element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's third element
+	     */
 	    const T& z() const;
-	    /// <summary>
-	    /// @brief Returns the vector's third element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's third element
+	     */
 	    T& z();
-	    /// <summary>
-	    /// @brief Returns the vector's fourth element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's fourth element
+	     */
 	    const T& w() const;
-	    /// <summary>
-	    /// @brief Returns the vector's fourth element
-	    /// </summary>
+	    /**
+	     * @brief Returns the vector's fourth element
+	     */
 	    T& w();
-	    /// <summary>
-	    /// @brief Translates this vector by the specified amount
-	    /// </summary>
+	    /**
+	     * @brief Translates this vector by the specified amount
+	     */
 	    Vector4<T>& translate(T x, T y, T z, T w);
 	    // Operators
 	    using BaseVectorType::operator=;
