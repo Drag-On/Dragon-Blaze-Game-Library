@@ -18,6 +18,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Holds data like position, scale and rotation of an entity
+     */
     class TransformComponent : public Entity::Component
     {
 	public:
@@ -79,11 +82,13 @@ namespace dbgl
 	    Mat4f worldTransform() const;
 	    /**
 	     * @brief Updates all components
+	     * @param owner Entity holding this component
 	     * @param deltaTime Time since last update
 	     */
 	    virtual void update(Entity* owner, double deltaTime);
 	    /**
 	     * @brief Called upon render process
+	     * @param owner Entity holding this component
 	     * @param rc RenderContext to draw to
 	     */
 	    virtual void render(Entity* owner, RenderContext const* rc);

@@ -17,7 +17,8 @@
 namespace dbgl
 {
     /**
-     * @brief Camera that can be attached to any entity (should also have a transform component for obvious reasons)
+     * @brief Camera that can be attached to any entity
+     * @details Requires a TransformComponent for obvious reasons
      */
     class CameraComponent : public Entity::Component
     {
@@ -61,11 +62,13 @@ namespace dbgl
 	    float const& far() const;
 	    /**
 	     * @brief Updates this component
+	     * @param owner Entity holding this component
 	     * @param deltaTime Time since last update
 	     */
 	    virtual void update(Entity* owner, double deltaTime);
 	    /**
 	     * @brief Called upon render process
+	     * @param owner Entity holding this component
 	     * @param rc RenderContext to draw to
 	     */
 	    virtual void render(Entity* owner, RenderContext const* rc);

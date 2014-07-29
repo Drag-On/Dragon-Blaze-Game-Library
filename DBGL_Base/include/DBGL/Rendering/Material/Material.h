@@ -42,6 +42,9 @@ namespace dbgl
 	    ShaderProgram const* getShader() const;
 
 	protected:
+	    /**
+	     * @brief Shader to use for this material
+	     */
 	    ShaderProgram const* m_pShaderProgram;
     };
 }

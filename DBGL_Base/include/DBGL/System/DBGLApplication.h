@@ -19,9 +19,21 @@ namespace dbgl
     class DBGLApplication
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     */
 	    virtual ~DBGLApplication() = default;
+	    /**
+	     * @brief Called upon initialization
+	     */
 	    virtual void init() = 0;
+	    /**
+	     * @brief Called in order to run the main loop
+	     */
 	    virtual void run() = 0;
+	    /**
+	     * @brief Called upon termination
+	     */
 	    virtual void terminate() = 0;
     };
 }

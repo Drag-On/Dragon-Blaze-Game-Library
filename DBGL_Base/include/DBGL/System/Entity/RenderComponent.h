@@ -23,6 +23,10 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Component which renders its owner entity
+     * @details Requires a TransformComponent to be applied as well
+     */
     class RenderComponent : public Entity::Component
     {
 	public:
@@ -35,11 +39,13 @@ namespace dbgl
 	    RenderComponent(Mesh& mesh, Material& mat, Environment& env);
 	    /**
 	     * @brief Updates this component
+	     * @param owner Entity holding this component
 	     * @param deltaTime Time since last update
 	     */
 	    virtual void update(Entity* owner, double deltaTime);
 	    /**
 	     * @brief Called upon render process
+	     * @param owner Entity holding this component
 	     * @param rc RenderContext to draw to
 	     */
 	    virtual void render(Entity* owner, RenderContext const* rc);

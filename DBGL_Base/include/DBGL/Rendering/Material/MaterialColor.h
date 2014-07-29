@@ -16,6 +16,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief A simple material which only includes a color
+     */
     class MaterialColor: public Material
     {
 	public:

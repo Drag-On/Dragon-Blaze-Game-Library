@@ -104,13 +104,13 @@ namespace dbgl
 	    std::set<Node*> const& getNodes() const;
 	    /**
 	     * @brief Adds a new top-level node
-	     * @param node Entity to add. It will automatically be wrapped in a node
+	     * @param entity Entity to add. It will automatically be wrapped in a node
 	     * @returns The node wrapping the passed entity
 	     */
 	    Node* addNode(T* entity);
 	    /**
 	     * @brief Remove top-level node
-	     * @param node Entity to remove.
+	     * @param entity Entity to remove.
 	     */
 	    void removeNode(T* entity);
 	private:

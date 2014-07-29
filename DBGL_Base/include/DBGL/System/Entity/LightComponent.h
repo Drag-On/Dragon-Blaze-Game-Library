@@ -19,6 +19,7 @@ namespace dbgl
 {
     /**
      * @brief Adds a light to an entity
+     * @details Requires a TransformComponent as well
      */
     class LightComponent : public Entity::Component
     {
@@ -93,11 +94,13 @@ namespace dbgl
 	    Vec3f const& direction() const;
 	    /**
 	     * @brief Updates this component
+	     * @param owner Entity holding this component
 	     * @param deltaTime Time since last update
 	     */
 	    virtual void update(Entity* owner, double deltaTime);
 	    /**
 	     * @brief Called upon render process
+	     * @param owner Entity holding this component
 	     * @param rc RenderContext to draw to
 	     */
 	    virtual void render(Entity* owner, RenderContext const* rc);
