@@ -96,6 +96,10 @@ namespace dbgl
 		    if (height < 1)
 			height = 1;
 		}
+		// Linear filtering when magnifying
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO: Make optional
+		// Linear blending when minifying
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		// In case the file doesn't have mipmaps generate some
 		if(mipMapCount == 1)
 		    glGenerateMipmap(GL_TEXTURE_2D);
