@@ -348,6 +348,15 @@ namespace dbgl
 	    Vector3<T> m_pos;
 	    Vector3<T> m_extent;
     };
+
+    /**
+     * @brief Axis-aligned bounding rectangle
+     */
+    template<typename T> using AABR = Hyperrectangle<T, 2>;
+    /**
+     * @brief Axis-aligned bounding box
+     */
+    template<typename T> using AABB = Hyperrectangle<T, 2>;
 }
 
 #include "Hyperrectangle.imp"
