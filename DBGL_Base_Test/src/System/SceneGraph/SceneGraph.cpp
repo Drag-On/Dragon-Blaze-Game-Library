@@ -40,8 +40,7 @@ namespace SceneGraphTest
     void testConstructor()
     {
         SceneGraph<Entity> sg{};
-        ASSERT_EQUAL(sg.getRoot(), nullptr);
-        ASSERT_EQUAL(sg.getRootEntity(), nullptr);
+        ASSERT_EQUAL(sg.getNodes().size(), 0);
         // Print all nodes (should be zero)
         visitAll(sg);
     }
@@ -51,8 +50,7 @@ namespace SceneGraphTest
         SceneGraph<Entity> sg{};
         // Add a root node
         Entity entity1{"1"};
-        SceneGraph<Entity>::Node rootNode{&entity1};
-        sg.setRoot(&rootNode);
+        sg.addNode(&entity1);
         visitAll(sg);
 //        Entity entity2{"2"};
 //        Entity entity3{"3"};
@@ -68,44 +66,16 @@ namespace SceneGraphTest
 	Entity entity3{"3"};
 	Entity entity4{"4"};
 	Entity entity5{"5"};
-	SceneGraph<Entity>::Node rootNode{&entity1};
-	ASSERT_EQUAL(nullptr, rootNode.getParent());
-	ASSERT_EQUAL(0, rootNode.getChildren().size());
 
-	SceneGraph<Entity>::Node childNode1{&entity2};
-	rootNode.addChild(&childNode1);
-	ASSERT_EQUAL(nullptr, rootNode.getParent());
-	ASSERT_EQUAL(1, rootNode.getChildren().size());
-	ASSERT_EQUAL(&rootNode, childNode1.getParent());
-	ASSERT_EQUAL(0, childNode1.getChildren().size());
+	auto node = sg.addNode(&entity1);
+	ASSERT_EQUAL(nullptr, node->getParent());
+	ASSERT_EQUAL(0, node->getChildren().size());
 
-	SceneGraph<Entity>::Node childNode2{&entity3};
-	rootNode.addChild(&childNode2);
-	ASSERT_EQUAL(nullptr, rootNode.getParent());
-	ASSERT_EQUAL(2, rootNode.getChildren().size());
-	ASSERT_EQUAL(&rootNode, childNode2.getParent());
-	ASSERT_EQUAL(0, childNode2.getChildren().size());
-
-	SceneGraph<Entity>::Node childNode3{&entity4};
-	childNode2.addChild(&childNode3);
-	ASSERT_EQUAL(nullptr, rootNode.getParent());
-	ASSERT_EQUAL(2, rootNode.getChildren().size());
-	ASSERT_EQUAL(&rootNode, childNode2.getParent());
-	ASSERT_EQUAL(1, childNode2.getChildren().size());
-	ASSERT_EQUAL(&childNode2, childNode3.getParent());
-	ASSERT_EQUAL(0, childNode3.getChildren().size());
-
-	SceneGraph<Entity>::Node childNode4{&entity5};
-	childNode4.setParent(&childNode2);
-	ASSERT_EQUAL(nullptr, rootNode.getParent());
-	ASSERT_EQUAL(2, rootNode.getChildren().size());
-	ASSERT_EQUAL(&rootNode, childNode2.getParent());
-	ASSERT_EQUAL(2, childNode2.getChildren().size());
-	ASSERT_EQUAL(&childNode2, childNode3.getParent());
-	ASSERT_EQUAL(0, childNode3.getChildren().size());
-	ASSERT_EQUAL(&childNode2, childNode4.getParent());
-	ASSERT_EQUAL(0, childNode4.getChildren().size());
-
+	auto child = node->addChild(&entity3);
+	ASSERT_EQUAL(node, child->getParent());
+	ASSERT_EQUAL(0, child->getChildren().size());
+	ASSERT_EQUAL(nullptr, node->getParent());
+	ASSERT_EQUAL(1, node->getChildren().size());
     }
 }
 

@@ -24,7 +24,7 @@ int testHyperrectangle()
 {
     LOG.info("Starting Hyperrectangle test suite...");
     LOG.info("Constructors... ");
-    Hyperrectangle<float, 2> rect2d;
+    AABR<float> rect2d;
     Hyperrectangle<float, 2> rect2d_2(Vec2f(1, 0.5f), Vec2f(8, 10));
     Hyperrectangle<float, 2> rect2d_2Copy(rect2d_2);
     Rectangle<double> rect(Vec2d(2, 2), Vec2d(42, 23));
