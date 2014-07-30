@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* TGATextureLoader::load(std::string path, Bitmask<> /* flags */)
+    Texture* TGATextureLoader::load(std::string path, Bitmask<> /* flags */, TextureLoader::Filtering filtering)
     {
 	GLuint texID;
 	// Read file
@@ -102,10 +102,22 @@ namespace dbgl
 	GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;
 	glTexImage2D(GL_TEXTURE_2D, 0, intFormat, width, height, 0, format,
 	GL_UNSIGNED_BYTE, image);
+	// Select filtering algorithm
+	GLint filterMag = GL_NEAREST;
+	GLint filterMin = GL_NEAREST_MIPMAP_NEAREST;
+	switch(filtering)
+	{
+	    case TextureLoader::Filtering::LINEAR:
+		filterMag = GL_LINEAR;
+		filterMin = GL_LINEAR_MIPMAP_LINEAR;
+		break;
+	    default:
+		break;
+	}
 	// Linear filtering when magnifying
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag);
 	// Linear blending when minifying
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO: Make optional
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMin);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	delete[] image;

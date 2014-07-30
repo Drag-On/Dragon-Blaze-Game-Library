@@ -27,10 +27,10 @@ namespace dbgl
 	return m_textureId;
     }
 
-    template <class Loader> Texture* Texture::load(const std::string path, Bitmask<> flags)
+    template <class Loader> Texture* Texture::load(const std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)
     {
 	Loader loader;
-	Texture* pTex = loader.load(path, flags);
+	Texture* pTex = loader.load(path, flags, filtering);
 	if (pTex == nullptr)
 	{
 	    LOG.warning("Texture % not loaded!", path.c_str());
@@ -38,18 +38,18 @@ namespace dbgl
 	return pTex;
     }
 
-    Texture* Texture::load(const Type type, const std::string path, Bitmask<> flags)
+    Texture* Texture::load(const Type type, const std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)
     {
 	switch (type)
 	{
-	    case BOGUS:
-		return Texture::load<BogusTextureLoader>(path, flags);
+	    case Type::BOGUS:
+		return Texture::load<BogusTextureLoader>(path, flags, filtering);
 		break;
-	    case DDS:
-		return Texture::load<DDSTextureLoader>(path, flags);
+	    case Type::DDS:
+		return Texture::load<DDSTextureLoader>(path, flags, filtering);
 		break;
-	    case TGA:
-		return Texture::load<TGATextureLoader>(path, flags);
+	    case Type::TGA:
+		return Texture::load<TGATextureLoader>(path, flags, filtering);
 		break;
 	}
 	return nullptr;

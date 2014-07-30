@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Texture* DDSTextureLoader::load(std::string path, Bitmask<> flags)
+    Texture* DDSTextureLoader::load(std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)
     {
 	GLuint texID;
 	// Read file
@@ -96,10 +96,22 @@ namespace dbgl
 		    if (height < 1)
 			height = 1;
 		}
+		// Select filtering algorithm
+		GLint filterMag = GL_NEAREST;
+		GLint filterMin = GL_NEAREST_MIPMAP_NEAREST;
+		switch(filtering)
+		{
+		    case TextureLoader::Filtering::LINEAR:
+			filterMag = GL_LINEAR;
+			filterMin = GL_LINEAR_MIPMAP_LINEAR;
+			break;
+		    default:
+			break;
+		}
 		// Linear filtering when magnifying
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO: Make optional
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag);
 		// Linear blending when minifying
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMin);
 		// In case the file doesn't have mipmaps generate some
 		if(mipMapCount == 1)
 		    glGenerateMipmap(GL_TEXTURE_2D);

@@ -69,18 +69,22 @@ namespace dbgl
 	     * @details Needs to be freed manually!
 	     * @param path File path
 	     * @param flags Flags to consider while loading
+	     * @param filtering Filter method to use
 	     * @return Pointer to the newly created texture object
 	     */
-	    template <class Loader> static Texture* load(const std::string path, Bitmask<> flags = 0);
+	    template<class Loader> static Texture* load(const std::string path, Bitmask<> flags = 0,
+		    TextureLoader::Filtering filtering = TextureLoader::Filtering::LINEAR);
 	    /**
 	     * @brief Constructs a new texture on the heap
 	     * @details Needs to be freed manually!
 	     * @param type Texture type
 	     * @param path File path
 	     * @param flags Flags to consider while loading
+	     * @param filtering Filter method to use
 	     * @return Pointer to the newly created texture object
 	     */
-	    static Texture* load(const Type type, const std::string path, Bitmask<> flags = 0);
+	    static Texture* load(const Type type, const std::string path, Bitmask<> flags = 0,
+		    TextureLoader::Filtering filtering = TextureLoader::Filtering::LINEAR);
 	private:
 	    /**
 	     * @brief GL texture handle

@@ -24,6 +24,15 @@ namespace dbgl
     class TextureLoader
     {
 	public:
+	    /**
+	     * @brief Possible types of texture filtering
+	     */
+	    enum class Filtering
+	    {
+		NEAREST,    //!< NEAREST
+		LINEAR,     //!< LINEAR
+	    };
+
 	    virtual ~TextureLoader() {};
 	    /**
 	     * @brief Loads the texture from hard disk
@@ -31,7 +40,7 @@ namespace dbgl
 	     * @param flags Special behavior that may be requested from the loader
 	     * @return The loaded texture if everything went right, otherwise NULL
 	     */
-	    virtual Texture* load(std::string path, Bitmask<> flags = 0) = 0;
+	    virtual Texture* load(std::string path, Bitmask<> flags = 0, Filtering filtering = Filtering::NEAREST) = 0;
 	private:
     };
 }
