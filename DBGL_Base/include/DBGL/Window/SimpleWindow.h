@@ -36,7 +36,7 @@ namespace dbgl
 	     * @param fullscreen Indicates if the window should be initialized as fullscreen
 	     */
 	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
-		    int width = 800, int height = 600, bool fullscreen = false);
+		    int width = 800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    /**
 	     * @brief Called on key events.
 	     * @param args Key event arguments

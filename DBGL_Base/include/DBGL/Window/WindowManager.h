@@ -35,49 +35,7 @@ namespace dbgl
 	     * @return The only instance of this class
 	     */
 	    static WindowManager* get();
-	    /**
-	     * @brief Constructs a new window
-	     * @return A new window of the specified type with default initialization
-	     */
-	    template<typename T> T* createWindow()
-	    {
-		GLFWwindow* share = m_pShareWindow;
-		auto wnd = new T(share);
-		s_windows.insert(std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
-		if (m_pShareWindow == NULL)
-		    m_pShareWindow = wnd->m_pWndHandle;
-		return wnd;
-	    }
-	    /**
-	     * @brief Constructs a new window
-	     * @param title Window title
-	     * @return A new window of the specified type with default initialization
-	     */
-	    template<typename T> T* createWindow(const char* title)
-	    {
-		GLFWwindow* share = m_pShareWindow;
-		auto wnd = new T(share, title);
-		s_windows.insert(std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
-		if (m_pShareWindow == NULL)
-		    m_pShareWindow = wnd->m_pWndHandle;
-		return wnd;
-	    }
-	    /**
-	     * @brief Constructs a new window
-	     * @param title Window title
-	     * @param width Window width
-	     * @param height Window height
-	     * @return A new window of the specified type
-	     */
-	    template<typename T> T* createWindow(const char* title, int width, int height)
-	    {
-		GLFWwindow* share = m_pShareWindow;
-		auto wnd = new T(share, title, width, height);
-		s_windows.insert(std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
-		if (m_pShareWindow == NULL)
-		    m_pShareWindow = wnd->m_pWndHandle;
-		return wnd;
-	    }
+
 	    /**
 	     * @brief Constructs a new window
 	     * @param title Window title
@@ -85,13 +43,14 @@ namespace dbgl
 	     * @param height Window height
 	     * @param fullscreen True if the window shall be opened fullscreen,
 	     * 			 otherwise false
+	     * @param multisampling Amount of multisampling (0 to disable)
 	     * @return A new window of the specified type
 	     */
-	    template<typename T> T* createWindow(const char* title, int width, int height,
-		    bool fullscreen)
+	    template<typename T> T* createWindow(const char* title = "Dragon Blaze Game Library", int width =
+		    800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2)
 	    {
 		GLFWwindow* share = m_pShareWindow;
-		auto wnd = new T(share, title, width, height, fullscreen);
+		auto wnd = new T(share, title, width, height, fullscreen, multisampling);
 		s_windows.insert(std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
 		if (m_pShareWindow == NULL)
 		    m_pShareWindow = wnd->m_pWndHandle;

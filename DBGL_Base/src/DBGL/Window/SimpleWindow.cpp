@@ -13,8 +13,8 @@
 namespace dbgl
 {
     SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title,
-	    int width, int height, bool fullscreen) :
-	    Window(share, title, width, height, fullscreen)
+	    int width, int height, bool fullscreen, unsigned int multisampling) :
+	    Window(share, title, width, height, fullscreen, multisampling)
     {
 	// Add callback for keyboard input
 	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this,

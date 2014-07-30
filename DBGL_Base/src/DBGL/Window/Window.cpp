@@ -12,7 +12,8 @@
 
 namespace dbgl
 {
-    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen)
+    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen,
+	    unsigned int multisampling) : m_multisampling(multisampling)
     {
 	m_title = title;
 	if(fullscreen)
@@ -40,6 +41,7 @@ namespace dbgl
 	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_SAMPLES, multisampling);
 #ifdef __WIN32
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
@@ -131,6 +133,9 @@ namespace dbgl
 	// Cull triangles that are not facing the camera?
 	if (options.isSet(FaceCulling))
 	    glEnable(GL_CULL_FACE);
+
+	if(m_multisampling > 0)
+	    glEnable(GL_MULTISAMPLE);
 
 	// Create vertex array
 	glGenVertexArrays(1, &m_vertexArrayId);

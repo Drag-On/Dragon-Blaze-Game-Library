@@ -718,9 +718,10 @@ namespace dbgl
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreens
+	     * @param multisampling Amount of multisampling (0 to disable)
 	     */
 	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width = 800,
-		    int height = 600, bool fullscreen = false);
+		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    /**
 	     * @brief Removes the current render context from the window and applies a new one
 	     */
@@ -776,6 +777,7 @@ namespace dbgl
 	    unsigned int m_windowedWidth, m_windowedHeight; // Resolution for window
 	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
 	    double m_deltaTime = 0, m_lastTime = 0; // Time since last frame
+	    unsigned int m_multisampling = 2;
 	    Vector3<GLclampf> m_clearColor = Vector3<GLclampf>(0, 0, 0);
 	    GLuint m_vertexArrayId;
 	    Input m_input;
