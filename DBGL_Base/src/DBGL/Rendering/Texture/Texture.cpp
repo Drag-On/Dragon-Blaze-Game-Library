@@ -15,6 +15,12 @@ namespace dbgl
     Texture::Texture(GLuint texID)
     {
 	m_textureId = texID;
+	glBindTexture(GL_TEXTURE_2D, m_textureId);
+	GLint temp;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &temp);
+	m_width = temp;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &temp);
+	m_height = temp;
     }
 
     Texture::~Texture()
@@ -27,18 +33,14 @@ namespace dbgl
 	return m_textureId;
     }
 
-    unsigned int Texture::getWidth(unsigned int level) const
+    unsigned int Texture::getWidth() const
     {
-	GLint width = 0;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, level, GL_TEXTURE_WIDTH, &width);
-	return width;
+	return m_width;
     }
 
-    unsigned int Texture::getHeight(unsigned int level) const
+    unsigned int Texture::getHeight() const
     {
-	GLint height = 0;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, level, GL_TEXTURE_HEIGHT, &height);
-	return height;
+	return m_height;
     }
 
     template <class Loader> Texture* Texture::load(const std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)

@@ -66,16 +66,14 @@ namespace dbgl
 	    GLuint getHandle() const;
 	    /**
 	     * @brief Provides the texture width
-	     * @param level Mip level, 0 for base texture
 	     * @return Width of the texture in pixels
 	     */
-	    unsigned int getWidth(unsigned int level = 0) const;
+	    unsigned int getWidth() const;
 	    /**
 	     * @brief Provides the texture height
-	     * @param level Mip level, 0 for base texture
 	     * @return Height of the texture in pixels
 	     */
-	    unsigned int getHeight(unsigned int level = 0) const;
+	    unsigned int getHeight() const;
 	    /**
 	     * @brief Constructs a new texture on the heap
 	     * @details Needs to be freed manually!
@@ -102,6 +100,8 @@ namespace dbgl
 	     * @brief GL texture handle
 	     */
 	    GLuint m_textureId;
+	    unsigned int m_width;
+	    unsigned int m_height;
     };
 }
 
