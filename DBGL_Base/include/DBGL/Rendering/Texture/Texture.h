@@ -65,6 +65,18 @@ namespace dbgl
 	     */
 	    GLuint getHandle() const;
 	    /**
+	     * @brief Provides the texture width
+	     * @param level Mip level, 0 for base texture
+	     * @return Width of the texture in pixels
+	     */
+	    unsigned int getWidth(unsigned int level = 0) const;
+	    /**
+	     * @brief Provides the texture height
+	     * @param level Mip level, 0 for base texture
+	     * @return Height of the texture in pixels
+	     */
+	    unsigned int getHeight(unsigned int level = 0) const;
+	    /**
 	     * @brief Constructs a new texture on the heap
 	     * @details Needs to be freed manually!
 	     * @param path File path
