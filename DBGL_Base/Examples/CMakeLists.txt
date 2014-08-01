@@ -25,6 +25,8 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/Entities"
 				 "${PROJECT_BINARY_DIR}/Entities")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Scene"
 				 "${PROJECT_BINARY_DIR}/Scene")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Sprite"
+				 "${PROJECT_BINARY_DIR}/Sprite")
 				 
 ######################################################################
 ### Copy common resource folder
