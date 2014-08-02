@@ -53,6 +53,28 @@ namespace dbgl
 	     */
 	    Matrix3x3<T> getInverted() const;
 	    /**
+	     * @brief Constructs a translation matrix from the given translation values
+	     * @param x Amount to translate on the x axis
+	     * @param y Amount to translate on the y axis
+	     */
+	    static Matrix3x3<T> make2DTranslation(T x, T y);
+	    /**
+	     * @brief Constructs a rotation matrix from the given angle
+	     * @param angle Angle to rotate around the z axis
+	     */
+	    static Matrix3x3<T> make2DRotation(T angle);
+	    /**
+	     * @brief Constructs a scale matrix from the given factor
+	     * @param factor Factor to scale by
+	     */
+	    static Matrix3x3<T> make2DScale(T factor);
+	    /**
+	     * @brief Constructs a scale matrix from the given factors
+	     * @param x Factor to scale by in x direction
+	     * @param y Factor to scale by in y direction
+	     */
+	    static Matrix3x3<T> make2DScale(T x, T y);
+	    /**
 	     * @brief Constructs a rotation matrix from the given angle
 	     * @param angle Angle to rotate around the x axis
 	     */

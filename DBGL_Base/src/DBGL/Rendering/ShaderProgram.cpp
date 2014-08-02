@@ -290,10 +290,10 @@ namespace dbgl
 		"layout(location = 1) in vec2 vertexUV;\n"
 		"out vec2 uv;\n"
 		"uniform vec2 v2_screenRes;\n"
-		"uniform mat4 M;\n"
+		"uniform mat3 TRANSFORM_2D;\n"
 		"void main(){\n"
 		"vec2 halfRes = v2_screenRes / 2;\n"
-		"vec2 clipPos = vec2(M * vec4(vertexPos, 1)) - halfRes;\n"
+		"vec2 clipPos = vec2(TRANSFORM_2D * vec3(vertexPos.xy, 1)) - halfRes;\n"
 		"clipPos /= halfRes;\n"
 		"gl_Position = vec4(clipPos, 0, 1);\n"
 		"uv = vertexUV;\n"
@@ -425,6 +425,7 @@ namespace dbgl
         { ShaderProgram::LIGHT_COLOR, "v3_color" },
         { ShaderProgram::AMBIENT, "v3_ambientLight" },
         { ShaderProgram::SCREEN_RES, "v2_screenRes" },
+        { ShaderProgram::TRANSFORM_2D, "TRANSFORM_2D" },
         { ShaderProgram::BOGUS, "" },
     };
 }

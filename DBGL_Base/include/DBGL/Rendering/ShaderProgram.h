@@ -51,6 +51,7 @@ namespace dbgl
 		LIGHT_COLOR, //!< LIGHT_COLOR
 		AMBIENT,     //!< AMBIENT
 		SCREEN_RES,  //!< SCREEN_RES
+		TRANSFORM_2D,//!< TRANSFORM_2D
 		BOGUS,       //!< BOGUS
 	    };
 

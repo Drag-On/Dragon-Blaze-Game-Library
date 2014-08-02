@@ -22,6 +22,8 @@
 #include "DBGL/Rendering/Texture/Texture.h"
 #include "DBGL/Rendering/Sprite/Sprite.h"
 #include "DBGL/Rendering/Environment/Camera.h"
+#include "DBGL/Math/Matrix3x3.h"
+#include "DBGL/Math/Matrix4x4.h"
 #include "DBGL/Math/Vector3.h"
 #include "DBGL/Math/Utility.h"
 #include "DBGL/Math/Quaternion.h"
@@ -147,9 +149,9 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     pSpriteShader->use();
     // Check for uniforms
-    GLint modelId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
+    GLint transformId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
     GLint screenResId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
-    if (screenResId <= 0 || modelId <= 0)
+    if (screenResId <= 0 || transformId <= 0)
 	return;
     // Diffuse texture
     diffuseId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
@@ -162,22 +164,22 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Sprite will be drawn in the top left corner
     // Send to shader
-    Mat4f model = Mat4f::makeTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight(), 0)
-	    * Mat4f::makeTranslation(pTexture->getWidth() / 2.0f, pTexture->getHeight() / 2.0f, 0)
-	    * Mat4f::makeRotationZ(curRotation)
-	    * Mat4f::makeTranslation(pTexture->getWidth() / -2.0f, pTexture->getHeight() / -2.0f, 0);
+    Mat3f transform = Mat3f::make2DTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight())
+	    * Mat3f::make2DTranslation(pTexture->getWidth() / 2.0f, pTexture->getHeight() / 2.0f)
+	    * Mat3f::make2DRotation(curRotation)
+	    * Mat3f::make2DTranslation(pTexture->getWidth() / -2.0f, pTexture->getHeight() / -2.0f);
     pSpriteShader->setUniformFloat2(screenResId, Vec2f { static_cast<float>(pWnd->getFrameWidth()),
 	static_cast<float>(pWnd->getFrameHeight()) }.getDataPointer());
-    pSpriteShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE, model.getDataPointer());
+    pSpriteShader->setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 
     /*
      * Draw a small version to the top right of the screen
      */
     float scale = 0.25f;
-    model = Mat4f::makeTranslation(pWnd->getFrameWidth() - pTexture->getWidth() * scale,
-	    pWnd->getFrameHeight() - pTexture->getHeight() * scale, 0) * Mat4f::makeScale(0.25f);
-    pSpriteShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE, model.getDataPointer());
+    transform = Mat3f::make2DTranslation(pWnd->getFrameWidth() - pTexture->getWidth() * scale,
+	    pWnd->getFrameHeight() - pTexture->getHeight() * scale) * Mat3f::make2DScale(0.25f);
+    pSpriteShader->setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 }
 

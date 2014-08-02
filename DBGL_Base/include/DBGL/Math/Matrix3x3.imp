@@ -58,6 +58,38 @@ namespace dbgl
 		return copy;
 	}
 	
+	template<typename T> Matrix3x3<T> Matrix3x3<T>::make2DTranslation(T x, T y)
+	{
+	    Matrix3x3<T> mat {};
+	    mat[2][0] = x;
+	    mat[2][1] = y;
+	    return mat;
+	}
+
+	template<typename T> Matrix3x3<T> Matrix3x3<T>::make2DRotation(T angle)
+	{
+	    return makeRotationZ(angle);
+	}
+
+	template<typename T> Matrix3x3<T> Matrix3x3<T>::make2DScale(T factor)
+	{
+	    Matrix3x3<T> mat {};
+	    mat[0][0] = factor;
+	    mat[1][1] = factor;
+	    mat[2][2] = 1;
+	    return mat;
+	}
+
+	template<typename T> Matrix3x3<T> Matrix3x3<T>::make2DScale(T x, T y)
+	{
+	    Matrix3x3<T> mat{};
+	    mat[0][0] = x;
+	    mat[1][1] = y;
+	    mat[2][2] = 1;
+	    return mat;
+	}
+
+
 	template<typename T> Matrix3x3<T> Matrix3x3<T>::makeRotationX(T angle)
 	{
 		BaseMatrixType mat{};
