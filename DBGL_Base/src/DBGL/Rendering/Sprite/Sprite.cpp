@@ -82,6 +82,16 @@ namespace dbgl
 	return m_pMesh;
     }
 
+    unsigned int Sprite::getWidth() const
+    {
+	return m_rect.getExtent().x();
+    }
+
+    unsigned int Sprite::getHeight() const
+    {
+	return m_rect.getExtent().y();
+    }
+
     void Sprite::recomputeMesh()
     {
 	float width = m_pTexture->getWidth();
@@ -98,10 +108,10 @@ namespace dbgl
 	m_pMesh->uvs()[ll] = Vec2f{uvs.left(0), uvs.left(1)};
 	m_pMesh->uvs()[lr] = Vec2f{uvs.right(0), uvs.left(1)};
 	// Set appropriate coordinates
-	m_pMesh->vertices()[tl] = Vec3f{m_rect.left(0), m_rect.right(1), 0};
-	m_pMesh->vertices()[tr] = Vec3f{m_rect.right(0), m_rect.right(1), 0};
-	m_pMesh->vertices()[ll] = Vec3f{m_rect.left(0), m_rect.left(1), 0};
-	m_pMesh->vertices()[lr] = Vec3f{m_rect.right(0), m_rect.left(1), 0};
+	m_pMesh->vertices()[tl] = Vec3f{static_cast<float>(m_rect.left(0)), static_cast<float>(m_rect.right(1)), 0};
+	m_pMesh->vertices()[tr] = Vec3f{static_cast<float>(m_rect.right(0)), static_cast<float>(m_rect.right(1)), 0};
+	m_pMesh->vertices()[ll] = Vec3f{static_cast<float>(m_rect.left(0)), static_cast<float>(m_rect.left(1)), 0};
+	m_pMesh->vertices()[lr] = Vec3f{static_cast<float>(m_rect.right(0)), static_cast<float>(m_rect.left(1)), 0};
 	m_pMesh->updateBuffers();
     }
 

@@ -66,6 +66,16 @@ namespace dbgl
 	     * @return Mesh fitting to the currently chosen rectangle
 	     */
 	    Mesh* getMesh() const;
+	    /**
+	     * @brief Returns the width of the currently selected part of the texture
+	     * @return Width of the currently selected part of the texture
+	     */
+	    unsigned int getWidth() const;
+	    /**
+	     * @brief Returns the height of the currently selected part of the texture
+	     * @return Height of the currently selected part of the texture
+	     */
+	    unsigned int getHeight() const;
 	private:
 	    /**
 	     * @brief Recomputes mesh proportions and UVs

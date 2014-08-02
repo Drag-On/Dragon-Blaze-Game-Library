@@ -164,10 +164,10 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Sprite will be drawn in the top left corner
     // Send to shader
-    Mat3f transform = Mat3f::make2DTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight())
-	    * Mat3f::make2DTranslation(pTexture->getWidth() / 2.0f, pTexture->getHeight() / 2.0f)
+    Mat3f transform = Mat3f::make2DTranslation(0, pWnd->getFrameHeight() - pSprite->getHeight())
+	    * Mat3f::make2DTranslation(pSprite->getWidth() / 2.0f, pSprite->getHeight() / 2.0f)
 	    * Mat3f::make2DRotation(curRotation)
-	    * Mat3f::make2DTranslation(pTexture->getWidth() / -2.0f, pTexture->getHeight() / -2.0f);
+	    * Mat3f::make2DTranslation(pSprite->getWidth() / -2.0f, pSprite->getHeight() / -2.0f);
     pSpriteShader->setUniformFloat2(screenResId, Vec2f { static_cast<float>(pWnd->getFrameWidth()),
 	static_cast<float>(pWnd->getFrameHeight()) }.getDataPointer());
     pSpriteShader->setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
@@ -177,8 +177,8 @@ void renderCallback(Window::RenderEventArgs const& args)
      * Draw a small version to the top right of the screen
      */
     float scale = 0.25f;
-    transform = Mat3f::make2DTranslation(pWnd->getFrameWidth() - pTexture->getWidth() * scale,
-	    pWnd->getFrameHeight() - pTexture->getHeight() * scale) * Mat3f::make2DScale(0.25f);
+    transform = Mat3f::make2DTranslation(pWnd->getFrameWidth() - pSprite->getWidth() * scale,
+	    pWnd->getFrameHeight() - pSprite->getHeight() * scale) * Mat3f::make2DScale(0.25f);
     pSpriteShader->setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 }
