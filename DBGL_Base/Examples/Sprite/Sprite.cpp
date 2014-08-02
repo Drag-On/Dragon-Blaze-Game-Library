@@ -36,6 +36,7 @@ Sprite* pSprite = nullptr;
 Camera* pCam = nullptr;
 Mat4f view{}, projection{};
 float mouseSpeed = 1.5, moveSpeed = 2.5;
+float curRotation = 0.0f, rotationSpeed = 1.0f;
 
 void inputCallback(Window::InputEventArgs const& args)
 {
@@ -101,6 +102,11 @@ void updateCallback(Window::UpdateEventArgs const& args)
 	pCam->position() += Vec3f(0, 1, 0) * deltaTime * moveSpeed;
     if (pWnd->getKey(Input::Key::KEY_Q) == Input::KeyState::DOWN)
 	pCam->position() -= Vec3f(0, 1, 0) * deltaTime * moveSpeed;
+
+    // Rotate sprite
+    curRotation += rotationSpeed * deltaTime;
+    while(curRotation >= 2 * pi())
+	curRotation -= 2 * pi();
 }
 
 void renderCallback(Window::RenderEventArgs const& args)
@@ -136,7 +142,7 @@ void renderCallback(Window::RenderEventArgs const& args)
 
 
     /*
-     * Draw sprite flat to screen
+     * Draw sprite flat to screen and rotate it
      */
     // Instruct shader
     pSpriteShader->use();
@@ -156,10 +162,22 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Sprite will be drawn in the top left corner
     // Send to shader
+    Mat4f model = Mat4f::makeTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight(), 0)
+	    * Mat4f::makeTranslation(pTexture->getWidth() / 2.0f, pTexture->getHeight() / 2.0f, 0)
+	    * Mat4f::makeRotationZ(curRotation)
+	    * Mat4f::makeTranslation(pTexture->getWidth() / -2.0f, pTexture->getHeight() / -2.0f, 0);
     pSpriteShader->setUniformFloat2(screenResId, Vec2f { static_cast<float>(pWnd->getFrameWidth()),
 	static_cast<float>(pWnd->getFrameHeight()) }.getDataPointer());
-    p3DShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE,
-	    Mat4f::makeTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight(), 0).getDataPointer());
+    pSpriteShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE, model.getDataPointer());
+    rc->draw(*(pSprite->getMesh()));
+
+    /*
+     * Draw a small version to the top right of the screen
+     */
+    float scale = 0.25f;
+    model = Mat4f::makeTranslation(pWnd->getFrameWidth() - pTexture->getWidth() * scale,
+	    pWnd->getFrameHeight() - pTexture->getHeight() * scale, 0) * Mat4f::makeScale(0.25f);
+    pSpriteShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE, model.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 }
 
