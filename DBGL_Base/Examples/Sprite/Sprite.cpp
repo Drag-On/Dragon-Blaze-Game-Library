@@ -141,8 +141,9 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     pSpriteShader->use();
     // Check for uniforms
+    GLint modelId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
     GLint screenResId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
-    if (screenResId <= 0)
+    if (screenResId <= 0 || modelId <= 0)
 	return;
     // Diffuse texture
     diffuseId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
@@ -155,7 +156,10 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Sprite will be drawn in the top left corner
     // Send to shader
-    pSpriteShader->setUniformFloat2(screenResId, Vec2f{pWnd->getFrameWidth(), pWnd->getFrameHeight()}.getDataPointer());
+    pSpriteShader->setUniformFloat2(screenResId, Vec2f { static_cast<float>(pWnd->getFrameWidth()),
+	static_cast<float>(pWnd->getFrameHeight()) }.getDataPointer());
+    p3DShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE,
+	    Mat4f::makeTranslation(0, pWnd->getFrameHeight() - pTexture->getHeight(), 0).getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 }
 
