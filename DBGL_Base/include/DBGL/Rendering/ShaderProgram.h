@@ -50,6 +50,7 @@ namespace dbgl
 		LIGHT_POS,   //!< LIGHT_POS
 		LIGHT_COLOR, //!< LIGHT_COLOR
 		AMBIENT,     //!< AMBIENT
+		SCREEN_RES,  //!< SCREEN_RES
 		BOGUS,       //!< BOGUS
 	    };
 
@@ -317,6 +318,13 @@ namespace dbgl
 	     * @return The newly created shader program
 	     */
 	    static ShaderProgram* createSimpleColorShader();
+	    /**
+	     * @brief Creates a very simple shader program which directly transforms the coordinates to the screen
+	     * @details No shading, all pixels will be displayed as on the texture
+	     * @warning The generated memory needs to be deallocated manually!
+	     * @return The newly created shader program
+	     */
+	    static ShaderProgram* createSpriteShader();
 
 	private:
 	    GLuint m_shaderProgram; // GL shader program handle

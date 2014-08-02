@@ -249,12 +249,12 @@ namespace dbgl
 	const std::string fragmentShader = "#version 330 core\n"
 		"in vec3 normal_cam;\n"
 		"in vec2 uv;\n"
-		"out vec3 color;\n"
+		"out vec4 color;\n"
 		"uniform sampler2D tex_diffuse;\n"
 		"void main(){\n"
 		"float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));\n"
 		"variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));\n"
-		"color = texture(tex_diffuse, uv).rgb * variance;\n"
+		"color = texture(tex_diffuse, uv).rgba * variance;\n"
 		"}";
 	return new ShaderProgram { vertexShader, fragmentShader, false };
     }
@@ -282,6 +282,30 @@ namespace dbgl
     		"}";
 	return new ShaderProgram { vertexShader, fragmentShader, false };
         }
+
+    ShaderProgram* ShaderProgram::createSpriteShader()
+    {
+	const std::string vertexShader = "#version 330 core\n"
+		"layout(location = 0) in vec3 vertexPos;\n"
+		"layout(location = 1) in vec2 vertexUV;\n"
+		"out vec2 uv;\n"
+		"uniform vec2 v2_screenRes;\n"
+		"void main(){\n"
+		"vec2 halfRes = v2_screenRes / 2;\n"
+		"vec2 clipPos = vec2(vertexPos) - halfRes;\n"
+		"clipPos /= halfRes;\n"
+		"gl_Position = vec4(clipPos, 0, 1);\n"
+		"uv = vertexUV;\n"
+		"}";
+	const std::string fragmentShader = "#version 330 core\n"
+		"in vec2 uv;\n"
+		"out vec4 color;\n"
+		"uniform sampler2D tex_diffuse;\n"
+		"void main(){\n"
+		"color = texture(tex_diffuse, uv).rgba;\n"
+		"}";
+	return new ShaderProgram { vertexShader, fragmentShader, false };
+    }
 
     void ShaderProgram::checkUniforms()
     {
@@ -399,6 +423,7 @@ namespace dbgl
         { ShaderProgram::LIGHT_POS, "v3_position_w" },
         { ShaderProgram::LIGHT_COLOR, "v3_color" },
         { ShaderProgram::AMBIENT, "v3_ambientLight" },
+        { ShaderProgram::SCREEN_RES, "v2_screenRes" },
         { ShaderProgram::BOGUS, "" },
     };
 }
