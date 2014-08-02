@@ -98,10 +98,10 @@ namespace dbgl
 	m_pMesh->uvs()[ll] = Vec2f{uvs.left(0), uvs.left(1)};
 	m_pMesh->uvs()[lr] = Vec2f{uvs.right(0), uvs.left(1)};
 	// Set appropriate coordinates
-	m_pMesh->vertices()[tl] = Vec3f{uvs.left(0), uvs.right(1), 0};
-	m_pMesh->vertices()[tr] = Vec3f{uvs.right(0), uvs.right(1), 0};
-	m_pMesh->vertices()[ll] = Vec3f{uvs.left(0), uvs.left(1), 0};
-	m_pMesh->vertices()[lr] = Vec3f{uvs.right(0), uvs.left(1), 0};
+	m_pMesh->vertices()[tl] = Vec3f{m_rect.left(0), m_rect.right(1), 0};
+	m_pMesh->vertices()[tr] = Vec3f{m_rect.right(0), m_rect.right(1), 0};
+	m_pMesh->vertices()[ll] = Vec3f{m_rect.left(0), m_rect.left(1), 0};
+	m_pMesh->vertices()[lr] = Vec3f{m_rect.right(0), m_rect.left(1), 0};
 	m_pMesh->updateBuffers();
     }
 

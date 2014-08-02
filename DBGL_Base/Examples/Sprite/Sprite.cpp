@@ -29,7 +29,8 @@
 using namespace dbgl;
 
 Window* pWnd = nullptr;
-ShaderProgram* pShader = nullptr;
+ShaderProgram* p3DShader = nullptr;
+ShaderProgram* pSpriteShader = nullptr;
 Texture* pTexture = nullptr;
 Sprite* pSprite = nullptr;
 Camera* pCam = nullptr;
@@ -106,31 +107,55 @@ void renderCallback(Window::RenderEventArgs const& args)
 {
     auto rc = args.rc;
 
+    /*
+     * Draw a 3D billboard
+     */
     // Instruct shader
-    pShader->use();
+    p3DShader->use();
     // Check for uniforms
-    GLint mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint itmvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
+    GLint mvpId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    GLint itmvId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
     if (mvpId <= 0 || itmvId <= 0)
 	return;
     // Diffuse texture
-    GLint diffuseId = pShader->getDefaultUniformHandle(
-	    ShaderProgram::TEX_DIFFUSE);
+    GLint diffuseId = p3DShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
-	pShader->setUniformSampler(diffuseId, 0);
+	p3DShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
+	p3DShader->setUniformSampler(diffuseId, 0);
     }
 
     // Sprite will be drawn in the center of the world
     // The model matrix equals the identity matrix and can thus be left out
-    Mat4f mvp = projection * view;
+    Mat4f mvp = projection * view * Mat4f::makeScale(1.0f/512.0f);
     // Send to shader
-    pShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE,
-	    mvp.getDataPointer());
-    pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,
-	    view.getDataPointer());
+    p3DShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE, mvp.getDataPointer());
+    p3DShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE, view.getDataPointer());
+    rc->draw(*(pSprite->getMesh()));
+
+
+    /*
+     * Draw sprite flat to screen
+     */
+    // Instruct shader
+    pSpriteShader->use();
+    // Check for uniforms
+    GLint screenResId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
+    if (screenResId <= 0)
+	return;
+    // Diffuse texture
+    diffuseId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+    if (diffuseId >= 0)
+    {
+	// Bind diffuse texture to unit 0
+	pSpriteShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
+	pSpriteShader->setUniformSampler(diffuseId, 0);
+    }
+
+    // Sprite will be drawn in the top left corner
+    // Send to shader
+    pSpriteShader->setUniformFloat2(screenResId, Vec2f{pWnd->getFrameWidth(), pWnd->getFrameHeight()}.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 }
 
@@ -142,7 +167,7 @@ int main()
     // Create window
     pWnd = WindowManager::get()->createWindow<SimpleWindow>();
     // Initialize it
-    pWnd->init();
+    pWnd->init(Window::DepthTest | Window::FaceCulling | Window::AlphaBlend);
     // Add a camera
     pCam = new Camera {Vec3f(0, 0, 3), Vec3f(0, 0, -1), Vec3f(0, 1, 0), pi_4(), 0.1, 100};
     view = Mat4f::makeView(pCam->position(),
@@ -150,7 +175,8 @@ int main()
     projection = Mat4f::makeProjection(pCam->getFieldOfView(),
 	float(pWnd->getFrameWidth()) / pWnd->getFrameHeight(), pCam->getNear(), pCam->getFar());
     // Load shader and texture
-    pShader = ShaderProgram::createSimpleShader();
+    p3DShader = ShaderProgram::createSimpleShader();
+    pSpriteShader = ShaderProgram::createSpriteShader();
     pTexture = Texture::load(Texture::TGA, "../common/DBGL_Logo_512.tga");
     pSprite = new Sprite{pTexture};
     // Add update- and render callback so we can draw the mesh
@@ -166,7 +192,8 @@ int main()
 	dbgl::update();
     }
     // Clean up
-    delete pShader;
+    delete p3DShader;
+    delete pSpriteShader;
     delete pTexture;
     delete pSprite;
     delete pCam;
