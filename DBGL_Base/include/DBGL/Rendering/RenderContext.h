@@ -32,6 +32,17 @@ namespace dbgl
     {
 	public:
 	    /**
+	     * @brief Types of buffers attached to the render context
+	     */
+	    enum Buffer : char
+	    {
+		COLOR = 1 << 0,   //!< COLOR
+		DEPTH = 1 << 1,   //!< DEPTH
+		STENCIL = 1 << 2, //!< STENCIL
+	    };
+
+
+	    /**
 	     * @brief Creates a new render context
 	     * @param frameWidth New width of of the framebuffer
 	     * @param frameHeight New height of the framebuffer
@@ -62,6 +73,11 @@ namespace dbgl
 	     * @return Height of the render context
 	     */
 	    unsigned int getHeight() const;
+	    /**
+	     * @brief Clear a buffer
+	     * @param Buffers to clear (type RenderContext::Buffer)
+	     */
+	    void clear(Bitmask<char> buf) const;
 	protected:
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame

@@ -43,6 +43,18 @@ namespace dbgl
 	return m_frameHeight;
     }
 
+    void RenderContext::clear(Bitmask<char> buf) const
+    {
+	GLbitfield flags = 0;
+	if(buf.isSet(Buffer::COLOR))
+	    flags |= GL_COLOR_BUFFER_BIT;
+	if(buf.isSet(Buffer::DEPTH))
+	    flags |= GL_DEPTH_BUFFER_BIT;
+	if(buf.isSet(Buffer::STENCIL))
+	    flags |= GL_STENCIL_BUFFER_BIT;
+	glClear(flags);
+    }
+
     void RenderContext::renderMesh(Mesh const& mesh) const
     {
 	// Bind vertex buffer : 0
