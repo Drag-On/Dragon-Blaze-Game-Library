@@ -21,6 +21,7 @@
 #include "DBGL/Rendering/ShaderProgram.h"
 #include "DBGL/Rendering/Texture/Texture.h"
 #include "DBGL/Rendering/Sprite/Sprite.h"
+#include "DBGL/Rendering/Sprite/BitmapFont.h"
 #include "DBGL/Rendering/Environment/Camera.h"
 #include "DBGL/Math/Matrix3x3.h"
 #include "DBGL/Math/Matrix4x4.h"
@@ -35,6 +36,7 @@ ShaderProgram* p3DShader = nullptr;
 ShaderProgram* pSpriteShader = nullptr;
 Texture* pTexture = nullptr;
 Sprite* pSprite = nullptr;
+BitmapFont* pFont = nullptr;
 Camera* pCam = nullptr;
 Mat4f view{}, projection{};
 float mouseSpeed = 1.5, moveSpeed = 2.5;
@@ -183,6 +185,11 @@ void renderCallback(Window::RenderEventArgs const& args)
 	    pWnd->getFrameHeight() - pSprite->getHeight() * scale) * Mat3f::make2DScale(0.25f);
     pSpriteShader->setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
+
+    /*
+     * Draw a text in the upper left corner
+     */
+    pFont->drawText(*rc, *pSpriteShader, "This is a text :)", 0, 20);
 }
 
 int main()
@@ -205,6 +212,7 @@ int main()
     pSpriteShader = ShaderProgram::createSpriteShader();
     pTexture = Texture::load(Texture::TGA, "../common/DBGL_Logo_512.tga");
     pSprite = new Sprite{pTexture};
+    pFont = new BitmapFont{"../common/DefaultFont.bff"};
     // Add update- and render callback so we can draw the mesh
     pWnd->addUpdateCallback(std::bind(&updateCallback, std::placeholders::_1));
     pWnd->addRenderCallback(std::bind(&renderCallback, std::placeholders::_1));
@@ -222,6 +230,7 @@ int main()
     delete pSpriteShader;
     delete pTexture;
     delete pSprite;
+    delete pFont;
     delete pCam;
     // Free remaining internal resources
     dbgl::terminate();

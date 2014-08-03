@@ -69,6 +69,54 @@ namespace dbgl
 	return *m_pSprite;
     }
 
+    void BitmapFont::drawText(RenderContext const& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y)
+    {
+	shader.use();
+	unsigned int cursor = 0;
+	for(char& c : text)
+	{
+	    // Check for uniforms
+	    GLint transformId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
+	    GLint screenResId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
+	    if (screenResId <= 0 || transformId <= 0)
+		return;
+	    // Diffuse texture
+	    GLint diffuseId = shader.getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+	    if (diffuseId >= 0)
+	    {
+		// Bind diffuse texture to unit 0
+		shader.bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, m_pTexture->getHandle());
+		shader.setUniformSampler(diffuseId, 0);
+	    }
+
+	    // TODO: Set blend mode
+//	    switch (m_header.bpp)
+//	    {
+//		case 8:
+//		    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+//		    glEnable(GL_BLEND);
+//		    break;
+//		case 24:
+//		    glDisable(GL_BLEND);
+//		    break;
+//		case 32:
+//		    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//		    glEnable(GL_BLEND);
+//		    break;
+//	    }
+
+	    // Sprite will be drawn in the top left corner
+	    // Send to shader
+	    Mat3f transform = Mat3f::make2DTranslation(x + cursor, y);
+	    shader.setUniformFloat2(screenResId, Vec2f { static_cast<float>(rc.getWidth()),
+		    static_cast<float>(rc.getHeight()) }.getDataPointer());
+	    shader.setUniformFloatMatrix3Array(transformId, 1, GL_FALSE, transform.getDataPointer());
+	    rc.draw(*getSprite(c).getMesh());
+	    // Move cursor right
+	    cursor += m_widths[static_cast<int>(c)];
+	}
+    }
+
     bool BitmapFont::load(std::string const& filename)
     {
 	// Variables to store data in
@@ -148,6 +196,7 @@ namespace dbgl
 	}
 	m_pTexture = new Texture {texId};
 	m_pSprite = new Sprite {m_pTexture};
+	m_pSprite->setFlipY(true);
 
 	delete [] img;
 	return true;

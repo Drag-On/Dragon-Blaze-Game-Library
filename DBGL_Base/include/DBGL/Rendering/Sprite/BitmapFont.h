@@ -15,6 +15,9 @@
 #include <fstream>
 #include "Sprite.h"
 #include "DBGL/Rendering/Texture/Texture.h"
+#include "DBGL/Rendering/RenderContext.h"
+#include "DBGL/Rendering/ShaderProgram.h"
+#include "DBGL/Math/Matrix3x3.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -64,6 +67,16 @@ namespace dbgl
 	     * @return Reference to sprite that is set up to show the passed character.
 	     */
 	    Sprite& getSprite(char c);
+	    /**
+	     * @brief Draws a text to the passed render context
+	     * @param rc Render context to use
+	     * @param shader Shader to use
+	     * @param text Message to display
+	     * @param x X display coordinate to start text at
+	     * @param y Y display coordinate to start text at
+	     * @note This assumes that the render context has been properly set up beforehand
+	     */
+	    void drawText(RenderContext const& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y);
 	private:
 	    /**
 	     * @brief loads the font file
