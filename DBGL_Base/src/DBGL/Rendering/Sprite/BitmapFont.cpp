@@ -52,6 +52,11 @@ namespace dbgl
 	return width;
     }
 
+    unsigned int BitmapFont::getLineHeight() const
+    {
+	return m_header.cellHeight;
+    }
+
     bool BitmapFont::load(std::string const& filename)
     {
 	// Variables to store data in

@@ -53,6 +53,11 @@ namespace dbgl
 	     * @note Does not account for newlines.
 	     */
 	    unsigned int getWidth(std::string text) const;
+	    /**
+	     * @brief Provides the maximum height of a line of text using this font
+	     * @return The height of the font in pixels
+	     */
+	    unsigned int getLineHeight() const;
 	private:
 	    /**
 	     * @brief loads the font file
