@@ -82,7 +82,7 @@ namespace dbgl
 	    return false;
 	}
 	// Reject unsupported bpp values
-	if(m_header.bpp != 8 || m_header.bpp != 24 || m_header.bpp != 32)
+	if(m_header.bpp != 8 && m_header.bpp != 24 && m_header.bpp != 32)
 	{
 	    in.close();
 	    LOG.error("Bitmap font file \"%\" has unsupported amount of bits per pixel.", filename.c_str());
