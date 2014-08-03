@@ -92,6 +92,26 @@ namespace dbgl
 	return m_rect.getExtent().y();
     }
 
+    bool Sprite::getFlipX() const
+    {
+	return m_flipX;
+    }
+
+    void Sprite::setFlipX(bool flip)
+    {
+	m_flipX = flip;
+    }
+
+    bool Sprite::getFlipY() const
+    {
+	return m_flipY;
+    }
+
+    void Sprite::setFlipY(bool flip)
+    {
+	m_flipY = flip;
+    }
+
     void Sprite::recomputeMesh()
     {
 	float width = m_pTexture->getWidth();
@@ -103,17 +123,19 @@ namespace dbgl
 	uvs.extent().x() = m_rect.extent().x() / width;
 	uvs.extent().y() = m_rect.extent().y() / height;
 	// Set them
-	m_pMesh->uvs()[tl] = Vec2f{uvs.left(0), uvs.right(1)};
-	m_pMesh->uvs()[tr] = Vec2f{uvs.right(0), uvs.right(1)};
-	m_pMesh->uvs()[ll] = Vec2f{uvs.left(0), uvs.left(1)};
-	m_pMesh->uvs()[lr] = Vec2f{uvs.right(0), uvs.left(1)};
+	float lowerX = m_flipX?uvs.right(0):uvs.left(0);
+	float upperX = m_flipX?uvs.left(0):uvs.right(0);
+	float lowerY = m_flipY?uvs.right(1):uvs.left(1);
+	float upperY = m_flipY?uvs.left(1):uvs.right(1);
+	m_pMesh->uvs()[tl] = Vec2f{lowerX, upperY};
+	m_pMesh->uvs()[tr] = Vec2f{upperX, upperY};
+	m_pMesh->uvs()[ll] = Vec2f{lowerX, lowerY};
+	m_pMesh->uvs()[lr] = Vec2f{upperX, lowerY};
 	// Set appropriate coordinates
-	float lowerX = m_rect.left(0);
-	float lowerY = m_rect.left(1);
-	m_pMesh->vertices()[tl] = Vec3f{0, m_rect.right(1) - lowerY, 0};
-	m_pMesh->vertices()[tr] = Vec3f{m_rect.right(0) - lowerX, m_rect.right(1) - lowerY, 0};
+	m_pMesh->vertices()[tl] = Vec3f{0, static_cast<float>(m_rect.right(1)) - m_rect.left(1), 0};
+	m_pMesh->vertices()[tr] = Vec3f{static_cast<float>(m_rect.right(0)) - m_rect.left(0), static_cast<float>(m_rect.right(1)) - m_rect.left(1), 0};
 	m_pMesh->vertices()[ll] = Vec3f{0, 0, 0};
-	m_pMesh->vertices()[lr] = Vec3f{m_rect.right(0) - lowerX, 0, 0};
+	m_pMesh->vertices()[lr] = Vec3f{static_cast<float>(m_rect.right(0)) - m_rect.left(0), 0, 0};
 	m_pMesh->updateBuffers();
     }
 

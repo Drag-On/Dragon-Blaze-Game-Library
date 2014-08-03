@@ -76,6 +76,26 @@ namespace dbgl
 	     * @return Height of the currently selected part of the texture
 	     */
 	    unsigned int getHeight() const;
+	    /**
+	     * @brief Checks if this sprite is flipped horizontally
+	     * @return True in case the sprite is flipped horizontally
+	     */
+	    bool getFlipX() const;
+	    /**
+	     * @brief Allows to flip this sprite horizontally
+	     * @param flip True to flip, otherwise false
+	     */
+	    void setFlipX(bool flip);
+	    /**
+	     * @brief Checks if this sprite is flipped vertically
+	     * @return True in case the sprite is flipped vertically
+	     */
+	    bool getFlipY() const;
+	    /**
+	     * @brief Allows to flip this sprite vertically
+	     * @param flip True to flip, otherwise false
+	     */
+	    void setFlipY(bool flip);
 	private:
 	    /**
 	     * @brief Recomputes mesh proportions and UVs
@@ -103,6 +123,10 @@ namespace dbgl
 	     * @brief Indices of the corner vertices
 	     */
 	    unsigned int tl = 5, tr = 5, ll = 5, lr = 5;
+	    /**
+	     * @brief Inverts x or y uvs
+	     */
+	    bool m_flipX = false, m_flipY = false;
     };
 }
 
