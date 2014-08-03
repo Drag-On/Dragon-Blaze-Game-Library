@@ -58,6 +58,12 @@ namespace dbgl
 	     * @return The height of the font in pixels
 	     */
 	    unsigned int getLineHeight() const;
+	    /**
+	     * @brief Provides a sprite that shows the character defined by \p c
+	     * @param c Character to get sprite for
+	     * @return Reference to sprite that is set up to show the passed character.
+	     */
+	    Sprite& getSprite(char c);
 	private:
 	    /**
 	     * @brief loads the font file
@@ -76,6 +82,7 @@ namespace dbgl
 		    int imgWidth = 0, imgHeight = 0, cellWidth = 0, cellHeight = 0;
 		    unsigned char bpp = 0, base = 0;
 	    } m_header;
+	    int m_rowPitch;
 	    char m_widths[256];
     };
 }

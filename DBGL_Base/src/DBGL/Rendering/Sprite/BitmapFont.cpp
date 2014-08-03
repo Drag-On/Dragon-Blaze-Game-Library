@@ -57,6 +57,18 @@ namespace dbgl
 	return m_header.cellHeight;
     }
 
+    Sprite& BitmapFont::getSprite(char c)
+    {
+	unsigned int row = (c - m_header.base) / m_rowPitch;
+	unsigned int col = (c - m_header.base) - row * m_rowPitch;
+	Rectangle<unsigned int> rect{};
+	rect.pos() = Vector2<unsigned int>{col * m_header.cellWidth, row * m_header.cellHeight};
+	rect.extent() = Vector2<unsigned int> { static_cast<unsigned int>(m_widths[static_cast<int>(c)]),
+	    static_cast<unsigned int>(m_header.cellHeight) };
+	m_pSprite->setRect(rect);
+	return *m_pSprite;
+    }
+
     bool BitmapFont::load(std::string const& filename)
     {
 	// Variables to store data in
@@ -93,6 +105,7 @@ namespace dbgl
 	    LOG.error("Bitmap font file \"%\" has unsupported amount of bits per pixel.", filename.c_str());
 	    return false;
 	}
+	m_rowPitch = m_header.imgWidth / m_header.cellWidth;
 	// Read in array with width of each character
 	in.read(&(m_widths[0]), 256);
 	// Read in texture
