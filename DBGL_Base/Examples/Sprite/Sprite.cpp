@@ -41,6 +41,7 @@ Camera* pCam = nullptr;
 Mat4f view{}, projection{};
 float mouseSpeed = 1.5, moveSpeed = 2.5;
 float curRotation = 0.0f, rotationSpeed = 1.0f;
+float fps = 0.0f;
 
 void inputCallback(Window::InputEventArgs const& args)
 {
@@ -111,6 +112,18 @@ void updateCallback(Window::UpdateEventArgs const& args)
     curRotation += rotationSpeed * deltaTime;
     while(curRotation >= 2 * pi())
 	curRotation -= 2 * pi();
+
+    // Calculate fps
+    static int frames = 0;
+    static double time = 0;
+    frames++;
+    time += deltaTime;
+    if(time >= 1)
+    {
+	time -= 1;
+	fps = frames;
+	frames = 0;
+    }
 }
 
 void renderCallback(Window::RenderEventArgs const& args)
@@ -187,9 +200,10 @@ void renderCallback(Window::RenderEventArgs const& args)
     rc->draw(*(pSprite->getMesh()));
 
     /*
-     * Draw a text in the upper left corner
+     * Draw framerate in the upper left corner
      */
-    pFont->drawText(*rc, *pSpriteShader, "This is a text :)", 0, 20);
+    std::string fpsStr = std::string("FPS: ") + std::to_string(fps);
+    pFont->drawText(*rc, *pSpriteShader, fpsStr, 0, rc->getHeight()-pFont->getLineHeight());
 }
 
 int main()
