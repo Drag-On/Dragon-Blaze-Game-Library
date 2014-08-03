@@ -41,6 +41,17 @@ namespace dbgl
 	return *this;
     }
 
+    unsigned int BitmapFont::getWidth(std::string text) const
+    {
+	// Iterate over all characters and add up their widths
+	unsigned int width = 0;
+	for(char& c : text)
+	{
+	    width += m_widths[static_cast<int>(c)];
+	}
+	return width;
+    }
+
     bool BitmapFont::load(std::string const& filename)
     {
 	// Variables to store data in

@@ -46,6 +46,13 @@ namespace dbgl
 	     * @return Reference to this BitmapFont
 	     */
 	    BitmapFont& operator=(BitmapFont const& other);
+	    /**
+	     * @brief Calculates the width of the passed string when displayed
+	     * @param text String to display
+	     * @return Width in pixels of \p text when displayed
+	     * @note Does not account for newlines.
+	     */
+	    unsigned int getWidth(std::string text) const;
 	private:
 	    /**
 	     * @brief loads the font file
