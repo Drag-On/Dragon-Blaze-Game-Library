@@ -142,7 +142,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     p3DShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE, view.getDataPointer());
     rc->draw(*(pSprite->getMesh()));
 
-    // Clear render buffer so the 2D sprites don't interfere with the 3D models
+    // Clear depth buffer so the 2D sprites don't interfere with the 3D models
     rc->clear(RenderContext::Buffer::DEPTH);
 
     /*
