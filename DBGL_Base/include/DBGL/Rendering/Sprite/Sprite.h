@@ -17,6 +17,10 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Represents a section of a two-dimensional texture, that is supposed to be drawn onto a plane, e.g. the screen.
+     * @details Automatically creates a mesh which tightly fits to the selected part of the texture and has the right UVs to show it.
+     */
     class Sprite
     {
 	public:
