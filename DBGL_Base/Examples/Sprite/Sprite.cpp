@@ -133,6 +133,8 @@ void renderCallback(Window::RenderEventArgs const& args)
     /*
      * Draw a 3D billboard
      */
+    // Enable depth testing for 3D
+    rc->setDepthTest(RenderContext::DepthTestValue::Less);
     // Instruct shader
     p3DShader->use();
     // Check for uniforms
@@ -163,6 +165,8 @@ void renderCallback(Window::RenderEventArgs const& args)
     /*
      * Draw sprite flat to screen and rotate it
      */
+    // Disable depth testing for 2D
+    rc->setDepthTest(RenderContext::DepthTestValue::Always);
     // Instruct shader
     pSpriteShader->use();
     // Check for uniforms
