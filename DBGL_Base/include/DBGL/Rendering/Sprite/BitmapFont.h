@@ -76,7 +76,7 @@ namespace dbgl
 	     * @param y Y display coordinate to start text at
 	     * @note This assumes that the render context has been properly set up beforehand
 	     */
-	    void drawText(RenderContext const& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y);
+	    void drawText(RenderContext& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y);
 	private:
 	    /**
 	     * @brief loads the font file

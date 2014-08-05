@@ -69,7 +69,7 @@ namespace dbgl
 	return *m_pSprite;
     }
 
-    void BitmapFont::drawText(RenderContext const& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y)
+    void BitmapFont::drawText(RenderContext& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y)
     {
 	shader.use();
 	unsigned int cursor = 0;
@@ -89,21 +89,22 @@ namespace dbgl
 		shader.setUniformSampler(diffuseId, 0);
 	    }
 
-	    // TODO: Set blend mode
-//	    switch (m_header.bpp)
-//	    {
-//		case 8:
-//		    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
-//		    glEnable(GL_BLEND);
-//		    break;
-//		case 24:
-//		    glDisable(GL_BLEND);
-//		    break;
-//		case 32:
-//		    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//		    glEnable(GL_BLEND);
-//		    break;
-//	    }
+	    // Set blend mode
+	    auto srcBlend = rc.getSrcAlphaBlend();
+	    auto destBlend = rc.getDestAlphaBlend();
+	    switch (m_header.bpp)
+	    {
+		case 8:
+		    rc.setAlphaBlend(RenderContext::AlphaBlendValue::SrcAlpha, RenderContext::AlphaBlendValue::SrcAlpha);
+		    break;
+		case 24:
+		    rc.setAlphaBlend(RenderContext::AlphaBlendValue::Zero, RenderContext::AlphaBlendValue::Zero);
+		    break;
+		case 32:
+		    rc.setAlphaBlend(RenderContext::AlphaBlendValue::One, RenderContext::AlphaBlendValue::OneMinusSrcAlpha);
+		    break;
+	    }
+	    rc.setAlphaBlend(srcBlend, destBlend);
 
 	    // Sprite will be drawn in the top left corner
 	    // Send to shader
