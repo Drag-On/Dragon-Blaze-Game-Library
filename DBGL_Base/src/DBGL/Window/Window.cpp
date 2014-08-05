@@ -118,21 +118,15 @@ namespace dbgl
 
 	// Enable depth test?
 	if (options.isSet(DepthTest))
-	{
-	    glEnable(GL_DEPTH_TEST);
-	    glDepthFunc(GL_LESS);
-	}
+	    m_pRenderContext->setDepthTest(RenderContext::DepthTestValue::Less);
 
 	// Enable alpha blending?
 	if (options.isSet(AlphaBlend))
-	{
-	    glEnable(GL_BLEND);
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
+	    m_pRenderContext->setAlphaBlend(RenderContext::AlphaBlendValue::SrcAlpha, RenderContext::AlphaBlendValue::OneMinusSrcAlpha);
 
 	// Cull triangles that are not facing the camera?
 	if (options.isSet(FaceCulling))
-	    glEnable(GL_CULL_FACE);
+	    m_pRenderContext->setFaceCulling(RenderContext::FaceCullingValue::Back);
 
 	if(m_multisampling > 0)
 	    glEnable(GL_MULTISAMPLE);
