@@ -55,62 +55,142 @@ namespace dbgl
 	glClear(flags);
     }
 
-    void RenderContext::setDepthTest(DepthTestValue val) const
+    void RenderContext::setDepthTest(DepthTestValue val)
     {
 	switch (val)
 	{
-	    case DepthTestValue::Off:
+	    case DepthTestValue::Always:
 		glDisable(GL_DEPTH_TEST);
+		break;
+	    case DepthTestValue::Never:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_NEVER);
 		break;
 	    case DepthTestValue::Less:
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		break;
+	    case DepthTestValue::LessEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		break;
 	    case DepthTestValue::Greater:
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_GREATER);
 		break;
+	    case DepthTestValue::GreaterEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_GEQUAL);
+		break;
+	    case DepthTestValue::Equal:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_EQUAL);
+		break;
+	    case DepthTestValue::NotEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_NOTEQUAL);
+		break;
 	    default:
 		LOG.warning("Unkown value for depth testing.");
-		break;
+		return;
 	}
+	m_curDepthTestVal = val;
     }
 
-    void RenderContext::setAlphaBlend(AlphaBlendValue val) const
+    auto RenderContext::getDepthTest() const -> DepthTestValue
+    {
+	return m_curDepthTestVal;
+    }
+
+    void RenderContext::setAlphaBlend(AlphaBlendValue src, AlphaBlendValue dest)
+    {
+	if(src == AlphaBlendValue::Zero && dest == AlphaBlendValue::Zero)
+	{
+	    glDisable(GL_BLEND);
+	    m_curSrcAlphaBlendVal = src;
+	    m_curDestAlphaBlendVal = dest;
+	    return;
+	}
+	GLenum sfactor = translateAlphaBlendValue(src), dfactor = translateAlphaBlendValue(dest);
+	glEnable(GL_BLEND);
+	glBlendFunc(sfactor, dfactor);
+	if(glGetError() != GL_NO_ERROR)
+	{
+	    LOG.warning("Unkown value for alpha blending.");
+	    glDisable(GL_BLEND);
+	    m_curSrcAlphaBlendVal = m_curDestAlphaBlendVal = AlphaBlendValue::Zero;
+	    return;
+	}
+	m_curSrcAlphaBlendVal = src;
+	m_curDestAlphaBlendVal = dest;
+    }
+
+    GLenum RenderContext::translateAlphaBlendValue(AlphaBlendValue val) const
     {
 	switch (val)
 	{
-	    case AlphaBlendValue::Off:
-		glDisable(GL_BLEND);
-		break;
+	    case AlphaBlendValue::Zero:
+		return GL_ZERO;
+	    case AlphaBlendValue::One:
+		return GL_ONE;
+	    case AlphaBlendValue::DstColor:
+		return GL_DST_COLOR;
+	    case AlphaBlendValue::OneMinusDstColor:
+		return GL_ONE_MINUS_DST_COLOR;
 	    case AlphaBlendValue::SrcAlpha:
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
-		break;
+		return GL_SRC_ALPHA;
 	    case AlphaBlendValue::OneMinusSrcAlpha:
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		break;
+		return GL_ONE_MINUS_SRC_ALPHA;
+	    case AlphaBlendValue::DstAlpha:
+		return GL_DST_ALPHA;
+	    case AlphaBlendValue::OneMinusDstAlpha:
+		return GL_ONE_MINUS_DST_ALPHA;
+	    case AlphaBlendValue::SrcAlphaSaturate:
+		return GL_SRC_ALPHA_SATURATE;
 	    default:
-		LOG.warning("Unkown value for alpha blending.");
-		break;
+		return GL_INVALID_ENUM;
 	}
     }
 
-    void RenderContext::setFaceCulling(FaceCullingValue val) const
+    auto RenderContext::getSrcAlphaBlend() const -> AlphaBlendValue
+    {
+	return m_curSrcAlphaBlendVal;
+    }
+
+    auto RenderContext::getDestAlphaBlend() const -> AlphaBlendValue
+    {
+	return m_curDestAlphaBlendVal;
+    }
+
+    void RenderContext::setFaceCulling(FaceCullingValue val)
     {
 	switch(val)
 	{
 	    case FaceCullingValue::Off:
 		glDisable(GL_CULL_FACE);
 		break;
-	    case FaceCullingValue::On:
+	    case FaceCullingValue::Front:
 		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		break;
+	    case FaceCullingValue::Back:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		break;
+	    case FaceCullingValue::FrontBack:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT_AND_BACK);
 		break;
 	    default:
 		LOG.warning("Unkown value for face culling.");
-		break;
+		return;
 	}
+	m_curFaceCullingVal = val;
+    }
+
+    auto RenderContext::getFaceCulling() const -> FaceCullingValue
+    {
+	return m_curFaceCullingVal;
     }
 
     void RenderContext::renderMesh(Mesh const& mesh) const

@@ -45,26 +45,39 @@ namespace dbgl
 	     */
 	    enum class DepthTestValue
 	    {
-		Off,    //!< Off
-		Less,   //!< Less
-		Greater,//!< Greater
+		Always,      //!< Always
+		Never,       //!< Never
+		Less,        //!< Less
+		LessEqual,   //!< LessEqual
+		Greater,     //!< Greater
+		GreaterEqual,//!< GreaterEqual
+		Equal,       //!< Equal
+		NotEqual,    //!< NotEqual
 	    };
 	    /**
 	     * @brief Options that can be set for alpha blending
 	     */
 	    enum class AlphaBlendValue
 	    {
-		Off,             //!< Off
+		Zero,            //!< Zero
+		One,             //!< One
+		DstColor,        //!< DstColor
+		OneMinusDstColor,//!< OneMinusDstColor
 		SrcAlpha,        //!< SrcAlpha
 		OneMinusSrcAlpha,//!< OneMinusSrcAlpha
+		DstAlpha,        //!< DstAlpha
+		OneMinusDstAlpha,//!< OneMinusDstAlpha
+		SrcAlphaSaturate,//!< SrcAlphaSaturate
 	    };
 	    /**
 	     * @brief Options that can be set for face culling
 	     */
 	    enum class FaceCullingValue
 	    {
-		Off,//!< Off
-		On, //!< On
+		Off,      //!< Off
+		Front,    //!< Front
+		Back,     //!< Back
+		FrontBack,//!< FrontBack
 	    };
 
 
@@ -108,17 +121,39 @@ namespace dbgl
 	     * @brief Sets the depth testing behavior
 	     * @param val Value to set
 	     */
-	    void setDepthTest(DepthTestValue val) const;
+	    void setDepthTest(DepthTestValue val);
+	    /**
+	     * @brief Retrieves the currently set depth testing behavior
+	     * @return
+	     */
+	    DepthTestValue getDepthTest() const;
 	    /**
 	     * @brief Sets the alpha blending behavior
-	     * @param val Value to set
+	     * @param src Source factor
+	     * @param dest Destination factor
+	     * @note Set both \p src and \p dest to ZERO in order to disable alpha blending
 	     */
-	    void setAlphaBlend(AlphaBlendValue val) const;
+	    void setAlphaBlend(AlphaBlendValue src, AlphaBlendValue dest);
+	    /**
+	     * @brief Retrieves the currently set source factor for alpha blending
+	     * @return Source factor
+	     */
+	    AlphaBlendValue getSrcAlphaBlend() const;
+	    /**
+	     * @brief Retrieves the currently set destination factor for alpha blending
+	     * @return Destination factor
+	     */
+	    AlphaBlendValue getDestAlphaBlend() const;
 	    /**
 	     * @brief Sets the face culling behavior
 	     * @param val Value to set
 	     */
-	    void setFaceCulling(FaceCullingValue val) const;
+	    void setFaceCulling(FaceCullingValue val);
+	    /**
+	     * @brief Retrieves the currently set face culling behavior
+	     * @return
+	     */
+	    FaceCullingValue getFaceCulling() const;
 	protected:
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame
@@ -146,6 +181,18 @@ namespace dbgl
 	     * @param mesh Pointer to the mesh to render
 	     */
 	    void renderMesh(Mesh const& mesh) const;
+	    /**
+	     * @brief Translates a AlphaBlendValue into the appropriate GLenum
+	     * @param val
+	     * @return
+	     */
+	    GLenum translateAlphaBlendValue(AlphaBlendValue val) const;
+
+
+	    DepthTestValue m_curDepthTestVal = DepthTestValue::Always;
+	    AlphaBlendValue m_curSrcAlphaBlendVal = AlphaBlendValue::Zero;
+	    AlphaBlendValue m_curDestAlphaBlendVal = AlphaBlendValue::Zero;
+	    FaceCullingValue m_curFaceCullingVal = FaceCullingValue::Off;
 
 	    // Window::preRender can access internals - only for preRender() method
 	    friend class Window;
