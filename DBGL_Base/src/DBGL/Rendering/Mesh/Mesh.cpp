@@ -366,13 +366,13 @@ namespace dbgl
 	    m_vertexBuffer = generateBuffer();
 	fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER,
 		m_vertices.size() * sizeof(Vec3f), &m_vertices[0],
-		GL_STATIC_DRAW);
+		convertUsage(m_usage));
 
 	if (m_indexBuffer == GL_INVALID_VALUE)
 	    m_indexBuffer = generateBuffer();
 	fillBuffer(m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER,
 		m_indices.size() * sizeof(unsigned short), &m_indices[0],
-		GL_STATIC_DRAW);
+		convertUsage(m_usage));
 
 	if (m_normals.size() > 0)
 	{
@@ -380,7 +380,7 @@ namespace dbgl
 		m_normalBuffer = generateBuffer();
 	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER,
 		    m_normals.size() * sizeof(Vec3f), &m_normals[0],
-		    GL_STATIC_DRAW);
+		    convertUsage(m_usage));
 	}
 
 	if (m_uv.size() > 0)
@@ -543,6 +543,44 @@ namespace dbgl
 		(*it)--;
 	    }
 	}
+    }
+
+    void Mesh::setUsage(Usage usage)
+    {
+	m_usage = usage;
+    }
+
+    auto Mesh::getUsage() const -> Usage
+    {
+	return m_usage;
+    }
+
+    GLenum Mesh::convertUsage(Usage usage)
+    {
+	switch(usage)
+	{
+	    case Usage::DynamicCopy:
+		return GL_DYNAMIC_COPY;
+	    case Usage::DynamicDraw:
+		return GL_DYNAMIC_DRAW;
+	    case Usage::DynamicRead:
+		return GL_DYNAMIC_READ;
+	    case Usage::StaticCopy:
+		return GL_STATIC_COPY;
+	    case Usage::StaticDraw:
+		return GL_STATIC_DRAW;
+	    case Usage::StaticRead:
+		return GL_STATIC_READ;
+	    case Usage::StreamCopy:
+		return GL_STREAM_COPY;
+	    case Usage::StreamDraw:
+		return GL_STREAM_DRAW;
+	    case Usage::StreamRead:
+		return GL_STREAM_READ;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+	return GL_INVALID_ENUM;
     }
 
     GLuint Mesh::generateBuffer()

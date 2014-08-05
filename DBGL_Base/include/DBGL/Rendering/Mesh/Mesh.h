@@ -37,6 +37,21 @@ namespace dbgl
 		OBJ, //!< OBJ
 	    };
 	    /**
+	     * @brief Mesh buffer usage
+	     */
+	    enum class Usage
+	    {
+		    StreamDraw, //!< StreamDraw
+		    StreamRead, //!< StreamRead
+		    StreamCopy, //!< StreamCopy
+		    StaticDraw, //!< StaticDraw
+		    StaticRead, //!< StaticRead
+		    StaticCopy, //!< StaticCopy
+		    DynamicDraw,//!< DynamicDraw
+		    DynamicRead,//!< DynamicRead
+		    DynamicCopy,//!< DynamicCopy
+	    };
+	    /**
 	     * @brief Flag indicating if tangents and bitangents should be generated
 	     */
 	    static const int GenerateTangentBase = 1 << 0;
@@ -188,7 +203,22 @@ namespace dbgl
 	     * 		time to finish.
 	     */
 	    void removeVertex(unsigned short i);
+	    /**
+	     * @brief Set the buffer usage pattern
+	     * @param usage New usage pattern
+	     */
+	    void setUsage(Usage usage);
+	    /**
+	     * @brief Retrieves the current buffer usage pattern
+	     * @return Current usage pattern
+	     */
+	    Usage getUsage() const;
 	private:
+	    /**
+	     * @brief Converts the Usage enum into a GLenum
+	     * @return
+	     */
+	    static GLenum convertUsage(Usage usage);
 	    /**
 	     * @brief Generates a gl buffer
 	     * @return Buffer identifier or GL_INVALID_VALUE if something went wrong
@@ -219,6 +249,7 @@ namespace dbgl
 	    GLuint m_tangentBuffer = GL_INVALID_VALUE;
 	    std::vector<Vector3<GLfloat>> m_bitangents;
 	    GLuint m_bitangentBuffer = GL_INVALID_VALUE;
+	    Usage m_usage = Usage::StaticDraw;
 
 	    friend class RenderContext;
 	    // So the render context can render
