@@ -89,13 +89,21 @@ namespace dbgl
 	return m_bitangents;
     }
 
-    Mesh* Mesh::load(const Type type, const std::string path, Bitmask<> flags)
+    Mesh* Mesh::load(const Type type, const std::string path, Bitmask<> flags, Usage usage)
     {
 	switch (type)
 	{
 	    case OBJ:
 	    {
-		return OBJMeshLoader().load(path, flags);
+		auto mesh = OBJMeshLoader().load(path, flags);
+		mesh->setUsage(usage);
+		// Generate tangent base if requested
+		if (flags.isSet(Mesh::GenerateTangentBase))
+		    mesh->generateTangentBasis();
+		// Send data to gl buffers if requested
+		if (flags.isSet(Mesh::SendToGPU))
+		    mesh->updateBuffers();
+		return mesh;
 	    }
 	    default:
 	    {
@@ -105,19 +113,36 @@ namespace dbgl
 	}
     }
 
-    template<class Loader> Mesh* Mesh::load(const std::string path, Bitmask<> flags)
+    template<class Loader> Mesh* Mesh::load(const std::string path, Bitmask<> flags, Usage usage)
     {
-	return Loader().load(path, flags);
+	auto mesh = Loader().load(path, flags);
+	mesh->setUsage(usage);
+	// Generate tangent base if requested
+	if (flags.isSet(Mesh::GenerateTangentBase))
+	    mesh->generateTangentBasis();
+	// Send data to gl buffers if requested
+	if (flags.isSet(Mesh::SendToGPU))
+	    mesh->updateBuffers();
+	return mesh;
     }
 
-    Mesh* Mesh::load(MeshLoader& loader, const std::string path, Bitmask<> flags)
+    Mesh* Mesh::load(MeshLoader& loader, const std::string path, Bitmask<> flags, Usage usage)
     {
-	return loader.load(path, flags);
+	auto mesh = loader.load(path, flags);
+	mesh->setUsage(usage);
+	// Generate tangent base if requested
+	if (flags.isSet(Mesh::GenerateTangentBase))
+	    mesh->generateTangentBasis();
+	// Send data to gl buffers if requested
+	if (flags.isSet(Mesh::SendToGPU))
+	    mesh->updateBuffers();
+	return mesh;
     }
 
-    Mesh* Mesh::makeTriangle(Bitmask<> flags)
+    Mesh* Mesh::makeTriangle(Bitmask<> flags, Usage usage)
     {
 	Mesh* mesh = new Mesh {};
+	mesh->setUsage(usage);
 	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(1, -1, 0), Vec3f(0, 1, 0)};
 
@@ -140,9 +165,10 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makePlane(Bitmask<> flags)
+    Mesh* Mesh::makePlane(Bitmask<> flags, Usage usage)
     {
 	Mesh* mesh = new Mesh {};
+	mesh->setUsage(usage);
 	mesh->m_vertices =
 	{   Vec3f(-1, -1, 0), Vec3f(-1, 1, 0), Vec3f(1, 1, 0), Vec3f(1, -1, 0)};
 
@@ -165,9 +191,10 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makeCube(Bitmask<> flags)
+    Mesh* Mesh::makeCube(Bitmask<> flags, Usage usage)
     {
 	Mesh* mesh = new Mesh {};
+	mesh->setUsage(usage);
 
 	// Define vertices
 	mesh->m_vertices =
@@ -265,9 +292,10 @@ namespace dbgl
 	return mesh;
     }
 
-    Mesh* Mesh::makePyramid(Bitmask<> flags)
+    Mesh* Mesh::makePyramid(Bitmask<> flags, Usage usage)
     {
 	Mesh* mesh = new Mesh {};
+	mesh->setUsage(usage);
 
 	// Define vertices
 	mesh->m_vertices =

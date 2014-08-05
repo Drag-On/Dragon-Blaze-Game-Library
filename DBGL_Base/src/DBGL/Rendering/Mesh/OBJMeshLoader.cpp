@@ -29,14 +29,6 @@ namespace dbgl
 	    return nullptr;
 	}
 
-	// Generate tangent base if requested
-	if (flags.isSet(Mesh::GenerateTangentBase))
-	    mesh->generateTangentBasis();
-
-	// Send data to gl buffers if requested
-	if (flags.isSet(Mesh::SendToGPU))
-	    mesh->updateBuffers();
-
 	LOG.info("Loaded model % with % faces, % vertices.", path.c_str(), mesh->getIndices().size() / 3, mesh->getVertices().size());
 
 	return mesh;

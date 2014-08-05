@@ -127,57 +127,64 @@ namespace dbgl
 	     * @param type File type to load
 	     * @param path Path of the file
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
 	    static Mesh* load(const Type type, const std::string path,
-		    Bitmask<> flags = SendToGPU | Optimize);
+		    Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param path Path of the file
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
 	    template<class Loader> static Mesh* load(const std::string path,
-		    Bitmask<> flags = SendToGPU | Optimize);
+		    Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Loads a mesh from hard disk
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param loader Loader to use
 	     * @param path Path of the file
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The loaded mesh or NULL if something went wrong
 	     */
 	    static Mesh* load(MeshLoader& loader, const std::string path,
-		    Bitmask<> flags = SendToGPU | Optimize);
+		    Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Creates a mesh that represents a simple triangle
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The triangle mesh
 	     */
-	    static Mesh* makeTriangle(Bitmask<> flags = SendToGPU | Optimize);
+	    static Mesh* makeTriangle(Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Creates a mesh that represents a simple plane
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The plane mesh
 	     */
-	    static Mesh* makePlane(Bitmask<> flags = SendToGPU | Optimize);
+	    static Mesh* makePlane(Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Creates a mesh that represents a cube
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The cube mesh
 	     */
-	    static Mesh* makeCube(Bitmask<> flags = SendToGPU | Optimize);
+	    static Mesh* makeCube(Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Creates a mesh that represents a four-sided pyramid
 	     * @warning The allocated memory needs to be freed manually!
 	     * @param flags Parameters to pass to the loader
+	     * @param usage Expected buffer usage
 	     * @return The pyramid mesh
 	     */
-	    static Mesh* makePyramid(Bitmask<> flags = SendToGPU | Optimize);
+	    static Mesh* makePyramid(Bitmask<> flags = SendToGPU | Optimize, Usage usage = Usage::StaticDraw);
 	    /**
 	     * @brief Updates GL buffers, resends vertices, uvs and normals
 	     */
