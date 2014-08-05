@@ -544,7 +544,8 @@ namespace dbgl
     void Window::update()
     {
 	m_updateCallbacks.fire(UpdateEventArgs {
-	    m_deltaTime
+	    m_deltaTime,
+	    m_input,
 	});
     }
 

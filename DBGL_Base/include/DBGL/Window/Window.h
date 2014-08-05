@@ -214,6 +214,10 @@ namespace dbgl
 		     * @brief Time since last update
 		     */
 		    double deltaTime;
+		    /**
+		     * @brief Input object
+		     */
+		    Input const& input;
 	    };
 	    /**
 	     * @brief Arguments passed on a render event
