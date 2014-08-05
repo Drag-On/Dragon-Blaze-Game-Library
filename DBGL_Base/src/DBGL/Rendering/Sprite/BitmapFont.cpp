@@ -106,7 +106,6 @@ namespace dbgl
 	    }
 	    rc.setAlphaBlend(srcBlend, destBlend);
 
-	    // Sprite will be drawn in the top left corner
 	    // Send to shader
 	    Mat3f transform = Mat3f::make2DTranslation(x + cursor, y);
 	    shader.setUniformFloat2(screenResId, Vec2f { static_cast<float>(rc.getWidth()),
