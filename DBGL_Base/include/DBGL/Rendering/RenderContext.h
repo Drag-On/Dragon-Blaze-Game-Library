@@ -114,7 +114,7 @@ namespace dbgl
 	    unsigned int getHeight() const;
 	    /**
 	     * @brief Clear a buffer
-	     * @param Buffers to clear (type RenderContext::Buffer)
+	     * @param buf Buffers to clear (type RenderContext::Buffer)
 	     */
 	    void clear(Bitmask<char> buf) const;
 	    /**

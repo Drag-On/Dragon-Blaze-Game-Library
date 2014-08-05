@@ -38,6 +38,7 @@ namespace dbgl
 	     * @brief Loads the texture from hard disk
 	     * @param path Path of the texture
 	     * @param flags Special behavior that may be requested from the loader
+	     * @param filtering Used filtering method
 	     * @return The loaded texture if everything went right, otherwise NULL
 	     */
 	    virtual Texture* load(std::string path, Bitmask<> flags = 0, Filtering filtering = Filtering::NEAREST) = 0;

@@ -33,6 +33,7 @@ namespace dbgl
 	     * @param title Window title
 	     * @param width Window width
 	     * @param height Window height
+	     * @param multisampling Multisampling level (0 to disable)
 	     * @param fullscreen Indicates if the window should be initialized as fullscreen
 	     */
 	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
