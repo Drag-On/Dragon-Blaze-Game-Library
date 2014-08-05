@@ -18,7 +18,7 @@ namespace dbgl
 	{
 	    m_rect.pos() = Vector2<unsigned int>{0, 0};
 	    m_rect.extent() = Vector2<unsigned int>{tex->getWidth(), tex->getHeight()};
-	    m_pMesh = Mesh::makePlane();
+	    m_pMesh = Mesh::makePlane(Mesh::SendToGPU, Mesh::Usage::DynamicDraw);
 	    tl = m_pMesh->getVertexIndex({-1, 1, 0});
 	    tr = m_pMesh->getVertexIndex({1, 1, 0});
 	    ll = m_pMesh->getVertexIndex({-1, -1, 0});
