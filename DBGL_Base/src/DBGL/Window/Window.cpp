@@ -271,6 +271,7 @@ namespace dbgl
     void Window::setClearColor(Vector3<GLclampf> const& color)
     {
 	m_clearColor = color;
+	glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 0);
     }
 
     RenderContext* Window::getRenderContext() const
@@ -560,8 +561,7 @@ namespace dbgl
     void Window::preRender()
     {
 	makeCurrent();
-	glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_pRenderContext->clear(RenderContext::COLOR | RenderContext::DEPTH | RenderContext::STENCIL);
 	m_pRenderContext->preRender();
     }
 
