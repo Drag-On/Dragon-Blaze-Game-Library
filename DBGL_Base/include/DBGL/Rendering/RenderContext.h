@@ -40,6 +40,32 @@ namespace dbgl
 		DEPTH = 1 << 1,   //!< DEPTH
 		STENCIL = 1 << 2, //!< STENCIL
 	    };
+	    /**
+	     * @brief Options that can be set for depth testing
+	     */
+	    enum class DepthTestValue
+	    {
+		Off,    //!< Off
+		Less,   //!< Less
+		Greater,//!< Greater
+	    };
+	    /**
+	     * @brief Options that can be set for alpha blending
+	     */
+	    enum class AlphaBlendValue
+	    {
+		Off,             //!< Off
+		SrcAlpha,        //!< SrcAlpha
+		OneMinusSrcAlpha,//!< OneMinusSrcAlpha
+	    };
+	    /**
+	     * @brief Options that can be set for face culling
+	     */
+	    enum class FaceCullingValue
+	    {
+		Off,//!< Off
+		On, //!< On
+	    };
 
 
 	    /**
@@ -78,6 +104,21 @@ namespace dbgl
 	     * @param Buffers to clear (type RenderContext::Buffer)
 	     */
 	    void clear(Bitmask<char> buf) const;
+	    /**
+	     * @brief Sets the depth testing behavior
+	     * @param val Value to set
+	     */
+	    void setDepthTest(DepthTestValue val) const;
+	    /**
+	     * @brief Sets the alpha blending behavior
+	     * @param val Value to set
+	     */
+	    void setAlphaBlend(AlphaBlendValue val) const;
+	    /**
+	     * @brief Sets the face culling behavior
+	     * @param val Value to set
+	     */
+	    void setFaceCulling(FaceCullingValue val) const;
 	protected:
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame

@@ -46,13 +46,71 @@ namespace dbgl
     void RenderContext::clear(Bitmask<char> buf) const
     {
 	GLbitfield flags = 0;
-	if(buf.isSet(Buffer::COLOR))
+	if (buf.isSet(Buffer::COLOR))
 	    flags |= GL_COLOR_BUFFER_BIT;
-	if(buf.isSet(Buffer::DEPTH))
+	if (buf.isSet(Buffer::DEPTH))
 	    flags |= GL_DEPTH_BUFFER_BIT;
-	if(buf.isSet(Buffer::STENCIL))
+	if (buf.isSet(Buffer::STENCIL))
 	    flags |= GL_STENCIL_BUFFER_BIT;
 	glClear(flags);
+    }
+
+    void RenderContext::setDepthTest(DepthTestValue val) const
+    {
+	switch (val)
+	{
+	    case DepthTestValue::Off:
+		glDisable(GL_DEPTH_TEST);
+		break;
+	    case DepthTestValue::Less:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		break;
+	    case DepthTestValue::Greater:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_GREATER);
+		break;
+	    default:
+		LOG.warning("Unkown value for depth testing.");
+		break;
+	}
+    }
+
+    void RenderContext::setAlphaBlend(AlphaBlendValue val) const
+    {
+	switch (val)
+	{
+	    case AlphaBlendValue::Off:
+		glDisable(GL_BLEND);
+		break;
+	    case AlphaBlendValue::SrcAlpha:
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+		break;
+	    case AlphaBlendValue::OneMinusSrcAlpha:
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+	    default:
+		LOG.warning("Unkown value for alpha blending.");
+		break;
+	}
+    }
+
+    void RenderContext::setFaceCulling(FaceCullingValue val) const
+    {
+	switch(val)
+	{
+	    case FaceCullingValue::Off:
+		glDisable(GL_CULL_FACE);
+		break;
+	    case FaceCullingValue::On:
+		glEnable(GL_CULL_FACE);
+		break;
+	    default:
+		LOG.warning("Unkown value for face culling.");
+		break;
+	}
     }
 
     void RenderContext::renderMesh(Mesh const& mesh) const
