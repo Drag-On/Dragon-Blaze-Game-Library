@@ -112,6 +112,7 @@ namespace dbgl
 	    return;
 	}
 	GLenum sfactor = translateAlphaBlendValue(src), dfactor = translateAlphaBlendValue(dest);
+	glGetError(); // Clear last error
 	glEnable(GL_BLEND);
 	glBlendFunc(sfactor, dfactor);
 	if(glGetError() != GL_NO_ERROR)
