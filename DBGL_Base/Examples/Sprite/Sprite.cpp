@@ -114,15 +114,15 @@ void updateCallback(Window::UpdateEventArgs const& args)
 	curRotation -= 2 * pi();
 
     // Calculate fps
-    static int frames = 0;
+    static double frames = 0;
     static double time = 0;
     frames++;
     time += deltaTime;
     if(time >= 1)
     {
+	fps = frames / time;
+	frames -= fps;
 	time -= 1;
-	fps = frames;
-	frames = 0;
     }
 }
 
