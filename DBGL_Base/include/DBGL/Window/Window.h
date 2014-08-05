@@ -223,7 +223,7 @@ namespace dbgl
 		    /**
 		     * @brief Current render context
 		     */
-		    const RenderContext* rc;
+		    RenderContext* rc;
 	    };
 	    /**
 	     * @brief Arguments passed on an input event
