@@ -12,9 +12,12 @@
 
 namespace dbgl
 {
+    GLuint RenderContext::curFrameBufferId = 0;
+
     RenderContext::RenderContext(unsigned int frameWidth, unsigned int frameHeight) :
 	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
     {
+	bindContext();
     }
 
     RenderContext::~RenderContext()
@@ -23,6 +26,7 @@ namespace dbgl
 
     void RenderContext::draw(Mesh const& mesh) const
     {
+	bindContext();
 	// Render mesh
 	renderMesh(mesh);
     }
@@ -45,6 +49,7 @@ namespace dbgl
 
     void RenderContext::clear(Bitmask<char> buf) const
     {
+	bindContext();
 	GLbitfield flags = 0;
 	if (buf.isSet(Buffer::COLOR))
 	    flags |= GL_COLOR_BUFFER_BIT;
@@ -57,6 +62,7 @@ namespace dbgl
 
     void RenderContext::setDepthTest(DepthTestValue val)
     {
+	bindContext();
 	switch (val)
 	{
 	    case DepthTestValue::Always:
@@ -104,6 +110,7 @@ namespace dbgl
 
     void RenderContext::setAlphaBlend(AlphaBlendValue src, AlphaBlendValue dest)
     {
+	bindContext();
 	if(src == AlphaBlendValue::Zero && dest == AlphaBlendValue::Zero)
 	{
 	    glDisable(GL_BLEND);
@@ -165,6 +172,7 @@ namespace dbgl
 
     void RenderContext::setFaceCulling(FaceCullingValue val)
     {
+	bindContext();
 	switch(val)
 	{
 	    case FaceCullingValue::Off:
@@ -285,11 +293,21 @@ namespace dbgl
 
     void RenderContext::preRender()
     {
+	bindContext();
 	glViewport(0, 0, m_frameWidth, m_frameHeight);
     }
 
     void RenderContext::postRender()
     {
+    }
+
+    void RenderContext::bindContext() const
+    {
+	if(m_frameBufferId != curFrameBufferId)
+	{
+	    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+	    curFrameBufferId = m_frameBufferId;
+	}
     }
 }
 

@@ -90,12 +90,12 @@ namespace dbgl
 	    /**
 	     * @brief Cleans up memory
 	     */
-	    virtual ~RenderContext();
+	    ~RenderContext();
 	    /**
 	     * @brief Draws a mesh using the currently bound shader
 	     * @param mesh Mesh to draw
 	     */
-	    virtual void draw(Mesh const& mesh) const;
+	    void draw(Mesh const& mesh) const;
 	    /**
 	     * @brief Updates this render context
 	     * @param width New width of of the framebuffer
@@ -158,11 +158,11 @@ namespace dbgl
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame
 	     */
-	    virtual void preRender();
+	    void preRender();
 	    /**
 	     * @brief Called after rendering has been done
 	     */
-	    virtual void postRender();
+	    void postRender();
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
 	     * 	      been set up accordingly. This method does not touch any matrices,
@@ -177,6 +177,10 @@ namespace dbgl
 	     * @return
 	     */
 	    GLenum translateAlphaBlendValue(AlphaBlendValue val) const;
+	    /**
+	     * @brief Binds this context (framebuffer) if not currently bound
+	     */
+	    void bindContext() const;
 
 
 	    unsigned int m_frameWidth;
@@ -185,6 +189,8 @@ namespace dbgl
 	    AlphaBlendValue m_curSrcAlphaBlendVal = AlphaBlendValue::Zero;
 	    AlphaBlendValue m_curDestAlphaBlendVal = AlphaBlendValue::Zero;
 	    FaceCullingValue m_curFaceCullingVal = FaceCullingValue::Off;
+	    GLuint m_frameBufferId = 0; // 0 = screen
+	    static GLuint curFrameBufferId;
 
 	    // Window::preRender can access internals - only for preRender() method
 	    friend class Window;
