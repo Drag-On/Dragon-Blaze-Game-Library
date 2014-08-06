@@ -154,7 +154,7 @@ namespace dbgl
 	     * @return
 	     */
 	    FaceCullingValue getFaceCulling() const;
-	protected:
+	private:
 	    /**
 	     * @brief Updates the render context's cached values, needed once per frame
 	     */
@@ -163,16 +163,6 @@ namespace dbgl
 	     * @brief Called after rendering has been done
 	     */
 	    virtual void postRender();
-
-	    /**
-	     * @brief Width of the frame
-	     */
-	    unsigned int m_frameWidth;
-	    /**
-	     * @brief Height of the frame
-	     */
-	    unsigned int m_frameHeight;
-	private:
 	    /**
 	     * @brief Renders a mesh to the current context, assuming everything has
 	     * 	      been set up accordingly. This method does not touch any matrices,
@@ -189,6 +179,8 @@ namespace dbgl
 	    GLenum translateAlphaBlendValue(AlphaBlendValue val) const;
 
 
+	    unsigned int m_frameWidth;
+	    unsigned int m_frameHeight;
 	    DepthTestValue m_curDepthTestVal = DepthTestValue::Always;
 	    AlphaBlendValue m_curSrcAlphaBlendVal = AlphaBlendValue::Zero;
 	    AlphaBlendValue m_curDestAlphaBlendVal = AlphaBlendValue::Zero;
