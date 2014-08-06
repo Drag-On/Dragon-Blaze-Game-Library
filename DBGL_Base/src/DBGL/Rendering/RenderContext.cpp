@@ -17,11 +17,38 @@ namespace dbgl
     RenderContext::RenderContext(unsigned int frameWidth, unsigned int frameHeight) :
 	    m_frameWidth(frameWidth), m_frameHeight(frameHeight)
     {
-	bindContext();
+    }
+
+    RenderContext::RenderContext(Texture const& tex) : m_frameWidth(tex.getWidth()), m_frameHeight(tex.getHeight())
+    {
+	// Create framebuffer object
+	glGenFramebuffers(1, &m_frameBufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+	// Create depth buffer
+	// TODO Depth buffer support
+//	GLuint depthrenderbuffer;
+//	glGenRenderbuffers(1, &depthrenderbuffer);
+//	glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
+//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+
+	// Configure framebuffer to use the passed texture
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex.getHandle(), 0);
+	GLenum drawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
+	glDrawBuffers(1, drawBuffers);
+
+	// Check for errors
+	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+	    LOG.error("Framebuffer could not be created. Therefore the created render context will draw to the screen instead of the passed texture.");
+	    glDeleteFramebuffers(1, &m_frameBufferId);
+	}
     }
 
     RenderContext::~RenderContext()
     {
+	// Note: 0 (the screen) is silently ignored by glDeleteFramebuffers
+	glDeleteFramebuffers(1, &m_frameBufferId);
     }
 
     void RenderContext::draw(Mesh const& mesh) const

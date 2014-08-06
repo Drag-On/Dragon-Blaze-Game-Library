@@ -82,11 +82,16 @@ namespace dbgl
 
 
 	    /**
-	     * @brief Creates a new render context
+	     * @brief Creates a new render context, using the screen as output
 	     * @param frameWidth New width of of the framebuffer
 	     * @param frameHeight New height of the framebuffer
 	     */
 	    RenderContext(unsigned int frameWidth, unsigned int frameHeight);
+	    /**
+	     * @brief Creates a new render context, using \p tex as output
+	     * @param tex Texture to render to
+	     */
+	    RenderContext(Texture const& tex);
 	    /**
 	     * @brief Cleans up memory
 	     */
