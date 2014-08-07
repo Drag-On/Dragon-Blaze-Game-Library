@@ -19,18 +19,20 @@ namespace dbgl
     {
     }
 
-    RenderContext::RenderContext(Texture const& tex) : m_frameWidth(tex.getWidth()), m_frameHeight(tex.getHeight())
+    RenderContext::RenderContext(Texture const& tex, bool createDepthBuf) : m_frameWidth(tex.getWidth()), m_frameHeight(tex.getHeight())
     {
 	// Create framebuffer object
 	glGenFramebuffers(1, &m_frameBufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+
 	// Create depth buffer
-	// TODO Depth buffer support
-//	GLuint depthrenderbuffer;
-//	glGenRenderbuffers(1, &depthrenderbuffer);
-//	glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
-//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
+	if(createDepthBuf)
+	{
+	    glGenRenderbuffers(1, &m_depthBufferId);
+	    glBindRenderbuffer(GL_RENDERBUFFER, m_depthBufferId);
+	    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_frameWidth, m_frameHeight);
+	    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBufferId);
+	}
 
 	// Configure framebuffer to use the passed texture
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex.getHandle(), 0);

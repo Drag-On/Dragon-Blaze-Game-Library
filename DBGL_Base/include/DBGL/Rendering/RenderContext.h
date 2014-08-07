@@ -90,8 +90,9 @@ namespace dbgl
 	    /**
 	     * @brief Creates a new render context, using \p tex as output
 	     * @param tex Texture to render to
+	     * @param createDepthBuf Indicates if a depth buffer should be created
 	     */
-	    RenderContext(Texture const& tex);
+	    RenderContext(Texture const& tex, bool createDepthBuf = false);
 	    /**
 	     * @brief Cleans up memory
 	     */
@@ -194,7 +195,8 @@ namespace dbgl
 	    AlphaBlendValue m_curSrcAlphaBlendVal = AlphaBlendValue::Zero;
 	    AlphaBlendValue m_curDestAlphaBlendVal = AlphaBlendValue::Zero;
 	    FaceCullingValue m_curFaceCullingVal = FaceCullingValue::Off;
-	    GLuint m_frameBufferId = 0; // 0 = screen
+	    GLuint m_frameBufferId = 0; // 0 = screen frame buffer
+	    GLuint m_depthBufferId = 0; // 0 = screen depth buffer
 	    static GLuint curFrameBufferId;
 
 	    // Window::preRender can access internals - only for preRender() method
