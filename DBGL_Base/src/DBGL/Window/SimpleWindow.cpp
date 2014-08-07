@@ -86,6 +86,11 @@ namespace dbgl
 		&& args.mods.isSet(Input::Modifier::KEY_ALT))
 	    setFullscreen(!isFullscreen());
 
+	// Toggle fps view on ctrl + f
+	if (args.key == Input::Key::KEY_F && args.action == Input::KeyState::RELEASED
+		&& args.mods.isSet(Input::Modifier::KEY_CONTROL))
+	    setShowFps(m_showFps = !m_showFps);
+
 	// Take screenshot on print
 	if (args.key == Input::Key::KEY_PRINT_SCREEN && args.action == Input::KeyState::RELEASED)
 	    m_takeScreenshot = true;
