@@ -68,7 +68,7 @@ namespace dbgl
 	private:
 	    bool m_takeScreenshot = false;
 	    bool m_showFps = true;
-	    BitmapFont m_defaultFont{"../common/DefaultFont.bff"};
+	    BitmapFont m_defaultFont{"../common/DefaultFont.bff"}; // TODO: Use a resource manager
 	    float m_fps = 0.0f;
 
 	    static std::shared_ptr<ShaderProgram> spriteShader;
