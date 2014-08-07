@@ -76,6 +76,69 @@ namespace dbgl
 	return m_frameHeight;
     }
 
+    void RenderContext::saveSnapshot(std::string filename) const
+    {
+	// Make sure this context is currently bound
+	bindContext();
+	// Allocate buffer
+	unsigned int imgDataSize { getWidth() * getHeight() * 3 };
+	char* bmpBuf = new char[imgDataSize];
+	if(!bmpBuf)
+	    return;
+	// Copy pixel data to buffer
+	glReadPixels(0, 0, getWidth(), getHeight(), GL_BGR, GL_UNSIGNED_BYTE, bmpBuf);
+	// Open file stream
+	std::ofstream file(filename, std::fstream::out | std::fstream::binary | std::fstream::trunc);
+	if(!file.good())
+	    return;
+	// Write file header
+	struct FileHeaderBMP
+	{
+		uint16_t id = 0x4D42;
+		uint32_t fileSize = 0;
+		uint32_t res = 0;
+		uint32_t off = 54;
+	} fileHeader{};
+	fileHeader.fileSize = imgDataSize;
+	file.write(reinterpret_cast<const char*>(&fileHeader.id), sizeof(uint16_t)); // "BM"
+	file.write(reinterpret_cast<const char*>(&fileHeader.fileSize), sizeof(uint32_t)); // File size
+	file.write(reinterpret_cast<const char*>(&fileHeader.res), sizeof(uint32_t)); // Reserved
+	file.write(reinterpret_cast<const char*>(&fileHeader.off), sizeof(uint32_t)); // Offset to image data
+	// Write info header
+	struct InfoHeaderBMP
+	{
+		uint32_t size = 40;
+		int32_t width = 0;
+		int32_t height = 0;
+		uint16_t panes = 1;
+		uint16_t bpp = 24;
+		uint32_t compr = 0;
+		uint32_t imgSize = 0;
+		int32_t xPixPerMeter = 0;
+		int32_t yPixPerMeter = 0;
+		uint32_t indexClr = 0;
+		uint32_t clr = 0;
+	} infoHeader{};
+	infoHeader.width = static_cast<int32_t>(getWidth());
+	infoHeader.height = static_cast<int32_t>(getHeight());
+	file.write(reinterpret_cast<const char*>(&infoHeader.size), sizeof(uint32_t)); // Size of info header
+	file.write(reinterpret_cast<const char*>(&infoHeader.width), sizeof(int32_t)); // Width in pixels
+	file.write(reinterpret_cast<const char*>(&infoHeader.height), sizeof(int32_t)); // Height in pixels
+	file.write(reinterpret_cast<const char*>(&infoHeader.panes), sizeof(uint16_t)); // Color planes (unused)
+	file.write(reinterpret_cast<const char*>(&infoHeader.bpp), sizeof(uint16_t)); // BPP
+	file.write(reinterpret_cast<const char*>(&infoHeader.compr), sizeof(uint32_t)); // Not compressed
+	file.write(reinterpret_cast<const char*>(&infoHeader.imgSize), sizeof(uint32_t)); // Size of image data (unused)
+	file.write(reinterpret_cast<const char*>(&infoHeader.xPixPerMeter), sizeof(int32_t)); // X pixel per meter (unused)
+	file.write(reinterpret_cast<const char*>(&infoHeader.yPixPerMeter), sizeof(int32_t)); // Y pixel per meter (unused)
+	file.write(reinterpret_cast<const char*>(&infoHeader.indexClr), sizeof(uint32_t)); // Amount of indexed colors (no indexing)
+	file.write(reinterpret_cast<const char*>(&infoHeader.clr), sizeof(uint32_t)); // Use all colors
+	// Write actual image
+	file.write(bmpBuf, imgDataSize);
+	file.close();
+
+	delete [] bmpBuf;
+    }
+
     void RenderContext::clear(Bitmask<char> buf) const
     {
 	bindContext();

@@ -14,6 +14,9 @@
 #include <GL/glew.h>
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <fstream>
+#include <cstdint>
 #include "Mesh/Mesh.h"
 #include "ShaderProgram.h"
 #include "Texture/Texture.h"
@@ -118,6 +121,12 @@ namespace dbgl
 	     * @return Height of the render context
 	     */
 	    unsigned int getHeight() const;
+	    /**
+	     * @brief Writes a snapshot of the current framebuffer to file
+	     * @param filename Name of the file to write
+	     * @note The written file will be encoded as a bmp and thus should have the appropriate *.bmp extension
+	     */
+	    void saveSnapshot(std::string filename) const;
 	    /**
 	     * @brief Clear a buffer
 	     * @param buf Buffers to clear (type RenderContext::Buffer)
