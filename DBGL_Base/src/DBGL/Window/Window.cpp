@@ -499,12 +499,22 @@ namespace dbgl
 
     Window::UpdateEventType::DelegatePtr Window::addUpdateCallback(UpdateCallbackType const& callback)
     {
+	if(m_inputKeyDelegate == nullptr)
+	    m_inputKeyDelegate = addKeyCallback(std::bind(&dbgl::Window::keyCallback, this, std::placeholders::_1));
+	if(m_inputMouseDelegate == nullptr)
+	    m_inputMouseDelegate = addMouseButtonCallback(std::bind(&dbgl::Window::mouseButtonCallback, this, std::placeholders::_1));
 	return m_updateCallbacks.addListener(callback);
     }
 
     bool Window::removeUpdateCallback(UpdateEventType::DelegatePtr const& callback)
     {
-	return m_updateCallbacks.removeListener(callback);
+	bool remove = m_updateCallbacks.removeListener(callback);
+	if(!m_inputCallbacks.hasListener() && !m_updateCallbacks.hasListener())
+	{
+	    removeKeyCallback(m_inputKeyDelegate);
+	    removeMouseButtonCallback(m_inputMouseDelegate);
+	}
+	return remove;
     }
 
     Window::RenderEventType::DelegatePtr Window::addRenderCallback(RenderCallbackType const& callback)
@@ -529,7 +539,7 @@ namespace dbgl
     bool Window::removeInputCallback(InputEventType::DelegatePtr const& callback)
     {
 	auto removed = m_inputCallbacks.removeListener(callback);
-	if(!m_inputCallbacks.hasListener())
+	if(!m_inputCallbacks.hasListener() && !m_updateCallbacks.hasListener())
 	{
 	    removeKeyCallback(m_inputKeyDelegate);
 	    removeMouseButtonCallback(m_inputMouseDelegate);
@@ -539,7 +549,6 @@ namespace dbgl
 
     void Window::preUpdate()
     {
-	m_input.update();
     }
 
     void Window::update()
@@ -552,6 +561,7 @@ namespace dbgl
 
     void Window::postUpdate()
     {
+	m_input.update();
 	// Calculate delta time
 	double currentTime = WindowManager::get()->getTime();
 	m_deltaTime = currentTime - m_lastTime;
