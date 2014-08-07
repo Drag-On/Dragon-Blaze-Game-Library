@@ -12,17 +12,28 @@
 
 namespace dbgl
 {
-    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title,
-	    int width, int height, bool fullscreen, unsigned int multisampling) :
+    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title, int width, int height, bool fullscreen,
+	    unsigned int multisampling) :
 	    Window(share, title, width, height, fullscreen, multisampling)
     {
 	// Add callback for keyboard input
-	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this,
-		std::placeholders::_1));
+	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this, std::placeholders::_1));
     }
 
     SimpleWindow::~SimpleWindow()
     {
+    }
+
+    void SimpleWindow::postRender()
+    {
+	// Check if we want to take a screenshot
+	if(m_takeScreenshot)
+	{
+	    m_pRenderContext->saveSnapshot("Snapshot.bmp");
+	    m_takeScreenshot = false;
+	}
+
+	Window::postRender();
     }
 
     void SimpleWindow::keyCallback(KeyEventArgs args)
@@ -35,6 +46,10 @@ namespace dbgl
 	if (args.key == Input::Key::KEY_ENTER && args.action == Input::KeyState::PRESSED
 		&& args.mods.isSet(Input::Modifier::KEY_ALT))
 	    setFullscreen(!isFullscreen());
+
+	// Take screenshot on print
+	if (args.key == Input::Key::KEY_PRINT_SCREEN && args.action == Input::KeyState::RELEASED)
+	    m_takeScreenshot = true;
     }
 }
 

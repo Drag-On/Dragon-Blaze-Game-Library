@@ -43,8 +43,14 @@ namespace dbgl
 	     * @param args Key event arguments
 	     */
 	    void keyCallback(KeyEventArgs args);
+	    /**
+	     * @brief Called after render
+	     */
+	    virtual void postRender();
 
 	private:
+	    bool m_takeScreenshot = false;
+
 	    friend class WindowManager;
     };
 }
