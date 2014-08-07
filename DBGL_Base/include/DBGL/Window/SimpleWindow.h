@@ -11,7 +11,10 @@
 #ifndef SIMPLEWINDOW_H_
 #define SIMPLEWINDOW_H_
 
+#include <memory>
 #include "Window.h"
+#include "DBGL/Rendering/Sprite/BitmapFont.h"
+#include "DBGL/Rendering/ShaderProgram.h"
 
 namespace dbgl
 {
@@ -25,6 +28,16 @@ namespace dbgl
 	     * @brief Frees all memory allocated to this window
 	     */
 	    ~SimpleWindow();
+	    /**
+	     * @brief Checks if fps are currently being shown
+	     * @return True in case fps are currently shown, otherwise false
+	     */
+	    bool getShowFps() const;
+	    /**
+	     * @brief Determines is fps should be shown
+	     * @param showFps True if fps should be shown, otherwise false
+	     */
+	    void setShowFps(bool showFps);
 
 	protected:
 	    /**
@@ -44,12 +57,21 @@ namespace dbgl
 	     */
 	    void keyCallback(KeyEventArgs args);
 	    /**
-	     * @brief Called after render
+	     * @brief Gets called once a frame and should render everything
+	     */
+	    virtual void render();
+	    /**
+	     * @brief Gets called once a frame after @see update
 	     */
 	    virtual void postRender();
 
 	private:
 	    bool m_takeScreenshot = false;
+	    bool m_showFps = true;
+	    BitmapFont m_defaultFont{"../common/DefaultFont.bff"};
+	    float m_fps = 0.0f;
+
+	    static std::shared_ptr<ShaderProgram> spriteShader;
 
 	    friend class WindowManager;
     };

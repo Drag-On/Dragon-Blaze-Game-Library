@@ -756,6 +756,10 @@ namespace dbgl
 	     * @brief Render context
 	     */
 	    RenderContext* m_pRenderContext = nullptr;
+	    /**
+	     * @brief Time since last frame
+	     */
+	    double m_deltaTime = 0;
 
 	private:
 	    CloseEventType m_closeCallbacks;
@@ -780,8 +784,8 @@ namespace dbgl
 	    unsigned int m_fullscreenWidth, m_fullscreenHeight; // Resolution for full screen
 	    unsigned int m_windowedWidth, m_windowedHeight; // Resolution for window
 	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
-	    double m_deltaTime = 0, m_lastTime = 0; // Time since last frame
 	    unsigned int m_multisampling = 2;
+	    double m_lastTime = 0; // Last timestamp
 	    Vector3<GLclampf> m_clearColor = Vector3<GLclampf>(0, 0, 0);
 	    GLuint m_vertexArrayId;
 	    Input m_input;
