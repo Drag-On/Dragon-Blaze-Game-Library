@@ -56,6 +56,7 @@ namespace dbgl
 	// Show them?
 	if(m_showFps)
 	{
+	    m_pRenderContext->clear(RenderContext::Buffer::DEPTH);
 	    std::string fpsStr = std::string("FPS: ") + std::to_string(m_fps);
 	    m_defaultFont.drawText(*m_pRenderContext, *spriteShader.get(), fpsStr, 0,
 		    getHeight() - m_defaultFont.getLineHeight());
