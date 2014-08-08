@@ -32,6 +32,7 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Constructs a default font
+	     * @details This font does only include the most common english symbols. No fancy stuff.
 	     */
 	    BitmapFont();
 	    /**
