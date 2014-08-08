@@ -165,8 +165,9 @@ namespace dbgl
 	// Variables to store data in
 	m_header.id1 = data[0];
 	m_header.id2 = data[1];
-	m_header.imgWidth = (data[2]<<0) | (data[3]<<8) | (data[4]<<16) | (data[5]<<24);
-	m_header.imgHeight = (data[6]<<0) | (data[7]<<8) | (data[8]<<16) | (data[9]<<24);
+	// Note: Sometimes the files are misformatted and contain negative values for width or height instead of positive ones
+	m_header.imgWidth = std::abs((data[2]<<0) | (data[3]<<8) | (data[4]<<16) | (data[5]<<24));
+	m_header.imgHeight = std::abs((data[6]<<0) | (data[7]<<8) | (data[8]<<16) | (data[9]<<24));
 	m_header.cellWidth = (data[10]<<0) | (data[11]<<8) | (data[12]<<16) | (data[13]<<24);
 	m_header.cellHeight = (data[14]<<0) | (data[15]<<8) | (data[16]<<16) | (data[17]<<24);
 	m_header.bpp = data[18];
@@ -187,7 +188,7 @@ namespace dbgl
 	// Read in array with width of each character
 	std::memcpy(&m_widths, &data[20], 256);
 	// Read in texture
-	long long int texDataSize { (m_header.imgWidth * m_header.imgHeight) * (m_header.bpp / 8) };
+	long long int texDataSize { (std::abs(m_header.imgWidth) * std::abs(m_header.imgHeight)) * (m_header.bpp / 8) };
 	const char* img = data + 276;
 	if(276 + texDataSize != filesize)
 	{
