@@ -13,6 +13,7 @@
 
 #include <string>
 #include <fstream>
+#include <string>
 #include "Sprite.h"
 #include "DBGL/Rendering/Texture/Texture.h"
 #include "DBGL/Rendering/RenderContext.h"
@@ -30,10 +31,21 @@ namespace dbgl
     {
 	public:
 	    /**
+	     * @brief Constructs a default font
+	     */
+	    BitmapFont();
+	    /**
 	     * @brief Constructor
 	     * @param filename Path of the font file to load
 	     */
 	    BitmapFont(std::string const& filename);
+	    /**
+	     * @brief Constructs a font from a series of bytes
+	     * @param size Size to pass
+	     * @param data Data in a contiguous array
+	     * @note The data passed to \p data must be freed after using this method. It will be left untouched.
+	     */
+	    BitmapFont(unsigned int size, char const* data);
 	    /**
 	     * @brief Copy constructor
 	     * @param other BitmapFont to copy
@@ -79,11 +91,19 @@ namespace dbgl
 	    void drawText(RenderContext& rc, ShaderProgram const& shader, std::string text, unsigned int x, unsigned int y);
 	private:
 	    /**
-	     * @brief loads the font file
+	     * @brief Loads the font file
 	     * @param filename Path of the font
 	     * @return True if everything went right, otherwise false
 	     */
 	    bool load(std::string const& filename);
+	    /**
+	     * @brief Loads a font file from raw data
+	     * @param filesize Size of the file
+	     * @param data Data array
+	     * @note The data passed to \p data must be freed after using this method. It will be left untouched.
+	     * @return True if everything went right, otherwise false
+	     */
+	    bool load(unsigned int filesize, char const* data);
 
 	    static const unsigned int headerSize = 20;
 	    Texture* m_pTexture;

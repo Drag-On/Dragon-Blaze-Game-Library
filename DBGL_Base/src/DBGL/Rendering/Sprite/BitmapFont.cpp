@@ -12,15 +12,29 @@
 
 namespace dbgl
 {
+    BitmapFont::BitmapFont()
+    {
+#include"DefaultFont.imp"
+	load(size, data);
+    }
+
     BitmapFont::BitmapFont(std::string const& filename)
     {
 	load(filename);
+    }
+
+    BitmapFont::BitmapFont(unsigned int size, char const* data)
+    {
+	load(size, data);
     }
 
     BitmapFont::BitmapFont(BitmapFont const& other)
     {
 	m_pTexture = new Texture{*other.m_pTexture};
 	m_pSprite = new Sprite{*other.m_pSprite};
+	m_header = other.m_header;
+	m_rowPitch = other.m_rowPitch;
+	std::copy(std::begin(other.m_widths), std::end(other.m_widths), std::begin(m_widths));
     }
 
     BitmapFont::~BitmapFont()
@@ -119,54 +133,67 @@ namespace dbgl
 
     bool BitmapFont::load(std::string const& filename)
     {
+	// Try to open the file
+	std::ifstream input{filename, std::ifstream::in | std::ifstream::binary | std::ios::ate};
+	if(!input.good())
+	{
+	    LOG.warning("Unable to open file % for reading!", filename);
+	    input.close();
+	    return 1;
+	}
+	// Else read in data
+	unsigned int filesize = input.tellg();
+	input.seekg(0, std::ifstream::beg);
+	char* data = new char[filesize];
+	if(!data)
+	{
+	    LOG.error("Unable to allocate sufficient memory!");
+	    input.close();
+	    return 1;
+	}
+	input.read(data, filesize);
+	input.close();
+
+	load(filesize, data);
+	delete [] data;
+
+	return true;
+    }
+
+    bool BitmapFont::load(unsigned int filesize, char const* data)
+    {
 	// Variables to store data in
-	char headDat[headerSize]{};
-	char* img = nullptr;
-	// Stream to read from
-	std::fstream in{};
-	// Open file
-	in.open(filename.c_str(), std::ios_base::binary | std::ios_base::in);
-	// Everything alright?
-	if(!in.is_open())
-	    return false;
-	// Read in header
-	in.read(&(headDat[0]), headerSize);
-	m_header.id1 = headDat[0];
-	m_header.id2 = headDat[1];
-	m_header.imgWidth = (headDat[2]<<0) | (headDat[3]<<8) | (headDat[4]<<16) | (headDat[5]<<24);
-	m_header.imgHeight = (headDat[6]<<0) | (headDat[7]<<8) | (headDat[8]<<16) | (headDat[9]<<24);
-	m_header.cellWidth = (headDat[10]<<0) | (headDat[11]<<8) | (headDat[12]<<16) | (headDat[13]<<24);
-	m_header.cellHeight = (headDat[14]<<0) | (headDat[15]<<8) | (headDat[16]<<16) | (headDat[17]<<24);
-	m_header.bpp = headDat[18];
-	m_header.base = headDat[19];
+	m_header.id1 = data[0];
+	m_header.id2 = data[1];
+	m_header.imgWidth = (data[2]<<0) | (data[3]<<8) | (data[4]<<16) | (data[5]<<24);
+	m_header.imgHeight = (data[6]<<0) | (data[7]<<8) | (data[8]<<16) | (data[9]<<24);
+	m_header.cellWidth = (data[10]<<0) | (data[11]<<8) | (data[12]<<16) | (data[13]<<24);
+	m_header.cellHeight = (data[14]<<0) | (data[15]<<8) | (data[16]<<16) | (data[17]<<24);
+	m_header.bpp = data[18];
+	m_header.base = data[19];
 	// Check if valid
 	if(m_header.id1 != 0xBF || m_header.id2 != 0xF2)
 	{
-	    in.close();
-	    LOG.error("Invalid BFF2 bitmap font file \"%\".", filename.c_str());
+	    LOG.error("BFF2 bitmap font header invalid.");
 	    return false;
 	}
 	// Reject unsupported bpp values
 	if(m_header.bpp != 8 && m_header.bpp != 24 && m_header.bpp != 32)
 	{
-	    in.close();
-	    LOG.error("Bitmap font file \"%\" has unsupported amount of bits per pixel.", filename.c_str());
+	    LOG.error("Bitmap font file has unsupported amount of bits per pixel.");
 	    return false;
 	}
 	m_rowPitch = m_header.imgWidth / m_header.cellWidth;
 	// Read in array with width of each character
-	in.read(&(m_widths[0]), 256);
+	std::memcpy(&m_widths, &data[20], 256);
 	// Read in texture
-	long long int texDataSize = (m_header.imgWidth * m_header.imgHeight) * (m_header.bpp / 8);
-	img = new char[texDataSize];
-	if(!img)
+	long long int texDataSize { (m_header.imgWidth * m_header.imgHeight) * (m_header.bpp / 8) };
+	const char* img = data + 276;
+	if(276 + texDataSize != filesize)
 	{
-	    in.close();
-	    LOG.error("Unable to allocate memory for bitmap font file \"%\".", filename.c_str());
+	    LOG.error("BFF2 bitmap font corrupt.");
 	    return false;
 	}
-	in.read(img, texDataSize);
-	in.close();
 
 	// Create texture
 	GLuint texId = GL_INVALID_VALUE;
@@ -191,14 +218,13 @@ namespace dbgl
 		break;
 	    default:
 		// Should never get here
-		LOG.error("Bitmap font file \"%\" corrupt.", filename.c_str());
+		LOG.error("BFF2 Bitmap font corrupt.");
 		break;
 	}
 	m_pTexture = new Texture {texId};
 	m_pSprite = new Sprite {m_pTexture};
 	m_pSprite->setFlipY(true);
 
-	delete [] img;
 	return true;
     }
 }
