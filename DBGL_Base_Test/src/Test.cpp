@@ -23,6 +23,7 @@ int testBitmask();
 int testKdTree();
 int testHyperrectangle();
 cute::suite testSceneGraph();
+cute::suite testResourceManager();
 
 void runAllTests(int argc, char const *argv[])
 {
@@ -36,6 +37,7 @@ void runAllTests(int argc, char const *argv[])
     runner(testVector3(), "Vector3");
 
     runner(testSceneGraph(), "SceneGraph");
+    runner(testResourceManager(), "ResourceManager");
 
     cute::suite s {};
     //TODO add your test here
