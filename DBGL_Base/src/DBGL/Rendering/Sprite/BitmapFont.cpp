@@ -15,7 +15,7 @@ namespace dbgl
     BitmapFont::BitmapFont()
     {
 #include"DefaultFont.imp"
-	load(size, data);
+	load(size, reinterpret_cast<const char*>(data));
     }
 
     BitmapFont::BitmapFont(std::string const& filename)
