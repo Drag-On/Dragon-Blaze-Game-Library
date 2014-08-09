@@ -86,7 +86,7 @@ namespace dbgl
 		if(forceLoad)
 		    m_resources[handle]->load();
 		else
-		    m_needProcHandles.push_back(handle);
+		    m_needProcHandles.insert(handle);
 	    }
 	    return m_resources[handle];
 	}
@@ -104,8 +104,8 @@ namespace dbgl
 	{
 	    if(m_resources[handle]->m_refCount > 0)
 		m_resources[handle]->m_refCount--;
-	    if(m_resources[handle]->m_refCount == 0)
-		m_needProcHandles.push_back(handle);
+	    if (m_resources[handle]->m_refCount == 0)
+		m_needProcHandles.insert(handle);
 	    return true;
 	}
 	return false;

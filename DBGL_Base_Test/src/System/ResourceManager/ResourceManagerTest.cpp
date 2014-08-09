@@ -110,16 +110,17 @@ namespace ResourceManagerTest
 	// Release res1
 	manager.release(filenames[0]);
 	ASSERT(manager.size() == filenames.size());
-	ASSERT(manager.needLoad() == true);
 	ASSERT(res2->isLoaded() == true);
-	manager.request(filenames[0]);
+	res1 = manager.request(filenames[0]);
 	manager.loadNext();
 	ASSERT(manager.needLoad() == false);
+	ASSERT(res1->isLoaded() == true);
 	manager.release(filenames[0]);
 	manager.release(filenames[0]);
-	ASSERT(manager.needLoad() == true);
-	manager.loadNext();
+	while(manager.needLoad())
+	    manager.loadNext();
 	ASSERT(manager.needLoad() == false);
+	ASSERT(res1->isLoaded() == false);
     }
 
     void testRemove()

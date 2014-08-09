@@ -14,6 +14,7 @@
 #include <vector>
 #include <stack>
 #include <unordered_map>
+#include <set>
 #include <string>
 #include <algorithm>
 #include "ResourceException.h"
@@ -172,7 +173,7 @@ namespace dbgl
 	    /**
 	     * @brief Handles of resources that need processing, i.e. loading or unloading
 	     */
-	    std::vector<ResourceHandle> m_needProcHandles;
+	    std::set<ResourceHandle> m_needProcHandles;
     };
 }
 
