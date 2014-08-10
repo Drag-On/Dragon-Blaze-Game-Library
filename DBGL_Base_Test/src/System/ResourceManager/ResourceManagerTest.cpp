@@ -12,16 +12,16 @@
 #include "cute.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/System/ResourceManager/ResourceManager.h"
-#include "DBGL/System/ResourceManager/IResource.h"
+#include "DBGL/System/ResourceManager/Resource.h"
 
 using namespace dbgl;
 
 namespace ResourceManagerTest
 {
-    class FakeResource : public IResource
+    class FakeResource : public Resource
     {
 	public:
-	    FakeResource(std::string filename) : IResource(filename)
+	    FakeResource(std::string filename) : Resource(filename)
 	    {
 	    }
 	    virtual ~FakeResource()
@@ -29,11 +29,11 @@ namespace ResourceManagerTest
 	    }
 	    virtual void load()
 	    {
-		IResource::load();
+		Resource::load();
 	    }
 	    virtual void unload()
 	    {
-		IResource::unload();
+		Resource::unload();
 	    }
 
 	    friend class ResourceManager<FakeResource>;
