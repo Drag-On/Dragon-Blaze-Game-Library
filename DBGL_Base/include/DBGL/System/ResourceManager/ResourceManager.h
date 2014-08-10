@@ -130,6 +130,11 @@ namespace dbgl
 	     */
 	    bool needLoad() const;
 	    /**
+	     * @brief Provides the amount of resources that need loading
+	     * @return Amount of resources that need loading
+	     */
+	    unsigned int getLoadQueueSize() const;
+	    /**
 	     * @brief Loads the next resource which needs to be loaded
 	     */
 	    void loadNext();

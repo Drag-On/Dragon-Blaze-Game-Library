@@ -136,6 +136,11 @@ namespace dbgl
 	return !m_needProcHandles.empty();
     }
 
+    template <typename T> unsigned int ResourceManager<T>::getLoadQueueSize() const
+    {
+	return m_needProcHandles.size();
+    }
+
     template <typename T> void ResourceManager<T>::loadNext()
     {
 	if(m_needProcHandles.empty())
