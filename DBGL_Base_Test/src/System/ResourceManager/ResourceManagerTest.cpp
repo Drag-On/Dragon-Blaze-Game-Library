@@ -21,8 +21,17 @@ namespace ResourceManagerTest
     class FakeResource : public Resource
     {
 	public:
-	    FakeResource(std::string filename) : Resource(filename)
+	    struct FakeInfo : public Resource::ResourceInfo
 	    {
+		public:
+		    int magicNumber; // Needs to be 42 to succeed test
+	    };
+	    FakeResource(std::string const& filename) : Resource(filename)
+	    {
+	    }
+	    FakeResource(std::string const& filename, FakeInfo info) : Resource(filename, info)
+	    {
+		ASSERT(info.magicNumber == 42);
 	    }
 	    virtual ~FakeResource()
 	    {
@@ -63,6 +72,14 @@ namespace ResourceManagerTest
 	    ASSERT(manager.checkExist(s));
 	    ASSERT(manager.checkExist(manager.getHandle(s)));
 	}
+	// Try other overload
+	FakeResource::FakeInfo info{};
+	info.magicNumber = 42;
+	handle = manager.add("Other/File.res", info);
+	ASSERT(manager.size() == 4);
+	ASSERT(manager.needLoad() == false);
+	ASSERT(manager.checkExist("Other/File.res"));
+	ASSERT(manager.checkExist(handle));
     }
 
     void testRequestRelease()

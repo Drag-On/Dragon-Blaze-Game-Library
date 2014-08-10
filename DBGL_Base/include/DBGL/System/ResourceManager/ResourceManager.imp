@@ -24,7 +24,7 @@ namespace dbgl
 	}
     }
 
-    template <typename T> ResourceHandle ResourceManager<T>::add(std::string filename)
+    template <typename T> ResourceHandle ResourceManager<T>::add(std::string const& filename)
     {
 	// Check for validity of filename
 	if(filename.empty())
@@ -34,7 +34,25 @@ namespace dbgl
 	if(handle != InvalidHandle)
 	    return handle;
 	// Create resource
-	T* resource = new T{filename}; // TODO: handle this differently
+	T* resource = new T{filename};
+	// Add it
+	handle = addNew(resource);
+	// Create shortcut for filename
+	m_fileNameMap[filename] = handle;
+	return handle;
+    }
+
+    template <typename T> template <typename ResInfo> ResourceHandle ResourceManager<T>::add(std::string const& filename, ResInfo const& info)
+    {
+	// Check for validity of filename
+	if(filename.empty())
+	    return InvalidHandle;
+	// Check if element already exists
+	ResourceHandle handle = getHandle(filename);
+	if(handle != InvalidHandle)
+	    return handle;
+	// Create resource
+	T* resource = new T{filename, info};
 	// Add it
 	handle = addNew(resource);
 	// Create shortcut for filename
@@ -51,7 +69,7 @@ namespace dbgl
 	    add(*it);
     }
 
-    template <typename T> bool ResourceManager<T>::checkExist(std::string filename) const
+    template <typename T> bool ResourceManager<T>::checkExist(std::string const& filename) const
     {
 	return isValid(getHandle(filename));
     }
@@ -61,14 +79,14 @@ namespace dbgl
 	return isValid(handle);
     }
 
-    template <typename T> ResourceHandle ResourceManager<T>::getHandle(std::string filename) const
+    template <typename T> ResourceHandle ResourceManager<T>::getHandle(std::string const& filename) const
     {
 	if(m_fileNameMap.count(filename) > 0)
 	    return m_fileNameMap.at(filename);
 	return InvalidHandle;
     }
 
-    template <typename T> T* ResourceManager<T>::request(std::string filename, bool forceLoad)
+    template <typename T> T* ResourceManager<T>::request(std::string const& filename, bool forceLoad)
     {
 	return request(getHandle(filename), forceLoad);
     }
@@ -93,7 +111,7 @@ namespace dbgl
 	return nullptr;
     }
 
-    template <typename T> bool ResourceManager<T>::release(std::string filename)
+    template <typename T> bool ResourceManager<T>::release(std::string const& filename)
     {
 	return release(getHandle(filename));
     }
@@ -111,7 +129,7 @@ namespace dbgl
 	return false;
     }
 
-    template <typename T> bool ResourceManager<T>::remove(std::string filename)
+    template <typename T> bool ResourceManager<T>::remove(std::string const& filename)
     {
 	return remove(getHandle(filename));
     }

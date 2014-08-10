@@ -24,10 +24,23 @@ namespace dbgl
     {
 	public:
 	    /**
+	     * @brief Base structure, can be used to pass additional information to ResourceManager
+	     */
+	    struct ResourceInfo
+	    {
+	    };
+
+	    /**
 	     * @brief Constructor
 	     * @param filename Filename of the resource
 	     */
-	    Resource(std::string filename);
+	    Resource(std::string const& filename);
+	    /**
+	     * @brief Constructor
+	     * @param filename Filename of the resource
+	     * @param info Object holding all the data needed to properly initialize the resource
+	     */
+	    Resource(std::string const& filename, ResourceInfo const& info);
 	    /**
 	     * @brief Destructor
 	     */

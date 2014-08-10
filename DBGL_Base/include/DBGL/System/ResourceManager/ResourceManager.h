@@ -49,7 +49,14 @@ namespace dbgl
 	     * @param filename Filename to load resource from
 	     * @return Handle assigned to the resource
 	     */
-	    ResourceHandle add(std::string filename);
+	    ResourceHandle add(std::string const& filename);
+	    /**
+	     * @brief Adds a new resource to the manager
+	     * @param filename Filename to load resource from
+	     * @param info All info the resource needs to be loaded
+	     * @return Handle assigned to the resource
+	     */
+	    template <typename ResInfo> ResourceHandle add(std::string const& filename, ResInfo const& info);
 	    /**
 	     * @brief Adds a range of new resources to the manager
 	     * @param begin Iterator representing the beginning of a list of filenames
@@ -61,7 +68,7 @@ namespace dbgl
 	     * @param filename Filename of the resource to search for
 	     * @return True in case the resource is known, otherwise false
 	     */
-	    bool checkExist(std::string filename) const;
+	    bool checkExist(std::string const& filename) const;
 	    /**
 	     * @brief Checks if the resource with a certain handle exists
 	     * @param handle Handle of the resource to search for
@@ -73,7 +80,7 @@ namespace dbgl
 	     * @param filename Filename to get the handle for
 	     * @return The handle associated with the passed filename or an invalid handle, if not found
 	     */
-	    ResourceHandle getHandle(std::string filename) const;
+	    ResourceHandle getHandle(std::string const& filename) const;
 	    /**
 	     * @brief Retrieves a resource by filename
 	     * @param filename Filename of the resource to retrieve
@@ -82,7 +89,7 @@ namespace dbgl
 	     * @details The requested resource needs to be released after it is not needed
 	     * 		by the caller anymore.
 	     */
-	    T* request(std::string filename, bool forceLoad = false);
+	    T* request(std::string const& filename, bool forceLoad = false);
 	    /**
 	     * @brief Retrieves a resource by handle
 	     * @param handle Handle of the resource to retrieve
@@ -99,7 +106,7 @@ namespace dbgl
 	     * @details If there are no more instances that requested the resource, it may
 	     * 		be unloaded by the manager at any time.
 	     */
-	    bool release(std::string filename);
+	    bool release(std::string const& filename);
 	    /**
 	     * @brief Indicates that the caller has no interest in a resource anymore
 	     * @param handle Handle of the resource to release
@@ -115,7 +122,7 @@ namespace dbgl
 	     * @warning This will remove the resource from the resource manager and deallocate it.
 	     * 		The handle of the resource will be invalidated.
 	     */
-	    bool remove(std::string filename);
+	    bool remove(std::string const& filename);
 	    /**
 	     * @brief Removes the resource with the passed filename from the manager
 	     * @param handle Handle of the resource to remove
