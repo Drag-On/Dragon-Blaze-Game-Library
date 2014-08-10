@@ -146,9 +146,9 @@ namespace dbgl
 	if(m_needProcHandles.empty())
 	    return;
 	auto it = m_needProcHandles.begin();
-	if(m_resources[*it]->m_refCount > 0)
+	if(m_resources[*it]->m_refCount > 0 && !m_resources[*it]->isLoaded())
 	    m_resources[*it]->load();
-	else
+	else if(m_resources[*it]->m_refCount <= 0 && m_resources[*it]->isLoaded())
 	    m_resources[*it]->unload();
 	m_needProcHandles.erase(it);
     }
