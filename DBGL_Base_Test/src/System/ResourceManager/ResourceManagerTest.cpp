@@ -24,14 +24,19 @@ namespace ResourceManagerTest
 	    struct FakeInfo : public Resource::ResourceInfo
 	    {
 		public:
-		    int magicNumber; // Needs to be 42 to succeed test
+		    FakeInfo(std::string name, int num)
+		    {
+			m_filename = name;
+			m_magicNumber = num;
+		    }
+		    int m_magicNumber; // Needs to be 42 to succeed test
 	    };
 	    FakeResource(std::string const& filename) : Resource(filename)
 	    {
 	    }
-	    FakeResource(std::string const& filename, FakeInfo info) : Resource(filename, info)
+	    FakeResource(FakeInfo info) : Resource(info)
 	    {
-		ASSERT(info.magicNumber == 42);
+		ASSERT(info.m_magicNumber == 42);
 	    }
 	    virtual ~FakeResource()
 	    {
@@ -67,19 +72,27 @@ namespace ResourceManagerTest
 	manager.add(filenames.begin(), filenames.end());
 	ASSERT(manager.size() == 3);
 	ASSERT(manager.needLoad() == false);
-	for(std::string s : filenames)
+	for(auto s : filenames)
 	{
 	    ASSERT(manager.checkExist(s));
 	    ASSERT(manager.checkExist(manager.getHandle(s)));
 	}
 	// Try other overload
-	FakeResource::FakeInfo info{};
-	info.magicNumber = 42;
-	handle = manager.add("Other/File.res", info);
+	FakeResource::FakeInfo info{"Other/File.res", 42};
+	handle = manager.add(info);
 	ASSERT(manager.size() == 4);
 	ASSERT(manager.needLoad() == false);
 	ASSERT(manager.checkExist("Other/File.res"));
 	ASSERT(manager.checkExist(handle));
+	std::vector<FakeResource::FakeInfo> infos { FakeResource::FakeInfo{"File1.res", 42}, FakeResource::FakeInfo{"File2.res", 42} };
+	manager.add(infos.begin(), infos.end());
+	ASSERT(manager.size() == 6);
+	ASSERT(manager.needLoad() == false);
+	for(auto i : infos)
+	{
+	    ASSERT(manager.checkExist(i.m_filename));
+	    ASSERT(manager.checkExist(manager.getHandle(i.m_filename)));
+	}
     }
 
     void testRequestRelease()

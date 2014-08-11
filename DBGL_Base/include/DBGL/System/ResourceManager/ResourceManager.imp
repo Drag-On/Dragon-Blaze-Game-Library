@@ -42,21 +42,26 @@ namespace dbgl
 	return handle;
     }
 
-    template <typename T> template <typename ResInfo> ResourceHandle ResourceManager<T>::add(std::string const& filename, ResInfo const& info)
+    template <typename T> template <size_t N> ResourceHandle ResourceManager<T>::add(const char(&filename)[N])
+    {
+	return add(std::string(filename));
+    }
+
+    template <typename T> template <typename ResInfo> ResourceHandle ResourceManager<T>::add(ResInfo const& info)
     {
 	// Check for validity of filename
-	if(filename.empty())
+	if(info.m_filename.empty())
 	    return InvalidHandle;
 	// Check if element already exists
-	ResourceHandle handle = getHandle(filename);
+	ResourceHandle handle = getHandle(info.m_filename);
 	if(handle != InvalidHandle)
 	    return handle;
 	// Create resource
-	T* resource = new T{filename, info};
+	T* resource = new T{info};
 	// Add it
 	handle = addNew(resource);
 	// Create shortcut for filename
-	m_fileNameMap[filename] = handle;
+	m_fileNameMap[info.m_filename] = handle;
 	return handle;
     }
 

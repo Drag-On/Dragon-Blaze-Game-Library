@@ -28,6 +28,7 @@ namespace dbgl
 	     */
 	    struct ResourceInfo
 	    {
+		std::string m_filename;
 	    };
 
 	    /**
@@ -37,10 +38,9 @@ namespace dbgl
 	    Resource(std::string const& filename);
 	    /**
 	     * @brief Constructor
-	     * @param filename Filename of the resource
 	     * @param info Object holding all the data needed to properly initialize the resource
 	     */
-	    Resource(std::string const& filename, ResourceInfo const& info);
+	    Resource(ResourceInfo const& info);
 	    /**
 	     * @brief Destructor
 	     */

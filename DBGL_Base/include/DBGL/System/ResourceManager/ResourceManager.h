@@ -53,10 +53,16 @@ namespace dbgl
 	    /**
 	     * @brief Adds a new resource to the manager
 	     * @param filename Filename to load resource from
+	     * @return Handle assigned to the resource
+	     */
+	    template <size_t N> ResourceHandle add(const char(&filename)[N]);
+	    /**
+	     * @brief Adds a new resource to the manager
+	     * @param filename Filename to load resource from
 	     * @param info All info the resource needs to be loaded
 	     * @return Handle assigned to the resource
 	     */
-	    template <typename ResInfo> ResourceHandle add(std::string const& filename, ResInfo const& info);
+	    template <typename ResInfo> ResourceHandle add(ResInfo const& info);
 	    /**
 	     * @brief Adds a range of new resources to the manager
 	     * @param begin Iterator representing the beginning of a list of filenames
