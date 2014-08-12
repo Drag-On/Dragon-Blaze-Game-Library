@@ -21,6 +21,10 @@
 
 namespace dbgl
 {
+    /**
+     * @brief A texture resource which can be used with a ResourceManager
+     * @details It wraps a texture inside and makes sure it gets loaded at an appropriate time
+     */
     class TextureResource : public Resource
     {
 	public:
