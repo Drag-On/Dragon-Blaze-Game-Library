@@ -16,7 +16,8 @@ namespace dbgl
     {
     }
 
-    template <class T> MeshResource::MeshResource(MeshResourceInfo<T> const& info) : Resource(info), m_pMeshLoader(new T{})
+    template<class T> MeshResource::MeshResource(MeshResourceInfo<T> const& info) :
+	    Resource(info), m_pMeshLoader(new T {}), m_flags(info.m_flags), m_usage(info.m_usage)
     {
     }
 
@@ -30,7 +31,8 @@ namespace dbgl
     {
 	if(m_pMesh != nullptr)
 	    LOG.warning("Tried to load a mesh resource multiple times in a row. Keeping previous state.");
-	m_pMesh = m_pMeshLoader->load(m_filename);
+	m_pMesh = m_pMeshLoader->load(m_filename, m_flags);
+	m_pMesh->setUsage(m_usage);
 	m_pMesh->updateBuffers();
 	Resource::load();
     }

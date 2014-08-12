@@ -41,7 +41,7 @@ namespace dbgl
 		/**
 		 * Flags to pass to the loader, defined in Mesh class
 		 */
-		Bitmask<char> m_flags = 0;
+		Bitmask<> m_flags = 0;
 		/**
 		 * @brief Expected mesh usage
 		 */
@@ -79,6 +79,8 @@ namespace dbgl
 	private:
 	    Mesh* m_pMesh = nullptr;
 	    MeshLoader* m_pMeshLoader = nullptr;
+	    Bitmask<> m_flags = 0;
+	    Mesh::Usage m_usage = Mesh::Usage::StaticDraw;
 
 	    friend class ResourceManager<MeshResource>;
     };
