@@ -1,0 +1,85 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef TEXTURERESOURCE_H_
+#define TEXTURERESOURCE_H_
+
+#include <string>
+#include "Resource.h"
+#include "DBGL/Rendering/Texture/Texture.h"
+#include "DBGL/Rendering/Texture/TextureLoader.h"
+#include "DBGL/Rendering/Texture/TGATextureLoader.h"
+#include "DBGL/System/Bitmask/Bitmask.h"
+#include "DBGL/System/Log/Log.h"
+
+namespace dbgl
+{
+    class TextureResource : public Resource
+    {
+	public:
+	    /**
+	     * @brief Base structure, can be used to pass additional information to ResourceManager
+	     */
+	    template <class T> struct TextureResourceInfo : public Resource::ResourceInfo
+	    {
+		/**
+		 * @brief Type of the loader to use
+		 */
+		using LoaderType = T;
+
+		/**
+		 * Flags to pass to the loader, defined in Texture class
+		 */
+		Bitmask<> m_flags = 0;
+		/**
+		 * @brief Texture filtering to use
+		 */
+		TextureLoader::Filtering m_filtering = TextureLoader::Filtering::LINEAR;
+	    };
+
+	    /**
+	     * @brief Constructor
+	     * @param filename Filename of the resource
+	     */
+	    TextureResource(std::string const& filename);
+	    /**
+	     * @brief Constructor
+	     * @param info Object holding all the data needed to properly initialize the resource
+	     */
+	    template <class T>TextureResource(TextureResourceInfo<T> const& info);
+	    /**
+	     * @brief Destructor
+	     */
+	    virtual ~TextureResource();
+	    /**
+	     * @brief Loads the resource
+	     */
+	    virtual void load();
+	    /**
+	     * @brief Unloads the resource
+	     */
+	    virtual void unload();
+	    /**
+	     * @brief Retrieves the held texture
+	     * @return A pointer to the texture or nullptr if not yet loaded
+	     */
+	    Texture* getTexture() const;
+
+	private:
+	    Texture* m_pTexture = nullptr;
+	    TextureLoader* m_pTextureLoader = nullptr;
+	    Bitmask<> m_flags = 0;
+	    TextureLoader::Filtering m_filtering = TextureLoader::Filtering::LINEAR;
+    };
+}
+
+
+
+#endif /* TEXTURERESOURCE_H_ */
