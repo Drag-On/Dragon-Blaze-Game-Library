@@ -21,6 +21,7 @@ namespace ResourceManagerTest
     class FakeResource : public Resource
     {
 	public:
+	    static int alloc;
 	    struct FakeInfo : public Resource::ResourceInfo
 	    {
 		public:
@@ -33,13 +34,16 @@ namespace ResourceManagerTest
 	    };
 	    FakeResource(std::string const& filename) : Resource(filename)
 	    {
+		alloc++;
 	    }
 	    FakeResource(FakeInfo info) : Resource(info)
 	    {
 		ASSERT(info.m_magicNumber == 42);
+		alloc++;
 	    }
 	    virtual ~FakeResource()
 	    {
+		alloc--;
 	    }
 	    virtual void load()
 	    {
@@ -52,6 +56,8 @@ namespace ResourceManagerTest
 
 	    friend class ResourceManager<FakeResource>;
     };
+
+    int FakeResource::alloc = 0;
 
     void testConstructor()
     {
@@ -177,6 +183,12 @@ namespace ResourceManagerTest
 	ASSERT(manager.size() == filenames.size());
 	ASSERT(manager.needLoad() == false);
     }
+
+    void testAllocation()
+    {
+	// Test if all created resources have been deallocated again
+	ASSERT(FakeResource::alloc == 0);
+    }
 }
 
 using namespace ResourceManagerTest;
@@ -188,5 +200,6 @@ cute::suite testResourceManager()
     s.push_back(CUTE(testAdd));
     s.push_back(CUTE(testRequestRelease));
     s.push_back(CUTE(testRemove));
+    s.push_back(CUTE(testAllocation));
     return s;
 }
