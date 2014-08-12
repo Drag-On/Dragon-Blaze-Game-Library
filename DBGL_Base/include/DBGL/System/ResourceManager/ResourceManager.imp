@@ -42,6 +42,11 @@ namespace dbgl
 	return handle;
     }
 
+    template <typename T> ResourceHandle ResourceManager<T>::add(T* resource)
+    {
+	return addNew(resource);
+    }
+
     template <typename T> template <size_t N> ResourceHandle ResourceManager<T>::add(const char(&filename)[N])
     {
 	return add(std::string(filename));

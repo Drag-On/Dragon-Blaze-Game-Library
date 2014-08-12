@@ -52,6 +52,17 @@ namespace dbgl
 	    ResourceHandle add(std::string const& filename);
 	    /**
 	     * @brief Adds a new resource to the manager
+	     * @param resource Resource to add
+	     * @return Handle assigned to the resource
+	     * @details Adds an already allocated resource to the manager. The resource doesn't have a
+	     * 		valid file name and thus can only be requested by its handle. By adding the
+	     * 		resource to the manager the caller hands over all obligations regarding memory
+	     * 		allocation. The caller also has to make sure that the passed object is in a
+	     * 		valid state and has been created on the heap.
+	     */
+	    ResourceHandle add(T* resource);
+	    /**
+	     * @brief Adds a new resource to the manager
 	     * @param filename Filename to load resource from
 	     * @return Handle assigned to the resource
 	     */

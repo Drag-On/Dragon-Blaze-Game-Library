@@ -93,6 +93,12 @@ namespace ResourceManagerTest
 	    ASSERT(manager.checkExist(i.m_filename));
 	    ASSERT(manager.checkExist(manager.getHandle(i.m_filename)));
 	}
+	// Add a previously allocated resource
+	FakeResource* someRes = new FakeResource{""};
+	ResourceHandle newHandle = manager.add(someRes);
+	ASSERT(manager.size() == 7);
+	ASSERT(manager.needLoad() == false);
+	ASSERT(manager.checkExist(newHandle));
     }
 
     void testRequestRelease()
