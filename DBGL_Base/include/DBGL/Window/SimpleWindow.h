@@ -38,6 +38,11 @@ namespace dbgl
 	     * @param showFps True if fps should be shown, otherwise false
 	     */
 	    void setShowFps(bool showFps);
+	    /**
+	     * @brief Provides a simple default font containing the most used english glyphs.
+	     * @return Reference to the default font
+	     */
+	    BitmapFont& getDefaultFont();
 
 	protected:
 	    /**

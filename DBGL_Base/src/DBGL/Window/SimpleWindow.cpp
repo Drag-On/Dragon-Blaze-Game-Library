@@ -38,6 +38,11 @@ namespace dbgl
 	m_showFps = showFps;
     }
 
+    BitmapFont& SimpleWindow::getDefaultFont()
+    {
+	return m_defaultFont;
+    }
+
     void SimpleWindow::render()
     {
 	Window::render();
