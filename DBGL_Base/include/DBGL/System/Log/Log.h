@@ -80,6 +80,15 @@ namespace dbgl
 	    template <typename... Args> void debug(const char* format, Args... args);
 
 	    /**
+	     * @brief Logs messages in case the logger is in debug mode
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
+	     */
+	    template <typename... Args> void debug(std::string const& format, Args... args);
+
+	    /**
 	     * @brief Logs messages in case the logger is in info mode or lower
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
@@ -87,6 +96,15 @@ namespace dbgl
 	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void info(const char* format, Args... args);
+
+	    /**
+	     * @brief Logs messages in case the logger is in info mode or lower
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
+	     */
+	    template <typename... Args> void info(std::string const& format, Args... args);
 
 	    /**
 	     * @brief Logs messages in case the logger is in warning mode or lower
@@ -98,6 +116,15 @@ namespace dbgl
 	    template <typename... Args> void warning(const char* format, Args... args);
 
 	    /**
+	     * @brief Logs messages in case the logger is in warning mode or lower
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
+	     */
+	    template <typename... Args> void warning(std::string const& format, Args... args);
+
+	    /**
 	     * @brief Logs messages in case the logger is in error mode or lower
 	     * @param format Format string
 	     * @param args Arguments to replace in \p format
@@ -105,6 +132,15 @@ namespace dbgl
 	     * 		It's also possible to specify floating point accuracy by using %{precision}.
 	     */
 	    template <typename... Args> void error(const char* format, Args... args);
+
+	    /**
+	     * @brief Logs messages in case the logger is in error mode or lower
+	     * @param format Format string
+	     * @param args Arguments to replace in \p format
+	     * @details The placeholder for (any) variable is %. To print the character '%' you have to type '%%'.
+	     * 		It's also possible to specify floating point accuracy by using %{precision}.
+	     */
+	    template <typename... Args> void error(std::string const& format, Args... args);
 
 	private:
 	    Level m_logLevel;

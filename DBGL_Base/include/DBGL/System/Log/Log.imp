@@ -29,6 +29,11 @@ namespace dbgl
 	}
     }
 
+    template <typename... Args> void Log::debug(std::string const& format, Args... args)
+    {
+	debug(format.c_str(), args...);
+    }
+
     template <typename... Args> void Log::info(const char* format, Args... args)
     {
 	if (m_logLevel <= Level::DBG)
@@ -46,6 +51,11 @@ namespace dbgl
 
 	    writeLog(time + ": INFO: " + msg + "\n");
 	}
+    }
+
+    template <typename... Args> void Log::info(std::string const& format, Args... args)
+    {
+	info(format.c_str(), args...);
     }
 
     template <typename... Args> void Log::warning(const char* format, Args... args)
@@ -67,6 +77,11 @@ namespace dbgl
 	}
     }
 
+    template <typename... Args> void Log::warning(std::string const& format, Args... args)
+    {
+	warning(format.c_str(), args...);
+    }
+
     template <typename... Args> void Log::error(const char* format, Args... args)
     {
 	if (m_logLevel <= Level::ERR)
@@ -84,6 +99,11 @@ namespace dbgl
 
 	    writeLog(time + ": ERROR: " + msg + "\n");
 	}
+    }
+
+    template <typename... Args> void Log::error(std::string const& format, Args... args)
+    {
+	error(format.c_str(), args...);
     }
 
     template <typename T, typename... Args> void Log::format(std::string& msg, const char* format, T val, Args... args)
