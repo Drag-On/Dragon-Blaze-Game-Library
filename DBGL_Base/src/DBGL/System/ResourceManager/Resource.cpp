@@ -12,6 +12,10 @@
 
 namespace dbgl
 {
+    Resource::ResourceInfo::ResourceInfo(std::string filename) : m_filename(filename)
+    {
+    }
+
     Resource::Resource(std::string const& filename) : m_filename(filename)
     {
     }

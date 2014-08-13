@@ -29,12 +29,17 @@ namespace dbgl
 	    /**
 	     * @brief Base structure, can be used to pass additional information to ResourceManager
 	     */
-	    template<class T> struct ShaderResourceInfo: public Resource::ResourceInfo
+	    struct ShaderResourceInfo: public Resource::ResourceInfo
 	    {
 		    /**
-		     * @brief Type of the loader to use
+		     * @brief Constructor
+		     * @param vertShaderFile File name of the vertex shader
+		     * @param fragShaderFile File name of the fragment shader
 		     */
-		    using LoaderType = T;
+		    ShaderResourceInfo(std::string const& vertShaderFile, std::string const& fragShaderFile) :
+			    Resource::ResourceInfo(vertShaderFile), m_fragmentShaderFileName(fragShaderFile)
+		    {
+		    }
 
 		    /**
 		     * @brief File name of the fragment shader (m_filename is the vertex shader)
@@ -46,7 +51,7 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param info Object holding all the data needed to properly initialize the resource
 	     */
-	    template<class T> ShaderResource(ShaderResourceInfo<T> const& info);
+	    ShaderResource(ShaderResourceInfo const& info);
 	    /**
 	     * @brief Destructor
 	     */
@@ -68,6 +73,8 @@ namespace dbgl
 	private:
 	    ShaderProgram* m_pShader = nullptr;
 	    std::string m_fragmentShaderFileName;
+
+	    friend class ResourceManager<ShaderResource>;
     };
 }
 

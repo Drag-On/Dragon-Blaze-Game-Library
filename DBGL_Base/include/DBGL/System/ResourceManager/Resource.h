@@ -29,6 +29,12 @@ namespace dbgl
 	    struct ResourceInfo
 	    {
 		/**
+		 * @brief Constructor
+		 * @param filename Name of the file
+		 */
+		ResourceInfo(std::string filename);
+
+		/**
 		 * @brief Filename of the resource
 		 */
 		std::string m_filename;

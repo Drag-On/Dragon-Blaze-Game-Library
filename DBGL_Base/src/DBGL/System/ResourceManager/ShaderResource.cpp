@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    template<class T> ShaderResource::ShaderResource(ShaderResourceInfo<T> const& info) :
+    ShaderResource::ShaderResource(ShaderResourceInfo const& info) :
 	    Resource(info), m_fragmentShaderFileName(info.m_fragmentShaderFileName)
     {
     }

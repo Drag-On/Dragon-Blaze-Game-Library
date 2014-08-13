@@ -16,11 +16,6 @@ namespace dbgl
     {
     }
 
-    template<class T> TextureResource::TextureResource(TextureResourceInfo<T> const& info) :
-	    Resource(info), m_pTextureLoader(new T {}), m_flags(info.m_flags), m_filtering(info.m_filtering)
-    {
-    }
-
     TextureResource::~TextureResource()
     {
 	unload();

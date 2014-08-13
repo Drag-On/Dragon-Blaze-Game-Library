@@ -39,6 +39,17 @@ namespace dbgl
 		using LoaderType = T;
 
 		/**
+		 * @brief Constructor
+		 * @param filename Filename
+		 * @param flags Flags to pass to the mesh loader
+		 * @param usage Expected usage
+		 */
+		MeshResourceInfo(std::string filename, Bitmask<> flags = 0, Mesh::Usage usage = Mesh::Usage::StaticDraw)  :
+		    ResourceInfo(filename), m_flags(flags), m_usage(usage)
+		{
+		}
+
+		/**
 		 * Flags to pass to the loader, defined in Mesh class
 		 */
 		Bitmask<> m_flags = 0;
@@ -57,7 +68,10 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param info Object holding all the data needed to properly initialize the resource
 	     */
-	    template <class T> MeshResource(MeshResourceInfo<T> const& info);
+	    template<class T> MeshResource(MeshResourceInfo<T> const& info) :
+		    Resource(info), m_pMeshLoader(new T {}), m_flags(info.m_flags), m_usage(info.m_usage)
+	    {
+	    }
 	    /**
 	     * @brief Destructor
 	     */

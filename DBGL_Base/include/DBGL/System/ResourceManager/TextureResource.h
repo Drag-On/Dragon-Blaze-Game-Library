@@ -39,6 +39,18 @@ namespace dbgl
 		using LoaderType = T;
 
 		/**
+		 * @brief Constructor
+		 * @param filename Name of the texture file
+		 * @param flags Flags to pass to loader
+		 * @param filtering Filtering to use
+		 */
+		TextureResourceInfo(std::string filename, Bitmask<> flags = 0,
+			    TextureLoader::Filtering filtering = TextureLoader::Filtering::LINEAR) :
+				    ResourceInfo(filename), m_flags(flags), m_filtering(filtering)
+		{
+		}
+
+		/**
 		 * Flags to pass to the loader, defined in Texture class
 		 */
 		Bitmask<> m_flags = 0;
@@ -57,7 +69,11 @@ namespace dbgl
 	     * @brief Constructor
 	     * @param info Object holding all the data needed to properly initialize the resource
 	     */
-	    template <class T>TextureResource(TextureResourceInfo<T> const& info);
+	    template<class T> TextureResource(TextureResourceInfo<T> const& info) :
+		    Resource(info), m_pTextureLoader(new T {}), m_flags(info.m_flags), m_filtering(
+			    info.m_filtering)
+	    {
+	    }
 	    /**
 	     * @brief Destructor
 	     */
@@ -81,6 +97,8 @@ namespace dbgl
 	    TextureLoader* m_pTextureLoader = nullptr;
 	    Bitmask<> m_flags = 0;
 	    TextureLoader::Filtering m_filtering = TextureLoader::Filtering::LINEAR;
+
+	    friend class ResourceManager<TextureResource>;
     };
 }
 
