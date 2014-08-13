@@ -27,6 +27,8 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/Scene"
 				 "${PROJECT_BINARY_DIR}/Scene")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Sprite"
 				 "${PROJECT_BINARY_DIR}/Sprite")
+add_subdirectory("${PROJECT_SOURCE_DIR}/ResourceManager"
+				 "${PROJECT_BINARY_DIR}/ResourceManager")
 				 
 ######################################################################
 ### Copy common resource folder
