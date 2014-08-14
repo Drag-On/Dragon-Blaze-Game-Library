@@ -24,7 +24,7 @@ void testConstructor()
     Vector2<float> vec;
     ASSERT(vec[0] == 0);
     ASSERT(vec[1] == 0);
-    Vector2<float> vec2(-1.5f, 3);
+    Vector2<float> vec2 = {-1.5f, 3.0f};
     ASSERT(vec2[0] == -1.5f);
     ASSERT(vec2[1] == 3);
     Vector2<float> vec3(vec2);
