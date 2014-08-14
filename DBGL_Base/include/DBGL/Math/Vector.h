@@ -56,6 +56,11 @@ namespace dbgl
 	     */
 	    Vector(const Vector<T, N> &other);
 	    /**
+	     * @brief Constructs a new vector from an initializer list
+	     * @param args Arguments
+	     */
+	    Vector(std::initializer_list<T> args);
+	    /**
 	     * @brief Destructor
 	     */
 	    ~Vector();
@@ -87,6 +92,11 @@ namespace dbgl
 	     * @brief Copies a vector
 	     */
 	    Vector(const Vector<T, N> &other);
+	    /**
+	     * @brief Constructs a new vector from an initializer list
+	     * @param a_args Arguments
+	     */
+	    Vector(std::initializer_list<T> a_args);
 	    /**
 	     * @brief Destructor
 	     */
@@ -120,6 +130,11 @@ namespace dbgl
 	     */
 	    Vector(const Vector<T, N> &other);
 	    /**
+	     * @brief Constructs a new vector from an initializer list
+	     * @param a_args Arguments
+	     */
+	    Vector(std::initializer_list<T> a_args);
+	    /**
 	     * @brief Destructor
 	     */
 	    ~Vector();
@@ -151,6 +166,11 @@ namespace dbgl
 	     * @brief Copies a vector
 	     */
 	    Vector(const Vector<T, N> &other);
+	    /**
+	     * @brief Constructs a new vector from an initializer list
+	     * @param a_args Arguments
+	     */
+	    Vector(std::initializer_list<T> a_args);
 	    /**
 	     * @brief Destructor
 	     */

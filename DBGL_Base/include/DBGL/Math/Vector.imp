@@ -67,7 +67,7 @@ namespace dbgl
 		
 		for (int i = 0; i < n && i < getDimension(); i++)
 		{
-			(*this)[i] = va_arg(args, double);
+			(*this)[i] = static_cast<float>(va_arg(args, double));
 		}
 		
 		va_end(args);

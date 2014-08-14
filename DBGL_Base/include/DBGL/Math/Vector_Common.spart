@@ -34,6 +34,18 @@ template<TEMPLATE_LIST> Vector<T,N>::Vector(const Vector<T,N> &other)
 		(*this)[i] = other[i];
 }
 
+template<TEMPLATE_LIST> Vector<T,N>::Vector(std::initializer_list<T> args)
+{
+	unsigned int i = 0;
+    for(auto n : args)
+    {
+    	if(i >= getDimension())
+    		throw(std::invalid_argument{"Too many arguments."});
+    	(*this)[i] = n;
+    	i++;
+    }
+}
+
 template<TEMPLATE_LIST> Vector<T,N>::~Vector()
 {
 }
