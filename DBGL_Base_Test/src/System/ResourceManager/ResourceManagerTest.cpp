@@ -25,9 +25,8 @@ namespace ResourceManagerTest
 	    struct FakeInfo : public Resource::ResourceInfo
 	    {
 		public:
-		    FakeInfo(std::string name, int num)
+		    FakeInfo(std::string name, int num) : ResourceInfo(name)
 		    {
-			m_filename = name;
 			m_magicNumber = num;
 		    }
 		    int m_magicNumber; // Needs to be 42 to succeed test
