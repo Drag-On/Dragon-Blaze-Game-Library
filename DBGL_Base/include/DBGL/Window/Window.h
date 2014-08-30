@@ -721,7 +721,7 @@ namespace dbgl
 	     * @param title Title of the window
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
-	     * @param fullscreen Indicates if it is opened to fullscreens
+	     * @param fullscreen Indicates if it is opened to fullscreen
 	     * @param multisampling Amount of multisampling (0 to disable)
 	     */
 	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width = 800,

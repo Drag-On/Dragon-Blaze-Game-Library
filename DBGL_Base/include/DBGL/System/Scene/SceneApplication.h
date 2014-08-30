@@ -15,7 +15,7 @@
 #include <typeinfo>
 #include "SceneGraph.h"
 #include "DBGL/System/System.h"
-#include "DBGL/System/DBGLApplication.h"
+#include "DBGL/System/IDbglApplication.h"
 #include "DBGL/System/Entity/Entity.h"
 #include "DBGL/System/Entity/TransformComponent.h"
 #include "DBGL/System/Entity/RenderComponent.h"
@@ -33,7 +33,7 @@ namespace dbgl
     /**
      * @brief Basic application main class which structures entities into a scene graph to ease scene management
      */
-    class SceneApplication : public DBGLApplication
+    class SceneApplication : public IDbglApplication
     {
 	public:
 	    virtual void init();

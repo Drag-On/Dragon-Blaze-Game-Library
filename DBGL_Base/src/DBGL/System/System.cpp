@@ -15,7 +15,7 @@ namespace dbgl
     /**
      * @brief Used if a DBGLApplication is passed to initialize()
      */
-    static DBGLApplication* pApp = nullptr;
+    static IDbglApplication* pApp = nullptr;
 
     void initialize()
     {
@@ -27,7 +27,7 @@ namespace dbgl
 	}
     }
 
-    void initialize(DBGLApplication* app)
+    void initialize(IDbglApplication* app)
     {
 	initialize();
 	app->init();
