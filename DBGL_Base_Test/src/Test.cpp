@@ -24,6 +24,7 @@ int testKdTree();
 int testHyperrectangle();
 cute::suite testSceneGraph();
 cute::suite testResourceManager();
+cute::suite testUID();
 
 void runAllTests(int argc, char const *argv[])
 {
@@ -40,6 +41,7 @@ void runAllTests(int argc, char const *argv[])
 
     runner(testSceneGraph(), "SceneGraph");
     runner(testResourceManager(), "ResourceManager");
+    runner(testUID(), "UID");
 
     cute::suite s {};
     //TODO add your test here
