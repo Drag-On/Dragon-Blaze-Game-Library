@@ -36,20 +36,22 @@ namespace dbgl
 
     template<unsigned int GROUP, typename T> UID<GROUP, T>& UID<GROUP, T>::operator=(UID<GROUP, T> const& other)
     {
-	m_pId = other.m_pId;
-	m_pRefCount = other.m_pRefCount;
-	*m_pRefCount += 1;
+	if (this != &other)
+	{
+	    *m_pRefCount -= 1;
+	    checkDelete();
+
+	    m_pId = other.m_pId;
+	    m_pRefCount = other.m_pRefCount;
+	    *m_pRefCount += 1;
+	}
+	return *this;
     }
 
     template<unsigned int GROUP, typename T> UID<GROUP, T>::~UID()
     {
 	*m_pRefCount -= 1;
-	if (*m_pRefCount <= 0)
-	{
-	    invalidate();
-	    delete m_pId;
-	    delete m_pRefCount;
-	}
+	checkDelete();
     }
 
     template<unsigned int GROUP, typename T> T UID<GROUP, T>::getNumber() const
@@ -74,6 +76,32 @@ namespace dbgl
     template<unsigned int GROUP, typename T> bool UID<GROUP, T>::checkValid(T id)
     {
 	return id < next && std::find(open.begin(), open.end(), id) == open.end();
+    }
+
+    template<unsigned int GROUP, typename T> void UID<GROUP, T>::clean()
+    {
+	std::sort(open.begin(), open.end(), std::greater<int>());
+	for(auto it = open.begin(); it != open.end(); ++it)
+	{
+	    if(*it == next-1)
+	    {
+		next--;
+		open.erase(it);
+		--it;
+	    }
+	    else
+		return;
+	}
+    }
+
+    template<unsigned int GROUP, typename T> void UID<GROUP, T>::checkDelete()
+    {
+	if (*m_pRefCount <= 0)
+	{
+	    invalidate();
+	    delete m_pId;
+	    delete m_pRefCount;
+	}
     }
 
     template<unsigned int GROUP, typename T> T UID<GROUP, T>::getNext()

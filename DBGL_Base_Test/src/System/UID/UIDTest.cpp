@@ -88,6 +88,18 @@ namespace UIDTest
 	ASSERT_EQUAL(0, uid3.getNumber());
 	ASSERT_THROWS(UID<3> uid4{2}, std::runtime_error);
     }
+
+    void testClean()
+    {
+	UID<666> uid{10};
+	{ // Create a mess
+	    UID<666> arr[100]{};
+	    arr[55] = UID<666>{200};
+	}
+	UID<666>::clean();
+	UID<666> uid2{};
+	ASSERT_EQUAL(0, uid2.getNumber());
+    }
 }
 
 using namespace UIDTest;
@@ -100,5 +112,6 @@ cute::suite testUID()
     s.push_back(CUTE(testCopy));
     s.push_back(CUTE(testOverflow));
     s.push_back(CUTE(testManual));
+    s.push_back(CUTE(testClean));
     return s;
 }

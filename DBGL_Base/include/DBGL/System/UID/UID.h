@@ -85,7 +85,15 @@ namespace dbgl
 	     * @return True in case the ID is valid and in use, otherwise false
 	     */
 	    static bool checkValid(T id);
+	    /**
+	     * @brief Potentially frees some memory
+	     */
+	    static void clean();
 	private:
+	    /**
+	     * @brief Checks if all references to this instance are lost and deletes this UID if necessary
+	     */
+	    void checkDelete();
 	    /**
 	     * @brief Gets the next id to use and marks it as used
 	     * @return ID to use
