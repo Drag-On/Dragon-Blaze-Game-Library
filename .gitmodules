@@ -6,3 +6,11 @@
 	path = DBGL_Base/lib/glew
 	url = git://github.com/nigels-com/glew.git
 	ignore = dirty
+[submodule "DBGL_Platform/lib/glfw"]
+	path = DBGL_Platform/lib/glfw
+	url = git://github.com/glfw/glfw.git
+	ignore = dirty
+[submodule "DBGL_Platform/lib/glew"]
+	path = DBGL_Platform/lib/glew
+	url = git://github.com/nigels-com/glew.git
+	ignore = dirty
