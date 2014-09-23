@@ -35,6 +35,9 @@ namespace dbgl
     template <unsigned int GROUP = 0, typename T = uint32_t> class UID
     {
 	public:
+	    /**
+	     * @brief Constant that describes an invalid ID
+	     */
 	    static const T InvalidID = std::numeric_limits<T>::max();
 
 	    /**
