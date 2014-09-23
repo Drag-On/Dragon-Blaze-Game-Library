@@ -19,12 +19,6 @@ namespace OS_Linux
     #include <unistd.h>
 }
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <cstdio>
-
 std::string getDerivativeName()
 {
 	// Parses /etc/lsb-release which is present on LSB compliant linux distributions

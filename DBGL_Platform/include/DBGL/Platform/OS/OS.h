@@ -14,6 +14,11 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
 
 namespace dbgl
 {
