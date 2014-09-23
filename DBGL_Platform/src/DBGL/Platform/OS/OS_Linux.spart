@@ -1,0 +1,103 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief OS dependent namespace for linux
+ * @details sys/utsname.h is included into this namespace
+ */
+namespace OS_Linux
+{
+    #include <sys/utsname.h>
+    #include <sys/wait.h>
+    #include <unistd.h>
+}
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <cstdio>
+
+std::string getDerivativeName()
+{
+	// Parses /etc/lsb-release which is present on LSB compliant linux distributions
+	std::ifstream file {};
+	file.open("/etc/lsb-release", std::ios::in);
+	if (file.is_open())
+	{
+		// Seek to beginning
+		file.seekg(0, std::ios::beg);
+		int lineNo = -1;
+		// Scan whole file
+		while (file.good())
+		{
+			// Increase line number
+			lineNo++;
+			// Read line
+			std::string line {};
+			std::getline(file, line);
+			// Skip empty lines
+			if (line.length() == 0)
+				continue;
+			// Split on "="
+			auto start = 0U;
+			auto end = line.find("=");
+			std::vector<std::string> tokens {};
+			while (end != std::string::npos)
+			{
+				tokens.push_back(line.substr(start, end - start));
+				start = end + 1;
+				end = line.find("=", start);
+			}
+			tokens.push_back(line.substr(start, end));
+			if (tokens.size() != 2)
+				continue;
+			if (tokens[0] == "DISTRIB_DESCRIPTION")
+			{
+				file.close();
+				return tokens[1];
+			}
+		}
+		file.close();
+	}
+	return "";
+}
+
+OS::Type OS::getType()
+{
+    OS::Type type;
+
+    // Request version info from system
+    OS_Linux::utsname versionInfo;
+    OS_Linux::uname(&versionInfo);
+    // OS name
+    type.name = versionInfo.sysname;
+    // Split version on dots
+    std::string major, minor;
+    unsigned int dots = 0;
+    for(unsigned int i = 0; i < strlen(versionInfo.release); i++)
+    {
+        if(versionInfo.release[i] != '.')
+            if(dots == 0)
+                major += versionInfo.release[i];
+            else if(dots == 1)
+                minor += versionInfo.release[i];
+            else
+                break;
+        else
+            dots++;
+    }
+    type.major = std::stoi(major);
+    type.minor = std::stoi(minor);
+    // Derivative name
+    type.derivative = getDerivativeName();
+
+    return type;
+}

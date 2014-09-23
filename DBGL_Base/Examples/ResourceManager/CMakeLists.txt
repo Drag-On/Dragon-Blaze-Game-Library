@@ -43,11 +43,6 @@ target_link_libraries(DBGL_BASE_RESOURCEMANAGER "${PROJECT_BINARY_DIR}/${DBGL_DL
 ######################################################################
 ### Copy files
 ######################################################################
-set(LIBRARIES2COPY
-   "${DBGL_LIB_DIR}/${DBGL_DLL_NAME}"
-   "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
-   "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
-)
 add_custom_target(ALWAYS_EXECUTE_RESOURCEMANAGER ALL)
 add_dependencies(DBGL_BASE_RESOURCEMANAGER ALWAYS_EXECUTE_RESOURCEMANAGER)
 # do the copying

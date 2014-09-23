@@ -14,6 +14,16 @@
 cmake_minimum_required (VERSION 2.6)
 project (DBGL_BASE_EXAMPLES C CXX)
 
+######################################################################
+### Specify libraries that need copying
+######################################################################
+set(LIBRARIES2COPY
+   "${DBGL_LIB_DIR}/${DBGL_DLL_NAME}"
+   "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}"
+   "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
+   "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
+)
+
 # External examples
 add_subdirectory("${PROJECT_SOURCE_DIR}/Basics"
 				 "${PROJECT_BINARY_DIR}/Basics")
