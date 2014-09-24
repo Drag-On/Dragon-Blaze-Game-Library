@@ -298,7 +298,7 @@ namespace dbgl
 
     Window::CloseEventType::DelegatePtr Window::addCloseCallback(CloseCallbackType const& callback)
     {
-	glfwSetWindowCloseCallback(m_pWndHandle, WindowManager::closeCallback);
+	GLProvider::get()->wndSetCloseCallback(m_wndHandle, WindowManager::closeCallback);
 	return m_closeCallbacks.addListener(callback);
     }
 
@@ -306,21 +306,21 @@ namespace dbgl
     {
 	bool ret = m_closeCallbacks.removeListener(callback);
 	if (!m_closeCallbacks.hasListener())
-	    glfwSetWindowCloseCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetCloseCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::FocusEventType::DelegatePtr Window::addFocusCallback(FocusCallbackType const& callback)
     {
-	glfwSetWindowFocusCallback(m_pWndHandle, WindowManager::focusCallback);
+	GLProvider::get()->wndSetFocusCallback(m_wndHandle, WindowManager::focusCallback);
 	return m_focusCallbacks.addListener(callback);
     }
 
     bool Window::removeFocusCallback(FocusEventType::DelegatePtr const& callback)
     {
 	bool ret = m_focusCallbacks.removeListener(callback);
-	if (!m_focusCallbacks.hasListener())
-	    glfwSetWindowFocusCallback(m_pWndHandle, NULL);
+	if (!m_closeCallbacks.hasListener())
+	    GLProvider::get()->wndSetFocusCallback(m_wndHandle, nullptr);
 	return ret;
     }
 

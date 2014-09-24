@@ -77,60 +77,60 @@ namespace dbgl
     {
     }
 
-    void WindowManager::closeCallback(GLFWwindow* window)
+    void WindowManager::closeCallback(IGL::WindowHandle window)
     {
 	s_windows[window]->m_closeCallbacks.fire(Window::CloseEventArgs());
     }
 
-    void WindowManager::focusCallback(GLFWwindow* window, int focused)
+    void WindowManager::focusCallback(IGL::WindowHandle window, int focused)
     {
 	s_windows[window]->m_focusCallbacks.fire(Window::FocusEventArgs{focused == GL_TRUE ? true : false});
     }
 
-    void WindowManager::iconifiedCallback(GLFWwindow* window, int iconified)
+    void WindowManager::iconifiedCallback(IGL::WindowHandle window, int iconified)
     {
 	s_windows[window]->m_iconifiedCallbacks.fire(Window::IconifiedEventArgs{iconified == GL_TRUE ? true : false});
     }
 
-    void WindowManager::refreshCallback(GLFWwindow* window)
+    void WindowManager::refreshCallback(IGL::WindowHandle window)
     {
 	s_windows[window]->m_refreshCallbacks.fire(Window::RefreshEventArgs());
     }
 
-    void WindowManager::resizeCallback(GLFWwindow* window, int width,
+    void WindowManager::resizeCallback(IGL::WindowHandle window, int width,
 	    int height)
     {
 	s_windows[window]->m_resizeCallbacks.fire(Window::ResizeEventArgs{width, height});
     }
 
-    void WindowManager::framebufferResizeCallback(GLFWwindow* window, int width,
+    void WindowManager::framebufferResizeCallback(IGL::WindowHandle window, int width,
 	    int height)
     {
 	s_windows[window]->m_framebufferResizeCallbacks.fire(Window::FramebufferResizeEventArgs{width, height});
     }
 
-    void WindowManager::positionCallback(GLFWwindow* window, int xpos, int ypos)
+    void WindowManager::positionCallback(IGL::WindowHandle window, int xpos, int ypos)
     {
 	s_windows[window]->m_positionCallbacks.fire(Window::PositionEventArgs{xpos, ypos});
     }
 
-    void WindowManager::characterCallback(GLFWwindow* window,
+    void WindowManager::characterCallback(IGL::WindowHandle window,
 	    unsigned int codepoint)
     {
 	s_windows[window]->m_characterCallbacks.fire(Window::CharacterEventArgs{codepoint});
     }
 
-    void WindowManager::cursorEnterCallback(GLFWwindow* window, int entered)
+    void WindowManager::cursorEnterCallback(IGL::WindowHandle window, int entered)
     {
 	s_windows[window]->m_cursorEnterCallbacks.fire(Window::CursorEnterEventArgs{entered == GL_TRUE ? true : false});
     }
 
-    void WindowManager::cursorCallback(GLFWwindow* window, double x, double y)
+    void WindowManager::cursorCallback(IGL::WindowHandle window, double x, double y)
     {
 	s_windows[window]->m_cursorCallbacks.fire(Window::CursorEventArgs{x, y});
     }
 
-    void WindowManager::mouseButtonCallback(GLFWwindow* window, int button,
+    void WindowManager::mouseButtonCallback(IGL::WindowHandle window, int button,
 	    int action, int mods)
     {
 	// Translate GLFW button into Input::Key
@@ -149,13 +149,13 @@ namespace dbgl
 	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input, keyConst});
     }
 
-    void WindowManager::scrollCallback(GLFWwindow* window, double xOffset,
+    void WindowManager::scrollCallback(IGL::WindowHandle window, double xOffset,
 	    double yOffset)
     {
 	s_windows[window]->m_scrollCallbacks.fire(Window::ScrollEventArgs{xOffset, yOffset});
     }
 
-    void WindowManager::keyCallback(GLFWwindow* window, int key, int scancode,
+    void WindowManager::keyCallback(IGL::WindowHandle window, int key, int scancode,
 	    int action, int mods)
     {
 	// Translate GLFW key into Input::Key
@@ -176,15 +176,15 @@ namespace dbgl
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
 
-    void WindowManager::updateHandle(GLFWwindow* oldHandle,
-	    GLFWwindow* newHandle)
+    void WindowManager::updateHandle(IGL::WindowHandle oldHandle,
+	    IGL::WindowHandle newHandle)
     {
 	if (oldHandle != newHandle)
 	{
 	    auto i = s_windows.find(oldHandle);
 	    auto temp = i->second;
 	    s_windows.erase(i);
-	    s_windows.insert(std::pair<GLFWwindow*, Window*>(newHandle, temp));
+	    s_windows.insert(std::pair<IGL::WindowHandle, Window*>(newHandle, temp));
 	}
     }
 }

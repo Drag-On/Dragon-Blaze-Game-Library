@@ -12,8 +12,11 @@
 #define WINDOWMANAGER_H_
 
 #include <stdlib.h>
-#include <map>#include <GL/glew.h>#include <GLFW/glfw3.h>
+#include <map>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "Window.h"
+#include "DBGL/Platform/GL/GLProvider.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -28,8 +31,6 @@ namespace dbgl
      */
     class WindowManager
     {
-	private:
-	    GLFWwindow* m_pShareWindow;
 	public:
 	    /**
 	     * @return The only instance of this class
@@ -49,11 +50,8 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title = "Dragon Blaze Game Library", int width =
 		    800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2)
 	    {
-		GLFWwindow* share = m_pShareWindow;
-		auto wnd = new T(share, title, width, height, fullscreen, multisampling);
-		s_windows.insert(std::pair<GLFWwindow*, Window*>(wnd->m_pWndHandle, wnd));
-		if (m_pShareWindow == NULL)
-		    m_pShareWindow = wnd->m_pWndHandle;
+		auto wnd = new T(nullptr, title, width, height, fullscreen, multisampling);
+		s_windows.insert(std::pair<IGL::WindowHandle, Window*>(wnd->m_wndHandle, wnd));
 		return wnd;
 	    }
 	    /**
@@ -76,31 +74,23 @@ namespace dbgl
 	private:
 	    WindowManager();
 	    ~WindowManager();
-	    static void closeCallback(GLFWwindow* window);
-	    static void focusCallback(GLFWwindow* window, int focused);
-	    static void iconifiedCallback(GLFWwindow* window, int iconified);
-	    static void refreshCallback(GLFWwindow* window);
-	    static void resizeCallback(GLFWwindow* window, int width,
-		    int height);
-	    static void framebufferResizeCallback(GLFWwindow* window, int width,
-		    int height);
-	    static void positionCallback(GLFWwindow* window, int xpos,
-		    int ypos);
-	    static void characterCallback(GLFWwindow* window,
-		    unsigned int codepoint);
-	    static void cursorEnterCallback(GLFWwindow* window, int entered);
-	    static void cursorCallback(GLFWwindow* window, double x, double y);
-	    static void mouseButtonCallback(GLFWwindow* window, int button,
-		    int action, int mods);
-	    static void scrollCallback(GLFWwindow* window, double xOffset,
-		    double yOffset);
-	    static void keyCallback(GLFWwindow* window, int key, int scancode,
-		    int action, int mods);
-	    //static void monitorCallback(GLFWmonitor* monitor, int event);
+	    static void closeCallback(IGL::WindowHandle window);
+	    static void focusCallback(IGL::WindowHandle window, int focused);
+	    static void iconifiedCallback(IGL::WindowHandle window, int iconified);
+	    static void refreshCallback(IGL::WindowHandle window);
+	    static void resizeCallback(IGL::WindowHandle window, int width, int height);
+	    static void framebufferResizeCallback(IGL::WindowHandle window, int width, int height);
+	    static void positionCallback(IGL::WindowHandle window, int xpos, int ypos);
+	    static void characterCallback(IGL::WindowHandle window, unsigned int codepoint);
+	    static void cursorEnterCallback(IGL::WindowHandle window, int entered);
+	    static void cursorCallback(IGL::WindowHandle window, double x, double y);
+	    static void mouseButtonCallback(IGL::WindowHandle window, int button, int action, int mods);
+	    static void scrollCallback(IGL::WindowHandle window, double xOffset, double yOffset);
+	    static void keyCallback(IGL::WindowHandle window, int key, int scancode, int action, int mods);
 
-	    void updateHandle(GLFWwindow* oldHandle, GLFWwindow* newHandle);
+	    void updateHandle(IGL::WindowHandle oldHandle, IGL::WindowHandle newHandle);
 
-	    static std::map<GLFWwindow*, Window*> s_windows;
+	    static std::map<IGL::WindowHandle, Window*> s_windows;
 	    static WindowManager s_instance;
 
 	    friend class Window;

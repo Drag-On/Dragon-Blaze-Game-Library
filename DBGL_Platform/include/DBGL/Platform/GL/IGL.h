@@ -226,6 +226,12 @@ namespace dbgl
 	     * @param callback Callback function to call on close events
 	     */
 	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window is focused or unfocused
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
+	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback) = 0;
 	    // TODO: Callbacks
 
 	    //TODO: DEBUG!

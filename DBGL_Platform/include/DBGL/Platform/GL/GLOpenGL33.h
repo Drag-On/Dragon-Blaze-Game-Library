@@ -47,6 +47,7 @@ namespace dbgl
 	    virtual void wndSwapBuffers(WindowHandle wnd);
 	    virtual void wndSetErrorCallback(WndErrorCallback callback);
 	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback);
+	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback);
 
 	    virtual GLFWwindow* getBasePointer(WindowHandle wnd)
 	    {
@@ -58,6 +59,7 @@ namespace dbgl
 
 	    static void wndPassErrorCallback(int error, const char* msg);
 	    static void wndPassCloseCallback(GLFWwindow* wnd);
+	    static void wndPassFocusCallback(GLFWwindow* wnd, int focus);
 
 	    static GLFWwindow* getGLFWHandle(WindowHandle wnd);
 	    static WindowHandle getWindowHandle(GLFWwindow* wnd);
@@ -67,6 +69,7 @@ namespace dbgl
 	    static std::unordered_map<WindowHandle, GLFWwindow*> s_wnd2GlfwMap;
 	    static std::unordered_map<GLFWwindow*, WindowHandle> s_glfw2WndMap;
 	    static std::unordered_map<WindowHandle, WndCloseCallback> s_closeCallbacks;
+	    static std::unordered_map<WindowHandle, WndFocusCallback> s_focusCallbacks;
     };
 }
 

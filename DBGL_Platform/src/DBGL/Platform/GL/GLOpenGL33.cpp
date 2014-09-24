@@ -16,6 +16,7 @@ namespace dbgl
     std::unordered_map<GLOpenGL33::WindowHandle, GLFWwindow*> GLOpenGL33::s_wnd2GlfwMap {};
     std::unordered_map<GLFWwindow*, GLOpenGL33::WindowHandle> GLOpenGL33::s_glfw2WndMap {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCloseCallback> GLOpenGL33::s_closeCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndFocusCallback> GLOpenGL33::s_focusCallbacks {};
 
     GLOpenGL33::GLOpenGL33()
     {
@@ -238,6 +239,27 @@ namespace dbgl
 	auto wndHandle = getWindowHandle(wnd);
 	auto callback = s_closeCallbacks.at(wndHandle);
 	callback(wndHandle);
+    }
+
+    void GLOpenGL33::wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback)
+    {
+	if(callback)
+	{
+	    s_focusCallbacks[wnd] = callback;
+	    glfwSetWindowFocusCallback(getGLFWHandle(wnd), wndPassFocusCallback);
+	}
+	else
+	{
+	    s_focusCallbacks.erase(wnd);
+	    glfwSetWindowFocusCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassFocusCallback(GLFWwindow* wnd, int focus)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_focusCallbacks.at(wndHandle);
+	callback(wndHandle, focus);
     }
 
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
