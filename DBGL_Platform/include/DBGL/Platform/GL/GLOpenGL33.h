@@ -45,7 +45,8 @@ namespace dbgl
 	    virtual void wndGetCursorPos(WindowHandle wnd, double& x, double& y);
 	    virtual void wndSetCursorPos(WindowHandle wnd, double x, double y);
 	    virtual void wndSwapBuffers(WindowHandle wnd);
-	    virtual void wndSetCloseCallback(WindowHandle wnd, CloseCallbackFun callback);
+	    virtual void wndSetErrorCallback(WndErrorCallback callback);
+	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback);
 
 	    virtual GLFWwindow* getBasePointer(WindowHandle wnd)
 	    {
@@ -55,14 +56,17 @@ namespace dbgl
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
 	    GLOpenGL33& operator=(GLOpenGL33 const& other);
 
+	    static void wndPassErrorCallback(int error, const char* msg);
 	    static void wndPassCloseCallback(GLFWwindow* wnd);
+
 	    static GLFWwindow* getGLFWHandle(WindowHandle wnd);
 	    static WindowHandle getWindowHandle(GLFWwindow* wnd);
 
 	    HandleGenerator m_wndHandleGen;
+	    static WndErrorCallback s_errorCallback;
 	    static std::unordered_map<WindowHandle, GLFWwindow*> s_wnd2GlfwMap;
 	    static std::unordered_map<GLFWwindow*, WindowHandle> s_glfw2WndMap;
-	    static std::unordered_map<WindowHandle, CloseCallbackFun> s_closeCallbacks;
+	    static std::unordered_map<WindowHandle, WndCloseCallback> s_closeCallbacks;
     };
 }
 

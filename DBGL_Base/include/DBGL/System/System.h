@@ -43,6 +43,12 @@ namespace dbgl
      * @brief Updates everything within dbgl. Every call equals one "frame"
      */
     void update();
+    /**
+     * @brief Receives bad news from the window manager
+     * @param error Error code
+     * @param description Error description
+     */
+    void errorCallback(int error, const char* description);
 }
 
 #endif /* SYSTEM_H_ */

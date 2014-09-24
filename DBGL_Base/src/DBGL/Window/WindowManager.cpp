@@ -71,17 +71,10 @@ namespace dbgl
 
     WindowManager::WindowManager() : m_pShareWindow(NULL)
     {
-	glfwSetErrorCallback(WindowManager::errorCallback);
     }
 
     WindowManager::~WindowManager()
     {
-
-    }
-
-    void WindowManager::errorCallback(int error, const char* description)
-    {
-	LOG.error("Error %: %!", error, description);
     }
 
     void WindowManager::closeCallback(GLFWwindow* window)

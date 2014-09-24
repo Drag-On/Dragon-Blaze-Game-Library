@@ -12,9 +12,10 @@
 
 namespace dbgl
 {
+    GLOpenGL33::WndErrorCallback GLOpenGL33::s_errorCallback = nullptr;
     std::unordered_map<GLOpenGL33::WindowHandle, GLFWwindow*> GLOpenGL33::s_wnd2GlfwMap {};
     std::unordered_map<GLFWwindow*, GLOpenGL33::WindowHandle> GLOpenGL33::s_glfw2WndMap {};
-    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::CloseCallbackFun> GLOpenGL33::s_closeCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCloseCallback> GLOpenGL33::s_closeCallbacks {};
 
     GLOpenGL33::GLOpenGL33()
     {
@@ -199,7 +200,26 @@ namespace dbgl
 	glfwSwapBuffers(getGLFWHandle(wnd));
     }
 
-    void GLOpenGL33::wndSetCloseCallback(WindowHandle wnd, CloseCallbackFun callback)
+    void GLOpenGL33::wndSetErrorCallback(WndErrorCallback callback)
+    {
+	if(callback)
+	{
+	    s_errorCallback = callback;
+	    glfwSetErrorCallback(wndPassErrorCallback);
+	}
+	else
+	{
+	    s_errorCallback = nullptr;
+	    glfwSetErrorCallback(nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassErrorCallback(int error, const char* msg)
+    {
+	s_errorCallback(error, msg);
+    }
+
+    void GLOpenGL33::wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback)
     {
 	if(callback)
 	{
@@ -216,7 +236,8 @@ namespace dbgl
     void GLOpenGL33::wndPassCloseCallback(GLFWwindow* wnd)
     {
 	auto wndHandle = getWindowHandle(wnd);
-	s_closeCallbacks.at(wndHandle)(wndHandle);
+	auto callback = s_closeCallbacks.at(wndHandle);
+	callback(wndHandle);
     }
 
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)

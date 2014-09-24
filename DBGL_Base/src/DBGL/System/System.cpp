@@ -21,6 +21,7 @@ namespace dbgl
     {
 	// Initialize graphics layer
 	GLProvider::init(GLProvider::API::OpenGL33);
+	GLProvider::get()->wndSetErrorCallback(errorCallback);
     }
 
     void initialize(IDbglApplication* app)
@@ -49,5 +50,10 @@ namespace dbgl
     void update()
     {
 	WindowManager::get()->update();
+    }
+
+    void errorCallback(int error, const char* description)
+    {
+	LOG.error("Error %: %!", error, description);
     }
 }

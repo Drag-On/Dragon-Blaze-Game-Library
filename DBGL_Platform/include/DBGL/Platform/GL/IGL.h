@@ -13,6 +13,7 @@
 
 #include <string>
 #include <iostream>
+#include <functional>
 #include "HandleGenerator.h"
 
 // TODO: DEBUG!
@@ -32,10 +33,51 @@ namespace dbgl
 	     * @brief Constant for invalid window handles
 	     */
 	    static constexpr WindowHandle InvalidWindowHandle = HandleGenerator::InvalidHandle;
+
 	    /**
-	     * @brief Function pointer for close callback
+	     * @brief Function type for error callback
 	     */
-	    using CloseCallbackFun = void (*)(WindowHandle wnd);
+	    using WndErrorCallback = std::function<void(int,const char*)>;
+	    /**
+	     * @brief Function type for close callback
+	     */
+	    using WndCloseCallback = std::function<void(WindowHandle)>;
+	    /**
+	     * @brief Function type for focus callback
+	     */
+	    using WndFocusCallback = std::function<void(WindowHandle,int)>;
+	    /**
+	     * @brief Function type for iconified callback
+	     */
+	    using WndIconifiedCallback = std::function<void(WindowHandle,int)>;
+	    /**
+	     * @brief Function type for resize callback
+	     */
+	    using WndResizeCallback = std::function<void(WindowHandle,int,int)>;
+	    /**
+	     * @brief Function type for framebuffer resize callback
+	     */
+	    using WndFramebufferResizeCallback = std::function<void(WindowHandle,int,int)>;
+	    /**
+	     * @brief Function type for window position callback
+	     */
+	    using WndWindowPosCallback = std::function<void(WindowHandle,int,int)>;
+	    /**
+	     * @brief Function type for cursor enter callback
+	     */
+	    using WndCursorEnterCallback = std::function<void(WindowHandle,int)>;
+	    /**
+	     * @brief Function type for cursor movement callback
+	     */
+	    using WndCursorMoveCallback = std::function<void(WindowHandle,double,double)>;
+	    /**
+	     * @brief Function type for general input callback
+	     */
+	    using WndInputCallback = std::function<void(WindowHandle,int,int,int)>;
+	    /**
+	     * @brief Function type for scroll callback
+	     */
+	    using WndScrollCallback = std::function<void(WindowHandle,double,double)>;
 
 	    /**
 	     * @brief Virtual destructor
@@ -174,11 +216,16 @@ namespace dbgl
 	     */
 	    virtual void wndSwapBuffers(WindowHandle wnd) = 0;
 	    /**
+	     * @brief Set a callback to call on errors regarding windows
+	     * @param callback Callback function
+	     */
+	    virtual void wndSetErrorCallback(WndErrorCallback callback) = 0;
+	    /**
 	     * @brief Set a callback that is called when a window is closed
 	     * @param wnd Wnd to set the callback for
 	     * @param callback Callback function to call on close events
 	     */
-	    virtual void wndSetCloseCallback(WindowHandle wnd, CloseCallbackFun callback) = 0;
+	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback) = 0;
 	    // TODO: Callbacks
 
 	    //TODO: DEBUG!
