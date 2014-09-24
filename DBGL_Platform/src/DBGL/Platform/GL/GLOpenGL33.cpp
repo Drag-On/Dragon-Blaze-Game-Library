@@ -12,6 +12,10 @@
 
 namespace dbgl
 {
+    std::unordered_map<GLOpenGL33::WindowHandle, GLFWwindow*> GLOpenGL33::s_wnd2GlfwMap {};
+    std::unordered_map<GLFWwindow*, GLOpenGL33::WindowHandle> GLOpenGL33::s_glfw2WndMap {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::CloseCallbackFun> GLOpenGL33::s_closeCallbacks {};
+
     GLOpenGL33::GLOpenGL33()
     {
 	// Initialize GLFW
@@ -55,18 +59,22 @@ namespace dbgl
 	    return HandleGenerator::InvalidHandle;
 	}
 
+	glfwMakeContextCurrent(glfwHandle);
+
 	// Initialize GLEW
 #ifdef __WIN32
-	glewExperimental = true;// For core profile
+	glewExperimental = GL_TRUE;// For core profile
 #endif
-	if (glewInit() != GLEW_OK)
+	if (auto err = glewInit() != GLEW_OK)
 	{
+	    std::cerr << glewGetErrorString(err) << std::endl;
 	    glfwTerminate();
 	    return HandleGenerator::InvalidHandle;
 	}
 
 	auto wndHandle = m_wndHandleGen.generate();
-	m_wndMap.insert({wndHandle, glfwHandle});
+	s_wnd2GlfwMap.insert({wndHandle, glfwHandle});
+	s_glfw2WndMap.insert({glfwHandle, wndHandle});
 	return wndHandle;
     }
 
@@ -82,7 +90,38 @@ namespace dbgl
 
     void GLOpenGL33::wndClose(WindowHandle wnd)
     {
-	glfwDestroyWindow(getGLFWHandle(wnd));
+	GLFWwindow* glfwHandle = nullptr;
+	try
+	{
+	    glfwHandle = s_wnd2GlfwMap.at(wnd);
+	}
+	catch(...)
+	{
+	}
+	s_wnd2GlfwMap.erase(wnd);
+	s_closeCallbacks.erase(wnd);
+	if (glfwHandle != nullptr)
+	{
+	    s_glfw2WndMap.erase(glfwHandle);
+	    glfwSetWindowShouldClose(glfwHandle, true);
+	}
+    }
+
+    void GLOpenGL33::wndDestroy(WindowHandle wnd)
+    {
+	GLFWwindow* glfwHandle = nullptr;
+	try
+	{
+	    glfwHandle = s_wnd2GlfwMap.at(wnd);
+	}
+	catch(...)
+	{
+	}
+	if (glfwHandle != nullptr)
+	{
+	    wndClose(wnd);
+	    glfwDestroyWindow(glfwHandle);
+	}
     }
 
     bool GLOpenGL33::wndCheckFocus(WindowHandle wnd)
@@ -160,15 +199,47 @@ namespace dbgl
 	glfwSwapBuffers(getGLFWHandle(wnd));
     }
 
+    void GLOpenGL33::wndSetCloseCallback(WindowHandle wnd, CloseCallbackFun callback)
+    {
+	if(callback)
+	{
+	    s_closeCallbacks[wnd] = callback;
+	    glfwSetWindowCloseCallback(getGLFWHandle(wnd), wndPassCloseCallback);
+	}
+	else
+	{
+	    s_closeCallbacks.erase(wnd);
+	    glfwSetWindowCloseCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassCloseCallback(GLFWwindow* wnd)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	s_closeCallbacks.at(wndHandle)(wndHandle);
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try
 	{
-	    return m_wndMap.at(wnd);
+	    return s_wnd2GlfwMap.at(wnd);
 	}
-	catch (std::out_of_range const& e)
+	catch (...)
 	{
 	    return nullptr;
+	}
+    }
+
+    auto GLOpenGL33::getWindowHandle(GLFWwindow* wnd) -> WindowHandle
+    {
+	try
+	{
+	    return s_glfw2WndMap.at(wnd);
+	}
+	catch (...)
+	{
+	    return HandleGenerator::InvalidHandle;
 	}
     }
 }

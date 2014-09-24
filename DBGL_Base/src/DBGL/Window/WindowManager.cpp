@@ -25,8 +25,19 @@ namespace dbgl
     {
 	// Poll events
 	glfwPollEvents();
-	// Update and render all windows
+	// Remove windows that need removal
 	for (auto wnd = s_windows.begin(); wnd != s_windows.end();)
+	{
+	    if(glfwWindowShouldClose(wnd->first))
+	    {
+		delete (wnd->second);
+		wnd = s_windows.erase(wnd);
+	    }
+	    else
+		++wnd;
+	}
+	// Update and render all windows
+	for (auto wnd = s_windows.begin(); wnd != s_windows.end(); ++wnd)
 	{
 	    wnd->second->preUpdate();
 	    wnd->second->update();
@@ -34,13 +45,6 @@ namespace dbgl
 	    wnd->second->preRender();
 	    wnd->second->render();
 	    wnd->second->postRender();
-	    if (glfwWindowShouldClose(wnd->first))
-	    {
-		delete (wnd->second);
-		wnd = s_windows.erase(wnd);
-	    }
-	    else
-		++wnd;
 	}
     }
 

@@ -32,28 +32,24 @@ namespace dbgl
 	    m_windowedWidth = width;
 	    m_windowedHeight = height;
 	    // Initialize fullscreen resolution to screen resolution
-	    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	    m_fullscreenWidth = mode->width;
-	    m_fullscreenHeight = mode->height;
+	    int fullscreenW {}, fullscreenH {};
+	    GLProvider::get()->getScreenResolution(fullscreenW, fullscreenH);
+	    m_fullscreenWidth = fullscreenW;
+	    m_fullscreenHeight = fullscreenH;
 	    m_isFullscreen = false;
 	}
 
-	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_SAMPLES, multisampling);
-#ifdef __WIN32
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
+	int useWidth = m_windowedWidth;
+	int useHeight = m_windowedHeight;
 	if(fullscreen)
-	    m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
-	else
-	    m_pWndHandle = glfwCreateWindow(m_windowedWidth, m_windowedHeight, title, NULL, share);
-	if (!m_pWndHandle)
 	{
-	    LOG.error("Failed to create new window!");
-	    glfwTerminate();
+	    useWidth = m_fullscreenWidth;
+	    useHeight = m_fullscreenHeight;
 	}
+
+	m_wndHandle = GLProvider::get()->wndInit(title, useWidth, useHeight, fullscreen, multisampling);
+	// TODO: DEBUG!
+	m_pWndHandle = GLProvider::get()->getBasePointer(m_wndHandle);
 
 	m_windowedX = getX();
 	m_windowedY = getY();
@@ -62,24 +58,14 @@ namespace dbgl
 	addFramebufferResizeCallback(
 		std::bind(&Window::framebufferResizeCallback, this,
 			std::placeholders::_1));
-
-	makeCurrent();
-
-	// Initialize GLEW
-	glewExperimental = true;// For core profile
-	if (glewInit() != GLEW_OK)
-	{
-	    LOG.error("Failed to initialize GLEW!");
-	    glfwTerminate();
-	    exit(EXIT_FAILURE);
-	}
     }
 
     Window::~Window()
     {
 	makeCurrent();
 	glDeleteVertexArrays(1, &m_vertexArrayId);
-	glfwDestroyWindow(m_pWndHandle);
+
+	GLProvider::get()->wndDestroy(m_wndHandle);
 
 	delete m_pRenderContext;
 	m_pRenderContext = NULL;
@@ -138,42 +124,42 @@ namespace dbgl
 
     void Window::show()
     {
-	glfwShowWindow(m_pWndHandle);
+	GLProvider::get()->wndShow(m_wndHandle);
     }
 
     void Window::hide()
     {
-	glfwHideWindow(m_pWndHandle);
+	GLProvider::get()->wndHide(m_wndHandle);
     }
 
     void Window::close()
     {
-	glfwSetWindowShouldClose(m_pWndHandle, true);
+	GLProvider::get()->wndClose(m_wndHandle);
     }
 
     bool Window::hasFocus() const
     {
-	return glfwGetWindowAttrib(m_pWndHandle, GLFW_FOCUSED);
+	return GLProvider::get()->wndCheckFocus(m_wndHandle);
     }
 
     bool Window::isIconified() const
     {
-	return glfwGetWindowAttrib(m_pWndHandle, GLFW_ICONIFIED);
+	return GLProvider::get()->wndCheckFocus(m_wndHandle);
     }
 
     bool Window::isVisible() const
     {
-	return glfwGetWindowAttrib(m_pWndHandle, GLFW_VISIBLE);
+	return GLProvider::get()->wndCheckVisible(m_wndHandle);
     }
 
     bool Window::isResizable() const
     {
-	return glfwGetWindowAttrib(m_pWndHandle, GLFW_RESIZABLE);
+	return GLProvider::get()->wndCheckResizable(m_wndHandle);
     }
 
     bool Window::isDecorated() const
     {
-	return glfwGetWindowAttrib(m_pWndHandle, GLFW_DECORATED);
+	return GLProvider::get()->wndCheckDecorations(m_wndHandle);
     }
 
     const char* Window::getTitle() const
@@ -184,59 +170,59 @@ namespace dbgl
     void Window::setTitle(const char* title)
     {
 	m_title.assign(title);
-	glfwSetWindowTitle(m_pWndHandle, title);
+	GLProvider::get()->wndSetTitle(m_wndHandle, m_title);
     }
 
     int Window::getWidth() const
     {
 	int width {}, height {};
-	glfwGetWindowSize(m_pWndHandle, &width, &height);
+	GLProvider::get()->wndGetSize(m_wndHandle, width, height);
 	return width;
     }
 
     int Window::getHeight() const
     {
 	int width {}, height {};
-	glfwGetWindowSize(m_pWndHandle, &width, &height);
+	GLProvider::get()->wndGetSize(m_wndHandle, width, height);
 	return height;
     }
 
     void Window::setSize(int width, int height)
     {
-	glfwSetWindowSize(m_pWndHandle, width, height);
+	GLProvider::get()->wndSetSize(m_wndHandle, width, height);
     }
 
     int Window::getFrameWidth() const
     {
 	int width {}, height {};
-	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
+	GLProvider::get()->wndGetFrameSize(m_wndHandle, width, height);
 	return width;
     }
 
     int Window::getFrameHeight() const
     {
 	int width {}, height {};
-	glfwGetFramebufferSize(m_pWndHandle, &width, &height);
+	GLProvider::get()->wndGetFrameSize(m_wndHandle, width, height);
 	return height;
     }
 
     int Window::getX() const
     {
 	int x {}, y {};
-	glfwGetWindowPos(m_pWndHandle, &x, &y);
+	GLProvider::get()->wndGetPos(m_wndHandle, x, y);
 	return x;
     }
 
     int Window::getY() const
     {
 	int x {}, y {};
-	glfwGetWindowPos(m_pWndHandle, &x, &y);
+	GLProvider::get()->wndGetPos(m_wndHandle, x, y);
 	return y;
     }
 
     void Window::setPos(int x, int y)
     {
-	glfwSetWindowPos(m_pWndHandle, x, y);
+	GLProvider::get()->wndSetPos(m_wndHandle, x, y);
     }
 
     bool Window::isFullscreen() const
@@ -281,17 +267,17 @@ namespace dbgl
 
     void Window::makeCurrent()
     {
-	glfwMakeContextCurrent(m_pWndHandle);
+	GLProvider::get()->wndMakeCurrent(m_wndHandle);
     }
 
     void Window::getCursorPos(double& x, double& y) const
     {
-	glfwGetCursorPos(m_pWndHandle, &x, &y);
+	GLProvider::get()->wndGetCursorPos(m_wndHandle, x, y);
     }
 
     void Window::setCursorPos(double x, double y)
     {
-	glfwSetCursorPos(m_pWndHandle, x, y);
+	GLProvider::get()->wndSetCursorPos(m_wndHandle, x, y);
     }
 
     int Window::getButton(int button) const
@@ -584,7 +570,7 @@ namespace dbgl
 
     void Window::postRender()
     {
-	glfwSwapBuffers(m_pWndHandle);
+	GLProvider::get()->wndSwapBuffers(m_wndHandle);
 	m_pRenderContext->postRender();
     }
 }

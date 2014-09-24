@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "DBGL/Platform/GL/GLProvider.h"
 #include "DBGL/System/IDbglApplication.h"
 #include "DBGL/System/Log/Log.h"
 #include "DBGL/Window/WindowManager.h"

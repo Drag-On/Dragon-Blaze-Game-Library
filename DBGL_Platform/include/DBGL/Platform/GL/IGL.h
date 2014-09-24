@@ -12,7 +12,12 @@
 #define IGL_H_
 
 #include <string>
+#include <iostream>
 #include "HandleGenerator.h"
+
+// TODO: DEBUG!
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace dbgl
 {
@@ -23,6 +28,14 @@ namespace dbgl
 	     * @brief Type of handles used for windows
 	     */
 	    using WindowHandle = HandleGenerator::Handle;
+	    /**
+	     * @brief Constant for invalid window handles
+	     */
+	    static constexpr WindowHandle InvalidWindowHandle = HandleGenerator::InvalidHandle;
+	    /**
+	     * @brief Function pointer for close callback
+	     */
+	    using CloseCallbackFun = void (*)(WindowHandle wnd);
 
 	    /**
 	     * @brief Virtual destructor
@@ -60,6 +73,11 @@ namespace dbgl
 	     * @param wnd Window to close
 	     */
 	    virtual void wndClose(WindowHandle wnd) = 0;
+	    /**
+	     * @brief Destroys a window without calling any events
+	     * @param wnd Window to destroy
+	     */
+	    virtual void wndDestroy(WindowHandle wnd) = 0;
 	    /**
 	     * @brief Checks if a window is in focus
 	     * @param wnd Window to check
@@ -155,8 +173,28 @@ namespace dbgl
 	     * @param wnd Window to modify
 	     */
 	    virtual void wndSwapBuffers(WindowHandle wnd) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window is closed
+	     * @param wnd Wnd to set the callback for
+	     * @param callback Callback function to call on close events
+	     */
+	    virtual void wndSetCloseCallback(WindowHandle wnd, CloseCallbackFun callback) = 0;
 	    // TODO: Callbacks
+
+	    //TODO: DEBUG!
+	    virtual GLFWwindow* getBasePointer(WindowHandle wnd) = 0;
+
+	protected:
+	    IGL()
+	    {
+		static bool initialized { false };
+		if(initialized)
+		    throw("Can't have more than one graphics layer.");
+		initialized = true;
+	    }
 	private:
+	    IGL(IGL const&); // Disallow copying
+	    IGL& operator=(IGL const& other);
     };
 }
 

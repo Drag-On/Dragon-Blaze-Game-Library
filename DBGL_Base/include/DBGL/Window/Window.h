@@ -15,6 +15,7 @@
 #include <functional>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "DBGL/Platform/GL/GLProvider.h"
 #include "DBGL/Math/Vector3.h"
 #include "DBGL/System/Event/Event.h"
 #include "DBGL/System/Log/Log.h"
@@ -747,9 +748,10 @@ namespace dbgl
 	    void mouseButtonCallback(MouseButtonEventArgs args);
 
 	    /**
-	     * GLFW window handle
+	     * Window handle
 	     */
 	    GLFWwindow* m_pWndHandle = nullptr;
+	    IGL::WindowHandle m_wndHandle = IGL::InvalidWindowHandle;
 // TODO: Use GLEW MX for support of multiple windows
 //	    GLEWContext* m_pGlewContext = nullptr;
 	    /**

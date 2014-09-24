@@ -19,12 +19,8 @@ namespace dbgl
 
     void initialize()
     {
-	// Initialize GLFW
-	if (!glfwInit())
-	{
-	    LOG.error("Failed to initialize GLFW!");
-	    exit(EXIT_FAILURE);
-	}
+	// Initialize graphics layer
+	GLProvider::init(GLProvider::API::OpenGL33);
     }
 
     void initialize(IDbglApplication* app)
@@ -41,6 +37,8 @@ namespace dbgl
 
 	// Terminate windows
 	WindowManager::get()->terminate();
+
+	GLProvider::free();
     }
 
     bool isRunning()
