@@ -327,7 +327,7 @@ namespace dbgl
     Window::IconifiedEventType::DelegatePtr Window::addIconifiedCallback(
 	    IconifiedCallbackType const& callback)
     {
-	glfwSetWindowIconifyCallback(m_pWndHandle, WindowManager::iconifiedCallback);
+	GLProvider::get()->wndSetIconifiedCallback(m_wndHandle, WindowManager::iconifiedCallback);
 	return m_iconifiedCallbacks.addListener(callback);
     }
 
@@ -335,27 +335,13 @@ namespace dbgl
     {
 	bool ret = m_iconifiedCallbacks.removeListener(callback);
 	if (!m_iconifiedCallbacks.hasListener())
-	    glfwSetWindowIconifyCallback(m_pWndHandle, NULL);
-	return ret;
-    }
-
-    Window::RefreshEventType::DelegatePtr Window::addRefreshCallback(RefreshCallbackType const& callback)
-    {
-	glfwSetWindowRefreshCallback(m_pWndHandle, WindowManager::refreshCallback);
-	return m_refreshCallbacks.addListener(callback);
-    }
-
-    bool Window::removeRefreshCallback(RefreshEventType::DelegatePtr const& callback)
-    {
-	bool ret = m_refreshCallbacks.removeListener(callback);
-	if (!m_refreshCallbacks.hasListener())
-	    glfwSetWindowRefreshCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetIconifiedCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::ResizeEventType::DelegatePtr Window::addResizeCallback(ResizeCallbackType const& callback)
     {
-	glfwSetWindowSizeCallback(m_pWndHandle, WindowManager::resizeCallback);
+	GLProvider::get()->wndSetResizeCallback(m_wndHandle, WindowManager::resizeCallback);
 	return m_resizeCallbacks.addListener(callback);
     }
 
@@ -363,14 +349,14 @@ namespace dbgl
     {
 	bool ret = m_resizeCallbacks.removeListener(callback);
 	if (!m_resizeCallbacks.hasListener())
-	    glfwSetWindowSizeCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetResizeCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::FramebufferResizeEventType::DelegatePtr Window::addFramebufferResizeCallback(
 	    FramebufferResizeCallbackType const& callback)
     {
-	glfwSetFramebufferSizeCallback(m_pWndHandle, WindowManager::framebufferResizeCallback);
+	GLProvider::get()->wndSetFramebufferResizeCallback(m_wndHandle, WindowManager::framebufferResizeCallback);
 	return m_framebufferResizeCallbacks.addListener(callback);
     }
 
@@ -378,13 +364,13 @@ namespace dbgl
     {
 	bool ret = m_framebufferResizeCallbacks.removeListener(callback);
 	if (!m_framebufferResizeCallbacks.hasListener())
-	    glfwSetFramebufferSizeCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetFramebufferResizeCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::PositionEventType::DelegatePtr Window::addPositionCallback(PositionCallbackType const& callback)
     {
-	glfwSetWindowPosCallback(m_pWndHandle, WindowManager::positionCallback);
+	GLProvider::get()->wndSetPositionCallback(m_wndHandle, WindowManager::positionCallback);
 	return m_positionCallbacks.addListener(callback);
     }
 
@@ -392,29 +378,14 @@ namespace dbgl
     {
 	bool ret = m_positionCallbacks.removeListener(callback);
 	if (!m_positionCallbacks.hasListener())
-	    glfwSetWindowPosCallback(m_pWndHandle, NULL);
-	return ret;
-    }
-
-    Window::CharacterEventType::DelegatePtr Window::addCharacterCallback(
-	    CharacterCallbackType const& callback)
-    {
-	glfwSetCharCallback(m_pWndHandle, WindowManager::characterCallback);
-	return m_characterCallbacks.addListener(callback);
-    }
-
-    bool Window::removeCharacterCallback(CharacterEventType::DelegatePtr const& callback)
-    {
-	bool ret = m_characterCallbacks.removeListener(callback);
-	if (!m_characterCallbacks.hasListener())
-	    glfwSetCharCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetPositionCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::CursorEnterEventType::DelegatePtr Window::addCursorEnterCallback(
 	    CursorEnterCallbackType const& callback)
     {
-	glfwSetCursorEnterCallback(m_pWndHandle, WindowManager::cursorEnterCallback);
+	GLProvider::get()->wndSetCursorEnterCallback(m_wndHandle, WindowManager::cursorEnterCallback);
 	return m_cursorEnterCallbacks.addListener(callback);
     }
 
@@ -422,13 +393,13 @@ namespace dbgl
     {
 	bool ret = m_cursorEnterCallbacks.removeListener(callback);
 	if (!m_cursorEnterCallbacks.hasListener())
-	    glfwSetCursorEnterCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetCursorEnterCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::CursorEventType::DelegatePtr Window::addCursorCallback(CursorCallbackType const& callback)
     {
-	glfwSetCursorPosCallback(m_pWndHandle, WindowManager::cursorCallback);
+	GLProvider::get()->wndSetCursorPositionCallback(m_wndHandle, WindowManager::cursorCallback);
 	return m_cursorCallbacks.addListener(callback);
     }
 
@@ -436,28 +407,13 @@ namespace dbgl
     {
 	bool ret = m_cursorCallbacks.removeListener(callback);
 	if (!m_cursorCallbacks.hasListener())
-	    glfwSetCursorPosCallback(m_pWndHandle, NULL);
-	return ret;
-    }
-
-    Window::MouseButtonEventType::DelegatePtr Window::addMouseButtonCallback(
-	    MouseButtonCallbackType const& callback)
-    {
-	glfwSetMouseButtonCallback(m_pWndHandle, WindowManager::mouseButtonCallback);
-	return m_mouseButtonCallbacks.addListener(callback);
-    }
-
-    bool Window::removeMouseButtonCallback(MouseButtonEventType::DelegatePtr const& callback)
-    {
-	bool ret = m_mouseButtonCallbacks.removeListener(callback);
-	if (!m_mouseButtonCallbacks.hasListener())
-	    glfwSetMouseButtonCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetCursorPositionCallback(m_wndHandle, nullptr);
 	return ret;
     }
 
     Window::ScrollEventType::DelegatePtr Window::addScrollCallback(ScrollCallbackType const& callback)
     {
-	glfwSetScrollCallback(m_pWndHandle, WindowManager::scrollCallback);
+	GLProvider::get()->wndSetScrollCallback(m_wndHandle, WindowManager::scrollCallback);
 	return m_scrollCallbacks.addListener(callback);
     }
 
@@ -465,7 +421,7 @@ namespace dbgl
     {
 	bool ret = m_scrollCallbacks.removeListener(callback);
 	if (!m_scrollCallbacks.hasListener())
-	    glfwSetScrollCallback(m_pWndHandle, NULL);
+	    GLProvider::get()->wndSetScrollCallback(m_wndHandle, nullptr);
 	return ret;
     }
 

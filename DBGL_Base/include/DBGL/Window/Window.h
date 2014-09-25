@@ -65,12 +65,6 @@ namespace dbgl
 		    bool iconified;
 	    };
 	    /**
-	     * @brief Arguments passed on a refresh event
-	     */
-	    struct RefreshEventArgs
-	    {
-	    };
-	    /**
 	     * @brief Arguments passed on a resize event
 	     */
 	    struct ResizeEventArgs
@@ -258,10 +252,6 @@ namespace dbgl
 	     */
 	    using IconifiedCallbackType = std::function<void(IconifiedEventArgs const&)>;
 	    /**
-	     * @brief Type of a refresh event method
-	     */
-	    using RefreshCallbackType = std::function<void(RefreshEventArgs const&)>;
-	    /**
 	     * @brief Type of a resize event method
 	     */
 	    using ResizeCallbackType = std::function<void(ResizeEventArgs const&)>;
@@ -322,10 +312,6 @@ namespace dbgl
 	     * @brief Type of a iconified event
 	     */
 	    using IconifiedEventType = Event<IconifiedCallbackType, IconifiedEventArgs>;
-	    /**
-	     * @brief Type of a refresh event
-	     */
-	    using RefreshEventType = Event<RefreshCallbackType, RefreshEventArgs>;
 	    /**
 	     * @brief Type of a resize event
 	     */
@@ -560,16 +546,6 @@ namespace dbgl
 	     */
 	    bool removeIconifiedCallback(IconifiedEventType::DelegatePtr const& callback);
 	    /**
-	     * @brief Registers a function as callback for refresh events
-	     * @param callback Function to be called when this window needs to be refreshed
-	     */
-	    RefreshEventType::DelegatePtr addRefreshCallback(RefreshCallbackType const& callback);
-	    /**
-	     * @brief Unregisters a function as callback for refresh events
-	     * @param callback Function to be called when this window needs to be refreshed
-	     */
-	    bool removeRefreshCallback(RefreshEventType::DelegatePtr const& callback);
-	    /**
 	     * @brief Registers a function as callback for resize events
 	     * @param callback Function to be called when this window is getting resized
 	     */
@@ -601,16 +577,6 @@ namespace dbgl
 	     */
 	    bool removePositionCallback(PositionEventType::DelegatePtr const& callback);
 	    /**
-	     * @brief Registers a function as callback for unicode character events
-	     * @param callback Function to be called when a character is typed into this window
-	     */
-	    CharacterEventType::DelegatePtr addCharacterCallback(CharacterCallbackType const& callback);
-	    /**
-	     * @brief Unregisters a function as callback for unicode character events
-	     * @param callback Function to be called when a character is typed into this window
-	     */
-	    bool removeCharacterCallback(CharacterEventType::DelegatePtr const& callback);
-	    /**
 	     * @brief Registers a function as callback for cursor enter events
 	     * @param callback Function to be called when the cursor enters or leaves this window
 	     */
@@ -630,16 +596,6 @@ namespace dbgl
 	     * @param callback Function to be called when the cursor is moved inside this window
 	     */
 	    bool removeCursorCallback(CursorEventType::DelegatePtr const& callback);
-	    /**
-	     * @brief Registers a function as callback for mouse button events
-	     * @param callback Function to be called when a mouse button state changes
-	     */
-	    MouseButtonEventType::DelegatePtr addMouseButtonCallback(MouseButtonCallbackType const& callback);
-	    /**
-	     * @brief Unregisters a function as callback for mouse button events
-	     * @param callback Function to be called when a mouse button state changes
-	     */
-	    bool removeMouseButtonCallback(MouseButtonEventType::DelegatePtr const& callback);
 	    /**
 	     * @brief Registers a function as callback for scroll events
 	     * @param callback Function to be called when the mouse wheel is scrolled
@@ -767,7 +723,6 @@ namespace dbgl
 	    CloseEventType m_closeCallbacks;
 	    FocusEventType m_focusCallbacks;
 	    IconifiedEventType m_iconifiedCallbacks;
-	    RefreshEventType m_refreshCallbacks;
 	    ResizeEventType m_resizeCallbacks;
 	    FramebufferResizeEventType m_framebufferResizeCallbacks;
 	    PositionEventType m_positionCallbacks;

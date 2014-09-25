@@ -61,7 +61,7 @@ namespace dbgl
 	    /**
 	     * @brief Function type for window position callback
 	     */
-	    using WndWindowPosCallback = std::function<void(WindowHandle,int,int)>;
+	    using WndPositionCallback = std::function<void(WindowHandle,int,int)>;
 	    /**
 	     * @brief Function type for cursor enter callback
 	     */
@@ -69,15 +69,15 @@ namespace dbgl
 	    /**
 	     * @brief Function type for cursor movement callback
 	     */
-	    using WndCursorMoveCallback = std::function<void(WindowHandle,double,double)>;
-	    /**
-	     * @brief Function type for general input callback
-	     */
-	    using WndInputCallback = std::function<void(WindowHandle,int,int,int)>;
+	    using WndCursorPositionCallback = std::function<void(WindowHandle,double,double)>;
 	    /**
 	     * @brief Function type for scroll callback
 	     */
 	    using WndScrollCallback = std::function<void(WindowHandle,double,double)>;
+	    /**
+	     * @brief Function type for general input callback
+	     */
+	    using WndInputCallback = std::function<void(WindowHandle,int,int,int)>;
 
 	    /**
 	     * @brief Virtual destructor
@@ -232,6 +232,13 @@ namespace dbgl
 	     * @param callback Callback function
 	     */
 	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback) = 0;
+	    virtual void wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback) = 0;
+	    virtual void wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback) = 0;
+	    virtual void wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback) = 0;
+	    virtual void wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback) = 0;
+	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback) = 0;
+	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback) = 0;
+	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback) = 0;
 	    // TODO: Callbacks
 
 	    //TODO: DEBUG!

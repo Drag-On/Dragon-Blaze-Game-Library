@@ -17,6 +17,13 @@ namespace dbgl
     std::unordered_map<GLFWwindow*, GLOpenGL33::WindowHandle> GLOpenGL33::s_glfw2WndMap {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCloseCallback> GLOpenGL33::s_closeCallbacks {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndFocusCallback> GLOpenGL33::s_focusCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndIconifiedCallback> GLOpenGL33::s_iconifiedCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndResizeCallback> GLOpenGL33::s_resizeCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndFramebufferResizeCallback> GLOpenGL33::s_frameResizeCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndPositionCallback> GLOpenGL33::s_positionCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCursorEnterCallback> GLOpenGL33::s_cursorEnterCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCursorPositionCallback> GLOpenGL33::s_cursorPositionCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndScrollCallback> GLOpenGL33::s_scrollCallbacks {};
 
     GLOpenGL33::GLOpenGL33()
     {
@@ -260,6 +267,153 @@ namespace dbgl
 	auto wndHandle = getWindowHandle(wnd);
 	auto callback = s_focusCallbacks.at(wndHandle);
 	callback(wndHandle, focus);
+    }
+
+    void GLOpenGL33::wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback)
+    {
+	if(callback)
+	{
+	    s_iconifiedCallbacks[wnd] = callback;
+	    glfwSetWindowIconifyCallback(getGLFWHandle(wnd), wndPassIconifiedCallback);
+	}
+	else
+	{
+	    s_iconifiedCallbacks.erase(wnd);
+	    glfwSetWindowIconifyCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassIconifiedCallback(GLFWwindow* wnd, int iconified)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_iconifiedCallbacks.at(wndHandle);
+	callback(wndHandle, iconified);
+    }
+
+    void GLOpenGL33::wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback)
+    {
+	if(callback)
+	{
+	    s_resizeCallbacks[wnd] = callback;
+	    glfwSetWindowSizeCallback(getGLFWHandle(wnd), wndPassResizeCallback);
+	}
+	else
+	{
+	    s_resizeCallbacks.erase(wnd);
+	    glfwSetWindowIconifyCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassResizeCallback(GLFWwindow* wnd, int width, int height)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_resizeCallbacks.at(wndHandle);
+	callback(wndHandle, width, height);
+    }
+
+    void GLOpenGL33::wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback)
+    {
+	if(callback)
+	{
+	    s_frameResizeCallbacks[wnd] = callback;
+	    glfwSetFramebufferSizeCallback(getGLFWHandle(wnd), wndPassFramebufferResizeCallback);
+	}
+	else
+	{
+	    s_frameResizeCallbacks.erase(wnd);
+	    glfwSetFramebufferSizeCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassFramebufferResizeCallback(GLFWwindow* wnd, int width, int height)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_frameResizeCallbacks.at(wndHandle);
+	callback(wndHandle, width, height);
+    }
+
+    void GLOpenGL33::wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback)
+    {
+	if(callback)
+	{
+	    s_positionCallbacks[wnd] = callback;
+	    glfwSetWindowPosCallback(getGLFWHandle(wnd), wndPassPositionCallback);
+	}
+	else
+	{
+	    s_positionCallbacks.erase(wnd);
+	    glfwSetWindowPosCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassPositionCallback(GLFWwindow* wnd, int x, int y)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_positionCallbacks.at(wndHandle);
+	callback(wndHandle, x, y);
+    }
+
+    void GLOpenGL33::wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback)
+    {
+	if(callback)
+	{
+	    s_cursorEnterCallbacks[wnd] = callback;
+	    glfwSetCursorEnterCallback(getGLFWHandle(wnd), wndPassCursorEnterCallback);
+	}
+	else
+	{
+	    s_cursorEnterCallbacks.erase(wnd);
+	    glfwSetCursorEnterCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassCursorEnterCallback(GLFWwindow* wnd, int enter)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_cursorEnterCallbacks.at(wndHandle);
+	callback(wndHandle, enter);
+    }
+
+    void GLOpenGL33::wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback)
+    {
+	if(callback)
+	{
+	    s_cursorPositionCallbacks[wnd] = callback;
+	    glfwSetCursorPosCallback(getGLFWHandle(wnd), wndPassCursorPositionCallback);
+	}
+	else
+	{
+	    s_cursorPositionCallbacks.erase(wnd);
+	    glfwSetCursorPosCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassCursorPositionCallback(GLFWwindow* wnd, double x, double y)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_cursorPositionCallbacks.at(wndHandle);
+	callback(wndHandle, x, y);
+    }
+
+    void GLOpenGL33::wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback)
+    {
+	if(callback)
+	{
+	    s_scrollCallbacks[wnd] = callback;
+	    glfwSetScrollCallback(getGLFWHandle(wnd), wndPassScrollCallback);
+	}
+	else
+	{
+	    s_scrollCallbacks.erase(wnd);
+	    glfwSetScrollCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassScrollCallback(GLFWwindow* wnd, double x, double y)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto callback = s_scrollCallbacks.at(wndHandle);
+	callback(wndHandle, x, y);
     }
 
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)

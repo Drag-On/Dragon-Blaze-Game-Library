@@ -48,6 +48,13 @@ namespace dbgl
 	    virtual void wndSetErrorCallback(WndErrorCallback callback);
 	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback);
 	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback);
+	    virtual void wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback);
+	    virtual void wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback);
+	    virtual void wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback);
+	    virtual void wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback);
+	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback);
+	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback);
+	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback);
 
 	    virtual GLFWwindow* getBasePointer(WindowHandle wnd)
 	    {
@@ -60,6 +67,13 @@ namespace dbgl
 	    static void wndPassErrorCallback(int error, const char* msg);
 	    static void wndPassCloseCallback(GLFWwindow* wnd);
 	    static void wndPassFocusCallback(GLFWwindow* wnd, int focus);
+	    static void wndPassIconifiedCallback(GLFWwindow* wnd, int iconified);
+	    static void wndPassResizeCallback(GLFWwindow* wnd, int width, int height);
+	    static void wndPassFramebufferResizeCallback(GLFWwindow* wnd, int width, int height);
+	    static void wndPassPositionCallback(GLFWwindow* wnd, int x, int y);
+	    static void wndPassCursorEnterCallback(GLFWwindow* wnd, int enter);
+	    static void wndPassCursorPositionCallback(GLFWwindow* wnd, double x, double y);
+	    static void wndPassScrollCallback(GLFWwindow* wnd, double x, double y);
 
 	    static GLFWwindow* getGLFWHandle(WindowHandle wnd);
 	    static WindowHandle getWindowHandle(GLFWwindow* wnd);
@@ -70,6 +84,13 @@ namespace dbgl
 	    static std::unordered_map<GLFWwindow*, WindowHandle> s_glfw2WndMap;
 	    static std::unordered_map<WindowHandle, WndCloseCallback> s_closeCallbacks;
 	    static std::unordered_map<WindowHandle, WndFocusCallback> s_focusCallbacks;
+	    static std::unordered_map<WindowHandle, WndIconifiedCallback> s_iconifiedCallbacks;
+	    static std::unordered_map<WindowHandle, WndResizeCallback> s_resizeCallbacks;
+	    static std::unordered_map<WindowHandle, WndFramebufferResizeCallback> s_frameResizeCallbacks;
+	    static std::unordered_map<WindowHandle, WndPositionCallback> s_positionCallbacks;
+	    static std::unordered_map<WindowHandle, WndCursorEnterCallback> s_cursorEnterCallbacks;
+	    static std::unordered_map<WindowHandle, WndCursorPositionCallback> s_cursorPositionCallbacks;
+	    static std::unordered_map<WindowHandle, WndScrollCallback> s_scrollCallbacks;
     };
 }
 
