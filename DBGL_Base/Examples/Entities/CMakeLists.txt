@@ -39,6 +39,7 @@ add_executable(DBGL_BASE_ENTITIES ${SRC_FILES_ENTITIES})
 ### Link libraries
 ######################################################################
 target_link_libraries(DBGL_BASE_ENTITIES "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_ENTITIES "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 
 ######################################################################
 ### Copy files

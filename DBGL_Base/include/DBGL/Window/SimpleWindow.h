@@ -57,10 +57,10 @@ namespace dbgl
 	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
 		    int width = 800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    /**
-	     * @brief Called on key events.
-	     * @param args Key event arguments
+	     * @brief Called on input events.
+	     * @param args Input event arguments
 	     */
-	    void keyCallback(KeyEventArgs args);
+	    void inputCallback(InputEventArgs args);
 	    /**
 	     * @brief Gets called once a frame and should render everything
 	     */

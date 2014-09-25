@@ -39,6 +39,7 @@ add_executable(DBGL_BASE_MOVEMENT ${SRC_FILES_MOVEMENT})
 ### Link libraries
 ######################################################################
 target_link_libraries(DBGL_BASE_MOVEMENT "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_MOVEMENT "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 
 ######################################################################
 ### Copy files

@@ -20,7 +20,6 @@
 #include "DBGL/System/Scene/SceneApplication.h"
 #include "DBGL/Window/WindowManager.h"
 #include "DBGL/Window/SimpleWindow.h"
-#include "DBGL/Window/Input.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Rendering/Mesh/Mesh.h"
 #include "DBGL/Rendering/ShaderProgram.h"

@@ -15,6 +15,7 @@ namespace dbgl
     GLOpenGL33::WndErrorCallback GLOpenGL33::s_errorCallback = nullptr;
     std::unordered_map<GLOpenGL33::WindowHandle, GLFWwindow*> GLOpenGL33::s_wnd2GlfwMap {};
     std::unordered_map<GLFWwindow*, GLOpenGL33::WindowHandle> GLOpenGL33::s_glfw2WndMap {};
+    std::unordered_map<GLOpenGL33::WindowHandle, Input> GLOpenGL33::s_wnd2Input {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCloseCallback> GLOpenGL33::s_closeCallbacks {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndFocusCallback> GLOpenGL33::s_focusCallbacks {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndIconifiedCallback> GLOpenGL33::s_iconifiedCallbacks {};
@@ -24,6 +25,7 @@ namespace dbgl
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCursorEnterCallback> GLOpenGL33::s_cursorEnterCallbacks {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndCursorPositionCallback> GLOpenGL33::s_cursorPositionCallbacks {};
     std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndScrollCallback> GLOpenGL33::s_scrollCallbacks {};
+    std::unordered_map<GLOpenGL33::WindowHandle, GLOpenGL33::WndInputCallback> GLOpenGL33::s_inputCallbacks {};
 
     GLOpenGL33::GLOpenGL33()
     {
@@ -130,6 +132,7 @@ namespace dbgl
 	{
 	    wndClose(wnd);
 	    glfwDestroyWindow(glfwHandle);
+	    s_wnd2Input.erase(wnd);
 	}
     }
 
@@ -156,6 +159,11 @@ namespace dbgl
     bool GLOpenGL33::wndCheckDecorations(WindowHandle wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_DECORATED);
+    }
+
+    bool GLOpenGL33::wndCheckClose(WindowHandle wnd)
+    {
+	return glfwWindowShouldClose(getGLFWHandle(wnd));
     }
 
     void GLOpenGL33::wndSetTitle(WindowHandle wnd, std::string const& title)
@@ -203,9 +211,19 @@ namespace dbgl
 	glfwSetCursorPos(getGLFWHandle(wnd), x, y);
     }
 
+    Input& GLOpenGL33::wndGetInput(WindowHandle wnd)
+    {
+	return getWindowInput(wnd);
+    }
+
     void GLOpenGL33::wndSwapBuffers(WindowHandle wnd)
     {
 	glfwSwapBuffers(getGLFWHandle(wnd));
+    }
+
+    void GLOpenGL33::wndPollEvents()
+    {
+	glfwPollEvents();
     }
 
     void GLOpenGL33::wndSetErrorCallback(WndErrorCallback callback)
@@ -416,6 +434,55 @@ namespace dbgl
 	callback(wndHandle, x, y);
     }
 
+    void GLOpenGL33::wndSetInputCallback(WindowHandle wnd, WndInputCallback callback)
+    {
+	if(callback)
+	{
+	    s_inputCallbacks[wnd] = callback;
+	    glfwSetKeyCallback(getGLFWHandle(wnd), wndPassKeyCallback);
+	    glfwSetMouseButtonCallback (getGLFWHandle(wnd), wndPassMouseCallback);
+	}
+	else
+	{
+	    s_inputCallbacks.erase(wnd);
+	    glfwSetKeyCallback(getGLFWHandle(wnd), nullptr);
+	}
+    }
+
+    void GLOpenGL33::wndPassKeyCallback(GLFWwindow* wnd, int key, int /* scancode */, int action, int /* mods */)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto& input = getWindowInput(wndHandle);
+	auto inputKey = Input::Key(Input::keyboard_offset + key);
+	Input::KeyState keyState { Input::KeyState::UP };
+	if (action == GLFW_RELEASE)
+	    keyState = Input::KeyState::RELEASED;
+	else if (action == GLFW_PRESS)
+	    keyState = Input::KeyState::PRESSED;
+	else if (action == GLFW_REPEAT)
+	    keyState = Input::KeyState::DOWN;
+	input.updateKey(inputKey, keyState);
+	auto callback = s_inputCallbacks.at(wndHandle);
+	callback(wndHandle, inputKey, input);
+    }
+
+    void GLOpenGL33::wndPassMouseCallback(GLFWwindow* wnd, int button, int action, int /* mods */)
+    {
+	auto wndHandle = getWindowHandle(wnd);
+	auto& input = getWindowInput(wndHandle);
+	auto inputKey = Input::Key(Input::mouse_offset + button);
+	Input::KeyState keyState { Input::KeyState::UP };
+	if (action == GLFW_RELEASE)
+	    keyState = Input::KeyState::RELEASED;
+	else if (action == GLFW_PRESS)
+	    keyState = Input::KeyState::PRESSED;
+	else if (action == GLFW_REPEAT)
+	    keyState = Input::KeyState::DOWN;
+	input.updateKey(inputKey, keyState);
+	auto callback = s_inputCallbacks.at(wndHandle);
+	callback(wndHandle, inputKey, input);
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try
@@ -438,5 +505,19 @@ namespace dbgl
 	{
 	    return HandleGenerator::InvalidHandle;
 	}
+    }
+
+    Input& GLOpenGL33::getWindowInput(WindowHandle wnd)
+    {
+	if(wnd != IGL::InvalidWindowHandle)
+	{
+	    return s_wnd2Input[wnd];
+	}
+	throw std::invalid_argument("No input for invalid window handles.");
+    }
+
+    GLFWwindow* GLOpenGL33::getBasePointer(WindowHandle wnd)
+    {
+	return getGLFWHandle(wnd);
     }
 }

@@ -39,6 +39,7 @@ add_executable(DBGL_BASE_SHADER ${SRC_FILES_SHADER})
 ### Link libraries
 ######################################################################
 target_link_libraries(DBGL_BASE_SHADER "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_SHADER "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 
 ######################################################################
 ### Copy files

@@ -19,7 +19,7 @@ namespace dbgl
 	    Window(share, title, width, height, fullscreen, multisampling)
     {
 	// Add callback for keyboard input
-	addKeyCallback(std::bind(&SimpleWindow::keyCallback, this, std::placeholders::_1));
+	addInputCallback(std::bind(&SimpleWindow::inputCallback, this, std::placeholders::_1));
 	if(!spriteShader.get())
 	    spriteShader = std::make_shared<ShaderProgram>(*ShaderProgram::createSpriteShader());
     }
@@ -80,24 +80,22 @@ namespace dbgl
 	Window::postRender();
     }
 
-    void SimpleWindow::keyCallback(KeyEventArgs args)
+    void SimpleWindow::inputCallback(InputEventArgs args)
     {
 	// Close on escape
-	if (args.key == Input::Key::KEY_ESCAPE && args.action == Input::KeyState::PRESSED)
+	if (args.key == Input::Key::KEY_ESCAPE && args.input.isPressed(args.key))
 	    close();
 
 	// Switch to fullscreen on alt + enter
-	if (args.key == Input::Key::KEY_ENTER && args.action == Input::KeyState::PRESSED
-		&& args.mods.isSet(Input::Modifier::KEY_ALT))
+	if (args.input.isReleased(Input::Key::KEY_ENTER) && args.input.isDown(Input::Modifier::KEY_ALT))
 	    setFullscreen(!isFullscreen());
 
 	// Toggle fps view on ctrl + f
-	if (args.key == Input::Key::KEY_F && args.action == Input::KeyState::RELEASED
-		&& args.mods.isSet(Input::Modifier::KEY_CONTROL))
+	if (args.input.isReleased(Input::Key::KEY_F) && args.input.isDown(Input::Modifier::KEY_CONTROL))
 	    setShowFps(m_showFps = !m_showFps);
 
 	// Take screenshot on print
-	if (args.key == Input::Key::KEY_PRINT_SCREEN && args.action == Input::KeyState::RELEASED)
+	if (args.key == Input::Key::KEY_PRINT_SCREEN && args.input.isReleased(args.key))
 	    m_takeScreenshot = true;
     }
 }

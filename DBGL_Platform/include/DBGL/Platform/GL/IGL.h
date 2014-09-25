@@ -11,17 +11,19 @@
 #ifndef IGL_H_
 #define IGL_H_
 
-#include <string>
-#include <iostream>
-#include <functional>
-#include "HandleGenerator.h"
-
 // TODO: DEBUG!
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <string>
+#include <iostream>
+#include <functional>
+#include "HandleGenerator.h"
+#include "Input.h"
+
 namespace dbgl
 {
+
     class IGL
     {
 	public:
@@ -77,7 +79,7 @@ namespace dbgl
 	    /**
 	     * @brief Function type for general input callback
 	     */
-	    using WndInputCallback = std::function<void(WindowHandle,int,int,int)>;
+	    using WndInputCallback = std::function<void(WindowHandle,Input::Key,Input const&)>;
 
 	    /**
 	     * @brief Virtual destructor
@@ -151,6 +153,12 @@ namespace dbgl
 	     */
 	    virtual bool wndCheckDecorations(WindowHandle wnd) = 0;
 	    /**
+	     * @brief Checks if a window is about to be closed
+	     * @param wnd Window to check
+	     * @return True in case the window is about to be closed, otherwise false
+	     */
+	    virtual bool wndCheckClose(WindowHandle wnd) = 0;
+	    /**
 	     * @brief Modifies the title of a window
 	     * @param wnd Window to set title for
 	     * @param title New title
@@ -211,10 +219,20 @@ namespace dbgl
 	     */
 	    virtual void wndSetCursorPos(WindowHandle wnd, double x, double y) = 0;
 	    /**
+	     * @brief Retrieves input from a window
+	     * @param wnd Wnd to check input from
+	     * @return Reference to input object
+	     */
+	    virtual Input& wndGetInput(WindowHandle wnd) = 0;
+	    /**
 	     * @brief Swaps the render buffers of a window
 	     * @param wnd Window to modify
 	     */
 	    virtual void wndSwapBuffers(WindowHandle wnd) = 0;
+	    /**
+	     * @brief Checks for new events in all windows and returns
+	     */
+	    virtual void wndPollEvents() = 0;
 	    /**
 	     * @brief Set a callback to call on errors regarding windows
 	     * @param callback Callback function
@@ -239,19 +257,14 @@ namespace dbgl
 	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback) = 0;
 	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback) = 0;
 	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback) = 0;
+	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback) = 0;
 	    // TODO: Callbacks
 
 	    //TODO: DEBUG!
 	    virtual GLFWwindow* getBasePointer(WindowHandle wnd) = 0;
 
 	protected:
-	    IGL()
-	    {
-		static bool initialized { false };
-		if(initialized)
-		    throw("Can't have more than one graphics layer.");
-		initialized = true;
-	    }
+	    IGL();
 	private:
 	    IGL(IGL const&); // Disallow copying
 	    IGL& operator=(IGL const& other);

@@ -18,7 +18,6 @@
 #include "DBGL/System/Entity/CameraComponent.h"
 #include "DBGL/Window/WindowManager.h"
 #include "DBGL/Window/SimpleWindow.h"
-#include "DBGL/Window/Input.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "DBGL/Rendering/Mesh/Mesh.h"
 #include "DBGL/Rendering/ShaderProgram.h"

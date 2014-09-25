@@ -22,7 +22,6 @@
 #include "DBGL/System/Bitmask/Bitmask.h"
 #include "DBGL/Rendering/RenderContext.h"
 #include "WindowManager.h"
-#include "Input.h"
 
 namespace dbgl
 {
@@ -107,16 +106,6 @@ namespace dbgl
 		    int y;
 	    };
 	    /**
-	     * @brief Arguments passed on a character event
-	     */
-	    struct CharacterEventArgs
-	    {
-		    /**
-		     * @brief Unicode codepoint of the character
-		     */
-		    unsigned int codepoint;
-	    };
-	    /**
 	     * @brief Arguments passed on a cursor enter event
 	     */
 	    struct CursorEnterEventArgs
@@ -141,29 +130,6 @@ namespace dbgl
 		    double y;
 	    };
 	    /**
-	     * @brief Arguments passed on a mouse button event
-	     */
-	    struct MouseButtonEventArgs
-	    {
-		    /**
-		     * @brief Pressed button
-		     */
-		    int button;
-		    /**
-		     * @brief Key constant representing the button
-		     */
-		    Input::Key key;
-		    /**
-		     * @brief Action that happened.
-		     */
-		    Input::KeyState action;
-		    /**
-		     * @brief Bitmask describing which modifier keys were held down.
-		     * @details Input::Modifier constants may be set
-		     */
-		    Bitmask<> mods;
-	    };
-	    /**
 	     * @brief Arguments passed on a scroll event
 	     */
 	    struct ScrollEventArgs
@@ -176,29 +142,6 @@ namespace dbgl
 		     * @brief Scroll y offset
 		     */
 		    double yOffset;
-	    };
-	    /**
-	     * @brief Arguments passed on a key event
-	     */
-	    struct KeyEventArgs
-	    {
-		    /**
-		     * @brief Key that was pressed or released.
-		     */
-		    Input::Key key;
-		    /**
-		     * @brief System-specific scancode of that key
-		     */
-		    int scancode;
-		    /**
-		     * @brief Action that happened
-		     */
-		    Input::KeyState action;
-		    /**
-		     * @brief Bitmask describing which modifier keys were held down.
-		     * @details Input::Modifier constants may be set
-		     */
-		    Bitmask<> mods;
 	    };
 	    /**
 	     * @brief Arguments passed on an update event
@@ -264,10 +207,6 @@ namespace dbgl
 	     */
 	    using PositionCallbackType = std::function<void(PositionEventArgs const&)>;
 	    /**
-	     * @brief Type of a character event method
-	     */
-	    using CharacterCallbackType = std::function<void(CharacterEventArgs const&)>;
-	    /**
 	     * @brief Type of a cursor enter event method
 	     */
 	    using CursorEnterCallbackType = std::function<void(CursorEnterEventArgs const&)>;
@@ -276,17 +215,9 @@ namespace dbgl
 	     */
 	    using CursorCallbackType = std::function<void(CursorEventArgs const&)>;
 	    /**
-	     * @brief Type of a mouse button event method
-	     */
-	    using MouseButtonCallbackType = std::function<void(MouseButtonEventArgs const&)>;
-	    /**
 	     * @brief Type of a scroll event method
 	     */
 	    using ScrollCallbackType = std::function<void(ScrollEventArgs const&)>;
-	    /**
-	     * @brief Type of a key event method
-	     */
-	    using KeyCallbackType = std::function<void(KeyEventArgs const&)>;
 	    /**
 	     * @brief Type of a update event method
 	     */
@@ -325,10 +256,6 @@ namespace dbgl
 	     */
 	    using PositionEventType = Event<PositionCallbackType, PositionEventArgs>;
 	    /**
-	     * @brief Type of a character event
-	     */
-	    using CharacterEventType = Event<CharacterCallbackType, CharacterEventArgs>;
-	    /**
 	     * @brief Type of a cursor enter event
 	     */
 	    using CursorEnterEventType = Event<CursorEnterCallbackType, CursorEnterEventArgs>;
@@ -337,17 +264,9 @@ namespace dbgl
 	     */
 	    using CursorEventType = Event<CursorCallbackType, CursorEventArgs>;
 	    /**
-	     * @brief Type of a mouse button event
-	     */
-	    using MouseButtonEventType = Event<MouseButtonCallbackType, MouseButtonEventArgs>;
-	    /**
 	     * @brief Type of a scroll event
 	     */
 	    using ScrollEventType = Event<ScrollCallbackType, ScrollEventArgs>;
-	    /**
-	     * @brief Type of a key event
-	     */
-	    using KeyEventType = Event<KeyCallbackType, KeyEventArgs>;
 	    /**
 	     * @brief Type of a update event
 	     */
@@ -607,16 +526,6 @@ namespace dbgl
 	     */
 	    bool removeScrollCallback(ScrollEventType::DelegatePtr const& callback);
 	    /**
-	     * @brief Registers a function as callback for key events
-	     * @param callback Function to be called when a key state changes
-	     */
-	    KeyEventType::DelegatePtr addKeyCallback(KeyCallbackType const& callback);
-	    /**
-	     * @brief Unregisters a function as callback for key events
-	     * @param callback Function to be called when a key state changes
-	     */
-	    bool removeKeyCallback(KeyEventType::DelegatePtr const& callback);
-	    /**
 	     * @brief Registers a function as callback for update events
 	     * @param callback Function to be called when the window is being updated
 	     */
@@ -692,16 +601,6 @@ namespace dbgl
 	     * @param args New size
 	     */
 	    void framebufferResizeCallback(FramebufferResizeEventArgs args);
-	    /**
-	     * @brief Called on key input if an input listener needs to be fed
-	     * @param args Key event arguments
-	     */
-	    void keyCallback(KeyEventArgs args);
-	    /**
-	     * @brief Called on mouse button events if an input listener needs to be fed
-	     * @param args Mouse button event arguments
-	     */
-	    void mouseButtonCallback(MouseButtonEventArgs args);
 
 	    /**
 	     * Window handle
@@ -726,12 +625,9 @@ namespace dbgl
 	    ResizeEventType m_resizeCallbacks;
 	    FramebufferResizeEventType m_framebufferResizeCallbacks;
 	    PositionEventType m_positionCallbacks;
-	    CharacterEventType m_characterCallbacks;
 	    CursorEnterEventType m_cursorEnterCallbacks;
 	    CursorEventType m_cursorCallbacks;
-	    MouseButtonEventType m_mouseButtonCallbacks;
 	    ScrollEventType m_scrollCallbacks;
-	    KeyEventType m_keyCallbacks;
 	    UpdateEventType m_updateCallbacks;
 	    RenderEventType m_renderCallbacks;
 	    InputEventType m_inputCallbacks;
@@ -745,9 +641,6 @@ namespace dbgl
 	    double m_lastTime = 0; // Last timestamp
 	    Vector3<GLclampf> m_clearColor = Vector3<GLclampf>(0, 0, 0);
 	    GLuint m_vertexArrayId;
-	    Input m_input;
-	    KeyEventType::DelegatePtr m_inputKeyDelegate;
-	    MouseButtonEventType::DelegatePtr m_inputMouseDelegate;
 
 	    friend class WindowManager;
     };

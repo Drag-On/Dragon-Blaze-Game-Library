@@ -77,16 +77,13 @@ namespace dbgl
 	    static void closeCallback(IGL::WindowHandle window);
 	    static void focusCallback(IGL::WindowHandle window, int focused);
 	    static void iconifiedCallback(IGL::WindowHandle window, int iconified);
-	    static void refreshCallback(IGL::WindowHandle window);
 	    static void resizeCallback(IGL::WindowHandle window, int width, int height);
 	    static void framebufferResizeCallback(IGL::WindowHandle window, int width, int height);
 	    static void positionCallback(IGL::WindowHandle window, int xpos, int ypos);
-	    static void characterCallback(IGL::WindowHandle window, unsigned int codepoint);
 	    static void cursorEnterCallback(IGL::WindowHandle window, int entered);
 	    static void cursorCallback(IGL::WindowHandle window, double x, double y);
-	    static void mouseButtonCallback(IGL::WindowHandle window, int button, int action, int mods);
 	    static void scrollCallback(IGL::WindowHandle window, double xOffset, double yOffset);
-	    static void keyCallback(IGL::WindowHandle window, int key, int scancode, int action, int mods);
+	    static void inputCallback(IGL::WindowHandle window, Input::Key, Input const& input);
 
 	    void updateHandle(IGL::WindowHandle oldHandle, IGL::WindowHandle newHandle);
 

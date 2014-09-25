@@ -39,6 +39,7 @@ add_executable(DBGL_BASE_SCENE ${SRC_FILES_SCENE})
 ### Link libraries
 ######################################################################
 target_link_libraries(DBGL_BASE_SCENE "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_BASE_SCENE "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 
 ######################################################################
 ### Copy files

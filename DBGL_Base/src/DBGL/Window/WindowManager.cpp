@@ -13,8 +13,7 @@
 namespace dbgl
 {
     WindowManager WindowManager::s_instance = WindowManager();
-    std::map<GLFWwindow*, Window*> WindowManager::s_windows = std::map<
-	    GLFWwindow*, Window*>();
+    std::map<IGL::WindowHandle, Window*> WindowManager::s_windows = std::map<IGL::WindowHandle, Window*>();
 
     WindowManager* WindowManager::get()
     {
@@ -24,11 +23,11 @@ namespace dbgl
     void WindowManager::update()
     {
 	// Poll events
-	glfwPollEvents();
+	GLProvider::get()->wndPollEvents();
 	// Remove windows that need removal
 	for (auto wnd = s_windows.begin(); wnd != s_windows.end();)
 	{
-	    if(glfwWindowShouldClose(wnd->first))
+	    if(GLProvider::get()->wndCheckClose(wnd->first))
 	    {
 		delete (wnd->second);
 		wnd = s_windows.erase(wnd);
@@ -69,7 +68,7 @@ namespace dbgl
 	return glfwGetTime();
     }
 
-    WindowManager::WindowManager() : m_pShareWindow(NULL)
+    WindowManager::WindowManager()
     {
     }
 
@@ -92,11 +91,6 @@ namespace dbgl
 	s_windows[window]->m_iconifiedCallbacks.fire(Window::IconifiedEventArgs{iconified == GL_TRUE ? true : false});
     }
 
-    void WindowManager::refreshCallback(IGL::WindowHandle window)
-    {
-	s_windows[window]->m_refreshCallbacks.fire(Window::RefreshEventArgs());
-    }
-
     void WindowManager::resizeCallback(IGL::WindowHandle window, int width,
 	    int height)
     {
@@ -114,12 +108,6 @@ namespace dbgl
 	s_windows[window]->m_positionCallbacks.fire(Window::PositionEventArgs{xpos, ypos});
     }
 
-    void WindowManager::characterCallback(IGL::WindowHandle window,
-	    unsigned int codepoint)
-    {
-	s_windows[window]->m_characterCallbacks.fire(Window::CharacterEventArgs{codepoint});
-    }
-
     void WindowManager::cursorEnterCallback(IGL::WindowHandle window, int entered)
     {
 	s_windows[window]->m_cursorEnterCallbacks.fire(Window::CursorEnterEventArgs{entered == GL_TRUE ? true : false});
@@ -130,48 +118,15 @@ namespace dbgl
 	s_windows[window]->m_cursorCallbacks.fire(Window::CursorEventArgs{x, y});
     }
 
-    void WindowManager::mouseButtonCallback(IGL::WindowHandle window, int button,
-	    int action, int mods)
-    {
-	// Translate GLFW button into Input::Key
-	Input::Key keyConst = Input::Key(Input::mouse_offset + button);
-	// Translate GLFW action int Input::KeyState
-	Input::KeyState keyState;
-	if(action == GLFW_RELEASE)
-	    keyState = Input::KeyState::RELEASED;
-	else if(action == GLFW_PRESS)
-	    keyState = Input::KeyState::PRESSED;
-	else if(action == GLFW_REPEAT)
-	    keyState = Input::KeyState::DOWN;
-	else
-	    keyState = Input::KeyState::UP;
-	s_windows[window]->m_mouseButtonCallbacks.fire(Window::MouseButtonEventArgs{button, keyConst, keyState, mods});
-	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input, keyConst});
-    }
-
     void WindowManager::scrollCallback(IGL::WindowHandle window, double xOffset,
 	    double yOffset)
     {
 	s_windows[window]->m_scrollCallbacks.fire(Window::ScrollEventArgs{xOffset, yOffset});
     }
 
-    void WindowManager::keyCallback(IGL::WindowHandle window, int key, int scancode,
-	    int action, int mods)
+    void WindowManager::inputCallback(IGL::WindowHandle window, Input::Key key, Input const& input)
     {
-	// Translate GLFW key into Input::Key
-	Input::Key keyConst = Input::Key(Input::keyboard_offset + key);
-	// Translate GLFW action int Input::KeyState
-	Input::KeyState keyState;
-	if(action == GLFW_RELEASE)
-	    keyState = Input::KeyState::RELEASED;
-	else if(action == GLFW_PRESS)
-	    keyState = Input::KeyState::PRESSED;
-	else if(action == GLFW_REPEAT)
-	    keyState = Input::KeyState::DOWN;
-	else
-	    keyState = Input::KeyState::UP;
-	s_windows[window]->m_keyCallbacks.fire(Window::KeyEventArgs{keyConst, scancode, keyState, mods});
-	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{s_windows[window]->m_input, keyConst});
+	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{input, key});
     }
 
     // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
