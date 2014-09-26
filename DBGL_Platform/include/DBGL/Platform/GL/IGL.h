@@ -238,6 +238,11 @@ namespace dbgl
 	     */
 	    virtual void wndPollEvents() = 0;
 	    /**
+	     * @brief Provides the time since initialization of the window system in seconds (but in a much better resolution)
+	     * @return Time since startup
+	     */
+	    virtual double wndGetTime() = 0;
+	    /**
 	     * @brief Set a callback to call on errors regarding windows
 	     * @param callback Callback function
 	     */

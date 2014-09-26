@@ -240,6 +240,11 @@ namespace dbgl
 	glfwPollEvents();
     }
 
+    double GLOpenGL33::wndGetTime()
+    {
+	return glfwGetTime();
+    }
+
     void GLOpenGL33::wndSetErrorCallback(WndErrorCallback callback)
     {
 	if(callback)

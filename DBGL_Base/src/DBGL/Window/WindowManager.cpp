@@ -65,7 +65,7 @@ namespace dbgl
 
     double WindowManager::getTime() const
     {
-	return glfwGetTime();
+	return GLProvider::get()->wndGetTime();
     }
 
     WindowManager::WindowManager()
@@ -128,8 +128,6 @@ namespace dbgl
     {
 	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{input, key});
     }
-
-    // void WindowManager::monitorCallback(GLFWmonitor* monitor, int event){}
 
     void WindowManager::updateHandle(IGL::WindowHandle oldHandle,
 	    IGL::WindowHandle newHandle)

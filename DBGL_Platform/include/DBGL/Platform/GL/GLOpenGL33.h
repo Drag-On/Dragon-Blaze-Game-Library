@@ -49,6 +49,7 @@ namespace dbgl
 	    virtual Input& wndGetInput(WindowHandle wnd);
 	    virtual void wndSwapBuffers(WindowHandle wnd);
 	    virtual void wndPollEvents();
+	    virtual double wndGetTime();
 	    virtual void wndSetErrorCallback(WndErrorCallback callback);
 	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback);
 	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback);
