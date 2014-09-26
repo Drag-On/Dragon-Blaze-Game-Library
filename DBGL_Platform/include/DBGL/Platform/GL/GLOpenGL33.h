@@ -11,8 +11,8 @@
 #ifndef GLOPENGL33_H_
 #define GLOPENGL33_H_
 
-//#include <GL/glew.h>
-//#include <GLFW/glfw3.h>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <unordered_map>
 #include "IGL.h"
 
@@ -62,7 +62,6 @@ namespace dbgl
 	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback);
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback);
 
-	    virtual GLFWwindow* getBasePointer(WindowHandle wnd);
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
 	    GLOpenGL33& operator=(GLOpenGL33 const& other);
@@ -83,6 +82,10 @@ namespace dbgl
 	    static GLFWwindow* getGLFWHandle(WindowHandle wnd);
 	    static WindowHandle getWindowHandle(GLFWwindow* wnd);
 	    static Input& getWindowInput(WindowHandle wnd);
+	    static Input::Key glfwKey2InputKey(int key);
+	    static Input::Key glfwButton2InputKey(int button);
+	    static Input::KeyState glfwKeyState2InputKeyState(int keyState);
+	    static Input::Modifier glfwModifier2InputModifier(int mod);
 
 	    HandleGenerator m_wndHandleGen;
 

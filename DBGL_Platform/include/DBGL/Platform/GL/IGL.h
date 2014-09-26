@@ -11,10 +11,6 @@
 #ifndef IGL_H_
 #define IGL_H_
 
-// TODO: DEBUG!
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <string>
 #include <iostream>
 #include <functional>
@@ -307,9 +303,6 @@ namespace dbgl
 	     * @param callback Callback function
 	     */
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback) = 0;
-
-	    //TODO: DEBUG!
-	    virtual GLFWwindow* getBasePointer(WindowHandle wnd) = 0;
 
 	protected:
 	    IGL();

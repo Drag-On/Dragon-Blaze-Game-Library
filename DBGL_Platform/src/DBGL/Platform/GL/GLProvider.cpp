@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Platform/GL/GLProvider.h"
+#include "DBGL/Platform/GL/GLOpenGL33.h"
 
 namespace dbgl
 {

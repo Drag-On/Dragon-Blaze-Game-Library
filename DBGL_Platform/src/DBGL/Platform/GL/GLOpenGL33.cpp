@@ -473,14 +473,8 @@ namespace dbgl
     {
 	auto wndHandle = getWindowHandle(wnd);
 	auto& input = getWindowInput(wndHandle);
-	auto inputKey = Input::Key(Input::keyboard_offset + key);
-	Input::KeyState keyState { Input::KeyState::UP };
-	if (action == GLFW_RELEASE)
-	    keyState = Input::KeyState::RELEASED;
-	else if (action == GLFW_PRESS)
-	    keyState = Input::KeyState::PRESSED;
-	else if (action == GLFW_REPEAT)
-	    keyState = Input::KeyState::DOWN;
+	Input::Key inputKey = glfwKey2InputKey(key);
+	Input::KeyState keyState = glfwKeyState2InputKeyState(action);
 	input.updateKey(inputKey, keyState);
 	auto callback = s_inputCallbacks.at(wndHandle);
 	callback(wndHandle, inputKey, input);
@@ -490,14 +484,8 @@ namespace dbgl
     {
 	auto wndHandle = getWindowHandle(wnd);
 	auto& input = getWindowInput(wndHandle);
-	auto inputKey = Input::Key(Input::mouse_offset + button);
-	Input::KeyState keyState { Input::KeyState::UP };
-	if (action == GLFW_RELEASE)
-	    keyState = Input::KeyState::RELEASED;
-	else if (action == GLFW_PRESS)
-	    keyState = Input::KeyState::PRESSED;
-	else if (action == GLFW_REPEAT)
-	    keyState = Input::KeyState::DOWN;
+	Input::Key inputKey = glfwButton2InputKey(button);
+	Input::KeyState keyState = glfwKeyState2InputKeyState(action);
 	input.updateKey(inputKey, keyState);
 	auto callback = s_inputCallbacks.at(wndHandle);
 	callback(wndHandle, inputKey, input);
@@ -536,8 +524,45 @@ namespace dbgl
 	throw std::invalid_argument("No input for invalid window handles.");
     }
 
-    GLFWwindow* GLOpenGL33::getBasePointer(WindowHandle wnd)
+    Input::Key GLOpenGL33::glfwKey2InputKey(int key)
     {
-	return getGLFWHandle(wnd);
+	return Input::Key(Input::keyboard_offset + key);
+    }
+
+    Input::Key GLOpenGL33::glfwButton2InputKey(int button)
+    {
+	return Input::Key(Input::mouse_offset + button);
+    }
+
+    Input::KeyState GLOpenGL33::glfwKeyState2InputKeyState(int keyState)
+    {
+	switch(keyState)
+	{
+	    case GLFW_RELEASE:
+		return Input::KeyState::RELEASED;
+	    case GLFW_PRESS:
+		return Input::KeyState::PRESSED;
+	    case GLFW_REPEAT:
+		return Input::KeyState::DOWN;
+	    default:
+		return Input::KeyState::UP;
+	}
+    }
+
+    Input::Modifier GLOpenGL33::glfwModifier2InputModifier(int mod)
+    {
+	switch(mod)
+	{
+	    case GLFW_MOD_ALT:
+		return Input::Modifier::KEY_ALT;
+	    case GLFW_MOD_CONTROL:
+		return Input::Modifier::KEY_CONTROL;
+	    case GLFW_MOD_SHIFT:
+		return Input::Modifier::KEY_SHIFT;
+	    case GLFW_MOD_SUPER:
+		return Input::Modifier::KEY_SUPER;
+	    default:
+		return Input::Modifier::NONE;
+	}
     }
 }

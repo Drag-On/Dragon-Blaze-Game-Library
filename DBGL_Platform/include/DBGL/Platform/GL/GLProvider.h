@@ -12,7 +12,6 @@
 #define GLPROVIDER_H_
 
 #include "IGL.h"
-#include "GLOpenGL33.h"
 
 namespace dbgl
 {
