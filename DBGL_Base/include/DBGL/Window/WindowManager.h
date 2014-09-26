@@ -13,8 +13,6 @@
 
 #include <stdlib.h>
 #include <map>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "Window.h"
 #include "DBGL/Platform/GL/GLProvider.h"
 #include "DBGL/System/Log/Log.h"

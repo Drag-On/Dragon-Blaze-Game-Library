@@ -16,7 +16,6 @@
 #include <fstream>
 #include <utility>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "DBGL/System/Log/Log.h"
 #include "TextureLoader.h"
 #include "BogusTextureLoader.h"
