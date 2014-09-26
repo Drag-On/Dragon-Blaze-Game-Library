@@ -13,8 +13,6 @@
 
 #include <string>
 #include <functional>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "DBGL/Platform/GL/GLProvider.h"
 #include "DBGL/Math/Vector3.h"
 #include "DBGL/System/Event/Event.h"
@@ -422,12 +420,6 @@ namespace dbgl
 	     * @param y New y coordinate
 	     */
 	    void setCursorPos(double x, double y);
-	    /**
-	     * @brief Checks a mouse button's state
-	     * @param button Button to check
-	     * @return GLFW_PRESS or GLFW_RELEASE
-	     */
-	    int getButton(int button) const;
 	    /**
 	     * @brief Checks a key's state
 	     * @param key Key to check

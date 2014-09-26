@@ -270,20 +270,9 @@ namespace dbgl
 	GLProvider::get()->wndSetCursorPos(m_wndHandle, x, y);
     }
 
-    int Window::getButton(int button) const
-    {
-	return glfwGetMouseButton(m_pWndHandle, button);
-    }
-
     Input::KeyState Window::getKey(Input::Key key) const
     {
-	// Convert Input::Key to GLFW key
-	int glfwKey = int(key) - Input::keyboard_offset;
-	int glfwResult = glfwGetKey(m_pWndHandle, glfwKey);
-	Input::KeyState keyState = Input::KeyState::UP;
-	if(glfwResult == GLFW_PRESS || glfwResult == GLFW_REPEAT)
-	    keyState = Input::KeyState::DOWN;
-	return keyState;
+	return GLProvider::get()->wndGetInput(m_wndHandle).getState(key);
     }
 
     Window::CloseEventType::DelegatePtr Window::addCloseCallback(CloseCallbackType const& callback)
