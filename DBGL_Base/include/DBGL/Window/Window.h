@@ -575,14 +575,13 @@ namespace dbgl
 	protected:
 	    /**
 	     * @brief Constructs a window
-	     * @param share Window to share resources with or NULL if none
 	     * @param title Title of the window
 	     * @param width Width of the rendering plane
 	     * @param height Height of the rendering plane
 	     * @param fullscreen Indicates if it is opened to fullscreen
 	     * @param multisampling Amount of multisampling (0 to disable)
 	     */
-	    Window(GLFWwindow* share, const char* title = "Dragon Blaze Game Library", int width = 800,
+	    Window(const char* title = "Dragon Blaze Game Library", int width = 800,
 		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    /**
 	     * @brief Removes the current render context from the window and applies a new one
@@ -597,7 +596,6 @@ namespace dbgl
 	    /**
 	     * Window handle
 	     */
-	    GLFWwindow* m_pWndHandle = nullptr;
 	    IGL::WindowHandle m_wndHandle = IGL::InvalidWindowHandle;
 // TODO: Use GLEW MX for support of multiple windows
 //	    GLEWContext* m_pGlewContext = nullptr;

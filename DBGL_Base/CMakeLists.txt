@@ -112,7 +112,6 @@ endif(DOXYGEN_FOUND)
 include_directories(${DBGL_INCLUDE_DIR})
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIR})
-include_directories(${GLFW_INCLUDE_DIR})
 
 ######################################################################
 ### Find OpenGL
@@ -135,7 +134,6 @@ set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
 ######################################################################
 target_link_libraries(DBGL_Base "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 target_link_libraries(DBGL_Base "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
-target_link_libraries(DBGL_Base "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
 target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
 
 ######################################################################

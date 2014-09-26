@@ -48,7 +48,7 @@ namespace dbgl
 	    template<typename T> T* createWindow(const char* title = "Dragon Blaze Game Library", int width =
 		    800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2)
 	    {
-		auto wnd = new T(nullptr, title, width, height, fullscreen, multisampling);
+		auto wnd = new T(title, width, height, fullscreen, multisampling);
 		s_windows.insert(std::pair<IGL::WindowHandle, Window*>(wnd->m_wndHandle, wnd));
 		return wnd;
 	    }

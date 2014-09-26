@@ -12,8 +12,8 @@
 
 namespace dbgl
 {
-    Window::Window(GLFWwindow* share, const char* title, int width, int height, bool fullscreen,
-	    unsigned int multisampling) : m_multisampling(multisampling)
+    Window::Window(const char* title, int width, int height, bool fullscreen, unsigned int multisampling) :
+	    m_multisampling(multisampling)
     {
 	m_title = title;
 	if(fullscreen)
@@ -48,8 +48,6 @@ namespace dbgl
 	}
 
 	m_wndHandle = GLProvider::get()->wndInit(title, useWidth, useHeight, fullscreen, multisampling);
-	// TODO: DEBUG!
-	m_pWndHandle = GLProvider::get()->getBasePointer(m_wndHandle);
 
 	m_windowedX = getX();
 	m_windowedY = getY();

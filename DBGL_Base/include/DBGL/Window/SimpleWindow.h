@@ -47,15 +47,14 @@ namespace dbgl
 	protected:
 	    /**
 	     * @brief Creates a simple window
-	     * @param share Other window to share resources with
 	     * @param title Window title
 	     * @param width Window width
 	     * @param height Window height
 	     * @param multisampling Multisampling level (0 to disable)
 	     * @param fullscreen Indicates if the window should be initialized as fullscreen
 	     */
-	    SimpleWindow(GLFWwindow* share, const char* title = "Dragon Blaze Game Library",
-		    int width = 800, int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
+	    SimpleWindow(const char* title = "Dragon Blaze Game Library", int width = 800, int height = 600,
+		    bool fullscreen = false, unsigned int multisampling = 2);
 	    /**
 	     * @brief Called on input events.
 	     * @param args Input event arguments

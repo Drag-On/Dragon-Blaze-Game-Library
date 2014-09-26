@@ -14,9 +14,9 @@ namespace dbgl
 {
     std::shared_ptr<ShaderProgram> SimpleWindow::spriteShader = std::shared_ptr<ShaderProgram>{};
 
-    SimpleWindow::SimpleWindow(GLFWwindow* share, const char* title, int width, int height, bool fullscreen,
+    SimpleWindow::SimpleWindow(const char* title, int width, int height, bool fullscreen,
 	    unsigned int multisampling) :
-	    Window(share, title, width, height, fullscreen, multisampling)
+	    Window(title, width, height, fullscreen, multisampling)
     {
 	// Add callback for keyboard input
 	addInputCallback(std::bind(&SimpleWindow::inputCallback, this, std::placeholders::_1));
