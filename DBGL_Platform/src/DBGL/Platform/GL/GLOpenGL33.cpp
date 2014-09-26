@@ -101,6 +101,18 @@ namespace dbgl
 
     void GLOpenGL33::wndClose(WindowHandle wnd)
     {
+	// Remove all callbacks
+	wndSetCloseCallback(wnd, nullptr);
+	wndSetCursorEnterCallback(wnd, nullptr);
+	wndSetCursorPositionCallback(wnd, nullptr);
+	wndSetFocusCallback(wnd, nullptr);
+	wndSetFramebufferResizeCallback(wnd, nullptr);
+	wndSetIconifiedCallback(wnd, nullptr);
+	wndSetInputCallback(wnd, nullptr);
+	wndSetPositionCallback(wnd, nullptr);
+	wndSetResizeCallback(wnd, nullptr);
+	wndSetScrollCallback(wnd, nullptr);
+	// Tell it to close
 	GLFWwindow* glfwHandle = nullptr;
 	try
 	{
@@ -109,13 +121,8 @@ namespace dbgl
 	catch(...)
 	{
 	}
-	s_wnd2GlfwMap.erase(wnd);
-	s_closeCallbacks.erase(wnd);
 	if (glfwHandle != nullptr)
-	{
-	    s_glfw2WndMap.erase(glfwHandle);
 	    glfwSetWindowShouldClose(glfwHandle, true);
-	}
     }
 
     void GLOpenGL33::wndDestroy(WindowHandle wnd)
@@ -133,6 +140,8 @@ namespace dbgl
 	    wndClose(wnd);
 	    glfwDestroyWindow(glfwHandle);
 	    s_wnd2Input.erase(wnd);
+	    s_wnd2GlfwMap.erase(wnd);
+	    s_glfw2WndMap.erase(glfwHandle);
 	}
     }
 
@@ -446,6 +455,7 @@ namespace dbgl
 	{
 	    s_inputCallbacks.erase(wnd);
 	    glfwSetKeyCallback(getGLFWHandle(wnd), nullptr);
+	    glfwSetMouseButtonCallback (getGLFWHandle(wnd), nullptr);
 	}
     }
 
