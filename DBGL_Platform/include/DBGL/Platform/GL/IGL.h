@@ -254,15 +254,54 @@ namespace dbgl
 	     * @param callback Callback function
 	     */
 	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window is iconified or deconified
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window is resized
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window's framebuffer is resized
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window is moved
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a cursor enters a window
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a cursor within a window has been moved
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a scroll wheel within a window has been used
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback) = 0;
+	    /**
+	     * @brief Set a callback that is called when a window receives some kind of input
+	     * @param wnd Window to set callback for
+	     * @param callback Callback function
+	     */
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback) = 0;
-	    // TODO: Callbacks
 
 	    //TODO: DEBUG!
 	    virtual GLFWwindow* getBasePointer(WindowHandle wnd) = 0;
