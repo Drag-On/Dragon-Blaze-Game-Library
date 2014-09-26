@@ -54,8 +54,8 @@ namespace dbgl
 	    for (auto wnd = s_windows.begin(); wnd != s_windows.end();)
 		delete (wnd->second);
 
-	// Terminate glfw context
-	glfwTerminate();
+	// Terminate window context
+	GLProvider::get()->wndTerminate();
     }
 
     bool WindowManager::isRunning() const

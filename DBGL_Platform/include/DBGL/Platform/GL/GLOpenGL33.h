@@ -26,6 +26,7 @@ namespace dbgl
 	    virtual void getScreenResolution(int& width, int& height);
 	    virtual WindowHandle wndInit(std::string title = "Dragon-Blaze-Game-Library", unsigned int width =
 		    800, unsigned int height = 600, bool fullscreen = false, unsigned int multisampling = 0);
+	    virtual void wndTerminate();
 	    virtual void wndShow(WindowHandle wnd);
 	    virtual void wndHide(WindowHandle wnd);
 	    virtual void wndClose(WindowHandle wnd);

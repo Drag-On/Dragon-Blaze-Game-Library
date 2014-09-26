@@ -89,6 +89,11 @@ namespace dbgl
 	return wndHandle;
     }
 
+    void GLOpenGL33::wndTerminate()
+    {
+	glfwTerminate();
+    }
+
     void GLOpenGL33::wndShow(WindowHandle wnd)
     {
 	glfwShowWindow(getGLFWHandle(wnd));

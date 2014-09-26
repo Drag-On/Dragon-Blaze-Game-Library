@@ -103,6 +103,10 @@ namespace dbgl
 		    800, unsigned int height = 600, bool fullscreen = false,
 		    unsigned int multisampling = 0) = 0;
 	    /**
+	     * @brief Terminates the window system and closes all open windows
+	     */
+	    virtual void wndTerminate() = 0;
+	    /**
 	     * @brief Show a window
 	     * @param wnd Window to show
 	     */
