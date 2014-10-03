@@ -71,7 +71,7 @@ namespace dbgl
 		GLProvider::get()->texBind(handle);
 		GLProvider::get()->texSetRowAlignment(IGL::RowAlignment::UNPACK, 1); // TODO: Check if always 1?
 		unsigned int offset { 0 };
-		unsigned int blockSize{ (format == IGL::PixelFormatCompressed::COMP_DXT1) ? 8 : 16 };
+		unsigned int blockSize{ (format == IGL::PixelFormatCompressed::COMP_DXT1) ? 8u : 16u };
 		// Load mipmaps
 		for (unsigned int level = 0;
 			level < mipMapCount && (width || height); ++level)

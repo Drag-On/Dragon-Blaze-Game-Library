@@ -99,7 +99,7 @@ namespace dbgl
 	    if (diffuseId >= 0)
 	    {
 		// Bind diffuse texture to unit 0
-		shader.bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, m_pTexture->getHandle());
+		shader.bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, m_pTexture->getHandle()->m_handle);
 		shader.setUniformSampler(diffuseId, 0);
 	    }
 

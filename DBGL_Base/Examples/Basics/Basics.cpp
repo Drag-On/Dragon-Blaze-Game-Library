@@ -62,7 +62,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
+	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);
 	pShader->setUniformSampler(diffuseId, 0);
     }
     // MVP matrix

@@ -131,7 +131,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	p3DShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
+	p3DShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);
 	p3DShader->setUniformSampler(diffuseId, 0);
     }
 
@@ -163,7 +163,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     if (diffuseId >= 0)
     {
 	// Bind diffuse texture to unit 0
-	pSpriteShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle());
+	pSpriteShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);
 	pSpriteShader->setUniformSampler(diffuseId, 0);
     }
 

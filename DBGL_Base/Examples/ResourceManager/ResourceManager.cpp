@@ -256,10 +256,10 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Bind textures
     // Bind diffuse texture to unit 0
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexWhite->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexWhite->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(diffuseId, 0);
     // Bind specular texture to unit 1
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexWhite->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexWhite->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(specularId, 1);
 
     // Calc matrices
@@ -308,13 +308,13 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Bind textures
     // Bind diffuse texture to unit 0
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexBricks->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexBricks->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(diffuseId, 0);
     // Bind specular texture to unit 1
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexBricksSpecular->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexBricksSpecular->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(specularId, 1);
     // Bind normal texture to unit 2
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexBricksNormal->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexBricksNormal->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(normalId, 2);
 
     // Set uniforms that are the same for all of the following models
@@ -373,13 +373,13 @@ void renderCallback(Window::RenderEventArgs const& args)
 
     // Bind textures
     // Bind diffuse texture to unit 0
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexMarble->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexMarble->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(diffuseId, 0);
     // Bind specular texture to unit 1
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexMarbleSpecular->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE1, GL_TEXTURE_2D, pTexMarbleSpecular->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(specularId, 1);
     // Bind normal texture to unit 2
-    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexMarbleNormal->getTexture()->getHandle());
+    pShaderDiffSpec->getShader()->bindTexture(GL_TEXTURE2, GL_TEXTURE_2D, pTexMarbleNormal->getTexture()->getHandle()->m_handle);
     pShaderDiffSpec->getShader()->setUniformSampler(normalId, 2);
 
     // Render pillar

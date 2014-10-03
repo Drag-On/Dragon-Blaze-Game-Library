@@ -24,9 +24,14 @@ namespace dbgl
 	GLProvider::get()->texDelete(m_handle);
     }
 
-    GLuint Texture::getHandle() const
+    void Texture::bind() const
     {
-	return m_handle->m_handle; // TODO: Remove
+	GLProvider::get()->texBind(m_handle);
+    }
+
+    IGL::TextureHandle Texture::getHandle() const
+    {
+	return m_handle;
     }
 
     unsigned int Texture::getWidth() const

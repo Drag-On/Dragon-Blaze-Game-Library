@@ -60,9 +60,13 @@ namespace dbgl
 	     */
 	    ~Texture();
 	    /**
-	     * @return GL texture handle
+	     * @brief Binds this texture
 	     */
-	    GLuint getHandle() const;
+	    void bind() const;
+	    /**
+	     * @return Texture handle
+	     */
+	    IGL::TextureHandle getHandle() const;
 	    /**
 	     * @brief Provides the texture width
 	     * @return Width of the texture in pixels
