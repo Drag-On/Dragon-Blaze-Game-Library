@@ -14,7 +14,6 @@ namespace dbgl
 {
     Texture* TGATextureLoader::load(std::string path, Bitmask<> /* flags */, TextureLoader::Filtering filtering)
     {
-	GLuint texID;
 	// Read file
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
@@ -95,39 +94,32 @@ namespace dbgl
 
 	// Create OpenGL texture
 	auto handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
-//	glGenTextures(1, &texID);
-	texID = handle->m_handle; // TODO DEBUG
 	// Bind texture
 	GLProvider::get()->texBind(handle);
-//	glBindTexture(GL_TEXTURE_2D, texID);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//	GLint intFormat = colorMode == 3 ? GL_RGB : GL_RGBA;
-//	GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;
+	GLProvider::get()->texSetRowAlignment(IGL::RowAlignment::UNPACK, 1); // TODO: Check if always 1?
 	auto format = colorMode == 3 ? IGL::PixelFormat::BGR : IGL::PixelFormat::BGRA;
 	GLProvider::get()->texWrite(0, width, height, format, IGL::PixelType::UBYTE, image);
-//	glTexImage2D(GL_TEXTURE_2D, 0, intFormat, width, height, 0, format,
-//	GL_UNSIGNED_BYTE, image);
 	// Select filtering algorithm
-	GLint filterMag = GL_NEAREST;
-	GLint filterMin = GL_NEAREST_MIPMAP_NEAREST;
+	IGL::MagFilter filterMag = IGL::MagFilter::NEAREST;
+	IGL::MinFilter filterMin = IGL::MinFilter::NEAREST_MIPMAP_NEAREST;
 	switch(filtering)
 	{
 	    case TextureLoader::Filtering::LINEAR:
-		filterMag = GL_LINEAR;
-		filterMin = GL_LINEAR_MIPMAP_LINEAR;
+		filterMag = IGL::MagFilter::LINEAR;
+		filterMin = IGL::MinFilter::LINEAR_MIPMAP_LINEAR;
 		break;
 	    default:
 		break;
 	}
 	// Linear filtering when magnifying
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag);
+	GLProvider::get()->texSetMagFilter(filterMag);
 	// Linear blending when minifying
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMin);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	GLProvider::get()->texSetMinFilter(filterMin);
+	GLProvider::get()->texGenerateMipMaps();
 
 	delete[] image;
 
-	return new Texture(texID);
+	return new Texture(handle);
     }
 }

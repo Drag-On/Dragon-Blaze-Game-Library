@@ -14,6 +14,7 @@
 #include <string>
 #include <fstream>
 #include <string>
+#include "DBGL/Platform/GL/GLProvider.h"
 #include "Sprite.h"
 #include "DBGL/Rendering/Texture/Texture.h"
 #include "DBGL/Rendering/RenderContext.h"

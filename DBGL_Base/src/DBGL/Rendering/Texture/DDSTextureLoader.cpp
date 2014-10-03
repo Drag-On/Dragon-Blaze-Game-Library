@@ -15,6 +15,7 @@ namespace dbgl
     Texture* DDSTextureLoader::load(std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)
     {
 	GLuint texID;
+	IGL::TextureHandle handle;
 	// Read file
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
@@ -66,7 +67,9 @@ namespace dbgl
 			break;
 		}
 		// Create OpenGL texture
-		glGenTextures(1, &texID);
+		handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
+	//	glGenTextures(1, &texId);
+		texID = handle->m_handle; // TODO: DEBUG
 		// Bind texture
 		glBindTexture(GL_TEXTURE_2D, texID);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -117,7 +120,7 @@ namespace dbgl
 		    glGenerateMipmap(GL_TEXTURE_2D);
 		delete[] buffer;
 	    }
-	    return new Texture(texID);
+	    return new Texture(handle);
 	}
 	LOG.warning("Texture file % could not be opened.", path.c_str());
 	return BogusTextureLoader().load("");

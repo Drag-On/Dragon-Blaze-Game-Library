@@ -62,9 +62,15 @@ namespace dbgl
 	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback);
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback);
 	    virtual TextureHandle texGenerate(TextureType type);
+	    virtual void texDelete(TextureHandle handle);
 	    virtual void texBind(TextureHandle handle);
-	    virtual void texWrite(unsigned int level, unsigned int width,
-		    unsigned int height, PixelFormat format, PixelType type, void* data);
+	    virtual void texWrite(unsigned int level, unsigned int width, unsigned int height,
+		    PixelFormat format, PixelType type, void* data);
+	    virtual void texSetRowAlignment(RowAlignment type, unsigned int align);
+	    virtual void texSetMinFilter(MinFilter filter);
+	    virtual void texSetMagFilter(MagFilter filter);
+	    virtual void texGenerateMipMaps();
+	    virtual void texGetSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
@@ -122,6 +128,9 @@ namespace dbgl
 	    static GLenum texType2GL(TextureType type);
 	    static GLint pixelFormat2GL(PixelFormat format);
 	    static GLenum pixelType2GL(PixelType type);
+	    static GLenum rowAlignment2GL(RowAlignment align);
+	    static GLenum minFilter2GL(MinFilter filter);
+	    static GLenum magFilter2GL(MagFilter filter);
     };
 }
 

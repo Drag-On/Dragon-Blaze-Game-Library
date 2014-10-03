@@ -504,9 +504,19 @@ namespace dbgl
 	return handle;
     }
 
+    void GLOpenGL33::texDelete(TextureHandle handle)
+    {
+	TextureHandleGL* hnd = dynamic_cast<TextureHandleGL*>(handle);
+	if(!hnd)
+	    throw("Invalid texture handle!");
+	glDeleteTextures(1, &(hnd->m_handle));
+    }
+
     void GLOpenGL33::texBind(TextureHandle handle)
     {
 	TextureHandleGL* hnd = dynamic_cast<TextureHandleGL*>(handle);
+	if(!hnd)
+	    throw("Invalid texture handle!");
 	glBindTexture(hnd->m_type, hnd->m_handle);
 	m_pBoundTexture = hnd;
     }
@@ -519,6 +529,43 @@ namespace dbgl
 	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
 	GLint formatgl = pixelFormat2GL(format);
 	glTexImage2D(m_pBoundTexture->m_type, level, intFormatgl, width, height, 0, formatgl, pixelType2GL(type), data);
+    }
+
+    void GLOpenGL33::texSetRowAlignment(RowAlignment type, unsigned int align)
+    {
+	glPixelStorei(rowAlignment2GL(type), align);
+    }
+
+    void GLOpenGL33::texSetMinFilter(MinFilter filter)
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	glTexParameteri(m_pBoundTexture->m_type, GL_TEXTURE_MIN_FILTER, minFilter2GL(filter));
+    }
+
+    void GLOpenGL33::texSetMagFilter(MagFilter filter)
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	glTexParameteri(m_pBoundTexture->m_type, GL_TEXTURE_MAG_FILTER, magFilter2GL(filter));
+    }
+
+    void GLOpenGL33::texGenerateMipMaps()
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	glGenerateMipmap(m_pBoundTexture->m_type);
+    }
+
+    void GLOpenGL33::texGetSize(unsigned int& width, unsigned int& height, unsigned int level)
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	GLint temp{};
+	glGetTexLevelParameteriv(m_pBoundTexture->m_type, level, GL_TEXTURE_WIDTH, &temp);
+	width = temp;
+	glGetTexLevelParameteriv(m_pBoundTexture->m_type, level, GL_TEXTURE_HEIGHT, &temp);
+	height = temp;
     }
 
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
@@ -642,6 +689,53 @@ namespace dbgl
 		return GL_UNSIGNED_INT;
 	    case PixelType::USHORT:
 		return GL_UNSIGNED_SHORT;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum GLOpenGL33::rowAlignment2GL(RowAlignment align)
+    {
+	switch (align)
+	{
+	    case RowAlignment::PACK:
+		return GL_PACK_ALIGNMENT;
+	    case RowAlignment::UNPACK:
+		return GL_UNPACK_ALIGNMENT;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum GLOpenGL33::minFilter2GL(MinFilter filter)
+    {
+	switch(filter)
+	{
+	    case MinFilter::LINEAR:
+		return GL_LINEAR;
+	    case MinFilter::LINEAR_MIPMAP_LINEAR:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	    case MinFilter::LINEAR_MIPMAP_NEAREST:
+		return GL_LINEAR_MIPMAP_NEAREST;
+	    case MinFilter::NEAREST:
+		return GL_NEAREST;
+	    case MinFilter::NEAREST_MIPMAP_LINEAR:
+		return GL_NEAREST_MIPMAP_LINEAR;
+	    case MinFilter::NEAREST_MIPMAP_NEAREST:
+		return GL_NEAREST_MIPMAP_NEAREST;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum GLOpenGL33::magFilter2GL(MagFilter filter)
+    {
+	switch(filter)
+	{
+	    case MagFilter::LINEAR:
+		return GL_LINEAR;
+	    case MagFilter::NEAREST:
+		return GL_NEAREST;
 	    default:
 		return GL_INVALID_ENUM;
 	}

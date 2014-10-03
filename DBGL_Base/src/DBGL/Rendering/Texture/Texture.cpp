@@ -12,25 +12,21 @@
 
 namespace dbgl
 {
-    Texture::Texture(GLuint texID)
+    Texture::Texture(IGL::TextureHandle handle)
     {
-	m_textureId = texID;
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
-	GLint temp;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &temp);
-	m_width = temp;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &temp);
-	m_height = temp;
+	m_handle = handle;
+	GLProvider::get()->texBind(handle);
+	GLProvider::get()->texGetSize(m_width, m_height);
     }
 
     Texture::~Texture()
     {
-	glDeleteTextures(1, &m_textureId);
+	GLProvider::get()->texDelete(m_handle);
     }
 
     GLuint Texture::getHandle() const
     {
-	return m_textureId;
+	return m_handle->m_handle; // TODO: Remove
     }
 
     unsigned int Texture::getWidth() const

@@ -15,10 +15,12 @@ namespace dbgl
     Texture* BogusTextureLoader::load(std::string /* path */, Bitmask<> /* flags */, TextureLoader::Filtering /* filtering */)
     {
 	GLuint texID;
-	glGenTextures(1, &texID);
+	auto handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
+//	glGenTextures(1, &texId);
+	texID = handle->m_handle; // TODO: DEBUG
 	glBindTexture(GL_TEXTURE_2D, texID);
 	unsigned char data[3] = { 255, 255, 255 };
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_BGR, GL_UNSIGNED_BYTE, &data);
-	return new Texture(texID);
+	return new Texture(handle);
     }
 }

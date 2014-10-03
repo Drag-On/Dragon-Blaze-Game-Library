@@ -198,7 +198,9 @@ namespace dbgl
 
 	// Create texture
 	GLuint texId = GL_INVALID_VALUE;
-	glGenTextures(1, &texId);
+	auto handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
+//	glGenTextures(1, &texId);
+	texId = handle->m_handle; // TODO: DEBUG
 	glBindTexture(GL_TEXTURE_2D, texId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -222,7 +224,7 @@ namespace dbgl
 		LOG.error("BFF2 Bitmap font corrupt.");
 		break;
 	}
-	m_pTexture = new Texture {texId};
+	m_pTexture = new Texture {handle};
 	m_pSprite = new Sprite {m_pTexture};
 	m_pSprite->setFlipY(true);
 

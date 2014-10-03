@@ -17,6 +17,7 @@
 #include <utility>
 #include <GL/glew.h>
 #include "DBGL/System/Log/Log.h"
+#include "DBGL/Platform/GL/GLProvider.h"
 #include "TextureLoader.h"
 #include "BogusTextureLoader.h"
 #include "DDSTextureLoader.h"
@@ -50,11 +51,10 @@ namespace dbgl
 	    static const int FlipHorizontally = 1 << 1;
 
 	    /**
-	     * @brief Creates a texture object from an already allocated OpenGL texture
-	     * @param texID ID of the allocated texture
-	     * @details Use the appropriate static load methods to load a texture from disk!
+	     * @brief Creates a texture object from an already allocated texture
+	     * @param handle Handle of the texture
 	     */
-	    Texture(GLuint texID);
+	    Texture(IGL::TextureHandle handle);
 	    /**
 	     * @brief Clean up used memory
 	     */
@@ -98,7 +98,7 @@ namespace dbgl
 	    /**
 	     * @brief GL texture handle
 	     */
-	    GLuint m_textureId;
+	    IGL::TextureHandle m_handle;
 	    unsigned int m_width;
 	    unsigned int m_height;
     };

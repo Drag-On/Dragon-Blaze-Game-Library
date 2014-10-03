@@ -127,6 +127,34 @@ namespace dbgl
 		INT,   //!< INT
 		FLOAT, //!< FLOAT
 	    };
+	    /**
+	     * @brief Lists all supported row alignment types
+	     */
+	    enum class RowAlignment : char
+	    {
+		PACK,  //!< PACK
+		UNPACK,//!< UNPACK
+	    };
+	    /**
+	     * @brief Lists all supported minifying filters
+	     */
+	    enum class MinFilter : char
+	    {
+		NEAREST,               //!< NEAREST
+		LINEAR,                //!< LINEAR
+		NEAREST_MIPMAP_NEAREST,//!< NEAREST_MIPMAP_NEAREST
+		NEAREST_MIPMAP_LINEAR, //!< NEAREST_MIPMAP_LINEAR
+		LINEAR_MIPMAP_NEAREST, //!< LINEAR_MIPMAP_NEAREST
+		LINEAR_MIPMAP_LINEAR,  //!< LINEAR_MIPMAP_LINEAR
+	    };
+	    /**
+	     * @brief Lists all supported magnifying filters
+	     */
+	    enum class MagFilter : char
+	    {
+		NEAREST,//!< NEAREST
+		LINEAR, //!< LINEAR
+	    };
 
 	    /**
 	     * @brief Virtual destructor
@@ -361,6 +389,11 @@ namespace dbgl
 	     */
 	    virtual TextureHandle texGenerate(TextureType type) = 0;
 	    /**
+	     * @brief Deletes a texture
+	     * @param handle Handle of the texture
+	     */
+	    virtual void texDelete(TextureHandle handle) = 0;
+	    /**
 	     * @brief Bind a texture
 	     * @param handle Texture to bind
 	     */
@@ -376,6 +409,34 @@ namespace dbgl
 	     */
 	    virtual void texWrite(unsigned int level, unsigned int width,
 		    unsigned int height, PixelFormat format, PixelType type, void* data) = 0;
+	    /**
+	     * @brief Modifies the row alignment used when transfering image data
+	     * @param type Alignment type
+	     * @param align Alignment to set
+	     */
+	    virtual void texSetRowAlignment(RowAlignment type, unsigned int align) = 0;
+	    /**
+	     * @brief Sets the filter used to minify the currently bound texture
+	     * @param filter New filter
+	     */
+	    virtual void texSetMinFilter(MinFilter filter) = 0;
+	    /**
+	     * @brief Sets the filter used to magnify the currently bound texture
+	     * @param filter New filter
+	     */
+	    virtual void texSetMagFilter(MagFilter filter) = 0;
+	    /**
+	     * @brief Generates mip maps for the currently bound texture.
+	     * @details Overwrites any previously set mip maps
+	     */
+	    virtual void texGenerateMipMaps() = 0;
+	    /**
+	     * @brief Retrieves the size of the currently bound texture (or a mip map of this texture)
+	     * @param[out] width Texture width will be copied here
+	     * @param[out] height Texture height will be copied here
+	     * @param level Mip level, defaults to 0
+	     */
+	    virtual void texGetSize(unsigned int& width, unsigned int& height, unsigned int level = 0) = 0;
 
 	protected:
 	    /**
