@@ -94,14 +94,20 @@ namespace dbgl
 	}
 
 	// Create OpenGL texture
-	glGenTextures(1, &texID);
+	auto handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
+//	glGenTextures(1, &texID);
+	texID = handle->m_handle; // TODO DEBUG
 	// Bind texture
-	glBindTexture(GL_TEXTURE_2D, texID);
+	GLProvider::get()->texBind(handle);
+//	glBindTexture(GL_TEXTURE_2D, texID);
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	GLint intFormat = colorMode == 3 ? GL_RGB : GL_RGBA;
-	GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;
-	glTexImage2D(GL_TEXTURE_2D, 0, intFormat, width, height, 0, format,
-	GL_UNSIGNED_BYTE, image);
+//	GLint intFormat = colorMode == 3 ? GL_RGB : GL_RGBA;
+//	GLint format = colorMode == 3 ? GL_BGR_EXT : GL_BGRA_EXT;
+	auto format = colorMode == 3 ? IGL::PixelFormat::BGR : IGL::PixelFormat::BGRA;
+	GLProvider::get()->texWrite(0, width, height, format, IGL::PixelType::UBYTE, image);
+//	glTexImage2D(GL_TEXTURE_2D, 0, intFormat, width, height, 0, format,
+//	GL_UNSIGNED_BYTE, image);
 	// Select filtering algorithm
 	GLint filterMag = GL_NEAREST;
 	GLint filterMin = GL_NEAREST_MIPMAP_NEAREST;

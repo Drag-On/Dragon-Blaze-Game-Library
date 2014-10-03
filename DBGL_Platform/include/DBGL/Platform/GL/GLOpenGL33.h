@@ -61,6 +61,10 @@ namespace dbgl
 	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback);
 	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback);
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback);
+	    virtual TextureHandle texGenerate(TextureType type);
+	    virtual void texBind(TextureHandle handle);
+	    virtual void texWrite(unsigned int level, unsigned int width,
+		    unsigned int height, PixelFormat format, PixelType type, void* data);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
@@ -103,6 +107,21 @@ namespace dbgl
 	    static std::unordered_map<WindowHandle, WndCursorPositionCallback> s_cursorPositionCallbacks;
 	    static std::unordered_map<WindowHandle, WndScrollCallback> s_scrollCallbacks;
 	    static std::unordered_map<WindowHandle, WndInputCallback> s_inputCallbacks;
+
+	    struct TextureHandleGL : public TextureHandleInternal
+	    {
+		private:
+//		    GLuint m_handle;
+		    GLenum m_type;
+
+		    friend class GLOpenGL33;
+	    };
+
+	    TextureHandleGL* m_pBoundTexture = nullptr;
+
+	    static GLenum texType2GL(TextureType type);
+	    static GLint pixelFormat2GL(PixelFormat format);
+	    static GLenum pixelType2GL(PixelType type);
     };
 }
 

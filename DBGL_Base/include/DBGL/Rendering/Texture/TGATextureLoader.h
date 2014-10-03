@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include "Texture.h"
+#include "DBGL/Platform/GL/GLProvider.h"
 
 namespace dbgl
 {

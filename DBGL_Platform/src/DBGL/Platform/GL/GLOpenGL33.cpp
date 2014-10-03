@@ -491,6 +491,36 @@ namespace dbgl
 	callback(wndHandle, inputKey, input);
     }
 
+    auto GLOpenGL33::texGenerate(TextureType type) -> TextureHandle
+    {
+	TextureHandleGL* handle = new TextureHandleGL{};
+	glGenTextures(1, &(handle->m_handle));
+	if(handle->m_handle == 0)
+	{
+	    delete handle;
+	    return nullptr;
+	}
+	handle->m_type = texType2GL(type);
+	return handle;
+    }
+
+    void GLOpenGL33::texBind(TextureHandle handle)
+    {
+	TextureHandleGL* hnd = dynamic_cast<TextureHandleGL*>(handle);
+	glBindTexture(hnd->m_type, hnd->m_handle);
+	m_pBoundTexture = hnd;
+    }
+
+    void GLOpenGL33::texWrite(unsigned int level, unsigned int width, unsigned int height, PixelFormat format,
+	    PixelType type, void* data)
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
+	GLint formatgl = pixelFormat2GL(format);
+	glTexImage2D(m_pBoundTexture->m_type, level, intFormatgl, width, height, 0, formatgl, pixelType2GL(type), data);
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try
@@ -563,6 +593,57 @@ namespace dbgl
 		return Input::Modifier::KEY_SUPER;
 	    default:
 		return Input::Modifier::NONE;
+	}
+    }
+
+    GLenum GLOpenGL33::texType2GL(TextureType type)
+    {
+	switch(type)
+	{
+	    case TextureType::TEX2D:
+		return GL_TEXTURE_2D;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLint GLOpenGL33::pixelFormat2GL(PixelFormat format)
+    {
+	switch(format)
+	{
+	    case PixelFormat::BGR:
+		return GL_BGR;
+	    case PixelFormat::BGRA:
+		return GL_BGRA;
+	    case PixelFormat::RGB:
+		return GL_RGB;
+	    case PixelFormat::RGBA:
+		return GL_RGBA;
+	    default:
+		return -1;
+	}
+    }
+
+    GLenum GLOpenGL33::pixelType2GL(PixelType type)
+    {
+	switch(type)
+	{
+	    case PixelType::BYTE:
+		return GL_BYTE;
+	    case PixelType::FLOAT:
+		return GL_FLOAT;
+	    case PixelType::INT:
+		return GL_INT;
+	    case PixelType::SHORT:
+		return GL_SHORT;
+	    case PixelType::UBYTE:
+		return GL_UNSIGNED_BYTE;
+	    case PixelType::UINT:
+		return GL_UNSIGNED_INT;
+	    case PixelType::USHORT:
+		return GL_UNSIGNED_SHORT;
+	    default:
+		return GL_INVALID_ENUM;
 	}
     }
 }

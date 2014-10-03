@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include <GL/glew.h> // TODO: DEBUG!
 #include "HandleGenerator.h"
 #include "Input.h"
 
@@ -76,6 +77,56 @@ namespace dbgl
 	     * @brief Function type for general input callback
 	     */
 	    using WndInputCallback = std::function<void(WindowHandle,Input::Key,Input const&)>;
+
+	protected:
+	    /**
+	     * @brief Base struct for texture handles
+	     */
+	    struct TextureHandleInternal
+	    {
+		public:
+		    virtual ~TextureHandleInternal() = default;
+		    GLuint m_handle; // TODO: DEBUG!
+	    };
+	public:
+	    /**
+	     * @brief Type of handles used for textures
+	     */
+	    using TextureHandle = TextureHandleInternal*;
+	    /**
+	     * @brief Constant for invalid window handles
+	     */
+	    static constexpr TextureHandle InvalidTextureHandle = nullptr;
+	    /**
+	     * @brief Lists all supported texture types
+	     */
+	    enum class TextureType : char
+	    {
+		TEX2D,//!< TEX2D
+	    };
+	    /**
+	     * @brief Lists all supported pixel formats
+	     */
+	    enum class PixelFormat : char
+	    {
+		RGB, //!< RGB
+		BGR, //!< BGR
+		RGBA,//!< RGBA
+		BGRA,//!< BGRA
+	    };
+	    /**
+	     * @brief Lists all supported pixel types
+	     */
+	    enum class PixelType : char
+	    {
+		UBYTE, //!< UBYTE
+		BYTE,  //!< BYTE
+		USHORT,//!< USHORT
+		SHORT, //!< SHORT
+		UINT,  //!< UINT
+		INT,   //!< INT
+		FLOAT, //!< FLOAT
+	    };
 
 	    /**
 	     * @brief Virtual destructor
@@ -303,9 +354,40 @@ namespace dbgl
 	     * @param callback Callback function
 	     */
 	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback) = 0;
+	    /**
+	     * @brief Generates a new texture
+	     * @param type Type of texture to generate
+	     * @return Handle of the generated texture
+	     */
+	    virtual TextureHandle texGenerate(TextureType type) = 0;
+	    /**
+	     * @brief Bind a texture
+	     * @param handle Texture to bind
+	     */
+	    virtual void texBind(TextureHandle handle) = 0;
+	    /**
+	     * @brief Fills the currently bound, previously generated texture buffer
+	     * @param level MipMap level to write
+	     * @param width Image width
+	     * @param height Image height
+	     * @param format Pixel format
+	     * @param type Pixel type
+	     * @param data Pointer to image data
+	     */
+	    virtual void texWrite(unsigned int level, unsigned int width,
+		    unsigned int height, PixelFormat format, PixelType type, void* data) = 0;
 
 	protected:
+	    /**
+	     * @brief Constructor
+	     */
 	    IGL();
+	    /**
+	     * @brief Checks if a pixel format supports alpha values
+	     * @param format Format to check
+	     * @return True in case alpha is supported, otherwise false
+	     */
+	    bool hasAlpha(PixelFormat format);
 	private:
 	    IGL(IGL const&); // Disallow copying
 	    IGL& operator=(IGL const& other);

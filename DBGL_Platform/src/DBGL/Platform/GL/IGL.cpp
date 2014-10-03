@@ -19,4 +19,9 @@ namespace dbgl
 	    throw("Can't have more than one graphics layer.");
 	initialized = true;
     }
+
+    bool IGL::hasAlpha(PixelFormat format)
+    {
+	return format == PixelFormat::BGRA || format == PixelFormat::RGBA;
+    }
 }
