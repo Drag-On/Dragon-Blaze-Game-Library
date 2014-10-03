@@ -66,6 +66,8 @@ namespace dbgl
 	    virtual void texBind(TextureHandle handle);
 	    virtual void texWrite(unsigned int level, unsigned int width, unsigned int height,
 		    PixelFormat format, PixelType type, void* data);
+	    virtual void texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
+		    PixelFormatCompressed format, unsigned int size, void* data);
 	    virtual void texSetRowAlignment(RowAlignment type, unsigned int align);
 	    virtual void texSetMinFilter(MinFilter filter);
 	    virtual void texSetMagFilter(MagFilter filter);
@@ -131,6 +133,7 @@ namespace dbgl
 	    static GLenum rowAlignment2GL(RowAlignment align);
 	    static GLenum minFilter2GL(MinFilter filter);
 	    static GLenum magFilter2GL(MagFilter filter);
+	    static GLenum compPixelFormat2GL(PixelFormatCompressed format);
     };
 }
 

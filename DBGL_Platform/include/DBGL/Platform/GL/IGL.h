@@ -105,14 +105,23 @@ namespace dbgl
 		TEX2D,//!< TEX2D
 	    };
 	    /**
-	     * @brief Lists all supported pixel formats
+	     * @brief Lists all supported uncompressed pixel formats
 	     */
 	    enum class PixelFormat : char
 	    {
-		RGB, //!< RGB
-		BGR, //!< BGR
-		RGBA,//!< RGBA
-		BGRA,//!< BGRA
+		RGB, 	  //!< RGB
+		BGR, 	  //!< BGR
+		RGBA,	  //!< RGBA
+		BGRA,	  //!< BGRA
+	    };
+	    /**
+	     * @brief Lists all supported compressed pixel formats
+	     */
+	    enum class PixelFormatCompressed : char
+	    {
+		COMP_DXT1,//!< COMP_DXT1
+		COMP_DXT3,//!< COMP_DXT3
+		COMP_DXT5,//!< COMP_DXT5
 	    };
 	    /**
 	     * @brief Lists all supported pixel types
@@ -409,6 +418,17 @@ namespace dbgl
 	     */
 	    virtual void texWrite(unsigned int level, unsigned int width,
 		    unsigned int height, PixelFormat format, PixelType type, void* data) = 0;
+	    /**
+	     * @brief Fills the currently bound, previously generated texture buffer with compressed data
+	     * @param level Mip map level to write
+	     * @param width Image width
+	     * @param height Image height
+	     * @param format Compressed pixel format
+	     * @param size Size of the passed image data
+	     * @param data Pointer to image data
+	     */
+	    virtual void texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
+		    PixelFormatCompressed format, unsigned int size, void* data) = 0;
 	    /**
 	     * @brief Modifies the row alignment used when transfering image data
 	     * @param type Alignment type

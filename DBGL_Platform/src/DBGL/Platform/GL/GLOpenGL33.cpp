@@ -528,7 +528,17 @@ namespace dbgl
 	    throw("No texture bound.");
 	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
 	GLint formatgl = pixelFormat2GL(format);
-	glTexImage2D(m_pBoundTexture->m_type, level, intFormatgl, width, height, 0, formatgl, pixelType2GL(type), data);
+	glTexImage2D(m_pBoundTexture->m_type, level, intFormatgl, width, height, 0, formatgl,
+		pixelType2GL(type), data);
+    }
+
+    void GLOpenGL33::texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
+    		    PixelFormatCompressed format, unsigned int size, void* data)
+    {
+	if(m_pBoundTexture == nullptr)
+	    throw("No texture bound.");
+	auto glFormat = compPixelFormat2GL(format);
+	glCompressedTexImage2D(m_pBoundTexture->m_type, level, glFormat, width, height, 0, size, data);
     }
 
     void GLOpenGL33::texSetRowAlignment(RowAlignment type, unsigned int align)
@@ -736,6 +746,21 @@ namespace dbgl
 		return GL_LINEAR;
 	    case MagFilter::NEAREST:
 		return GL_NEAREST;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum GLOpenGL33::compPixelFormat2GL(PixelFormatCompressed format)
+    {
+	switch(format)
+	{
+	    case PixelFormatCompressed::COMP_DXT1:
+		return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+	    case PixelFormatCompressed::COMP_DXT3:
+		return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+	    case PixelFormatCompressed::COMP_DXT5:
+		return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 	    default:
 		return GL_INVALID_ENUM;
 	}

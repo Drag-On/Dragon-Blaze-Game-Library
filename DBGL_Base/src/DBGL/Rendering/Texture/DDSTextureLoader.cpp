@@ -14,8 +14,7 @@ namespace dbgl
 {
     Texture* DDSTextureLoader::load(std::string path, Bitmask<> flags, TextureLoader::Filtering filtering)
     {
-	GLuint texID;
-	IGL::TextureHandle handle;
+	IGL::TextureHandle handle = IGL::InvalidTextureHandle;
 	// Read file
 	std::ifstream file;
 	file.open(path.c_str(), std::ios::in | std::ios::binary);
@@ -48,17 +47,17 @@ namespace dbgl
 		// Close file
 		file.close();
 		// Analyze data
-		unsigned int format;
+		IGL::PixelFormatCompressed format;
 		switch (fourCC)
 		{
 		    case FOURCC_DXT1:
-			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			format = IGL::PixelFormatCompressed::COMP_DXT1;
 			break;
 		    case FOURCC_DXT3:
-			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+			format = IGL::PixelFormatCompressed::COMP_DXT3;
 			break;
 		    case FOURCC_DXT5:
-			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			format = IGL::PixelFormatCompressed::COMP_DXT5;
 			break;
 		    default:
 			LOG.warning("File % is not DXT1-, DXT3- or DXT5-compressed", path.c_str());
@@ -68,13 +67,11 @@ namespace dbgl
 		}
 		// Create OpenGL texture
 		handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
-	//	glGenTextures(1, &texId);
-		texID = handle->m_handle; // TODO: DEBUG
 		// Bind texture
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		unsigned int offset = 0;
-		unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+		GLProvider::get()->texBind(handle);
+		GLProvider::get()->texSetRowAlignment(IGL::RowAlignment::UNPACK, 1); // TODO: Check if always 1?
+		unsigned int offset { 0 };
+		unsigned int blockSize{ (format == IGL::PixelFormatCompressed::COMP_DXT1) ? 8 : 16 };
 		// Load mipmaps
 		for (unsigned int level = 0;
 			level < mipMapCount && (width || height); ++level)
@@ -85,9 +82,8 @@ namespace dbgl
 			ddsFlipVertically(buffer, offset, width, height, blockSize, fourCC);
 		    }
 		    // Send compressed image to GL
-		    unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
-		    glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width,
-			    height, 0, size, buffer + offset);
+		    unsigned int size { ((width + 3) / 4) * ((height + 3) / 4) * blockSize };
+		    GLProvider::get()->texWriteCompressed(level, width, height, format, size, buffer + offset);
 		    // Prepare for next mipmap
 		    offset += size;
 		    width /= 2;
@@ -100,24 +96,24 @@ namespace dbgl
 			height = 1;
 		}
 		// Select filtering algorithm
-		GLint filterMag = GL_NEAREST;
-		GLint filterMin = GL_NEAREST_MIPMAP_NEAREST;
+		IGL::MagFilter filterMag = IGL::MagFilter::NEAREST;
+		IGL::MinFilter filterMin = IGL::MinFilter::NEAREST_MIPMAP_NEAREST;
 		switch(filtering)
 		{
 		    case TextureLoader::Filtering::LINEAR:
-			filterMag = GL_LINEAR;
-			filterMin = GL_LINEAR_MIPMAP_LINEAR;
+			filterMag = IGL::MagFilter::LINEAR;
+			filterMin = IGL::MinFilter::LINEAR_MIPMAP_LINEAR;
 			break;
 		    default:
 			break;
 		}
-		// Linear filtering when magnifying
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag);
-		// Linear blending when minifying
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMin);
+		// Set filtering when magnifying
+		GLProvider::get()->texSetMagFilter(filterMag);
+		// Set filtering when minifying
+		GLProvider::get()->texSetMinFilter(filterMin);
 		// In case the file doesn't have mipmaps generate some
 		if(mipMapCount == 1)
-		    glGenerateMipmap(GL_TEXTURE_2D);
+		    GLProvider::get()->texGenerateMipMaps();
 		delete[] buffer;
 	    }
 	    return new Texture(handle);
