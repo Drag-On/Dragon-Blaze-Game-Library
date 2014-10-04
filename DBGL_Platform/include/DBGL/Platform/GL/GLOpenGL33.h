@@ -65,9 +65,9 @@ namespace dbgl
 	    virtual void texDelete(TextureHandle handle);
 	    virtual void texBind(TextureHandle handle);
 	    virtual void texWrite(unsigned int level, unsigned int width, unsigned int height,
-		    PixelFormat format, PixelType type, void* data);
+		    PixelFormat format, PixelType type, void const* data);
 	    virtual void texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
-		    PixelFormatCompressed format, unsigned int size, void* data);
+		    PixelFormatCompressed format, unsigned int size, void const* data);
 	    virtual void texSetRowAlignment(RowAlignment type, unsigned int align);
 	    virtual void texSetMinFilter(MinFilter filter);
 	    virtual void texSetMagFilter(MagFilter filter);

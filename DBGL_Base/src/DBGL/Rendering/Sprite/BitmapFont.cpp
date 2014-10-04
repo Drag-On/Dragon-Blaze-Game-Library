@@ -197,27 +197,27 @@ namespace dbgl
 	}
 
 	// Create texture
-	GLuint texId = GL_INVALID_VALUE;
 	auto handle = GLProvider::get()->texGenerate(IGL::TextureType::TEX2D);
-//	glGenTextures(1, &texId);
-	texId = handle->m_handle; // TODO: DEBUG
-	glBindTexture(GL_TEXTURE_2D, texId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	GLProvider::get()->texBind(handle);
+	GLProvider::get()->texSetMinFilter(IGL::MinFilter::NEAREST);
+	GLProvider::get()->texSetMagFilter(IGL::MagFilter::NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	// Tex creation params are dependent on BPP
 	switch (m_header.bpp)
 	{
 	    case 8:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_header.imgWidth, m_header.imgHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, img);
+		GLProvider::get()->texWrite(0, m_header.imgWidth, m_header.imgHeight,
+			IGL::PixelFormat::LUMINANCE, IGL::PixelType::UBYTE, img);
 		break;
 	    case 24:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_header.imgWidth, m_header.imgHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+		GLProvider::get()->texWrite(0, m_header.imgWidth, m_header.imgHeight, IGL::PixelFormat::RGB,
+			IGL::PixelType::UBYTE, img);
 		break;
 	    case 32:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_header.imgWidth, m_header.imgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+		GLProvider::get()->texWrite(0, m_header.imgWidth, m_header.imgHeight, IGL::PixelFormat::RGBA,
+			IGL::PixelType::UBYTE, img);
 		break;
 	    default:
 		// Should never get here

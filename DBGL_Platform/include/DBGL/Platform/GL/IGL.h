@@ -113,6 +113,7 @@ namespace dbgl
 		BGR, 	  //!< BGR
 		RGBA,	  //!< RGBA
 		BGRA,	  //!< BGRA
+		LUMINANCE,//!< LUMINANCE
 	    };
 	    /**
 	     * @brief Lists all supported compressed pixel formats
@@ -417,7 +418,7 @@ namespace dbgl
 	     * @param data Pointer to image data
 	     */
 	    virtual void texWrite(unsigned int level, unsigned int width,
-		    unsigned int height, PixelFormat format, PixelType type, void* data) = 0;
+		    unsigned int height, PixelFormat format, PixelType type, void const* data) = 0;
 	    /**
 	     * @brief Fills the currently bound, previously generated texture buffer with compressed data
 	     * @param level Mip map level to write
@@ -428,7 +429,7 @@ namespace dbgl
 	     * @param data Pointer to image data
 	     */
 	    virtual void texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
-		    PixelFormatCompressed format, unsigned int size, void* data) = 0;
+		    PixelFormatCompressed format, unsigned int size, void const* data) = 0;
 	    /**
 	     * @brief Modifies the row alignment used when transfering image data
 	     * @param type Alignment type

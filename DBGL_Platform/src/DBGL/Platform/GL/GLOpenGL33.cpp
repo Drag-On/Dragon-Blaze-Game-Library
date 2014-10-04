@@ -522,7 +522,7 @@ namespace dbgl
     }
 
     void GLOpenGL33::texWrite(unsigned int level, unsigned int width, unsigned int height, PixelFormat format,
-	    PixelType type, void* data)
+	    PixelType type, void const* data)
     {
 	if(m_pBoundTexture == nullptr)
 	    throw("No texture bound.");
@@ -533,7 +533,7 @@ namespace dbgl
     }
 
     void GLOpenGL33::texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
-    		    PixelFormatCompressed format, unsigned int size, void* data)
+    		    PixelFormatCompressed format, unsigned int size, void const* data)
     {
 	if(m_pBoundTexture == nullptr)
 	    throw("No texture bound.");
@@ -676,6 +676,8 @@ namespace dbgl
 		return GL_RGB;
 	    case PixelFormat::RGBA:
 		return GL_RGBA;
+	    case PixelFormat::LUMINANCE:
+		return GL_LUMINANCE;
 	    default:
 		return -1;
 	}
