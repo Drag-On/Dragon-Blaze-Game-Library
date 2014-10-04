@@ -579,6 +579,104 @@ namespace dbgl
 	height = temp;
     }
 
+    auto GLOpenGL33::shaCreate(ShaderType type, std::string src) -> ShaderHandle
+    {
+	if (src.length() == 0)
+	    throw CompileException("Can't compile shader without code.");
+
+	// Create shader object
+	GLuint id = glCreateShader(shaderType2GL(type));
+
+	// Compile
+	const char* codePtr = src.c_str();
+	glShaderSource(id, 1, &codePtr, nullptr);
+	glCompileShader(id);
+
+	// Check if everything went right
+	GLint result = GL_FALSE;
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+	if(result == GL_FALSE)
+	{
+	    // Generate log
+	    GLint logLength = 0;
+	    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
+	    if (logLength > 0)
+	    {
+		char* msg = new char[logLength] {};
+		glGetShaderInfoLog(id, logLength, nullptr, msg);
+		std::string message{msg};
+		delete[] msg;
+		throw CompileException(message);
+	    }
+	}
+	ShaderHandleGL* handle = new ShaderHandleGL{};
+	handle->m_handle = id;
+	return handle;
+    }
+
+    void GLOpenGL33::shaDelete(ShaderHandle handle)
+    {
+	ShaderHandleGL* hnd = dynamic_cast<ShaderHandleGL*>(handle);
+	if(!hnd)
+	    throw("Invalid shader handle!");
+	glDeleteShader(hnd->m_handle);
+	delete hnd;
+    }
+
+    auto GLOpenGL33::shaCreateProgram() -> ShaderProgramHandle
+    {
+	GLuint id = glCreateProgram();
+	if(id == 0)
+	    throw std::runtime_error("Couldn't create shader program");
+	ShaderProgramHandleGL* handle = new ShaderProgramHandleGL{};
+	handle->m_handle = id;
+	return handle;
+    }
+
+    void GLOpenGL33::shaDeleteProgram(ShaderProgramHandle handle)
+    {
+	ShaderProgramHandleGL* hnd = dynamic_cast<ShaderProgramHandleGL*>(handle);
+	if(!hnd)
+	    throw("Invalid shader program handle!");
+	glDeleteProgram(hnd->m_handle);
+	delete hnd;
+    }
+
+    void GLOpenGL33::shaAttachShader(ShaderProgramHandle program, ShaderHandle shader)
+    {
+	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
+	if(!prog)
+	    throw("Invalid shader program handle!");
+	ShaderHandleGL* sha = dynamic_cast<ShaderHandleGL*>(shader);
+	if(!sha)
+	    throw("Invalid shader handle!");
+	glAttachShader(prog->m_handle, sha->m_handle);
+    }
+
+    void GLOpenGL33::shaLinkProgram(ShaderProgramHandle program)
+    {
+	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
+	if(!prog)
+	    throw("Invalid shader program handle!");
+	GLint linkOk = GL_FALSE;
+	glLinkProgram(prog->m_handle);
+	glGetProgramiv(prog->m_handle, GL_LINK_STATUS, &linkOk);
+	if (!linkOk)
+	{
+	    // Generate log
+	    GLint logLength = 0;
+	    glGetProgramiv(prog->m_handle, GL_INFO_LOG_LENGTH, &logLength);
+	    if (logLength > 0)
+	    {
+		char* msg = new char[logLength] {};
+		glGetProgramInfoLog(prog->m_handle, logLength, nullptr, msg);
+		std::string message { msg };
+		delete[] msg;
+		throw LinkException(message);
+	    }
+	}
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try
@@ -764,6 +862,23 @@ namespace dbgl
 		return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
 	    case PixelFormatCompressed::COMP_DXT5:
 		return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum GLOpenGL33::shaderType2GL(ShaderType type)
+    {
+	switch(type)
+	{
+	    case ShaderType::COMPUTE:
+		return GL_COMPUTE_SHADER;
+	    case ShaderType::FRAGMENT:
+		return GL_FRAGMENT_SHADER;
+	    case ShaderType::GEOMETRY:
+		return GL_GEOMETRY_SHADER;
+	    case ShaderType::VERTEX:
+		return GL_VERTEX_SHADER;
 	    default:
 		return GL_INVALID_ENUM;
 	}

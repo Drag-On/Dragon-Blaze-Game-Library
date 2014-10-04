@@ -15,6 +15,8 @@
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 #include "IGL.h"
+#include "Exception/CompileException.h"
+#include "Exception/LinkException.h"
 
 namespace dbgl
 {
@@ -73,6 +75,12 @@ namespace dbgl
 	    virtual void texSetMagFilter(MagFilter filter);
 	    virtual void texGenerateMipMaps();
 	    virtual void texGetSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
+	    virtual ShaderHandle shaCreate(ShaderType type, std::string src);
+	    virtual void shaDelete(ShaderHandle handle);
+	    virtual ShaderProgramHandle shaCreateProgram();
+	    virtual void shaDeleteProgram(ShaderProgramHandle handle);
+	    virtual void shaAttachShader(ShaderProgramHandle program, ShaderHandle shader);
+	    virtual void shaLinkProgram(ShaderProgramHandle program);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
@@ -134,6 +142,23 @@ namespace dbgl
 	    static GLenum minFilter2GL(MinFilter filter);
 	    static GLenum magFilter2GL(MagFilter filter);
 	    static GLenum compPixelFormat2GL(PixelFormatCompressed format);
+
+	    struct ShaderHandleGL : public ShaderHandleInternal
+	    {
+		private:
+//		    GLuint m_handle;
+
+		    friend class GLOpenGL33;
+	    };
+	    struct ShaderProgramHandleGL : public ShaderProgramHandleInternal
+	    {
+		private:
+//		    GLuint m_handle;
+
+		    friend class GLOpenGL33;
+	    };
+
+	    static GLenum shaderType2GL(ShaderType type);
     };
 }
 

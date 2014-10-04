@@ -166,6 +166,54 @@ namespace dbgl
 		LINEAR, //!< LINEAR
 	    };
 
+	protected:
+	    /**
+	     * @brief Base struct for shader handles
+	     */
+	    struct ShaderHandleInternal
+	    {
+		public:
+		    virtual ~ShaderHandleInternal() = default;
+		    GLuint m_handle; // TODO: DEBUG!
+	    };
+	    /**
+	     * @brief Base struct for shader program handles
+	     */
+	    struct ShaderProgramHandleInternal
+	    {
+		public:
+		    virtual ~ShaderProgramHandleInternal() = default;
+		    GLuint m_handle; // TODO: DEBUG!
+	    };
+	public:
+	    /**
+	     * @brief Type of handles used for textures
+	     */
+	    using ShaderHandle = ShaderHandleInternal*;
+	    /**
+	     * @brief Constant for invalid window handles
+	     */
+	    static constexpr ShaderHandle InvalidShaderHandle = nullptr;
+	    /**
+	     * @brief Type of handles used for textures
+	     */
+	    using ShaderProgramHandle = ShaderProgramHandleInternal*;
+	    /**
+	     * @brief Constant for invalid window handles
+	     */
+	    static constexpr ShaderProgramHandle InvalidShaderProgramHandle = nullptr;
+	    /**
+	     * @brief Lists all supported shader types
+	     */
+	    enum class ShaderType : char
+	    {
+		VERTEX,  //!< VERTEX
+		FRAGMENT,//!< FRAGMENT
+		GEOMETRY,//!< GEOMETRY
+		COMPUTE, //!< COMPUTE
+	    };
+
+
 	    /**
 	     * @brief Virtual destructor
 	     */
@@ -458,6 +506,42 @@ namespace dbgl
 	     * @param level Mip level, defaults to 0
 	     */
 	    virtual void texGetSize(unsigned int& width, unsigned int& height, unsigned int level = 0) = 0;
+	    /**
+	     * @brief Creates a new shader of a certain type and compiles it
+	     * @param type Type of shader to generate
+	     * @param src Source code to compile
+	     * @return Handle of the new shader
+	     * @throws CompileException if compilation went wrong
+	     */
+	    virtual ShaderHandle shaCreate(ShaderType type, std::string src) = 0;
+	    /**
+	     * @brief Deletes a previously created shader
+	     * @param handle Handle of the shader to delete
+	     */
+	    virtual void shaDelete(ShaderHandle handle) = 0;
+	    /**
+	     * @brief Creates a shader program
+	     * @return Handle of the new shader program
+	     * @throws std::runtime_error if unable to create
+	     */
+	    virtual ShaderProgramHandle shaCreateProgram() = 0;
+	    /**
+	     * @brief Deletes a previously created shader program
+	     * @param handle Handle of the program to delete
+	     */
+	    virtual void shaDeleteProgram(ShaderProgramHandle handle) = 0;
+	    /**
+	     * @brief Attaches a shader to a shader program
+	     * @param program Program to attach to
+	     * @param shader Shader to attach to \p program
+	     */
+	    virtual void shaAttachShader(ShaderProgramHandle program, ShaderHandle shader) = 0;
+	    /**
+	     * @brief Links all the shaders, that have been attached to a program, together
+	     * @param program Program to link
+	     * @throws LinkException if linking went wrong
+	     */
+	    virtual void shaLinkProgram(ShaderProgramHandle program) = 0;
 
 	protected:
 	    /**
