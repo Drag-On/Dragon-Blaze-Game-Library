@@ -510,6 +510,7 @@ namespace dbgl
 	if(!hnd)
 	    throw("Invalid texture handle!");
 	glDeleteTextures(1, &(hnd->m_handle));
+	delete hnd;
     }
 
     void GLOpenGL33::texBind(TextureHandle handle)
