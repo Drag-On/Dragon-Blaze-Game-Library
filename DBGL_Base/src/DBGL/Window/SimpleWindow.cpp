@@ -12,20 +12,19 @@
 
 namespace dbgl
 {
-    std::shared_ptr<ShaderProgram> SimpleWindow::spriteShader = std::shared_ptr<ShaderProgram>{};
-
     SimpleWindow::SimpleWindow(const char* title, int width, int height, bool fullscreen,
 	    unsigned int multisampling) :
 	    Window(title, width, height, fullscreen, multisampling)
     {
 	// Add callback for keyboard input
 	addInputCallback(std::bind(&SimpleWindow::inputCallback, this, std::placeholders::_1));
-	if(!spriteShader.get())
-	    spriteShader = std::make_shared<ShaderProgram>(*ShaderProgram::createSpriteShader());
+	if(!m_pSpriteShader)
+	    m_pSpriteShader = ShaderProgram::createSpriteShader();
     }
 
     SimpleWindow::~SimpleWindow()
     {
+	delete m_pSpriteShader;
     }
 
     bool SimpleWindow::getShowFps() const
@@ -63,7 +62,7 @@ namespace dbgl
 	{
 	    m_pRenderContext->clear(RenderContext::Buffer::DEPTH);
 	    std::string fpsStr = std::string("FPS: ") + std::to_string(m_fps);
-	    m_defaultFont.drawText(*m_pRenderContext, *spriteShader.get(), fpsStr, 0,
+	    m_defaultFont.drawText(*m_pRenderContext, *m_pSpriteShader, fpsStr, 0,
 		    getHeight() - m_defaultFont.getLineHeight());
 	}
     }

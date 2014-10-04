@@ -75,7 +75,7 @@ namespace dbgl
 	    BitmapFont m_defaultFont;
 	    float m_fps = 0.0f;
 
-	    static std::shared_ptr<ShaderProgram> spriteShader;
+	    ShaderProgram* m_pSpriteShader; // TODO: Use some sort of resource manager
 
 	    friend class WindowManager;
     };

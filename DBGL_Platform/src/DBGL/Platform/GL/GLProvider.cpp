@@ -36,5 +36,6 @@ namespace dbgl
     void GLProvider::free()
     {
 	delete s_pGL;
+	s_pGL = nullptr;
     }
 }

@@ -14,7 +14,6 @@ namespace dbgl
 {
     ShaderProgram::ShaderProgram(const std::string vert, const std::string frag, bool isFiles)
     {
-	LOG.info("Creating shader program...");
 	std::string vertCode = "", fragCode = "";
 	if (isFiles)
 	{
@@ -31,26 +30,28 @@ namespace dbgl
 	}
 
 	// Compile shaders
-	GLuint vsId = 0, fsId = 0;
+	IGL::ShaderHandle vsId = IGL::InvalidShaderHandle, fsId = IGL::InvalidShaderHandle;
 	const std::string vertFileName = isFiles ? vert : "";
 	const std::string fragFileName = isFiles ? frag : "";
-	vsId = compile(vertCode.c_str(), GL_VERTEX_SHADER, vertFileName);
-	fsId = compile(fragCode.c_str(), GL_FRAGMENT_SHADER, fragFileName);
+	vsId = compile(vertCode, IGL::ShaderType::VERTEX, vertFileName);
+	fsId = compile(fragCode, IGL::ShaderType::FRAGMENT, fragFileName);
 
 	// Link shaders
-	GLint linkOk = GL_FALSE;
-	m_shaderProgram = glCreateProgram();
-	glAttachShader(m_shaderProgram, vsId);
-	glAttachShader(m_shaderProgram, fsId);
-	glLinkProgram(m_shaderProgram);
-	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &linkOk);
-	if (!linkOk)
-	LOG.error("Error while linking shaders.");
-	printLog(m_shaderProgram, linkOk);
+	try
+	{
+	    m_shaderProgram = GLProvider::get()->shaCreateProgram();
+	    GLProvider::get()->shaAttachShader(m_shaderProgram, vsId);
+	    GLProvider::get()->shaAttachShader(m_shaderProgram, fsId);
+	    GLProvider::get()->shaLinkProgram(m_shaderProgram);
+	}
+	catch (LinkException& e)
+	{
+	    LOG.error("Unable to link shader. %.", e.what());
+	}
 
 	// Delete vertex- and fragment shader objects again
-	glDeleteShader(vsId);
-	glDeleteShader(fsId);
+	GLProvider::get()->shaDelete(vsId);
+	GLProvider::get()->shaDelete(fsId);
 
 	// Check for common uniform names
 	checkUniforms();
@@ -58,22 +59,22 @@ namespace dbgl
 
     ShaderProgram::~ShaderProgram()
     {
-	glDeleteProgram(m_shaderProgram);
+	GLProvider::get()->shaDeleteProgram(m_shaderProgram);
     }
 
     void ShaderProgram::use() const
     {
-	glUseProgram(m_shaderProgram);
+	glUseProgram(m_shaderProgram->m_handle);
     }
 
     GLint ShaderProgram::getAttributeHandle(const std::string name) const
     {
-	return glGetAttribLocation(m_shaderProgram, name.c_str());
+	return glGetAttribLocation(m_shaderProgram->m_handle, name.c_str());
     }
 
     GLint ShaderProgram::getUniformHandle(const std::string name) const
     {
-	return glGetUniformLocation(m_shaderProgram, name.c_str());
+	return glGetUniformLocation(m_shaderProgram->m_handle, name.c_str());
     }
 
     void ShaderProgram::bindTexture(int texLocation, int texType, GLuint texHandle) const
@@ -218,7 +219,7 @@ namespace dbgl
 
     GLuint ShaderProgram::getHandle() const
     {
-	return m_shaderProgram;
+	return m_shaderProgram->m_handle;
     }
 
     GLint ShaderProgram::getDefaultUniformHandle(Uniform uniform) const
@@ -376,29 +377,26 @@ namespace dbgl
 	}
     }
 
-    GLuint ShaderProgram::compile(const std::string code, GLenum type,
-	    const std::string fileName)
+    IGL::ShaderHandle ShaderProgram::compile(const std::string code, IGL::ShaderType type, const std::string fileName)
     {
+	// Create shader object
+	IGL::ShaderHandle id = IGL::InvalidShaderHandle;
+
 	if (code.length() == 0)
 	{
 	    LOG.error("Error compiling NULL shader");
-	    return -1;
+	    return id;
 	}
 
-	// Create shader object
-	GLuint id = glCreateShader(type);
+	try
+	{
+	    id = GLProvider::get()->shaCreate(type, code);
+	}
+	catch (CompileException& e)
+	{
+	    LOG.error("Error while compiling shader %. %", fileName, e.what());
+	}
 
-	// Compile
-	const char* codePtr = code.c_str();
-	glShaderSource(id, 1, &codePtr, NULL);
-	glCompileShader(id);
-
-	// Check if everything went right
-	GLint result = GL_FALSE;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if(result == GL_FALSE)
-	LOG.error("Error while compiling shader %", fileName);
-	printLog(id, result);
 	return id;
     }
 

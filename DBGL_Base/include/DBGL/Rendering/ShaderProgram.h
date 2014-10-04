@@ -13,7 +13,9 @@
 
 #include <map>
 #include <string>
-#include <GL/glew.h>
+#include "DBGL/Platform/GL/GLProvider.h"
+#include "DBGL/Platform/GL/Exception/CompileException.h"
+#include "DBGL/Platform/GL/Exception/LinkException.h"
 #include "DBGL/System/Log/Log.h"
 
 namespace dbgl
@@ -328,7 +330,7 @@ namespace dbgl
 	    static ShaderProgram* createSpriteShader();
 
 	private:
-	    GLuint m_shaderProgram; // GL shader program handle
+	    IGL::ShaderProgramHandle m_shaderProgram;
 	    std::map<Uniform, GLint> m_uniformHandles;
 
 	    static std::map<Uniform, std::string> uniformNames;
@@ -358,9 +360,9 @@ namespace dbgl
 	     * @param code Code of the shader to compile
 	     * @param type Type of the shader to compile
 	     * @param fileName Name of the file if the shader is compiled from a file
-	     * @return The compiled shader or 0 in case something went wrong
+	     * @return The handle of the compiled shader or invalid handle in case something went wrong
 	     */
-	    GLuint compile(const std::string code, GLenum type, const std::string fileName = "");
+	    IGL::ShaderHandle compile(const std::string code, IGL::ShaderType type, const std::string fileName = "");
     };
 }
 
