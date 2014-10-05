@@ -149,25 +149,25 @@ namespace dbgl
     void ShaderProgram::setUniformFloatArray(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform1fv(handle->m_handle, count, values);
+	GLProvider::get()->shaSetUniformFloatArray(handle, count, values);
     }
 
     void ShaderProgram::setUniformFloat2Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform2fv(handle->m_handle, count, values);
+	GLProvider::get()->shaSetUniformFloat2Array(handle, count, values);
     }
 
     void ShaderProgram::setUniformFloat3Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform3fv(handle->m_handle, count, values);
+	GLProvider::get()->shaSetUniformFloat3Array(handle, count, values);
     }
 
     void ShaderProgram::setUniformFloat4Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform4fv(handle->m_handle, count, values);
+	GLProvider::get()->shaSetUniformFloat4Array(handle, count, values);
     }
 
     void ShaderProgram::setUniformIntArray(IGL::UniformHandle const& handle, unsigned int count,

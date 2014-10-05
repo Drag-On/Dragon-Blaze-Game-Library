@@ -660,6 +660,34 @@ namespace dbgl
 	     */
 	    virtual void shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3,
 		    int value4) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformFloatArray(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
 
 	protected:
 	    /**

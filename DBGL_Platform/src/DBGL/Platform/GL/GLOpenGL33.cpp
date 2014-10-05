@@ -782,6 +782,38 @@ namespace dbgl
 	glUniform4i(un->m_handle, value1, value2, value3, value4);
     }
 
+    void GLOpenGL33::shaSetUniformFloatArray(UniformHandle uniform, unsigned int count, float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniform1fv(un->m_handle, count, values);
+    }
+
+    void GLOpenGL33::shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniform2fv(un->m_handle, count, values);
+    }
+
+    void GLOpenGL33::shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniform3fv(un->m_handle, count, values);
+    }
+
+    void GLOpenGL33::shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniform4fv(un->m_handle, count, values);
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try
