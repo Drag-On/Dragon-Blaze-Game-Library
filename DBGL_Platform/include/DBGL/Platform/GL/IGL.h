@@ -41,43 +41,43 @@ namespace dbgl
 	    /**
 	     * @brief Function type for close callback
 	     */
-	    using WndCloseCallback = std::function<void(WindowHandle)>;
+	    using WndCloseCallback = std::function<void(WindowHandle const&)>;
 	    /**
 	     * @brief Function type for focus callback
 	     */
-	    using WndFocusCallback = std::function<void(WindowHandle,int)>;
+	    using WndFocusCallback = std::function<void(WindowHandle const&,int)>;
 	    /**
 	     * @brief Function type for iconified callback
 	     */
-	    using WndIconifiedCallback = std::function<void(WindowHandle,int)>;
+	    using WndIconifiedCallback = std::function<void(WindowHandle const&,int)>;
 	    /**
 	     * @brief Function type for resize callback
 	     */
-	    using WndResizeCallback = std::function<void(WindowHandle,int,int)>;
+	    using WndResizeCallback = std::function<void(WindowHandle const&,int,int)>;
 	    /**
 	     * @brief Function type for framebuffer resize callback
 	     */
-	    using WndFramebufferResizeCallback = std::function<void(WindowHandle,int,int)>;
+	    using WndFramebufferResizeCallback = std::function<void(WindowHandle const&,int,int)>;
 	    /**
 	     * @brief Function type for window position callback
 	     */
-	    using WndPositionCallback = std::function<void(WindowHandle,int,int)>;
+	    using WndPositionCallback = std::function<void(WindowHandle const&,int,int)>;
 	    /**
 	     * @brief Function type for cursor enter callback
 	     */
-	    using WndCursorEnterCallback = std::function<void(WindowHandle,int)>;
+	    using WndCursorEnterCallback = std::function<void(WindowHandle const&,int)>;
 	    /**
 	     * @brief Function type for cursor movement callback
 	     */
-	    using WndCursorPositionCallback = std::function<void(WindowHandle,double,double)>;
+	    using WndCursorPositionCallback = std::function<void(WindowHandle const&,double,double)>;
 	    /**
 	     * @brief Function type for scroll callback
 	     */
-	    using WndScrollCallback = std::function<void(WindowHandle,double,double)>;
+	    using WndScrollCallback = std::function<void(WindowHandle const&,double,double)>;
 	    /**
 	     * @brief Function type for general input callback
 	     */
-	    using WndInputCallback = std::function<void(WindowHandle,Input::Key,Input const&)>;
+	    using WndInputCallback = std::function<void(WindowHandle const&,Input::Key,Input const&)>;
 
 	protected:
 	    /**
@@ -278,129 +278,129 @@ namespace dbgl
 	     * @brief Show a window
 	     * @param wnd Window to show
 	     */
-	    virtual void wndShow(WindowHandle wnd) = 0;
+	    virtual void wndShow(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Hide a window
 	     * @param wnd Window to hide
 	     */
-	    virtual void wndHide(WindowHandle wnd) = 0;
+	    virtual void wndHide(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Closes a window
 	     * @param wnd Window to close
 	     */
-	    virtual void wndClose(WindowHandle wnd) = 0;
+	    virtual void wndClose(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Destroys a window without calling any events
 	     * @param wnd Window to destroy
 	     */
-	    virtual void wndDestroy(WindowHandle wnd) = 0;
+	    virtual void wndDestroy(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window is in focus
 	     * @param wnd Window to check
 	     * @return True in case the window is in focus, otherwise false
 	     */
-	    virtual bool wndCheckFocus(WindowHandle wnd) = 0;
+	    virtual bool wndCheckFocus(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window is iconified
 	     * @param wnd Window to check
 	     * @return True in case the window is iconified, otherwise false
 	     */
-	    virtual bool wndCheckIconified(WindowHandle wnd) = 0;
+	    virtual bool wndCheckIconified(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window is visible
 	     * @param wnd Window to check
 	     * @return True in case the window is visible, otherwise false
 	     */
-	    virtual bool wndCheckVisible(WindowHandle wnd) = 0;
+	    virtual bool wndCheckVisible(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window is resizable
 	     * @param wnd Window to check
 	     * @return True in case the window is resizable, otherwise false
 	     */
-	    virtual bool wndCheckResizable(WindowHandle wnd) = 0;
+	    virtual bool wndCheckResizable(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window has decorations
 	     * @param wnd Window to check
 	     * @return True in case the window has decorations, otherwise false
 	     */
-	    virtual bool wndCheckDecorations(WindowHandle wnd) = 0;
+	    virtual bool wndCheckDecorations(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks if a window is about to be closed
 	     * @param wnd Window to check
 	     * @return True in case the window is about to be closed, otherwise false
 	     */
-	    virtual bool wndCheckClose(WindowHandle wnd) = 0;
+	    virtual bool wndCheckClose(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Modifies the title of a window
 	     * @param wnd Window to set title for
 	     * @param title New title
 	     */
-	    virtual void wndSetTitle(WindowHandle wnd, std::string const& title) = 0;
+	    virtual void wndSetTitle(WindowHandle const& wnd, std::string const& title) = 0;
 	    /**
 	     * @brief Retrieves the size of a window
 	     * @param wnd Window to get width from
 	     * @param[out] width The window's width
 	     * @param[out] height The window's height
 	     */
-	    virtual void wndGetSize(WindowHandle wnd, int& width, int& height) = 0;
+	    virtual void wndGetSize(WindowHandle const& wnd, int& width, int& height) = 0;
 	    /**
 	     * @brief Modifies the size of a window
 	     * @param wnd Window to modify
 	     * @param width New width
 	     * @param height New height
 	     */
-	    virtual void wndSetSize(WindowHandle wnd, int width, int height) = 0;
+	    virtual void wndSetSize(WindowHandle const& wnd, int width, int height) = 0;
 	    /**
 	     * @brief Retrieves the frame size of a window
 	     * @param wnd Window to get frame size from
 	     * @param[out] width Frame width
 	     * @param[out] height Frame height
 	     */
-	    virtual void wndGetFrameSize(WindowHandle wnd, int& width, int& height) = 0;
+	    virtual void wndGetFrameSize(WindowHandle const& wnd, int& width, int& height) = 0;
 	    /**
 	     * @brief Retrieves the coordinates of a window
 	     * @param wnd Window to get coordinates from
 	     * @param[out] x X coordinate
 	     * @param[out] y Y coordinate
 	     */
-	    virtual void wndGetPos(WindowHandle wnd, int& x, int& y) = 0;
+	    virtual void wndGetPos(WindowHandle const& wnd, int& x, int& y) = 0;
 	    /**
 	     * @brief Modifies the coordinates of a window
 	     * @param wnd Window to modify
 	     * @param x New x coordinate
 	     * @param y New y coordinate
 	     */
-	    virtual void wndSetPos(WindowHandle wnd, int x, int y) = 0;
+	    virtual void wndSetPos(WindowHandle const& wnd, int x, int y) = 0;
 	    /**
 	     * @brief Makes a window current
 	     * @param wnd Window to make current
 	     */
-	    virtual void wndMakeCurrent(WindowHandle wnd) = 0;
+	    virtual void wndMakeCurrent(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Retrieves the current cursor coordinates within a window
 	     * @param wnd Window to check
 	     * @param x[out] X coordinate
 	     * @param y[out] Y coordinate
 	     */
-	    virtual void wndGetCursorPos(WindowHandle wnd, double& x, double& y) = 0;
+	    virtual void wndGetCursorPos(WindowHandle const& wnd, double& x, double& y) = 0;
 	    /**
 	     * @brief Modifies the cursor coordinates within a window
 	     * @param wnd Window to modify
 	     * @param x[in] New x coordinate
 	     * @param y[in] New y coordinate
 	     */
-	    virtual void wndSetCursorPos(WindowHandle wnd, double x, double y) = 0;
+	    virtual void wndSetCursorPos(WindowHandle const& wnd, double x, double y) = 0;
 	    /**
 	     * @brief Retrieves input from a window
 	     * @param wnd Wnd to check input from
 	     * @return Reference to input object
 	     */
-	    virtual Input& wndGetInput(WindowHandle wnd) = 0;
+	    virtual Input& wndGetInput(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Swaps the render buffers of a window
 	     * @param wnd Window to modify
 	     */
-	    virtual void wndSwapBuffers(WindowHandle wnd) = 0;
+	    virtual void wndSwapBuffers(WindowHandle const& wnd) = 0;
 	    /**
 	     * @brief Checks for new events in all windows and returns
 	     */
@@ -420,61 +420,61 @@ namespace dbgl
 	     * @param wnd Wnd to set the callback for
 	     * @param callback Callback function to call on close events
 	     */
-	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback) = 0;
+	    virtual void wndSetCloseCallback(WindowHandle const& wnd, WndCloseCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window is focused or unfocused
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback) = 0;
+	    virtual void wndSetFocusCallback(WindowHandle const& wnd, WndFocusCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window is iconified or deconified
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback) = 0;
+	    virtual void wndSetIconifiedCallback(WindowHandle const& wnd, WndIconifiedCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window is resized
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback) = 0;
+	    virtual void wndSetResizeCallback(WindowHandle const& wnd, WndResizeCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window's framebuffer is resized
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback) = 0;
+	    virtual void wndSetFramebufferResizeCallback(WindowHandle const& wnd, WndFramebufferResizeCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window is moved
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback) = 0;
+	    virtual void wndSetPositionCallback(WindowHandle const& wnd, WndPositionCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a cursor enters a window
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback) = 0;
+	    virtual void wndSetCursorEnterCallback(WindowHandle const& wnd, WndCursorEnterCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a cursor within a window has been moved
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback) = 0;
+	    virtual void wndSetCursorPositionCallback(WindowHandle const& wnd, WndCursorPositionCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a scroll wheel within a window has been used
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback) = 0;
+	    virtual void wndSetScrollCallback(WindowHandle const& wnd, WndScrollCallback callback) = 0;
 	    /**
 	     * @brief Set a callback that is called when a window receives some kind of input
 	     * @param wnd Window to set callback for
 	     * @param callback Callback function
 	     */
-	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback) = 0;
+	    virtual void wndSetInputCallback(WindowHandle const& wnd, WndInputCallback callback) = 0;
 	    /**
 	     * @brief Generates a new texture
 	     * @param type Type of texture to generate
@@ -485,12 +485,12 @@ namespace dbgl
 	     * @brief Deletes a texture
 	     * @param handle Handle of the texture
 	     */
-	    virtual void texDelete(TextureHandle handle) = 0;
+	    virtual void texDelete(TextureHandle const& handle) = 0;
 	    /**
 	     * @brief Bind a texture
 	     * @param handle Texture to bind
 	     */
-	    virtual void texBind(TextureHandle handle) = 0;
+	    virtual void texBind(TextureHandle const& handle) = 0;
 	    /**
 	     * @brief Fills the currently bound, previously generated texture buffer
 	     * @param level MipMap level to write
@@ -553,7 +553,7 @@ namespace dbgl
 	     * @brief Deletes a previously created shader
 	     * @param handle Handle of the shader to delete
 	     */
-	    virtual void shaDelete(ShaderHandle handle) = 0;
+	    virtual void shaDelete(ShaderHandle const& handle) = 0;
 	    /**
 	     * @brief Creates a shader program
 	     * @return Handle of the new shader program
@@ -564,51 +564,51 @@ namespace dbgl
 	     * @brief Deletes a previously created shader program
 	     * @param handle Handle of the program to delete
 	     */
-	    virtual void shaDeleteProgram(ShaderProgramHandle handle) = 0;
+	    virtual void shaDeleteProgram(ShaderProgramHandle const& handle) = 0;
 	    /**
 	     * @brief Attaches a shader to a shader program
 	     * @param program Program to attach to
 	     * @param shader Shader to attach to \p program
 	     */
-	    virtual void shaAttachShader(ShaderProgramHandle program, ShaderHandle shader) = 0;
+	    virtual void shaAttachShader(ShaderProgramHandle const& program, ShaderHandle const& shader) = 0;
 	    /**
 	     * @brief Links all the shaders, that have been attached to a program, together
 	     * @param program Program to link
 	     * @throws LinkException if linking went wrong
 	     */
-	    virtual void shaLinkProgram(ShaderProgramHandle program) = 0;
+	    virtual void shaLinkProgram(ShaderProgramHandle const& program) = 0;
 	    /**
 	     * @brief Makes the passed shader program the currently used one
 	     * @param program Program to use
 	     */
-	    virtual void shaUseProgram(ShaderProgramHandle program) = 0;
+	    virtual void shaUseProgram(ShaderProgramHandle const& program) = 0;
 	    /**
 	     * @brief Provides a handle to a certain attribute of a shader program
 	     * @param program Program to get attribute handle from
 	     * @param name Name of the attribute
 	     * @return Handle to the attribute or InvalidAttributeHandle if not found
 	     */
-	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle program, std::string name) = 0;
+	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle const& program, std::string name) = 0;
 	    /**
 	     * @brief Provides a handle to a certain uniform of a shader program
 	     * @param program Program to get uniform handle from
 	     * @param name Name of the uniform
 	     * @return Handle to the uniform or InvalidUniformHandle if not found
 	     */
-	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle program, std::string name) = 0;
+	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle const& program, std::string name) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param value Value to assign
 	     */
-	    virtual void shaSetUniformFloat(UniformHandle uniform, float value) = 0;
+	    virtual void shaSetUniformFloat(UniformHandle const& uniform, float value) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param value1 First value to assign
 	     * @param value2 Second value to assign
 	     */
-	    virtual void shaSetUniformFloat2(UniformHandle uniform, float value1, float value2) = 0;
+	    virtual void shaSetUniformFloat2(UniformHandle const& uniform, float value1, float value2) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
@@ -616,7 +616,7 @@ namespace dbgl
 	     * @param value2 Second value to assign
 	     * @param value3 Third value to assign
 	     */
-	    virtual void shaSetUniformFloat3(UniformHandle uniform, float value1, float value2,
+	    virtual void shaSetUniformFloat3(UniformHandle const& uniform, float value1, float value2,
 		    float value3) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
@@ -626,21 +626,21 @@ namespace dbgl
 	     * @param value3 Third value to assign
 	     * @param value4 Fourth value to assign
 	     */
-	    virtual void shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
+	    virtual void shaSetUniformFloat4(UniformHandle const& uniform, float value1, float value2, float value3,
 		    float value4) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param value Value to assign
 	     */
-	    virtual void shaSetUniformInt(UniformHandle uniform, int value) = 0;
+	    virtual void shaSetUniformInt(UniformHandle const& uniform, int value) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param value1 First value to assign
 	     * @param value2 Second value to assign
 	     */
-	    virtual void shaSetUniformInt2(UniformHandle uniform, int value1, int value2) = 0;
+	    virtual void shaSetUniformInt2(UniformHandle const& uniform, int value1, int value2) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
@@ -648,7 +648,7 @@ namespace dbgl
 	     * @param value2 Second value to assign
 	     * @param value3 Third value to assign
 	     */
-	    virtual void shaSetUniformInt3(UniformHandle uniform, int value1, int value2,
+	    virtual void shaSetUniformInt3(UniformHandle const& uniform, int value1, int value2,
 		    int value3) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
@@ -658,7 +658,7 @@ namespace dbgl
 	     * @param value3 Third value to assign
 	     * @param value4 Fourth value to assign
 	     */
-	    virtual void shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3,
+	    virtual void shaSetUniformInt4(UniformHandle const& uniform, int value1, int value2, int value3,
 		    int value4) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
@@ -666,56 +666,56 @@ namespace dbgl
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformFloatArray(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    virtual void shaSetUniformFloatArray(UniformHandle const& uniform, unsigned int count, float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    virtual void shaSetUniformFloat2Array(UniformHandle const& uniform, unsigned int count, float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    virtual void shaSetUniformFloat3Array(UniformHandle const& uniform, unsigned int count, float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values) = 0;
+	    virtual void shaSetUniformFloat4Array(UniformHandle const& uniform, unsigned int count, float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformIntArray(UniformHandle uniform, unsigned int count, int const* values) = 0;
+	    virtual void shaSetUniformIntArray(UniformHandle const& uniform, unsigned int count, int const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformInt2Array(UniformHandle uniform, unsigned int count, int const* values) = 0;
+	    virtual void shaSetUniformInt2Array(UniformHandle const& uniform, unsigned int count, int const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformInt3Array(UniformHandle uniform, unsigned int count, int const* values) = 0;
+	    virtual void shaSetUniformInt3Array(UniformHandle const& uniform, unsigned int count, int const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
 	     * @param count Amount of elements passed in \p values
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformInt4Array(UniformHandle uniform, unsigned int count, int const* values) = 0;
+	    virtual void shaSetUniformInt4Array(UniformHandle const& uniform, unsigned int count, int const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
 	     * @param uniform Handle of the uniform
@@ -723,7 +723,7 @@ namespace dbgl
 	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformMatrix2Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformMatrix2Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
@@ -732,7 +732,7 @@ namespace dbgl
 	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformMatrix3Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformMatrix3Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values) = 0;
 	    /**
 	     * @brief Assigns some value to a uniform of the currently used shader program
@@ -741,7 +741,7 @@ namespace dbgl
 	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
 	     * @param values Values, contiguously layed out in memory
 	     */
-	    virtual void shaSetUniformMatrix4Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformMatrix4Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values) = 0;
 
 	protected:

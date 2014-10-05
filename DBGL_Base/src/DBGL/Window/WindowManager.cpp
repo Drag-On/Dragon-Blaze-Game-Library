@@ -76,61 +76,60 @@ namespace dbgl
     {
     }
 
-    void WindowManager::closeCallback(IGL::WindowHandle window)
+    void WindowManager::closeCallback(IGL::WindowHandle const& window)
     {
 	s_windows[window]->m_closeCallbacks.fire(Window::CloseEventArgs());
     }
 
-    void WindowManager::focusCallback(IGL::WindowHandle window, int focused)
+    void WindowManager::focusCallback(IGL::WindowHandle const& window, int focused)
     {
 	s_windows[window]->m_focusCallbacks.fire(Window::FocusEventArgs{focused == GL_TRUE ? true : false});
     }
 
-    void WindowManager::iconifiedCallback(IGL::WindowHandle window, int iconified)
+    void WindowManager::iconifiedCallback(IGL::WindowHandle const& window, int iconified)
     {
 	s_windows[window]->m_iconifiedCallbacks.fire(Window::IconifiedEventArgs{iconified == GL_TRUE ? true : false});
     }
 
-    void WindowManager::resizeCallback(IGL::WindowHandle window, int width,
+    void WindowManager::resizeCallback(IGL::WindowHandle const& window, int width,
 	    int height)
     {
 	s_windows[window]->m_resizeCallbacks.fire(Window::ResizeEventArgs{width, height});
     }
 
-    void WindowManager::framebufferResizeCallback(IGL::WindowHandle window, int width,
+    void WindowManager::framebufferResizeCallback(IGL::WindowHandle const& window, int width,
 	    int height)
     {
 	s_windows[window]->m_framebufferResizeCallbacks.fire(Window::FramebufferResizeEventArgs{width, height});
     }
 
-    void WindowManager::positionCallback(IGL::WindowHandle window, int xpos, int ypos)
+    void WindowManager::positionCallback(IGL::WindowHandle const& window, int xpos, int ypos)
     {
 	s_windows[window]->m_positionCallbacks.fire(Window::PositionEventArgs{xpos, ypos});
     }
 
-    void WindowManager::cursorEnterCallback(IGL::WindowHandle window, int entered)
+    void WindowManager::cursorEnterCallback(IGL::WindowHandle const& window, int entered)
     {
 	s_windows[window]->m_cursorEnterCallbacks.fire(Window::CursorEnterEventArgs{entered == GL_TRUE ? true : false});
     }
 
-    void WindowManager::cursorCallback(IGL::WindowHandle window, double x, double y)
+    void WindowManager::cursorCallback(IGL::WindowHandle const& window, double x, double y)
     {
 	s_windows[window]->m_cursorCallbacks.fire(Window::CursorEventArgs{x, y});
     }
 
-    void WindowManager::scrollCallback(IGL::WindowHandle window, double xOffset,
+    void WindowManager::scrollCallback(IGL::WindowHandle const& window, double xOffset,
 	    double yOffset)
     {
 	s_windows[window]->m_scrollCallbacks.fire(Window::ScrollEventArgs{xOffset, yOffset});
     }
 
-    void WindowManager::inputCallback(IGL::WindowHandle window, Input::Key key, Input const& input)
+    void WindowManager::inputCallback(IGL::WindowHandle const& window, Input::Key key, Input const& input)
     {
 	s_windows[window]->m_inputCallbacks.fire(Window::InputEventArgs{input, key});
     }
 
-    void WindowManager::updateHandle(IGL::WindowHandle oldHandle,
-	    IGL::WindowHandle newHandle)
+    void WindowManager::updateHandle(IGL::WindowHandle const& oldHandle, IGL::WindowHandle const& newHandle)
     {
 	if (oldHandle != newHandle)
 	{

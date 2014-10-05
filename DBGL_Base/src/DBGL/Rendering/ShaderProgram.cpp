@@ -217,9 +217,9 @@ namespace dbgl
 	GLProvider::get()->shaSetUniformInt(handle, value);
     }
 
-    GLuint ShaderProgram::getHandle() const
+    IGL::ShaderProgramHandle const& ShaderProgram::getHandle() const
     {
-	return m_shaderProgram->m_handle;
+	return m_shaderProgram;
     }
 
     IGL::UniformHandle const& ShaderProgram::getDefaultUniformHandle(Uniform uniform) const

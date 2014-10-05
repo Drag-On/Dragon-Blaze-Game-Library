@@ -94,17 +94,17 @@ namespace dbgl
 	glfwTerminate();
     }
 
-    void GLOpenGL33::wndShow(WindowHandle wnd)
+    void GLOpenGL33::wndShow(WindowHandle const& wnd)
     {
 	glfwShowWindow(getGLFWHandle(wnd));
     }
 
-    void GLOpenGL33::wndHide(WindowHandle wnd)
+    void GLOpenGL33::wndHide(WindowHandle const& wnd)
     {
 	glfwHideWindow(getGLFWHandle(wnd));
     }
 
-    void GLOpenGL33::wndClose(WindowHandle wnd)
+    void GLOpenGL33::wndClose(WindowHandle const& wnd)
     {
 	// Remove all callbacks
 	wndSetCloseCallback(wnd, nullptr);
@@ -130,7 +130,7 @@ namespace dbgl
 	    glfwSetWindowShouldClose(glfwHandle, true);
     }
 
-    void GLOpenGL33::wndDestroy(WindowHandle wnd)
+    void GLOpenGL33::wndDestroy(WindowHandle const& wnd)
     {
 	GLFWwindow* glfwHandle = nullptr;
 	try
@@ -150,87 +150,87 @@ namespace dbgl
 	}
     }
 
-    bool GLOpenGL33::wndCheckFocus(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckFocus(WindowHandle const& wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_FOCUSED);
     }
 
-    bool GLOpenGL33::wndCheckIconified(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckIconified(WindowHandle const& wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_ICONIFIED);
     }
 
-    bool GLOpenGL33::wndCheckVisible(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckVisible(WindowHandle const& wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_VISIBLE);
     }
 
-    bool GLOpenGL33::wndCheckResizable(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckResizable(WindowHandle const& wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_RESIZABLE);
     }
 
-    bool GLOpenGL33::wndCheckDecorations(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckDecorations(WindowHandle const& wnd)
     {
 	return glfwGetWindowAttrib(getGLFWHandle(wnd), GLFW_DECORATED);
     }
 
-    bool GLOpenGL33::wndCheckClose(WindowHandle wnd)
+    bool GLOpenGL33::wndCheckClose(WindowHandle const& wnd)
     {
 	return glfwWindowShouldClose(getGLFWHandle(wnd));
     }
 
-    void GLOpenGL33::wndSetTitle(WindowHandle wnd, std::string const& title)
+    void GLOpenGL33::wndSetTitle(WindowHandle const& wnd, std::string const& title)
     {
 	glfwSetWindowTitle(getGLFWHandle(wnd), title.c_str());
     }
 
-    void GLOpenGL33::wndGetSize(WindowHandle wnd, int& width, int& height)
+    void GLOpenGL33::wndGetSize(WindowHandle const& wnd, int& width, int& height)
     {
 	glfwGetWindowSize(getGLFWHandle(wnd), &width, &height);
     }
 
-    void GLOpenGL33::wndSetSize(WindowHandle wnd, int width, int height)
+    void GLOpenGL33::wndSetSize(WindowHandle const& wnd, int width, int height)
     {
 	glfwSetWindowSize(getGLFWHandle(wnd), width, height);
     }
 
-    void GLOpenGL33::wndGetFrameSize(WindowHandle wnd, int& width, int& height)
+    void GLOpenGL33::wndGetFrameSize(WindowHandle const& wnd, int& width, int& height)
     {
 	glfwGetFramebufferSize(getGLFWHandle(wnd), &width, &height);
     }
 
-    void GLOpenGL33::wndGetPos(WindowHandle wnd, int& x, int& y)
+    void GLOpenGL33::wndGetPos(WindowHandle const& wnd, int& x, int& y)
     {
 	glfwGetWindowPos(getGLFWHandle(wnd), &x, &y);
     }
 
-    void GLOpenGL33::wndSetPos(WindowHandle wnd, int x, int y)
+    void GLOpenGL33::wndSetPos(WindowHandle const& wnd, int x, int y)
     {
 	glfwSetWindowPos(getGLFWHandle(wnd), x, y);
     }
 
-    void GLOpenGL33::wndMakeCurrent(WindowHandle wnd)
+    void GLOpenGL33::wndMakeCurrent(WindowHandle const& wnd)
     {
 	glfwMakeContextCurrent(getGLFWHandle(wnd));
     }
 
-    void GLOpenGL33::wndGetCursorPos(WindowHandle wnd, double& x, double& y)
+    void GLOpenGL33::wndGetCursorPos(WindowHandle const& wnd, double& x, double& y)
     {
 	glfwGetCursorPos(getGLFWHandle(wnd), &x, &y);
     }
 
-    void GLOpenGL33::wndSetCursorPos(WindowHandle wnd, double x, double y)
+    void GLOpenGL33::wndSetCursorPos(WindowHandle const& wnd, double x, double y)
     {
 	glfwSetCursorPos(getGLFWHandle(wnd), x, y);
     }
 
-    Input& GLOpenGL33::wndGetInput(WindowHandle wnd)
+    Input& GLOpenGL33::wndGetInput(WindowHandle const& wnd)
     {
 	return getWindowInput(wnd);
     }
 
-    void GLOpenGL33::wndSwapBuffers(WindowHandle wnd)
+    void GLOpenGL33::wndSwapBuffers(WindowHandle const& wnd)
     {
 	glfwSwapBuffers(getGLFWHandle(wnd));
     }
@@ -264,7 +264,7 @@ namespace dbgl
 	s_errorCallback(error, msg);
     }
 
-    void GLOpenGL33::wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback)
+    void GLOpenGL33::wndSetCloseCallback(WindowHandle const& wnd, WndCloseCallback callback)
     {
 	if(callback)
 	{
@@ -285,7 +285,7 @@ namespace dbgl
 	callback(wndHandle);
     }
 
-    void GLOpenGL33::wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback)
+    void GLOpenGL33::wndSetFocusCallback(WindowHandle const& wnd, WndFocusCallback callback)
     {
 	if(callback)
 	{
@@ -306,7 +306,7 @@ namespace dbgl
 	callback(wndHandle, focus);
     }
 
-    void GLOpenGL33::wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback)
+    void GLOpenGL33::wndSetIconifiedCallback(WindowHandle const& wnd, WndIconifiedCallback callback)
     {
 	if(callback)
 	{
@@ -327,7 +327,7 @@ namespace dbgl
 	callback(wndHandle, iconified);
     }
 
-    void GLOpenGL33::wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback)
+    void GLOpenGL33::wndSetResizeCallback(WindowHandle const& wnd, WndResizeCallback callback)
     {
 	if(callback)
 	{
@@ -348,7 +348,7 @@ namespace dbgl
 	callback(wndHandle, width, height);
     }
 
-    void GLOpenGL33::wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback)
+    void GLOpenGL33::wndSetFramebufferResizeCallback(WindowHandle const& wnd, WndFramebufferResizeCallback callback)
     {
 	if(callback)
 	{
@@ -369,7 +369,7 @@ namespace dbgl
 	callback(wndHandle, width, height);
     }
 
-    void GLOpenGL33::wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback)
+    void GLOpenGL33::wndSetPositionCallback(WindowHandle const& wnd, WndPositionCallback callback)
     {
 	if(callback)
 	{
@@ -390,7 +390,7 @@ namespace dbgl
 	callback(wndHandle, x, y);
     }
 
-    void GLOpenGL33::wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback)
+    void GLOpenGL33::wndSetCursorEnterCallback(WindowHandle const& wnd, WndCursorEnterCallback callback)
     {
 	if(callback)
 	{
@@ -411,7 +411,7 @@ namespace dbgl
 	callback(wndHandle, enter);
     }
 
-    void GLOpenGL33::wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback)
+    void GLOpenGL33::wndSetCursorPositionCallback(WindowHandle const& wnd, WndCursorPositionCallback callback)
     {
 	if(callback)
 	{
@@ -432,7 +432,7 @@ namespace dbgl
 	callback(wndHandle, x, y);
     }
 
-    void GLOpenGL33::wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback)
+    void GLOpenGL33::wndSetScrollCallback(WindowHandle const& wnd, WndScrollCallback callback)
     {
 	if(callback)
 	{
@@ -453,7 +453,7 @@ namespace dbgl
 	callback(wndHandle, x, y);
     }
 
-    void GLOpenGL33::wndSetInputCallback(WindowHandle wnd, WndInputCallback callback)
+    void GLOpenGL33::wndSetInputCallback(WindowHandle const& wnd, WndInputCallback callback)
     {
 	if(callback)
 	{
@@ -504,7 +504,7 @@ namespace dbgl
 	return handle;
     }
 
-    void GLOpenGL33::texDelete(TextureHandle handle)
+    void GLOpenGL33::texDelete(TextureHandle const& handle)
     {
 	TextureHandleGL* hnd = dynamic_cast<TextureHandleGL*>(handle);
 	if(!hnd)
@@ -513,7 +513,7 @@ namespace dbgl
 	delete hnd;
     }
 
-    void GLOpenGL33::texBind(TextureHandle handle)
+    void GLOpenGL33::texBind(TextureHandle const& handle)
     {
 	TextureHandleGL* hnd = dynamic_cast<TextureHandleGL*>(handle);
 	if(!hnd)
@@ -614,7 +614,7 @@ namespace dbgl
 	return handle;
     }
 
-    void GLOpenGL33::shaDelete(ShaderHandle handle)
+    void GLOpenGL33::shaDelete(ShaderHandle const& handle)
     {
 	ShaderHandleGL* hnd = dynamic_cast<ShaderHandleGL*>(handle);
 	if(!hnd)
@@ -633,7 +633,7 @@ namespace dbgl
 	return handle;
     }
 
-    void GLOpenGL33::shaDeleteProgram(ShaderProgramHandle handle)
+    void GLOpenGL33::shaDeleteProgram(ShaderProgramHandle const& handle)
     {
 	ShaderProgramHandleGL* hnd = dynamic_cast<ShaderProgramHandleGL*>(handle);
 	if(!hnd)
@@ -642,7 +642,7 @@ namespace dbgl
 	delete hnd;
     }
 
-    void GLOpenGL33::shaAttachShader(ShaderProgramHandle program, ShaderHandle shader)
+    void GLOpenGL33::shaAttachShader(ShaderProgramHandle const& program, ShaderHandle const& shader)
     {
 	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
 	if(!prog)
@@ -653,7 +653,7 @@ namespace dbgl
 	glAttachShader(prog->m_handle, sha->m_handle);
     }
 
-    void GLOpenGL33::shaLinkProgram(ShaderProgramHandle program)
+    void GLOpenGL33::shaLinkProgram(ShaderProgramHandle const& program)
     {
 	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
 	if(!prog)
@@ -677,7 +677,7 @@ namespace dbgl
 	}
     }
 
-    void GLOpenGL33::shaUseProgram(ShaderProgramHandle program)
+    void GLOpenGL33::shaUseProgram(ShaderProgramHandle const& program)
     {
 	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
 	if(!prog)
@@ -685,7 +685,7 @@ namespace dbgl
 	glUseProgram(prog->m_handle);
     }
 
-    auto GLOpenGL33::shaGetAttributeHandle(ShaderProgramHandle program, std::string name) -> AttributeHandle
+    auto GLOpenGL33::shaGetAttributeHandle(ShaderProgramHandle const& program, std::string name) -> AttributeHandle
     {
 	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
 	if(!prog)
@@ -701,7 +701,7 @@ namespace dbgl
 	    return InvalidAttributeHandle;
     }
 
-    auto GLOpenGL33::shaGetUniformHandle(ShaderProgramHandle program, std::string name) -> UniformHandle
+    auto GLOpenGL33::shaGetUniformHandle(ShaderProgramHandle const& program, std::string name) -> UniformHandle
     {
 	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
 	if(!prog)
@@ -717,7 +717,7 @@ namespace dbgl
 	    return InvalidUniformHandle;
     }
 
-    void GLOpenGL33::shaSetUniformFloat(UniformHandle uniform, float value)
+    void GLOpenGL33::shaSetUniformFloat(UniformHandle const& uniform, float value)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -725,7 +725,7 @@ namespace dbgl
 	glUniform1f(un->m_handle, value);
     }
 
-    void GLOpenGL33::shaSetUniformFloat2(UniformHandle uniform, float value1, float value2)
+    void GLOpenGL33::shaSetUniformFloat2(UniformHandle const& uniform, float value1, float value2)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -733,7 +733,7 @@ namespace dbgl
 	glUniform2f(un->m_handle, value1, value2);
     }
 
-    void GLOpenGL33::shaSetUniformFloat3(UniformHandle uniform, float value1, float value2, float value3)
+    void GLOpenGL33::shaSetUniformFloat3(UniformHandle const& uniform, float value1, float value2, float value3)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -741,7 +741,7 @@ namespace dbgl
 	glUniform3f(un->m_handle, value1, value2, value3);
     }
 
-    void GLOpenGL33::shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
+    void GLOpenGL33::shaSetUniformFloat4(UniformHandle const& uniform, float value1, float value2, float value3,
 	    float value4)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
@@ -750,7 +750,7 @@ namespace dbgl
 	glUniform4f(un->m_handle, value1, value2, value3, value4);
     }
 
-    void GLOpenGL33::shaSetUniformInt(UniformHandle uniform, int value)
+    void GLOpenGL33::shaSetUniformInt(UniformHandle const& uniform, int value)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -758,7 +758,7 @@ namespace dbgl
 	glUniform1i(un->m_handle, value);
     }
 
-    void GLOpenGL33::shaSetUniformInt2(UniformHandle uniform, int value1, int value2)
+    void GLOpenGL33::shaSetUniformInt2(UniformHandle const& uniform, int value1, int value2)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -766,7 +766,7 @@ namespace dbgl
 	glUniform2i(un->m_handle, value1, value2);
     }
 
-    void GLOpenGL33::shaSetUniformInt3(UniformHandle uniform, int value1, int value2, int value3)
+    void GLOpenGL33::shaSetUniformInt3(UniformHandle const& uniform, int value1, int value2, int value3)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -774,7 +774,7 @@ namespace dbgl
 	glUniform3i(un->m_handle, value1, value2, value3);
     }
 
-    void GLOpenGL33::shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3, int value4)
+    void GLOpenGL33::shaSetUniformInt4(UniformHandle const& uniform, int value1, int value2, int value3, int value4)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -782,7 +782,7 @@ namespace dbgl
 	glUniform4i(un->m_handle, value1, value2, value3, value4);
     }
 
-    void GLOpenGL33::shaSetUniformFloatArray(UniformHandle uniform, unsigned int count, float const* values)
+    void GLOpenGL33::shaSetUniformFloatArray(UniformHandle const& uniform, unsigned int count, float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -790,7 +790,7 @@ namespace dbgl
 	glUniform1fv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values)
+    void GLOpenGL33::shaSetUniformFloat2Array(UniformHandle const& uniform, unsigned int count, float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -798,7 +798,7 @@ namespace dbgl
 	glUniform2fv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values)
+    void GLOpenGL33::shaSetUniformFloat3Array(UniformHandle const& uniform, unsigned int count, float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -806,7 +806,7 @@ namespace dbgl
 	glUniform3fv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values)
+    void GLOpenGL33::shaSetUniformFloat4Array(UniformHandle const& uniform, unsigned int count, float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -814,7 +814,7 @@ namespace dbgl
 	glUniform4fv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformIntArray(UniformHandle uniform, unsigned int count, int const* values)
+    void GLOpenGL33::shaSetUniformIntArray(UniformHandle const& uniform, unsigned int count, int const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -822,7 +822,7 @@ namespace dbgl
 	glUniform1iv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformInt2Array(UniformHandle uniform, unsigned int count, int const* values)
+    void GLOpenGL33::shaSetUniformInt2Array(UniformHandle const& uniform, unsigned int count, int const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -830,7 +830,7 @@ namespace dbgl
 	glUniform2iv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformInt3Array(UniformHandle uniform, unsigned int count, int const* values)
+    void GLOpenGL33::shaSetUniformInt3Array(UniformHandle const& uniform, unsigned int count, int const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -838,7 +838,7 @@ namespace dbgl
 	glUniform3iv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformInt4Array(UniformHandle uniform, unsigned int count, int const* values)
+    void GLOpenGL33::shaSetUniformInt4Array(UniformHandle const& uniform, unsigned int count, int const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
 	if (!un)
@@ -846,7 +846,7 @@ namespace dbgl
 	glUniform4iv(un->m_handle, count, values);
     }
 
-    void GLOpenGL33::shaSetUniformMatrix2Array(UniformHandle uniform, unsigned int count, bool transpose,
+    void GLOpenGL33::shaSetUniformMatrix2Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 	    float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
@@ -855,7 +855,7 @@ namespace dbgl
 	glUniformMatrix2fv(un->m_handle, count, transpose, values);
     }
 
-    void GLOpenGL33::shaSetUniformMatrix3Array(UniformHandle uniform, unsigned int count, bool transpose,
+    void GLOpenGL33::shaSetUniformMatrix3Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 	    float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
@@ -864,7 +864,7 @@ namespace dbgl
 	glUniformMatrix3fv(un->m_handle, count, transpose, values);
     }
 
-    void GLOpenGL33::shaSetUniformMatrix4Array(UniformHandle uniform, unsigned int count, bool transpose,
+    void GLOpenGL33::shaSetUniformMatrix4Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 	    float const* values)
     {
 	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
@@ -874,7 +874,7 @@ namespace dbgl
     }
 
 
-    GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
+    GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle const& wnd)
     {
 	try
 	{
@@ -898,7 +898,7 @@ namespace dbgl
 	}
     }
 
-    Input& GLOpenGL33::getWindowInput(WindowHandle wnd)
+    Input& GLOpenGL33::getWindowInput(WindowHandle const& wnd)
     {
 	if(wnd != IGL::InvalidWindowHandle)
 	{

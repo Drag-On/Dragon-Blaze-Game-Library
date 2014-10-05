@@ -72,18 +72,18 @@ namespace dbgl
 	private:
 	    WindowManager();
 	    ~WindowManager();
-	    static void closeCallback(IGL::WindowHandle window);
-	    static void focusCallback(IGL::WindowHandle window, int focused);
-	    static void iconifiedCallback(IGL::WindowHandle window, int iconified);
-	    static void resizeCallback(IGL::WindowHandle window, int width, int height);
-	    static void framebufferResizeCallback(IGL::WindowHandle window, int width, int height);
-	    static void positionCallback(IGL::WindowHandle window, int xpos, int ypos);
-	    static void cursorEnterCallback(IGL::WindowHandle window, int entered);
-	    static void cursorCallback(IGL::WindowHandle window, double x, double y);
-	    static void scrollCallback(IGL::WindowHandle window, double xOffset, double yOffset);
-	    static void inputCallback(IGL::WindowHandle window, Input::Key, Input const& input);
+	    static void closeCallback(IGL::WindowHandle const& window);
+	    static void focusCallback(IGL::WindowHandle const& window, int focused);
+	    static void iconifiedCallback(IGL::WindowHandle const& window, int iconified);
+	    static void resizeCallback(IGL::WindowHandle const& window, int width, int height);
+	    static void framebufferResizeCallback(IGL::WindowHandle const& window, int width, int height);
+	    static void positionCallback(IGL::WindowHandle const& window, int xpos, int ypos);
+	    static void cursorEnterCallback(IGL::WindowHandle const& window, int entered);
+	    static void cursorCallback(IGL::WindowHandle const& window, double x, double y);
+	    static void scrollCallback(IGL::WindowHandle const& window, double xOffset, double yOffset);
+	    static void inputCallback(IGL::WindowHandle const& window, Input::Key, Input const& input);
 
-	    void updateHandle(IGL::WindowHandle oldHandle, IGL::WindowHandle newHandle);
+	    void updateHandle(IGL::WindowHandle const& oldHandle, IGL::WindowHandle const& newHandle);
 
 	    static std::map<IGL::WindowHandle, Window*> s_windows;
 	    static WindowManager s_instance;

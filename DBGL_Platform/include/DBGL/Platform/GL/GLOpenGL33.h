@@ -29,43 +29,43 @@ namespace dbgl
 	    virtual WindowHandle wndInit(std::string title = "Dragon-Blaze-Game-Library", unsigned int width =
 		    800, unsigned int height = 600, bool fullscreen = false, unsigned int multisampling = 0);
 	    virtual void wndTerminate();
-	    virtual void wndShow(WindowHandle wnd);
-	    virtual void wndHide(WindowHandle wnd);
-	    virtual void wndClose(WindowHandle wnd);
-	    virtual void wndDestroy(WindowHandle wnd);
-	    virtual bool wndCheckFocus(WindowHandle wnd);
-	    virtual bool wndCheckIconified(WindowHandle wnd);
-	    virtual bool wndCheckVisible(WindowHandle wnd);
-	    virtual bool wndCheckResizable(WindowHandle wnd);
-	    virtual bool wndCheckDecorations(WindowHandle wnd);
-	    virtual bool wndCheckClose(WindowHandle wnd);
-	    virtual void wndSetTitle(WindowHandle wnd, std::string const& title);
-	    virtual void wndGetSize(WindowHandle wnd, int& width, int& height);
-	    virtual void wndSetSize(WindowHandle wnd, int width, int height);
-	    virtual void wndGetFrameSize(WindowHandle wnd, int& width, int& height);
-	    virtual void wndGetPos(WindowHandle wnd, int& x, int& y);
-	    virtual void wndSetPos(WindowHandle wnd, int x, int y);
-	    virtual void wndMakeCurrent(WindowHandle wnd);
-	    virtual void wndGetCursorPos(WindowHandle wnd, double& x, double& y);
-	    virtual void wndSetCursorPos(WindowHandle wnd, double x, double y);
-	    virtual Input& wndGetInput(WindowHandle wnd);
-	    virtual void wndSwapBuffers(WindowHandle wnd);
+	    virtual void wndShow(WindowHandle const& wnd);
+	    virtual void wndHide(WindowHandle const& wnd);
+	    virtual void wndClose(WindowHandle const& wnd);
+	    virtual void wndDestroy(WindowHandle const& wnd);
+	    virtual bool wndCheckFocus(WindowHandle const& wnd);
+	    virtual bool wndCheckIconified(WindowHandle const& wnd);
+	    virtual bool wndCheckVisible(WindowHandle const& wnd);
+	    virtual bool wndCheckResizable(WindowHandle const& wnd);
+	    virtual bool wndCheckDecorations(WindowHandle const& wnd);
+	    virtual bool wndCheckClose(WindowHandle const& wnd);
+	    virtual void wndSetTitle(WindowHandle const& wnd, std::string const& title);
+	    virtual void wndGetSize(WindowHandle const& wnd, int& width, int& height);
+	    virtual void wndSetSize(WindowHandle const& wnd, int width, int height);
+	    virtual void wndGetFrameSize(WindowHandle const& wnd, int& width, int& height);
+	    virtual void wndGetPos(WindowHandle const& wnd, int& x, int& y);
+	    virtual void wndSetPos(WindowHandle const& wnd, int x, int y);
+	    virtual void wndMakeCurrent(WindowHandle const& wnd);
+	    virtual void wndGetCursorPos(WindowHandle const& wnd, double& x, double& y);
+	    virtual void wndSetCursorPos(WindowHandle const& wnd, double x, double y);
+	    virtual Input& wndGetInput(WindowHandle const& wnd);
+	    virtual void wndSwapBuffers(WindowHandle const& wnd);
 	    virtual void wndPollEvents();
 	    virtual double wndGetTime();
 	    virtual void wndSetErrorCallback(WndErrorCallback callback);
-	    virtual void wndSetCloseCallback(WindowHandle wnd, WndCloseCallback callback);
-	    virtual void wndSetFocusCallback(WindowHandle wnd, WndFocusCallback callback);
-	    virtual void wndSetIconifiedCallback(WindowHandle wnd, WndIconifiedCallback callback);
-	    virtual void wndSetResizeCallback(WindowHandle wnd, WndResizeCallback callback);
-	    virtual void wndSetFramebufferResizeCallback(WindowHandle wnd, WndFramebufferResizeCallback callback);
-	    virtual void wndSetPositionCallback(WindowHandle wnd, WndPositionCallback callback);
-	    virtual void wndSetCursorEnterCallback(WindowHandle wnd, WndCursorEnterCallback callback);
-	    virtual void wndSetCursorPositionCallback(WindowHandle wnd, WndCursorPositionCallback callback);
-	    virtual void wndSetScrollCallback(WindowHandle wnd, WndScrollCallback callback);
-	    virtual void wndSetInputCallback(WindowHandle wnd, WndInputCallback callback);
+	    virtual void wndSetCloseCallback(WindowHandle const& wnd, WndCloseCallback callback);
+	    virtual void wndSetFocusCallback(WindowHandle const& wnd, WndFocusCallback callback);
+	    virtual void wndSetIconifiedCallback(WindowHandle const& wnd, WndIconifiedCallback callback);
+	    virtual void wndSetResizeCallback(WindowHandle const& wnd, WndResizeCallback callback);
+	    virtual void wndSetFramebufferResizeCallback(WindowHandle const& wnd, WndFramebufferResizeCallback callback);
+	    virtual void wndSetPositionCallback(WindowHandle const& wnd, WndPositionCallback callback);
+	    virtual void wndSetCursorEnterCallback(WindowHandle const& wnd, WndCursorEnterCallback callback);
+	    virtual void wndSetCursorPositionCallback(WindowHandle const& wnd, WndCursorPositionCallback callback);
+	    virtual void wndSetScrollCallback(WindowHandle const& wnd, WndScrollCallback callback);
+	    virtual void wndSetInputCallback(WindowHandle const& wnd, WndInputCallback callback);
 	    virtual TextureHandle texGenerate(TextureType type);
-	    virtual void texDelete(TextureHandle handle);
-	    virtual void texBind(TextureHandle handle);
+	    virtual void texDelete(TextureHandle const& handle);
+	    virtual void texBind(TextureHandle const& handle);
 	    virtual void texWrite(unsigned int level, unsigned int width, unsigned int height,
 		    PixelFormat format, PixelType type, void const* data);
 	    virtual void texWriteCompressed(unsigned int level, unsigned int width, unsigned int height,
@@ -76,37 +76,37 @@ namespace dbgl
 	    virtual void texGenerateMipMaps();
 	    virtual void texGetSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 	    virtual ShaderHandle shaCreate(ShaderType type, std::string src);
-	    virtual void shaDelete(ShaderHandle handle);
+	    virtual void shaDelete(ShaderHandle const& handle);
 	    virtual ShaderProgramHandle shaCreateProgram();
-	    virtual void shaDeleteProgram(ShaderProgramHandle handle);
-	    virtual void shaAttachShader(ShaderProgramHandle program, ShaderHandle shader);
-	    virtual void shaLinkProgram(ShaderProgramHandle program);
-	    virtual void shaUseProgram(ShaderProgramHandle program);
-	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle program, std::string name);
-	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle program, std::string name);
-	    virtual void shaSetUniformFloat(UniformHandle uniform, float value);
-	    virtual void shaSetUniformFloat2(UniformHandle uniform, float value1, float value2);
-	    virtual void shaSetUniformFloat3(UniformHandle uniform, float value1, float value2, float value3);
-	    virtual void shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
+	    virtual void shaDeleteProgram(ShaderProgramHandle const& handle);
+	    virtual void shaAttachShader(ShaderProgramHandle const& program, ShaderHandle const& shader);
+	    virtual void shaLinkProgram(ShaderProgramHandle const& program);
+	    virtual void shaUseProgram(ShaderProgramHandle const& program);
+	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle const& program, std::string name);
+	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle const& program, std::string name);
+	    virtual void shaSetUniformFloat(UniformHandle const& uniform, float value);
+	    virtual void shaSetUniformFloat2(UniformHandle const& uniform, float value1, float value2);
+	    virtual void shaSetUniformFloat3(UniformHandle const& uniform, float value1, float value2, float value3);
+	    virtual void shaSetUniformFloat4(UniformHandle const& uniform, float value1, float value2, float value3,
 		    float value4);
-	    virtual void shaSetUniformInt(UniformHandle uniform, int value);
-	    virtual void shaSetUniformInt2(UniformHandle uniform, int value1, int value2);
-	    virtual void shaSetUniformInt3(UniformHandle uniform, int value1, int value2, int value3);
-	    virtual void shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3,
+	    virtual void shaSetUniformInt(UniformHandle const& uniform, int value);
+	    virtual void shaSetUniformInt2(UniformHandle const& uniform, int value1, int value2);
+	    virtual void shaSetUniformInt3(UniformHandle const& uniform, int value1, int value2, int value3);
+	    virtual void shaSetUniformInt4(UniformHandle const& uniform, int value1, int value2, int value3,
 		    int value4);
-	    virtual void shaSetUniformFloatArray(UniformHandle uniform, unsigned int count, float const* values);
-	    virtual void shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values);
-	    virtual void shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values);
-	    virtual void shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values);
-	    virtual void shaSetUniformIntArray(UniformHandle uniform, unsigned int count, int const* values);
-	    virtual void shaSetUniformInt2Array(UniformHandle uniform, unsigned int count, int const* values);
-	    virtual void shaSetUniformInt3Array(UniformHandle uniform, unsigned int count, int const* values);
-	    virtual void shaSetUniformInt4Array(UniformHandle uniform, unsigned int count, int const* values);
-	    virtual void shaSetUniformMatrix2Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformFloatArray(UniformHandle const& uniform, unsigned int count, float const* values);
+	    virtual void shaSetUniformFloat2Array(UniformHandle const& uniform, unsigned int count, float const* values);
+	    virtual void shaSetUniformFloat3Array(UniformHandle const& uniform, unsigned int count, float const* values);
+	    virtual void shaSetUniformFloat4Array(UniformHandle const& uniform, unsigned int count, float const* values);
+	    virtual void shaSetUniformIntArray(UniformHandle const& uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt2Array(UniformHandle const& uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt3Array(UniformHandle const& uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt4Array(UniformHandle const& uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformMatrix2Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values);
-	    virtual void shaSetUniformMatrix3Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformMatrix3Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values);
-	    virtual void shaSetUniformMatrix4Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    virtual void shaSetUniformMatrix4Array(UniformHandle const& uniform, unsigned int count, bool transpose,
 		    float const* values);
 
 	private:
@@ -126,9 +126,9 @@ namespace dbgl
 	    static void wndPassKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	    static void wndPassMouseCallback(GLFWwindow* window, int button, int action, int mods);
 
-	    static GLFWwindow* getGLFWHandle(WindowHandle wnd);
+	    static GLFWwindow* getGLFWHandle(WindowHandle const& wnd);
 	    static WindowHandle getWindowHandle(GLFWwindow* wnd);
-	    static Input& getWindowInput(WindowHandle wnd);
+	    static Input& getWindowInput(WindowHandle const& wnd);
 	    static Input::Key glfwKey2InputKey(int key);
 	    static Input::Key glfwButton2InputKey(int button);
 	    static Input::KeyState glfwKeyState2InputKeyState(int keyState);

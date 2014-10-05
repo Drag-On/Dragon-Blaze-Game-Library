@@ -285,7 +285,7 @@ namespace dbgl
 	    /**
 	     * @return OpenGL handle of the shader program
 	     */
-	    GLuint getHandle() const;
+	    IGL::ShaderProgramHandle const& getHandle() const;
 
 	    /**
 	     * @brief Returns the handle of a default uniform or -1 if that uniform
