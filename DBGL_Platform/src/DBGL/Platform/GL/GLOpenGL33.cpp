@@ -846,6 +846,34 @@ namespace dbgl
 	glUniform4iv(un->m_handle, count, values);
     }
 
+    void GLOpenGL33::shaSetUniformMatrix2Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniformMatrix2fv(un->m_handle, count, transpose, values);
+    }
+
+    void GLOpenGL33::shaSetUniformMatrix3Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniformMatrix3fv(un->m_handle, count, transpose, values);
+    }
+
+    void GLOpenGL33::shaSetUniformMatrix4Array(UniformHandle uniform, unsigned int count, bool transpose,
+	    float const* values)
+    {
+	std::shared_ptr<ShaderUniformHandleGL> un = std::dynamic_pointer_cast<ShaderUniformHandleGL>(uniform);
+	if (!un)
+	    throw("Invalid uniform handle!");
+	glUniformMatrix4fv(un->m_handle, count, transpose, values);
+    }
+
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try

@@ -197,24 +197,24 @@ namespace dbgl
     void ShaderProgram::setUniformFloatMatrix2Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix2fv(handle->m_handle, count, transpose, values);
+	GLProvider::get()->shaSetUniformMatrix2Array(handle, count, transpose, values);
     }
 
     void ShaderProgram::setUniformFloatMatrix3Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix3fv(handle->m_handle, count, transpose, values);
+	GLProvider::get()->shaSetUniformMatrix3Array(handle, count, transpose, values);
     }
 
     void ShaderProgram::setUniformFloatMatrix4Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix4fv(handle->m_handle, count, transpose, values);
+	GLProvider::get()->shaSetUniformMatrix4Array(handle, count, transpose, values);
     }
 
     void ShaderProgram::setUniformSampler(IGL::UniformHandle const& handle, const int value) const
     {
-	glUniform1i(handle->m_handle, value);
+	GLProvider::get()->shaSetUniformInt(handle, value);
     }
 
     GLuint ShaderProgram::getHandle() const

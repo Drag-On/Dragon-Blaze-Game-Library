@@ -716,6 +716,33 @@ namespace dbgl
 	     * @param values Values, contiguously layed out in memory
 	     */
 	    virtual void shaSetUniformInt4Array(UniformHandle uniform, unsigned int count, int const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformMatrix2Array(UniformHandle uniform, unsigned int count, bool transpose,
+		    float const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformMatrix3Array(UniformHandle uniform, unsigned int count, bool transpose,
+		    float const* values) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param count Amount of elements passed in \p values
+	     * @param transpose Specifies if the matrix should be read as columns (false) or rows (true)
+	     * @param values Values, contiguously layed out in memory
+	     */
+	    virtual void shaSetUniformMatrix4Array(UniformHandle uniform, unsigned int count, bool transpose,
+		    float const* values) = 0;
 
 	protected:
 	    /**
