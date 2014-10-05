@@ -84,6 +84,11 @@ namespace dbgl
 	    virtual void shaUseProgram(ShaderProgramHandle program);
 	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle program, std::string name);
 	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle program, std::string name);
+	    virtual void shaSetUniformFloat(UniformHandle uniform, float value);
+	    virtual void shaSetUniformFloat2(UniformHandle uniform, float value1, float value2);
+	    virtual void shaSetUniformFloat3(UniformHandle uniform, float value1, float value2, float value3);
+	    virtual void shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
+		    float value4);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying

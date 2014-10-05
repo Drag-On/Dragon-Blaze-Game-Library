@@ -85,25 +85,25 @@ namespace dbgl
 
     void ShaderProgram::setUniformFloat(IGL::UniformHandle const& handle, const float value) const
     {
-	glUniform1f(handle->m_handle, value);
+	GLProvider::get()->shaSetUniformFloat(handle, value);
     }
 
     void ShaderProgram::setUniformFloat2(IGL::UniformHandle const& handle,
 	    const float value[2]) const
     {
-	glUniform2f(handle->m_handle, value[0], value[1]);
+	GLProvider::get()->shaSetUniformFloat2(handle, value[0], value[1]);
     }
 
     void ShaderProgram::setUniformFloat3(IGL::UniformHandle const& handle,
 	    const float value[3]) const
     {
-	glUniform3f(handle->m_handle, value[0], value[1], value[2]);
+	GLProvider::get()->shaSetUniformFloat3(handle, value[0], value[1], value[2]);
     }
 
     void ShaderProgram::setUniformFloat4(IGL::UniformHandle const& handle,
 	    const float value[4]) const
     {
-	glUniform4f(handle->m_handle, value[0], value[1], value[2], value[3]);
+	GLProvider::get()->shaSetUniformFloat4(handle, value[0], value[1], value[2], value[3]);
     }
 
     void ShaderProgram::setUniformInt(IGL::UniformHandle const& handle, const int value) const
