@@ -98,6 +98,10 @@ namespace dbgl
 	    virtual void shaSetUniformFloat2Array(UniformHandle uniform, unsigned int count, float const* values);
 	    virtual void shaSetUniformFloat3Array(UniformHandle uniform, unsigned int count, float const* values);
 	    virtual void shaSetUniformFloat4Array(UniformHandle uniform, unsigned int count, float const* values);
+	    virtual void shaSetUniformIntArray(UniformHandle uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt2Array(UniformHandle uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt3Array(UniformHandle uniform, unsigned int count, int const* values);
+	    virtual void shaSetUniformInt4Array(UniformHandle uniform, unsigned int count, int const* values);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
