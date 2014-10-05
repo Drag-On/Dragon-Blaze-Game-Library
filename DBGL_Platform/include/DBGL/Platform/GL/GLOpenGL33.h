@@ -89,6 +89,11 @@ namespace dbgl
 	    virtual void shaSetUniformFloat3(UniformHandle uniform, float value1, float value2, float value3);
 	    virtual void shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
 		    float value4);
+	    virtual void shaSetUniformInt(UniformHandle uniform, int value);
+	    virtual void shaSetUniformInt2(UniformHandle uniform, int value1, int value2);
+	    virtual void shaSetUniformInt3(UniformHandle uniform, int value1, int value2, int value3);
+	    virtual void shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3,
+		    int value4);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying

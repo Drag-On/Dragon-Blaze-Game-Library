@@ -108,42 +108,42 @@ namespace dbgl
 
     void ShaderProgram::setUniformInt(IGL::UniformHandle const& handle, const int value) const
     {
-	glUniform1i(handle->m_handle, value);
+	GLProvider::get()->shaSetUniformInt(handle, value);
     }
 
     void ShaderProgram::setUniformInt2(IGL::UniformHandle const& handle, const int value[2]) const
     {
-	glUniform2i(handle->m_handle, value[0], value[1]);
+	GLProvider::get()->shaSetUniformInt2(handle, value[0], value[1]);
     }
 
     void ShaderProgram::setUniformInt3(IGL::UniformHandle const& handle, const int value[3]) const
     {
-	glUniform3i(handle->m_handle, value[0], value[1], value[2]);
+	GLProvider::get()->shaSetUniformInt3(handle, value[0], value[1], value[2]);
     }
 
     void ShaderProgram::setUniformInt4(IGL::UniformHandle const& handle, const int value[4]) const
     {
-	glUniform4i(handle->m_handle, value[0], value[1], value[2], value[3]);
+	GLProvider::get()->shaSetUniformInt4(handle, value[0], value[1], value[2], value[3]);
     }
 
     void ShaderProgram::setUniformBool(IGL::UniformHandle const& handle, const bool value) const
     {
-	glUniform1i(handle->m_handle, value);
+	GLProvider::get()->shaSetUniformInt(handle, value);
     }
 
     void ShaderProgram::setUniformBool2(IGL::UniformHandle const& handle, const bool value[2]) const
     {
-	glUniform2i(handle->m_handle, value[0], value[1]);
+	GLProvider::get()->shaSetUniformInt2(handle, value[0], value[1]);
     }
 
     void ShaderProgram::setUniformBool3(IGL::UniformHandle const& handle, const bool value[3]) const
     {
-	glUniform3i(handle->m_handle, value[0], value[1], value[2]);
+	GLProvider::get()->shaSetUniformInt3(handle, value[0], value[1], value[2]);
     }
 
     void ShaderProgram::setUniformBool4(IGL::UniformHandle const& handle, const bool value[4]) const
     {
-	glUniform4i(handle->m_handle, value[0], value[1], value[2], value[3]);
+	GLProvider::get()->shaSetUniformInt4(handle, value[0], value[1], value[2], value[3]);
     }
 
     void ShaderProgram::setUniformFloatArray(IGL::UniformHandle const& handle, unsigned int count,

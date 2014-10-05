@@ -628,6 +628,38 @@ namespace dbgl
 	     */
 	    virtual void shaSetUniformFloat4(UniformHandle uniform, float value1, float value2, float value3,
 		    float value4) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param value Value to assign
+	     */
+	    virtual void shaSetUniformInt(UniformHandle uniform, int value) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param value1 First value to assign
+	     * @param value2 Second value to assign
+	     */
+	    virtual void shaSetUniformInt2(UniformHandle uniform, int value1, int value2) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param value1 First value to assign
+	     * @param value2 Second value to assign
+	     * @param value3 Third value to assign
+	     */
+	    virtual void shaSetUniformInt3(UniformHandle uniform, int value1, int value2,
+		    int value3) = 0;
+	    /**
+	     * @brief Assigns some value to a uniform of the currently used shader program
+	     * @param uniform Handle of the uniform
+	     * @param value1 First value to assign
+	     * @param value2 Second value to assign
+	     * @param value3 Third value to assign
+	     * @param value4 Fourth value to assign
+	     */
+	    virtual void shaSetUniformInt4(UniformHandle uniform, int value1, int value2, int value3,
+		    int value4) = 0;
 
 	protected:
 	    /**
