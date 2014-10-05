@@ -12,6 +12,9 @@
 
 namespace dbgl
 {
+    const IGL::AttributeHandle IGL::InvalidAttributeHandle = IGL::AttributeHandle{}; // nullptr
+    const IGL::UniformHandle IGL::InvalidUniformHandle = IGL::UniformHandle{}; // nullptr
+
     IGL::IGL()
     {
 	static bool initialized { false };

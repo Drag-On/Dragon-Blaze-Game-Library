@@ -80,14 +80,14 @@ namespace dbgl
 	     * @param name Name of the shader attribute
 	     * @return The attributes id
 	     */
-	    GLint getAttributeHandle(const std::string name) const;
+	    IGL::AttributeHandle getAttributeHandle(const std::string name) const;
 
 	    /**
 	     * @brief Returns the handle for a shader uniform by it's name
 	     * @param name Name of the shader uniform
 	     * @return The uniform id
 	     */
-	    GLint getUniformHandle(const std::string name) const;
+	    IGL::UniformHandle getUniformHandle(const std::string name) const;
 
 	    /**
 	     * @brief Binds a texture to a certain texture location
@@ -102,84 +102,84 @@ namespace dbgl
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformFloat(GLint handle, const float value) const;
+	    void setUniformFloat(IGL::UniformHandle const& handle, const float value) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformFloat2(GLint handle, const float value[2]) const;
+	    void setUniformFloat2(IGL::UniformHandle const& handle, const float value[2]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformFloat3(GLint handle, const float value[3]) const;
+	    void setUniformFloat3(IGL::UniformHandle const& handle, const float value[3]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformFloat4(GLint handle, const float value[4]) const;
+	    void setUniformFloat4(IGL::UniformHandle const& handle, const float value[4]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformInt(GLint handle, const int value) const;
+	    void setUniformInt(IGL::UniformHandle const& handle, const int value) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformInt2(GLint handle, const int value[2]) const;
+	    void setUniformInt2(IGL::UniformHandle const& handle, const int value[2]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformInt3(GLint handle, const int value[3]) const;
+	    void setUniformInt3(IGL::UniformHandle const& handle, const int value[3]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformInt4(GLint handle, const int value[4]) const;
+	    void setUniformInt4(IGL::UniformHandle const& handle, const int value[4]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformBool(GLint handle, const bool value) const;
+	    void setUniformBool(IGL::UniformHandle const& handle, const bool value) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformBool2(GLint handle, const bool value[2]) const;
+	    void setUniformBool2(IGL::UniformHandle const& handle, const bool value[2]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformBool3(GLint handle, const bool value[3]) const;
+	    void setUniformBool3(IGL::UniformHandle const& handle, const bool value[3]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformBool4(GLint handle, const bool value[4]) const;
+	    void setUniformBool4(IGL::UniformHandle const& handle, const bool value[4]) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -187,7 +187,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatArray(GLint handle, unsigned int count, const float* values) const;
+	    void setUniformFloatArray(IGL::UniformHandle const& handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -195,7 +195,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat2Array(GLint handle, unsigned int count, const float* values) const;
+	    void setUniformFloat2Array(IGL::UniformHandle const& handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -203,7 +203,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat3Array(GLint handle, unsigned int count, const float* values) const;
+	    void setUniformFloat3Array(IGL::UniformHandle const& handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -211,7 +211,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloat4Array(GLint handle, unsigned int count, const float* values) const;
+	    void setUniformFloat4Array(IGL::UniformHandle const& handle, unsigned int count, const float* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -219,7 +219,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformIntArray(GLint handle, unsigned int count, const int* values) const;
+	    void setUniformIntArray(IGL::UniformHandle const& handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -227,7 +227,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt2Array(GLint handle, unsigned int count, const int* values) const;
+	    void setUniformInt2Array(IGL::UniformHandle const& handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -235,7 +235,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt3Array(GLint handle, unsigned int count, const int* values) const;
+	    void setUniformInt3Array(IGL::UniformHandle const& handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -243,7 +243,7 @@ namespace dbgl
 	     * @param count Amount of elements of the uniform array
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformInt4Array(GLint handle, unsigned int count, const int* values) const;
+	    void setUniformInt4Array(IGL::UniformHandle const& handle, unsigned int count, const int* values) const;
 
 	    /**
 	     * @brief Sets a uniform by it's handle
@@ -252,7 +252,7 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix2Array(GLint handle, unsigned int count, bool transpose,
+	    void setUniformFloatMatrix2Array(IGL::UniformHandle const& handle, unsigned int count, bool transpose,
 		    const float* values) const;
 
 	    /**
@@ -262,7 +262,7 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix3Array(GLint handle, unsigned int count, bool transpose,
+	    void setUniformFloatMatrix3Array(IGL::UniformHandle const& handle, unsigned int count, bool transpose,
 		    const float* values) const;
 
 	    /**
@@ -272,7 +272,7 @@ namespace dbgl
 	     * @param transpose Indicates if the matrix should get transposed
 	     * @param values Pointer to array with count values
 	     */
-	    void setUniformFloatMatrix4Array(GLint handle, unsigned int count, bool transpose,
+	    void setUniformFloatMatrix4Array(IGL::UniformHandle const& handle, unsigned int count, bool transpose,
 		    const float* values) const;
 
 	    /**
@@ -280,7 +280,7 @@ namespace dbgl
 	     * @param handle Uniform handle
 	     * @param value New value
 	     */
-	    void setUniformSampler(GLint handle, const int value) const;
+	    void setUniformSampler(IGL::UniformHandle const& handle, const int value) const;
 
 	    /**
 	     * @return OpenGL handle of the shader program
@@ -293,7 +293,7 @@ namespace dbgl
 	     * @param uniform Uniform to get the handle for
 	     * @return The uniform handle or -1 if it is not present
 	     */
-	    GLint getDefaultUniformHandle(Uniform uniform) const;
+	    IGL::UniformHandle const& getDefaultUniformHandle(Uniform uniform) const;
 
 	    /**
 	     * @brief Returns the expected name of a default uniform.
@@ -331,7 +331,7 @@ namespace dbgl
 
 	private:
 	    IGL::ShaderProgramHandle m_shaderProgram;
-	    std::map<Uniform, GLint> m_uniformHandles;
+	    std::map<Uniform, IGL::UniformHandle> m_uniformHandles;
 
 	    static std::map<Uniform, std::string> uniformNames;
 
@@ -340,21 +340,12 @@ namespace dbgl
 	     * 	      handles for later use
 	     */
 	    void checkUniforms();
-
 	    /**
 	     * @brief Reads in a text file
 	     * @param path Path of the file to read
 	     * @return Content of the read file
 	     */
 	    std::string readFile(const std::string path);
-
-	    /**
-	     * @brief Prints the output of a shader compile process to LOG
-	     * @param object Shader to print the log for
-	     * @param ok Indicates if compilation was successful
-	     */
-	    void printLog(GLuint object, GLint ok);
-
 	    /**
 	     * @brief Compiles a string as a shader and returns it
 	     * @param code Code of the shader to compile

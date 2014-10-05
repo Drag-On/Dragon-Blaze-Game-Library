@@ -57,9 +57,9 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     pShader->use();
     // Diffuse texture
-    GLint diffuseId = pShader->getDefaultUniformHandle(
+    auto diffuseId = pShader->getDefaultUniformHandle(
 	    ShaderProgram::TEX_DIFFUSE);
-    if (diffuseId >= 0)
+    if (diffuseId != IGL::InvalidUniformHandle)
     {
 	// Bind diffuse texture to unit 0
 	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);
@@ -67,16 +67,16 @@ void renderCallback(Window::RenderEventArgs const& args)
     }
     // MVP matrix
     Mat4f mvp = projection * view; // Identity model matrix
-    GLint mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    if (mvpId >= 0)
+    auto mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    if (mvpId != IGL::InvalidUniformHandle)
     {
 	pShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE,
 		mvp.getDataPointer());
     }
     // ITMV matrix
-    GLint itmvId = pShader->getDefaultUniformHandle(
+    auto itmvId = pShader->getDefaultUniformHandle(
 	    ShaderProgram::Uniform::ITMV);
-    if (itmvId >= 0)
+    if (itmvId != IGL::InvalidUniformHandle)
     {
 	// In this case inverse transpose of view equals view
 	pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,

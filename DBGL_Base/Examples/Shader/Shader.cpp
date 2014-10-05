@@ -119,9 +119,9 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Draw lights using simple color shader
     pShaderNoLight->use();
     // Get uniform handles
-    GLint mvpId = pShaderNoLight->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint colorId = pShaderNoLight->getDefaultUniformHandle(ShaderProgram::Uniform::COLOR);
-    if (mvpId <= 0)
+    auto mvpId = pShaderNoLight->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    auto colorId = pShaderNoLight->getDefaultUniformHandle(ShaderProgram::Uniform::COLOR);
+    if (mvpId == IGL::InvalidUniformHandle)
 	return;
 
     // Draw sphere at light 1 position
@@ -139,20 +139,20 @@ void renderCallback(Window::RenderEventArgs const& args)
     pShaderDiffSpec->use();
 
     // Get uniform handles
-    GLint mId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
+    auto mId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
     mvpId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint itmId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
-    GLint itvId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
-    GLint numLightsId = pShaderDiffSpec->getUniformHandle("i_numLights");
-    GLint light0PosId = pShaderDiffSpec->getUniformHandle("lights[0].v3_position_w");
-    GLint light0ColorId = pShaderDiffSpec->getUniformHandle("lights[0].v3_color");
-    GLint light1PosId = pShaderDiffSpec->getUniformHandle("lights[1].v3_position_w");
-    GLint light1ColorId = pShaderDiffSpec->getUniformHandle("lights[1].v3_color");
-    GLint ambientId = pShaderDiffSpec->getUniformHandle("v3_ambientLight");
-    GLint matSpecColId = pShaderDiffSpec->getUniformHandle("mat.v3_specColor");
-    GLint matSpecWidthId = pShaderDiffSpec->getUniformHandle("mat.f_specWidth");
-    GLint diffuseId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-    GLint specularId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
+    auto itmId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
+    auto itvId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
+    auto numLightsId = pShaderDiffSpec->getUniformHandle("i_numLights");
+    auto light0PosId = pShaderDiffSpec->getUniformHandle("lights[0].v3_position_w");
+    auto light0ColorId = pShaderDiffSpec->getUniformHandle("lights[0].v3_color");
+    auto light1PosId = pShaderDiffSpec->getUniformHandle("lights[1].v3_position_w");
+    auto light1ColorId = pShaderDiffSpec->getUniformHandle("lights[1].v3_color");
+    auto ambientId = pShaderDiffSpec->getUniformHandle("v3_ambientLight");
+    auto matSpecColId = pShaderDiffSpec->getUniformHandle("mat.v3_specColor");
+    auto matSpecWidthId = pShaderDiffSpec->getUniformHandle("mat.f_specWidth");
+    auto diffuseId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+    auto specularId = pShaderDiffSpec->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
 
     // Bind textures
     // Bind diffuse texture to unit 0
@@ -201,7 +201,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     matSpecWidthId = pShaderNorm->getUniformHandle("mat.f_specWidth");
     diffuseId = pShaderNorm->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
     specularId = pShaderNorm->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
-    GLint normalId = pShaderNorm->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
+    auto normalId = pShaderNorm->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
 
     // Bind textures
     // Bind diffuse texture to unit 0

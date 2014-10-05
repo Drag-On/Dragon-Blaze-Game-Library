@@ -219,9 +219,9 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Draw lights using simple color shader
     pShaderNoLight->getShader()->use();
     // Get uniform handles
-    GLint mvpId = pShaderNoLight->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint colorId = pShaderNoLight->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::COLOR);
-    if (mvpId <= 0)
+    auto mvpId = pShaderNoLight->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    auto colorId = pShaderNoLight->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::COLOR);
+    if (mvpId == IGL::InvalidUniformHandle)
 	return;
 
     // Draw sphere at light 1 position
@@ -239,20 +239,20 @@ void renderCallback(Window::RenderEventArgs const& args)
     pShaderDiffSpec->getShader()->use();
 
     // Get uniform handles
-    GLint mId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
+    auto mId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
     mvpId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint itmId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
-    GLint itvId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
-    GLint numLightsId = pShaderDiffSpec->getShader()->getUniformHandle("i_numLights");
-    GLint light0PosId = pShaderDiffSpec->getShader()->getUniformHandle("lights[0].v3_position_w");
-    GLint light0ColorId = pShaderDiffSpec->getShader()->getUniformHandle("lights[0].v3_color");
-    GLint light1PosId = pShaderDiffSpec->getShader()->getUniformHandle("lights[1].v3_position_w");
-    GLint light1ColorId = pShaderDiffSpec->getShader()->getUniformHandle("lights[1].v3_color");
-    GLint ambientId = pShaderDiffSpec->getShader()->getUniformHandle("v3_ambientLight");
-    GLint matSpecColId = pShaderDiffSpec->getShader()->getUniformHandle("mat.v3_specColor");
-    GLint matSpecWidthId = pShaderDiffSpec->getShader()->getUniformHandle("mat.f_specWidth");
-    GLint diffuseId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-    GLint specularId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
+    auto itmId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
+    auto itvId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
+    auto numLightsId = pShaderDiffSpec->getShader()->getUniformHandle("i_numLights");
+    auto light0PosId = pShaderDiffSpec->getShader()->getUniformHandle("lights[0].v3_position_w");
+    auto light0ColorId = pShaderDiffSpec->getShader()->getUniformHandle("lights[0].v3_color");
+    auto light1PosId = pShaderDiffSpec->getShader()->getUniformHandle("lights[1].v3_position_w");
+    auto light1ColorId = pShaderDiffSpec->getShader()->getUniformHandle("lights[1].v3_color");
+    auto ambientId = pShaderDiffSpec->getShader()->getUniformHandle("v3_ambientLight");
+    auto matSpecColId = pShaderDiffSpec->getShader()->getUniformHandle("mat.v3_specColor");
+    auto matSpecWidthId = pShaderDiffSpec->getShader()->getUniformHandle("mat.f_specWidth");
+    auto diffuseId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+    auto specularId = pShaderDiffSpec->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
 
     // Bind textures
     // Bind diffuse texture to unit 0
@@ -304,7 +304,7 @@ void renderCallback(Window::RenderEventArgs const& args)
     matSpecWidthId = pShaderNorm->getShader()->getUniformHandle("mat.f_specWidth");
     diffuseId = pShaderNorm->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
     specularId = pShaderNorm->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
-    GLint normalId = pShaderNorm->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
+    auto normalId = pShaderNorm->getShader()->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
 
     // Bind textures
     // Bind diffuse texture to unit 0

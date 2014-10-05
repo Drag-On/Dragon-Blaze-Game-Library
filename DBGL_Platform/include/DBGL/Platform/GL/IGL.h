@@ -14,6 +14,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include <memory>
 #include <GL/glew.h> // TODO: DEBUG!
 #include "HandleGenerator.h"
 #include "Input.h"
@@ -185,23 +186,57 @@ namespace dbgl
 		    virtual ~ShaderProgramHandleInternal() = default;
 		    GLuint m_handle; // TODO: DEBUG!
 	    };
+	    /**
+	     * @brief Base struct for attribute handles of a shader
+	     */
+	    struct ShaderAttributeHandleInternal
+	    {
+		public:
+		    virtual ~ShaderAttributeHandleInternal() = default;
+		    GLint m_handle; // TODO: DEBUG!
+	    };
+	    /**
+	     * @brief Base struct for uniform handles of a shader
+	     */
+	    struct ShaderUniformHandleInternal
+	    {
+		public:
+		    virtual ~ShaderUniformHandleInternal() = default;
+		    GLint m_handle; // TODO: DEBUG!
+	    };
 	public:
 	    /**
-	     * @brief Type of handles used for textures
+	     * @brief Type of handles used for shaders
 	     */
 	    using ShaderHandle = ShaderHandleInternal*;
 	    /**
-	     * @brief Constant for invalid window handles
+	     * @brief Constant for invalid shader handles
 	     */
 	    static constexpr ShaderHandle InvalidShaderHandle = nullptr;
 	    /**
-	     * @brief Type of handles used for textures
+	     * @brief Type of handles used for shader programs
 	     */
 	    using ShaderProgramHandle = ShaderProgramHandleInternal*;
 	    /**
-	     * @brief Constant for invalid window handles
+	     * @brief Constant for invalid shader program handles
 	     */
 	    static constexpr ShaderProgramHandle InvalidShaderProgramHandle = nullptr;
+	    /**
+	     * @brief Type of handles used for attributes of shader programs
+	     */
+	    using AttributeHandle = std::shared_ptr<ShaderAttributeHandleInternal>;
+	    /**
+	     * @brief Constant for invalid attribute handles
+	     */
+	    static const AttributeHandle InvalidAttributeHandle;
+	    /**
+	     * @brief Type of handles used for uniforms of shader programs
+	     */
+	    using UniformHandle = std::shared_ptr<ShaderUniformHandleInternal>;
+	    /**
+	     * @brief Constant for invalid uniform handles
+	     */
+	    static const UniformHandle InvalidUniformHandle;
 	    /**
 	     * @brief Lists all supported shader types
 	     */
@@ -542,6 +577,25 @@ namespace dbgl
 	     * @throws LinkException if linking went wrong
 	     */
 	    virtual void shaLinkProgram(ShaderProgramHandle program) = 0;
+	    /**
+	     * @brief Makes the passed shader program the currently used one
+	     * @param program Program to use
+	     */
+	    virtual void shaUseProgram(ShaderProgramHandle program) = 0;
+	    /**
+	     * @brief Provides a handle to a certain attribute of a shader program
+	     * @param program Program to get attribute handle from
+	     * @param name Name of the attribute
+	     * @return Handle to the attribute or InvalidAttributeHandle if not found
+	     */
+	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle program, std::string name) = 0;
+	    /**
+	     * @brief Provides a handle to a certain uniform of a shader program
+	     * @param program Program to get uniform handle from
+	     * @param name Name of the uniform
+	     * @return Handle to the uniform or InvalidUniformHandle if not found
+	     */
+	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle program, std::string name) = 0;
 
 	protected:
 	    /**

@@ -64,17 +64,17 @@ namespace dbgl
 
     void ShaderProgram::use() const
     {
-	glUseProgram(m_shaderProgram->m_handle);
+	GLProvider::get()->shaUseProgram(m_shaderProgram);
     }
 
-    GLint ShaderProgram::getAttributeHandle(const std::string name) const
+    IGL::AttributeHandle ShaderProgram::getAttributeHandle(const std::string name) const
     {
-	return glGetAttribLocation(m_shaderProgram->m_handle, name.c_str());
+	return GLProvider::get()->shaGetAttributeHandle(m_shaderProgram, name);
     }
 
-    GLint ShaderProgram::getUniformHandle(const std::string name) const
+    IGL::UniformHandle ShaderProgram::getUniformHandle(const std::string name) const
     {
-	return glGetUniformLocation(m_shaderProgram->m_handle, name.c_str());
+	return GLProvider::get()->shaGetUniformHandle(m_shaderProgram, name);
     }
 
     void ShaderProgram::bindTexture(int texLocation, int texType, GLuint texHandle) const
@@ -83,138 +83,138 @@ namespace dbgl
 	glBindTexture(texType, texHandle);
     }
 
-    void ShaderProgram::setUniformFloat(GLint handle, const float value) const
+    void ShaderProgram::setUniformFloat(IGL::UniformHandle const& handle, const float value) const
     {
-	glUniform1f(handle, value);
+	glUniform1f(handle->m_handle, value);
     }
 
-    void ShaderProgram::setUniformFloat2(GLint handle,
+    void ShaderProgram::setUniformFloat2(IGL::UniformHandle const& handle,
 	    const float value[2]) const
     {
-	glUniform2f(handle, value[0], value[1]);
+	glUniform2f(handle->m_handle, value[0], value[1]);
     }
 
-    void ShaderProgram::setUniformFloat3(GLint handle,
+    void ShaderProgram::setUniformFloat3(IGL::UniformHandle const& handle,
 	    const float value[3]) const
     {
-	glUniform3f(handle, value[0], value[1], value[2]);
+	glUniform3f(handle->m_handle, value[0], value[1], value[2]);
     }
 
-    void ShaderProgram::setUniformFloat4(GLint handle,
+    void ShaderProgram::setUniformFloat4(IGL::UniformHandle const& handle,
 	    const float value[4]) const
     {
-	glUniform4f(handle, value[0], value[1], value[2], value[3]);
+	glUniform4f(handle->m_handle, value[0], value[1], value[2], value[3]);
     }
 
-    void ShaderProgram::setUniformInt(GLint handle, const int value) const
+    void ShaderProgram::setUniformInt(IGL::UniformHandle const& handle, const int value) const
     {
-	glUniform1i(handle, value);
+	glUniform1i(handle->m_handle, value);
     }
 
-    void ShaderProgram::setUniformInt2(GLint handle, const int value[2]) const
+    void ShaderProgram::setUniformInt2(IGL::UniformHandle const& handle, const int value[2]) const
     {
-	glUniform2i(handle, value[0], value[1]);
+	glUniform2i(handle->m_handle, value[0], value[1]);
     }
 
-    void ShaderProgram::setUniformInt3(GLint handle, const int value[3]) const
+    void ShaderProgram::setUniformInt3(IGL::UniformHandle const& handle, const int value[3]) const
     {
-	glUniform3i(handle, value[0], value[1], value[2]);
+	glUniform3i(handle->m_handle, value[0], value[1], value[2]);
     }
 
-    void ShaderProgram::setUniformInt4(GLint handle, const int value[4]) const
+    void ShaderProgram::setUniformInt4(IGL::UniformHandle const& handle, const int value[4]) const
     {
-	glUniform4i(handle, value[0], value[1], value[2], value[3]);
+	glUniform4i(handle->m_handle, value[0], value[1], value[2], value[3]);
     }
 
-    void ShaderProgram::setUniformBool(GLint handle, const bool value) const
+    void ShaderProgram::setUniformBool(IGL::UniformHandle const& handle, const bool value) const
     {
-	glUniform1i(handle, value);
+	glUniform1i(handle->m_handle, value);
     }
 
-    void ShaderProgram::setUniformBool2(GLint handle, const bool value[2]) const
+    void ShaderProgram::setUniformBool2(IGL::UniformHandle const& handle, const bool value[2]) const
     {
-	glUniform2i(handle, value[0], value[1]);
+	glUniform2i(handle->m_handle, value[0], value[1]);
     }
 
-    void ShaderProgram::setUniformBool3(GLint handle, const bool value[3]) const
+    void ShaderProgram::setUniformBool3(IGL::UniformHandle const& handle, const bool value[3]) const
     {
-	glUniform3i(handle, value[0], value[1], value[2]);
+	glUniform3i(handle->m_handle, value[0], value[1], value[2]);
     }
 
-    void ShaderProgram::setUniformBool4(GLint handle, const bool value[4]) const
+    void ShaderProgram::setUniformBool4(IGL::UniformHandle const& handle, const bool value[4]) const
     {
-	glUniform4i(handle, value[0], value[1], value[2], value[3]);
+	glUniform4i(handle->m_handle, value[0], value[1], value[2], value[3]);
     }
 
-    void ShaderProgram::setUniformFloatArray(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformFloatArray(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform1fv(handle, count, values);
+	glUniform1fv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformFloat2Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformFloat2Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform2fv(handle, count, values);
+	glUniform2fv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformFloat3Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformFloat3Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform3fv(handle, count, values);
+	glUniform3fv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformFloat4Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformFloat4Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const float* values) const
     {
-	glUniform4fv(handle, count, values);
+	glUniform4fv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformIntArray(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformIntArray(IGL::UniformHandle const& handle, unsigned int count,
 	    const int* values) const
     {
-	glUniform1iv(handle, count, values);
+	glUniform1iv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformInt2Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformInt2Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const int* values) const
     {
-	glUniform2iv(handle, count, values);
+	glUniform2iv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformInt3Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformInt3Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const int* values) const
     {
-	glUniform3iv(handle, count, values);
+	glUniform3iv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformInt4Array(GLint handle, unsigned int count,
+    void ShaderProgram::setUniformInt4Array(IGL::UniformHandle const& handle, unsigned int count,
 	    const int* values) const
     {
-	glUniform4iv(handle, count, values);
+	glUniform4iv(handle->m_handle, count, values);
     }
 
-    void ShaderProgram::setUniformFloatMatrix2Array(GLint handle,
+    void ShaderProgram::setUniformFloatMatrix2Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix2fv(handle, count, transpose, values);
+	glUniformMatrix2fv(handle->m_handle, count, transpose, values);
     }
 
-    void ShaderProgram::setUniformFloatMatrix3Array(GLint handle,
+    void ShaderProgram::setUniformFloatMatrix3Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix3fv(handle, count, transpose, values);
+	glUniformMatrix3fv(handle->m_handle, count, transpose, values);
     }
 
-    void ShaderProgram::setUniformFloatMatrix4Array(GLint handle,
+    void ShaderProgram::setUniformFloatMatrix4Array(IGL::UniformHandle const& handle,
 	    unsigned int count, bool transpose, const float* values) const
     {
-	glUniformMatrix4fv(handle, count, transpose, values);
+	glUniformMatrix4fv(handle->m_handle, count, transpose, values);
     }
 
-    void ShaderProgram::setUniformSampler(GLint handle, const int value) const
+    void ShaderProgram::setUniformSampler(IGL::UniformHandle const& handle, const int value) const
     {
-	glUniform1i(handle, value);
+	glUniform1i(handle->m_handle, value);
     }
 
     GLuint ShaderProgram::getHandle() const
@@ -222,7 +222,7 @@ namespace dbgl
 	return m_shaderProgram->m_handle;
     }
 
-    GLint ShaderProgram::getDefaultUniformHandle(Uniform uniform) const
+    IGL::UniformHandle const& ShaderProgram::getDefaultUniformHandle(Uniform uniform) const
     {
 	return m_uniformHandles.find(uniform)->second;
     }
@@ -319,7 +319,7 @@ namespace dbgl
 	    auto foo = uniformNames.find(uniform);
 	    std::string name = foo->second;
 	    const std::string nameCstr = name.c_str();
-	    GLint handle = getUniformHandle(nameCstr);
+	    IGL::UniformHandle handle = getUniformHandle(nameCstr);
 	    m_uniformHandles[uniform] = handle;
 	}
     }
@@ -338,43 +338,6 @@ namespace dbgl
 	else
 	    LOG.error("Unable to open %.", path);
 	return code;
-    }
-
-    void ShaderProgram::printLog(GLuint object, GLint ok)
-    {
-	GLint logLength = 0;
-
-	// Get length of the log depending on object type
-	if (glIsShader(object))
-	    glGetShaderiv(object, GL_INFO_LOG_LENGTH, &logLength);
-	else if (glIsProgram(object))
-	    glGetProgramiv(object, GL_INFO_LOG_LENGTH, &logLength);
-	else
-	{
-	    LOG.warning(
-		    "Tried to print compile log for an object that is not a shader or program.");
-	    return;
-	}
-	if (logLength > 0)
-	{
-	    char* msg = new char[logLength] {};
-
-	    // Get actual log
-	    if (glIsShader(object))
-		glGetShaderInfoLog(object, logLength, NULL, msg);
-	    else if (glIsProgram(object))
-		glGetProgramInfoLog(object, logLength, NULL, msg);
-
-	    if (msg[logLength - 2] == '\n')
-		msg[logLength - 2] = 0;
-
-	    if (ok)
-		LOG.info(msg);
-	    else
-		LOG.error(msg);
-
-	    delete [] msg;
-	}
     }
 
     IGL::ShaderHandle ShaderProgram::compile(const std::string code, IGL::ShaderType type, const std::string fileName)

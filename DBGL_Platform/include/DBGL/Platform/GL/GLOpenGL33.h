@@ -81,6 +81,9 @@ namespace dbgl
 	    virtual void shaDeleteProgram(ShaderProgramHandle handle);
 	    virtual void shaAttachShader(ShaderProgramHandle program, ShaderHandle shader);
 	    virtual void shaLinkProgram(ShaderProgramHandle program);
+	    virtual void shaUseProgram(ShaderProgramHandle program);
+	    virtual AttributeHandle shaGetAttributeHandle(ShaderProgramHandle program, std::string name);
+	    virtual UniformHandle shaGetUniformHandle(ShaderProgramHandle program, std::string name);
 
 	private:
 	    GLOpenGL33(GLOpenGL33 const&); // Disallow copying
@@ -129,7 +132,6 @@ namespace dbgl
 		private:
 //		    GLuint m_handle;
 		    GLenum m_type;
-
 		    friend class GLOpenGL33;
 	    };
 
@@ -147,14 +149,24 @@ namespace dbgl
 	    {
 		private:
 //		    GLuint m_handle;
-
 		    friend class GLOpenGL33;
 	    };
 	    struct ShaderProgramHandleGL : public ShaderProgramHandleInternal
 	    {
 		private:
 //		    GLuint m_handle;
-
+		    friend class GLOpenGL33;
+	    };
+	    struct ShaderAttributeHandleGL : public ShaderAttributeHandleInternal
+	    {
+		private:
+//		    GLint m_handle;
+		    friend class GLOpenGL33;
+	    };
+	    struct ShaderUniformHandleGL : public ShaderUniformHandleInternal
+	    {
+		private:
+//		    GLint m_handle;
 		    friend class GLOpenGL33;
 	    };
 

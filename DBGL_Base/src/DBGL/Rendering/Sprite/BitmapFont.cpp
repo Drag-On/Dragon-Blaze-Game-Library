@@ -90,13 +90,13 @@ namespace dbgl
 	for(char& c : text)
 	{
 	    // Check for uniforms
-	    GLint transformId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
-	    GLint screenResId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
-	    if (screenResId <= 0 || transformId <= 0)
+	    auto transformId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
+	    auto screenResId = shader.getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
+	    if (screenResId == IGL::InvalidUniformHandle || transformId == IGL::InvalidUniformHandle)
 		return;
 	    // Diffuse texture
-	    GLint diffuseId = shader.getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-	    if (diffuseId >= 0)
+	    auto diffuseId = shader.getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+	    if (diffuseId != IGL::InvalidUniformHandle)
 	    {
 		// Bind diffuse texture to unit 0
 		shader.bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, m_pTexture->getHandle()->m_handle);

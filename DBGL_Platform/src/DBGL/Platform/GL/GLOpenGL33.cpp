@@ -677,6 +677,46 @@ namespace dbgl
 	}
     }
 
+    void GLOpenGL33::shaUseProgram(ShaderProgramHandle program)
+    {
+	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
+	if(!prog)
+	    throw("Invalid shader program handle!");
+	glUseProgram(prog->m_handle);
+    }
+
+    auto GLOpenGL33::shaGetAttributeHandle(ShaderProgramHandle program, std::string name) -> AttributeHandle
+    {
+	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
+	if(!prog)
+	    throw("Invalid shader program handle!");
+	auto loc = glGetAttribLocation(prog->m_handle, name.c_str());
+	if(loc != -1)
+	{
+	    auto handle = std::make_shared<ShaderAttributeHandleGL>();
+	    handle->m_handle = loc;
+	    return handle;
+	}
+	else
+	    return InvalidAttributeHandle;
+    }
+
+    auto GLOpenGL33::shaGetUniformHandle(ShaderProgramHandle program, std::string name) -> UniformHandle
+    {
+	ShaderProgramHandleGL* prog = dynamic_cast<ShaderProgramHandleGL*>(program);
+	if(!prog)
+	    throw("Invalid shader program handle!");
+	auto loc = glGetUniformLocation(prog->m_handle, name.c_str());
+	if(loc != -1)
+	{
+	    auto handle = std::make_shared<ShaderUniformHandleGL>();
+	    handle->m_handle = loc;
+	    return handle;
+	}
+	else
+	    return InvalidUniformHandle;
+    }
+
     GLFWwindow* GLOpenGL33::getGLFWHandle(WindowHandle wnd)
     {
 	try

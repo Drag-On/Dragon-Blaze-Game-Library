@@ -96,14 +96,14 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     pShader->use();
     // Check for uniforms
-    GLint mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint itmvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
-    if (mvpId <= 0 || itmvId <= 0)
+    auto mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    auto itmvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
+    if (mvpId == IGL::InvalidUniformHandle || itmvId == IGL::InvalidUniformHandle)
 	return;
     // Diffuse texture
-    GLint diffuseId = pShader->getDefaultUniformHandle(
+    auto diffuseId = pShader->getDefaultUniformHandle(
 	    ShaderProgram::TEX_DIFFUSE);
-    if (diffuseId >= 0)
+    if (diffuseId != IGL::InvalidUniformHandle)
     {
 	// Bind diffuse texture to unit 0
 	pShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);

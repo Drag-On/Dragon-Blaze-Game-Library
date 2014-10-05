@@ -122,13 +122,13 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     p3DShader->use();
     // Check for uniforms
-    GLint mvpId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-    GLint itmvId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
-    if (mvpId <= 0 || itmvId <= 0)
+    auto mvpId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+    auto itmvId = p3DShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
+    if (mvpId == IGL::InvalidUniformHandle || itmvId == IGL::InvalidUniformHandle)
 	return;
     // Diffuse texture
-    GLint diffuseId = p3DShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-    if (diffuseId >= 0)
+    auto diffuseId = p3DShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+    if (diffuseId != IGL::InvalidUniformHandle)
     {
 	// Bind diffuse texture to unit 0
 	p3DShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);
@@ -154,13 +154,13 @@ void renderCallback(Window::RenderEventArgs const& args)
     // Instruct shader
     pSpriteShader->use();
     // Check for uniforms
-    GLint transformId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
-    GLint screenResId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
+    auto transformId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::TRANSFORM_2D);
+    auto screenResId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::Uniform::SCREEN_RES);
     if (screenResId <= 0 || transformId <= 0)
 	return;
     // Diffuse texture
     diffuseId = pSpriteShader->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-    if (diffuseId >= 0)
+    if (diffuseId != IGL::InvalidUniformHandle)
     {
 	// Bind diffuse texture to unit 0
 	pSpriteShader->bindTexture(GL_TEXTURE0, GL_TEXTURE_2D, pTexture->getHandle()->m_handle);

@@ -68,53 +68,53 @@ namespace dbgl
 	Mat4f projMat = Mat4f::makeProjection(cam.getFieldOfView(), frameWidth / frameHeight, cam.getNear(),
 		cam.getFar());
 	// Send model matrix if the shader wants it
-	GLint modelId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
-	if (modelId >= 0)
+	auto modelId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MODEL);
+	if (modelId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(modelId, 1, GL_FALSE, modelMat.getDataPointer());
 	}
 	// Send view matrix if the shader wants it
-	GLint viewId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::VIEW);
-	if (viewId >= 0)
+	auto viewId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::VIEW);
+	if (viewId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(viewId, 1, GL_FALSE, viewMat.getDataPointer());
 	}
 	// Send projection matrix if the shader wants it
-	GLint projectionId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::PROJECTION);
-	if (projectionId >= 0)
+	auto projectionId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::PROJECTION);
+	if (projectionId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(projectionId, 1, GL_FALSE, projMat.getDataPointer());
 	}
 	// Send mv matrix if the shader wants it
-	GLint mvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MV);
-	if (mvId >= 0)
+	auto mvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MV);
+	if (mvId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(mvId, 1, GL_FALSE,
 		    (viewMat * modelMat).getDataPointer());
 	}
 	// Send mvp matrix if the shader wants it
-	GLint mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
-	if (mvpId >= 0)
+	auto mvpId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::MVP);
+	if (mvpId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(mvpId, 1, GL_FALSE,
 		    (projMat * viewMat * modelMat).getDataPointer());
 	}
 	// Send itm matrix if the shader wants it
-	GLint itmId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
-	if (itmId >= 0)
+	auto itmId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITM);
+	if (itmId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(itmId, 1, GL_FALSE, itmMat.getDataPointer());
 	}
 	// Send itv matrix if the shader wants it
-	GLint itvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
-	if (itvId >= 0)
+	auto itvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITV);
+	if (itvId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(itvId, 1, GL_FALSE,
 		    itvMat.getDataPointer());
 	}
 	// Send itmv matrix if the shader wants it
-	GLint itmvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
-	if (itmvId >= 0)
+	auto itmvId = pShader->getDefaultUniformHandle(ShaderProgram::Uniform::ITMV);
+	if (itmvId != IGL::InvalidUniformHandle)
 	{
 	    pShader->setUniformFloatMatrix4Array(itmvId, 1, GL_FALSE,
 		    (itvMat * itmMat).getDataPointer());
@@ -136,8 +136,8 @@ namespace dbgl
 	auto lightColorName = ShaderProgram::getDefaultUniformName(ShaderProgram::LIGHT_COLOR);
 	struct LightData
 	{
-		GLint position;
-		GLint color;
+		IGL::UniformHandle position;
+		IGL::UniformHandle color;
 	};
 	std::vector<LightData> lightIds {};
 	for(auto it = lights.begin(); it != lights.end(); ++it)
@@ -156,8 +156,8 @@ namespace dbgl
 				    pShader->getUniformHandle(lightArrName + "[" + std::to_string(i) + "]." + lightColorName)});
 	    }
 	}
-	GLint numLightsId = pShader->getDefaultUniformHandle(ShaderProgram::AMOUNTLIGHTS);
-	GLint ambientId = pShader->getDefaultUniformHandle(ShaderProgram::AMBIENT);
+	auto numLightsId = pShader->getDefaultUniformHandle(ShaderProgram::AMOUNTLIGHTS);
+	auto ambientId = pShader->getDefaultUniformHandle(ShaderProgram::AMBIENT);
 
 	// Calculate ambient light and pass it over
 	Vec3f ambient{0.0f, 0.0f, 0.0f};

@@ -24,8 +24,8 @@ namespace dbgl
 	Material::prepare();
 
 	// Send diffuse texture if the shader wants it
-	GLint diffuseId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
-	if (diffuseId >= 0 && m_pDiffuse != nullptr)
+	auto diffuseId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_DIFFUSE);
+	if (diffuseId != IGL::InvalidUniformHandle && m_pDiffuse != nullptr)
 	{
 	    // Bind to texture unit 0
 	    glActiveTexture(GL_TEXTURE0);
@@ -33,8 +33,8 @@ namespace dbgl
 	    m_pShaderProgram->setUniformSampler(diffuseId, 0);
 	}
 	// Send normal texture if the shader wants it
-	GLint normalId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
-	if (normalId >= 0 && m_pNormal != nullptr)
+	auto normalId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_NORMAL);
+	if (normalId != IGL::InvalidUniformHandle && m_pNormal != nullptr)
 	{
 	    // Bind to texture unit 1
 	    glActiveTexture(GL_TEXTURE1);
@@ -42,8 +42,8 @@ namespace dbgl
 	    m_pShaderProgram->setUniformSampler(normalId, 1);
 	}
 	// Send specular texture if the shader wants it
-	GLint specularId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
-	if (specularId >= 0 && m_pSpecular != nullptr)
+	auto specularId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::TEX_SPECULAR);
+	if (specularId != IGL::InvalidUniformHandle && m_pSpecular != nullptr)
 	{
 	    // Bind to texture unit 2
 	    glActiveTexture(GL_TEXTURE2);
@@ -51,13 +51,13 @@ namespace dbgl
 	    m_pShaderProgram->setUniformSampler(specularId, 2);
 	}
 	// Send specular color and width if the shader wants it
-	GLint specularColorId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_COLOR);
-	if (specularColorId >= 0)
+	auto specularColorId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_COLOR);
+	if (specularColorId != IGL::InvalidUniformHandle)
 	{
 	    m_pShaderProgram->setUniformFloat3(specularColorId, m_specColor.getDataPointer());
 	}
-	GLint specularWidthId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_WIDTH);
-	if (specularWidthId >= 0)
+	auto specularWidthId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::SPEC_WIDTH);
+	if (specularWidthId != IGL::InvalidUniformHandle)
 	{
 	    m_pShaderProgram->setUniformFloat(specularWidthId, m_specWidth);
 	}

@@ -22,8 +22,8 @@ namespace dbgl
 	Material::prepare();
 
 	// Send color to shader
-	GLint colorId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::COLOR);
-	if (colorId >= 0)
+	auto colorId = m_pShaderProgram->getDefaultUniformHandle(ShaderProgram::COLOR);
+	if (colorId != IGL::InvalidUniformHandle)
 	{
 	    m_pShaderProgram->setUniformFloat3(colorId, m_color.getDataPointer());
 	}
