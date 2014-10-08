@@ -42,9 +42,7 @@ namespace dbgl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_SAMPLES, multisampling);
-#ifdef __WIN32
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
 	if(fullscreen)
 	    m_pWndHandle = glfwCreateWindow(m_fullscreenWidth, m_fullscreenHeight, title, glfwGetPrimaryMonitor(), share);
 	else
