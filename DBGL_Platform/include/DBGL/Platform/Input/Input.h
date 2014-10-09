@@ -296,9 +296,6 @@ namespace dbgl
 	     * 	     allow for easy localization
 	     */
 	    static KeyDescriptionMap keyDescriptions;
-
-	    friend class GLOpenGL33;
-	    friend class Window;
     };
 }
 
