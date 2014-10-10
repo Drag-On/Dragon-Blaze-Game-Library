@@ -21,11 +21,11 @@ namespace dbgl
      */
     class Input
     {
-	private:
+	public:
 	    static const unsigned int keyboard_offset = 0;
 	    static const unsigned int mouse_offset = 400;
 	    static const unsigned int joystick_offset = 450;
-	public:
+
 	    /**
 	     * @brief All known input methods
 	     * @details This does not only cover keyboards, but also mouse and joystick.
