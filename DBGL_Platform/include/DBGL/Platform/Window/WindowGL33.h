@@ -86,19 +86,14 @@ namespace dbgl
 	    virtual InputEventType::DelegatePtr addInputCallback(InputCallbackType const& callback);
 	    virtual bool removeInputCallback(InputEventType::DelegatePtr const& callback);
 
-	protected:
+	private:
 	    /**
 	     * GLFW window handle
 	     */
 	    GLFWwindow* m_pWndHandle = nullptr;
 // TODO: Use GLEW MX for support of multiple windows
 //	    GLEWContext* m_pGlewContext = nullptr;
-	    /**
-	     * @brief Time since last frame
-	     */
-	    double m_deltaTime = 0;
 
-	private:
 	    CloseEventType m_closeCallbacks;
 	    FocusEventType m_focusCallbacks;
 	    IconifiedEventType m_iconifiedCallbacks;
@@ -119,8 +114,6 @@ namespace dbgl
 	    unsigned int m_windowedWidth, m_windowedHeight; // Resolution for window
 	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
 	    unsigned int m_multisampling;
-	    double m_lastTime = 0; // Last timestamp
-	    GLuint m_vertexArrayId;
 	    Input m_input;
 	    KeyEventType::DelegatePtr m_inputKeyDelegate;
 	    MouseButtonEventType::DelegatePtr m_inputMouseDelegate;
