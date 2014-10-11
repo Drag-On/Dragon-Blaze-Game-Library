@@ -16,6 +16,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "IWindow.h"
+#include "DBGL/Platform/RenderContext/RenderContextGL33Window.h"
 
 namespace dbgl
 {
@@ -53,6 +54,7 @@ namespace dbgl
 	    virtual void getCursorPos(double& x, double& y) const;
 	    virtual void setCursorPos(double x, double y);
 	    virtual Input const& getInput() const;
+	    virtual IRenderContext const& getRenderContext() const;
 	    virtual CloseEventType::DelegatePtr addCloseCallback(CloseCallbackType const& callback);
 	    virtual bool removeCloseCallback(CloseEventType::DelegatePtr const& callback);
 	    virtual FocusEventType::DelegatePtr addFocusCallback(FocusCallbackType const& callback);
@@ -115,6 +117,7 @@ namespace dbgl
 	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
 	    unsigned int m_multisampling;
 	    Input m_input;
+	    RenderContextGL33Window m_rc{this};
 	    KeyEventType::DelegatePtr m_inputKeyDelegate;
 	    MouseButtonEventType::DelegatePtr m_inputMouseDelegate;
 

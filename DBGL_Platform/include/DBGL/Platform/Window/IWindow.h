@@ -15,6 +15,7 @@
 #include <functional>
 #include "DBGL/Platform/Input/Input.h"
 #include "DBGL/Platform/Event/Event.h"
+#include "DBGL/Platform/RenderContext/IRenderContext.h"
 
 namespace dbgl
 {
@@ -421,9 +422,14 @@ namespace dbgl
 	    virtual void setCursorPos(double x, double y) = 0;
 	    /**
 	     * @brief Provides an input object that can be used to check input inside the window
-	     * @return Pointer to the input object
+	     * @return Reference to the input object
 	     */
 	    virtual Input const& getInput() const = 0;
+	    /**
+	     * @brief Provides the render context that can be used to display stuff inside of this window
+	     * @return Reference to the RC object
+	     */
+	    virtual IRenderContext const& getRenderContext() const = 0;
 	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed

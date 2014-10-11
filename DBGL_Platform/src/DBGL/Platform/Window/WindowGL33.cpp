@@ -236,6 +236,11 @@ namespace dbgl
 	return m_input;
     }
 
+    IRenderContext const& WindowGL33::getRenderContext() const
+    {
+	return m_rc;
+    }
+
     WindowGL33::CloseEventType::DelegatePtr WindowGL33::addCloseCallback(CloseCallbackType const& callback)
     {
 	glfwSetWindowCloseCallback(m_pWndHandle, WindowGL33::closeCallback);
