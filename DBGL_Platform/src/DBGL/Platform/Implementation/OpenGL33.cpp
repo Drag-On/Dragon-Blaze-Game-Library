@@ -11,6 +11,7 @@
 #include "DBGL/Platform/Implementation/OpenGL33.h"
 #include "DBGL/Platform/Window/WindowGL33.h"
 #include "DBGL/Platform/Monitor/MonitorGL33.h"
+#include "DBGL/Platform/Time/TimerGL33.h"
 
 namespace dbgl
 {
@@ -43,5 +44,10 @@ namespace dbgl
     IMonitor* OpenGL33::createMonitor()
     {
 	return new MonitorGL33{};
+    }
+
+    ITimer* OpenGL33::createTimer()
+    {
+	return new TimerGL33{};
     }
 }

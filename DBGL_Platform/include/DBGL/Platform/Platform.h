@@ -14,6 +14,7 @@
 #include <string>
 #include "DBGL/Platform/Window/IWindow.h"
 #include "DBGL/Platform/Monitor/IMonitor.h"
+#include "DBGL/Platform/Time/ITimer.h"
 
 namespace dbgl
 {
@@ -28,6 +29,7 @@ namespace dbgl
 			    800, int height = 600, bool fullscreen = false,
 			    unsigned int multisampling = 2) = 0;
 		    virtual IMonitor* createMonitor() = 0;
+		    virtual ITimer* createTimer() = 0;
 	    };
 
 	    /**

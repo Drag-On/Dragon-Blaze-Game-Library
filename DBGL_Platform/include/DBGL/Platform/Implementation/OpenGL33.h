@@ -23,6 +23,7 @@ namespace dbgl
 	    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width = 800,
 		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    virtual IMonitor* createMonitor();
+	    virtual ITimer* createTimer();
     };
 }
 
