@@ -60,10 +60,6 @@ namespace dbgl
 
 	makeCurrent();
 
-	// Enable multisampling?
-	if(m_multisampling > 0)
-	    m_rc.setMultisampling(true);
-
 	// Initialize GLEW
 	glewExperimental = true;// For core profile
 	if (glewInit() != GLEW_OK)
@@ -71,6 +67,21 @@ namespace dbgl
 	    std::cerr << "Failed to initialize GLEW!";
 	    glfwTerminate();
 	}
+
+	// Enable multisampling?
+	if(m_multisampling > 0)
+	    m_rc.setMultisampling(true);
+
+	// Wrap context in vao
+	glGenVertexArrays(1, &m_vertexArrayId);
+	glBindVertexArray(m_vertexArrayId);
+    }
+
+    WindowGL33::~WindowGL33()
+    {
+	makeCurrent();
+	glDeleteVertexArrays(1, &m_vertexArrayId);
+	glfwDestroyWindow(m_pWndHandle);
     }
 
     void WindowGL33::show()

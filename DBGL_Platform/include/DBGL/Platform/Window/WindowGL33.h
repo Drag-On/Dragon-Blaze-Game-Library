@@ -25,7 +25,7 @@ namespace dbgl
 	public:
 	    WindowGL33(std::string title = "Dragon Blaze Game Library", int width = 800, int height = 600,
 		    bool fullscreen = false, unsigned int multisampling = 2);
-	    virtual ~WindowGL33() = default;
+	    virtual ~WindowGL33();
 	    virtual void show();
 	    virtual void hide();
 	    virtual void close();
@@ -116,6 +116,7 @@ namespace dbgl
 	    unsigned int m_windowedWidth, m_windowedHeight; // Resolution for window
 	    unsigned int m_windowedX, m_windowedY; // Last window position before entering fullscreen mode
 	    unsigned int m_multisampling;
+	    GLuint m_vertexArrayId = 0;
 	    Input m_input;
 	    RenderContextGL33Window m_rc{this};
 	    KeyEventType::DelegatePtr m_inputKeyDelegate;
