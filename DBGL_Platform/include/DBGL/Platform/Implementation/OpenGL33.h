@@ -1,0 +1,27 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef OPENGL33_H_
+#define OPENGL33_H_
+
+#include "DBGL/Platform/Platform.h"
+
+namespace dbgl
+{
+    class OpenGL33: public Platform::IType
+    {
+	public:
+	    virtual ~OpenGL33();
+	    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width = 800,
+		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
+    };
+}
+
+#endif /* OPENGL33_H_ */
