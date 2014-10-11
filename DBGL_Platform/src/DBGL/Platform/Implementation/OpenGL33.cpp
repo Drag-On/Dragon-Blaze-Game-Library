@@ -22,7 +22,8 @@ namespace dbgl
 
     OpenGL33::~OpenGL33()
     {
-
+	// Terminate window manager
+	glfwTerminate();
     }
 
     IWindow* OpenGL33::createWindow(std::string title, int width, int height, bool fullscreen,

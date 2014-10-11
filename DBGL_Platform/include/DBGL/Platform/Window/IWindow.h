@@ -404,6 +404,10 @@ namespace dbgl
 	     */
 	    virtual void waitEvents() = 0;
 	    /**
+	     * @brief Swaps the back buffer
+	     */
+	    virtual void swapBuffer() = 0;
+	    /**
 	     * @brief Grants access to the current cursor position inside of the window
 	     * @param x X coordinate is stored here
 	     * @param y Y coordinate is stored here

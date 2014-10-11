@@ -49,6 +49,7 @@ namespace dbgl
 	    virtual void makeCurrent();
 	    virtual void pollEvents();
 	    virtual void waitEvents();
+	    virtual void swapBuffer();
 	    virtual void getCursorPos(double& x, double& y) const;
 	    virtual void setCursorPos(double x, double y);
 	    virtual Input const& getInput() const;

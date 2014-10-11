@@ -216,6 +216,11 @@ namespace dbgl
 	glfwWaitEvents();
     }
 
+    void WindowGL33::swapBuffer()
+    {
+	glfwSwapBuffers(m_pWndHandle);
+    }
+
     void WindowGL33::getCursorPos(double& x, double& y) const
     {
 	glfwGetCursorPos(m_pWndHandle, &x, &y);
@@ -481,7 +486,7 @@ namespace dbgl
 	// Translate GLFW button into Input::Key
 	Input::Key keyConst = Input::Key(Input::mouse_offset + button);
 	// Translate GLFW action int Input::KeyState
-	Input::KeyState keyState;
+	Input::KeyState keyState{};
 	if(action == GLFW_RELEASE)
 	    keyState = Input::KeyState::RELEASED;
 	else if(action == GLFW_PRESS)
@@ -504,7 +509,7 @@ namespace dbgl
 	// Translate GLFW key into Input::Key
 	Input::Key keyConst = Input::Key(Input::keyboard_offset + key);
 	// Translate GLFW action int Input::KeyState
-	Input::KeyState keyState;
+	Input::KeyState keyState{};
 	if(action == GLFW_RELEASE)
 	    keyState = Input::KeyState::RELEASED;
 	else if(action == GLFW_PRESS)
