@@ -332,6 +332,10 @@ namespace dbgl
 	     */
 	    virtual bool isDecorated() const = 0;
 	    /**
+	     * @return True in case the window is currently open, otherwise false
+	     */
+	    virtual bool isOpen() const = 0;
+	    /**
 	     * @return The window's title
 	     */
 	    virtual std::string const& getTitle() const = 0;
@@ -391,6 +395,14 @@ namespace dbgl
 	     * @brief Makes this window the current one
 	     */
 	    virtual void makeCurrent() = 0;
+	    /**
+	     * @brief Check if there are new events to process
+	     */
+	    virtual void pollEvents() = 0;
+	    /**
+	     * @brief Wait for new events to provess
+	     */
+	    virtual void waitEvents() = 0;
 	    /**
 	     * @brief Grants access to the current cursor position inside of the window
 	     * @param x X coordinate is stored here

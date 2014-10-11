@@ -8,20 +8,13 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Platform/Platform.h"
-
 namespace dbgl
 {
-    Platform::IType* Platform::s_pType = nullptr;
-
-    void Platform::destroy()
+    template<class Type> void Platform::init()
     {
-	delete s_pType;
-	s_pType = nullptr;
-    }
-
-    auto Platform::get() -> IType*
-    {
-	return s_pType;
+	if (s_pType != nullptr)
+	    throw "Platform already initialized!";
+	else
+	    s_pType = new Type {};
     }
 }

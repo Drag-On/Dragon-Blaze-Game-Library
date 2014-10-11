@@ -12,11 +12,10 @@
 #define PLATFORM_H_
 
 #include <string>
+#include "DBGL/Platform/Window/IWindow.h"
 
 namespace dbgl
 {
-    class IWindow;
-
     class Platform
     {
 	public:
@@ -48,5 +47,7 @@ namespace dbgl
 	    static IType* s_pType;
     };
 }
+
+#include "Platform.imp"
 
 #endif /* PLATFORM_H_ */

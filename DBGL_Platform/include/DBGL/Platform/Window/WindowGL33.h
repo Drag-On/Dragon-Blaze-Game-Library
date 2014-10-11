@@ -33,6 +33,7 @@ namespace dbgl
 	    virtual bool isVisible() const;
 	    virtual bool isResizable() const;
 	    virtual bool isDecorated() const;
+	    virtual bool isOpen() const;
 	    virtual std::string const& getTitle() const;
 	    virtual void setTitle(std::string const& title);
 	    virtual int getWidth() const;
@@ -46,6 +47,8 @@ namespace dbgl
 	    virtual bool isFullscreen() const;
 	    virtual void setFullscreen(bool fullscreen);
 	    virtual void makeCurrent();
+	    virtual void pollEvents();
+	    virtual void waitEvents();
 	    virtual void getCursorPos(double& x, double& y) const;
 	    virtual void setCursorPos(double x, double y);
 	    virtual Input const& getInput() const;

@@ -116,3 +116,11 @@ set_target_properties(DBGL_Platform PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(DBGL_Platform "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
 target_link_libraries(DBGL_Platform "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
 target_link_libraries(DBGL_Platform "${OPENGL_LIBRARIES}")
+
+######################################################################
+### Compile tests
+######################################################################
+if(COMPILE_TESTS)
+	add_subdirectory("${PROJECT_SOURCE_DIR}/test/"
+					 "${PROJECT_BINARY_DIR}/test/")
+endif(COMPILE_TESTS)

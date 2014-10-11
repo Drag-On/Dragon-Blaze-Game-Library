@@ -109,6 +109,11 @@ namespace dbgl
 	return glfwGetWindowAttrib(m_pWndHandle, GLFW_DECORATED);
     }
 
+    bool WindowGL33::isOpen() const
+    {
+	return !glfwWindowShouldClose(m_pWndHandle);
+    }
+
     std::string const& WindowGL33::getTitle() const
     {
 	return m_title;
@@ -199,6 +204,16 @@ namespace dbgl
     void WindowGL33::makeCurrent()
     {
 	glfwMakeContextCurrent(m_pWndHandle);
+    }
+
+    void WindowGL33::pollEvents()
+    {
+	glfwPollEvents();
+    }
+
+    void WindowGL33::waitEvents()
+    {
+	glfwWaitEvents();
     }
 
     void WindowGL33::getCursorPos(double& x, double& y) const

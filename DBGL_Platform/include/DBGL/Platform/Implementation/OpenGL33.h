@@ -18,6 +18,7 @@ namespace dbgl
     class OpenGL33: public Platform::IType
     {
 	public:
+	    OpenGL33();
 	    virtual ~OpenGL33();
 	    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width = 800,
 		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);

@@ -13,6 +13,13 @@
 
 namespace dbgl
 {
+    OpenGL33::OpenGL33()
+    {
+	// Initialize window manager
+	if (!glfwInit())
+	    throw "Unable to initialize glfw!";
+    }
+
     OpenGL33::~OpenGL33()
     {
 
@@ -21,6 +28,13 @@ namespace dbgl
     IWindow* OpenGL33::createWindow(std::string title, int width, int height, bool fullscreen,
 	    unsigned int multisampling)
     {
-	return new WindowGL33 { title, width, height, fullscreen, multisampling };
+	static bool created { false };
+	if(!created)
+	{
+	    created = true;
+	    return new WindowGL33 { title, width, height, fullscreen, multisampling };
+	}
+	else
+	    throw "Creation of multiple windows is currently not supported";
     }
 }
