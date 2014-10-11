@@ -35,6 +35,7 @@ namespace dbgl
 	    virtual void setClearColor(std::array<float, 3> color);
 	    virtual void bind();
 	    virtual bool isBound() const;
+	    virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height);
 	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
 		    unsigned int bufsize, char* buf);
 

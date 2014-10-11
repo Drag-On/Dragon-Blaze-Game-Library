@@ -122,15 +122,7 @@ namespace dbgl
 	    KeyEventType::DelegatePtr m_inputKeyDelegate;
 	    MouseButtonEventType::DelegatePtr m_inputMouseDelegate;
 
-	    /**
-	     * @brief Called on key input if an input listener needs to be fed
-	     * @param args Key event arguments
-	     */
 	    void internalKeyCallback(KeyEventArgs args);
-	    /**
-	     * @brief Called on mouse button events if an input listener needs to be fed
-	     * @param args Mouse button event arguments
-	     */
 	    void internalMouseButtonCallback(MouseButtonEventArgs args);
 
 	    static std::unordered_map<GLFWwindow*, WindowGL33*> s_windows;

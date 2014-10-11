@@ -217,6 +217,14 @@ namespace dbgl
 	     */
 	    virtual int getHeight() = 0;
 	    /**
+	     * @brief Set the viewport
+	     * @param x X coordinate
+	     * @param y Y coordinate
+	     * @param width Width
+	     * @param height Height
+	     */
+	    virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) = 0;
+	    /**
 	     * @brief Reads out the pixels of the current buffer
 	     * @param x X coordinate to start reading from
 	     * @param y Y coordinate to start reading from

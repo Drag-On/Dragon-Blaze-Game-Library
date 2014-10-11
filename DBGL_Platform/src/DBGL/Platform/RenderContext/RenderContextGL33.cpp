@@ -198,6 +198,13 @@ namespace dbgl
 	return s_curFrameBufferId == m_frameBufferId;
     }
 
+    void RenderContextGL33::viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height)
+    {
+	if(!isBound())
+	    throw std::runtime_error("Need to bind render context before modifying viewport");
+	glViewport(x, y, width, height);
+    }
+
     void RenderContextGL33::readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
     		    unsigned int bufsize, char* buf)
     {
