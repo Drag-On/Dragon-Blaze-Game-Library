@@ -31,6 +31,8 @@ namespace dbgl
 	    virtual FaceCullingValue getFaceCulling() const;
 	    virtual void bind();
 	    virtual bool isBound() const;
+	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
+		    unsigned int bufsize, char* buf);
 
 	protected:
 	    DepthTestValue m_curDepthTestVal = DepthTestValue::Always;
@@ -40,7 +42,14 @@ namespace dbgl
 	    GLuint m_frameBufferId = 0; // 0 = screen frame buffer
 	    GLuint m_depthBufferId = 0; // 0 = screen depth buffer
 
-	    GLenum translateAlphaBlendValue(AlphaBlendValue val) const;
+	    GLenum alphaBlendValue2GL(AlphaBlendValue val) const;
+	    GLint pixelFormat2GL(PixelFormat format) const;
+	    unsigned int pixelFormatSize(PixelFormat format) const;
+	    GLenum pixelType2GL(PixelType type) const;
+	    GLenum rowAlignment2GL(RowAlignment align) const;
+	    GLenum minFilter2GL(MinFilter filter) const;
+	    GLenum magFilter2GL(MagFilter filter) const;
+	    GLenum compPixelFormat2GL(PixelFormatCompressed format) const;
 
 	    static GLuint s_curFrameBufferId;
     };

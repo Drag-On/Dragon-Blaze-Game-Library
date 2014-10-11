@@ -95,7 +95,7 @@ namespace dbgl
 	    m_curDestAlphaBlendVal = dest;
 	    return;
 	}
-	GLenum sfactor = translateAlphaBlendValue(src), dfactor = translateAlphaBlendValue(dest);
+	GLenum sfactor = alphaBlendValue2GL(src), dfactor = alphaBlendValue2GL(dest);
 	glGetError(); // Clear last error
 	glEnable(GL_BLEND);
 	glBlendFunc(sfactor, dfactor);
@@ -166,7 +166,18 @@ namespace dbgl
 	return s_curFrameBufferId == m_frameBufferId;
     }
 
-    GLenum RenderContextGL33::translateAlphaBlendValue(AlphaBlendValue val) const
+    void RenderContextGL33::readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
+    		    unsigned int bufsize, char* buf)
+    {
+	// Allocate buffer
+	unsigned int imgDataSize { width * height * pixelFormatSize(format) };
+	if(!buf || bufsize < imgDataSize)
+	    return;
+	// Copy pixel data to buffer
+	glReadPixels(x, y, width, height, pixelFormat2GL(format), pixelType2GL(type), buf);
+    }
+
+    GLenum RenderContextGL33::alphaBlendValue2GL(AlphaBlendValue val) const
     {
 	switch (val)
 	{
@@ -188,6 +199,127 @@ namespace dbgl
 		return GL_ONE_MINUS_DST_ALPHA;
 	    case AlphaBlendValue::SrcAlphaSaturate:
 		return GL_SRC_ALPHA_SATURATE;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLint RenderContextGL33::pixelFormat2GL(PixelFormat format) const
+    {
+	switch(format)
+	{
+	    case PixelFormat::BGR:
+		return GL_BGR;
+	    case PixelFormat::BGRA:
+		return GL_BGRA;
+	    case PixelFormat::RGB:
+		return GL_RGB;
+	    case PixelFormat::RGBA:
+		return GL_RGBA;
+	    case PixelFormat::LUMINANCE:
+		return GL_LUMINANCE;
+	    default:
+		return -1;
+	}
+    }
+
+    unsigned int RenderContextGL33::pixelFormatSize(PixelFormat format) const
+    {
+	switch(format)
+	{
+	    case PixelFormat::LUMINANCE:
+		return 1;
+	    case PixelFormat::BGR:
+	    case PixelFormat::RGB:
+		return 3;
+	    case PixelFormat::BGRA:
+	    case PixelFormat::RGBA:
+		return 4;
+	    default:
+		return 0;
+	}
+    }
+
+    GLenum RenderContextGL33::pixelType2GL(PixelType type) const
+    {
+	switch(type)
+	{
+	    case PixelType::BYTE:
+		return GL_BYTE;
+	    case PixelType::FLOAT:
+		return GL_FLOAT;
+	    case PixelType::INT:
+		return GL_INT;
+	    case PixelType::SHORT:
+		return GL_SHORT;
+	    case PixelType::UBYTE:
+		return GL_UNSIGNED_BYTE;
+	    case PixelType::UINT:
+		return GL_UNSIGNED_INT;
+	    case PixelType::USHORT:
+		return GL_UNSIGNED_SHORT;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum RenderContextGL33::rowAlignment2GL(RowAlignment align) const
+    {
+	switch (align)
+	{
+	    case RowAlignment::PACK:
+		return GL_PACK_ALIGNMENT;
+	    case RowAlignment::UNPACK:
+		return GL_UNPACK_ALIGNMENT;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum RenderContextGL33::minFilter2GL(MinFilter filter) const
+    {
+	switch(filter)
+	{
+	    case MinFilter::LINEAR:
+		return GL_LINEAR;
+	    case MinFilter::LINEAR_MIPMAP_LINEAR:
+		return GL_LINEAR_MIPMAP_LINEAR;
+	    case MinFilter::LINEAR_MIPMAP_NEAREST:
+		return GL_LINEAR_MIPMAP_NEAREST;
+	    case MinFilter::NEAREST:
+		return GL_NEAREST;
+	    case MinFilter::NEAREST_MIPMAP_LINEAR:
+		return GL_NEAREST_MIPMAP_LINEAR;
+	    case MinFilter::NEAREST_MIPMAP_NEAREST:
+		return GL_NEAREST_MIPMAP_NEAREST;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum RenderContextGL33::magFilter2GL(MagFilter filter) const
+    {
+	switch(filter)
+	{
+	    case MagFilter::LINEAR:
+		return GL_LINEAR;
+	    case MagFilter::NEAREST:
+		return GL_NEAREST;
+	    default:
+		return GL_INVALID_ENUM;
+	}
+    }
+
+    GLenum RenderContextGL33::compPixelFormat2GL(PixelFormatCompressed format) const
+    {
+	switch(format)
+	{
+	    case PixelFormatCompressed::COMP_DXT1:
+		return GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+	    case PixelFormatCompressed::COMP_DXT3:
+		return GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+	    case PixelFormatCompressed::COMP_DXT5:
+		return GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 	    default:
 		return GL_INVALID_ENUM;
 	}
