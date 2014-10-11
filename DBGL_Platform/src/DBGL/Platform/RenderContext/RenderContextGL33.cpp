@@ -17,6 +17,8 @@ namespace dbgl
     RenderContextGL33::~RenderContextGL33()
     {
 	// Note: 0 (the screen) is silently ignored by glDeleteFramebuffers
+	if (!isBound())
+	    bind();
 	glDeleteFramebuffers(1, &m_frameBufferId);
 	glDeleteRenderbuffers(1, &m_depthBufferId);
     }
@@ -154,6 +156,8 @@ namespace dbgl
 
     void RenderContextGL33::setMultisampling(bool msaa)
     {
+	if(!isBound())
+	    throw std::runtime_error("Need to bind render context before modifying multisampling settings.");
 	if(msaa)
 	    glEnable(GL_MULTISAMPLE);
 	else
@@ -162,6 +166,8 @@ namespace dbgl
 
     bool RenderContextGL33::getMultisampling() const
     {
+	if(!isBound())
+	    throw std::runtime_error("Need to bind render context before retrieving multisampling settings.");
 	return glIsEnabled(GL_MULTISAMPLE);
     }
 
@@ -172,6 +178,8 @@ namespace dbgl
 
     void RenderContextGL33::setClearColor(std::array<float, 3> color)
     {
+	if(!isBound())
+	    throw std::runtime_error("Need to bind render context before modifying clear color.");
 	m_clearcolor = color;
 	glClearColor(m_clearcolor[0], m_clearcolor[1], m_clearcolor[2], 0);
     }
@@ -193,6 +201,8 @@ namespace dbgl
     void RenderContextGL33::readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
     		    unsigned int bufsize, char* buf)
     {
+	if(!isBound())
+	    throw std::runtime_error("Need to bind render context before reading pixels.");
 	// Allocate buffer
 	unsigned int imgDataSize { width * height * pixelFormatSize(format) };
 	if(!buf || bufsize < imgDataSize)

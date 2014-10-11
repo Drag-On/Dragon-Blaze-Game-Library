@@ -60,6 +60,10 @@ namespace dbgl
 
 	makeCurrent();
 
+	// Enable multisampling?
+	if(m_multisampling > 0)
+	    m_rc.setMultisampling(true);
+
 	// Initialize GLEW
 	glewExperimental = true;// For core profile
 	if (glewInit() != GLEW_OK)
