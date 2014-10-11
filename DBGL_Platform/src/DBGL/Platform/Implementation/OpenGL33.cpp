@@ -12,6 +12,8 @@
 #include "DBGL/Platform/Window/WindowGL33.h"
 #include "DBGL/Platform/Monitor/MonitorGL33.h"
 #include "DBGL/Platform/Time/TimerGL33.h"
+#include "DBGL/Platform/Shader/ShaderGL33.h"
+#include "DBGL/Platform/Shader/ShaderProgramGL33.h"
 
 namespace dbgl
 {
@@ -49,5 +51,15 @@ namespace dbgl
     ITimer* OpenGL33::createTimer()
     {
 	return new TimerGL33{};
+    }
+
+    IShader* OpenGL33::createShader(IShader::Type type, std::string code)
+    {
+	return new ShaderGL33{type, code};
+    }
+
+    IShaderProgram* OpenGL33::createShaderProgram()
+    {
+	return new ShaderProgramGL33{};
     }
 }

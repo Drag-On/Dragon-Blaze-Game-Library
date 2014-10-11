@@ -24,6 +24,8 @@ namespace dbgl
 		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
 	    virtual IMonitor* createMonitor();
 	    virtual ITimer* createTimer();
+	    virtual IShader* createShader(IShader::Type type, std::string code);
+	    virtual IShaderProgram* createShaderProgram();
     };
 }
 

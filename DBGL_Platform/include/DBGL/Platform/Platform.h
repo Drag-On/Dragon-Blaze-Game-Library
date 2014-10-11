@@ -15,6 +15,8 @@
 #include "DBGL/Platform/Window/IWindow.h"
 #include "DBGL/Platform/Monitor/IMonitor.h"
 #include "DBGL/Platform/Time/ITimer.h"
+#include "DBGL/Platform/Shader/IShader.h"
+#include "DBGL/Platform/Shader/IShaderProgram.h"
 
 namespace dbgl
 {
@@ -30,13 +32,15 @@ namespace dbgl
 			    unsigned int multisampling = 2) = 0;
 		    virtual IMonitor* createMonitor() = 0;
 		    virtual ITimer* createTimer() = 0;
+		    virtual IShader* createShader(IShader::Type type, std::string code) = 0;
+		    virtual IShaderProgram* createShaderProgram() = 0;
 	    };
 
 	    /**
 	     * @brief Initializes the specified platform implementation
 	     * @param type Type of platform implementation to use
 	     */
-	    template <class Type> static void init();
+	    template<class Type> static void init();
 	    /**
 	     * @brief Destroy the currently active platform implementation
 	     */
