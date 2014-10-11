@@ -8,22 +8,17 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef OPENGL33_H_
-#define OPENGL33_H_
-
-#include "DBGL/Platform/Platform.h"
+#ifndef IMONITOR_H_
+#define IMONITOR_H_
 
 namespace dbgl
 {
-    class OpenGL33: public Platform::IType
+    class IMonitor
     {
 	public:
-	    OpenGL33();
-	    virtual ~OpenGL33();
-	    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width = 800,
-		    int height = 600, bool fullscreen = false, unsigned int multisampling = 2);
-	    virtual IMonitor* createMonitor();
+	    virtual ~IMonitor() = default;
+	    virtual void getResolution(int& width, int& height) = 0;
     };
 }
 
-#endif /* OPENGL33_H_ */
+#endif /* IMONITOR_H_ */

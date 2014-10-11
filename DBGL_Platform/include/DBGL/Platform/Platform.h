@@ -13,6 +13,7 @@
 
 #include <string>
 #include "DBGL/Platform/Window/IWindow.h"
+#include "DBGL/Platform/Monitor/IMonitor.h"
 
 namespace dbgl
 {
@@ -26,6 +27,7 @@ namespace dbgl
 		    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width =
 			    800, int height = 600, bool fullscreen = false,
 			    unsigned int multisampling = 2) = 0;
+		    virtual IMonitor* createMonitor() = 0;
 	    };
 
 	    /**

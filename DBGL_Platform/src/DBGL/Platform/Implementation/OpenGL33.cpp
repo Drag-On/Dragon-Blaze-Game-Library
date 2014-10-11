@@ -10,6 +10,7 @@
 
 #include "DBGL/Platform/Implementation/OpenGL33.h"
 #include "DBGL/Platform/Window/WindowGL33.h"
+#include "DBGL/Platform/Monitor/MonitorGL33.h"
 
 namespace dbgl
 {
@@ -37,5 +38,10 @@ namespace dbgl
 	}
 	else
 	    throw "Creation of multiple windows is currently not supported";
+    }
+
+    IMonitor* OpenGL33::createMonitor()
+    {
+	return new MonitorGL33{};
     }
 }
