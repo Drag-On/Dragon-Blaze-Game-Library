@@ -26,8 +26,6 @@ file(GLOB_RECURSE SRC_FILES
 ### Include directories
 ######################################################################
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
-include_directories(${GLEW_INCLUDE_DIR})
-include_directories(${GLFW_INCLUDE_DIR})
 
 ######################################################################
 ### Make target
