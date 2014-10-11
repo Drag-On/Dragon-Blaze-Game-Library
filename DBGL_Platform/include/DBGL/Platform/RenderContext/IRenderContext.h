@@ -11,6 +11,8 @@
 #ifndef IRENDERCONTEXT_H_
 #define IRENDERCONTEXT_H_
 
+#include <array>
+
 namespace dbgl
 {
     class IRenderContext
@@ -173,6 +175,28 @@ namespace dbgl
 	     * @return Currently set face culling behavior
 	     */
 	    virtual FaceCullingValue getFaceCulling() const = 0;
+	    /**
+	     * @brief Enables or disables multisampling
+	     * @note Note that the window has to be created with multisampling flag in order
+	     * 	     for this to have an effect
+	     * @param msaa True to enable multisampling, false to disable
+	     */
+	    virtual void setMultisampling(bool msaa) = 0;
+	    /**
+	     * @brief Retrieves if multisampling is enabled or not
+	     * @return True in case multisampling is enabled, otherwise false
+	     */
+	    virtual bool getMultisampling() const = 0;
+	    /**
+	     * @brief Retrieves the current clear color
+	     * @return Currently set clear color
+	     */
+	    virtual std::array<float, 3> getClearColor() const = 0;
+	    /**
+	     * @brief Sets the clear color
+	     * @param color Color used to clear the context
+	     */
+	    virtual void setClearColor(std::array<float, 3> color) = 0;
 	    /**
 	     * @brief Bind this context
 	     */

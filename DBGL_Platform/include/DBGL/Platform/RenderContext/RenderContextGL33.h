@@ -29,6 +29,10 @@ namespace dbgl
 	    virtual AlphaBlendValue getDestAlphaBlend() const;
 	    virtual void setFaceCulling(FaceCullingValue val);
 	    virtual FaceCullingValue getFaceCulling() const;
+	    virtual void setMultisampling(bool msaa);
+	    virtual bool getMultisampling() const;
+	    virtual std::array<float, 3> getClearColor() const;
+	    virtual void setClearColor(std::array<float, 3> color);
 	    virtual void bind();
 	    virtual bool isBound() const;
 	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
@@ -41,6 +45,7 @@ namespace dbgl
 	    FaceCullingValue m_curFaceCullingVal = FaceCullingValue::Off;
 	    GLuint m_frameBufferId = 0; // 0 = screen frame buffer
 	    GLuint m_depthBufferId = 0; // 0 = screen depth buffer
+	    std::array<float, 3> m_clearcolor{{0.0f, 0.0f, 0.0f}};
 
 	    GLenum alphaBlendValue2GL(AlphaBlendValue val) const;
 	    GLint pixelFormat2GL(PixelFormat format) const;

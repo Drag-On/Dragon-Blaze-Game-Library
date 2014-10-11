@@ -152,6 +152,30 @@ namespace dbgl
 	return m_curFaceCullingVal;
     }
 
+    void RenderContextGL33::setMultisampling(bool msaa)
+    {
+	if(msaa)
+	    glEnable(GL_MULTISAMPLE);
+	else
+	    glDisable(GL_MULTISAMPLE);
+    }
+
+    bool RenderContextGL33::getMultisampling() const
+    {
+	return glIsEnabled(GL_MULTISAMPLE);
+    }
+
+    std::array<float, 3> RenderContextGL33::getClearColor() const
+    {
+	return m_clearcolor;
+    }
+
+    void RenderContextGL33::setClearColor(std::array<float, 3> color)
+    {
+	m_clearcolor = color;
+	glClearColor(m_clearcolor[0], m_clearcolor[1], m_clearcolor[2], 0);
+    }
+
     void RenderContextGL33::bind()
     {
 	if(m_frameBufferId != s_curFrameBufferId)
