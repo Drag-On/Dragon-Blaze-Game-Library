@@ -218,6 +218,93 @@ namespace dbgl
 	glReadPixels(x, y, width, height, pixelFormat2GL(format), pixelType2GL(type), buf);
     }
 
+    void RenderContextGL33::drawMesh(IMesh* mesh)
+    {
+	MeshGL33* pMesh = dynamic_cast<MeshGL33*> (mesh);
+	if(pMesh == nullptr)
+	    throw std::invalid_argument("Cannot render null mesh.");
+
+	// Bind vertex buffer : 0
+	if (pMesh->m_vertices.size() > 0)
+	{
+	    glEnableVertexAttribArray(0);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_vertexBuffer);
+	    glVertexAttribPointer(0,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+	// Bind UV buffer : 1
+	if (pMesh->m_uv.size() > 0)
+	{
+	    glEnableVertexAttribArray(1);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_uvBuffer);
+	    glVertexAttribPointer(1,	// attribute
+		    2,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+	// Bind normal buffer : 2
+	if (pMesh->m_normals.size() > 0)
+	{
+	    glEnableVertexAttribArray(2);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_normalBuffer);
+	    glVertexAttribPointer(2,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+	// Bind tangent buffer : 3
+	if (pMesh->m_tangents.size() > 0)
+	{
+	    glEnableVertexAttribArray(3);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_tangentBuffer);
+	    glVertexAttribPointer(3,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+	// Bind bitangent buffer : 4
+	if (pMesh->m_bitangents.size() > 0)
+	{
+	    glEnableVertexAttribArray(4);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_bitangentBuffer);
+	    glVertexAttribPointer(4,	// attribute
+		    3,			// size
+		    GL_FLOAT,		// type
+		    GL_FALSE,		// normalized?
+		    0,			// stride
+		    (void*) 0);		// offset
+	}
+	// Index buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pMesh->m_indexBuffer);
+	// Draw!
+	glDrawElements(GL_TRIANGLES,	// mode
+		pMesh->m_indices.size(),// count
+		GL_UNSIGNED_SHORT,	// type
+		(void*) 0);		// offset
+
+	// Disable buffers
+	if (pMesh->m_vertices.size() > 0)
+	    glDisableVertexAttribArray(0);
+	if (pMesh->m_uv.size() > 0)
+	    glDisableVertexAttribArray(1);
+	if (pMesh->m_normals.size() > 0)
+	    glDisableVertexAttribArray(2);
+	if (pMesh->m_tangents.size() > 0)
+	    glDisableVertexAttribArray(3);
+	if (pMesh->m_bitangents.size() > 0)
+	    glDisableVertexAttribArray(4);
+    }
+
     GLenum RenderContextGL33::alphaBlendValue2GL(AlphaBlendValue val) const
     {
 	switch (val)

@@ -12,6 +12,7 @@
 #define IRENDERCONTEXT_H_
 
 #include <array>
+#include "DBGL/Platform/Mesh/IMesh.h"
 
 namespace dbgl
 {
@@ -237,6 +238,11 @@ namespace dbgl
 	     */
 	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
 		    unsigned int bufsize, char* buf) = 0;
+	    /**
+	     * @brief Renders the \p mesh to this render context
+	     * @param mesh Mesh to draw
+	     */
+	    virtual void drawMesh(IMesh* mesh) = 0;
     };
 }
 

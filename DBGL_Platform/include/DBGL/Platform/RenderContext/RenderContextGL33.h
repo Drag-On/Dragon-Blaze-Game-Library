@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <GL/glew.h>
 #include "IRenderContext.h"
+#include "DBGL/Platform/Mesh/MeshGL33.h"
 
 namespace dbgl
 {
@@ -38,6 +39,7 @@ namespace dbgl
 	    virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height);
 	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
 		    unsigned int bufsize, char* buf);
+	    virtual void drawMesh(IMesh* mesh);
 
 	protected:
 	    DepthTestValue m_curDepthTestVal = DepthTestValue::Always;
