@@ -90,9 +90,10 @@ namespace dbgl
 	     */
 	    virtual ~ITexture() = default;
 	    /**
-	     * @brief Binds the texture
+	     * @brief Binds the texture to a texture unit
+	     * @param unit Texture unit to bind to (defaults to unit 0)
 	     */
-	    virtual void bind() = 0;
+	    virtual void bind(unsigned int unit = 0) = 0;
 	    /**
 	     * @brief Modifies a certain mip level of this texture
 	     * @note Texture needs to be bound

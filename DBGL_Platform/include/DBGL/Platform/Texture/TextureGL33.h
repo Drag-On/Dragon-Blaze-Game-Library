@@ -21,7 +21,7 @@ namespace dbgl
 	public:
 	    TextureGL33(Type type);
 	    virtual ~TextureGL33();
-	    virtual void bind();
+	    virtual void bind(unsigned int unit = 0);
 	    virtual void write(unsigned int level, unsigned int width, unsigned int height,
 		    PixelFormat format, PixelType type, void const* data);
 	    virtual void writeCompressed(unsigned int level, unsigned int width, unsigned int height,
@@ -37,7 +37,7 @@ namespace dbgl
 	private:
 	    GLuint m_id;
 	    Type m_type;
-	    unsigned int m_width, m_height;
+	    unsigned int m_width = 0, m_height = 0;
 
 	    static TextureGL33* s_pBoundTex;
 
@@ -50,6 +50,7 @@ namespace dbgl
 	    static GLenum compPixelFormat2GL(PixelFormatCompressed format);
 	    static bool hasAlpha(PixelFormat format);
 	    static GLenum texType2GL(Type type);
+	    static GLenum texUnit2GL(unsigned unit);
 
 	    friend class RenderContextGL33;
     };
