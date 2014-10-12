@@ -26,6 +26,7 @@ namespace dbgl
 	    virtual ITimer* createTimer();
 	    virtual IShader* createShader(IShader::Type type, std::string code);
 	    virtual IShaderProgram* createShaderProgram();
+	    virtual ITexture* createTexture(ITexture::Type type);
     };
 }
 

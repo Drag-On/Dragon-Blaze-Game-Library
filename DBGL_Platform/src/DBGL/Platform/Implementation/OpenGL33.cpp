@@ -14,6 +14,7 @@
 #include "DBGL/Platform/Time/TimerGL33.h"
 #include "DBGL/Platform/Shader/ShaderGL33.h"
 #include "DBGL/Platform/Shader/ShaderProgramGL33.h"
+#include "DBGL/Platform/Texture/TextureGL33.h"
 
 namespace dbgl
 {
@@ -61,5 +62,10 @@ namespace dbgl
     IShaderProgram* OpenGL33::createShaderProgram()
     {
 	return new ShaderProgramGL33{};
+    }
+
+    ITexture* OpenGL33::createTexture(ITexture::Type type)
+    {
+	return new TextureGL33{type};
     }
 }

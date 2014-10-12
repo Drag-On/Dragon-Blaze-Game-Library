@@ -17,6 +17,7 @@
 #include "DBGL/Platform/Time/ITimer.h"
 #include "DBGL/Platform/Shader/IShader.h"
 #include "DBGL/Platform/Shader/IShaderProgram.h"
+#include "DBGL/Platform/Texture/ITexture.h"
 
 namespace dbgl
 {
@@ -34,6 +35,7 @@ namespace dbgl
 		    virtual ITimer* createTimer() = 0;
 		    virtual IShader* createShader(IShader::Type type, std::string code) = 0;
 		    virtual IShaderProgram* createShaderProgram() = 0;
+		    virtual ITexture* createTexture(ITexture::Type type) = 0;
 	    };
 
 	    /**
