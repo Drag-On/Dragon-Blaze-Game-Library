@@ -62,11 +62,11 @@ namespace dbgl
 		    /**
 		     * @brief New window width
 		     */
-		    int width;
+		    unsigned int width;
 		    /**
 		     * @brief New window height
 		     */
-		    int height;
+		    unsigned int height;
 	    };
 	    /**
 	     * @brief Arguments passed on a framebuffer resize event
@@ -76,11 +76,11 @@ namespace dbgl
 		    /**
 		     * @brief New framebuffer width
 		     */
-		    int width;
+		    unsigned int width;
 		    /**
 		     * @brief New framebuffer height
 		     */
-		    int height;
+		    unsigned int height;
 	    };
 	    /**
 	     * @brief Arguments passed on a position event
@@ -430,6 +430,11 @@ namespace dbgl
 	     * @return Reference to the RC object
 	     */
 	    virtual IRenderContext const& getRenderContext() const = 0;
+	    /**
+	     * @brief Provides the render context that can be used to display stuff inside of this window
+	     * @return Reference to the RC object
+	     */
+	    virtual IRenderContext& getRenderContext() = 0;
 	    /**
 	     * @brief Registers a function as callback for close events
 	     * @param callback Function to be called when this window is getting closed

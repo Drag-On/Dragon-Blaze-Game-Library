@@ -55,6 +55,7 @@ namespace dbgl
 	    virtual void setCursorPos(double x, double y);
 	    virtual Input const& getInput() const;
 	    virtual IRenderContext const& getRenderContext() const;
+	    virtual IRenderContext& getRenderContext();
 	    virtual CloseEventType::DelegatePtr addCloseCallback(CloseCallbackType const& callback);
 	    virtual bool removeCloseCallback(CloseEventType::DelegatePtr const& callback);
 	    virtual FocusEventType::DelegatePtr addFocusCallback(FocusCallbackType const& callback);

@@ -55,6 +55,9 @@ namespace dbgl
 	    glfwTerminate();
 	}
 
+	// Remember window
+	s_windows.insert({m_pWndHandle, this});
+
 	m_windowedX = getX();
 	m_windowedY = getY();
 
@@ -81,6 +84,7 @@ namespace dbgl
     {
 	makeCurrent();
 	glDeleteVertexArrays(1, &m_vertexArrayId);
+	s_windows.erase(m_pWndHandle);
 	glfwDestroyWindow(m_pWndHandle);
     }
 
@@ -252,6 +256,11 @@ namespace dbgl
     }
 
     IRenderContext const& WindowGL33::getRenderContext() const
+    {
+	return m_rc;
+    }
+
+    IRenderContext& WindowGL33::getRenderContext()
     {
 	return m_rc;
     }
@@ -458,7 +467,7 @@ namespace dbgl
 
     void WindowGL33::closeCallback(GLFWwindow* window)
     {
-	s_windows[window]->m_closeCallbacks.fire(WindowGL33::CloseEventArgs());
+	s_windows[window]->m_closeCallbacks.fire(WindowGL33::CloseEventArgs{});
     }
 
     void WindowGL33::focusCallback(GLFWwindow* window, int focused)
@@ -473,17 +482,19 @@ namespace dbgl
 
     void WindowGL33::refreshCallback(GLFWwindow* window)
     {
-	s_windows[window]->m_refreshCallbacks.fire(WindowGL33::RefreshEventArgs());
+	s_windows[window]->m_refreshCallbacks.fire(WindowGL33::RefreshEventArgs{});
     }
 
     void WindowGL33::resizeCallback(GLFWwindow* window, int width, int height)
     {
-	s_windows[window]->m_resizeCallbacks.fire(WindowGL33::ResizeEventArgs{width, height});
+	s_windows[window]->m_resizeCallbacks.fire(WindowGL33::ResizeEventArgs{static_cast<unsigned int>(width),
+	    static_cast<unsigned int>(height)});
     }
 
     void WindowGL33::framebufferResizeCallback(GLFWwindow* window, int width, int height)
     {
-	s_windows[window]->m_framebufferResizeCallbacks.fire(WindowGL33::FramebufferResizeEventArgs{width, height});
+	s_windows[window]->m_framebufferResizeCallbacks.fire(WindowGL33::FramebufferResizeEventArgs {
+	    static_cast<unsigned int>(width), static_cast<unsigned int>(height) });
     }
 
     void WindowGL33::positionCallback(GLFWwindow* window, int xpos, int ypos)
