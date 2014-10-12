@@ -12,6 +12,13 @@
 
 namespace dbgl
 {
+    ShaderProgramGL33::ShaderProgramGL33()
+    {
+	m_id = glCreateProgram();
+	if(m_id == 0)
+	    throw std::runtime_error("Couldn't create shader program");
+    }
+
     ShaderProgramGL33::~ShaderProgramGL33()
     {
 	glDeleteProgram(m_id);
@@ -21,36 +28,29 @@ namespace dbgl
     {
 	auto sha = dynamic_cast<ShaderGL33*>(shader);
 	if (sha == nullptr)
-	    throw std::invalid_argument {
-	    "Cannot attach null shader to program"
-	    };
+	    throw std::invalid_argument { "Cannot attach null shader to program" };
 	glAttachShader(m_id, sha->m_id);
     }
 
     void ShaderProgramGL33::link()
     {
 	glLinkProgram(m_id);
+	// Check if everything went right
 	GLint linkOk = GL_FALSE;
 	glGetProgramiv(m_id, GL_LINK_STATUS, &linkOk);
-	// Check if everything went right
-	GLint result = GL_FALSE;
-	glGetShaderiv(m_id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
+	if (!linkOk)
 	{
-	    GLint logLength {
-	    0
-	    };
+	    // Generate log
+	    GLint logLength = 0;
 	    glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &logLength);
-	    char* msg = new char[logLength] {};
-	    // Get actual log
-	    glGetProgramInfoLog(m_id, logLength, nullptr, msg);
-	    std::string message {
-	    msg
-	    };
-	    delete msg;
-	    throw std::runtime_error {
-	    message
-	    };
+	    if (logLength > 0)
+	    {
+		char* msg = new char[logLength] {};
+		glGetProgramInfoLog(m_id, logLength, nullptr, msg);
+		std::string message { msg };
+		delete[] msg;
+		throw std::runtime_error(message);
+	    }
 	}
     }
 

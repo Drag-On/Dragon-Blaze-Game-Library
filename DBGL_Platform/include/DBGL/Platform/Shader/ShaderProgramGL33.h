@@ -19,6 +19,7 @@ namespace dbgl
     class ShaderProgramGL33: public IShaderProgram
     {
 	public:
+	    ShaderProgramGL33();
 	    virtual ~ShaderProgramGL33();
 	    virtual void attach(IShader* shader);
 	    virtual void link();
