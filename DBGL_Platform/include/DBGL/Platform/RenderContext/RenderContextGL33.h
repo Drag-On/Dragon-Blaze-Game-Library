@@ -15,6 +15,7 @@
 #include <GL/glew.h>
 #include "IRenderContext.h"
 #include "DBGL/Platform/Mesh/MeshGL33.h"
+#include "DBGL/Platform/Texture/TextureGL33.h"
 
 namespace dbgl
 {
@@ -37,8 +38,8 @@ namespace dbgl
 	    virtual void bind();
 	    virtual bool isBound() const;
 	    virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height);
-	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
-		    unsigned int bufsize, char* buf);
+	    virtual void readPixels(int x, int y, int width, int height, ITexture::PixelFormat format,
+		    ITexture::PixelType type, unsigned int bufsize, char* buf);
 	    virtual void drawMesh(IMesh* mesh);
 
 	protected:
@@ -50,14 +51,7 @@ namespace dbgl
 	    GLuint m_depthBufferId = 0; // 0 = screen depth buffer
 	    std::array<float, 3> m_clearcolor{{0.0f, 0.0f, 0.0f}};
 
-	    GLenum alphaBlendValue2GL(AlphaBlendValue val) const;
-	    GLint pixelFormat2GL(PixelFormat format) const;
-	    unsigned int pixelFormatSize(PixelFormat format) const;
-	    GLenum pixelType2GL(PixelType type) const;
-	    GLenum rowAlignment2GL(RowAlignment align) const;
-	    GLenum minFilter2GL(MinFilter filter) const;
-	    GLenum magFilter2GL(MagFilter filter) const;
-	    GLenum compPixelFormat2GL(PixelFormatCompressed format) const;
+	    static GLenum alphaBlendValue2GL(AlphaBlendValue val);
 
 	    static GLuint s_curFrameBufferId;
     };

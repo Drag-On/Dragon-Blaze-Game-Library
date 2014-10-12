@@ -13,6 +13,7 @@
 
 #include <array>
 #include "DBGL/Platform/Mesh/IMesh.h"
+#include "DBGL/Platform/Texture/ITexture.h"
 
 namespace dbgl
 {
@@ -66,68 +67,6 @@ namespace dbgl
 		Front,    //!< Front
 		Back,     //!< Back
 		FrontBack,//!< FrontBack
-	    };
-
-	    /**
-	     * @brief Lists all supported uncompressed pixel formats
-	     */
-	    enum class PixelFormat
-	    {
-		RGB, 	  //!< RGB
-		BGR, 	  //!< BGR
-		RGBA,	  //!< RGBA
-		BGRA,	  //!< BGRA
-		LUMINANCE,//!< LUMINANCE
-	    };
-	    /**
-	     * @brief Lists all supported compressed pixel formats
-	     */
-	    enum class PixelFormatCompressed
-	    {
-		COMP_DXT1,//!< COMP_DXT1
-		COMP_DXT3,//!< COMP_DXT3
-		COMP_DXT5,//!< COMP_DXT5
-	    };
-	    /**
-	     * @brief Lists all supported pixel types
-	     */
-	    enum class PixelType
-	    {
-		UBYTE, //!< UBYTE
-		BYTE,  //!< BYTE
-		USHORT,//!< USHORT
-		SHORT, //!< SHORT
-		UINT,  //!< UINT
-		INT,   //!< INT
-		FLOAT, //!< FLOAT
-	    };
-	    /**
-	     * @brief Lists all supported row alignment types
-	     */
-	    enum class RowAlignment
-	    {
-		PACK,  //!< PACK
-		UNPACK,//!< UNPACK
-	    };
-	    /**
-	     * @brief Lists all supported minifying filters
-	     */
-	    enum class MinFilter
-	    {
-		NEAREST,               //!< NEAREST
-		LINEAR,                //!< LINEAR
-		NEAREST_MIPMAP_NEAREST,//!< NEAREST_MIPMAP_NEAREST
-		NEAREST_MIPMAP_LINEAR, //!< NEAREST_MIPMAP_LINEAR
-		LINEAR_MIPMAP_NEAREST, //!< LINEAR_MIPMAP_NEAREST
-		LINEAR_MIPMAP_LINEAR,  //!< LINEAR_MIPMAP_LINEAR
-	    };
-	    /**
-	     * @brief Lists all supported magnifying filters
-	     */
-	    enum class MagFilter
-	    {
-		NEAREST,//!< NEAREST
-		LINEAR, //!< LINEAR
 	    };
 
 	    /**
@@ -236,8 +175,8 @@ namespace dbgl
 	     * @param bufsize Size of the passed buffer
 	     * @param[out] buf Buffer to write data to
 	     */
-	    virtual void readPixels(int x, int y, int width, int height, PixelFormat format, PixelType type,
-		    unsigned int bufsize, char* buf) = 0;
+	    virtual void readPixels(int x, int y, int width, int height, ITexture::PixelFormat format,
+		    ITexture::PixelType type, unsigned int bufsize, char* buf) = 0;
 	    /**
 	     * @brief Renders the \p mesh to this render context
 	     * @param mesh Mesh to draw
