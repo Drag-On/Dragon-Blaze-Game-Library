@@ -46,6 +46,36 @@ namespace dbgl
 	return m_bitangents;
     }
 
+    unsigned int MeshGL33::getIndexCount() const
+    {
+	return m_indexCount;
+    }
+
+    unsigned int MeshGL33::getVertexCount() const
+    {
+	return m_vertexCount;
+    }
+
+    unsigned int MeshGL33::getUVCount() const
+    {
+	return m_uvCount;
+    }
+
+    unsigned int MeshGL33::getNormalCount() const
+    {
+	return m_normalsCount;
+    }
+
+    unsigned int MeshGL33::getTangentCount() const
+    {
+	return m_tangentCount;
+    }
+
+    unsigned int MeshGL33::getBitangentCount() const
+    {
+	return m_bitangentCount;
+    }
+
     void MeshGL33::setUsage(Usage usage)
     {
 	m_usage = usage;
@@ -58,41 +88,95 @@ namespace dbgl
 
     void MeshGL33::updateBuffers()
     {
-	if (m_vertexBuffer == GL_INVALID_VALUE)
-	    m_vertexBuffer = generateBuffer();
-	fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0],
-		convertUsage(m_usage));
-	if (m_indexBuffer == GL_INVALID_VALUE)
-	    m_indexBuffer = generateBuffer();
-	fillBuffer(m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned short),
-		&m_indices[0], convertUsage(m_usage));
-	if (m_normals.size() > 0)
+	m_indexCount = m_indices.size();
+	m_vertexCount = m_vertices.size();
+	m_normalsCount = m_normals.size();
+	m_uvCount = m_uv.size();
+	m_tangentCount = m_tangents.size();
+	m_bitangentCount = m_bitangents.size();
+	if (m_vertexCount > 0)
+	{
+	    if (m_vertexBuffer == GL_INVALID_VALUE)
+		m_vertexBuffer = generateBuffer();
+	    fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER, m_vertexCount * sizeof(Vertex), &m_vertices[0],
+		    convertUsage(m_usage));
+	}
+	else if (m_vertexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_vertexBuffer);
+	if (m_indexCount > 0)
+	{
+	    if (m_indexBuffer == GL_INVALID_VALUE)
+		m_indexBuffer = generateBuffer();
+	    fillBuffer(m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(unsigned short),
+		    &m_indices[0], convertUsage(m_usage));
+	}
+	else if (m_indexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_indexBuffer);
+	if (m_normalsCount > 0)
 	{
 	    if (m_normalBuffer == GL_INVALID_VALUE)
 		m_normalBuffer = generateBuffer();
-	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER, m_normals.size() * sizeof(Vertex), &m_normals[0],
+	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER, m_normalsCount * sizeof(Vertex), &m_normals[0],
 		    convertUsage(m_usage));
 	}
-	if (m_uv.size() > 0)
+	else if (m_normalBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_normalBuffer);
+	if (m_uvCount > 0)
 	{
 	    if (m_uvBuffer == GL_INVALID_VALUE)
 		m_uvBuffer = generateBuffer();
-	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uv.size() * sizeof(UV), &m_uv[0], GL_STATIC_DRAW);
+	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uvCount * sizeof(UV), &m_uv[0], GL_STATIC_DRAW);
 	}
-	if (m_tangents.size() > 0)
+	else if (m_uvBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_uvBuffer);
+	if (m_tangentCount > 0)
 	{
 	    if (m_tangentBuffer == GL_INVALID_VALUE)
 		m_tangentBuffer = generateBuffer();
-	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER, m_tangents.size() * sizeof(Vertex), &m_tangents[0],
+	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER, m_tangentCount * sizeof(Vertex), &m_tangents[0],
 		    GL_STATIC_DRAW);
 	}
-	if (m_bitangents.size() > 0)
+	else if (m_tangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_tangentBuffer);
+	if (m_bitangentCount > 0)
 	{
 	    if (m_bitangentBuffer == GL_INVALID_VALUE)
 		m_bitangentBuffer = generateBuffer();
-	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER, m_bitangents.size() * sizeof(Vertex),
+	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER, m_bitangentCount * sizeof(Vertex),
 		    &m_bitangents[0], GL_STATIC_DRAW);
 	}
+	else if (m_bitangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_bitangentBuffer);
+    }
+
+    GLuint MeshGL33::getIndexHandle() const
+    {
+	return m_indexBuffer;
+    }
+
+    GLuint MeshGL33::getVertexHandle() const
+    {
+	return m_vertexBuffer;
+    }
+
+    GLuint MeshGL33::getNormalHandle() const
+    {
+	return m_normalBuffer;
+    }
+
+    GLuint MeshGL33::getUVHandle() const
+    {
+	return m_uvBuffer;
+    }
+
+    GLuint MeshGL33::getTangentHandle() const
+    {
+	return m_tangentBuffer;
+    }
+
+    GLuint MeshGL33::getBitangentHandle() const
+    {
+	return m_bitangentBuffer;
     }
 
     GLenum MeshGL33::convertUsage(Usage usage)

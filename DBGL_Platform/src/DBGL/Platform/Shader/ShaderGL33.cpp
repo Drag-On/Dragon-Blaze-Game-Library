@@ -50,6 +50,11 @@ namespace dbgl
 	}
     }
 
+    GLuint ShaderGL33::getHandle() const
+    {
+	return m_id;
+    }
+
     GLenum ShaderGL33::shaderType2GL(Type type)
     {
 	switch(type)

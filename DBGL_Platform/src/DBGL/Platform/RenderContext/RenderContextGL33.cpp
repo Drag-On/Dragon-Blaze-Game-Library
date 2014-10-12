@@ -226,10 +226,10 @@ namespace dbgl
 	    throw std::invalid_argument("Cannot render null mesh.");
 
 	// Bind vertex buffer : 0
-	if (pMesh->m_vertices.size() > 0)
+	if (pMesh->getVertexCount() > 0)
 	{
 	    glEnableVertexAttribArray(0);
-	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_vertexBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->getVertexHandle());
 	    glVertexAttribPointer(0,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -238,10 +238,10 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 	// Bind UV buffer : 1
-	if (pMesh->m_uv.size() > 0)
+	if (pMesh->getUVCount() > 0)
 	{
 	    glEnableVertexAttribArray(1);
-	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_uvBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->getUVHandle());
 	    glVertexAttribPointer(1,	// attribute
 		    2,			// size
 		    GL_FLOAT,		// type
@@ -250,10 +250,10 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 	// Bind normal buffer : 2
-	if (pMesh->m_normals.size() > 0)
+	if (pMesh->getNormalCount() > 0)
 	{
 	    glEnableVertexAttribArray(2);
-	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_normalBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->getNormalHandle());
 	    glVertexAttribPointer(2,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -262,10 +262,10 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 	// Bind tangent buffer : 3
-	if (pMesh->m_tangents.size() > 0)
+	if (pMesh->getTangentCount() > 0)
 	{
 	    glEnableVertexAttribArray(3);
-	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_tangentBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->getTangentHandle());
 	    glVertexAttribPointer(3,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -274,10 +274,10 @@ namespace dbgl
 		    (void*) 0);		// offset
 	}
 	// Bind bitangent buffer : 4
-	if (pMesh->m_bitangents.size() > 0)
+	if (pMesh->getBitangentCount() > 0)
 	{
 	    glEnableVertexAttribArray(4);
-	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->m_bitangentBuffer);
+	    glBindBuffer(GL_ARRAY_BUFFER, pMesh->getBitangentHandle());
 	    glVertexAttribPointer(4,	// attribute
 		    3,			// size
 		    GL_FLOAT,		// type
@@ -285,24 +285,27 @@ namespace dbgl
 		    0,			// stride
 		    (void*) 0);		// offset
 	}
-	// Index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pMesh->m_indexBuffer);
-	// Draw!
-	glDrawElements(GL_TRIANGLES,	// mode
-		pMesh->m_indices.size(),// count
-		GL_UNSIGNED_SHORT,	// type
-		(void*) 0);		// offset
+	if(pMesh->getIndexCount() > 0)
+	{
+	    // Index buffer
+	    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pMesh->getIndexHandle());
+	    // Draw!
+	    glDrawElements(GL_TRIANGLES,	// mode
+		    pMesh->getIndexCount(),	// count
+		    GL_UNSIGNED_SHORT,		// type
+		    (void*) 0);			// offset
+	}
 
 	// Disable buffers
-	if (pMesh->m_vertices.size() > 0)
+	if (pMesh->getVertexCount() > 0)
 	    glDisableVertexAttribArray(0);
-	if (pMesh->m_uv.size() > 0)
+	if (pMesh->getUVCount() > 0)
 	    glDisableVertexAttribArray(1);
-	if (pMesh->m_normals.size() > 0)
+	if (pMesh->getNormalCount() > 0)
 	    glDisableVertexAttribArray(2);
-	if (pMesh->m_tangents.size() > 0)
+	if (pMesh->getTangentCount() > 0)
 	    glDisableVertexAttribArray(3);
-	if (pMesh->m_bitangents.size() > 0)
+	if (pMesh->getBitangentCount() > 0)
 	    glDisableVertexAttribArray(4);
     }
 

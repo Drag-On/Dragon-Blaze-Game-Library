@@ -15,6 +15,7 @@
 #include "DBGL/Platform/Shader/ShaderGL33.h"
 #include "DBGL/Platform/Shader/ShaderProgramGL33.h"
 #include "DBGL/Platform/Texture/TextureGL33.h"
+#include "DBGL/Platform/RenderContext/RenderContextGL33Texture.h"
 
 namespace dbgl
 {
@@ -72,5 +73,10 @@ namespace dbgl
     IMesh* OpenGL33::createMesh()
     {
 	return new MeshGL33{};
+    }
+
+    IRenderContext* OpenGL33::createRenderContext(ITexture* tex, bool createDepthBuf)
+    {
+	return new RenderContextGL33Texture{tex, createDepthBuf};
     }
 }

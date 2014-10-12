@@ -33,6 +33,7 @@ namespace dbgl
 	    virtual void getSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 	    virtual unsigned int getWidth() const;
 	    virtual unsigned int getHeight() const;
+	    GLuint getHandle() const;
 
 	private:
 	    GLuint m_id;

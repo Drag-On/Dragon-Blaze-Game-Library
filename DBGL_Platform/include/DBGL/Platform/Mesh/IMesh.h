@@ -80,6 +80,30 @@ namespace dbgl
 	     */
 	    virtual std::vector<Vertex>& bitangents() = 0;
 	    /**
+	     * @return Amount of indices inside the hardware buffer
+	     */
+	    virtual unsigned int getIndexCount() const = 0;
+	    /**
+	     * @return Amount of vertices inside the hardware buffer
+	     */
+	    virtual unsigned int getVertexCount() const = 0;
+	    /**
+	     * @return Amount of UVs inside the hardware buffer
+	     */
+	    virtual unsigned int getUVCount() const = 0;
+	    /**
+	     * @return Amount of normals inside the hardware buffer
+	     */
+	    virtual unsigned int getNormalCount() const = 0;
+	    /**
+	     * @return Amount of tangents inside the hardware buffer
+	     */
+	    virtual unsigned int getTangentCount() const = 0;
+	    /**
+	     * @return Amount of bitangents inside the hardware buffer
+	     */
+	    virtual unsigned int getBitangentCount() const = 0;
+	    /**
 	     * @brief Set the buffer usage pattern
 	     * @param usage New usage pattern
 	     */

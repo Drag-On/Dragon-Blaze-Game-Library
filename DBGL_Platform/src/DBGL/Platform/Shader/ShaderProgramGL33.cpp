@@ -29,7 +29,7 @@ namespace dbgl
 	auto sha = dynamic_cast<ShaderGL33*>(shader);
 	if (sha == nullptr)
 	    throw std::invalid_argument { "Cannot attach null shader to program" };
-	glAttachShader(m_id, sha->m_id);
+	glAttachShader(m_id, sha->getHandle());
     }
 
     void ShaderProgramGL33::link()
@@ -194,5 +194,10 @@ namespace dbgl
     void ShaderProgramGL33::setUniformSampler(UniformHandle handle, const int value)
     {
 	glUniform1i(handle, value);
+    }
+
+    GLuint ShaderProgramGL33::getHandle() const
+    {
+	return m_id;
     }
 }

@@ -23,14 +23,13 @@ namespace dbgl
 	    ShaderGL33(Type type, std::string code);
 	    virtual ~ShaderGL33();
 	    virtual void compile();
+	    GLuint getHandle() const;
 	private:
 	    Type m_type;
 	    std::string m_code;
 	    GLuint m_id = 0;
 
 	    GLenum shaderType2GL(Type type);
-
-	    friend class ShaderProgramGL33;
     };
 }
 

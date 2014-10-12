@@ -37,6 +37,8 @@ namespace dbgl
 		    virtual IShaderProgram* createShaderProgram() = 0;
 		    virtual ITexture* createTexture(ITexture::Type type) = 0;
 		    virtual IMesh* createMesh() = 0;
+		    virtual IRenderContext* createRenderContext(ITexture* tex,
+			    bool createDepthBuf = false) = 0;
 	    };
 
 	    /**

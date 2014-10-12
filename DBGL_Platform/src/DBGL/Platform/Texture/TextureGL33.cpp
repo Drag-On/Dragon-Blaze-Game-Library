@@ -107,6 +107,11 @@ namespace dbgl
 	return m_height;
     }
 
+    GLuint TextureGL33::getHandle() const
+    {
+	return m_id;
+    }
+
     GLint TextureGL33::pixelFormat2GL(PixelFormat format)
     {
 	switch(format)

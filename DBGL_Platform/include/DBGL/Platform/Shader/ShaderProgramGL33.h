@@ -54,6 +54,8 @@ namespace dbgl
 		    const float* values);
 	    virtual void setUniformSampler(UniformHandle handle, const int value);
 
+	    GLuint getHandle() const;
+
 	private:
 	    GLuint m_id;
     };
