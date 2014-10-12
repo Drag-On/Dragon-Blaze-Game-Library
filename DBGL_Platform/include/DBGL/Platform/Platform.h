@@ -36,6 +36,7 @@ namespace dbgl
 		    virtual IShader* createShader(IShader::Type type, std::string code) = 0;
 		    virtual IShaderProgram* createShaderProgram() = 0;
 		    virtual ITexture* createTexture(ITexture::Type type) = 0;
+		    virtual IMesh* createMesh() = 0;
 	    };
 
 	    /**

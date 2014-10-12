@@ -68,4 +68,9 @@ namespace dbgl
     {
 	return new TextureGL33{type};
     }
+
+    IMesh* OpenGL33::createMesh()
+    {
+	return new MeshGL33{};
+    }
 }
