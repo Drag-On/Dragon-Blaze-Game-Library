@@ -15,20 +15,31 @@
 using namespace dbgl;
 using namespace std;
 
+IWindow* pWnd = nullptr;
+
+void resizeHandler(IWindow::FramebufferResizeEventArgs const& args)
+{
+    pWnd->getRenderContext().viewport(0, 0, args.width, args.height);
+}
+
 int main()
 {
     cout << "Initing..." << endl;
     Platform::init<OpenGL33>();
     cout << "Creating a window..." << endl;
-    auto window = Platform::get()->createWindow("WindowTest", 720, 480, false, 0);
+    pWnd = Platform::get()->createWindow("GraphicsTest", 720, 480, false, 0);
+    cout << "Adding resize handler..." << endl;
+    pWnd->addFramebufferResizeCallback(resizeHandler);
     cout << "Showing window..." << endl;
-    window->show();
-    while(window->isOpen())
+    pWnd->show();
+    while(pWnd->isOpen())
     {
-	window->waitEvents();
+	pWnd->waitEvents();
+	pWnd->getRenderContext().clear(IRenderContext::COLOR);
+	pWnd->swapBuffer();
     }
-    window->close();
-    delete window;
+    pWnd->close();
+    delete pWnd;
     cout << "Destroying platform..." << endl;
     Platform::destroy();
     cout << "Finished!" << endl;

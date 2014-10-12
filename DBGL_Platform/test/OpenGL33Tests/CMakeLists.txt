@@ -28,6 +28,8 @@ set(LIBRARIES2COPY
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/WindowTest"
 				 "${PROJECT_BINARY_DIR}/WindowTest")
+add_subdirectory("${PROJECT_SOURCE_DIR}/GraphicsTest"
+				 "${PROJECT_BINARY_DIR}/GraphicsTest")
 				 
 ######################################################################
 ### Copy common resource folder
