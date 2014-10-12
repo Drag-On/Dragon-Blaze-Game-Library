@@ -19,6 +19,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for windows
+     */
     class IWindow
     {
 	public:

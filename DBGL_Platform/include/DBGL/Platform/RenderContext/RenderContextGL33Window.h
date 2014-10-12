@@ -16,6 +16,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief RenderContext that draws into a window
+     */
     class RenderContextGL33Window: public RenderContextGL33
     {
 	public:

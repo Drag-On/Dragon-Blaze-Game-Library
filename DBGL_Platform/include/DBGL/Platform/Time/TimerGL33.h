@@ -17,6 +17,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the timer class
+     */
     class TimerGL33: public ITimer
     {
 	public:

@@ -17,12 +17,23 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the shader class
+     */
     class ShaderGL33 : public IShader
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param type Shader type
+	     * @param code Code of the shader
+	     */
 	    ShaderGL33(Type type, std::string code);
 	    virtual ~ShaderGL33();
 	    virtual void compile();
+	    /**
+	     * @return Internal shader handle
+	     */
 	    GLuint getHandle() const;
 	private:
 	    Type m_type;

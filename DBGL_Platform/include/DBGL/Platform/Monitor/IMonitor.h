@@ -13,10 +13,21 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for monitor implementations. Provides data about the monitor.
+     */
     class IMonitor
     {
 	public:
+	    /**
+	     * @brief Destructor
+	     */
 	    virtual ~IMonitor() = default;
+	    /**
+	     * @brief Retrieves the resolution of the pc's monitor
+	     * @param width Monitor width in pixels
+	     * @param height Monitor height in pixels
+	     */
 	    virtual void getResolution(int& width, int& height) = 0;
     };
 }

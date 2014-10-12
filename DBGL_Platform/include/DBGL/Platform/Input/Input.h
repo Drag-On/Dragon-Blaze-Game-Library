@@ -22,8 +22,17 @@ namespace dbgl
     class Input
     {
 	public:
+	    /**
+	     * @brief Starting point for keys on the keyboard inside the Key enum
+	     */
 	    static const unsigned int keyboard_offset = 0;
+	    /**
+	     * @brief Starting point for mouse buttons inside the Key enum
+	     */
 	    static const unsigned int mouse_offset = 400;
+	    /**
+	     * @brief Starting point for joystick buttons inside the Key enum
+	     */
 	    static const unsigned int joystick_offset = 450;
 
 	    /**

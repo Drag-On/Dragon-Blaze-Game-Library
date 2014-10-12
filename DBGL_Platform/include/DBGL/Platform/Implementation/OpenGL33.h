@@ -15,9 +15,15 @@
 
 namespace dbgl
 {
-    class OpenGL33: public Platform::IType
+    /**
+     * @brief OpenGL 3.3 implementation of the platform toolkit
+     */
+    class OpenGL33: public Platform::IImplementation
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     */
 	    OpenGL33();
 	    virtual ~OpenGL33();
 	    virtual IWindow* createWindow(std::string title = "Dragon Blaze Game Library", int width = 800,

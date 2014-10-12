@@ -16,9 +16,15 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the shader program class
+     */
     class ShaderProgramGL33: public IShaderProgram
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     */
 	    ShaderProgramGL33();
 	    virtual ~ShaderProgramGL33();
 	    virtual void attach(IShader* shader);
@@ -54,6 +60,9 @@ namespace dbgl
 		    const float* values);
 	    virtual void setUniformSampler(UniformHandle handle, const int value);
 
+	    /**
+	     * @return Internal shader program handle
+	     */
 	    GLuint getHandle() const;
 
 	private:

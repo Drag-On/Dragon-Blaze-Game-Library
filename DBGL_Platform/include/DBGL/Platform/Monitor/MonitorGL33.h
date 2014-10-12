@@ -17,6 +17,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief IMonitor implementation for OpenGL 3.3
+     */
     class MonitorGL33: public IMonitor
     {
 	public:

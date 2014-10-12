@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    Platform::IType* Platform::s_pType = nullptr;
+    Platform::IImplementation* Platform::s_pType = nullptr;
 
     void Platform::destroy()
     {
@@ -20,7 +20,7 @@ namespace dbgl
 	s_pType = nullptr;
     }
 
-    auto Platform::get() -> IType*
+    auto Platform::get() -> IImplementation*
     {
 	return s_pType;
     }

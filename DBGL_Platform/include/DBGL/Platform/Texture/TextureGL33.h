@@ -16,9 +16,16 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the texture class
+     */
     class TextureGL33 : public ITexture
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param type Texture type
+	     */
 	    TextureGL33(Type type);
 	    virtual ~TextureGL33();
 	    virtual void bind(unsigned int unit = 0);
@@ -33,7 +40,71 @@ namespace dbgl
 	    virtual void getSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 	    virtual unsigned int getWidth() const;
 	    virtual unsigned int getHeight() const;
+	    /**
+	     * @return Internal texture handle
+	     */
 	    GLuint getHandle() const;
+
+	    /**
+	     * @brief Converts PixelFormat into OpenGL values
+	     * @param format Format to convert
+	     * @return OpenGL equivalent of \p format
+	     */
+	    static GLint pixelFormat2GL(PixelFormat format);
+	    /**
+	     * @brief Calculates the size of a pixel format
+	     * @param format Format to check
+	     * @return Amount of components of \p format
+	     */
+	    static unsigned int pixelFormatSize(PixelFormat format);
+	    /**
+	     * @brief Converts PixelType into OpenGL values
+	     * @param type Type to convert
+	     * @return OpenGL equivalent of \p type
+	     */
+	    static GLenum pixelType2GL(PixelType type);
+	    /**
+	     * @brief Converts RowAlignment into OpenGL values
+	     * @param align Alignment to convert
+	     * @return OpenGL equivalent of \p align
+	     */
+	    static GLenum rowAlignment2GL(RowAlignment align);
+	    /**
+	     * @brief Converts MinFilter into OpenGL values
+	     * @param filter Filter to convert
+	     * @return OpenGL equivalent of \p filter
+	     */
+	    static GLenum minFilter2GL(MinFilter filter);
+	    /**
+	     * @brief Converts MagFilter into OpenGL values
+	     * @param filter Filter to convert
+	     * @return OpenGL equivalent of \p filter
+	     */
+	    static GLenum magFilter2GL(MagFilter filter);
+	    /**
+	     * @brief Converts PixelFormatCompressed into OpenGL values
+	     * @param format Format to convert
+	     * @return OpenGL equivalent of \p format
+	     */
+	    static GLenum compPixelFormat2GL(PixelFormatCompressed format);
+	    /**
+	     * @brief Checks if a pixel format suppports alpha
+	     * @param format Format to check
+	     * @return True in case \p format supports alpha values, otherwise false
+	     */
+	    static bool hasAlpha(PixelFormat format);
+	    /**
+	     * @brief Converts ITexture::Type into OpenGL values
+	     * @param type Texture type to convert
+	     * @return OpenGL equivalent of \p type
+	     */
+	    static GLenum texType2GL(Type type);
+	    /**
+	     * @brief Converts integers into OpenGL texture unit constants
+	     * @param unit Texture unit to convert
+	     * @return OpenGL equivalent of \p unit
+	     */
+	    static GLenum texUnit2GL(unsigned int unit);
 
 	private:
 	    GLuint m_id;
@@ -41,19 +112,6 @@ namespace dbgl
 	    unsigned int m_width = 0, m_height = 0;
 
 	    static TextureGL33* s_pBoundTex;
-
-	    static GLint pixelFormat2GL(PixelFormat format);
-	    static unsigned int pixelFormatSize(PixelFormat format);
-	    static GLenum pixelType2GL(PixelType type);
-	    static GLenum rowAlignment2GL(RowAlignment align);
-	    static GLenum minFilter2GL(MinFilter filter);
-	    static GLenum magFilter2GL(MagFilter filter);
-	    static GLenum compPixelFormat2GL(PixelFormatCompressed format);
-	    static bool hasAlpha(PixelFormat format);
-	    static GLenum texType2GL(Type type);
-	    static GLenum texUnit2GL(unsigned unit);
-
-	    friend class RenderContextGL33;
     };
 }
 

@@ -20,9 +20,20 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the window class
+     */
     class WindowGL33: public IWindow
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param title Window title
+	     * @param width Initial window width
+	     * @param height Initial window height
+	     * @param fullscreen Flag defining if the window will be created fullscreen
+	     * @param multisampling Amount of multisampling to use
+	     */
 	    WindowGL33(std::string title = "Dragon Blaze Game Library", int width = 800, int height = 600,
 		    bool fullscreen = false, unsigned int multisampling = 2);
 	    virtual ~WindowGL33();
@@ -56,37 +67,115 @@ namespace dbgl
 	    virtual Input const& getInput() const;
 	    virtual IRenderContext const& getRenderContext() const;
 	    virtual IRenderContext& getRenderContext();
+	    /**
+	     * @copydoc IWindow::addCloseCallback()
+	     */
 	    virtual CloseEventType::DelegatePtr addCloseCallback(CloseCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeCloseCallback()
+	     */
 	    virtual bool removeCloseCallback(CloseEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addFocusCallback()
+	     */
 	    virtual FocusEventType::DelegatePtr addFocusCallback(FocusCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeFocusCallback()
+	     */
 	    virtual bool removeFocusCallback(FocusEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addIconifiedCallback()
+	     */
 	    virtual IconifiedEventType::DelegatePtr addIconifiedCallback(
 		    IconifiedCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeIconifiedCallback()
+	     */
 	    virtual bool removeIconifiedCallback(IconifiedEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addRefreshCallback()
+	     */
 	    virtual RefreshEventType::DelegatePtr addRefreshCallback(RefreshCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeRefreshCallback()
+	     */
 	    virtual bool removeRefreshCallback(RefreshEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addResizeCallback()
+	     */
 	    virtual ResizeEventType::DelegatePtr addResizeCallback(ResizeCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeResizeCallback()
+	     */
 	    virtual bool removeResizeCallback(ResizeEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addFramebufferResizeCallback()
+	     */
 	    virtual FramebufferResizeEventType::DelegatePtr addFramebufferResizeCallback(
 		    FramebufferResizeCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeFramebufferResizeCallback()
+	     */
 	    virtual bool removeFramebufferResizeCallback(
 		    FramebufferResizeEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addPositionCallback()
+	     */
 	    virtual PositionEventType::DelegatePtr addPositionCallback(
 		    PositionCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removePositionCallback()
+	     */
 	    virtual bool removePositionCallback(PositionEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addCursorEnterCallback()
+	     */
 	    virtual CursorEnterEventType::DelegatePtr addCursorEnterCallback(
 		    CursorEnterCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeCursorEnterCallback()
+	     */
 	    virtual bool removeCursorEnterCallback(CursorEnterEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addCursorCallback()
+	     */
 	    virtual CursorEventType::DelegatePtr addCursorCallback(CursorCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeCursorCallback()
+	     */
 	    virtual bool removeCursorCallback(CursorEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addMouseButtonCallback()
+	     */
 	    virtual MouseButtonEventType::DelegatePtr addMouseButtonCallback(
 		    MouseButtonCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeMouseButtonCallback()
+	     */
 	    virtual bool removeMouseButtonCallback(MouseButtonEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addScrollCallback()
+	     */
 	    virtual ScrollEventType::DelegatePtr addScrollCallback(ScrollCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeScrollCallback()
+	     */
 	    virtual bool removeScrollCallback(ScrollEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addKeyCallback()
+	     */
 	    virtual KeyEventType::DelegatePtr addKeyCallback(KeyCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeKeyCallback()
+	     */
 	    virtual bool removeKeyCallback(KeyEventType::DelegatePtr const& callback);
+	    /**
+	     * @copydoc IWindow::addInputCallback()
+	     */
 	    virtual InputEventType::DelegatePtr addInputCallback(InputCallbackType const& callback);
+	    /**
+	     * @copydoc IWindow::removeInputCallback()
+	     */
 	    virtual bool removeInputCallback(InputEventType::DelegatePtr const& callback);
 
 	private:

@@ -16,30 +16,99 @@
 
 namespace dbgl
 {
+    /**
+     * @brief OpenGL 3.3 implementation of the mesh class.
+     */
     class MeshGL33 : public IMesh
     {
 	public:
+	    /**
+	     * @brief Destructor
+	     */
 	    virtual ~MeshGL33();
+	    /**
+	     * @copydoc IMesh::indices()
+	     */
 	    virtual std::vector<unsigned short>& indices();
+	    /**
+	     * @copydoc IMesh::vertices()
+	     */
 	    virtual std::vector<Vertex>& vertices();
+	    /**
+	     * @copydoc IMesh::normals()
+	     */
 	    virtual std::vector<Vertex>& normals();
+	    /**
+	     * @copydoc IMesh::uvs()
+	     */
 	    virtual std::vector<UV>& uvs();
+	    /**
+	     * @copydoc IMesh::tangents()
+	     */
 	    virtual std::vector<Vertex>& tangents();
+	    /**
+	     * @copydoc IMesh::bitangents()
+	     */
 	    virtual std::vector<Vertex>& bitangents();
+	    /**
+	     * @copydoc IMesh::getIndexCount()
+	     */
 	    virtual unsigned int getIndexCount() const;
+	    /**
+	     * @copydoc IMesh::getVertexCount()
+	     */
 	    virtual unsigned int getVertexCount() const;
+	    /**
+	     * @copydoc IMesh::getUVCount()
+	     */
 	    virtual unsigned int getUVCount() const;
+	    /**
+	     * @copydoc IMesh::getNormalCount()
+	     */
 	    virtual unsigned int getNormalCount() const;
+	    /**
+	     * @copydoc IMesh::getTangentCount()
+	     */
 	    virtual unsigned int getTangentCount() const;
+	    /**
+	     * @copydoc IMesh::getBitangentCount()
+	     */
 	    virtual unsigned int getBitangentCount() const;
+	    /**
+	     * @copydoc IMesh::setUsage()
+	     */
 	    virtual void setUsage(Usage usage);
+	    /**
+	     * @copydoc IMesh::getUsage()
+	     */
 	    virtual Usage getUsage() const;
+	    /**
+	     * @copydoc IMesh::updateBuffers()
+	     */
 	    virtual void updateBuffers();
+	    /**
+	     * @return Internal index buffer handle
+	     */
 	    GLuint getIndexHandle() const;
+	    /**
+	     * @return Internal vertex buffer handle
+	     */
 	    GLuint getVertexHandle() const;
+	    /**
+	     * @return Internal normal buffer handle
+	     */
 	    GLuint getNormalHandle() const;
+	    /**
+	     * @return Internal uv buffer handle
+	     */
 	    GLuint getUVHandle() const;
+	    /**
+	     * @return Internal tangent buffer handle
+	     */
 	    GLuint getTangentHandle() const;
+	    /**
+	     * @return Internal bitangent buffer handle
+	     */
 	    GLuint getBitangentHandle() const;
 
 	private:

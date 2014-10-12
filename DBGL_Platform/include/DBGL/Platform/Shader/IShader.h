@@ -15,6 +15,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for shaders
+     */
     class IShader
     {
 	public:
@@ -29,7 +32,13 @@ namespace dbgl
 		COMPUTE, //!< COMPUTE
 	    };
 
+	    /**
+	     * @brief Destructor
+	     */
 	    virtual ~IShader() = default;
+	    /**
+	     * @brief Compiles the shader
+	     */
 	    virtual void compile() = 0;
     };
 }

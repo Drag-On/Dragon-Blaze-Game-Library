@@ -17,6 +17,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for render contexts
+     */
     class IRenderContext
     {
 	public:

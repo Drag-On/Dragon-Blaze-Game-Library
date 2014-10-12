@@ -14,7 +14,7 @@
 namespace dbgl
 {
     /**
-     * @brief High-precision timer
+     * @brief Interface class for a high-precision timer
      */
     class ITimer
     {

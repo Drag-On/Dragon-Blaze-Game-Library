@@ -13,6 +13,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for textures
+     */
     class ITexture
     {
 	public:

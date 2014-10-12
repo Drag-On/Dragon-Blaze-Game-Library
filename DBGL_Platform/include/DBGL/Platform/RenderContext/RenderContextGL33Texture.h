@@ -15,6 +15,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief RenderContext that draws onto a texture instead of the screen
+     */
     class RenderContextGL33Texture: public RenderContextGL33
     {
 	public:

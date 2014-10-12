@@ -15,6 +15,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Interface class for mesh implementations.
+     */
     class IMesh
     {
 	public:
@@ -40,7 +43,18 @@ namespace dbgl
 	    struct Vertex
 	    {
 		public:
-		    float x, y, z;
+		    /**
+		     * @brief X coordinate
+		     */
+		    float x;
+		    /**
+		     * @brief Y coordinate
+		     */
+		    float y;
+		    /**
+		     * @brief Z coordinate
+		     */
+		    float z;
 	    };
 	    /**
 	     * @brief UV coordinate in 2 dimensions
@@ -48,7 +62,14 @@ namespace dbgl
 	    struct UV
 	    {
 		public:
-		    float u, v;
+		    /**
+		     * @brief U coordinate
+		     */
+		    float u;
+		    /**
+		     * @brief V coordinate
+		     */
+		    float v;
 	    };
 
 	    /**
