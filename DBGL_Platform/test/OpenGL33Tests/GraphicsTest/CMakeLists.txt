@@ -9,15 +9,15 @@
 ######################################################################
 
 ######################################################################
-### Shader example cmake compilation file
+### Basics example cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_BASE_RESOURCEMANAGER C CXX)
+project (DBGL_PLATFORM_TEST_OGL33_GRAPHICS C CXX)
 
 ######################################################################
 ### Project code files
 ######################################################################
-file(GLOB_RECURSE SRC_FILES_RESOURCEMANAGER
+file(GLOB_RECURSE SRC_FILES
     "*.h"
     "*.cpp"
 )
@@ -25,29 +25,26 @@ file(GLOB_RECURSE SRC_FILES_RESOURCEMANAGER
 ######################################################################
 ### Include directories
 ######################################################################
-include_directories(${OPENGL_INCLUDE_DIR})
-include_directories(${DBGL_INCLUDE_DIR})
-include_directories(${GLEW_INCLUDE_DIR})
-include_directories(${GLFW_INCLUDE_DIR})
+include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 
 ######################################################################
 ### Make target
 ######################################################################
-add_executable(DBGL_BASE_RESOURCEMANAGER ${SRC_FILES_RESOURCEMANAGER})
+add_executable(DBGL_PLATFORM_TEST_OGL33_GRAPHICS ${SRC_FILES})
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_BASE_RESOURCEMANAGER "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
+target_link_libraries(DBGL_PLATFORM_TEST_OGL33_GRAPHICS "${PROJECT_BINARY_DIR}/${DBGL_PLATFORM_DLL_NAME}")
 
 ######################################################################
 ### Copy files
 ######################################################################
-add_custom_target(ALWAYS_EXECUTE_RESOURCEMANAGER ALL)
-add_dependencies(DBGL_BASE_RESOURCEMANAGER ALWAYS_EXECUTE_RESOURCEMANAGER)
+add_custom_target(ALWAYS_EXECUTE_OGL33_GRAPHICS ALL)
+add_dependencies(DBGL_PLATFORM_TEST_OGL33_GRAPHICS ALWAYS_EXECUTE_OGL33_GRAPHICS)
 # do the copying
 foreach(file_i ${LIBRARIES2COPY})
-	add_custom_command(TARGET ALWAYS_EXECUTE_RESOURCEMANAGER
+	add_custom_command(TARGET ALWAYS_EXECUTE_OGL33_GRAPHICS
                         PRE_BUILD
                         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
                         DEPENDS ${file_i}

@@ -43,11 +43,6 @@ target_link_libraries(DBGL_BASE_SCENE "${PROJECT_BINARY_DIR}/${DBGL_DLL_NAME}")
 ######################################################################
 ### Copy files
 ######################################################################
-set(LIBRARIES2COPY
-   "${DBGL_LIB_DIR}/${DBGL_DLL_NAME}"
-   "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
-   "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
-)
 add_custom_target(ALWAYS_EXECUTE_SCENE ALL)
 add_dependencies(DBGL_BASE_SCENE ALWAYS_EXECUTE_SCENE)
 # do the copying

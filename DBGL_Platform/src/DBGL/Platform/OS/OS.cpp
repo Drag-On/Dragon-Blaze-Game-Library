@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/System/OS/OS.h"
+#include "DBGL/Platform/OS/OS.h"
 
 namespace dbgl
 {
@@ -25,7 +25,7 @@ namespace dbgl
 
     std::string OS::getDescripion(OS::Type const& os)
     {
-	std::stringstream osDesc;
+	std::stringstream osDesc {};
 	osDesc << os.name;
 	if(os.derivative.length() > 0)
 	    osDesc<< " " << os.derivative;

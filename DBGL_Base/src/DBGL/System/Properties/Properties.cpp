@@ -16,7 +16,7 @@ namespace dbgl
     {
 	m_filename = path;
 	// Open file
-	std::ifstream file;
+	std::ifstream file {};
 	file.open(path.c_str(), std::ios::in);
 	if (file.is_open())
 	{
@@ -29,7 +29,7 @@ namespace dbgl
 		// Increase line number
 		lineNo++;
 		// Read line
-		std::string line;
+		std::string line {};
 		std::getline(file, line);
 		// Skip empty lines
 		if (line.length() == 0)
@@ -40,7 +40,7 @@ namespace dbgl
 		// Split on key-value-separator
 		auto start = 0U;
 		auto end = line.find(m_keyValueSep);
-		std::vector<std::string> tokens;
+		std::vector<std::string> tokens {};
 		while (end != std::string::npos)
 		{
 		    tokens.push_back(line.substr(start, end - start));
@@ -71,7 +71,7 @@ namespace dbgl
 
     void Properties::interpret(const std::string line)
     {
-	std::string token;
+	std::string token {};
 	std::istringstream lineStream(line);
 	while (lineStream.good())
 	{
@@ -82,7 +82,7 @@ namespace dbgl
 		return;
 	    }
 	    std::string key = token.substr(m_cmntSymbol.size(), token.size());
-	    std::string value;
+	    std::string value {};
 	    lineStream >> value;
 	    // Check if property already exists
 	    if (m_properties.find(key) != m_properties.end())
@@ -116,8 +116,8 @@ namespace dbgl
     bool Properties::write()
     {
 	// Open original file and new file
-	std::ifstream inFile;
-	std::stringstream stringStream;
+	std::ifstream inFile {};
+	std::stringstream stringStream {};
 	inFile.open(m_filename, std::ios::in);
 	if (inFile.is_open())
 	{
@@ -130,7 +130,7 @@ namespace dbgl
 		// Increase line number
 		lineNo++;
 		// Read line
-		std::string line;
+		std::string line {};
 		std::getline(inFile, line);
 		// Take over empty lines and comments
 		if (line.length() == 0 || line.substr(0, m_cmntSymbol.size()) == m_cmntSymbol)
@@ -171,7 +171,7 @@ namespace dbgl
 	    return false;
 	}
 	// Replace file with new content
-	std::ofstream outFile;
+	std::ofstream outFile {};
 	outFile.open(m_filename, std::ios::out | std::ios::trunc);
 	if (outFile.is_open())
 	{
@@ -194,7 +194,7 @@ namespace dbgl
 	else
 	{
 	    // Write to some other file
-	    std::ofstream outFile;
+	    std::ofstream outFile {};
 	    outFile.open(path, std::ios::out);
 	    if (outFile.is_open())
 	    {
@@ -242,7 +242,7 @@ namespace dbgl
     bool Properties::getBoolValue(std::string key)
     {
 	std::string val = getStringValue(key);
-	bool b;
+	bool b {};
 	std::istringstream(val) >> std::boolalpha >> b;
 	return b;
     }

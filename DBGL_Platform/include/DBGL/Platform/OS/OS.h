@@ -14,8 +14,11 @@
 #include <string>
 #include <sstream>
 #include <cstring>
-#include "DBGL/System/Log/Log.h"
-#include "DBGL/System/Properties/Properties.h"
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
 
 namespace dbgl
 {

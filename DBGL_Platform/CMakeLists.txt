@@ -12,7 +12,7 @@
 ### Main library cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_BASE C CXX)
+project (DBGL_PLATFORM C CXX)
 
 ######################################################################
 ### Configure compilation details
@@ -20,26 +20,17 @@ project (DBGL_BASE C CXX)
 
 #set (CMAKE_BUILD_TYPE Release)
 
-set (DBGL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 										# Path to own headers
-set (DBGL_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 								# Path to own library file
-set (DBGL_PLATFORM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/include") 			# Path to platform headers
-set (DBGL_PLATFORM_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/${CMAKE_BUILD_TYPE}") 	# Path to platform library file
-set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glew/lib/") 									# Path to GLEW library file
-set (GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glew/include") 							# Path to GLEW headers
-set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/src/") 									# Path to GLFW library file
-set (GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/include") 							# Path to GLFW headers
-
-set (DBGL_VERSION_MAJOR 0)
-set (DBGL_VERSION_MINOR 1)
-set (DBGL_VERSION_ADD 0)
-set (DBGL_VERSION_FULL "${DBGL_VERSION_MAJOR}.${DBGL_VERSION_MINOR}.${DBGL_VERSION_ADD}")
+set (DBGL_PLATFORM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 			# Path to own headers
+set (DBGL_PLATFORM_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 	# Path to own library file
+set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glew/lib/") 					# Path to GLEW library file
+set (GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glew/include") 			# Path to GLEW headers
+set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/src/") 					# Path to GLFW library file
+set (GLFW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/include") 			# Path to GLFW headers
 
 ######################################################################
 ### Platform specific stuff
 ######################################################################
 if(WIN32)
-	set (DBGL_LIB_NAME "libDBGL_Base.dll")
-	set (DBGL_DLL_NAME "libDBGL_Base.dll")
 	set (DBGL_PLATFORM_LIB_NAME "libDBGL_Platform.dll")
 	set (DBGL_PLATFORM_DLL_NAME "libDBGL_Platform.dll")
 	set (GLEW_LIB_NAME "libglew32.dll.a")
@@ -47,8 +38,6 @@ if(WIN32)
 	set (GLFW_LIB_NAME "glfw3dll.a")
 	set (GLFW_DLL_NAME "glfw3.dll")
 elseif(UNIX)
-	set (DBGL_LIB_NAME "libDBGL_Base.so")
-	set (DBGL_DLL_NAME "libDBGL_Base.so")
 	set (DBGL_PLATFORM_LIB_NAME "libDBGL_Platform.so")
 	set (DBGL_PLATFORM_DLL_NAME "libDBGL_Platform.so")
 	set (GLEW_LIB_NAME "libGLEW.so")
@@ -56,14 +45,6 @@ elseif(UNIX)
 	set (GLFW_LIB_NAME "libglfw.so")
 	set (GLFW_DLL_NAME "libglfw.so")
 endif()
- 
-######################################################################
-### Make header file
-######################################################################
-configure_file (
-	"${DBGL_INCLUDE_DIR}/DBGL/DBGL_Base_Config.h.in"
-	"${DBGL_INCLUDE_DIR}/DBGL/DBGL_Base_Config.h"
-)
 
 ######################################################################
 ### Compiler flags
@@ -79,7 +60,7 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 ######################################################################
 ### Project code files
 ######################################################################
-file(GLOB_RECURSE BASE_SRC
+file(GLOB_RECURSE SRC
     "include/*.h"
     "src/*.cpp"
 )
@@ -109,7 +90,6 @@ endif(DOXYGEN_FOUND)
 ######################################################################
 ### Include directories
 ######################################################################
-include_directories(${DBGL_INCLUDE_DIR})
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${GLFW_INCLUDE_DIR})
@@ -127,19 +107,20 @@ endif (OPENGL_FOUND)
 ######################################################################
 ### Make target
 ######################################################################
-add_library(DBGL_Base SHARED ${BASE_SRC})
-set_target_properties(DBGL_Base PROPERTIES LINKER_LANGUAGE CXX)
+add_library(DBGL_Platform SHARED ${SRC})
+set_target_properties(DBGL_Platform PROPERTIES LINKER_LANGUAGE CXX)
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Base "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_Base "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
-target_link_libraries(DBGL_Base "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
-target_link_libraries(DBGL_Base "${OPENGL_LIBRARIES}")
+target_link_libraries(DBGL_Platform "${GLEW_LIB_DIR}/${GLEW_LIB_NAME}")
+target_link_libraries(DBGL_Platform "${GLFW_LIB_DIR}/${GLFW_LIB_NAME}")
+target_link_libraries(DBGL_Platform "${OPENGL_LIBRARIES}")
 
 ######################################################################
-### Compile sub projects
+### Compile tests
 ######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/Examples/"
-				 "${PROJECT_BINARY_DIR}/Examples/")
+if(COMPILE_TESTS)
+	add_subdirectory("${PROJECT_SOURCE_DIR}/test/"
+					 "${PROJECT_BINARY_DIR}/test/")
+endif(COMPILE_TESTS)

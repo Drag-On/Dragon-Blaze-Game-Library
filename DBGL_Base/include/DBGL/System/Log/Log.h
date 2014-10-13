@@ -22,7 +22,7 @@
 #include <cstdarg>
 #include <cstring>
 #include <ctime>
-#include "DBGL/System/OS/OS.h"
+#include "DBGL/Platform/OS/OS.h"
 
 #define LOG dbgl::Log::getDefault()
 

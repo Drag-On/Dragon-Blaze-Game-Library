@@ -19,6 +19,51 @@ namespace OS_Linux
     #include <unistd.h>
 }
 
+std::string getDerivativeName()
+{
+	// Parses /etc/lsb-release which is present on LSB compliant linux distributions
+	std::ifstream file {};
+	file.open("/etc/lsb-release", std::ios::in);
+	if (file.is_open())
+	{
+		// Seek to beginning
+		file.seekg(0, std::ios::beg);
+		int lineNo = -1;
+		// Scan whole file
+		while (file.good())
+		{
+			// Increase line number
+			lineNo++;
+			// Read line
+			std::string line {};
+			std::getline(file, line);
+			// Skip empty lines
+			if (line.length() == 0)
+				continue;
+			// Split on "="
+			auto start = 0U;
+			auto end = line.find("=");
+			std::vector<std::string> tokens {};
+			while (end != std::string::npos)
+			{
+				tokens.push_back(line.substr(start, end - start));
+				start = end + 1;
+				end = line.find("=", start);
+			}
+			tokens.push_back(line.substr(start, end));
+			if (tokens.size() != 2)
+				continue;
+			if (tokens[0] == "DISTRIB_DESCRIPTION")
+			{
+				file.close();
+				return tokens[1];
+			}
+		}
+		file.close();
+	}
+	return "";
+}
+
 OS::Type OS::getType()
 {
     OS::Type type;
@@ -46,9 +91,7 @@ OS::Type OS::getType()
     type.major = std::stoi(major);
     type.minor = std::stoi(minor);
     // Derivative name
-    Properties prop;
-    prop.read("/etc/lsb-release");
-    type.derivative = prop.getStringValue("DISTRIB_DESCRIPTION");
+    type.derivative = getDerivativeName();
 
     return type;
 }

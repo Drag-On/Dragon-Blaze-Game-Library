@@ -12,35 +12,26 @@
 ### Examples cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_BASE_EXAMPLES C CXX)
+project (DBGL_PLATFORM_TEST_OGL33 C CXX)
 
 ######################################################################
 ### Specify libraries that need copying
 ######################################################################
 set(LIBRARIES2COPY
-   "${DBGL_LIB_DIR}/${DBGL_DLL_NAME}"
    "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}"
    "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
    "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
 )
 
-# External examples
-add_subdirectory("${PROJECT_SOURCE_DIR}/Basics"
-				 "${PROJECT_BINARY_DIR}/Basics")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Movement"
-				 "${PROJECT_BINARY_DIR}/Movement")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Shader"
-				 "${PROJECT_BINARY_DIR}/Shader")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Entities"
-				 "${PROJECT_BINARY_DIR}/Entities")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Scene"
-				 "${PROJECT_BINARY_DIR}/Scene")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Sprite"
-				 "${PROJECT_BINARY_DIR}/Sprite")
-add_subdirectory("${PROJECT_SOURCE_DIR}/ResourceManager"
-				 "${PROJECT_BINARY_DIR}/ResourceManager")
+######################################################################
+### Add test cases
+######################################################################
+add_subdirectory("${PROJECT_SOURCE_DIR}/WindowTest"
+				 "${PROJECT_BINARY_DIR}/WindowTest")
+add_subdirectory("${PROJECT_SOURCE_DIR}/GraphicsTest"
+				 "${PROJECT_BINARY_DIR}/GraphicsTest")
 				 
 ######################################################################
 ### Copy common resource folder
 ######################################################################
-file(COPY "${PROJECT_SOURCE_DIR}/common" DESTINATION "${PROJECT_BINARY_DIR}")
+#file(COPY "${PROJECT_SOURCE_DIR}/common" DESTINATION "${PROJECT_BINARY_DIR}")
