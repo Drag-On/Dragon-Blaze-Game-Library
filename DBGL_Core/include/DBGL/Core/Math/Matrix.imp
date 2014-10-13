@@ -1,0 +1,225 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>::Matrix()
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+			{
+				if(x == y)
+					(*this)[x][y] = 1;
+				else
+					(*this)[x][y] = 0;
+			}
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>::Matrix(const Matrix<T,N,M> &other)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				m_columns[x][y] = other[x][y];
+	}
+
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>::~Matrix()
+	{
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> constexpr int Matrix<T,N,M>::getWidth()
+	{
+		return N;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> constexpr int Matrix<T,N,M>::getHeight()
+	{
+		return M;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,M,N> Matrix<T,N,M>::getTransposed() const
+	{
+		Matrix<T,M,N> transposed{};
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				transposed[y][x] = (*this)[x][y];
+		return transposed;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isZero() const
+	{
+		for(int i = 0; i < getWidth(); i++)
+			if(!(*this)[i].isZero())
+				return false;
+		return true;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::isIdentity() const
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+			{
+				if(x == y && (*this)[x][y] != 1)
+					return false;
+				if(x != y && (*this)[x][y] != 0)
+					return false;
+			}
+		return true;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const T* Matrix<T,N,M>::getDataPointer() const
+	{
+		return &((*this)[0][0]);
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator=(Matrix<T,N,M> const& rhs) 
+	{ 
+		if (*this != rhs)
+		{ 
+			for(int i = 0; i < getWidth(); i++)
+				(*this)[i] = rhs[i];
+		} 
+		return *this;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator+(Matrix<T,N,M> const& rhs) const
+	{ 
+		Matrix<T,N,M> tmp(*this);
+		tmp += rhs;
+		return tmp;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator+=(Matrix<T,N,M> const& rhs)
+	{
+		for(int i = 0; i < getWidth(); i++)
+			(*this)[i] += rhs[i];
+		return *this;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator-(Matrix<T,N,M> const& rhs) const
+	{ 
+		Matrix<T,N,M> tmp(*this);
+		tmp -= rhs;
+		return tmp;
+	}
+		
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator-=(Matrix<T,N,M> const& rhs)
+	{
+		for(int i = 0; i < getWidth(); i++)
+			(*this)[i] -= rhs[i];
+		return *this;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> template <unsigned int O> const Matrix<T,M,O> Matrix<T,N,M>::operator*(Matrix<T,O,N> const& rhs) const
+	{
+		Matrix<T,M,O> mat{};
+		for(int x = 0; x < M; x++)
+			for(int y = 0; y < O; y++)
+			{
+				mat[x][y] = 0;
+				for(int xThis = 0; xThis < getWidth(); xThis++)
+					mat[x][y] += (*this)[xThis][y] * rhs[x][xThis];
+			}
+		return mat;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Vector<T,M> Matrix<T,N,M>::operator*(Vector<T,N> const& rhs) const
+	{
+		Vector<T,M> vec{};
+		for(int y = 0; y < getHeight(); y++)
+			for(int x = 0; x < getWidth(); x++)
+				vec[y] += (*this)[x][y] * rhs[x];
+		return vec;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator*(T const& rhs) const
+	{ 
+		Matrix<T,N,M> tmp(*this);
+		tmp *= rhs;
+		return tmp;
+	}
+		
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator*=(T const& rhs)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				(*this)[x][y] *= rhs;
+		return *this;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T,N,M> Matrix<T,N,M>::operator/(T const& rhs) const
+	{ 
+		Matrix<T,N,M> tmp(*this);
+		tmp /= rhs;
+		return tmp;
+	}
+		
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M>& Matrix<T,N,M>::operator/=(T const& rhs)
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				(*this)[x][y] /= rhs;
+		return *this;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> Matrix<T,N,M> Matrix<T,N,M>::operator-() const
+	{
+		Matrix<T,N,M> tmp(*this);
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				tmp[x][y] = -(*this)[x][y];
+		return tmp;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator==(Matrix<T,N,M> const& rhs) const
+	{
+		for(int x = 0; x < getWidth(); x++)
+			for(int y = 0; y < getHeight(); y++)
+				if((*this)[x][y] != rhs[x][y])
+					return false;
+		return true;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> bool Matrix<T,N,M>::operator!=(Matrix<T,N,M> const& rhs) const
+	{
+		return !(*this == rhs);
+	}
+
+	template<typename T, unsigned int N, unsigned int M> Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index)
+	{
+		if(index < getWidth())
+			return m_columns[index];
+		else
+		{
+			LOG.error("Tried to access column % of %-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Vector<T,M>& Matrix<T,N,M>::operator[](std::size_t const& index) const
+	{
+		if(index < getWidth())
+			return m_columns[index];
+		else
+		{
+			LOG.error("Tried to access column % of %-width matrix!", index, getWidth());
+			exit(EXIT_FAILURE);
+		}
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> operator*(Matrix<T, N, M> const& lhs, T const& rhs)
+	{
+		return lhs * rhs;
+	}
+	
+	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> operator*(T const& lhs, Matrix<T, N, M> const& rhs)
+	{
+		return rhs * lhs;
+	}
+}
