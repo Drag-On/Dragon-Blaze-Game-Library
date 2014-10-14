@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include "DBGL/Platform/Module/Module.h"
+#include "DBGL/Platform/Module/AdvancedModule.h"
+#include "IAdvancedModule.h"
 
 using namespace dbgl;
 using namespace std;
@@ -34,7 +36,19 @@ int main()
 	cerr << "Unable to load function" << endl;
 	return -2;
     }
-    cout << gimmeZero() << endl;
+    cout << "Simple way: gimmeZero() returned: " << gimmeZero() << endl;
+
+#ifdef __linux__
+    AdvancedModule<IAdvancedModule> amod{"test_module.so"};
+#elif __WIN32
+    AdvancedModule<IAdvancedModule> amod{"test_module.dll"};
+#endif
+    if(!amod.load())
+    {
+	cerr << "Unable to load advanced module" << endl;
+	return -1;
+    }
+    cout << "Advanced module: 3.5f + 1.9f = " << amod.get()->add(3.5f, 1.9f) << endl;
 }
 
 
