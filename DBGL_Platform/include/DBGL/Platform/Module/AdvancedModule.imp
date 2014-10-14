@@ -1,0 +1,41 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string path) : m_module{path}
+    {
+    }
+
+    template<class Base> AdvancedModule<Base>::~AdvancedModule()
+    {
+	if (m_pDestroy)
+	    m_pDestroy(m_pClass);
+    }
+
+    template<class Base> bool AdvancedModule<Base>::load()
+    {
+	if(!m_module.load())
+	    return false;
+	m_pCreate = reinterpret_cast<CreateFunc>(m_module.getFunction("create"));
+	m_pDestroy = reinterpret_cast<DestroyFunc>(m_module.getFunction("destroy"));
+	if(!m_pCreate || !m_pDestroy)
+	    return false;
+	m_pClass = m_pCreate();
+	return true;
+    }
+
+    template<typename Base> Base* AdvancedModule<Base>::get()
+    {
+	return m_pClass;
+    }
+}
+
+
