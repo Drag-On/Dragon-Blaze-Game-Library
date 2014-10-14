@@ -31,17 +31,18 @@ namespace dbgl
     class Module
     {
 	public:
+	    using Func = void(*)(void);
 	    Module(std::string path);
 	    ~Module();
 	    bool load();
-	    void* getFunction(std::string name);
+	    Func getFunction(std::string name);
 	private:
 	    // Prevent copies
 	    Module(Module& other);
 	    Module& operator=(Module& other);
 
 	    std::string m_path;
-            internal_os::ModHandle m_handle;
+            internal_os::ModHandle m_handle{};
     };
 }
 

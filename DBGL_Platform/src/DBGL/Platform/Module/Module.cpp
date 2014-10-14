@@ -41,12 +41,12 @@ namespace dbgl
 	    return true;
     }
 
-    void* Module::getFunction(std::string name)
+    auto Module::getFunction(std::string name) -> Func
     {
 #ifdef __linux__
-        return internal_os::dlsym(m_handle, name.c_str());
+        return reinterpret_cast<Func>(internal_os::dlsym(m_handle, name.c_str()));
 #elif __WIN32
-	return internal_os::GetProcAddress(m_handle, name.c_str());
+	return reinterpret_cast<Func>(internal_os::GetProcAddress(m_handle, name.c_str()));
 #endif
     }
 }
