@@ -18,13 +18,17 @@ using GimmeZeroType = int(*)();
 
 int main()
 {
+#ifdef __linux__
+    Module mod{"test_module.so"};
+#elif __WIN32
     Module mod{"test_module.dll"};
+#endif
     if(!mod.load())
     {
 	cerr << "Unable to load module" << endl;
 	return -1;
     }
-    GimmeZeroType gimmeZero = mod.getFunction<GimmeZeroType>("gimmeZero");
+    GimmeZeroType gimmeZero = (GimmeZeroType)mod.getFunction("gimmeZero");
     if(!gimmeZero)
     {
 	cerr << "Unable to load function" << endl;

@@ -1,0 +1,38 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef MODULEWINDOWS_H_
+#define MODULEWINDOWS_H_
+
+#include <windows.h>
+#include "IModule.h"
+
+namespace dbgl
+{
+    class ModuleWindows : public IModule
+    {
+	public:
+	    ModuleWindows(std::string path);
+	    virtual ~ModuleWindows();
+	    virtual bool load();
+	    template <typename Func> virtual Func getFunction(std::string name);
+	private:
+	    // Prevent copies
+	    ModuleWindows(ModuleWindows& other);
+	    ModuleWindows& operator=(ModuleWindows& other);
+
+	    std::string m_path;
+            HINSTANCE m_handle;
+    };
+}
+
+#include "ModuleWindows.imp"
+
+#endif /* MODULEWINDOWS_H_ */

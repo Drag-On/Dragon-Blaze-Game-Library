@@ -18,20 +18,35 @@ namespace dbgl
 
     Module::~Module()
     {
-#ifdef _WIN32
-	OS_Win32::FreeLibrary(m_handle);
+        if(m_handle)
+        {
+#ifdef __linux__
+            internal_os::dlclose(m_handle);
+#elif __WIN32
+            internal_os::FreeLibrary(m_handle);
 #endif
+        }
     }
 
     bool Module::load()
     {
-#ifdef _WIN32
-	m_handle = OS_Win32::LoadLibrary(m_path.c_str());
+#ifdef __linux__
+        m_handle = internal_os::dlopen(m_path.c_str(), RTLD_LAZY);
+#elif __WIN32
+        m_handle = internal_os::LoadLibrary(m_path.c_str());
+#endif
 	if (!m_handle)
 	    return false;
 	else
 	    return true;
+    }
+
+    void* Module::getFunction(std::string name)
+    {
+#ifdef __linux__
+        return internal_os::dlsym(m_handle, name.c_str());
+#elif __WIN32
+	return internal_os::GetProcAddress(m_handle, name.c_str());
 #endif
-	// TODO: Linux & Mac implementations
     }
 }
