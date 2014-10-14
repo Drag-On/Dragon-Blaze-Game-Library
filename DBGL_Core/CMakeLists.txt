@@ -24,6 +24,8 @@ set (DBGL_CORE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 								# Path to ow
 set (DBGL_CORE_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 						# Path to own library file
 set (DBGL_PLATFORM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/include") 			# Path to platform headers
 set (DBGL_PLATFORM_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/${CMAKE_BUILD_TYPE}") 	# Path to platform library file
+set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/lib/glew/lib/") 					# Path to GLEW library file
+set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Platform/lib/glfw/src/") 					# Path to GLFW library file
 
 ######################################################################
 ### Platform specific stuff
@@ -33,11 +35,19 @@ if(WIN32)
 	set (DBGL_CORE_DLL_NAME "libDBGL_Core.dll")
 	set (DBGL_PLATFORM_LIB_NAME "libDBGL_Platform.dll")
 	set (DBGL_PLATFORM_DLL_NAME "libDBGL_Platform.dll")
+	set (GLEW_LIB_NAME "libglew32.dll.a")
+	set (GLEW_DLL_NAME "glew32.dll")
+	set (GLFW_LIB_NAME "glfw3dll.a")
+	set (GLFW_DLL_NAME "glfw3.dll")
 elseif(UNIX)
 	set (DBGL_CORE_LIB_NAME "libDBGL_Core.so")
 	set (DBGL_CORE_DLL_NAME "libDBGL_Core.so")
 	set (DBGL_PLATFORM_LIB_NAME "libDBGL_Platform.so")
 	set (DBGL_PLATFORM_DLL_NAME "libDBGL_Platform.so")
+	set (GLEW_LIB_NAME "libGLEW.so")
+	set (GLEW_DLL_NAME "libGLEW.so")
+	set (GLFW_LIB_NAME "libglfw.so")
+	set (GLFW_DLL_NAME "libglfw.so")
 endif()
 
 ######################################################################
