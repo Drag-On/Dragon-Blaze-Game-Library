@@ -28,13 +28,38 @@ namespace dbgl
 #endif
     }
 
+    /**
+     * @brief Represents a dynamic library that can be loaded on runtime
+     */
     class Module
     {
 	public:
+	    /**
+	     * @brief Void function pointer
+	     */
 	    using Func = void(*)(void);
+	    /**
+	     * @brief Constructs a new module from a file
+	     * @param path Path of the file
+	     */
 	    Module(std::string path);
+	    /**
+	     * @brief Destructor
+	     */
 	    ~Module();
+	    /**
+	     * @brief Loads the module into memory
+	     * @return True in case the module was loaded, otherwise false
+	     */
 	    bool load();
+	    /**
+	     * @brief Retrieves a pointer to a function within this module
+	     * @details The function has to be a c-style function. It may have any signature, however
+	     * 		this signature needs to be known to the caller, since the returned function
+	     * 		pointer needs to be cast into the right format.
+	     * @param name Name of the function to get
+	     * @return Function pointer to the requested function or nullptr if something went wrong
+	     */
 	    Func getFunction(std::string name);
 	private:
 	    // Prevent copies
