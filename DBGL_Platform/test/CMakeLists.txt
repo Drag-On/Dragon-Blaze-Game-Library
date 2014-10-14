@@ -16,3 +16,5 @@ project (DBGL_PLATFORM_TEST C CXX)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/OpenGL33Tests/"
 				 "${PROJECT_BINARY_DIR}/OpenGL33Tests/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/OSTests/"
+				 "${PROJECT_BINARY_DIR}/OSTests/")
