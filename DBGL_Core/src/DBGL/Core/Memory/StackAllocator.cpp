@@ -27,7 +27,7 @@ namespace dbgl
 
     void* StackAllocator::allocate(unsigned long long size)
     {
-	if ((reinterpret_cast<char*>(m_pCur) + size) < m_pEnd)
+	if ((reinterpret_cast<char*>(m_pCur) + size) <= m_pEnd)
 	{
 	    void* addr = m_pCur;
 	    m_pCur = reinterpret_cast<char*>(m_pCur) + size;

@@ -18,6 +18,10 @@ struct foo
 {
 	int x = 0;
 	int y = 0;
+	~foo()
+	{
+	    cout << "foo destructor called for (" << x << "," << y << ") :)" << endl;
+	}
 };
 
 int main()
@@ -33,6 +37,8 @@ int main()
     }
     *number = 5;
     cout << "Number: " << *number << endl;
+    cout << "Retrieving marker..." << endl;
+    auto mark = mem.top();
     cout << "Allocating foo..." << endl;
     foo* bar = mem.allocate<foo>();
     if(!bar)
@@ -43,8 +49,23 @@ int main()
     bar->x = 42;
     bar->y = -10;
     cout << "foo: (" << bar->x << "," << bar->y << ")" << endl;
-    cout << "Rolling back..." << endl;
+    cout << "Trying to allocate another 4 foos..." << endl;
+    for(unsigned int i = 0; i < 4; i++)
+    {
+	if(!mem.allocate<foo>())
+	    cout << "Couldn't allocate " << i << ". foo instance." << endl;
+    }
+    cout << "Rolling back to marker, manually calling destructor on first created foo..." << endl;
+    bar->~foo();
+    mem.rollBack(mark);
+    cout << "Clearing..." << endl;
     mem.clear();
+    cout << "Allocating 4 foos..." << endl;
+    for(unsigned int i = 0; i < 4; i++)
+    {
+	if(!mem.allocate<foo>())
+	    cout << "Couldn't allocate " << i << "th foo instance." << endl;
+    }
     cout << "Done!" << endl;
 
     return 0;

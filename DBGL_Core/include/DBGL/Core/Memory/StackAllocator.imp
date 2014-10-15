@@ -13,7 +13,7 @@ namespace dbgl
     template <typename T> T* StackAllocator::allocate()
     {
 	auto size = sizeof(T);
-	if ((reinterpret_cast<char*>(m_pCur) + size) < m_pEnd)
+	if ((reinterpret_cast<char*>(m_pCur) + size) <= m_pEnd)
 	{
 	    T* obj = new (m_pCur) T {};
 	    m_pCur = reinterpret_cast<char*>(m_pCur) + size;
