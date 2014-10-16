@@ -29,6 +29,8 @@ set(LIBRARIES2COPY
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/StackAllocatorTest"
 				 "${PROJECT_BINARY_DIR}/StackAllocatorTest")
+add_subdirectory("${PROJECT_SOURCE_DIR}/PoolAllocatorTest"
+				 "${PROJECT_BINARY_DIR}/PoolAllocatorTest")
 				 
 ######################################################################
 ### Copy common resource folder
