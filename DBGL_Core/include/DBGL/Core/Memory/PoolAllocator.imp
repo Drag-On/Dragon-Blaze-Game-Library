@@ -25,10 +25,10 @@ namespace dbgl
 	    *ppBlock = pNextBlock;
 	}
 	// Write nullptr into last block
-	T** ppLastBlock = reinterpret_cast<T**>(reinterpret_cast<T*>(m_pMemory) + size-1);
-	*ppLastBlock = nullptr;
-	// Point m_pFreeList to first allocated block
-	m_pFreeList = reinterpret_cast<T**>(m_pMemory);
+	m_pFreeListEnd = reinterpret_cast<T**>(reinterpret_cast<T*>(m_pMemory) + size-1);
+	*m_pFreeListEnd = nullptr;
+	// Point m_pFreeListStart to first allocated block
+	m_pFreeListStart = reinterpret_cast<T**>(m_pMemory);
 
 	// TODO: Remove debug output
 	debugOut();
@@ -42,14 +42,14 @@ namespace dbgl
     template<typename T> T* PoolAllocator<T>::allocate()
     {
 	// Check if there is a free block
-	if(!m_pFreeList)
+	if(!m_pFreeListStart)
 	    return nullptr;
 	// Get the pointer to the next free block
-	T** pNextFree = reinterpret_cast<T**>(*m_pFreeList);
+	T** pNextFree = reinterpret_cast<T**>(*m_pFreeListStart);
 	// Allocate object in free block
-	T* obj = new (reinterpret_cast<T*>(m_pFreeList)) T {};
+	T* obj = new (reinterpret_cast<T*>(m_pFreeListStart)) T {};
 	// Point free list start to new start
-	m_pFreeList = pNextFree;
+	m_pFreeListStart = pNextFree;
 
 	debugOut();
 	return obj;
@@ -61,8 +61,10 @@ namespace dbgl
 	    throw std::invalid_argument("Pointer doesn't point to an object within the pool.");
 	// Call destructor
 	obj->~T();
-	// Re-insert deallocated block into free list
-
+	// Append deallocated block to free list
+	*m_pFreeListEnd = obj;
+	m_pFreeListEnd = reinterpret_cast<T**>(obj);
+	*m_pFreeListEnd = nullptr;
 
 	debugOut();
 	//..
@@ -74,7 +76,8 @@ namespace dbgl
 	// TODO: Remove debug output
 	std::cout << "sizeof(T): " << sizeof(T) << std::endl;
 	std::cout << "m_pMemory: " << static_cast<void*>(m_pMemory) << std::endl;
-	std::cout << "m_pFreeList: " << static_cast<void*>(m_pFreeList) << std::endl;
+	std::cout << "m_pFreeListStart: " << static_cast<void*>(m_pFreeListStart) << std::endl;
+	std::cout << "m_pFreeListEnd: " << static_cast<void*>(m_pFreeListEnd) << std::endl;
 	for(unsigned int i = 0; i < m_size; i++)
 	    std::cout << "Element " << i << ": " << reinterpret_cast<T*>(*reinterpret_cast<T**>((static_cast<T*>(m_pMemory) + i))) << std::endl;
     }

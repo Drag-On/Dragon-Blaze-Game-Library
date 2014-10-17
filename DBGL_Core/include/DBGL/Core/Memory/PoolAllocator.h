@@ -25,7 +25,8 @@ namespace dbgl
 	    void deallocate(T*& obj);
 	private:
 	    void* m_pMemory = nullptr;
-	    T** m_pFreeList = nullptr;
+	    T** m_pFreeListStart = nullptr;
+	    T** m_pFreeListEnd = nullptr;
 	    unsigned long long m_size;
 
 	    void debugOut();
