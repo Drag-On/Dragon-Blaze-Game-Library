@@ -33,6 +33,26 @@ int main()
     foo* bar = mem.allocate();
     cout << "Deallocate foo again..." << endl;
     mem.deallocate(bar);
+    cout << "Allocating 8 foos..." << endl;
+    foo* arr[8];
+    for(unsigned int i = 0; i< 8; i++)
+    {
+	if(!(arr[i] = mem.allocate()))
+	    cout << "Allocation not possible for element " << i << "!" << endl;
+    }
+    cout << "Allocating another foo..." << endl;
+    foo* baz ;
+    if(!(baz = mem.allocate()))
+	cout << "Couldn't allocate foo!" << endl;
+    cout <<"Deallocate everything..." << endl;
+    for(unsigned int i = 0; i < 8; i++)
+	mem.deallocate(arr[i]);
+    mem.deallocate(baz);
+    cout << "Allocate another foo..." << endl;
+    if(!(bar = mem.allocate()))
+	cout << "Couldn't allocate!" << endl;
+    cout << "Deallocate again..." << endl;
+    mem.deallocate(bar);
     cout << "Done!" << endl;
     return 0;
 }

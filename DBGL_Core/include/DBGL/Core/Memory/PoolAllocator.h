@@ -50,7 +50,7 @@ namespace dbgl
 	    T** m_pFreeListEnd = nullptr;
 	    unsigned long long m_size;
 
-	    void debugOut();
+	    bool canAllocate();
     };
 }
 
