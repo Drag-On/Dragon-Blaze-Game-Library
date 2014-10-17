@@ -16,12 +16,33 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Pool-based allocator.
+     * @details Pre-allocates a certain amount of memory on creation and serves requests from
+     * 		this preallocated memory. Thus no context switch is needed on creation.
+     * 		A pool allocator can only be used to allocate multiple objects of the same type.
+     */
     template <typename T> class PoolAllocator
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param size Amount of objects that can be allocated with this allocator
+	     */
 	    PoolAllocator(unsigned long long size);
+	    /**
+	     * @brief Destructor
+	     */
 	    ~PoolAllocator();
+	    /**
+	     * @brief Allocates and constructs a new object
+	     * @return Pointer to the allocated object
+	     */
 	    T* allocate();
+	    /**
+	     * @brief Destructs and deallocates a previously allocated object
+	     * @param obj Pointer to the object to deallocate
+	     */
 	    void deallocate(T*& obj);
 	private:
 	    void* m_pMemory = nullptr;
