@@ -77,6 +77,4 @@ namespace dbgl
     };
 }
 
-
-
 #endif /* FNVHASHER_H_ */

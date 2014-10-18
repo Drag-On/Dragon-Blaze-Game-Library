@@ -29,6 +29,8 @@ set(LIBRARIES2COPY
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/FNVHasherTest"
 				 "${PROJECT_BINARY_DIR}/FNVHasherTest")
+add_subdirectory("${PROJECT_SOURCE_DIR}/OATHasherTest"
+				 "${PROJECT_BINARY_DIR}/OATHasherTest")
 				 
 ######################################################################
 ### Copy common resource folder
