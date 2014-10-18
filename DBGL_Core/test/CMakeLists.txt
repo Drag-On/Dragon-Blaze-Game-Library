@@ -16,3 +16,5 @@ project (DBGL_CORE_TEST C CXX)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/AllocatorTests/"
 				 "${PROJECT_BINARY_DIR}/AllocatorTests/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/HashingTests/"
+				 "${PROJECT_BINARY_DIR}/HashingTests/")
