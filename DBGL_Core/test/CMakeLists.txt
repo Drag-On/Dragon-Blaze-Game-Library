@@ -18,3 +18,5 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/AllocatorTests/"
 				 "${PROJECT_BINARY_DIR}/AllocatorTests/")
 add_subdirectory("${PROJECT_SOURCE_DIR}/HashingTests/"
 				 "${PROJECT_BINARY_DIR}/HashingTests/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/ParserTests/"
+				 "${PROJECT_BINARY_DIR}/ParserTests/")

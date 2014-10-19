@@ -34,13 +34,13 @@ namespace dbgl
 	     * @param path Path of the file to use
 	     * @return True in case the file could be loaded, otherwise false
 	     */
-	    bool read(const std::string path);
+	    bool read(std::string const& path);
 	    /**
 	     * @brief Interprets a line
 	     * @details Reads in "-key value" pairs
 	     * @param line String to parse
 	     */
-	    void interpret(const std::string line);
+	    void interpret(std::string const& line);
 	    /**
 	     * @brief Interprets an array
 	     * @details Reads in "-key value" pairs
@@ -58,53 +58,53 @@ namespace dbgl
 	     * @param path Path to write to
 	     * @return True in case the file was written, otherwise false
 	     */
-	    bool write(std::string path);
+	    bool write(std::string const& path);
 	    /**
 	     * @brief Manually sets a property, overwriting any previous values
 	     * @param key Key of the property
 	     * @param value Value of the property
 	     */
-	    void setValue(std::string key, std::string value);
+	    void setValue(std::string const&key, std::string const& value);
 	    /**
 	     * @param key Key to get the value for
 	     * @return Raw string value associated with the passed key
 	     */
-	    std::string getStringValue(std::string key);
+	    std::string getStringValue(std::string const& key);
 	    /**
 	     * @brief Interprets the string associated with the passed key as an integer
 	     * @param key Key to get the value for
 	     * @return Integer value associated with the passed key
 	     */
-	    int getIntValue(std::string key);
+	    int getIntValue(std::string const& key);
 	    /**
 	     * @brief Interprets the string associated with the passed key as a float
 	     * @param key Key to get the value for
 	     * @return Float value associated with the passed key
 	     */
-	    float getFloatValue(std::string key);
+	    float getFloatValue(std::string const& key);
 	    /**
 	     * @brief Interprets the string associated with the passed key as a boolean
 	     * @param key Key to get the value for
 	     * @return Boolean value associated with the passed key
 	     */
-	    bool getBoolValue(std::string key);
+	    bool getBoolValue(std::string const& key);
 	    /**
 	     * @param key Key to get the value for
 	     * @return Reference to value associated with the passed key. Creates key if not found.
 	     */
-	    std::string& operator[](std::string key);
+	    std::string& operator[](std::string const& key);
 	    /**
 	     * @param cmntQualifier String that qualifies lines as comments
 	     */
-	    void setCommentQualifier(std::string cmntQualifier);
+	    void setCommentQualifier(std::string const& cmntQualifier);
 	    /**
 	     * @param delimiter String to delimit key and value in property files
 	     */
-	    void setKeyValueDelimiter(std::string delimiter);
+	    void setKeyValueDelimiter(std::string const& delimiter);
 	    /**
 	     * @param prefix Prefix for keys in interpreted lines
 	     */
-	    void setKeyPrefix(std::string prefix);
+	    void setKeyPrefix(std::string const& prefix);
 	private:
 	    std::string m_filename;
 	    std::string m_cmntSymbol = "#";

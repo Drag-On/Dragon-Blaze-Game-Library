@@ -12,7 +12,7 @@
 
 namespace dbgl
 {
-    bool Properties::read(const std::string path)
+    bool Properties::read(std::string const& path)
     {
 	m_filename = path;
 	// Open file
@@ -69,7 +69,7 @@ namespace dbgl
 	return false;
     }
 
-    void Properties::interpret(const std::string line)
+    void Properties::interpret(std::string const& line)
     {
 	std::string token {};
 	std::istringstream lineStream(line);
@@ -187,7 +187,7 @@ namespace dbgl
 	}
     }
 
-    bool Properties::write(std::string path)
+    bool Properties::write(std::string const& path)
     {
 	if(path == m_filename)
 	    return write();
@@ -209,7 +209,7 @@ namespace dbgl
 	}
     }
 
-    void Properties::setValue(std::string key, std::string value)
+    void Properties::setValue(std::string const&key, std::string const& value)
     {
 	// Check if property already exists
 	if (m_properties.find(key) != m_properties.end())
@@ -218,7 +218,7 @@ namespace dbgl
 	m_properties[key] = value;
     }
 
-    std::string Properties::getStringValue(std::string key)
+    std::string Properties::getStringValue(std::string const& key)
     {
 	auto it = m_properties.find(key);
 	if (it != m_properties.end())
@@ -227,19 +227,19 @@ namespace dbgl
 	    return "";
     }
 
-    int Properties::getIntValue(std::string key)
+    int Properties::getIntValue(std::string const& key)
     {
 	std::string val = getStringValue(key);
 	return atoi(val.c_str());
     }
 
-    float Properties::getFloatValue(std::string key)
+    float Properties::getFloatValue(std::string const& key)
     {
 	std::string val = getStringValue(key);
 	return atof(val.c_str());
     }
 
-    bool Properties::getBoolValue(std::string key)
+    bool Properties::getBoolValue(std::string const& key)
     {
 	std::string val = getStringValue(key);
 	bool b {};
@@ -247,22 +247,22 @@ namespace dbgl
 	return b;
     }
 
-    std::string& Properties::operator[](std::string key)
+    std::string& Properties::operator[](std::string const& key)
     {
 	return m_properties[key];
     }
 
-    void Properties::setCommentQualifier(std::string cmntQualifier)
+    void Properties::setCommentQualifier(std::string const& cmntQualifier)
     {
 	m_cmntSymbol = cmntQualifier;
     }
 
-    void Properties::setKeyValueDelimiter(std::string delimiter)
+    void Properties::setKeyValueDelimiter(std::string const& delimiter)
     {
 	m_keyValueSep = delimiter;
     }
 
-    void Properties::setKeyPrefix(std::string prefix)
+    void Properties::setKeyPrefix(std::string const& prefix)
     {
 	m_keyPrefix = prefix;
     }
