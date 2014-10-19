@@ -22,7 +22,10 @@ int main()
     try
     {
 	CSV csv { "test.csv" };
-	cout << "Element (0,0) = " << csv.getStringValue(0, 0) << endl;
+	cout << "Elements:" << endl;
+	for(int y = 0; y < 4; y++)
+	    for(int x = 0; x < 4; x++)
+		cout << "Element (" << x << "," << y << ") = " << csv.getStringValue(x, y) << endl;
     }
     catch (exception& e)
     {
