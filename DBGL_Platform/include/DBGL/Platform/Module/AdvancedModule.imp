@@ -10,7 +10,11 @@
 
 namespace dbgl
 {
-    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string path) : m_module{path}
+    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string const& path) : m_module{path}
+    {
+    }
+
+    template<class Base> AdvancedModule<Base>::AdvancedModule(Filename const& path) : m_module{path}
     {
     }
 

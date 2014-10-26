@@ -12,7 +12,11 @@
 
 namespace dbgl
 {
-    Module::Module(std::string path) : m_path{path}
+    Module::Module(std::string const& path) : m_path{path}
+    {
+    }
+
+    Module::Module(Filename const& path) : m_path{path}
     {
     }
 
@@ -31,9 +35,9 @@ namespace dbgl
     bool Module::load()
     {
 #ifdef __linux__
-        m_handle = internal_os::dlopen(m_path.c_str(), RTLD_LAZY);
+        m_handle = internal_os::dlopen(m_path.get().c_str(), RTLD_LAZY);
 #elif __WIN32
-        m_handle = internal_os::LoadLibrary(m_path.c_str());
+        m_handle = internal_os::LoadLibrary(m_path.get().c_str());
 #endif
 	if (!m_handle)
 	    return false;
@@ -41,7 +45,7 @@ namespace dbgl
 	    return true;
     }
 
-    auto Module::getFunction(std::string name) -> Func
+    auto Module::getFunction(std::string const& name) -> Func
     {
 #ifdef __linux__
         return reinterpret_cast<Func>(internal_os::dlsym(m_handle, name.c_str()));
