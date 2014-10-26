@@ -18,12 +18,14 @@ namespace dbgl
 
     TextureIO::~TextureIO()
     {
+	for(auto mod : m_modules)
+	    delete mod;
     }
 
     bool TextureIO::addFormat(std::string const& filename)
     {
-	AdvancedModule<ITextureFormat> mod { filename };
-	if(mod.load())
+	auto mod = new AdvancedModule<ITextureFormat>{ filename };
+	if(mod->load())
 	    m_modules.push_back(mod);
 	else
 	    return false;
@@ -32,8 +34,8 @@ namespace dbgl
 
     bool TextureIO::addFormat(Filename const& filename)
     {
-	AdvancedModule<ITextureFormat> mod { filename };
-	if(mod.load())
+	auto mod = new AdvancedModule<ITextureFormat>{ filename };
+	if(mod->load())
 	    m_modules.push_back(mod);
 	else
 	    return false;

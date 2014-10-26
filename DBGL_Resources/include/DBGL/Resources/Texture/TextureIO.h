@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include "ITextureFormat.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/File/Filename.h"
 #include "DBGL/Platform/Module/AdvancedModule.h"
@@ -83,7 +84,7 @@ namespace dbgl
 	private:
 	    AdvancedModule<ITextureFormat>* pickModule() const;
 
-	    std::vector<AdvancedModule<ITextureFormat>> m_modules;
+	    std::vector<AdvancedModule<ITextureFormat>*> m_modules;
     };
 }
 
