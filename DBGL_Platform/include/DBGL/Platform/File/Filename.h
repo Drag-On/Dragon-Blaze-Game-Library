@@ -25,7 +25,7 @@ namespace dbgl
 	    bool isRelative() const;
 	    std::string getExtension() const;
 	    std::string getAbsolute() const;
-	    std::string getRelative() const;
+//	    std::string getRelative() const;
 	    std::string const& get() const;
 
 	private:

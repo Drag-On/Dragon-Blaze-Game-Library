@@ -15,6 +15,7 @@ namespace dbgl
     namespace internal_os
     {
 #ifdef __linux__
+	#include <unistd.h>
 #elif __WIN32
         #undef _MSC_EXTENSIONS
 	#include <windows.h>
@@ -25,6 +26,9 @@ namespace dbgl
     {
 	std::string cwd{};
 #ifdef __linux__
+	char buffer[512];
+	if (internal_os::getcwd(buffer, sizeof(buffer)))
+	    cwd.append(buffer);
 #elif __WIN32
 	int reqSize = internal_os::GetCurrentDirectory(0, nullptr);
 	char* buffer = new char[reqSize]{};
@@ -39,6 +43,7 @@ namespace dbgl
     {
 	bool success { false };
 #ifdef __linux__
+	success = !internal_os::chdir(path.c_str());
 #elif __WIN32
 	success = internal_os::SetCurrentDirectory(path.c_str());
 #endif

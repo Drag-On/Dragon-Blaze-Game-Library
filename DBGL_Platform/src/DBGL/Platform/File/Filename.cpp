@@ -15,6 +15,7 @@ namespace dbgl
     namespace internal_os
     {
 #ifdef __linux__
+	#include <stdlib.h>
 #elif __WIN32
         #undef _MSC_EXTENSIONS
 	#include <windows.h>
@@ -43,6 +44,9 @@ namespace dbgl
 	if(isRelative())
 	{
 #ifdef __linux__
+	    char absPath[512];
+	    realpath(m_completeFile.c_str(), absPath);
+	    fullPath.append(absPath);
 #elif __WIN32
 	    int reqSize = internal_os::GetFullPathName(m_completeFile.c_str(), 0, nullptr, nullptr);
 	    char* absPath = new char[reqSize];
@@ -56,23 +60,23 @@ namespace dbgl
 	    return m_completeFile;
     }
 
-    std::string Filename::getRelative() const
-    {
-	std::string relPath{};
-	if(!isRelative())
-	{
-#ifdef __linux__
-#elif __WIN32
-//	    char* relative = new char[MAX_PATH]{};
-//	    internal_os::PathRelativePathTo(relative, Filesystem::getCurWorkingDir().c_str(), 0, m_completeFile.c_str(), 0);
-//	    relPath.append(relative);
-//	    delete [] relative;
-	    return relPath;
-#endif
-	}
-	else
-	    return m_completeFile;
-    }
+//    std::string Filename::getRelative() const
+//    {
+//	std::string relPath{};
+//	if(!isRelative())
+//	{
+//#ifdef __linux__
+//#elif __WIN32
+////	    char* relative = new char[MAX_PATH]{};
+////	    internal_os::PathRelativePathTo(relative, Filesystem::getCurWorkingDir().c_str(), 0, m_completeFile.c_str(), 0);
+////	    relPath.append(relative);
+////	    delete [] relative;
+//	    return relPath;
+//#endif
+//	}
+//	else
+//	    return m_completeFile;
+//    }
 
     std::string const& Filename::get() const
     {
@@ -89,8 +93,9 @@ namespace dbgl
     void Filename::analyzeRelative(std::string const& path)
     {
 #ifdef __linux__
+	m_isRelative = !std::regex_match(path, std::regex("\\/[A-Za-z0-9\\/\\\\ \\.\\-_]*"));
 #elif __WIN32
-	m_isRelative = !std::regex_match(path, std::regex("[A-Z]:[A-Za-z0-9\\/\\\\ .]*"));
+	m_isRelative = !std::regex_match(path, std::regex("[A-Z]:[A-Za-z0-9\\/\\\\ \\.\\-_]*"));
 #endif
     }
 
