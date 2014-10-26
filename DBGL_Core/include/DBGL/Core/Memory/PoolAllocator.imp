@@ -1,0 +1,81 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<typename T> PoolAllocator<T>::PoolAllocator(unsigned long long size) : m_size{size}
+    {
+	// Check if pointers fit into the pool (for list of free blocks)
+	if(sizeof(T*) > sizeof(T))
+	    throw std::invalid_argument("Allocated objects must at least have the size of a pointer to that object!");
+
+	m_pMemory = operator new(size * sizeof(T));
+	// Initialize free list by writing the pointer to the next block into each block
+	for(unsigned int i = 0; i < size - 1; i++)
+	{
+	    T** ppBlock = reinterpret_cast<T**>(reinterpret_cast<T*>(m_pMemory) + i);
+	    T* pNextBlock = reinterpret_cast<T*>(m_pMemory) + i + 1;
+	    *ppBlock = pNextBlock;
+	}
+	// Write nullptr into last block
+	m_pFreeListEnd = reinterpret_cast<T**>(reinterpret_cast<T*>(m_pMemory) + size-1);
+	*m_pFreeListEnd = nullptr;
+	// Point m_pFreeListStart to first allocated block
+	m_pFreeListStart = reinterpret_cast<T**>(m_pMemory);
+    }
+
+    template<typename T> PoolAllocator<T>::~PoolAllocator()
+    {
+	operator delete(m_pMemory);
+    }
+
+    template<typename T> T* PoolAllocator<T>::allocate()
+    {
+	// Check if there is a free block
+	if(!canAllocate())
+	    return nullptr;
+	// Get the pointer to the next free block
+	T** pNextFree = reinterpret_cast<T**>(*m_pFreeListStart);
+	// Allocate object in free block
+	T* obj = new (reinterpret_cast<T*>(m_pFreeListStart)) T {};
+	// Point free list start to new start
+	m_pFreeListStart = pNextFree;
+	return obj;
+    }
+
+    template<typename T> void PoolAllocator<T>::deallocate(T*& obj)
+    {
+	if(obj == nullptr)
+	    return;
+	if(obj < m_pMemory || obj >= reinterpret_cast<T*>(m_pMemory) + m_size)
+	    throw std::invalid_argument("Pointer doesn't point to an object within the pool.");
+	// Call destructor
+	obj->~T();
+	// Append deallocated block to free list
+	if(m_pFreeListStart == nullptr)
+	{
+	    m_pFreeListStart = m_pFreeListEnd = reinterpret_cast<T**>(obj);
+	    *m_pFreeListStart = nullptr;
+	}
+	else
+	{
+	    *m_pFreeListEnd = obj;
+	    m_pFreeListEnd = reinterpret_cast<T**>(obj);
+	    *m_pFreeListEnd = nullptr;
+	}
+	//..
+	obj = nullptr;
+    }
+
+    template<typename T> bool PoolAllocator<T>::canAllocate()
+    {
+	return m_pFreeListStart != nullptr;
+    }
+}

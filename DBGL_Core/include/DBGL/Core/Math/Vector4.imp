@@ -1,0 +1,77 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T> Vector4<T>::Vector4() : BaseVectorType()
+	{
+	}
+	
+	template<typename T> Vector4<T>::Vector4(T x, T y, T z, T w) : BaseVectorType(4, x, y, z, w)
+	{
+	}
+	
+	template<typename T> Vector4<T>::Vector4(const BaseVectorType &other) : BaseVectorType(other)
+	{
+	}
+
+	template<typename T> Vector4<T>::~Vector4()
+	{
+	}
+	
+	template<typename T> const T& Vector4<T>::x() const
+	{
+		return (*this)[0];
+	}
+	
+	template<typename T> T& Vector4<T>::x()
+	{
+		return (*this)[0];
+	}
+	
+	template<typename T> const T& Vector4<T>::y() const
+	{
+		return (*this)[1];
+	}
+	
+	template<typename T> T& Vector4<T>::y()
+	{
+		return (*this)[1];
+	}
+	
+	template<typename T> const T& Vector4<T>::z() const
+	{
+		return (*this)[2];
+	}
+	
+	template<typename T> T& Vector4<T>::z()
+	{
+		return (*this)[2];
+	}
+	
+	template<typename T> const T& Vector4<T>::w() const
+	{
+		return (*this)[3];
+	}
+	
+	template<typename T> T& Vector4<T>::w()
+	{
+		return (*this)[3];
+	}
+	
+	template<typename T> Vector4<T>& Vector4<T>::translate(T x, T y, T z, T w)
+	{
+		this->x() += x;
+		this->y() += y;
+		this->z() += z;
+		this->w() += w;
+		return *this;
+	}
+}

@@ -1,0 +1,19 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template <class Visitor, class MyType> void AbstractTreeVisitable::accept(Visitor& visitor)
+    {
+	visitor.visit(*dynamic_cast<MyType>(this));
+    }
+}
+
+
