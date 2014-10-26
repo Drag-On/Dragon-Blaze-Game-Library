@@ -30,6 +30,23 @@ namespace dbgl
 	     */
 	    Filename(std::string const& path);
 	    /**
+	     * @brief Copy constructor
+	     * @param other Filename to copy
+	     */
+	    Filename(Filename const& other);
+	    /**
+	     * @brief Copy assignment
+	     * @param path Filename to assign
+	     * @return Reference to this filename
+	     */
+	    Filename& operator=(Filename const& path);
+	    /**
+	     * @brief Copy assignment
+	     * @param path Filename to assign
+	     * @return Reference to this filename
+	     */
+	    Filename& operator=(std::string const& path);
+	    /**
 	     * @brief Checks if this filename is relative to the current working directory
 	     * @return True in case it's relative, otherwise false
 	     */

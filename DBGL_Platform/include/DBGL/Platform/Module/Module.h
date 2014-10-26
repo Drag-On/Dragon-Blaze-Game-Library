@@ -50,6 +50,17 @@ namespace dbgl
 	     */
 	    Module(Filename const& path);
 	    /**
+	     * @brief Move constructor
+	     * @param other Module to move
+	     */
+	    Module(Module&& other);
+	    /**
+	     * @brief Move assignment
+	     * @param other Module to move
+	     * @return Reference to this module
+	     */
+	    Module& operator=(Module&& other);
+	    /**
 	     * @brief Destructor
 	     */
 	    ~Module();
@@ -69,8 +80,8 @@ namespace dbgl
 	    Func getFunction(std::string const& name);
 	private:
 	    // Prevent copies
-	    Module(Module& other);
-	    Module& operator=(Module& other);
+	    Module(Module& other) = delete;
+	    Module& operator=(Module& other) = delete;
 
 	    Filename m_path;
             internal_os::ModHandle m_handle{};

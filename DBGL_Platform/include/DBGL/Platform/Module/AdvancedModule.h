@@ -41,6 +41,17 @@ namespace dbgl
 	     */
 	    AdvancedModule(Filename const& path);
 	    /**
+	     * @brief Move constructor
+	     * @param other AdvancedModule to move
+	     */
+	    AdvancedModule(AdvancedModule&& other);
+	    /**
+	     * @brief Move assignment
+	     * @param other AdvancedModule to move
+	     * @return Reference to this module
+	     */
+	    AdvancedModule& operator=(AdvancedModule&& other);
+	    /**
 	     * @brief Destructor
 	     */
 	    ~AdvancedModule();
@@ -56,8 +67,8 @@ namespace dbgl
 	    Base* get();
 
 	private:
-	    AdvancedModule(AdvancedModule&);
-	    AdvancedModule& operator=(AdvancedModule&);
+	    AdvancedModule(AdvancedModule&) = delete;
+	    AdvancedModule& operator=(AdvancedModule&) = delete;
 
 	    using CreateFunc = Base*(*)(void);
 	    using DestroyFunc = void(*)(Base*);

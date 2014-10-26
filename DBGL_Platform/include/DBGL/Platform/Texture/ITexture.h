@@ -163,6 +163,15 @@ namespace dbgl
 	     * @return Height of the texture in pixels
 	     */
 	    virtual unsigned int getHeight() const = 0;
+	    /**
+	     * @brief Retrieves the pixel data of the texture
+	     * @note Texture needs to be bound
+	     * @param format Format to convert to
+	     * @param type Type to convert to
+	     * @param buffer[out] Buffer to write to. Must be big enough to hold the data.
+	     * @param level Mip level
+	     */
+	    virtual void getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level = 0) const = 0;
     };
 }
 

@@ -107,6 +107,13 @@ namespace dbgl
 	return m_height;
     }
 
+    void TextureGL33::getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level) const
+    {
+	if(s_pBoundTex != this)
+	    throw("Texture not bound!");
+	glGetTexImage(texType2GL(m_type), level, pixelFormat2GL(format), pixelType2GL(type), buffer);
+    }
+
     GLuint TextureGL33::getHandle() const
     {
 	return m_id;
