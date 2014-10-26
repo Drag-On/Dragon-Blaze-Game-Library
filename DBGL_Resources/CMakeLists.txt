@@ -117,6 +117,12 @@ target_link_libraries(DBGL_RESOURCES "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_L
 target_link_libraries(DBGL_RESOURCES "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
 
 ######################################################################
+### Compile plugins
+######################################################################
+add_subdirectory("${PROJECT_SOURCE_DIR}/plugins/"
+				 "${PROJECT_BINARY_DIR}/plugins/")
+
+######################################################################
 ### Compile tests
 ######################################################################
 if(COMPILE_TESTS)
