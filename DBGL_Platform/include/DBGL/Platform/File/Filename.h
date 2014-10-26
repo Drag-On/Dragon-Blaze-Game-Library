@@ -18,14 +18,38 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Represents a path and filename on hard disk
+     */
     class Filename
     {
 	public:
+	    /**
+	     * @brief Initialize filename from string
+	     * @param path Initial value
+	     */
 	    Filename(std::string const& path);
+	    /**
+	     * @brief Checks if this filename is relative to the current working directory
+	     * @return True in case it's relative, otherwise false
+	     */
 	    bool isRelative() const;
+	    /**
+	     * @brief Provides the file extension (if any) of the file pointed to by this path
+	     * @return The file extension
+	     */
 	    std::string getExtension() const;
+	    /**
+	     * @brief Returns an absolute path to the file
+	     * @return Absolute path to the file
+	     */
 	    std::string getAbsolute() const;
 //	    std::string getRelative() const;
+	    /**
+	     * @brief Retrieves the path and filename as stored within this object, i.e. it can
+	     * 	      either be a relative path or an absolute one.
+	     * @return The underlying path and filename
+	     */
 	    std::string const& get() const;
 
 	private:

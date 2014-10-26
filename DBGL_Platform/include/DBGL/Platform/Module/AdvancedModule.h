@@ -13,6 +13,7 @@
 
 #include<string>
 #include"Module.h"
+#include"DBGL/Platform/File/Filename.h"
 
 namespace dbgl
 {
@@ -33,7 +34,12 @@ namespace dbgl
 	     * @brief Creates a new advanced module
 	     * @param path Path of the library to load
 	     */
-	    AdvancedModule(std::string path);
+	    AdvancedModule(std::string const& path);
+	    /**
+	     * @brief Creates a new advanced module
+	     * @param path Path of the library to load
+	     */
+	    AdvancedModule(Filename const& path);
 	    /**
 	     * @brief Destructor
 	     */
