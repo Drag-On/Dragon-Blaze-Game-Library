@@ -24,7 +24,7 @@ namespace dbgl
 
     bool TextureIO::addFormat(std::string const& filename)
     {
-	auto mod = new AdvancedModule<ITextureFormat>{ filename };
+	auto mod = new AdvancedModule<IImageFormatModule>{ filename };
 	if(mod->load())
 	    m_modules.push_back(mod);
 	else
@@ -34,7 +34,7 @@ namespace dbgl
 
     bool TextureIO::addFormat(Filename const& filename)
     {
-	auto mod = new AdvancedModule<ITextureFormat>{ filename };
+	auto mod = new AdvancedModule<IImageFormatModule>{ filename };
 	if(mod->load())
 	    m_modules.push_back(mod);
 	else
@@ -44,27 +44,36 @@ namespace dbgl
 
     ITexture* TextureIO::load(std::string const& filename) const
     {
-
+	return load(Filename{filename});
     }
 
     ITexture* TextureIO::load(Filename const& filename) const
     {
-
+	for(auto mod : m_modules)
+	{
+	    if(mod->get()->matchExtension(filename.getExtension()) && mod->get()->canLoad())
+	    {
+		return mod->get()->load(filename);
+	    }
+	}
+	return nullptr;
     }
 
     bool TextureIO::write(ITexture* tex, std::string const& filename) const
     {
-
+	return write(tex, Filename{filename});
     }
 
     bool TextureIO::write(ITexture* tex, Filename const& filename) const
     {
-
-    }
-
-    AdvancedModule<ITextureFormat>* TextureIO::pickModule() const
-    {
-
+	for(auto mod : m_modules)
+	{
+	    if(mod->get()->matchExtension(filename.getExtension()) && mod->get()->canWrite())
+	    {
+		return mod->get()->write(tex, filename);
+	    }
+	}
+	return false;
     }
 
 }
