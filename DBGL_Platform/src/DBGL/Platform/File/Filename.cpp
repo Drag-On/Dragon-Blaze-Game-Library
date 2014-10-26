@@ -93,16 +93,16 @@ namespace dbgl
     void Filename::analyzeRelative(std::string const& path)
     {
 #ifdef __linux__
-	m_isRelative = !std::regex_match(path, std::regex("\\/[A-Za-z0-9\\/\\\\ \\.\\-_]*"));
+	m_isRelative = !std::regex_match(path, std::regex("\\/[A-Za-z0-9\\/\\\\\\s\\.\\-_]*", std::regex_constants::ECMAScript));
 #elif __WIN32
-	m_isRelative = !std::regex_match(path, std::regex("[A-Z]:[A-Za-z0-9\\/\\\\ \\.\\-_]*"));
+	m_isRelative = !std::regex_match(path, std::regex("[A-Z]:[A-Za-z0-9\\/\\\\\\s\\.\\-_]*", std::regex_constants::ECMAScript));
 #endif
     }
 
     void Filename::analyzeExtension(std::string const& path)
     {
 	std::smatch m;
-	std::regex_search(path, m, std::regex("\\.[A-Za-z0-9]*$"));
+	std::regex_search(path, m, std::regex("\\.[A-Za-z0-9]*$", std::regex_constants::ECMAScript));
 	m_extension = m.str();
     }
 }
