@@ -13,7 +13,7 @@
 
 #include <string>
 #include <vector>
-#include "IIMageFormatModule.h"
+#include "IImageFormatModule.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/File/Filename.h"
 #include "DBGL/Platform/Module/AdvancedModule.h"
