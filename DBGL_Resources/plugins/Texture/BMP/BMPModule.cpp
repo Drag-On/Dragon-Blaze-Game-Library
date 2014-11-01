@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <fstream>
 #include "DBGL/Resources/Texture/IIMageFormatModule.h"
+#include "DBGL/Platform/Platform.h"
 
 namespace dbgl
 {
@@ -62,12 +63,58 @@ namespace dbgl
 
 	    virtual ITexture* load(std::string const& path) const
 	    {
-		return nullptr;
+		return load(Filename{path});
 	    }
 
 	    virtual ITexture* load(Filename const& path) const
 	    {
-		return nullptr;
+		// Open file stream
+		std::ifstream file(path.get(), std::fstream::in | std::fstream::binary);
+		if(!file.good())
+		    return nullptr;
+		// Read file header
+		file.seekg(0, std::ios::beg);
+		FileHeaderBMP fileHeader{};
+		char fHeader[14];
+		file.read(&fHeader[0], 14);
+		fileHeader.id = *reinterpret_cast<uint16_t*>(&fHeader[0]);
+		fileHeader.fileSize = *reinterpret_cast<uint32_t*>(&fHeader[2]);
+		fileHeader.res = *reinterpret_cast<uint32_t*>(&fHeader[6]);
+		fileHeader.off = *reinterpret_cast<uint32_t*>(&fHeader[10]);
+		if(fileHeader.id != 0x4D42 || fileHeader.fileSize <= 0)
+		    return nullptr;
+		// Read info header
+		InfoHeaderBMP infoHeader{};
+		char iHeader[40];
+		file.read(&iHeader[0], 40);
+		infoHeader.size = *reinterpret_cast<uint32_t*>(&iHeader[0]);
+		infoHeader.width = *reinterpret_cast<uint32_t*>(&iHeader[4]);
+		infoHeader.height = *reinterpret_cast<uint32_t*>(&iHeader[8]);
+		infoHeader.panes = *reinterpret_cast<uint16_t*>(&iHeader[10]);
+		infoHeader.bpp = *reinterpret_cast<uint16_t*>(&iHeader[12]);
+		infoHeader.compr = *reinterpret_cast<uint32_t*>(&iHeader[16]);
+		infoHeader.imgSize = *reinterpret_cast<uint32_t*>(&iHeader[20]);
+		infoHeader.xPixPerMeter = *reinterpret_cast<uint32_t*>(&iHeader[24]);
+		infoHeader.yPixPerMeter = *reinterpret_cast<uint32_t*>(&iHeader[28]);
+		infoHeader.indexClr = *reinterpret_cast<uint32_t*>(&iHeader[32]);
+		infoHeader.clr = *reinterpret_cast<uint32_t*>(&iHeader[36]);
+		if(infoHeader.size != 40 || infoHeader.width <= 0 || infoHeader.height <= 0 || infoHeader.compr != 0)
+		    return nullptr;
+		// Read image data
+		if(fileHeader.off > 0)
+		    file.seekg(fileHeader.off, std::ios::beg);
+		const unsigned int imgSize { static_cast<unsigned int>((infoHeader.width + 4 - infoHeader.width % 4)
+			* infoHeader.height * infoHeader.bpp / 8) };
+		char img[imgSize];
+		file.read(&img[0], imgSize);
+		// Close file
+		file.close();
+
+		// Create texture
+		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
+		tex->setRowAlignment(ITexture::RowAlignment::PACK, 4);
+		tex->write(0, infoHeader.width, infoHeader.height, ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, &img[0]);
+		return tex;
 	    }
 
 	    virtual bool write(ITexture* tex, std::string const& path) const
@@ -82,7 +129,8 @@ namespace dbgl
 		if(!bmpBuf)
 		    return false;
 		// Copy pixel data to buffer
-		tex->bind(0);
+		tex->bind(0); // TODO: Shouldn't change a global state... :(
+		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 4);
 		tex->getPixelData(ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, bmpBuf);
 		// Open file stream
 		std::ofstream file(path.get(), std::fstream::out | std::fstream::binary | std::fstream::trunc);
