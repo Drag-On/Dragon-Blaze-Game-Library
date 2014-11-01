@@ -11,7 +11,7 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
-#include "DBGL/Resources/Texture/IIMageFormatModule.h"
+#include "DBGL/Resources/Texture/IImageFormatModule.h"
 #include "DBGL/Platform/Platform.h"
 
 namespace dbgl
