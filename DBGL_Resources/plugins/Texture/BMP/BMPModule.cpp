@@ -113,6 +113,7 @@ namespace dbgl
 		// Create texture
 		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 		tex->setRowAlignment(ITexture::RowAlignment::PACK, 4);
+		tex->bind(0);
 		tex->write(0, infoHeader.width, infoHeader.height, ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, &img[0]);
 		return tex;
 	    }
