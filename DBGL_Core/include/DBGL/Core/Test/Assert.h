@@ -16,11 +16,28 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Exception thrown by assert commands
+     */
     class AssertException : public std::runtime_error
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param file File where the assertion failed
+	     * @param line Line within that file, where assertion failed
+	     * @param msg Attached message
+	     */
 	    AssertException(std::string const& file, unsigned int line, std::string const& msg);
+	    /**
+	     * @brief Retrieves the file name where the exception was thrown
+	     * @return File name
+	     */
 	    std::string const& getFile() const;
+	    /**
+	     * @brief Retrieves the line where the exception was thrown
+	     * @return
+	     */
 	    unsigned int getLine() const;
 	private:
 	    std::string m_file;

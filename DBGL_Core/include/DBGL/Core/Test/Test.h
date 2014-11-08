@@ -25,6 +25,10 @@ namespace dbgl
     struct AutoRegistration
     {
 	public:
+	    /**
+	     * @brief Retrieves the map of test suite names to test suite instances
+	     * @return Reference to map
+	     */
 	    static std::unordered_map<std::string, dbgl::TestSuite>& getMap()
 	    {
 		static std::unordered_map<std::string, dbgl::TestSuite> s_testSuites {};

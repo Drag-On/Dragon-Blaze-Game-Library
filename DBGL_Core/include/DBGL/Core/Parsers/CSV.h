@@ -22,6 +22,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Parser for csv tables
+     */
     class CSV
     {
 	public:

@@ -19,7 +19,7 @@ namespace dbgl
     /**
      * @brief Implementation of the FNV-1a hashing algorithm.
      * @details The FNV-1a algorithm is fast and simple and generates fairly evenly distributed outputs.
-     * @link http://isthe.com/chongo/tech/comp/fnv/
+     * 		http://isthe.com/chongo/tech/comp/fnv/
      */
     class FNVHasher
     {

@@ -17,11 +17,27 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Test case, part of a test suite
+     */
     class TestCase
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param name Test name
+	     * @param func Function to execute for the test
+	     */
 	    TestCase(std::string const& name, std::function<void()> func);
+	    /**
+	     * @brief Executes the test
+	     * @return True in case the test succeeded, otherwise false
+	     */
 	    bool run();
+	    /**
+	     * @brief Retrieves the name of this test
+	     * @return Name of the test
+	     */
 	    std::string const& getName() const;
 	private:
 	    std::function<void()> m_func;

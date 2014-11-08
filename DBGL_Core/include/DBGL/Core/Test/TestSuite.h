@@ -18,14 +18,39 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Test suite, contains test cases
+     */
     class TestSuite
     {
 	public:
+	    /**
+	     * @brief Constructor
+	     * @param name Test suite name
+	     */
 	    TestSuite(std::string name);
+	    /**
+	     * @brief Executes all attached test cases
+	     */
 	    void run();
+	    /**
+	     * @brief Attaches a test case
+	     * @param test Test to attach
+	     */
 	    void add(TestCase test);
+	    /**
+	     * @brief Retrieves the suite name
+	     * @return Suite name
+	     */
 	    std::string const& getName() const;
+	    /**
+	     * @brief Prints stats of the last run
+	     */
 	    void printStat() const;
+	    /**
+	     * @brief Amount of attached test cases
+	     * @return Amount of attached test cases
+	     */
 	    unsigned int size() const;
 	private:
 	    std::string m_name;
