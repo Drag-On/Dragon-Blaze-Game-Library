@@ -11,23 +11,31 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "DBGL/Core/Hashing/FNVHasher.h"
+#include <algorithm>
+#include "DBGL/Core/Hashing/OATHasher.h"
+#include "DBGL/Core/Test/Test.h"
 
 using namespace dbgl;
 using namespace std;
 
-int main()
+TEST(OATHasher,equal32)
+{
+    std::string str1 {"Ein String"};
+    std::string str2 {"Ein String"};
+    ASSERT_EQ(OATHasher::hash32(str1), OATHasher::hash32(str2));
+}
+
+TEST(OATHasher,prior)
 {
     std::vector<std::string> strings = {
 	    "", "abc", "0", "C:/Programs/Whatever/Foo.exe", "./bar", "Hey yo, whassup?", "ResourceA", "ResourceB"
     };
+    std::vector<uint32_t> hashes32{};
     for(unsigned int i = 0; i < strings.size(); i++)
     {
-	auto hash32 = FNVHasher::hash32(strings[i]);
-	cout << "32 bit hash for \"" << strings[i] << "\" is " << hash32 << "." << endl;
-	auto hash64 = FNVHasher::hash64(strings[i]);
-	cout << "64 bit hash for \"" << strings[i] << "\" is " << hash64 << "." << endl;
+	auto hash32 = OATHasher::hash32(strings[i]);
+	ASSERT(std::find(hashes32.begin(), hashes32.end(), hash32) == hashes32.end());
+	hashes32.push_back(hash32);
     }
-    return 0;
 }
 

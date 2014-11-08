@@ -109,6 +109,29 @@ set_target_properties(DBGL_Core PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(DBGL_Core "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
 
 ######################################################################
+### Specify libraries that need copying
+######################################################################
+set(LIBRARIES2COPY
+   "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}"
+   "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
+   "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
+)
+
+######################################################################
+### Copy files
+######################################################################
+add_custom_target(ALWAYS_EXECUTE_CORE ALL)
+add_dependencies(DBGL_Core ALWAYS_EXECUTE_CORE)
+# do the copying
+foreach(file_i ${LIBRARIES2COPY})
+	add_custom_command(TARGET ALWAYS_EXECUTE_CORE
+                        PRE_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
+                        DEPENDS ${file_i}
+                        )
+endforeach(file_i)
+
+######################################################################
 ### Compile tests
 ######################################################################
 if(COMPILE_TESTS)

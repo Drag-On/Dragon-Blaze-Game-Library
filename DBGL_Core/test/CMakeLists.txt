@@ -9,14 +9,32 @@
 ######################################################################
 
 ######################################################################
-### Main library cmake compilation file
+### Basics example cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
 project (DBGL_CORE_TEST C CXX)
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/AllocatorTests/"
-				 "${PROJECT_BINARY_DIR}/AllocatorTests/")
-add_subdirectory("${PROJECT_SOURCE_DIR}/HashingTests/"
-				 "${PROJECT_BINARY_DIR}/HashingTests/")
-add_subdirectory("${PROJECT_SOURCE_DIR}/ParserTests/"
-				 "${PROJECT_BINARY_DIR}/ParserTests/")
+######################################################################
+### Project code files
+######################################################################
+file(GLOB_RECURSE SRC_FILES
+    "*.h"
+    "*.cpp"
+)
+
+######################################################################
+### Include directories
+######################################################################
+include_directories(${DBGL_CORE_INCLUDE_DIR})
+include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
+
+######################################################################
+### Make target
+######################################################################
+add_executable(DBGL_CORE_TEST ${SRC_FILES})
+
+######################################################################
+### Link libraries
+######################################################################
+target_link_libraries(DBGL_CORE_TEST "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_CORE_TEST "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
