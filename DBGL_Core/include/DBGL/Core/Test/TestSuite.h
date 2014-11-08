@@ -26,6 +26,7 @@ namespace dbgl
 	    void add(TestCase test);
 	    std::string const& getName() const;
 	    void printStat() const;
+	    unsigned int size() const;
 	private:
 	    std::string m_name;
 	    std::vector<TestCase> m_testCases;

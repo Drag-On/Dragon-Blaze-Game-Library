@@ -12,25 +12,33 @@
 #include <string>
 #include <vector>
 #include "DBGL/Core/Parsers/CSV.h"
+#include "DBGL/Core/Test/Test.h"
 
 using namespace dbgl;
 using namespace std;
 
-int main()
+TEST(CSV,access)
 {
-    cout << "Reading in csv..." << endl;
-    try
-    {
-	CSV csv { "test.csv" };
-	cout << "Elements:" << endl;
-	for(int y = 0; y < 4; y++)
-	    for(int x = 0; x < 4; x++)
-		cout << "Element (" << x << "," << y << ") = " << csv.getStringValue(x, y) << endl;
-    }
-    catch (exception& e)
-    {
-	cerr << e.what() << endl;
-    }
-    return 0;
+    CSV csv { "test.csv" };
+    ASSERT(csv.getStringValue(0, 0) == "Hello");
+    ASSERT(csv.getStringValue(1, 0) == "World");
+    ASSERT(csv.getStringValue(2, 0) == "0");
+    ASSERT(csv.getStringValue(3, 0) == "3.74");
+    ASSERT(csv.getStringValue(0, 1) == "42");
+    ASSERT(csv.getStringValue(1, 1) == "true");
+    ASSERT(csv.getStringValue(2, 1) == "foo");
+    ASSERT(csv.getStringValue(3, 1) == "bar");
+    ASSERT(csv.getStringValue(0, 2) == "\"baz\"");
+    ASSERT(csv.getStringValue(1, 2) == "");
+    ASSERT(csv.getBoolValue(1, 1) == true);
+    ASSERT(csv.getFloatValue(3, 0) == 3.74f);
+    ASSERT(csv.getFloatValue(0, 1) == 42.0f);
+    ASSERT(csv.getIntValue(2, 0) == 0);
+}
+
+TEST(CSV,except)
+{
+    CSV csv { "test.csv" };
+    ASSERT_THROWS(csv.getStringValue(42,100), std::exception);
 }
 

@@ -47,8 +47,16 @@ namespace dbgl
 
     void TestSuite::printStat() const
     {
+	float percent = 0;
+	if (m_testCases.size() > 0)
+	    percent = m_successful / static_cast<float>(m_testCases.size()) * 100.0f;
 	std::cout << m_successful << " of " << m_testCases.size() << " successful ("
-		<< m_successful / static_cast<float>(m_testCases.size()) * 100.0f << "%)" << std::endl;
+		<< percent << "%)" << std::endl;
+    }
+
+    unsigned int TestSuite::size() const
+    {
+	return m_testCases.size();
     }
 
 }

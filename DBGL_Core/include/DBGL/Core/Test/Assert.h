@@ -28,8 +28,10 @@ namespace dbgl
     };
 }
 
-#define ASSERT(chk) if(chk){}else{throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
+#define ASSERT(chk) if((chk)){}else{throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
 
 #define ASSERT_EQ(first, last) ASSERT((first) == (last))
+
+#define ASSERT_THROWS(chk,ex) {bool thrown = false; try {(chk);}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
 
 #endif /* ASSERT_H_ */

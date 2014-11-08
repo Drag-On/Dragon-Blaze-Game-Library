@@ -20,16 +20,16 @@
 namespace dbgl
 {
     /**
-     * @brief Maps test suite names to test suite objects
-     */
-    static std::unordered_map<std::string, dbgl::TestSuite> s_testSuites {};
-
-    /**
      * @brief Struct that registers test suites to be run
      */
     struct AutoRegistration
     {
 	public:
+	    static std::unordered_map<std::string, dbgl::TestSuite>& getMap()
+	    {
+		static std::unordered_map<std::string, dbgl::TestSuite> s_testSuites {};
+		return s_testSuites;
+	    }
 	    /**
 	     * @brief Gets a test suite by it's name
 	     * @param name Name of the test suite
@@ -37,11 +37,12 @@ namespace dbgl
 	     */
 	    static TestSuite& getTestSuite(std::string const& name)
 	    {
+		auto& s_testSuites = getMap();
 		auto iter = s_testSuites.find(name);
 		if (iter == s_testSuites.end())
 		{
-		    s_testSuites.insert({name, TestSuite{name}});
-		    return s_testSuites.find(name)->second;
+		    s_testSuites.emplace(name, TestSuite{name});
+		    return s_testSuites.at(name);
 		}
 		else
 		    return iter->second;
@@ -53,7 +54,8 @@ namespace dbgl
 	     */
 	    AutoRegistration(std::string const& testSuite, TestCase testCase)
 	    {
-		getTestSuite(testSuite).add(testCase);
+		auto& suite = getTestSuite(testSuite);
+		suite.add(testCase);
 	    }
     };
 }
@@ -72,9 +74,7 @@ namespace dbgl
     static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, TestCase(#test_case, test_suite##_##test_case));	\
     static void test_suite##_##test_case()
 
-
-#ifndef TEST_H_MAIN_
-#define TEST_H_MAIN_
+#ifdef DBGL_TEST_MAIN
 /**
  * @brief Test suite main entry point
  * @return Returns 0.
@@ -82,7 +82,7 @@ namespace dbgl
 int main()
 {
     // Call test cases
-    for(auto tc : dbgl::s_testSuites)
+    for(auto tc : dbgl::AutoRegistration::getMap())
     {
 	tc.second.run();
 	tc.second.printStat();
