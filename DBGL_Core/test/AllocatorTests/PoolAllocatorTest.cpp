@@ -30,7 +30,7 @@ TEST(PoolAllocator,main)
 {
     PoolAllocator<foo> mem{8};
     foo* bar = mem.allocate();
-    mem.deallocate(bar);
+    ASSERT_NOTHROW(mem.deallocate(bar));
     foo* arr[8];
     for(unsigned int i = 0; i < 8; i++)
     {
@@ -39,8 +39,8 @@ TEST(PoolAllocator,main)
     foo* baz ;
     ASSERT(!(baz = mem.allocate()));
     for(unsigned int i = 0; i < 8; i++)
-	mem.deallocate(arr[i]);
-    mem.deallocate(baz);
+	ASSERT_NOTHROW(mem.deallocate(arr[i]));
+    ASSERT_NOTHROW(mem.deallocate(baz));
     ASSERT(bar = mem.allocate());
-    mem.deallocate(bar);
+    ASSERT_NOTHROW(mem.deallocate(bar));
 }

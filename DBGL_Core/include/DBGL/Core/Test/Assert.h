@@ -34,4 +34,8 @@ namespace dbgl
 
 #define ASSERT_THROWS(chk,ex) {bool thrown = false; try {(chk);}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
 
+#define ASSERT_NOTHROW(chk) try{(chk);}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
+
+#define FAIL() {throw AssertException{__FILE__, __LINE__, "Failed unconditionally."};}
+
 #endif /* ASSERT_H_ */

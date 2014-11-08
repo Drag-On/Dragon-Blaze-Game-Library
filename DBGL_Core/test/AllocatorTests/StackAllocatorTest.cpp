@@ -43,8 +43,8 @@ TEST(StackAllocator,main)
 	ASSERT(mem.allocate<foo>() || i == 2);
     }
     bar->~foo();
-    mem.rollBack(mark);
-    mem.clear();
+    ASSERT_NOTHROW(mem.rollBack(mark));
+    ASSERT_NOTHROW(mem.clear());
     for(unsigned int i = 0; i < 4; i++)
     {
 	ASSERT(mem.allocate<foo>());
