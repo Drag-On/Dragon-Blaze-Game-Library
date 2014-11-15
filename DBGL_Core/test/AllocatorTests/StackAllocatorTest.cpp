@@ -29,7 +29,7 @@ TEST(StackAllocator,main)
 {
     StackAllocator mem{32};
     int* number = mem.allocate<int>();
-    ASSERT(number)
+    ASSERT(number);
     *number = 5;
     ASSERT(*number == 5);
     auto mark = mem.top();

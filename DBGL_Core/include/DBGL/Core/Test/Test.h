@@ -75,7 +75,7 @@ namespace dbgl
  */
 #define TEST(test_suite,test_case)													\
     static void test_suite##_##test_case();												\
-    static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, TestCase(#test_case, test_suite##_##test_case));	\
+    static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, dbgl::TestCase(#test_case, test_suite##_##test_case));	\
     static void test_suite##_##test_case()
 
 #ifdef DBGL_TEST_MAIN

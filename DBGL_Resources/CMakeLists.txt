@@ -107,20 +107,44 @@ include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 ######################################################################
 ### Make target
 ######################################################################
-add_library(DBGL_RESOURCES SHARED ${SRC})
-set_target_properties(DBGL_RESOURCES PROPERTIES LINKER_LANGUAGE CXX)
+add_library(DBGL_Resources SHARED ${SRC})
+set_target_properties(DBGL_Resources PROPERTIES LINKER_LANGUAGE CXX)
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_RESOURCES "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_RESOURCES "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
+target_link_libraries(DBGL_Resources "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
+target_link_libraries(DBGL_Resources "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
 
 ######################################################################
 ### Compile plugins
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/plugins/"
 				 "${PROJECT_BINARY_DIR}/plugins/")
+
+######################################################################
+### Specify libraries that need copying
+######################################################################
+set(LIBRARIES2COPY
+   "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_DLL_NAME}"
+   "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}"
+   "${GLEW_LIB_DIR}/${GLEW_DLL_NAME}"
+   "${GLFW_LIB_DIR}/${GLFW_DLL_NAME}"
+)
+
+######################################################################
+### Copy files
+######################################################################
+add_custom_target(ALWAYS_EXECUTE_RESOURCES ALL)
+add_dependencies(DBGL_Resources ALWAYS_EXECUTE_RESOURCES)
+# do the copying
+foreach(file_i ${LIBRARIES2COPY})
+	add_custom_command(TARGET ALWAYS_EXECUTE_RESOURCES
+                        PRE_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
+                        DEPENDS ${file_i}
+                        )
+endforeach(file_i)
 
 ######################################################################
 ### Compile tests

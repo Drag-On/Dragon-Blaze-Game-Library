@@ -46,12 +46,12 @@ namespace dbgl
 
 	    virtual bool canLoad() const
 	    {
-		return false;
+		return true;
 	    }
 
 	    virtual bool canWrite() const
 	    {
-		return false;
+		return true;
 	    }
 
 	    virtual bool matchExtension(std::string const& extension) const
@@ -103,8 +103,8 @@ namespace dbgl
 		// Read image data
 		if(fileHeader.off > 0)
 		    file.seekg(fileHeader.off, std::ios::beg);
-		const unsigned int imgSize { static_cast<unsigned int>((infoHeader.width + 4 - infoHeader.width % 4)
-			* infoHeader.height * infoHeader.bpp / 8) };
+		const unsigned int imgSize { static_cast<unsigned int>(((infoHeader.width * infoHeader.bpp + 31) & ~31) / 8
+			* infoHeader.height) };
 		char img[imgSize];
 		file.read(&img[0], imgSize);
 		// Close file
@@ -112,7 +112,7 @@ namespace dbgl
 
 		// Create texture
 		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
-		tex->setRowAlignment(ITexture::RowAlignment::PACK, 4);
+		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 4);
 		tex->bind(0);
 		tex->write(0, infoHeader.width, infoHeader.height, ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, &img[0]);
 		return tex;
@@ -131,7 +131,7 @@ namespace dbgl
 		    return false;
 		// Copy pixel data to buffer
 		tex->bind(0); // TODO: Shouldn't change a global state... :(
-		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 4);
+		tex->setRowAlignment(ITexture::RowAlignment::PACK, 4);
 		tex->getPixelData(ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, bmpBuf);
 		// Open file stream
 		std::ofstream file(path.get(), std::fstream::out | std::fstream::binary | std::fstream::trunc);

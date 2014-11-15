@@ -10,6 +10,8 @@
 
 #include "DBGL/Resources/Texture/TextureIO.h"
 
+#include <iostream>
+
 namespace dbgl
 {
     TextureIO::TextureIO()
@@ -24,12 +26,7 @@ namespace dbgl
 
     bool TextureIO::addFormat(std::string const& filename)
     {
-	auto mod = new AdvancedModule<IImageFormatModule>{ filename };
-	if(mod->load())
-	    m_modules.push_back(mod);
-	else
-	    return false;
-	return true;
+	return addFormat(Filename{filename});
     }
 
     bool TextureIO::addFormat(Filename const& filename)

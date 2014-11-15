@@ -82,7 +82,7 @@ namespace dbgl
 	    bool write(ITexture* tex, Filename const& filename) const;
 
 	private:
-	    std::vector<AdvancedModule<IImageFormatModule>*> m_modules;
+	    std::vector<AdvancedModule<IImageFormatModule>*> m_modules{};
     };
 }
 
