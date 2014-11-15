@@ -20,6 +20,9 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Provides some static functionality to work with meshes.
+     */
     class MeshUtility
     {
 	public:
