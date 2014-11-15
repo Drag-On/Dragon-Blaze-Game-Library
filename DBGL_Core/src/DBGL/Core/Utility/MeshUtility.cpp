@@ -199,4 +199,76 @@ namespace dbgl
 	return mesh;
     }
 
+    IMesh* MeshUtility::generateTangentBase(IMesh* mesh)
+    {
+	// Allocate sufficient memory
+	mesh->tangents().resize(mesh->vertices().size());
+	mesh->bitangents().resize(mesh->vertices().size());
+
+	for (unsigned int i = 0; i < mesh->indices().size(); i += 3)
+	{
+	    // Shortcuts
+	    Vec3f v0 = mesh->vertices()[mesh->indices()[i + 0]];
+	    Vec3f v1 = mesh->vertices()[mesh->indices()[i + 1]];
+	    Vec3f v2 = mesh->vertices()[mesh->indices()[i + 2]];
+	    Vec2f uv0 = mesh->uvs()[mesh->indices()[i + 0]];
+	    Vec2f uv1 = mesh->uvs()[mesh->indices()[i + 1]];
+	    Vec2f uv2 = mesh->uvs()[mesh->indices()[i + 2]];
+
+	    // Position delta
+	    Vec3f deltaPos1 = v1 - v0;
+	    Vec3f deltaPos2 = v2 - v0;
+
+	    // UV delta
+	    Vec2f deltaUV1 = uv1 - uv0;
+	    Vec2f deltaUV2 = uv2 - uv0;
+
+	    // Calculate tangent and bitangent
+	    float r = 1 / (deltaUV1.x() * deltaUV2.y()
+				    - deltaUV1.y() * deltaUV2.x());
+	    Vec3f tangent =
+		    (deltaPos1 * deltaUV2.y() - deltaPos2 * deltaUV1.y()) * r;
+	    Vec3f bitangent = (deltaPos2 * deltaUV1.x()
+		    - deltaPos1 * deltaUV2.x()) * r;
+
+	    // Average tangents and bitangents if already present
+	    mesh->tangents()[mesh->indices()[i + 0]] = static_cast<Vec3f>(tangent + Vec3f(mesh->tangents()[mesh->indices()[i + 0]]));
+	    mesh->tangents()[mesh->indices()[i + 1]] = static_cast<Vec3f>(tangent + Vec3f(mesh->tangents()[mesh->indices()[i + 1]]));
+	    mesh->tangents()[mesh->indices()[i + 2]] = static_cast<Vec3f>(tangent + Vec3f(mesh->tangents()[mesh->indices()[i + 2]]));
+	    mesh->bitangents()[mesh->indices()[i + 0]] = static_cast<Vec3f>(bitangent + Vec3f(mesh->bitangents()[mesh->indices()[i + 0]]));
+	    mesh->bitangents()[mesh->indices()[i + 1]] = static_cast<Vec3f>(bitangent + Vec3f(mesh->bitangents()[mesh->indices()[i + 1]]));
+	    mesh->bitangents()[mesh->indices()[i + 2]] = static_cast<Vec3f>(bitangent + Vec3f(mesh->bitangents()[mesh->indices()[i + 2]]));
+	}
+	// Normalize tangents & bitangents
+	for (unsigned int i = 0; i < mesh->tangents().size(); i++)
+	{
+	    mesh->tangents()[i] = static_cast<Vec3f>(static_cast<Vec3f>(mesh->tangents()[i]).normalize());
+	    mesh->bitangents()[i] = static_cast<Vec3f>(static_cast<Vec3f>(mesh->bitangents()[i]).normalize());
+	}
+	// Orthogonalize normal/tangent/bitangent system
+	for (unsigned int i = 0; i < mesh->vertices().size(); i++)
+	{
+	    Vec3f n = mesh->normals()[i];
+	    Vec3f t = mesh->tangents()[i];
+	    Vec3f b = mesh->bitangents()[i];
+
+	    // Gram-Schmidt orthogonalize
+	    t = t - n * n.dot(t);
+	    t.normalize();
+
+	    // Calculate handedness
+	    if (n.cross(t).dot(b) < 0.0f)
+	    {
+		t = t * -1.0f;
+	    }
+
+	    // Write back
+	    mesh->normals()[i] = n;
+	    mesh->tangents()[i] = t;
+	    mesh->bitangents()[i] = b;
+	}
+
+	return mesh;
+    }
+
 }

@@ -15,6 +15,8 @@
 #include <array>
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
+#include "DBGL/Core/Math/Vector3.h"
+#include "DBGL/Core/Math/Vector2.h"
 
 namespace dbgl
 {
@@ -25,6 +27,7 @@ namespace dbgl
 	    static IMesh* createRectangle(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
 	    static IMesh* createCube(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
 	    static IMesh* createPyramid(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+	    static IMesh* generateTangentBase(IMesh* mesh);
     };
 }
 
