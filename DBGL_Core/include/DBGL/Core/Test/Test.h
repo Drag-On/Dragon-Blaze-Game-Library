@@ -75,24 +75,26 @@ namespace dbgl
  */
 #define TEST(test_suite,test_case)													\
     static void test_suite##_##test_case();												\
-    static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, TestCase(#test_case, test_suite##_##test_case));	\
+    static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, dbgl::TestCase(#test_case, test_suite##_##test_case));	\
     static void test_suite##_##test_case()
+
+#define DBGL_CREATE_TEST_MAIN				\
+int main()						\
+{							\
+    for(auto tc : dbgl::AutoRegistration::getMap())	\
+    {							\
+	tc.second.run();				\
+	tc.second.printStat();				\
+    }							\
+    return 0;						\
+}
 
 #ifdef DBGL_TEST_MAIN
 /**
  * @brief Test suite main entry point
  * @return Returns 0.
  */
-int main()
-{
-    // Call test cases
-    for(auto tc : dbgl::AutoRegistration::getMap())
-    {
-	tc.second.run();
-	tc.second.printStat();
-    }
-    return 0;
-}
+DBGL_CREATE_TEST_MAIN
 #endif
 
 #endif /* TEST_H_ */
