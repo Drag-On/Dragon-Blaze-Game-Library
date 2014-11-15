@@ -45,7 +45,7 @@ namespace dbgl
     };
 }
 
-#define ASSERT(chk) do{if((chk)){}else{throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}}while(false)
+#define ASSERT(chk) do{if(!(chk)){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}}while(false)
 
 #define ASSERT_EQ(first, last) ASSERT((first) == (last))
 

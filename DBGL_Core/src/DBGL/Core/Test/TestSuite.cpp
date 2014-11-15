@@ -17,6 +17,12 @@ namespace dbgl
 
     }
 
+    void TestSuite::initialize()
+    {
+	if(m_initialize)
+	    m_initialize();
+    }
+
     void TestSuite::run()
     {
 	std::cout << m_name << "..." << std::endl;
@@ -33,6 +39,12 @@ namespace dbgl
 		std::cerr << "::\"" + test.getName() + "\" FAILED!" << std::endl;
 	    }
 	}
+    }
+
+    void TestSuite::terminate()
+    {
+	if(m_terminate)
+	    m_terminate();
     }
 
     void TestSuite::add(TestCase test)
@@ -57,6 +69,16 @@ namespace dbgl
     unsigned int TestSuite::size() const
     {
 	return m_testCases.size();
+    }
+
+    void TestSuite::setInitialize(std::function<void()> func)
+    {
+	m_initialize = func;
+    }
+
+    void TestSuite::setTerminate(std::function<void()> func)
+    {
+	m_terminate = func;
     }
 
 }
