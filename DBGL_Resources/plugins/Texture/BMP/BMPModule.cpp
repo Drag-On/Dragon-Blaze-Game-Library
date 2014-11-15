@@ -130,7 +130,6 @@ namespace dbgl
 		if(!bmpBuf)
 		    return false;
 		// Copy pixel data to buffer
-		tex->bind(0); // TODO: Shouldn't change a global state... :(
 		tex->setRowAlignment(ITexture::RowAlignment::PACK, 4);
 		tex->getPixelData(ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, bmpBuf);
 		// Open file stream
