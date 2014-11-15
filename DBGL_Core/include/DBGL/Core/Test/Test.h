@@ -62,6 +62,42 @@ namespace dbgl
 		suite.add(testCase);
 	    }
     };
+
+    /**
+     * @brief Struct that registers initialization routines to test suites
+     */
+    struct AutoInitializationRegistration
+    {
+	public:
+	    /**
+	     * @brief Registers a function to be run on startup of a test suite
+	     * @param testSuite Test suite to register to
+	     * @param func Function to run on suite startup
+	     */
+	    AutoInitializationRegistration(std::string const& testSuite, std::function<void()> func)
+	    {
+		auto& suite = AutoRegistration::getTestSuite(testSuite);
+		suite.setInitialize(func);
+	    }
+    };
+
+    /**
+     * @brief Struct that registers termination routines to test suites
+     */
+    struct AutoTerminationRegistration
+    {
+	public:
+	    /**
+	     * @brief Registers a function to be run on termination of a test suite
+	     * @param testSuite Test suite to register to
+	     * @param func Function to run on suite termination
+	     */
+	    AutoTerminationRegistration(std::string const& testSuite, std::function<void()> func)
+	    {
+		auto& suite = AutoRegistration::getTestSuite(testSuite);
+		suite.setTerminate(func);
+	    }
+    };
 }
 
 /**
@@ -78,12 +114,30 @@ namespace dbgl
     static dbgl::AutoRegistration register_##test_suite##_##test_case(#test_suite, dbgl::TestCase(#test_case, test_suite##_##test_case));	\
     static void test_suite##_##test_case()
 
+/**
+ * @brief Define some code to run before any tests of a suite are run
+ */
+#define TEST_INITIALIZE(test_suite)										\
+    static void test_suite##_init();									\
+    static dbgl::AutoInitializationRegistration register_##test_suite##_init(#test_suite, test_suite##_init);	\
+    static void test_suite##_init()
+
+/**
+ * @brief Define some code to run before any tests of a suite are run
+ */
+#define TEST_TERMINATE(test_suite)										\
+    static void test_suite##_term();									\
+    static dbgl::AutoTerminationRegistration register_##test_suite##_term(#test_suite, test_suite##_term);	\
+    static void test_suite##_term()
+
 #define DBGL_CREATE_TEST_MAIN				\
 int main()						\
 {							\
     for(auto tc : dbgl::AutoRegistration::getMap())	\
     {							\
+    	tc.second.initialize();				\
 	tc.second.run();				\
+	tc.second.terminate();				\
 	tc.second.printStat();				\
     }							\
     return 0;						\
