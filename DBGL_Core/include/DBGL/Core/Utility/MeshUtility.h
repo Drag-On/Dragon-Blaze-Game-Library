@@ -23,10 +23,39 @@ namespace dbgl
     class MeshUtility
     {
 	public:
+	    /**
+	     * @brief Creates a simple triangle mesh
+	     * @param sendToGPU Determines if buffers should be updated after creation
+	     * @param usage Initial usage pattern
+	     * @return The created mesh
+	     */
 	    static IMesh* createTriangle(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+	    /**
+	     * @brief Creates a simple rectangle mesh
+	     * @param sendToGPU Determines if buffers should be updated after creation
+	     * @param usage Initial usage pattern
+	     * @return The created mesh
+	     */
 	    static IMesh* createRectangle(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+	    /**
+	     * @brief Creates a simple cube mesh
+	     * @param sendToGPU Determines if buffers should be updated after creation
+	     * @param usage Initial usage pattern
+	     * @return The created mesh
+	     */
 	    static IMesh* createCube(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+	    /**
+	     * @brief Creates a simple four-sided pyramid mesh
+	     * @param sendToGPU Determines if buffers should be updated after creation
+	     * @param usage Initial usage pattern
+	     * @return The created mesh
+	     */
 	    static IMesh* createPyramid(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+	    /**
+	     * @brief Generates the tangent base for a mesh
+	     * @param[in,out] mesh Mesh to generate tangent base for
+	     * @return Pointer to the same mesh that has been passed in
+	     */
 	    static IMesh* generateTangentBase(IMesh* mesh);
     };
 }
