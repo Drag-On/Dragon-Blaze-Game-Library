@@ -18,48 +18,48 @@
 using namespace dbgl;
 using namespace std;
 
-TEST(TextureIO,bmp)
+TEST_INITIALIZE(TextureIO)
 {
     // Init graphics context
     Platform::init<OpenGL33>();
     Platform::get()->createWindow();
+}
+
+TEST_TERMINATE(TextureIO)
+{
+    Platform::destroy();
+}
+
+TEST(TextureIO,bmp)
+{
     // TextureIO object
     TextureIO io {};
-    try
+    if (!io.addFormat("plugins\\Texture\\BMP\\libDBGL_BMP.dll"))
     {
-	if (!io.addFormat("plugins\\Texture\\BMP\\libDBGL_BMP.dll"))
-	{
-	    FAIL();
-	}
-	else
-	{
-	    auto tex = io.load("plugins\\Texture\\BMP\\test.bmp");
-	    ASSERT(tex);
-	    ASSERT(tex->getWidth() == 2);
-	    ASSERT(tex->getHeight() == 2);
-	    char pixelDat[2 * 2 * 3];
-	    tex->bind(0);
-	    tex->setRowAlignment(ITexture::RowAlignment::PACK, 1);
-	    tex->getPixelData(ITexture::PixelFormat::RGB, ITexture::PixelType::BYTE,
-		    reinterpret_cast<char*>(&(pixelDat[0])), 0);
-	    ASSERT(pixelDat[0] == 0);
-	    ASSERT(pixelDat[1] == 0);
-	    ASSERT(pixelDat[2] == 0);
-	    ASSERT(pixelDat[3] == 254);
-	    ASSERT(pixelDat[4] == 254);
-	    ASSERT(pixelDat[5] == 254);
-	    ASSERT(pixelDat[6] == 0);
-	    ASSERT(pixelDat[7] == 254);
-	    ASSERT(pixelDat[8] == 0);
-	    ASSERT(pixelDat[9] == 254);
-	    ASSERT(pixelDat[10] == 0);
-	    ASSERT(pixelDat[11] == 0);
-	}
+	FAIL();
     }
-    catch (...)
+    else
     {
-	Platform::destroy();
-	throw;
+	auto tex = io.load("plugins\\Texture\\BMP\\test.bmp");
+	ASSERT(tex);
+	ASSERT(tex->getWidth() == 2);
+	ASSERT(tex->getHeight() == 2);
+	unsigned char pixelDat[2 * 2 * 3];
+	tex->bind(0);
+	tex->setRowAlignment(ITexture::RowAlignment::PACK, 1);
+	tex->getPixelData(ITexture::PixelFormat::RGB, ITexture::PixelType::BYTE,
+		reinterpret_cast<char*>(&(pixelDat[0])), 0);
+	ASSERT(pixelDat[0] == 0);
+	ASSERT(pixelDat[1] == 0);
+	ASSERT(pixelDat[2] == 0);
+	ASSERT(pixelDat[3] == 254);
+	ASSERT(pixelDat[4] == 254);
+	ASSERT(pixelDat[5] == 254);
+	ASSERT(pixelDat[6] == 0);
+	ASSERT(pixelDat[7] == 254);
+	ASSERT(pixelDat[8] == 0);
+	ASSERT(pixelDat[9] == 254);
+	ASSERT(pixelDat[10] == 0);
+	ASSERT(pixelDat[11] == 0);
     }
-    Platform::destroy();
 }
