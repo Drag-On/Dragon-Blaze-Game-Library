@@ -50,7 +50,7 @@ namespace dbgl
 	     * @param n Amount of passed parameters
 	     * @param ... n initialization values
 	     */
-	    Vector(int n, ...);
+	    Vector(unsigned int n, ...);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -87,7 +87,7 @@ namespace dbgl
 	     * @param n Amount of passed parameters
 	     * @param ... n initialization values
 	     */
-	    Vector(int n, ...);
+	    Vector(unsigned int n, ...);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -124,7 +124,7 @@ namespace dbgl
 	     * @param n Amount of passed parameters
 	     * @param ... n initialization values
 	     */
-	    Vector(int n, ...);
+	    Vector(unsigned int n, ...);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -161,7 +161,7 @@ namespace dbgl
 	     * @param n Amount of passed parameters
 	     * @param ... n initialization values
 	     */
-	    Vector(int n, ...);
+	    Vector(unsigned int n, ...);
 	    /**
 	     * @brief Copies a vector
 	     */
