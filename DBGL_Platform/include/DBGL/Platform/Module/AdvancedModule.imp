@@ -10,7 +10,11 @@
 
 namespace dbgl
 {
-    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string path) : m_module{path}
+    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string const& path) : m_module{path}
+    {
+    }
+
+    template<class Base> AdvancedModule<Base>::AdvancedModule(Filename const& path) : m_module{path}
     {
     }
 
@@ -35,6 +39,29 @@ namespace dbgl
     template<typename Base> Base* AdvancedModule<Base>::get()
     {
 	return m_pClass;
+    }
+
+    template<typename Base> AdvancedModule<Base>::AdvancedModule(AdvancedModule<Base>&& other) :
+	    m_module{other.m_module}, m_pClass{other.m_pClass}, m_pCreate{other.m_pCreate}, m_pDestroy{other.m_pDestroy}
+    {
+	other.m_pClass = nullptr;
+	other.m_pCreate = nullptr;
+	other.m_pDestroy = nullptr;
+    }
+
+    template<typename Base> AdvancedModule<Base>& AdvancedModule<Base>::operator=(AdvancedModule<Base>&& other)
+    {
+	if (this != &other)
+	{
+	    m_module = other.m_module;
+	    m_pClass = other.m_pClass;
+	    m_pCreate = other.m_pCreate;
+	    m_pDestroy = other.m_pDestroy;
+	    other.m_pClass = nullptr;
+	    other.m_pCreate = nullptr;
+	    other.m_pDestroy = nullptr;
+	}
+	return *this;
     }
 }
 

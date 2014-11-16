@@ -13,6 +13,7 @@
 
 #include <string>
 #include <cstring>
+#include "DBGL/Platform/File/Filename.h"
 
 namespace dbgl
 {
@@ -42,7 +43,23 @@ namespace dbgl
 	     * @brief Constructs a new module from a file
 	     * @param path Path of the file
 	     */
-	    Module(std::string path);
+	    Module(std::string const& path);
+	    /**
+	     * @brief Constructs a new module from a file
+	     * @param path Path of the file
+	     */
+	    Module(Filename const& path);
+	    /**
+	     * @brief Move constructor
+	     * @param other Module to move
+	     */
+	    Module(Module&& other);
+	    /**
+	     * @brief Move assignment
+	     * @param other Module to move
+	     * @return Reference to this module
+	     */
+	    Module& operator=(Module&& other);
 	    /**
 	     * @brief Destructor
 	     */
@@ -60,13 +77,13 @@ namespace dbgl
 	     * @param name Name of the function to get
 	     * @return Function pointer to the requested function or nullptr if something went wrong
 	     */
-	    Func getFunction(std::string name);
+	    Func getFunction(std::string const& name);
 	private:
 	    // Prevent copies
-	    Module(Module& other);
-	    Module& operator=(Module& other);
+	    Module(Module& other) = delete;
+	    Module& operator=(Module& other) = delete;
 
-	    std::string m_path;
+	    Filename m_path;
             internal_os::ModHandle m_handle{};
     };
 }

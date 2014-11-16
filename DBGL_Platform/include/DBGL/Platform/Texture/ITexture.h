@@ -99,7 +99,6 @@ namespace dbgl
 	    virtual void bind(unsigned int unit = 0) = 0;
 	    /**
 	     * @brief Modifies a certain mip level of this texture
-	     * @note Texture needs to be bound
 	     * @param level MipMap level to write
 	     * @param width Image width
 	     * @param height Image height
@@ -111,7 +110,6 @@ namespace dbgl
 		    PixelFormat format, PixelType type, void const* data) = 0;
 	    /**
 	     * @brief Modifies a vertain mip level of this texture
-	     * @note Texture needs to be bound
 	     * @param level Mip map level to write
 	     * @param width Image width
 	     * @param height Image height
@@ -129,25 +127,21 @@ namespace dbgl
 	    virtual void setRowAlignment(RowAlignment type, unsigned int align) = 0;
 	    /**
 	     * @brief Sets the filter used to minify the texture
-	     * @note Texture needs to be bound
 	     * @param filter New filter
 	     */
 	    virtual void setMinFilter(MinFilter filter) = 0;
 	    /**
 	     * @brief Sets the filter used to magnify the texture
-	     * @note Texture needs to be bound
 	     * @param filter New filter
 	     */
 	    virtual void setMagFilter(MagFilter filter) = 0;
 	    /**
 	     * @brief Generates mip maps for the texture.
-	     * @note Texture needs to be bound
 	     * @details Overwrites any previously set mip maps
 	     */
 	    virtual void generateMipMaps() = 0;
 	    /**
 	     * @brief Retrieves the size of the texture (or a mip map thereof)
-	     * @note Texture needs to be bound
 	     * @param[out] width Texture width will be copied here
 	     * @param[out] height Texture height will be copied here
 	     * @param level Mip level, defaults to 0
@@ -163,6 +157,14 @@ namespace dbgl
 	     * @return Height of the texture in pixels
 	     */
 	    virtual unsigned int getHeight() const = 0;
+	    /**
+	     * @brief Retrieves the pixel data of the texture
+	     * @param format Format to convert to
+	     * @param type Type to convert to
+	     * @param buffer[out] Buffer to write to. Must be big enough to hold the data.
+	     * @param level Mip level
+	     */
+	    virtual void getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level = 0) const = 0;
     };
 }
 

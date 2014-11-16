@@ -13,6 +13,7 @@
 
 #include<string>
 #include"Module.h"
+#include"DBGL/Platform/File/Filename.h"
 
 namespace dbgl
 {
@@ -33,7 +34,23 @@ namespace dbgl
 	     * @brief Creates a new advanced module
 	     * @param path Path of the library to load
 	     */
-	    AdvancedModule(std::string path);
+	    AdvancedModule(std::string const& path);
+	    /**
+	     * @brief Creates a new advanced module
+	     * @param path Path of the library to load
+	     */
+	    AdvancedModule(Filename const& path);
+	    /**
+	     * @brief Move constructor
+	     * @param other AdvancedModule to move
+	     */
+	    AdvancedModule(AdvancedModule&& other);
+	    /**
+	     * @brief Move assignment
+	     * @param other AdvancedModule to move
+	     * @return Reference to this module
+	     */
+	    AdvancedModule& operator=(AdvancedModule&& other);
 	    /**
 	     * @brief Destructor
 	     */
@@ -50,8 +67,8 @@ namespace dbgl
 	    Base* get();
 
 	private:
-	    AdvancedModule(AdvancedModule&);
-	    AdvancedModule& operator=(AdvancedModule&);
+	    AdvancedModule(AdvancedModule&) = delete;
+	    AdvancedModule& operator=(AdvancedModule&) = delete;
 
 	    using CreateFunc = Base*(*)(void);
 	    using DestroyFunc = void(*)(Base*);
