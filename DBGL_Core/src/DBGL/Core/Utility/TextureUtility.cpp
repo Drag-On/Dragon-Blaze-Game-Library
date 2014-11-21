@@ -12,17 +12,17 @@
 
 namespace dbgl
 {
-    TextureUtility::ImageData::ImageData(char* imgData, unsigned int width, unsigned int height) : m_width{width}, m_height{height}
+    TextureUtility::ImageData::ImageData(unsigned char* imgData, unsigned int width, unsigned int height) : m_width{width}, m_height{height}
     {
-	m_pPixels = new PixelData[width * height];
+	m_pPixels = new Color[width * height];
 	for (unsigned y = 0; y < height; y++)
 	{
 	    for (unsigned x = 0; x < width; x++)
 	    {
-		m_pPixels[x + y * width].r = imgData[4 * (x + y * width) + 0];
-		m_pPixels[x + y * width].g = imgData[4 * (x + y * width) + 1];
-		m_pPixels[x + y * width].b = imgData[4 * (x + y * width) + 2];
-		m_pPixels[x + y * width].a = imgData[4 * (x + y * width) + 3];
+		m_pPixels[x + y * width].setRed(imgData[4 * (x + y * width) + 0]);
+		m_pPixels[x + y * width].setGreen(imgData[4 * (x + y * width) + 1]);
+		m_pPixels[x + y * width].setBlue(imgData[4 * (x + y * width) + 2]);
+		m_pPixels[x + y * width].setAlpha(imgData[4 * (x + y * width) + 3]);
 	    }
 	}
     }
@@ -32,7 +32,7 @@ namespace dbgl
 	delete [] m_pPixels;
     }
 
-    auto TextureUtility::ImageData::getPixel(unsigned int x, unsigned int y) -> PixelData&
+    auto TextureUtility::ImageData::getPixel(unsigned int x, unsigned int y) -> Color&
     {
 	return m_pPixels[x + y * m_height];
     }
@@ -52,7 +52,7 @@ namespace dbgl
 	char* buffer = new char[tex->getHeight() * tex->getWidth() * 4];
 	tex->setRowAlignment(ITexture::RowAlignment::PACK, 1);
 	tex->getPixelData(ITexture::PixelFormat::RGBA, ITexture::PixelType::UBYTE, buffer, 0);
-	ImageData img{buffer, tex->getWidth(), tex->getHeight()};
+	ImageData img{reinterpret_cast<unsigned char*>(buffer), tex->getWidth(), tex->getHeight()};
 	delete [] buffer;
 	return img;
     }

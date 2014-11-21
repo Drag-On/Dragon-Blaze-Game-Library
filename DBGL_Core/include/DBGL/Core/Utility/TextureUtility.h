@@ -13,6 +13,7 @@
 
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Texture/ITexture.h"
+#include "DBGL/Core/Utility/Color.h"
 
 namespace dbgl
 {
@@ -22,29 +23,6 @@ namespace dbgl
     class TextureUtility
     {
 	public:
-	    /**
-	     * @brief Information about one pixel
-	     */
-	    struct PixelData
-	    {
-		public:
-		    /**
-		     *  @brief Red value
-		     */
-		    unsigned char r;
-		    /**
-		     * @brief Green value
-		     */
-		    unsigned char g;
-		    /**
-		     * @brief Blue value
-		     */
-		    unsigned char b;
-		    /**
-		     * @brief Alpha value
-		     */
-		    unsigned char a;
-	    };
 	    /**
 	     * @brief Image data which can be retrieved from a texture
 	     */
@@ -57,7 +35,7 @@ namespace dbgl
 		     * @param width Image width
 		     * @param height Image height
 		     */
-		    ImageData(char* imgData, unsigned int width, unsigned int height);
+		    ImageData(unsigned char* imgData, unsigned int width, unsigned int height);
 		    /**
 		     * @brief Destructor
 		     */
@@ -68,7 +46,7 @@ namespace dbgl
 		     * @param y Y coordinate
 		     * @return Color of the requested pixel
 		     */
-		    PixelData& getPixel(unsigned int x, unsigned int y);
+		    Color& getPixel(unsigned int x, unsigned int y);
 		    /**
 		     * @brief Retrieves the image width
 		     * @return Image width in pixels
@@ -80,7 +58,7 @@ namespace dbgl
 		     */
 		    unsigned int getHeight() const;
 		private:
-		    PixelData* m_pPixels = nullptr;
+		    Color* m_pPixels = nullptr;
 		    unsigned int m_width;
 		    unsigned int m_height;
 	    };
@@ -93,7 +71,5 @@ namespace dbgl
 	    static ImageData createImageData(ITexture* tex);
     };
 }
-
-
 
 #endif /* INCLUDE_DBGL_CORE_UTILITY_TEXTUREUTILITY_H_ */
