@@ -103,8 +103,7 @@ namespace dbgl
 		// Read image data
 		if(fileHeader.off > 0)
 		    file.seekg(fileHeader.off, std::ios::beg);
-		const unsigned int imgSize { static_cast<unsigned int>(((infoHeader.width * infoHeader.bpp + 31) & ~31) / 8
-			* infoHeader.height) };
+		const unsigned int imgSize { fileHeader.fileSize - fileHeader.off };
 		char img[imgSize];
 		file.read(&img[0], imgSize);
 		// Close file
@@ -113,7 +112,6 @@ namespace dbgl
 		// Create texture
 		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 4);
-		tex->bind(0);
 		tex->write(0, infoHeader.width, infoHeader.height, ITexture::PixelFormat::BGR, ITexture::PixelType::UBYTE, &img[0]);
 		return tex;
 	    }
