@@ -16,14 +16,20 @@
 using namespace dbgl;
 using namespace std;
 
+namespace dbgl_test_MeshUtility
+{
+    IWindow* g_wnd = nullptr;
+}
+
 TEST_INITIALIZE(MeshUtility)
 {
     Platform::init<OpenGL33>();
-    //Platform::get()->createWindow();
+    dbgl_test_MeshUtility::g_wnd = Platform::get()->createWindow();
 }
 
 TEST_TERMINATE(MeshUtility)
 {
+    delete dbgl_test_MeshUtility::g_wnd;
     Platform::destroy();
 }
 

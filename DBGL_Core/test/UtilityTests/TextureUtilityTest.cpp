@@ -16,14 +16,20 @@
 using namespace dbgl;
 using namespace std;
 
+namespace dbgl_test_TextureUtility
+{
+    IWindow* g_wnd = nullptr;
+}
+
 TEST_INITIALIZE(TextureUtility)
 {
     Platform::init<OpenGL33>();
-    Platform::get()->createWindow();
+    dbgl_test_TextureUtility::g_wnd = Platform::get()->createWindow();
 }
 
 TEST_TERMINATE(TextureUtility)
 {
+    delete dbgl_test_TextureUtility::g_wnd;
     Platform::destroy();
 }
 
