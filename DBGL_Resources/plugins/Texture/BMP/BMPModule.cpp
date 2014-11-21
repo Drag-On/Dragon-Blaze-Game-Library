@@ -8,6 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include <cstring>
 #include <string>
 #include <algorithm>
 #include <fstream>
@@ -18,6 +19,24 @@ namespace dbgl
 {
     class BMPModule : public IImageFormatModule
     {
+	private:
+	    void flipVertical(char* img, unsigned int width, unsigned int height) const
+	    {
+		unsigned int bufsize = width * 3;
+		if(bufsize % 4 != 0)
+		    bufsize += bufsize % 4;
+		char* lineBuffer = new char[bufsize];
+		for (unsigned int i = 0; i < height / 2; i++)
+		{
+		    int frontOffset = i * bufsize;
+		    int backOffset = ((height - 1) - i) * bufsize;
+		    memcpy(lineBuffer, img + frontOffset, bufsize);
+		    memcpy(img + frontOffset, img + backOffset, bufsize);
+		    memcpy(img + backOffset, lineBuffer, bufsize);
+		}
+		delete [] lineBuffer;
+	    }
+
 	public:
 	    struct FileHeaderBMP
 	    {
@@ -109,6 +128,8 @@ namespace dbgl
 		// Close file
 		file.close();
 
+		// Flip vertically since bmps are layed out the wrong way
+		flipVertical(&img[0], infoHeader.width, infoHeader.height);
 		// Create texture
 		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 4);
