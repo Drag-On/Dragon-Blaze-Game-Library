@@ -37,6 +37,16 @@ namespace dbgl
 		     */
 		    ImageData(unsigned char* imgData, unsigned int width, unsigned int height);
 		    /**
+		     * @brief Copy constructor
+		     * @param other Image to copy
+		     */
+		    ImageData(ImageData const& other);
+		    /**
+		     * @brief Move constructor
+		     * @param other Image to move
+		     */
+		    ImageData(ImageData&& other);
+		    /**
 		     * @brief Destructor
 		     */
 		    ~ImageData();
@@ -46,7 +56,14 @@ namespace dbgl
 		     * @param y Y coordinate
 		     * @return Color of the requested pixel
 		     */
-		    Color& getPixel(unsigned int x, unsigned int y);
+		    Color const& getPixel(unsigned int x, unsigned int y) const;
+		    /**
+		     * @brief Modifies a pixel
+		     * @param x X coordinate
+		     * @param y Y coordinate
+		     * @param color Pixel color
+		     */
+		    void setPixel(unsigned int x, unsigned int y, Color const& color);
 		    /**
 		     * @brief Retrieves the image width
 		     * @return Image width in pixels
@@ -57,10 +74,24 @@ namespace dbgl
 		     * @return Image height in pixels
 		     */
 		    unsigned int getHeight() const;
+		    /**
+		     * @brief Assignment operator
+		     * @param other Image to assign
+		     * @return Reference to this image
+		     */
+		    ImageData& operator=(ImageData const& other);
+		    /**
+		     * @brief Move assignment operator
+		     * @param other Image to assign
+		     * @return Reference to this image
+		     */
+		    ImageData& operator=(ImageData&& other);
 		private:
 		    Color* m_pPixels = nullptr;
 		    unsigned int m_width;
 		    unsigned int m_height;
+
+		    friend class TextureUtility;
 	    };
 
 	    /**
@@ -69,6 +100,18 @@ namespace dbgl
 	     * @return ImageData object
 	     */
 	    static ImageData createImageData(ITexture* tex);
+	    /**
+	     * @brief Create a texture from a an image data object
+	     * @param img Image to use as a texture
+	     * @return Created texture
+	     */
+	    static ITexture* createTexture(ImageData const& img);
+	    /**
+	     * @brief Replaces the passed texture with a image
+	     * @param[out] tex Texture to replace
+	     * @param img Image to use as replacement
+	     */
+	    static void replaceTexture(ITexture* tex, ImageData const& img);
     };
 }
 
