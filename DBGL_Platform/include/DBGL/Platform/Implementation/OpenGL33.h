@@ -35,6 +35,8 @@ namespace dbgl
 	    virtual ITexture* createTexture(ITexture::Type type);
 	    virtual IMesh* createMesh();
 	    virtual IRenderContext* createRenderContext(ITexture* tex, bool createDepthBuf = false);
+	private:
+	    bool m_wndCreated = false;
     };
 }
 

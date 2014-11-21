@@ -35,12 +35,12 @@ namespace dbgl
     #define RETURN_QUALIFIER const
     #include "Vector_Common.spart"
 
-	template<typename T, unsigned int N> Vector<T,N>::Vector(int n, ...)
+	template<typename T, unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
 	{
 		va_list args{};
 		va_start(args, n);
 		
-		for (int i = 0; i < n && i < getDimension(); i++)
+		for (unsigned int i = 0; i < n && i < getDimension(); i++)
 		{
 		    (*this)[i] = va_arg(args, T);
 		}
@@ -60,12 +60,12 @@ namespace dbgl
     #define RETURN_QUALIFIER
     #include "Vector_Common.spart"
 	
-	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
+	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
 	{
 		va_list args{};
 		va_start(args, n);
 		
-		for (int i = 0; i < n && i < getDimension(); i++)
+		for (unsigned int i = 0; i < n && i < getDimension(); i++)
 		{
 			(*this)[i] = static_cast<float>(va_arg(args, double));
 		}
@@ -85,12 +85,12 @@ namespace dbgl
     #define RETURN_QUALIFIER
 	#include "Vector_Common.spart"
 	
-	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
+	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
 	{
 		va_list args{};
 		va_start(args, n);
 		
-		for (int i = 0; i < n && i < getDimension(); i++)
+		for (unsigned int i = 0; i < n && i < getDimension(); i++)
 		{
 			(*this)[i] = va_arg(args, int);
 		}
@@ -110,12 +110,12 @@ namespace dbgl
     #define RETURN_QUALIFIER
 	#include "Vector_Common.spart"
 	
-	template<unsigned int N> Vector<T,N>::Vector(int n, ...)
+	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
 	{
 		va_list args{};
 		va_start(args, n);
 		
-		for (int i = 0; i < n && i < getDimension(); i++)
+		for (unsigned int i = 0; i < n && i < getDimension(); i++)
 		{
 			(*this)[i] = va_arg(args, int);
 		}
