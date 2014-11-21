@@ -35,10 +35,9 @@ namespace dbgl
     IWindow* OpenGL33::createWindow(std::string title, int width, int height, bool fullscreen,
 	    unsigned int multisampling)
     {
-	static bool created { false };
-	if(!created)
+	if(!m_wndCreated)
 	{
-	    created = true;
+	    m_wndCreated = true;
 	    return new WindowGL33 { title, width, height, fullscreen, multisampling };
 	}
 	else
