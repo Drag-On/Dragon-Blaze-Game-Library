@@ -8,8 +8,8 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include <iostream>
 #include "DBGL/Core/Test/Test.h"
+#include "DBGL/Core/Utility/TextureUtility.h"
 #include "DBGL/Resources/Texture/TextureIO.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/Platform.h"
@@ -18,15 +18,21 @@
 using namespace dbgl;
 using namespace std;
 
+namespace dbgl_test_TextureIO
+{
+    IWindow* g_wnd = nullptr;
+}
+
 TEST_INITIALIZE(TextureIO)
 {
     // Init graphics context
     Platform::init<OpenGL33>();
-    Platform::get()->createWindow();
+    dbgl_test_TextureIO::g_wnd = Platform::get()->createWindow();
 }
 
 TEST_TERMINATE(TextureIO)
 {
+    delete dbgl_test_TextureIO::g_wnd;
     Platform::destroy();
 }
 
@@ -44,22 +50,22 @@ TEST(TextureIO,bmp)
 	ASSERT(tex);
 	ASSERT(tex->getWidth() == 2);
 	ASSERT(tex->getHeight() == 2);
-	unsigned char pixelDat[2 * 2 * 3];
-	tex->bind(0);
-	tex->setRowAlignment(ITexture::RowAlignment::PACK, 1);
-	tex->getPixelData(ITexture::PixelFormat::RGB, ITexture::PixelType::BYTE,
-		reinterpret_cast<char*>(&(pixelDat[0])), 0);
-	ASSERT(pixelDat[0] == 0);
-	ASSERT(pixelDat[1] == 0);
-	ASSERT(pixelDat[2] == 0);
-	ASSERT(pixelDat[3] == 254);
-	ASSERT(pixelDat[4] == 254);
-	ASSERT(pixelDat[5] == 254);
-	ASSERT(pixelDat[6] == 0);
-	ASSERT(pixelDat[7] == 254);
-	ASSERT(pixelDat[8] == 0);
-	ASSERT(pixelDat[9] == 254);
-	ASSERT(pixelDat[10] == 0);
-	ASSERT(pixelDat[11] == 0);
+	auto img = TextureUtility::createImageData(tex);
+	ASSERT(img.getPixel(0, 0).getRed() == 0);
+	ASSERT(img.getPixel(0, 0).getGreen() == 0);
+	ASSERT(img.getPixel(0, 0).getBlue() == 0);
+	ASSERT(img.getPixel(0, 0).getAlpha() == 255);
+	ASSERT(img.getPixel(1, 0).getRed() == 255);
+	ASSERT(img.getPixel(1, 0).getGreen() == 255);
+	ASSERT(img.getPixel(1, 0).getBlue() == 255);
+	ASSERT(img.getPixel(1, 0).getAlpha() == 255);
+	ASSERT(img.getPixel(0, 1).getRed() == 0);
+	ASSERT(img.getPixel(0, 1).getGreen() ==255);
+	ASSERT(img.getPixel(0, 1).getBlue() == 0);
+	ASSERT(img.getPixel(0, 1).getAlpha() == 255);
+	ASSERT(img.getPixel(1, 1).getRed() == 255);
+	ASSERT(img.getPixel(1, 1).getGreen() == 0);
+	ASSERT(img.getPixel(1, 1).getBlue() == 0);
+	ASSERT(img.getPixel(1, 1).getAlpha() == 255);
     }
 }
