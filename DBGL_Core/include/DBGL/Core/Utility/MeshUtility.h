@@ -55,11 +55,20 @@ namespace dbgl
 	     */
 	    static IMesh* createPyramid(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
 	    /**
+	     * @brief Generates normals for a mesh
+	     * @param[in,out] mesh Mesh to generate normals for
+	     */
+	    static void generateNormals(IMesh* mesh);
+	    /**
 	     * @brief Generates the tangent base for a mesh
 	     * @param[in,out] mesh Mesh to generate tangent base for
-	     * @return Pointer to the same mesh that has been passed in
 	     */
-	    static IMesh* generateTangentBase(IMesh* mesh);
+	    static void generateTangentBase(IMesh* mesh);
+	    /**
+	     * @brief Reverses the direction of all normals
+	     * @param[in,out] mesh Mesh to reverse normals for
+	     */
+	    static void reverseNormals(IMesh* mesh);
     };
 }
 

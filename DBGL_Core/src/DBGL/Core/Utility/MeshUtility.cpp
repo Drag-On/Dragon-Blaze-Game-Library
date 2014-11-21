@@ -199,7 +199,34 @@ namespace dbgl
 	return mesh;
     }
 
-    IMesh* MeshUtility::generateTangentBase(IMesh* mesh)
+    void MeshUtility::generateNormals(IMesh* mesh)
+    {
+	mesh->normals().clear();
+	mesh->normals().resize(mesh->vertices().size());
+	for (unsigned int i = 0; i < mesh->indices().size(); i += 3)
+	{
+	    // Shortcuts
+	    Vec3f v0 = mesh->vertices()[mesh->indices()[i + 0]];
+	    Vec3f v1 = mesh->vertices()[mesh->indices()[i + 1]];
+	    Vec3f v2 = mesh->vertices()[mesh->indices()[i + 2]];
+	    Vec3f oldNormal = mesh->normals()[mesh->indices()[i]];
+	    Vec3f newNormal = (v0 - v1).cross(v0 - v2).normalize();
+	    if(oldNormal.getSquaredLength() == 0)
+	    {
+		mesh->normals()[mesh->indices()[i]] = newNormal;
+		mesh->normals()[mesh->indices()[i + 1]] = newNormal;
+		mesh->normals()[mesh->indices()[i + 2]] = newNormal;
+	    }
+	    else
+	    {
+		mesh->normals()[mesh->indices()[i]] = static_cast<Vec3f>(oldNormal * newNormal);
+		mesh->normals()[mesh->indices()[i + 1]] = static_cast<Vec3f>(oldNormal * newNormal);
+		mesh->normals()[mesh->indices()[i + 2]] = static_cast<Vec3f>(oldNormal * newNormal);
+	    }
+	}
+    }
+
+    void MeshUtility::generateTangentBase(IMesh* mesh)
     {
 	// Allocate sufficient memory
 	mesh->tangents().resize(mesh->vertices().size());
@@ -267,8 +294,15 @@ namespace dbgl
 	    mesh->tangents()[i] = t;
 	    mesh->bitangents()[i] = b;
 	}
+    }
 
-	return mesh;
+    void MeshUtility::reverseNormals(IMesh* mesh)
+    {
+	for (unsigned int i = 0; i < mesh->normals().size(); i++)
+	{
+	    Vec3f normal = mesh->normals()[i];
+	    mesh->normals()[i] = static_cast<Vec3f>(-normal);
+	}
     }
 
 }

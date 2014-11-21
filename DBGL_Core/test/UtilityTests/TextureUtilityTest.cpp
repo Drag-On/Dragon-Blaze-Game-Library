@@ -16,17 +16,14 @@
 using namespace dbgl;
 using namespace std;
 
-IWindow* g_pWnd = nullptr;
-
 TEST_INITIALIZE(TextureUtility)
 {
     Platform::init<OpenGL33>();
-    g_pWnd = Platform::get()->createWindow();
+    Platform::get()->createWindow();
 }
 
 TEST_TERMINATE(TextureUtility)
 {
-    g_pWnd->close();
     Platform::destroy();
 }
 
