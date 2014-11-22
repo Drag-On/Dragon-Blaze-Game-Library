@@ -8,18 +8,18 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef IIMAGEFORMATMODULE_H_
-#define IIMAGEFORMATMODULE_H_
+#ifndef IMESHFORMATMODULE_H_
+#define IMESHFORMATMODULE_H_
 
-#include "DBGL/Platform/Texture/ITexture.h"
+#include "DBGL/Platform/Mesh/IMesh.h"
 #include "DBGL/Resources/FileFormat/IFileFormatModule.h"
 
 namespace dbgl
 {
     /**
-     * @brief Interface class for all image loader and writer modules
+     * @brief Interface class for all mesh loader and writer modules
      */
-    using IImageFormatModule = IFileFormatModule<ITexture>;
+    using IMeshFormatModule = IFileFormatModule<IMesh>;
 }
 
-#endif /* IIMAGEFORMATMODULE_H_ */
+#endif /* IMESHFORMATMODULE_H_ */

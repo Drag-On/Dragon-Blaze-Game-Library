@@ -8,23 +8,23 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef TEXTURELOADER_H_
-#define TEXTURELOADER_H_
+#ifndef MESHIO_H_
+#define MESHIO_H_
 
-#include "IImageFormatModule.h"
+#include "IMeshFormatModule.h"
 #include "DBGL/Resources/FileFormat/FileFormatIO.h"
-#include "DBGL/Platform/Texture/ITexture.h"
+#include "DBGL/Platform/Mesh/IMesh.h"
 
 namespace dbgl
 {
     /**
-     * @brief Loads textures from hard disk and stores them
-     * @details This class doesn't contain any code to load or write image files, instead
+     * @brief Loads meshes from hard disk and stores them
+     * @details This class doesn't contain any code to load or write mesh files, instead
      * 		it loads dynamic libraries that contain such code. The libraries must
      * 		be compatible with the AdvancedModule class from DBGL_Platform, and
-     * 		provide instances of subclasses of ITextureFormat.
+     * 		provide instances of subclasses of IMeshFormat.
      */
-    using TextureIO = FileFormatIO<ITexture, IImageFormatModule>;
+    using MeshIO = FileFormatIO<IMesh, IMeshFormatModule>;
 }
 
-#endif /* TEXTURELOADER_H_ */
+#endif /* MESHIO_H_ */

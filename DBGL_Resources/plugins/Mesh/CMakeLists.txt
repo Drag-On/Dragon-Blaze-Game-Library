@@ -9,12 +9,13 @@
 ######################################################################
 
 ######################################################################
-### Main library cmake compilation file
+### Examples cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_RESOURCES_PLUGINS C CXX)
+project (DBGL_RESOURCES_PLUGINS_MESH C CXX)
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/Texture/"
-				 "${PROJECT_BINARY_DIR}/Texture/")
-add_subdirectory("${PROJECT_SOURCE_DIR}/Mesh/"
-				 "${PROJECT_BINARY_DIR}/Mesh/")
+######################################################################
+### Add plugin projects
+######################################################################
+add_subdirectory("${PROJECT_SOURCE_DIR}/OBJ"
+				 "${PROJECT_BINARY_DIR}/OBJ")
