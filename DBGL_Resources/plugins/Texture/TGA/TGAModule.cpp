@@ -20,7 +20,7 @@ namespace dbgl
     class TGAModule : public IImageFormatModule
     {
 	private:
-	    void flipVertical(char* img, unsigned int width, unsigned int height, unsigned int lineSize) const
+	    void flipVertical(char* img, unsigned int height, unsigned int lineSize) const
 	    {
 		char* lineBuffer = new char[lineSize];
 		for (unsigned int i = 0; i < height / 2; i++)
@@ -112,7 +112,7 @@ namespace dbgl
 		file.close();
 
 		// Flip vertically since tgas are layed out the wrong way
-		flipVertical(&img[0], fileHeader.imWidth, fileHeader.imHeight, fileHeader.imWidth * colorMode);
+		flipVertical(&img[0], fileHeader.imHeight, fileHeader.imWidth * colorMode);
 		// Create texture
 		auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 		tex->setRowAlignment(ITexture::RowAlignment::UNPACK, 1);
