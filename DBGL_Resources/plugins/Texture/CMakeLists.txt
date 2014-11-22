@@ -19,3 +19,5 @@ project (DBGL_RESOURCES_PLUGINS_TEXTURE C CXX)
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/BMP"
 				 "${PROJECT_BINARY_DIR}/BMP")
+add_subdirectory("${PROJECT_SOURCE_DIR}/TGA"
+				 "${PROJECT_BINARY_DIR}/TGA")
