@@ -90,6 +90,6 @@ TEST(TextureIO,dds)
 	FAIL();
     else
     {
-	testImg(io, "plugins\\Texture\\DDS\\test.dds", 20);
+	testImg(io, "plugins\\Texture\\DDS\\test.dds", 200); // DDS compression destroys a lot of information...
     }
 }

@@ -171,8 +171,8 @@ namespace dbgl
 		// Read file header
 		file.seekg(0, std::ios::beg);
 		FileHeaderDDS fileHeader{};
-		unsigned char fHeader[124];
-		file.read(reinterpret_cast<char*>(&fHeader[0]), 124);
+		unsigned char fHeader[128];
+		file.read(reinterpret_cast<char*>(&fHeader[0]), 128);
 		for(auto i = 0; i < 4; i++)
 		    fileHeader.id[i] = fHeader[i];
 		fileHeader.size = (fHeader[4] << 0) | (fHeader[5] << 8) | (fHeader[6] << 16) | (fHeader[7] << 24);
