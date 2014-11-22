@@ -56,6 +56,12 @@ namespace dbgl
 	glBindTexture(texType2GL(m_type), m_id);
 	auto glFormat = compPixelFormat2GL(format);
 	glCompressedTexImage2D(texType2GL(m_type), level, glFormat, width, height, 0, size, data);
+	// Update cached tex size
+	GLint temp { 0 };
+	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_WIDTH, &temp);
+	m_width = temp;
+	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_HEIGHT, &temp);
+	m_height = temp;
     }
 
     void TextureGL33::setRowAlignment(RowAlignment type, unsigned int align)
