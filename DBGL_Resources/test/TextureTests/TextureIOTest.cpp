@@ -10,6 +10,7 @@
 
 #include "DBGL/Core/Test/Test.h"
 #include "DBGL/Core/Utility/TextureUtility.h"
+#include "DBGL/Core/Math/Utility.h"
 #include "DBGL/Resources/Texture/TextureIO.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/Platform.h"
@@ -36,29 +37,29 @@ TEST_TERMINATE(TextureIO)
     Platform::destroy();
 }
 
-void testImg(TextureIO& io, std::string const& path)
+void testImg(TextureIO& io, std::string const& path, unsigned char accuracy = 0)
 {
     auto tex = io.load(path);
     ASSERT(tex);
     ASSERT(tex->getWidth() == 2);
     ASSERT(tex->getHeight() == 2);
     auto img = TextureUtility::createImageData(tex);
-    ASSERT(img.getPixel(0, 0).getRed() == 0);
-    ASSERT(img.getPixel(0, 0).getGreen() == 0);
-    ASSERT(img.getPixel(0, 0).getBlue() == 0);
-    ASSERT(img.getPixel(0, 0).getAlpha() == 255);
-    ASSERT(img.getPixel(1, 0).getRed() == 255);
-    ASSERT(img.getPixel(1, 0).getGreen() == 255);
-    ASSERT(img.getPixel(1, 0).getBlue() == 255);
-    ASSERT(img.getPixel(1, 0).getAlpha() == 255);
-    ASSERT(img.getPixel(0, 1).getRed() == 0);
-    ASSERT(img.getPixel(0, 1).getGreen() == 255);
-    ASSERT(img.getPixel(0, 1).getBlue() == 0);
-    ASSERT(img.getPixel(0, 1).getAlpha() == 255);
-    ASSERT(img.getPixel(1, 1).getRed() == 255);
-    ASSERT(img.getPixel(1, 1).getGreen() == 0);
-    ASSERT(img.getPixel(1, 1).getBlue() == 0);
-    ASSERT(img.getPixel(1, 1).getAlpha() == 255);
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getRed(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getGreen(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getBlue(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getAlpha(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 0).getRed(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 0).getGreen(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 0).getBlue(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 0).getAlpha(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 1).getRed(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 1).getGreen(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 1).getBlue(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(0, 1).getAlpha(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 1).getRed(), static_cast<unsigned char>(255), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 1).getGreen(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 1).getBlue(), static_cast<unsigned char>(0), accuracy));
+    ASSERT(dbgl::isSimilar(img.getPixel(1, 1).getAlpha(), static_cast<unsigned char>(255), accuracy));
 }
 
 TEST(TextureIO,bmp)
@@ -66,13 +67,9 @@ TEST(TextureIO,bmp)
     // TextureIO object
     TextureIO io {};
     if (!io.addFormat("plugins\\Texture\\BMP\\libDBGL_BMP.dll"))
-    {
 	FAIL();
-    }
     else
-    {
 	testImg(io, "plugins\\Texture\\BMP\\test.bmp");
-    }
 }
 
 TEST(TextureIO,tga)
@@ -80,11 +77,19 @@ TEST(TextureIO,tga)
     // TextureIO object
     TextureIO io {};
     if (!io.addFormat("plugins\\Texture\\TGA\\libDBGL_TGA.dll"))
-    {
 	FAIL();
-    }
+    else
+	testImg(io, "plugins\\Texture\\TGA\\test.tga");
+}
+
+TEST(TextureIO,dds)
+{
+    // TextureIO object
+    TextureIO io {};
+    if (!io.addFormat("plugins\\Texture\\DDS\\libDBGL_DDS.dll"))
+	FAIL();
     else
     {
-	testImg(io, "plugins\\Texture\\TGA\\test.tga");
+	testImg(io, "plugins\\Texture\\DDS\\test.dds", 20);
     }
 }
