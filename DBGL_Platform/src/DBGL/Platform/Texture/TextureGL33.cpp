@@ -37,6 +37,7 @@ namespace dbgl
     void TextureGL33::write(unsigned int level, unsigned int width, unsigned int height, PixelFormat format,
 	    PixelType type, void const* data)
     {
+	glPixelStorei(rowAlignment2GL(RowAlignment::UNPACK), m_rowAlignmentUnpack);
 	glBindTexture(texType2GL(m_type), m_id);
 	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
 	GLint formatgl = pixelFormat2GL(format);
@@ -53,6 +54,7 @@ namespace dbgl
     void TextureGL33::writeCompressed(unsigned int level, unsigned int width, unsigned int height,
     		    PixelFormatCompressed format, unsigned int size, void const* data)
     {
+	glPixelStorei(rowAlignment2GL(RowAlignment::UNPACK), m_rowAlignmentUnpack);
 	glBindTexture(texType2GL(m_type), m_id);
 	auto glFormat = compPixelFormat2GL(format);
 	glCompressedTexImage2D(texType2GL(m_type), level, glFormat, width, height, 0, size, data);
@@ -66,7 +68,15 @@ namespace dbgl
 
     void TextureGL33::setRowAlignment(RowAlignment type, unsigned int align)
     {
-	glPixelStorei(rowAlignment2GL(type), align);
+	switch(type)
+	{
+	    case RowAlignment::PACK:
+		m_rowAlignmentPack = align;
+		break;
+	    case RowAlignment::UNPACK:
+		m_rowAlignmentUnpack = align;
+		break;
+	}
     }
 
     void TextureGL33::setMinFilter(MinFilter filter)
@@ -109,6 +119,7 @@ namespace dbgl
 
     void TextureGL33::getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level) const
     {
+	glPixelStorei(rowAlignment2GL(RowAlignment::PACK), m_rowAlignmentPack);
 	glBindTexture(texType2GL(m_type), m_id);
 	glGetTexImage(texType2GL(m_type), level, pixelFormat2GL(format), pixelType2GL(type), buffer);
     }

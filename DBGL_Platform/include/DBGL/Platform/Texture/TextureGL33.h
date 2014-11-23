@@ -111,6 +111,8 @@ namespace dbgl
 	    GLuint m_id;
 	    Type m_type;
 	    unsigned int m_width = 0, m_height = 0;
+	    unsigned int m_rowAlignmentPack = 4;
+	    unsigned int m_rowAlignmentUnpack = 4;
 
 	    static TextureGL33* s_pBoundTex;
     };
