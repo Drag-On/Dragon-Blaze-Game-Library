@@ -14,7 +14,7 @@
 #include <string>
 #include <functional>
 #include "DBGL/Platform/Input/Input.h"
-#include "DBGL/Platform/Event/Event.h"
+#include "DBGL/Core/Utility/Event.h"
 #include "DBGL/Platform/RenderContext/IRenderContext.h"
 
 namespace dbgl

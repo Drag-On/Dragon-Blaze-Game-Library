@@ -17,10 +17,6 @@ namespace dbgl
 	template<typename T> Vector2<T>::Vector2(T x, T y) : BaseVectorType(2, x, y)
 	{
 	}
-	
-	template<typename T> Vector2<T>::Vector2(IMesh::UV const& uv) : BaseVectorType(2, uv.u, uv.v)
-	{
-	}
 
 	template<typename T> Vector2<T>::Vector2(const BaseVectorType &other) : BaseVectorType(other)
 	{
@@ -55,16 +51,5 @@ namespace dbgl
 		this->x() += x;
 		this->y() += y;
 		return *this;
-	}
-
-	template<typename T> Vector2<T>& Vector2<T>::operator=(IMesh::UV const& uv)
-	{
-	    this->x() = uv.u;
-	    this->y() = uv.v;
-	}
-
-	template<typename T>  Vector2<T>::operator IMesh::UV() const
-	{
-	    return IMesh::UV{x(), y()};
 	}
 }

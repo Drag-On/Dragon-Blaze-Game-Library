@@ -52,11 +52,6 @@ namespace dbgl
 	     */
 	    Vector3(T x, T y, T z);
 	    /**
-	     * @brief Create vector from vertex
-	     * @param vert Vertex to use for initialization
-	     */
-	    Vector3(IMesh::Vertex const& vert);
-	    /**
 	     * @brief Copies a vector
 	     */
 	    Vector3(const BaseVectorType &other);
@@ -93,16 +88,6 @@ namespace dbgl
 	    Vector3<T>& translate(T x, T y, T z);
 	    // Operators
 	    using BaseVectorType::operator=;
-	    /**
-	     * @brief Assign from vertex
-	     * @param vert Vertex to assign from
-	     * @return Reference to this
-	     */
-	    Vector3<T>& operator=(IMesh::Vertex const& vert);
-	    /**
-	     * @brief Convert into vertex
-	     */
-	    operator IMesh::Vertex() const;
 
 	private:
     };

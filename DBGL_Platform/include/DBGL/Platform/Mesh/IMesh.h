@@ -12,6 +12,8 @@
 #define IMESH_H_
 
 #include <vector>
+#include "DBGL/Core/Math/Vector2.h"
+#include "DBGL/Core/Math/Vector3.h"
 
 namespace dbgl
 {
@@ -38,41 +40,6 @@ namespace dbgl
 	    };
 
 	    /**
-	     * @brief Vertex in 3 dimensions
-	     */
-	    struct Vertex
-	    {
-		public:
-		    /**
-		     * @brief X coordinate
-		     */
-		    float x;
-		    /**
-		     * @brief Y coordinate
-		     */
-		    float y;
-		    /**
-		     * @brief Z coordinate
-		     */
-		    float z;
-	    };
-	    /**
-	     * @brief UV coordinate in 2 dimensions
-	     */
-	    struct UV
-	    {
-		public:
-		    /**
-		     * @brief U coordinate
-		     */
-		    float u;
-		    /**
-		     * @brief V coordinate
-		     */
-		    float v;
-	    };
-
-	    /**
 	     * @brief Destructor
 	     */
 	    virtual ~IMesh() = default;
@@ -83,23 +50,23 @@ namespace dbgl
 	    /**
 	     * @return A reference to the vertices list
 	     */
-	    virtual std::vector<Vertex>& vertices() = 0;
+	    virtual std::vector<Vec3f>& vertices() = 0;
 	    /**
 	     * @return A reference to the normals list
 	     */
-	    virtual std::vector<Vertex>& normals() = 0;
+	    virtual std::vector<Vec3f>& normals() = 0;
 	    /**
 	     * @return A reference to the UVs list
 	     */
-	    virtual std::vector<UV>& uvs() = 0;
+	    virtual std::vector<Vec2f>& uvs() = 0;
 	    /**
 	     * @return A reference to the tangents list
 	     */
-	    virtual std::vector<Vertex>& tangents() = 0;
+	    virtual std::vector<Vec3f>& tangents() = 0;
 	    /**
 	     * @return A reference to the bitangents list
 	     */
-	    virtual std::vector<Vertex>& bitangents() = 0;
+	    virtual std::vector<Vec3f>& bitangents() = 0;
 	    /**
 	     * @return Amount of indices inside the hardware buffer
 	     */

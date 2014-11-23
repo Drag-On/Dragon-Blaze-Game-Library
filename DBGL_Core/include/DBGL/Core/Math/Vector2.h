@@ -52,11 +52,6 @@ namespace dbgl
 	     */
 	    Vector2(T x, T y);
 	    /**
-	     * @brief Constructs a new vector from uv coordinates
-	     * @param uv UV coordinates
-	     */
-	    Vector2(IMesh::UV const& uv);
-	    /**
 	     * @brief Copies a vector
 	     */
 	    Vector2(const BaseVectorType &other);
@@ -85,16 +80,6 @@ namespace dbgl
 	    Vector2<T>& translate(T x, T y);
 	    // Operators
 	    using BaseVectorType::operator=;
-	    /**
-	     * @brief Assign from uv coordinate
-	     * @param uv UV to assign from
-	     * @return Reference to this
-	     */
-	    Vector2<T>& operator=(IMesh::UV const& uv);
-	    /**
-	     * @brief Convert into uv
-	     */
-	    operator IMesh::UV() const;
 
 	private:
     };

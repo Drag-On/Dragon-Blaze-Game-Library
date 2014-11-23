@@ -33,23 +33,23 @@ namespace dbgl
 	    /**
 	     * @copydoc IMesh::vertices()
 	     */
-	    virtual std::vector<Vertex>& vertices();
+	    virtual std::vector<Vec3f>& vertices();
 	    /**
 	     * @copydoc IMesh::normals()
 	     */
-	    virtual std::vector<Vertex>& normals();
+	    virtual std::vector<Vec3f>& normals();
 	    /**
 	     * @copydoc IMesh::uvs()
 	     */
-	    virtual std::vector<UV>& uvs();
+	    virtual std::vector<Vec2f>& uvs();
 	    /**
 	     * @copydoc IMesh::tangents()
 	     */
-	    virtual std::vector<Vertex>& tangents();
+	    virtual std::vector<Vec3f>& tangents();
 	    /**
 	     * @copydoc IMesh::bitangents()
 	     */
-	    virtual std::vector<Vertex>& bitangents();
+	    virtual std::vector<Vec3f>& bitangents();
 	    /**
 	     * @copydoc IMesh::getIndexCount()
 	     */
@@ -115,19 +115,19 @@ namespace dbgl
 	    std::vector<unsigned short> m_indices;
 	    GLuint m_indexBuffer = GL_INVALID_VALUE;
 	    unsigned int m_indexCount = 0;
-	    std::vector<Vertex> m_vertices;
+	    std::vector<Vec3f> m_vertices;
 	    GLuint m_vertexBuffer = GL_INVALID_VALUE;
 	    unsigned int m_vertexCount = 0;
-	    std::vector<Vertex> m_normals;
+	    std::vector<Vec3f> m_normals;
 	    GLuint m_normalBuffer = GL_INVALID_VALUE;
 	    unsigned int m_normalsCount = 0;
-	    std::vector<UV> m_uv;
+	    std::vector<Vec2f> m_uv;
 	    GLuint m_uvBuffer = GL_INVALID_VALUE;
 	    unsigned int m_uvCount = 0;
-	    std::vector<Vertex> m_tangents;
+	    std::vector<Vec3f> m_tangents;
 	    GLuint m_tangentBuffer = GL_INVALID_VALUE;
 	    unsigned int m_tangentCount = 0;
-	    std::vector<Vertex> m_bitangents;
+	    std::vector<Vec3f> m_bitangents;
 	    GLuint m_bitangentBuffer = GL_INVALID_VALUE;
 	    unsigned int m_bitangentCount = 0;
 	    Usage m_usage = Usage::StaticDraw;

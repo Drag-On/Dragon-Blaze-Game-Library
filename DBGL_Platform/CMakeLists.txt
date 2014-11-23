@@ -22,6 +22,7 @@ project (DBGL_PLATFORM C CXX)
 
 set (DBGL_PLATFORM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include") 			# Path to own headers
 set (DBGL_PLATFORM_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 	# Path to own library file
+set (DBGL_CORE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/../DBGL_Core/include") 	# Path to core headers (for template classes)
 set (GLEW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glew/lib/") 					# Path to GLEW library file
 set (GLEW_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib/glew/include") 			# Path to GLEW headers
 set (GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib/glfw/src/") 					# Path to GLFW library file
@@ -94,6 +95,7 @@ endif(DOXYGEN_FOUND)
 ### Include directories
 ######################################################################
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
+include_directories(${DBGL_CORE_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${GLFW_INCLUDE_DIR})
 

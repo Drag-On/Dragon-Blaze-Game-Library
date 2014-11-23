@@ -17,10 +17,6 @@ namespace dbgl
 	template<typename T> Vector3<T>::Vector3(T x, T y, T z) : BaseVectorType(3, x, y, z)
 	{
 	}
-	
-	template<typename T> Vector3<T>::Vector3(IMesh::Vertex const& vert) : BaseVectorType(3, vert.x, vert.y, vert.z)
-	{
-	}
 
 	template<typename T> Vector3<T>::Vector3(const BaseVectorType &other) : BaseVectorType(other)
 	{
@@ -66,17 +62,5 @@ namespace dbgl
 		this->y() += y;
 		this->z() += z;
 		return *this;
-	}
-
-	template<typename T> Vector3<T>& Vector3<T>::operator=(IMesh::Vertex const& vert)
-	{
-	    this->x() = vert.x;
-	    this->y() = vert.y;
-	    this->z() = vert.z;
-	}
-
-	template<typename T>  Vector3<T>::operator IMesh::Vertex() const
-	{
-	    return IMesh::Vertex{x(), y(), z()};
 	}
 }

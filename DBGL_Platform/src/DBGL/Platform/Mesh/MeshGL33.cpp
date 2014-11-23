@@ -21,27 +21,27 @@ namespace dbgl
 	return m_indices;
     }
 
-    auto MeshGL33::vertices() -> std::vector<Vertex>&
+    auto MeshGL33::vertices() -> std::vector<Vec3f>&
     {
 	return m_vertices;
     }
 
-    auto MeshGL33::normals() -> std::vector<Vertex>&
+    auto MeshGL33::normals() -> std::vector<Vec3f>&
     {
 	return m_normals;
     }
 
-    auto MeshGL33::uvs() -> std::vector<UV>&
+    auto MeshGL33::uvs() -> std::vector<Vec2f>&
     {
 	return m_uv;
     }
 
-    auto MeshGL33::tangents() -> std::vector<Vertex>&
+    auto MeshGL33::tangents() -> std::vector<Vec3f>&
     {
 	return m_tangents;
     }
 
-    auto MeshGL33::bitangents() -> std::vector<Vertex>&
+    auto MeshGL33::bitangents() -> std::vector<Vec3f>&
     {
 	return m_bitangents;
     }
@@ -98,7 +98,7 @@ namespace dbgl
 	{
 	    if (m_vertexBuffer == GL_INVALID_VALUE)
 		m_vertexBuffer = generateBuffer();
-	    fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER, m_vertexCount * sizeof(Vertex), &m_vertices[0],
+	    fillBuffer(m_vertexBuffer, GL_ARRAY_BUFFER, m_vertexCount * sizeof(Vec3f), &m_vertices[0],
 		    convertUsage(m_usage));
 	}
 	else if (m_vertexBuffer != GL_INVALID_VALUE)
@@ -116,7 +116,7 @@ namespace dbgl
 	{
 	    if (m_normalBuffer == GL_INVALID_VALUE)
 		m_normalBuffer = generateBuffer();
-	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER, m_normalsCount * sizeof(Vertex), &m_normals[0],
+	    fillBuffer(m_normalBuffer, GL_ARRAY_BUFFER, m_normalsCount * sizeof(Vec3f), &m_normals[0],
 		    convertUsage(m_usage));
 	}
 	else if (m_normalBuffer != GL_INVALID_VALUE)
@@ -125,7 +125,7 @@ namespace dbgl
 	{
 	    if (m_uvBuffer == GL_INVALID_VALUE)
 		m_uvBuffer = generateBuffer();
-	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uvCount * sizeof(UV), &m_uv[0], GL_STATIC_DRAW);
+	    fillBuffer(m_uvBuffer, GL_ARRAY_BUFFER, m_uvCount * sizeof(Vec2f), &m_uv[0], GL_STATIC_DRAW);
 	}
 	else if (m_uvBuffer != GL_INVALID_VALUE)
 	    glDeleteBuffers(1, &m_uvBuffer);
@@ -133,7 +133,7 @@ namespace dbgl
 	{
 	    if (m_tangentBuffer == GL_INVALID_VALUE)
 		m_tangentBuffer = generateBuffer();
-	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER, m_tangentCount * sizeof(Vertex), &m_tangents[0],
+	    fillBuffer(m_tangentBuffer, GL_ARRAY_BUFFER, m_tangentCount * sizeof(Vec3f), &m_tangents[0],
 		    GL_STATIC_DRAW);
 	}
 	else if (m_tangentBuffer != GL_INVALID_VALUE)
@@ -142,7 +142,7 @@ namespace dbgl
 	{
 	    if (m_bitangentBuffer == GL_INVALID_VALUE)
 		m_bitangentBuffer = generateBuffer();
-	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER, m_bitangentCount * sizeof(Vertex),
+	    fillBuffer(m_bitangentBuffer, GL_ARRAY_BUFFER, m_bitangentCount * sizeof(Vec3f),
 		    &m_bitangents[0], GL_STATIC_DRAW);
 	}
 	else if (m_bitangentBuffer != GL_INVALID_VALUE)

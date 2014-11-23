@@ -42,9 +42,9 @@ TEST(MeshUtility,generateNormals)
     ASSERT(mesh2->normals().size() == mesh->normals().size());
     for(unsigned int i = 0; i < mesh2->normals().size(); i++)
     {
-	ASSERT(mesh2->normals()[i].x == mesh->normals()[i].x);
-	ASSERT(mesh2->normals()[i].y == mesh->normals()[i].y);
-	ASSERT(mesh2->normals()[i].z == mesh->normals()[i].z);
+	ASSERT(mesh2->normals()[i].x() == mesh->normals()[i].x());
+	ASSERT(mesh2->normals()[i].y() == mesh->normals()[i].y());
+	ASSERT(mesh2->normals()[i].z() == mesh->normals()[i].z());
     }
 }
 
