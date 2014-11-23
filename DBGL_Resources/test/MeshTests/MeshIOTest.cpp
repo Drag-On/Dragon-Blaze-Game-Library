@@ -41,11 +41,11 @@ TEST(MeshIO,obj)
 {
     // MeshIO object
     MeshIO io {};
-    if (!io.addFormat("plugins\\Mesh\\OBJ\\libDBGL_OBJ." + Module::getFileExtension()))
+    if (!io.addFormat("plugins/Mesh/OBJ/libDBGL_OBJ." + Module::getFileExtension()))
 	FAIL();
     else
     {
-	auto mesh = io.load("plugins\\Mesh\\OBJ\\test.obj");
+	auto mesh = io.load("plugins/Mesh/OBJ/test.obj");
 	ASSERT(mesh);
 	ASSERT(mesh->vertices().size() == 6 * 6);
 	ASSERT(mesh->normals().size() == 0);
