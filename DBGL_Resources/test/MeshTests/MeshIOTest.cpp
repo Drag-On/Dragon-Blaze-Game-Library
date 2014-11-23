@@ -47,7 +47,12 @@ TEST(MeshIO,obj)
     {
 	auto mesh = io.load("plugins\\Mesh\\OBJ\\test.obj");
 	ASSERT(mesh);
-	ASSERT(mesh->getVertexCount() == 8);
+	ASSERT(mesh->vertices().size() == 6 * 6);
+	ASSERT(mesh->normals().size() == 0);
+	ASSERT(mesh->uvs().size() == 6 * 6);
+	ASSERT(mesh->tangents().size() == 0);
+	ASSERT(mesh->bitangents().size() == 0);
+	ASSERT(mesh->indices().size() == 6 * 6);
     }
 }
 
