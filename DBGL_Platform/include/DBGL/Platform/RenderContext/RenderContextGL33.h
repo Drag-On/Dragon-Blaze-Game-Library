@@ -135,6 +135,10 @@ namespace dbgl
 	     * @brief Current clear color
 	     */
 	    std::array<float, 3> m_clearcolor{{0.0f, 0.0f, 0.0f}};
+	    /**
+	     * @brief Caches if multisampling is enabled
+	     */
+	    bool m_msaaEnabled = false;
 
 	    /**
 	     * @brief Currently bound frame buffer

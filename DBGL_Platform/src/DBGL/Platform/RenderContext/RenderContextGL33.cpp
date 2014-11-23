@@ -26,7 +26,7 @@ namespace dbgl
     void RenderContextGL33::clear(int bitmask)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying its buffers.");
+	    bind();
 	GLbitfield flags = 0;
 	if (bitmask & Buffer::COLOR)
 	    flags |= GL_COLOR_BUFFER_BIT;
@@ -40,7 +40,7 @@ namespace dbgl
     void RenderContextGL33::setDepthTest(DepthTestValue val)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying depth testing.");
+	    bind();
 	switch (val)
 	{
 	    case DepthTestValue::Always:
@@ -89,7 +89,7 @@ namespace dbgl
     void RenderContextGL33::setAlphaBlend(AlphaBlendValue src, AlphaBlendValue dest)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying alpha blending.");
+	    bind();
 	if(src == AlphaBlendValue::Zero && dest == AlphaBlendValue::Zero)
 	{
 	    glDisable(GL_BLEND);
@@ -124,7 +124,7 @@ namespace dbgl
     void RenderContextGL33::setFaceCulling(FaceCullingValue val)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying culling settings.");
+	    bind();
 	switch(val)
 	{
 	    case FaceCullingValue::Off:
@@ -157,18 +157,17 @@ namespace dbgl
     void RenderContextGL33::setMultisampling(bool msaa)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying multisampling settings.");
+	    bind();
 	if(msaa)
 	    glEnable(GL_MULTISAMPLE);
 	else
 	    glDisable(GL_MULTISAMPLE);
+	m_msaaEnabled = msaa;
     }
 
     bool RenderContextGL33::getMultisampling() const
     {
-	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before retrieving multisampling settings.");
-	return glIsEnabled(GL_MULTISAMPLE);
+	return m_msaaEnabled;
     }
 
     std::array<float, 3> RenderContextGL33::getClearColor() const
@@ -178,8 +177,8 @@ namespace dbgl
 
     void RenderContextGL33::setClearColor(std::array<float, 3> color)
     {
-	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying clear color.");
+	if (!isBound())
+	    bind();
 	m_clearcolor = color;
 	glClearColor(m_clearcolor[0], m_clearcolor[1], m_clearcolor[2], 0);
     }
@@ -201,7 +200,7 @@ namespace dbgl
     void RenderContextGL33::viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before modifying viewport");
+	    bind();
 	glViewport(x, y, width, height);
     }
 
@@ -209,7 +208,7 @@ namespace dbgl
 	    ITexture::PixelType type, unsigned int bufsize, char* buf)
     {
 	if(!isBound())
-	    throw std::runtime_error("Need to bind render context before reading pixels.");
+	    bind();
 	// Allocate buffer
 	unsigned int imgDataSize { width * height * TextureGL33::pixelFormatSize(format) };
 	if(!buf || bufsize < imgDataSize)
@@ -221,6 +220,9 @@ namespace dbgl
 
     void RenderContextGL33::drawMesh(IMesh* mesh)
     {
+	if(!isBound())
+	    bind();
+
 	MeshGL33* pMesh = dynamic_cast<MeshGL33*> (mesh);
 	if(pMesh == nullptr)
 	    throw std::invalid_argument("Cannot render null mesh.");
