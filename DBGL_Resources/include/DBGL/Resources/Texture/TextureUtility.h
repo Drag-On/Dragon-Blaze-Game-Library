@@ -13,7 +13,7 @@
 
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Texture/ITexture.h"
-#include "DBGL/Core/Utility/Color.h"
+#include "DBGL/Resources/Color/Color.h"
 
 namespace dbgl
 {

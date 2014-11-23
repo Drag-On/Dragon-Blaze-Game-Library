@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Utility/MeshUtility.h"
+#include "DBGL/Resources/Mesh/MeshUtility.h"
 
 namespace dbgl
 {

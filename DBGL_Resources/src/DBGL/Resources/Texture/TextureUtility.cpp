@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Utility/TextureUtility.h"
+#include "DBGL/Resources/Texture/TextureUtility.h"
 
 namespace dbgl
 {

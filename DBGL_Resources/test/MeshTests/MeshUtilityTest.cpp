@@ -11,7 +11,7 @@
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/PLatform/Implementation/OpenGL33.h"
 #include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Utility/MeshUtility.h"
+#include "DBGL/Resources/Mesh/MeshUtility.h"
 
 using namespace dbgl;
 using namespace std;

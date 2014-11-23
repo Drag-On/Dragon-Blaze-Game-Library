@@ -8,7 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Utility/Color.h"
+#include "DBGL/Resources/Color/Color.h"
 
 namespace dbgl
 {

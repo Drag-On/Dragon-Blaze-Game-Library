@@ -8,13 +8,13 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Utility/TextureUtility.h"
-#include "DBGL/Core/Math/Utility.h"
-#include "DBGL/Resources/Texture/TextureIO.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Implementation/OpenGL33.h"
+#include "DBGL/Core/Test/Test.h"
+#include "DBGL/Core/Math/Utility.h"
+#include "DBGL/Resources/Texture/TextureIO.h"
+#include "DBGL/Resources/Texture/TextureUtility.h"
 
 using namespace dbgl;
 using namespace std;

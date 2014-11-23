@@ -11,7 +11,7 @@
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/PLatform/Implementation/OpenGL33.h"
 #include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Utility/TextureUtility.h"
+#include "DBGL/Resources/Texture/TextureUtility.h"
 
 using namespace dbgl;
 using namespace std;

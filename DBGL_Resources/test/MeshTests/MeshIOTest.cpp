@@ -8,13 +8,13 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Utility/MeshUtility.h"
-#include "DBGL/Core/Math/Utility.h"
-#include "DBGL/Resources/Mesh/MeshIO.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Implementation/OpenGL33.h"
+#include "DBGL/Core/Test/Test.h"
+#include "DBGL/Core/Math/Utility.h"
+#include "DBGL/Resources/Mesh/MeshUtility.h"
+#include "DBGL/Resources/Mesh/MeshIO.h"
 
 using namespace dbgl;
 using namespace std;
