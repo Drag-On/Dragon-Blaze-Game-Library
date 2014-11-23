@@ -23,14 +23,14 @@
 
 template<TEMPLATE_LIST> Vector<T,N>::Vector()
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] = 0;
 }
 
 template<TEMPLATE_LIST> Vector<T,N>::Vector(const Vector<T,N> &other)
 {
 	assert(this->getDimension() == other.getDimension());
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] = other[i];
 }
 
@@ -58,7 +58,7 @@ template<TEMPLATE_LIST> constexpr std::size_t Vector<T,N>::getDimension()
 template<TEMPLATE_LIST> T Vector<T,N>::getSquaredLength() const
 {
 	T sqlen = 0;
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		sqlen += (*this)[i] * (*this)[i];
 	return sqlen;
 }
@@ -71,7 +71,7 @@ template<TEMPLATE_LIST> T Vector<T,N>::getLength() const
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::normalize()
 {
 	T length = getLength();
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] /= length;
 	return *this;
 }
@@ -97,7 +97,7 @@ template<TEMPLATE_LIST> Vector<T,N> Vector<T,N>::cross(Vector<T,N> const& rhs) c
 
 template<TEMPLATE_LIST> bool Vector<T,N>::isZero() const
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		if((*this)[i] != 0)
 			return false;
 	return true;
@@ -117,7 +117,7 @@ template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator=(Vector<T,N> const& r
 { 
 	if (*this != rhs)
 	{ 
-		for(int i = 0; i < getDimension(); i++)
+		for(unsigned int i = 0; i < getDimension(); i++)
 			(*this)[i] = rhs[i];
 	} 
 	return *this;
@@ -132,7 +132,7 @@ template<TEMPLATE_LIST> RETURN_QUALIFIER Vector<T,N> Vector<T,N>::operator+(Vect
 
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator+=(Vector<T,N> const& rhs)
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] += rhs[i];
 	return *this;
 }
@@ -146,7 +146,7 @@ template<TEMPLATE_LIST> RETURN_QUALIFIER Vector<T,N> Vector<T,N>::operator-(Vect
 	
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator-=(Vector<T,N> const& rhs)
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] -= rhs[i];
 	return *this;
 }
@@ -154,7 +154,7 @@ template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator-=(Vector<T,N> const& 
 template<TEMPLATE_LIST> RETURN_QUALIFIER T Vector<T,N>::operator*(Vector<T,N> const& rhs) const
 {
 	T dotProd = 0;
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		dotProd += (*this)[i] * rhs[i];
 	return dotProd;
 }
@@ -168,7 +168,7 @@ template<TEMPLATE_LIST> RETURN_QUALIFIER Vector<T,N> Vector<T,N>::operator*(T co
 	
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator*=(T const& rhs)
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] *= rhs;
 	return *this;
 }
@@ -176,7 +176,7 @@ template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator*=(T const& rhs)
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator*=(Vector<T,N> const& rhs)
 {
 	auto temp(*this); // Need copy of unmodified data
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 	{
 		int i1 = (i+1) % getDimension();
 		int i2 = (i+2) % getDimension();
@@ -194,7 +194,7 @@ template<TEMPLATE_LIST> RETURN_QUALIFIER Vector<T,N> Vector<T,N>::operator/(T co
 	
 template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator/=(T const& rhs)
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		(*this)[i] /= rhs;
 	return *this;
 }
@@ -202,14 +202,14 @@ template<TEMPLATE_LIST> Vector<T,N>& Vector<T,N>::operator/=(T const& rhs)
 template<TEMPLATE_LIST> Vector<T,N> Vector<T,N>::operator-() const
 {
 	auto tmp(*this);
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		tmp[i] = -(*this)[i];
 	return tmp;
 }
 
 template<TEMPLATE_LIST> bool Vector<T,N>::operator==(Vector<T,N> const& rhs) const
 {
-	for(int i = 0; i < getDimension(); i++)
+	for(unsigned int i = 0; i < getDimension(); i++)
 		if((*this)[i] != rhs[i])
 			return false;
 	return true;
@@ -245,10 +245,7 @@ template<TEMPLATE_LIST> T& Vector<T,N>::operator[](std::size_t const& index)
 	if(index < getDimension())
 		return m_elements[index];
 	else
-	{
-		LOG.error("Tried to access element %d of %d-length vector!", index, getDimension());
-		exit(EXIT_FAILURE);
-	}
+		throw std::out_of_range("Tried to access element " + std::to_string(index) + " of " + std::to_string(getDimension()) + "-length vector!");
 }
 
 template<TEMPLATE_LIST> const T& Vector<T,N>::operator[](std::size_t const& index) const
@@ -256,8 +253,5 @@ template<TEMPLATE_LIST> const T& Vector<T,N>::operator[](std::size_t const& inde
 	if(index < getDimension())
 		return m_elements[index];
 	else
-	{
-		LOG.error("Tried to access element %d of %d-length vector!", index, getDimension());
-		exit(EXIT_FAILURE);
-	}
+		throw std::out_of_range("Tried to access element " + std::to_string(index) + " of " + std::to_string(getDimension()) + "-length vector!");
 }

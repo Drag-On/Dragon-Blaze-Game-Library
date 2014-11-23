@@ -37,8 +37,7 @@ namespace dbgl
     void TextureGL33::write(unsigned int level, unsigned int width, unsigned int height, PixelFormat format,
 	    PixelType type, void const* data)
     {
-	if(s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
 	GLint formatgl = pixelFormat2GL(format);
 	glTexImage2D(texType2GL(m_type), level, intFormatgl, width, height, 0, formatgl, pixelType2GL(type),
@@ -54,10 +53,15 @@ namespace dbgl
     void TextureGL33::writeCompressed(unsigned int level, unsigned int width, unsigned int height,
     		    PixelFormatCompressed format, unsigned int size, void const* data)
     {
-	if (s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	auto glFormat = compPixelFormat2GL(format);
 	glCompressedTexImage2D(texType2GL(m_type), level, glFormat, width, height, 0, size, data);
+	// Update cached tex size
+	GLint temp { 0 };
+	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_WIDTH, &temp);
+	m_width = temp;
+	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_HEIGHT, &temp);
+	m_height = temp;
     }
 
     void TextureGL33::setRowAlignment(RowAlignment type, unsigned int align)
@@ -67,29 +71,25 @@ namespace dbgl
 
     void TextureGL33::setMinFilter(MinFilter filter)
     {
-	if(s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	glTexParameteri(texType2GL(m_type), GL_TEXTURE_MIN_FILTER, minFilter2GL(filter));
     }
 
     void TextureGL33::setMagFilter(MagFilter filter)
     {
-	if(s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	glTexParameteri(texType2GL(m_type), GL_TEXTURE_MAG_FILTER, magFilter2GL(filter));
     }
 
     void TextureGL33::generateMipMaps()
     {
-	if(s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	glGenerateMipmap(texType2GL(m_type));
     }
 
     void TextureGL33::getSize(unsigned int& width, unsigned int& height, unsigned int level)
     {
-	if(s_pBoundTex != this)
-	    throw("Texture not bound!");
+	glBindTexture(texType2GL(m_type), m_id);
 	GLint temp{};
 	glGetTexLevelParameteriv(texType2GL(m_type), level, GL_TEXTURE_WIDTH, &temp);
 	width = temp;
@@ -105,6 +105,12 @@ namespace dbgl
     unsigned int TextureGL33::getHeight() const
     {
 	return m_height;
+    }
+
+    void TextureGL33::getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level) const
+    {
+	glBindTexture(texType2GL(m_type), m_id);
+	glGetTexImage(texType2GL(m_type), level, pixelFormat2GL(format), pixelType2GL(type), buffer);
     }
 
     GLuint TextureGL33::getHandle() const

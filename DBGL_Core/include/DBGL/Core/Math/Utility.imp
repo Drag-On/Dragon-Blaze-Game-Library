@@ -30,5 +30,10 @@ namespace dbgl
     {
 	return radians * (180 / pi());
     }
+
+    template<typename T, typename R> constexpr R clamp(T val, T min, T max)
+    {
+	return static_cast<R>(val < min ? min : val > max ? max : val);
+    }
 }
 

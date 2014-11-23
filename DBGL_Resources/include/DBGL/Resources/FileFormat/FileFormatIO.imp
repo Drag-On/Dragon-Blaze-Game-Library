@@ -1,0 +1,72 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template <class T, class M> FileFormatIO<T, M>::FileFormatIO()
+    {
+    }
+
+    template <class T, class M> FileFormatIO<T, M>::~FileFormatIO()
+    {
+	for(auto mod : m_modules)
+	    delete mod;
+    }
+
+    template <class T, class M> bool FileFormatIO<T, M>::addFormat(std::string const& filename)
+    {
+	return addFormat(Filename{filename});
+    }
+
+    template <class T, class M> bool FileFormatIO<T, M>::addFormat(Filename const& filename)
+    {
+	auto mod = new AdvancedModule<M>{ filename };
+	if(mod->load())
+	    m_modules.push_back(mod);
+	else
+	    return false;
+	return true;
+    }
+
+    template <class T, class M> T* FileFormatIO<T, M>::load(std::string const& filename) const
+    {
+	return load(Filename{filename});
+    }
+
+    template <class T, class M> T* FileFormatIO<T, M>::load(Filename const& filename) const
+    {
+	for(auto mod : m_modules)
+	{
+	    if(mod->get()->matchExtension(filename.getExtension()) && mod->get()->canLoad())
+	    {
+		return mod->get()->load(filename);
+	    }
+	}
+	return nullptr;
+    }
+
+    template <class T, class M> bool FileFormatIO<T, M>::write(T* tex, std::string const& filename) const
+    {
+	return write(tex, Filename{filename});
+    }
+
+    template <class T, class M> bool FileFormatIO<T, M>::write(T* tex, Filename const& filename) const
+    {
+	for(auto mod : m_modules)
+	{
+	    if(mod->get()->matchExtension(filename.getExtension()) && mod->get()->canWrite())
+	    {
+		return mod->get()->write(tex, filename);
+	    }
+	}
+	return false;
+    }
+
+}

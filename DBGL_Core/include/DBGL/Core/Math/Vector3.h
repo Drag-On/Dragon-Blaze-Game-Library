@@ -17,6 +17,7 @@
 #include "Utility.h"
 #include "Vector.h"
 #include "DBGL/Core/Debug/Log.h"
+#include "DBGL/Platform/Mesh/IMesh.h"
 
 namespace dbgl
 {
@@ -50,6 +51,11 @@ namespace dbgl
 	     * @brief Constructs a new vector from the given coordinates
 	     */
 	    Vector3(T x, T y, T z);
+	    /**
+	     * @brief Create vector from vertex
+	     * @param vert Vertex to use for initialization
+	     */
+	    Vector3(IMesh::Vertex const& vert);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -87,6 +93,16 @@ namespace dbgl
 	    Vector3<T>& translate(T x, T y, T z);
 	    // Operators
 	    using BaseVectorType::operator=;
+	    /**
+	     * @brief Assign from vertex
+	     * @param vert Vertex to assign from
+	     * @return Reference to this
+	     */
+	    Vector3<T>& operator=(IMesh::Vertex const& vert);
+	    /**
+	     * @brief Convert into vertex
+	     */
+	    operator IMesh::Vertex() const;
 
 	private:
     };

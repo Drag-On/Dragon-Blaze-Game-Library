@@ -28,6 +28,30 @@ namespace dbgl
 	analyze(path);
     }
 
+    Filename::Filename(Filename const& other) : m_completeFile{other.m_completeFile},
+	    m_filename{other.m_filename}, m_extension{other.m_extension}, m_isRelative{other.m_isRelative}
+    {
+    }
+
+    Filename& Filename::operator=(Filename const& path)
+    {
+	if(this != &path)
+	{
+	    m_completeFile = path.m_completeFile;
+	    m_extension = path.m_extension;
+	    m_filename = path.m_filename;
+	    m_isRelative = path.m_isRelative;
+	}
+	return *this;
+    }
+
+    Filename& Filename::operator=(std::string const& path)
+    {
+	m_completeFile = path;
+	analyze(path);
+	return *this;
+    }
+
     bool Filename::isRelative() const
     {
 	return m_isRelative;

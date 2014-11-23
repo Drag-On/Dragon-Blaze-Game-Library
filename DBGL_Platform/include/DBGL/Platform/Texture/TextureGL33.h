@@ -40,6 +40,7 @@ namespace dbgl
 	    virtual void getSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 	    virtual unsigned int getWidth() const;
 	    virtual unsigned int getHeight() const;
+	    virtual void getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level = 0) const;
 	    /**
 	     * @return Internal texture handle
 	     */

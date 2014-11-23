@@ -45,14 +45,14 @@ namespace dbgl
     };
 }
 
-#define ASSERT(chk) if((chk)){}else{throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
+#define ASSERT(chk) do{if(!(chk)){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}}while(false)
 
 #define ASSERT_EQ(first, last) ASSERT((first) == (last))
 
-#define ASSERT_THROWS(chk,ex) {bool thrown = false; try {(chk);}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
+#define ASSERT_THROWS(chk,ex) do{bool thrown = false; try {(chk);}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}while(false)
 
-#define ASSERT_NOTHROW(chk) try{(chk);}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}
+#define ASSERT_NOTHROW(chk) do{try{(chk);}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}}while(false)
 
-#define FAIL() {throw AssertException{__FILE__, __LINE__, "Failed unconditionally."};}
+#define FAIL() do{throw AssertException{__FILE__, __LINE__, "Failed unconditionally."};}while(false)
 
 #endif /* ASSERT_H_ */

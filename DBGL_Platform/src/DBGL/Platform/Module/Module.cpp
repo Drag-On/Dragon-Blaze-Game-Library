@@ -53,4 +53,20 @@ namespace dbgl
 	return reinterpret_cast<Func>(internal_os::GetProcAddress(m_handle, name.c_str()));
 #endif
     }
+
+    Module::Module(Module&& other) : m_path{other.m_path}, m_handle{other.m_handle}
+    {
+	other.m_handle = nullptr;
+	other.m_path = "";
+    }
+
+    Module& Module::operator=(Module&& other)
+    {
+	if(this != &other)
+	{
+	    m_handle = other.m_handle;
+	    m_path = other.m_path;
+	}
+	return *this;
+    }
 }

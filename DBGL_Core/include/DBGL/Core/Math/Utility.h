@@ -104,6 +104,14 @@ namespace dbgl
      * @return The angle in degrees
      */
     template<typename T> constexpr T toDegrees(T radians);
+    /**
+     * @brief Clamps the value into the specified range
+     * @param val Value to clamp
+     * @param min Min value
+     * @param max Max value
+     * @return Clamped value
+     */
+    template<typename T, typename R = T> constexpr R clamp(T val, T min, T max);
 }
 
 #include "Utility.imp"
