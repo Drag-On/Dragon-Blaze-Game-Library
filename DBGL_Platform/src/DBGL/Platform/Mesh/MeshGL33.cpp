@@ -14,6 +14,18 @@ namespace dbgl
 {
     MeshGL33::~MeshGL33()
     {
+	if (m_indexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_indexBuffer);
+	if (m_vertexBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_vertexBuffer);
+	if (m_normalBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_normalBuffer);
+	if (m_uvBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_uvBuffer);
+	if (m_tangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_tangentBuffer);
+	if (m_bitangentBuffer != GL_INVALID_VALUE)
+	    glDeleteBuffers(1, &m_bitangentBuffer);
     }
 
     auto MeshGL33::indices() -> std::vector<unsigned short>&
