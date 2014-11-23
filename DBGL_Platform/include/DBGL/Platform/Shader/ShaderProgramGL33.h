@@ -67,6 +67,10 @@ namespace dbgl
 
 	private:
 	    GLuint m_id;
+
+	    static GLuint s_activeProgram;
+
+	    void useInternal() const;
     };
 }
 
