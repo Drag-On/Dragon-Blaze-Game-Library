@@ -20,11 +20,7 @@ using GimmeZeroType = int(*)();
 
 int main()
 {
-#ifdef __linux__
-    Module mod{"test_module.so"};
-#elif __WIN32
-    Module mod{"test_module.dll"};
-#endif
+    Module mod{"test_module." + Module::getFileExtension()};
     if(!mod.load())
     {
 	cerr << "Unable to load module" << endl;
@@ -38,11 +34,7 @@ int main()
     }
     cout << "Simple way: gimmeZero() returned: " << gimmeZero() << endl;
 
-#ifdef __linux__
-    AdvancedModule<IAdvancedModule> amod{"test_module.so"};
-#elif __WIN32
-    AdvancedModule<IAdvancedModule> amod{"test_module.dll"};
-#endif
+    AdvancedModule<IAdvancedModule> amod{"test_module." + Module::getFileExtension()};
     if(!amod.load())
     {
 	cerr << "Unable to load advanced module" << endl;

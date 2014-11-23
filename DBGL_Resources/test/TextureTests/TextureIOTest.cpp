@@ -66,7 +66,7 @@ TEST(TextureIO,bmp)
 {
     // TextureIO object
     TextureIO io {};
-    if (!io.addFormat("plugins\\Texture\\BMP\\libDBGL_BMP.dll"))
+    if (!io.addFormat("plugins\\Texture\\BMP\\libDBGL_BMP." + Module::getFileExtension()))
 	FAIL();
     else
 	testImg(io, "plugins\\Texture\\BMP\\test.bmp");
@@ -76,7 +76,7 @@ TEST(TextureIO,tga)
 {
     // TextureIO object
     TextureIO io {};
-    if (!io.addFormat("plugins\\Texture\\TGA\\libDBGL_TGA.dll"))
+    if (!io.addFormat("plugins\\Texture\\TGA\\libDBGL_TGA." + Module::getFileExtension()))
 	FAIL();
     else
 	testImg(io, "plugins\\Texture\\TGA\\test.tga");
@@ -86,7 +86,7 @@ TEST(TextureIO,dds)
 {
     // TextureIO object
     TextureIO io {};
-    if (!io.addFormat("plugins\\Texture\\DDS\\libDBGL_DDS.dll"))
+    if (!io.addFormat("plugins\\Texture\\DDS\\libDBGL_DDS." + Module::getFileExtension()))
 	FAIL();
     else
     {
