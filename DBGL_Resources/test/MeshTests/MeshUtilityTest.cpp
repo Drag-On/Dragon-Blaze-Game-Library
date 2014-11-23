@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Platform/Platform.h"
-#include "DBGL/PLatform/Implementation/OpenGL33.h"
+#include "DBGL/Platform/Implementation/OpenGL33.h"
 #include "DBGL/Core/Test/Test.h"
 #include "DBGL/Resources/Mesh/MeshUtility.h"
 
