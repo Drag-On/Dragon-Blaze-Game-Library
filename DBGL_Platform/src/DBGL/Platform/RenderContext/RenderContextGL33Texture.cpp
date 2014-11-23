@@ -14,6 +14,9 @@ namespace dbgl
 {
     RenderContextGL33Texture::RenderContextGL33Texture(ITexture* texture, bool createDepthBuf)
     {
+	if(!isBound())
+	    bind();
+
 	TextureGL33* tex = dynamic_cast<TextureGL33*>(texture);
 	if(!tex)
 	    throw std::invalid_argument("RenderContextGL33Texture can only handle OpenGL textures!");
