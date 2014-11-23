@@ -26,6 +26,10 @@ namespace dbgl
 	if (m_code.length() == 0)
 	    return;
 
+	// In case the shader has already been compiled -> delete old result
+	if(m_id != 0)
+	    glDeleteShader(m_id);
+
 	// Create shader object
 	m_id = glCreateShader(shaderType2GL(m_type));
 
