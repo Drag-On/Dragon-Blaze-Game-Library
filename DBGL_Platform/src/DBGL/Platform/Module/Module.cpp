@@ -69,4 +69,15 @@ namespace dbgl
 	}
 	return *this;
     }
+
+    std::string Module::getFileExtension()
+    {
+#ifdef __linux__
+        return "so";
+#elif __WIN32
+	return "dll";
+#elif __APPLE__
+	return "dylib"
+#endif
+    }
 }

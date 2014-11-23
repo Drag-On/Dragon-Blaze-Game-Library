@@ -78,6 +78,12 @@ namespace dbgl
 	     * @return Function pointer to the requested function or nullptr if something went wrong
 	     */
 	    Func getFunction(std::string const& name);
+
+	    /**
+	     * @brief Gets the default module file extension for the current operating system.
+	     * @return "ddl" on windows, "so" on linux, "dylib" on mac
+	     */
+	    static std::string getFileExtension();
 	private:
 	    // Prevent copies
 	    Module(Module& other) = delete;
