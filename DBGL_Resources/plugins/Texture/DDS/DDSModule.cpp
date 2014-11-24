@@ -203,7 +203,7 @@ namespace dbgl
 		    return nullptr;
 		// Read actual image data
 		const unsigned int bufsize { fileHeader.mipMapCount > 1 ? fileHeader.pitchLinearSize * 2 : fileHeader.pitchLinearSize };
-		char buffer[bufsize];
+		char buffer[bufsize]{};
 		file.read(buffer, bufsize);
 		// Close file
 		file.close();
@@ -240,12 +240,12 @@ namespace dbgl
 		    // Vertically flip texture to fit OpenGL needs
 		    flipVertical(buffer, offset, width, height, blockSize, static_cast<FourCC>(fileHeader.pixelFormat.fourCC));
 		    // Send compressed image to GL
-		    unsigned int size = ((width + 3) / 4.0) * ((height + 3) / 4.0) * blockSize;
+		    unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 		    tex->writeCompressed(level, width, height, format, size, buffer + offset);
 		    // Prepare for next mipmap
 		    offset += size;
-		    width /= 2.0;
-		    height /= 2.0;
+		    width /= 2;
+		    height /= 2;
 		    // If the texture is not squared, width or height might become 0
 		    // All mipmaps must have at least a width and height of 1
 		    if (width < 1)

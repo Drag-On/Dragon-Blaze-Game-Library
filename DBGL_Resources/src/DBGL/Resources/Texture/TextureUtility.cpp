@@ -100,11 +100,11 @@ namespace dbgl
 
     auto TextureUtility::createImageData(ITexture* tex) -> ImageData
     {
-	char* buffer = new char[tex->getHeight() * tex->getWidth() * 4];
+	const unsigned int size = tex->getHeight() * tex->getWidth() * 4;
+	unsigned char buffer[size]{};
 	tex->setRowAlignment(ITexture::RowAlignment::PACK, 1);
-	tex->getPixelData(ITexture::PixelFormat::RGBA, ITexture::PixelType::UBYTE, buffer, 0);
-	ImageData img{reinterpret_cast<unsigned char*>(buffer), tex->getWidth(), tex->getHeight()};
-	delete [] buffer;
+	tex->getPixelData(ITexture::PixelFormat::RGBA, ITexture::PixelType::UBYTE, reinterpret_cast<char*>(&buffer[0]), 0);
+	ImageData img{&buffer[0], tex->getWidth(), tex->getHeight()};
 	return img;
     }
 
