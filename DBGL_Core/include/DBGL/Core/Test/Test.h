@@ -130,17 +130,21 @@ namespace dbgl
     static dbgl::AutoTerminationRegistration register_##test_suite##_term(#test_suite, test_suite##_term);	\
     static void test_suite##_term()
 
-#define DBGL_CREATE_TEST_MAIN				\
-int main()						\
-{							\
-    for(auto tc : dbgl::AutoRegistration::getMap())	\
-    {							\
-    	tc.second.initialize();				\
-	tc.second.run();				\
-	tc.second.terminate();				\
-	tc.second.printStat();				\
-    }							\
-    return 0;						\
+#define DBGL_CREATE_TEST_MAIN									\
+int main()											\
+{												\
+    for(auto tc : dbgl::AutoRegistration::getMap())						\
+    {												\
+	try { tc.second.initialize(); }								\
+	catch (...) { std::cerr << tc.second.getName() << " initialize failed!" << std::endl; }	\
+	try { tc.second.run(); }								\
+	catch (...) { std::cerr << tc.second.getName() << " run failed!" << std::endl; } 	\
+	try { tc.second.terminate(); }								\
+	catch (...) { std::cerr << tc.second.getName() << " terminate failed!" << std::endl; } 	\
+	try { tc.second.printStat(); }								\
+	catch (...) { std::cerr << tc.second.getName() << " printstat failed!" << std::endl; } 	\
+    }												\
+    return 0;											\
 }
 
 #ifdef DBGL_TEST_MAIN

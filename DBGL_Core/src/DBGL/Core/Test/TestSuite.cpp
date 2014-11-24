@@ -29,7 +29,17 @@ namespace dbgl
 	m_successful = 0;
 	for(auto test : m_testCases)
 	{
-	    if(test.run())
+	    bool success = false;
+	    try
+	    {
+		success = test.run();
+	    }
+	    catch (std::exception& e)
+	    {
+		std::cerr << "::\"" + test.getName() + "\" threw an unexpected exception!" << std::endl;
+		std::cerr << e.what() << std::endl;
+	    }
+	    if(success)
 	    {
 		m_successful++;
 		std::cout << "::\"" + test.getName() + "\" OK!" << std::endl;
