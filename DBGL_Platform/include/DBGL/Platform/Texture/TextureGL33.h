@@ -11,6 +11,7 @@
 #ifndef TEXTUREGL33_H_
 #define TEXTUREGL33_H_
 
+#include <stdexcept>
 #include <GL/glew.h>
 #include "ITexture.h"
 

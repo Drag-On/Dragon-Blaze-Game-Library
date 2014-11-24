@@ -41,14 +41,19 @@ namespace dbgl
 	glBindTexture(texType2GL(m_type), m_id);
 	GLint intFormatgl = hasAlpha(format) ? GL_RGBA : GL_RGB;
 	GLint formatgl = pixelFormat2GL(format);
+	glGetError();
 	glTexImage2D(texType2GL(m_type), level, intFormatgl, width, height, 0, formatgl, pixelType2GL(type),
 		data);
+	auto err = glGetError();
 	// Update cached tex size
 	GLint temp { 0 };
 	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_WIDTH, &temp);
 	m_width = temp;
 	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_HEIGHT, &temp);
 	m_height = temp;
+	if(err != GL_NO_ERROR)
+	    throw std::runtime_error { std::string { "glTexImage2D failed: " }
+		+ reinterpret_cast<const char*>(glewGetErrorString(err)) };
     }
 
     void TextureGL33::writeCompressed(unsigned int level, unsigned int width, unsigned int height,
@@ -57,13 +62,18 @@ namespace dbgl
 	glPixelStorei(rowAlignment2GL(RowAlignment::UNPACK), m_rowAlignmentUnpack);
 	glBindTexture(texType2GL(m_type), m_id);
 	auto glFormat = compPixelFormat2GL(format);
+	glGetError();
 	glCompressedTexImage2D(texType2GL(m_type), level, glFormat, width, height, 0, size, data);
+	auto err = glGetError();
 	// Update cached tex size
 	GLint temp { 0 };
 	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_WIDTH, &temp);
 	m_width = temp;
 	glGetTexLevelParameteriv(texType2GL(m_type), 0, GL_TEXTURE_HEIGHT, &temp);
 	m_height = temp;
+	if(err != GL_NO_ERROR)
+	    throw std::runtime_error{ std::string{"glCompressedTexImage2D failed: "}
+		+ reinterpret_cast<const char*>(glewGetErrorString(err)) };
     }
 
     void TextureGL33::setRowAlignment(RowAlignment type, unsigned int align)
@@ -121,7 +131,12 @@ namespace dbgl
     {
 	glPixelStorei(rowAlignment2GL(RowAlignment::PACK), m_rowAlignmentPack);
 	glBindTexture(texType2GL(m_type), m_id);
+	glGetError();
 	glGetTexImage(texType2GL(m_type), level, pixelFormat2GL(format), pixelType2GL(type), buffer);
+	auto err = glGetError();
+	if(err != GL_NO_ERROR)
+	    throw std::runtime_error{ std::string{"glGetTexImage failed: "}
+		+ reinterpret_cast<const char*>(glewGetErrorString(err)) };
     }
 
     GLuint TextureGL33::getHandle() const
