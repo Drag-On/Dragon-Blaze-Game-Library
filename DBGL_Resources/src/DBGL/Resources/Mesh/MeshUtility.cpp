@@ -8,6 +8,12 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include <cstring>
+#include <array>
+#include <map>
+#include "DBGL/Core/Math/Vector3.h"
+#include "DBGL/Core/Math/Vector2.h"
+#include "DBGL/Core/Collection/Tree/KdTree.h"
 #include "DBGL/Resources/Mesh/MeshUtility.h"
 
 namespace dbgl
@@ -118,7 +124,7 @@ namespace dbgl
 	    {0.0, 1.0},
 	};
 	for (int i = 1; i < 6; i++)
-	    memcpy(&uvs[i * 4], &uvs[0], 4 * sizeof(decltype(uvs)));
+	    memcpy(&uvs[i * 4], &uvs[0], 4 * sizeof(Vec2f));
 	mesh->uvs().insert(mesh->uvs().begin(), std::begin(uvs), std::end(uvs));
 	if (sendToGPU)
 	    mesh->updateBuffers();
@@ -291,5 +297,119 @@ namespace dbgl
 	}
     }
 
+    void MeshUtility::optimize(IMesh* mesh, float maxCompatibilityAngle)
+    {
+	// Vertices into kd-tree for better performance
+	std::vector<unsigned int> indices(mesh->vertices().size());
+	std::iota(std::begin(indices), std::end(indices), 0); // Fill with increasing values, starting with 0
+	KdTree<unsigned int, Vec3f> vertexTree {mesh->vertices().begin(), mesh->vertices().end(), indices.begin(), indices.end()};
+
+	std::map<unsigned int, unsigned int> replace{};
+
+	// Method to check normal compatibility
+	auto checkNormalCompat = [&maxCompatibilityAngle, &mesh](unsigned int id1, unsigned int id2) -> bool
+	{
+	    if(mesh->normals().size() < std::max(id1, id2))
+		return true;
+	    auto theta = mesh->normals()[id1].getNormalized().dot(mesh->normals()[id2].getNormalized());
+	    if (theta < -1.0)
+		theta = -1.0f;
+	    else if (theta > 1.0)
+		theta = 1.0f;
+	    auto angle = std::acos(theta);
+	    return (angle < maxCompatibilityAngle);
+	};
+	// Method to check uv compatibility
+	auto checkUvCompat = [&mesh](unsigned int id1, unsigned int id2) -> bool
+	{
+	    if(mesh->uvs().size() < std::max(id1, id2))
+		return true;
+	    return (mesh->uvs()[id1].isSimilar(mesh->uvs()[id2], 0.000001f));
+	};
+	auto mergeVertices = [&mesh, &replace](unsigned int id1, unsigned int id2)
+	{
+	    // Average coordinates
+	    mesh->vertices()[id1] = (mesh->vertices()[id1] + mesh->vertices()[id2]) / 2;
+	    // Average normals
+	    if(mesh->normals().size() > std::max(id1, id2))
+	    {
+		mesh->normals()[id1] += mesh->normals()[id2];
+		mesh->normals()[id1].normalize();
+	    }
+	    // Average uvs
+	    if(mesh->uvs().size() > std::max(id1, id2))
+	    {
+		mesh->uvs()[id1] = (mesh->uvs()[id1] + mesh->uvs()[id2]) / 2;
+	    }
+	    // Memorize index to replace
+	    replace.insert({id1, id2});
+	};
+
+	// Iterate over all vertices
+	for(unsigned int i = 0; i < mesh->vertices().size(); i++)
+	{
+	    if (replace.find(i) != replace.end())
+		continue;
+	    auto& vert = mesh->vertices()[i];
+	    // Find all similar vertices
+	    std::vector<KdTree<unsigned int, Vec3f>::Container> possible{};
+	    Box<float> range{vert-Vec3f{0.0001f, 0.0001f, 0.0001f}, Vec3f{0.0002f, 0.0002f, 0.0002f}};
+	    vertexTree.findRange(range, possible);
+	    for(auto c : possible)
+	    {
+		auto curId = c.data;
+		if (curId == i)
+		    continue;
+		if(replace.find(curId) != replace.end())
+		    continue;
+		bool normalCompat = checkNormalCompat(i, curId);
+		bool uvCompat = checkUvCompat(i, curId);
+		// If everything is compatible -> merge vertices
+		if(normalCompat && uvCompat)
+		    mergeVertices(curId, i);
+	    }
+	}
+	// Replace merged vertices
+	for (unsigned int i = 0; i < mesh->indices().size(); i++)
+	{
+	    auto it = replace.find(mesh->indices()[i]);
+	    if (it != replace.end())
+	    {
+		mesh->indices()[i] = it->second;
+	    }
+	}
+	// Remove unused vertices
+	std::vector<unsigned int> replaceIndices{};
+	replaceIndices.reserve(replace.size());
+	for (auto it = replace.begin(); it != replace.end(); ++it)
+	{
+	    replaceIndices.push_back(it->first);
+	}
+	std::sort(replaceIndices.begin(), replaceIndices.end());
+	unsigned int offset = 0;
+	for(auto it = replaceIndices.begin(); it != replaceIndices.end(); ++it)
+	{
+	    unsigned int rIndex = *it - offset;
+	    mesh->vertices().erase(mesh->vertices().begin() + rIndex);
+	    if(mesh->normals().size() > rIndex)
+		mesh->normals().erase(mesh->normals().begin() + rIndex);
+	    if(mesh->uvs().size() > rIndex)
+		mesh->uvs().erase(mesh->uvs().begin() + rIndex);
+	    offset++;
+	    // Decrement all indices higher than that by 1
+	    for (unsigned int i = 0; i < mesh->indices().size(); i++)
+	    {
+		if(mesh->indices()[i] > rIndex)
+		    mesh->indices()[i] = mesh->indices()[i] - 1;
+	    }
+	}
+	// If there are tangents and bitangents, recalculate them
+	if(mesh->tangents().size() > 0 || mesh->bitangents().size() > 0)
+	{
+	    mesh->tangents().clear();
+	    mesh->bitangents().clear();
+	    generateTangentBase(mesh);
+	}
+    }
 
 }

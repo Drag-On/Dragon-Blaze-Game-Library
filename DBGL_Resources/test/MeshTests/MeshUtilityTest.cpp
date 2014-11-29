@@ -77,3 +77,30 @@ TEST(MeshUtility,reverseNormals)
 	ASSERT(normal1 == - normal2);
     }
 }
+
+TEST(MeshUtility,optimizeMesh)
+{
+    auto cube = MeshUtility::createCube(false);
+    IMesh* copy{cube};
+    ASSERT_EQ(copy->indices().size(), 6 * 6);
+    ASSERT_EQ(copy->vertices().size(), 4 * 6);
+    ASSERT_EQ(copy->normals().size(), 4 * 6);
+    ASSERT_EQ(copy->uvs().size(), 4 * 6);
+    MeshUtility::optimize(copy, 0); // Angle of 0°
+    ASSERT_EQ(copy->indices().size(), 6 * 6);
+    ASSERT_EQ(copy->vertices().size(), 4 * 6);
+    ASSERT_EQ(copy->normals().size(), 4 * 6);
+    ASSERT_EQ(copy->uvs().size(), 4 * 6);
+    copy->uvs().clear(); // Don't use uvs
+    ASSERT_EQ(copy->uvs().size(), 0);
+    MeshUtility::optimize(copy, 0); // Angle of 0°
+    ASSERT_EQ(copy->indices().size(), 6 * 6);
+    ASSERT_EQ(copy->vertices().size(), 4 * 6);
+    ASSERT_EQ(copy->normals().size(), 4 * 6);
+    ASSERT_EQ(copy->uvs().size(), 0);
+    MeshUtility::optimize(copy, 1.74532925f); // Angle of 100°
+    ASSERT_EQ(copy->indices().size(), 6 * 6);
+    ASSERT_EQ(copy->vertices().size(), 8);
+    ASSERT_EQ(copy->normals().size(), 8);
+    ASSERT_EQ(copy->uvs().size(), 0);
+}

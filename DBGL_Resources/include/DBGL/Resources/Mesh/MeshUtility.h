@@ -11,12 +11,9 @@
 #ifndef INCLUDE_DBGL_CORE_UTILITY_MESHUTILITY_H_
 #define INCLUDE_DBGL_CORE_UTILITY_MESHUTILITY_H_
 
-#include <cstring>
-#include <array>
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
-#include "DBGL/Core/Math/Vector3.h"
-#include "DBGL/Core/Math/Vector2.h"
+
 
 namespace dbgl
 {
@@ -69,6 +66,12 @@ namespace dbgl
 	     * @param[in,out] mesh Mesh to reverse normals for
 	     */
 	    static void reverseNormals(IMesh* mesh);
+	    /**
+	     * @brief Joins compatible vertices, i.e. vertices with the same position and uv coordinates and similar normals
+	     * @param mesh Mesh to optimize
+	     * @param maxCompatibilityAngle Maximum angle in radians for normals to count as compatible
+	     */
+	    static void optimize(IMesh* mesh, float maxCompatibilityAngle = 0);
     };
 }
 
