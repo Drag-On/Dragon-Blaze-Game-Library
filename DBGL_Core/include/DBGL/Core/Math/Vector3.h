@@ -17,7 +17,6 @@
 #include "Utility.h"
 #include "Vector.h"
 #include "DBGL/Core/Debug/Log.h"
-#include "DBGL/Platform/Mesh/IMesh.h"
 
 namespace dbgl
 {
