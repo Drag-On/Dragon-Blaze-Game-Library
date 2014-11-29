@@ -15,6 +15,7 @@
 #include <limits>
 #include <exception>
 #include <cstdint>
+#include <algorithm>
 
 namespace dbgl
 {
