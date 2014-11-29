@@ -51,7 +51,7 @@ namespace dbgl
 
 #define ASSERT_NEQ(first, last) ASSERT((first) != (last))
 
-#define ASSERT_THROWS(chk,ex) do{bool thrown = false; try {(chk);}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}while(false)
+#define ASSERT_THROWS(chk,ex) do{bool thrown = false; try {{chk;}}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}while(false)
 
 #define ASSERT_NOTHROW(chk) do{try{(chk);}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}}while(false)
 
