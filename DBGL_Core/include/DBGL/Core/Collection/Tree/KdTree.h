@@ -190,9 +190,9 @@ namespace dbgl
 	    void findRange(Hyperrectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const;
 	    /**
 	     * @brief Collects all nodes stored in the tree
-	     * @return The list of all nodes
+	     * @param[out] container Adds all nodes to this list
 	     */
-	    std::vector<Container> getAll() const;
+	    void getAll(std::vector<Container>& container) const;
 	    /**
 	     * @return Amount of elements held by the tree
 	     */
@@ -270,10 +270,11 @@ namespace dbgl
 
 	    /**
 	     * @brief Collects all child nodes of the passed node
+	     * @param[out] container All children will be added here
 	     * @param node Node to get all children from
 	     * @return The list of all child nodes of node
 	     */
-	    std::vector<Container> getAllChildren(Node const& node) const;
+	    void getAllChildren(std::vector<Container>& container, Node const& node) const;
 
 	    /**
 	     * @brief Collects all child nodes of the passed node and the passed node and inserts them into list

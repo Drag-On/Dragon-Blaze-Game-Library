@@ -266,7 +266,8 @@ namespace dbgl
 	else
 	{
 	    // It exists, thus collect all of its children and rebuild the partial tree from them
-	    auto children = getAllChildren(*node2Delete);
+	    std::vector<Container> children{};
+	    getAllChildren(children, *node2Delete);
 	    auto parent = node2Delete->parent;
 	    Node** attachHere = &m_pRoot;
 	    if (parent != nullptr)
@@ -283,15 +284,13 @@ namespace dbgl
 	}
     }
 
-    template<typename Data, typename Point> auto KdTree<Data, Point>::getAllChildren(
-	    Node const& node) const -> std::vector<Container>
+    template<typename Data, typename Point> void KdTree<Data, Point>::getAllChildren(std::vector<Container>& container,
+	    Node const& node) const
     {
-	std::vector<Container> list {};
 	if (node.leftChild != nullptr)
-	    getAllNodes(*node.leftChild, list);
+	    getAllNodes(*node.leftChild, container);
 	if (node.rightChild != nullptr)
-	    getAllNodes(*node.rightChild, list);
-	return list;
+	    getAllNodes(*node.rightChild, container);
     }
 
     template<typename Data, typename Point> void KdTree<Data, Point>::getAllNodes(Node const& node,
@@ -304,23 +303,22 @@ namespace dbgl
 	list.push_back( { node.point, node.data });
     }
 
-    template<typename Data, typename Point> auto KdTree<Data, Point>::getAll() const -> std::vector<Container>
+    template<typename Data, typename Point> void KdTree<Data, Point>::getAll(std::vector<Container>& container) const
     {
 	if (m_pRoot != nullptr)
 	{
-	    auto list = getAllChildren(*m_pRoot);
-	    list.push_back( { m_pRoot->point, m_pRoot->data });
-	    return list;
+	    getAllChildren(container, *m_pRoot);
+	    container.push_back( { m_pRoot->point, m_pRoot->data });
 	}
-	else
-	    return std::vector<Container>();
     }
 
     template<typename Data, typename Point> void KdTree<Data, Point>::balance()
     {
 	if (m_pRoot != nullptr)
 	{
-	    auto nodes = getAllChildren(*m_pRoot);
+	    std::vector<Container> nodes{};
+	    nodes.reserve(m_size);
+	    getAllChildren(nodes, *m_pRoot);
 	    nodes.push_back( { m_pRoot->point, m_pRoot->data });
 	    free(m_pRoot);
 	    m_pRoot = buildTree(nodes.begin(), nodes.end(), 0);
