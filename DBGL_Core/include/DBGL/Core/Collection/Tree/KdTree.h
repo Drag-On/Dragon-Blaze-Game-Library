@@ -103,6 +103,17 @@ namespace dbgl
 	     */
 	    template<class RandomAccessIterator> KdTree(RandomAccessIterator begin, RandomAccessIterator end);
 	    /**
+	     * @brief Constructs an k-d tree from the passed elements
+	     * @details The iterators have to be random-access iterators to a list of Point/Data
+	     * @param beginPoints Iterator pointing to the first point to add
+	     * @param endPoints iterator pointing to the last point to add
+	     * @param beginDat Iterator pointing to the first data to add
+	     * @param endDat iterator pointing to the last data to add
+	     */
+	    template<class RandomAccessIterator1, class RandomAccessIterator2> KdTree(RandomAccessIterator1 beginPoints,
+		    RandomAccessIterator1 endPoints, RandomAccessIterator2 beginDat,
+		    RandomAccessIterator2 endDat);
+	    /**
 	     * @brief Copies a k-d tree
 	     * @param other Tree to copy
 	     */

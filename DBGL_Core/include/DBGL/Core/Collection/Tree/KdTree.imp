@@ -22,6 +22,25 @@ namespace dbgl
 	m_size = std::distance(begin, end);
     }
 
+    template<typename Data, typename Point> template<class RandomAccessIterator1, class RandomAccessIterator2> KdTree<
+	    Data, Point>::KdTree(RandomAccessIterator1 beginPoint, RandomAccessIterator1 endPoint,
+	    RandomAccessIterator2 beginDat, RandomAccessIterator2 endDat)
+    {
+	m_size = std::distance(beginPoint, endPoint);
+	if(static_cast<int>(m_size) != std::distance(beginDat, endDat))
+	    throw std::range_error {"Invalid size of point- and data list."};
+	std::vector<Container> containers{};
+	containers.reserve(m_size);
+	auto itD = beginDat;
+	for (auto itP = beginPoint; itP != endPoint; ++itP)
+	{
+	    containers.push_back({*itP, *itD});
+	    ++itD;
+	}
+
+	m_pRoot = buildTree(containers.begin(), containers.end(), 0, nullptr);
+    }
+
     template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> const& other)
     {
 	m_pRoot = copyNode(*other.m_pRoot);
@@ -31,6 +50,7 @@ namespace dbgl
     template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> && other)
     {
 	m_pRoot = other.m_pRoot;
+	m_size = other.m_size;
 	other.m_pRoot = nullptr;
 	other.m_size = 0;
     }
