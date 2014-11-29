@@ -312,9 +312,11 @@ TEST(KdTree,getAll)
 	    {Vec2f(-0.5f, -0.5f), 5},
     };
     KdTree<int, Vec2f> tree2(data.begin(), data.end());
-    auto allNodes = tree2.getAll();
+    std::vector<KdTree<int, Vec2f>::Container> allNodes;
+    tree2.getAll(allNodes);
     ASSERT_EQ(allNodes.size(), tree2.size());
-    allNodes = tree.getAll();
+    allNodes.clear();
+    tree.getAll(allNodes);
     ASSERT_EQ(allNodes.size(), tree.size());
 }
 
