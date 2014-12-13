@@ -19,3 +19,5 @@ DBGL_SCENE_*
 Doxyfile
 DBGL_Base/.suppressed
 /DBGL_Core/documentation
+DBGL_Base
+DBGL_Scene
