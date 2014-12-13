@@ -1,0 +1,182 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template <typename T> HandleFactory<T>::Handle::Handle() : m_pFactory { nullptr }
+    {
+	m_pId = new T{ InvalidHandle };
+	m_pRefCount = new unsigned long{1};
+    }
+
+    template <typename T> HandleFactory<T>::Handle::Handle(T id, HandleFactory<T>* factory) : m_pFactory { factory }
+    {
+	m_pId = new T{ id };
+	m_pRefCount = new unsigned long{1};
+    }
+
+    template <typename T> HandleFactory<T>::Handle::Handle(Handle const& other)
+    {
+	m_pId = other.m_pId;
+	m_pRefCount = other.m_pRefCount;
+	*m_pRefCount += 1;
+	m_pFactory = other.m_pFactory;
+    }
+
+    template <typename T> HandleFactory<T>::Handle::~Handle()
+    {
+	*m_pRefCount -= 1;
+	checkDelete();
+    }
+
+    template <typename T> typename HandleFactory<T>::Handle& HandleFactory<T>::Handle::operator=(Handle const& other)
+    {
+	if (this != &other)
+	{
+	    *m_pRefCount -= 1;
+	    checkDelete();
+
+	    m_pId = other.m_pId;
+	    m_pRefCount = other.m_pRefCount;
+	    *m_pRefCount += 1;
+	    m_pFactory = other.m_pFactory;
+	}
+	return *this;
+    }
+
+    template <typename T> bool HandleFactory<T>::Handle::isValid() const
+    {
+	return m_pId != nullptr && *m_pId != InvalidHandle && m_pFactory->isValid(*this);
+    }
+
+    template <typename T> void HandleFactory<T>::Handle::invalidate()
+    {
+	if(isValid())
+	    m_pFactory->invalidate(*this);
+    }
+
+    template <typename T> T HandleFactory<T>::Handle::getValue() const
+    {
+	if(m_pId != nullptr)
+	    return *m_pId;
+	else
+	    return InvalidHandle;
+    }
+
+    template<typename T> void HandleFactory<T>::Handle::checkDelete()
+    {
+	if (m_pRefCount != nullptr && *m_pRefCount <= 0)
+	{
+	    invalidate();
+	    delete m_pId;
+	    m_pId = nullptr;
+	    delete m_pRefCount;
+	    m_pRefCount = nullptr;
+	}
+    }
+
+    template <typename T> HandleFactory<T>::~HandleFactory()
+    {
+	// Invalidate all handles that are still valid
+	for(auto h : m_handles)
+	    *h = Handle::InvalidHandle;
+    }
+
+    template<typename T> auto HandleFactory<T>::next() -> Handle
+    {
+	auto handle = Handle(getNext(), this);
+	m_handles.insert(handle.m_pId);
+	return std::move(handle);
+    }
+
+    template<typename T> auto HandleFactory<T>::request(T id) -> Handle
+    {
+	auto handle = Handle(tryUse(id), this);
+	m_handles.insert(handle.m_pId);
+	return std::move(handle);
+    }
+
+    template<typename T> bool HandleFactory<T>::isValid(Handle const& handle)
+    {
+	return *(handle.m_pId) < m_next && std::find(m_open.begin(), m_open.end(), *(handle.m_pId)) == m_open.end();
+    }
+
+    template <typename T> void HandleFactory<T>::invalidate(Handle& handle)
+    {
+	m_open.push_back(*(handle.m_pId));
+	*(handle.m_pId) = Handle::InvalidHandle;
+	m_handles.erase (m_handles.find(handle.m_pId));
+    }
+
+    template<typename T> void HandleFactory<T>::clean()
+    {
+	std::sort(m_open.begin(), m_open.end(), std::greater<int>());
+	for(auto it = m_open.begin(); it != m_open.end(); ++it)
+	{
+	    if(*it == m_next-1)
+	    {
+		m_next--;
+		m_open.erase(it);
+		--it;
+	    }
+	    else
+		return;
+	}
+    }
+
+    template<typename T> T HandleFactory<T>::getNext()
+    {
+	if(m_open.empty())
+	{
+	    if (m_next >= std::numeric_limits<T>::max())
+		throw std::overflow_error("No unique identifiers left.");
+
+	    m_next++;
+	    return m_next - 1;
+	}
+	else
+	{
+	    T use = m_open.back();
+	    m_open.pop_back();
+	    return use;
+	}
+    }
+
+    template<typename T> T HandleFactory<T>::tryUse(T id)
+    {
+	if(id >= m_next)
+	{
+	    // ID must not be too big.
+	    if (id >= std::numeric_limits<T>::max())
+		throw std::overflow_error("ID out of bounds.");
+
+	    // Push unused IDs between current next and id to open list.
+	    for(T cur = m_next; cur < id; cur++)
+		m_open.push_back(cur);
+	    m_next = id + 1;
+	    return id;
+	}
+	else
+	{
+	    // ID must be in open list
+	    for(auto it = m_open.begin(); it != m_open.end(); ++it)
+	    {
+		if(*it == id)
+		{
+		    m_open.erase(it);
+		    return id;
+		}
+	    }
+	    throw std::runtime_error("ID " + std::to_string(id) + " already taken.");
+	}
+    }
+}
+
+
