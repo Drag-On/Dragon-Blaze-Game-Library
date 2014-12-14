@@ -9,9 +9,10 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include "DBGL/Platform/Module/Module.h"
-#include "DBGL/Platform/Module/AdvancedModule.h"
-#include "IAdvancedModule.h"
+
+#include "DBGL/Platform/Library/Library.h"
+#include "DBGL/Platform/Library/SimpleLibrary.h"
+#include "ISimpleLibrary.h"
 
 using namespace dbgl;
 using namespace std;
@@ -20,7 +21,7 @@ using GimmeZeroType = int(*)();
 
 int main()
 {
-    Module mod{"test_module." + Module::getFileExtension()};
+    Library mod{"test_module." + Library::getFileExtension()};
     if(!mod.load())
     {
 	cerr << "Unable to load module" << endl;
@@ -34,7 +35,7 @@ int main()
     }
     cout << "Simple way: gimmeZero() returned: " << gimmeZero() << endl;
 
-    AdvancedModule<IAdvancedModule> amod{"test_module." + Module::getFileExtension()};
+    SimpleLibrary<ISimpleLibrary> amod{"test_module." + Library::getFileExtension()};
     if(!amod.load())
     {
 	cerr << "Unable to load advanced module" << endl;

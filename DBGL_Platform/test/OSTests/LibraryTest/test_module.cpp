@@ -8,14 +8,28 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef IADVANCEDMODULE_H_
-#define IADVANCEDMODULE_H_
+#include "ISimpleLibrary.h"
 
-class IAdvancedModule
+extern "C" int gimmeZero()
+{
+    return 0;
+}
+
+class ModImpl : public ISimpleLibrary
 {
     public:
-	virtual ~IAdvancedModule(){};
-	virtual float add(float a, float b) = 0;
+	virtual float add(float a, float b)
+	{
+	    return a + b;
+	}
 };
 
-#endif /* IADVANCEDMODULE_H_ */
+extern "C" ISimpleLibrary* create()
+{
+    return new ModImpl();
+}
+
+extern "C" void destroy(ISimpleLibrary* mod)
+{
+    delete mod;
+}

@@ -12,8 +12,9 @@
 #define INCLUDE_DBGL_RESOURCES_FILEFORMATIO_H_
 
 #include <iostream>
+
+#include "DBGL/Platform/Library/SimpleLibrary.h"
 #include "DBGL/Platform/File/Filename.h"
-#include "DBGL/Platform/Module/AdvancedModule.h"
 
 namespace dbgl
 {
@@ -79,7 +80,7 @@ namespace dbgl
 	    bool write(T* tex, Filename const& filename) const;
 
 	protected:
-	    std::vector<AdvancedModule<M>*> m_modules {};
+	    std::vector<SimpleLibrary<M>*> m_modules {};
     };
 }
 

@@ -8,19 +8,19 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Platform/Module/Module.h"
+#include "DBGL/Platform/Library/Library.h"
 
 namespace dbgl
 {
-    Module::Module(std::string const& path) : m_path{path}
+    Library::Library(std::string const& path) : m_path{path}
     {
     }
 
-    Module::Module(Filename const& path) : m_path{path}
+    Library::Library(Filename const& path) : m_path{path}
     {
     }
 
-    Module::~Module()
+    Library::~Library()
     {
         if(m_handle)
         {
@@ -32,7 +32,7 @@ namespace dbgl
         }
     }
 
-    bool Module::load()
+    bool Library::load()
     {
 #ifdef __linux__
         m_handle = internal_os::dlopen(m_path.get().c_str(), RTLD_LAZY);
@@ -45,7 +45,7 @@ namespace dbgl
 	    return true;
     }
 
-    auto Module::getFunction(std::string const& name) -> Func
+    auto Library::getFunction(std::string const& name) -> Func
     {
 #ifdef __linux__
         return reinterpret_cast<Func>(internal_os::dlsym(m_handle, name.c_str()));
@@ -54,13 +54,13 @@ namespace dbgl
 #endif
     }
 
-    Module::Module(Module&& other) : m_path{other.m_path}, m_handle{other.m_handle}
+    Library::Library(Library&& other) : m_path{other.m_path}, m_handle{other.m_handle}
     {
 	other.m_handle = nullptr;
 	other.m_path = "";
     }
 
-    Module& Module::operator=(Module&& other)
+    Library& Library::operator=(Library&& other)
     {
 	if(this != &other)
 	{
@@ -70,7 +70,7 @@ namespace dbgl
 	return *this;
     }
 
-    std::string Module::getFileExtension()
+    std::string Library::getFileExtension()
     {
 #ifdef __linux__
         return "so";

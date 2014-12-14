@@ -26,8 +26,8 @@ set(LIBRARIES2COPY
 ######################################################################
 ### Add test cases
 ######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/ModuleTest"
-				 "${PROJECT_BINARY_DIR}/ModuleTest")
+add_subdirectory("${PROJECT_SOURCE_DIR}/LibraryTest"
+				 "${PROJECT_BINARY_DIR}/LibraryTest")
 				 
 ######################################################################
 ### Copy common resource folder

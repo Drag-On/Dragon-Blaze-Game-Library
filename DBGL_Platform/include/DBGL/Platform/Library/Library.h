@@ -8,8 +8,8 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef MODULE_H_
-#define MODULE_H_
+#ifndef LIBRARY_H_
+#define LIBRARY_H_
 
 #include <string>
 #include <cstring>
@@ -21,18 +21,18 @@ namespace dbgl
     {
 #ifdef __linux__
 	#include <dlfcn.h>
-	using ModHandle = void*;
+	using LibHandle = void*;
 #elif __WIN32
         #undef _MSC_EXTENSIONS
 	#include <windows.h>
-	using ModHandle = HINSTANCE;
+	using LibHandle = HINSTANCE;
 #endif
     }
 
     /**
      * @brief Represents a dynamic library that can be loaded on runtime
      */
-    class Module
+    class Library
     {
 	public:
 	    /**
@@ -40,37 +40,37 @@ namespace dbgl
 	     */
 	    using Func = void(*)(void);
 	    /**
-	     * @brief Constructs a new module from a file
+	     * @brief Constructs a new library from a file
 	     * @param path Path of the file
 	     */
-	    Module(std::string const& path);
+	    Library(std::string const& path);
 	    /**
-	     * @brief Constructs a new module from a file
+	     * @brief Constructs a new library from a file
 	     * @param path Path of the file
 	     */
-	    Module(Filename const& path);
+	    Library(Filename const& path);
 	    /**
 	     * @brief Move constructor
-	     * @param other Module to move
+	     * @param other Library to move
 	     */
-	    Module(Module&& other);
+	    Library(Library&& other);
 	    /**
 	     * @brief Move assignment
-	     * @param other Module to move
-	     * @return Reference to this module
+	     * @param other Library to move
+	     * @return Reference to this library
 	     */
-	    Module& operator=(Module&& other);
+	    Library& operator=(Library&& other);
 	    /**
 	     * @brief Destructor
 	     */
-	    ~Module();
+	    ~Library();
 	    /**
-	     * @brief Loads the module into memory
-	     * @return True in case the module was loaded, otherwise false
+	     * @brief Loads the library into memory
+	     * @return True in case the library was loaded, otherwise false
 	     */
 	    bool load();
 	    /**
-	     * @brief Retrieves a pointer to a function within this module
+	     * @brief Retrieves a pointer to a function within this library
 	     * @details The function has to be a c-style function. It may have any signature, however
 	     * 		this signature needs to be known to the caller, since the returned function
 	     * 		pointer needs to be cast into the right format.
@@ -80,18 +80,18 @@ namespace dbgl
 	    Func getFunction(std::string const& name);
 
 	    /**
-	     * @brief Gets the default module file extension for the current operating system.
+	     * @brief Gets the default library file extension for the current operating system.
 	     * @return "ddl" on windows, "so" on linux, "dylib" on mac
 	     */
 	    static std::string getFileExtension();
 	private:
 	    // Prevent copies
-	    Module(Module& other) = delete;
-	    Module& operator=(Module& other) = delete;
+	    Library(Library& other) = delete;
+	    Library& operator=(Library& other) = delete;
 
 	    Filename m_path;
-            internal_os::ModHandle m_handle{};
+            internal_os::LibHandle m_handle{};
     };
 }
 
-#endif /* MODULE_H_ */
+#endif /* LIBRARY_H_ */

@@ -10,50 +10,50 @@
 
 namespace dbgl
 {
-    template<class Base> AdvancedModule<Base>::AdvancedModule(std::string const& path) : m_module{path}
+    template<class Base> SimpleLibrary<Base>::SimpleLibrary(std::string const& path) : m_lib{path}
     {
     }
 
-    template<class Base> AdvancedModule<Base>::AdvancedModule(Filename const& path) : m_module{path}
+    template<class Base> SimpleLibrary<Base>::SimpleLibrary(Filename const& path) : m_lib{path}
     {
     }
 
-    template<class Base> AdvancedModule<Base>::~AdvancedModule()
+    template<class Base> SimpleLibrary<Base>::~SimpleLibrary()
     {
 	if (m_pDestroy)
 	    m_pDestroy(m_pClass);
     }
 
-    template<class Base> bool AdvancedModule<Base>::load()
+    template<class Base> bool SimpleLibrary<Base>::load()
     {
-	if(!m_module.load())
+	if(!m_lib.load())
 	    return false;
-	m_pCreate = reinterpret_cast<CreateFunc>(m_module.getFunction("create"));
-	m_pDestroy = reinterpret_cast<DestroyFunc>(m_module.getFunction("destroy"));
+	m_pCreate = reinterpret_cast<CreateFunc>(m_lib.getFunction("create"));
+	m_pDestroy = reinterpret_cast<DestroyFunc>(m_lib.getFunction("destroy"));
 	if(!m_pCreate || !m_pDestroy)
 	    return false;
 	m_pClass = m_pCreate();
 	return true;
     }
 
-    template<typename Base> Base* AdvancedModule<Base>::get()
+    template<typename Base> Base* SimpleLibrary<Base>::get()
     {
 	return m_pClass;
     }
 
-    template<typename Base> AdvancedModule<Base>::AdvancedModule(AdvancedModule<Base>&& other) :
-	    m_module{other.m_module}, m_pClass{other.m_pClass}, m_pCreate{other.m_pCreate}, m_pDestroy{other.m_pDestroy}
+    template<typename Base> SimpleLibrary<Base>::SimpleLibrary(SimpleLibrary<Base>&& other) :
+	    m_lib{other.m_lib}, m_pClass{other.m_pClass}, m_pCreate{other.m_pCreate}, m_pDestroy{other.m_pDestroy}
     {
 	other.m_pClass = nullptr;
 	other.m_pCreate = nullptr;
 	other.m_pDestroy = nullptr;
     }
 
-    template<typename Base> AdvancedModule<Base>& AdvancedModule<Base>::operator=(AdvancedModule<Base>&& other)
+    template<typename Base> SimpleLibrary<Base>& SimpleLibrary<Base>::operator=(SimpleLibrary<Base>&& other)
     {
 	if (this != &other)
 	{
-	    m_module = other.m_module;
+	    m_lib = other.m_lib;
 	    m_pClass = other.m_pClass;
 	    m_pCreate = other.m_pCreate;
 	    m_pDestroy = other.m_pDestroy;

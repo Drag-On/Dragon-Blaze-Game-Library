@@ -27,7 +27,7 @@ namespace dbgl
 
     template <class T, class M> bool FileFormatIO<T, M>::addFormat(Filename const& filename)
     {
-	auto mod = new AdvancedModule<M>{ filename };
+	auto mod = new SimpleLibrary<M>{ filename };
 	if(mod->load())
 	    m_modules.push_back(mod);
 	else

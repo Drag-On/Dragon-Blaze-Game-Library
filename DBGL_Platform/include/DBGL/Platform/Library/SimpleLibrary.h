@@ -8,53 +8,54 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef ADVANCEDMODULE_H_
-#define ADVANCEDMODULE_H_
+#ifndef SIMPLELIBRARY_H_
+#define SIMPLELIBRARY_H_
 
 #include<string>
-#include"Module.h"
+
+#include "Library.h"
 #include"DBGL/Platform/File/Filename.h"
 
 namespace dbgl
 {
     /**
-     * @brief Advanced module class that can load classes
-     * @details An advanced module must have at least two c-style functions:
+     * @brief Advanced library class that can load classes
+     * @details A simple library must have at least two c-style functions:
      * 		    - Base* create()
      * 		    - void destroy(Base*)
      * 		create() is used to create a new instance of the interface class Base,
      * 		destroy() is used to delete any previously created instance.
-     * 		The AdvancedModule allows only one instance of the module class to be created,
+     * 		The SimpleLibrary allows only one instance of the library class to be created,
      * 		however it manages this instance and makes sure it will get freed eventually.
      */
-    template<class Base> class AdvancedModule
+    template<class Base> class SimpleLibrary
     {
 	public:
 	    /**
-	     * @brief Creates a new advanced module
+	     * @brief Creates a new library
 	     * @param path Path of the library to load
 	     */
-	    AdvancedModule(std::string const& path);
+	    SimpleLibrary(std::string const& path);
 	    /**
-	     * @brief Creates a new advanced module
+	     * @brief Creates a new library
 	     * @param path Path of the library to load
 	     */
-	    AdvancedModule(Filename const& path);
+	    SimpleLibrary(Filename const& path);
 	    /**
 	     * @brief Move constructor
-	     * @param other AdvancedModule to move
+	     * @param other Library to move
 	     */
-	    AdvancedModule(AdvancedModule&& other);
+	    SimpleLibrary(SimpleLibrary&& other);
 	    /**
 	     * @brief Move assignment
-	     * @param other AdvancedModule to move
-	     * @return Reference to this module
+	     * @param other Library to move
+	     * @return Reference to this library
 	     */
-	    AdvancedModule& operator=(AdvancedModule&& other);
+	    SimpleLibrary& operator=(SimpleLibrary&& other);
 	    /**
 	     * @brief Destructor
 	     */
-	    ~AdvancedModule();
+	    ~SimpleLibrary();
 	    /**
 	     * @brief Loads the library
 	     * @return True in case the library could be loaded, otherwise false
@@ -62,24 +63,24 @@ namespace dbgl
 	    bool load();
 	    /**
 	     * @brief Retrieves a pointer to the created class if loading was successful.
-	     * @return A pointer to the created class or nullptr, if the module could not be loaded.
+	     * @return A pointer to the created class or nullptr, if the library could not be loaded.
 	     */
 	    Base* get();
 
 	private:
-	    AdvancedModule(AdvancedModule&) = delete;
-	    AdvancedModule& operator=(AdvancedModule&) = delete;
+	    SimpleLibrary(SimpleLibrary&) = delete;
+	    SimpleLibrary& operator=(SimpleLibrary&) = delete;
 
 	    using CreateFunc = Base*(*)(void);
 	    using DestroyFunc = void(*)(Base*);
 
-	    Module m_module;
+	    Library m_lib;
 	    CreateFunc m_pCreate = nullptr;
 	    DestroyFunc m_pDestroy = nullptr;
 	    Base* m_pClass = nullptr;
     };
 }
 
-#include "AdvancedModule.imp"
+#include "../Library/SimpleLibrary.imp"
 
-#endif /* ADVANCEDMODULE_H_ */
+#endif /* SIMPLELIBRARY_H_ */

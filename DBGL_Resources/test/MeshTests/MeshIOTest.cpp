@@ -41,7 +41,7 @@ TEST(MeshIO,obj)
 {
     // MeshIO object
     MeshIO io {};
-    if (!io.addFormat("plugins/Mesh/OBJ/libDBGL_OBJ." + Module::getFileExtension()))
+    if (!io.addFormat("plugins/Mesh/OBJ/libDBGL_OBJ." + Library::getFileExtension()))
 	FAIL();
     else
     {
