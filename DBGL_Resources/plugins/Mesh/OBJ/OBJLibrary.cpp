@@ -13,7 +13,8 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include "DBGL/Resources/Mesh/IMeshFormatModule.h"
+
+#include "DBGL/Resources/Mesh/IMeshFormatLibrary.h"
 #include "DBGL/Core/Math/Vector3.h"
 #include "DBGL/Core/Math/Vector2.h"
 #include "DBGL/Core/Math/Utility.h"
@@ -21,7 +22,7 @@
 
 namespace dbgl
 {
-    class OBJModule : public IMeshFormatModule
+    class OBJModule : public IMeshFormatLibrary
     {
 	private:
 	    /**
@@ -298,12 +299,12 @@ namespace dbgl
     };
 }
 
-extern "C" dbgl::IMeshFormatModule* create()
+extern "C" dbgl::IMeshFormatLibrary* create()
 {
     return new dbgl::OBJModule{};
 }
 
-extern "C" void destroy(dbgl::IMeshFormatModule* mod)
+extern "C" void destroy(dbgl::IMeshFormatLibrary* mod)
 {
     delete mod;
 }

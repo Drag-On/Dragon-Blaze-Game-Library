@@ -18,7 +18,7 @@
 
 namespace dbgl
 {
-    class DDSModule : public IImageFormatModule
+    class DDSModule : public IImageFormatLibrary
     {
 	private:
 	    enum class FourCC
@@ -268,12 +268,12 @@ namespace dbgl
     };
 }
 
-extern "C" dbgl::IImageFormatModule* create()
+extern "C" dbgl::IImageFormatLibrary* create()
 {
     return new dbgl::DDSModule{};
 }
 
-extern "C" void destroy(dbgl::IImageFormatModule* mod)
+extern "C" void destroy(dbgl::IImageFormatLibrary* mod)
 {
     delete mod;
 }

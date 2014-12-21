@@ -17,7 +17,7 @@
 
 namespace dbgl
 {
-    class TGAModule : public IImageFormatModule
+    class TGAModule : public IImageFormatLibrary
     {
 	private:
 	    void flipVertical(char* img, unsigned int height, unsigned int lineSize) const
@@ -133,12 +133,12 @@ namespace dbgl
     };
 }
 
-extern "C" dbgl::IImageFormatModule* create()
+extern "C" dbgl::IImageFormatLibrary* create()
 {
     return new dbgl::TGAModule{};
 }
 
-extern "C" void destroy(dbgl::IImageFormatModule* mod)
+extern "C" void destroy(dbgl::IImageFormatLibrary* mod)
 {
     delete mod;
 }

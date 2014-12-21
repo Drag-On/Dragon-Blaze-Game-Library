@@ -11,15 +11,15 @@
 #ifndef IMESHFORMATMODULE_H_
 #define IMESHFORMATMODULE_H_
 
+#include "DBGL/Resources/FileFormat/IFileFormatLibrary.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
-#include "DBGL/Resources/FileFormat/IFileFormatModule.h"
 
 namespace dbgl
 {
     /**
      * @brief Interface class for all mesh loader and writer modules
      */
-    using IMeshFormatModule = IFileFormatModule<IMesh>;
+    using IMeshFormatLibrary = IFileFormatLibrary<IMesh>;
 }
 
 #endif /* IMESHFORMATMODULE_H_ */

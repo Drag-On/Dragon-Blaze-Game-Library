@@ -19,13 +19,13 @@ namespace dbgl
     /**
      * @brief Interface class for all file loader and writer modules
      */
-    template <class T> class IFileFormatModule
+    template <class T> class IFileFormatLibrary
     {
 	public:
 	    /**
 	     * @brief Destructor
 	     */
-	    virtual ~IFileFormatModule() = default;
+	    virtual ~IFileFormatLibrary() = default;
 	    /**
 	     * @brief Checks if the module is capable of loading files
 	     * @return True in case the module's load() methods work

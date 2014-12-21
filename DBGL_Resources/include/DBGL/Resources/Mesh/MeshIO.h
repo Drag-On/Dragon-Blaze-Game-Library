@@ -11,9 +11,9 @@
 #ifndef MESHIO_H_
 #define MESHIO_H_
 
-#include "IMeshFormatModule.h"
 #include "DBGL/Resources/FileFormat/FileFormatIO.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
+#include "IMeshFormatLibrary.h"
 
 namespace dbgl
 {
@@ -24,7 +24,7 @@ namespace dbgl
      * 		be compatible with the AdvancedModule class from DBGL_Platform, and
      * 		provide instances of subclasses of IMeshFormat.
      */
-    using MeshIO = FileFormatIO<IMesh, IMeshFormatModule>;
+    using MeshIO = FileFormatIO<IMesh, IMeshFormatLibrary>;
 }
 
 #endif /* MESHIO_H_ */

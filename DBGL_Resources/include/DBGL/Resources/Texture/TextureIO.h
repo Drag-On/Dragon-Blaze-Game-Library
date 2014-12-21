@@ -24,7 +24,7 @@ namespace dbgl
      * 		be compatible with the AdvancedModule class from DBGL_Platform, and
      * 		provide instances of subclasses of ITextureFormat.
      */
-    using TextureIO = FileFormatIO<ITexture, IImageFormatModule>;
+    using TextureIO = FileFormatIO<ITexture, IImageFormatLibrary>;
 }
 
 #endif /* TEXTURELOADER_H_ */

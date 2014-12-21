@@ -11,15 +11,15 @@
 #ifndef IIMAGEFORMATMODULE_H_
 #define IIMAGEFORMATMODULE_H_
 
+#include "DBGL/Resources/FileFormat/IFileFormatLibrary.h"
 #include "DBGL/Platform/Texture/ITexture.h"
-#include "DBGL/Resources/FileFormat/IFileFormatModule.h"
 
 namespace dbgl
 {
     /**
      * @brief Interface class for all image loader and writer modules
      */
-    using IImageFormatModule = IFileFormatModule<ITexture>;
+    using IImageFormatLibrary = IFileFormatLibrary<ITexture>;
 }
 
 #endif /* IIMAGEFORMATMODULE_H_ */
