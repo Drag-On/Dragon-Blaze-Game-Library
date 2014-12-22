@@ -70,6 +70,21 @@ namespace dbgl
 	    return InvalidHandle;
     }
 
+    template <typename T> unsigned long HandleFactory<T>::Handle::getRefCount() const
+    {
+	return *m_pRefCount;
+    }
+
+    template <typename T> bool HandleFactory<T>::Handle::operator==(Handle const& other) const
+    {
+	return m_pFactory == other.m_pFactory && m_pId == other.m_pId;
+    }
+
+    template <typename T> bool HandleFactory<T>::Handle::operator!=(Handle const& other) const
+    {
+	return !(*this == other);
+    }
+
     template<typename T> void HandleFactory<T>::Handle::checkDelete()
     {
 	if (m_pRefCount != nullptr && *m_pRefCount <= 0)

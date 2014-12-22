@@ -78,6 +78,22 @@ namespace dbgl
 		     * @return The value of this handle
 		     */
 		    T getValue() const;
+		    /**
+		     * @brief Retrieves the reference count of this handle
+		     */
+		    unsigned long getRefCount() const;
+		    /**
+		     * @brief Comparison operator
+		     * @param other Handle to compare to
+		     * @return True if handles are equal, otherwise false
+		     */
+		    bool operator==(Handle const& other) const;
+		    /**
+		     * @brief Comparison operator
+		     * @param other Handle to compare to
+		     * @return True if handles are not equal, otherwise false
+		     */
+		    bool operator!=(Handle const& other) const;
 
 		    /**
 		     * @brief Constant that describes an invalid ID
