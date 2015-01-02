@@ -120,7 +120,8 @@ namespace dbgl
 
     template<typename T> bool HandleFactory<T>::isValid(Handle const& handle)
     {
-	return *(handle.m_pId) < m_next && std::find(m_open.begin(), m_open.end(), *(handle.m_pId)) == m_open.end();
+	return handle.m_pFactory == this && *(handle.m_pId) < m_next
+		&& std::find(m_open.begin(), m_open.end(), *(handle.m_pId)) == m_open.end();
     }
 
     template <typename T> void HandleFactory<T>::invalidate(Handle& handle)
