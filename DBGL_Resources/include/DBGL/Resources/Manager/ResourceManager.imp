@@ -147,7 +147,7 @@ namespace dbgl
 
     template<class T> uint32_t ResourceManager<T>::computeHash()
     {
-	return 0;
+	return 0; // Ends compile time recursion
     }
 
     template<class T> template<typename First, typename ... Last> uint32_t ResourceManager<T>::computeHash(
