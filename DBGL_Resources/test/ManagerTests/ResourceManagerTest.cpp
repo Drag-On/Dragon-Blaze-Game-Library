@@ -17,6 +17,10 @@ using namespace std;
 
 namespace dbgl_test_ResourceManager
 {
+    void noop()
+    {
+    }
+
     class TestResource : public AbstractResource
     {
 	public:
@@ -30,6 +34,17 @@ namespace dbgl_test_ResourceManager
 	    bool identify(std::string const& string) const
 	    {
 		return string == m_string;
+	    }
+	    bool identify(void(*func)(void)) const
+	    {
+		return func == dbgl_test_ResourceManager::noop;
+	    }
+	    bool identify(void(TestResource::*func)(void)) const
+	    {
+		return func == &TestResource::noop;
+	    }
+	    void noop()
+	    {
 	    }
 	    int m_int = 0;
 	    std::string m_string = "";
@@ -73,6 +88,12 @@ TEST(ResourceManager,identify)
     auto handle1_o22 = manager.identify(42, "Hello World");
     ASSERT(handle1_o22.isValid());
     ASSERT_EQ(handle1_o22, handle1);
+    auto handle1_o23 = manager.identify(&noop);
+    ASSERT(handle1_o23.isValid());
+    auto handle1_o24 = manager.identify(&noop);
+    ASSERT_EQ(handle1_o23, handle1_o24);
+    auto handle2 = manager.identify(&TestResource::noop);
+    ASSERT(handle2.isValid());
 
     auto handle2_o = manager.identify("Hello");
     ASSERT(!handle2_o.isValid());

@@ -87,10 +87,7 @@ namespace dbgl
     {
 	uint32_t hashes[2];
 	// Compute hash of first argument
-	if(std::is_pointer<decltype(first)>::value)
-	    hashes[0] = FNVHasher::hash32(reinterpret_cast<void const*>(first), sizeof(first));
-	else
-	    hashes[0] = FNVHasher::hash32(reinterpret_cast<void const*>(&first), sizeof(first));
+	hashes[0] = FNVHasher::hash32(reinterpret_cast<void const*>(&first), sizeof(first));
 	if (sizeof...(last) > 0)
 	{
 	    // There are more arguments, so compute combined hash of them and combine them
