@@ -36,8 +36,9 @@ namespace dbgl
 	public:
 	    /**
 	     * @brief Constructor
+	     * @param sizeHint Prediction of how many resources the manager will need to keep at once
 	     */
-	    ResourceManager();
+	    ResourceManager(unsigned int sizeHint = 0);
 	    /**
 	     * @brief Destructor
 	     */

@@ -10,9 +10,9 @@
 
 namespace dbgl
 {
-    template<class T> ResourceManager<T>::ResourceManager()
+    template<class T> ResourceManager<T>::ResourceManager(unsigned int sizeHint)
     {
-
+	m_resources.reserve(sizeHint);
     }
 
     template<class T> ResourceManager<T>::~ResourceManager()
