@@ -135,12 +135,16 @@ namespace dbgl
 
     template <typename T> void ResourceManager<T>::loadNext()
     {
+	// Check if there are some resources that are not needed anymore
+	checkUnload();
+	// If there is nothing to do, return
 	if(m_needProcHandles.empty())
 	    return;
+	// Load or unload, depending on reference count
 	auto it = m_needProcHandles.begin();
-	if(m_resources[*it].getHandle().getRefCount() > 1 && !m_resources[*it].isLoaded())
+	if(m_resources[*it].getHandle().getRefCount() > 2 && !m_resources[*it].isLoaded())
 	    m_resources[*it].load();
-	else if(m_resources[*it].getHandle().getRefCount() <= 1 && m_resources[*it].isLoaded())
+	else if(m_resources[*it].getHandle().getRefCount() <= 2 && m_resources[*it].isLoaded())
 	    m_resources[*it].unload();
 	m_needProcHandles.erase(it);
     }
@@ -165,6 +169,21 @@ namespace dbgl
 	else
 	    // No more arguments, return hash of the first argument
 	    return hashes[0];
+    }
+
+    template<class T> void ResourceManager<T>::checkUnload()
+    {
+	for (unsigned int i = 0; i < m_unloadNum; i++)
+	{
+	    m_unloadIndex++;
+	    while(m_unloadIndex >= m_resources.size())
+		m_unloadIndex -= m_resources.size();
+
+	    auto& res = m_resources[m_unloadIndex];
+	    auto const& handle = res.getHandle();
+	    if(handle.getRefCount() <= 2 && res.isLoaded())
+		m_needProcHandles.insert({handle.getValue()});
+	}
     }
 
 }

@@ -80,7 +80,7 @@ namespace dbgl
 	     */
 	    T* request(typename T::ResourceHandle const& handle, bool forceLoad = false);
 	    /**
-	     * @brief Checks if there are resources that need to be loaded
+	     * @brief Checks if there are any resources that need to be loaded
 	     * @return True in case there are resources to load, otherwise false
 	     */
 	    bool needLoad() const;
@@ -102,12 +102,15 @@ namespace dbgl
 	private:
 	    uint32_t computeHash();
 	    template<typename First, typename ... Last> uint32_t computeHash(First const& first, Last&&... last);
+	    void checkUnload();
 
 	    HandleFactory<> m_handleFactory;
 	    std::vector<T> m_resources;
 	    std::set<uint32_t> m_needProcHandles;
 	    std::unordered_multimap<uint32_t, unsigned int> m_resLookup;
 	    std::unordered_multimap<unsigned int, uint32_t> m_hashLookup;
+	    unsigned int m_unloadIndex = 0; // Next resource to check for unload on loadNext()
+	    const unsigned int m_unloadNum = 2; // Amount of resources to check for unload per loadNext()
     };
 }
 

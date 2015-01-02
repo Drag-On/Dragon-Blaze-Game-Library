@@ -196,15 +196,22 @@ TEST(ResourceManager,size)
 TEST(ResourceManager,loadNext)
 {
     ResourceManager<TestResource> manager;
-    auto handle0 = manager.add(0, "0");
-    auto handle1 = manager.add(1, "1");
-    auto handle2 = manager.add(2, "2");
-    auto handle3 = manager.add(3, "3");
-    auto pRes1 = manager.request(handle1, false);
-    auto pRes2 = manager.request(handle2, false);
-    while(manager.needLoad())
+    {
+	auto handle0 = manager.add(0, "0");
+	auto handle1 = manager.add(1, "1");
+	auto handle2 = manager.add(2, "2");
+	auto handle3 = manager.add(3, "3");
+	auto pRes1 = manager.request(handle1, false);
+	auto pRes2 = manager.request(handle2, false);
+	while (manager.needLoad())
+	    manager.loadNext();
+	ASSERT_EQ(pRes1->isLoaded(), true);
+	ASSERT_EQ(pRes2->isLoaded(), true);
+	ASSERT_NOTHROW(manager.loadNext());
+    }
+    // Let it unload the resources
+    for(unsigned int i = 0; i < manager.size(); i++)
 	manager.loadNext();
-    ASSERT_EQ(pRes1->isLoaded(), true);
-    ASSERT_EQ(pRes2->isLoaded(), true);
-    ASSERT_NOTHROW(manager.loadNext());
+    ASSERT_EQ(manager.request(manager.identify(1, "1"), false)->isLoaded(), false);
+    ASSERT_EQ(manager.request(manager.identify(2, "2"), false)->isLoaded(), false);
 }
