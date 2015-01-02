@@ -147,6 +147,11 @@ namespace dbgl
 	}
     }
 
+    template<typename T> T HandleFactory<T>::totalInUse() const
+    {
+	return m_handles.size();
+    }
+
     template<typename T> T HandleFactory<T>::getNext()
     {
 	if(m_open.empty())

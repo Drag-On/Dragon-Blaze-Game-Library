@@ -145,6 +145,11 @@ namespace dbgl
 	     * @brief Potentially frees some memory
 	     */
 	    void clean();
+	    /**
+	     * Provides the amount of currently taken handles
+	     * @return The amount of handles that are in use
+	     */
+	    T totalInUse() const;
 	private:
 	    /**
 	     * @brief Gets the next id to use and marks it as used
