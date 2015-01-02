@@ -21,6 +21,16 @@
 
 namespace dbgl
 {
+    /**
+     * @brief Manages allocation and deallocation of a certain type of resource.
+     * @details Each resource implementation has to inherit from AbstractResource or at least IResource.
+     * 		Then a ResourceManager can be constructed, which handles such types of resources. Each resource
+     * 		gets a unique handle, over which it can be quickly retrieved from this manager. Every requested
+     * 		resource will be put into a loading queue if it is not yet loaded; frequently calling loadNext
+     * 		will then load those resources. As long as other instances maintain a resource handle, this
+     * 		resource will not be unloaded, however, as soon as no other references to this handle are held,
+     * 		the manager is free to unload the resource at any time.
+     */
     template<class T> class ResourceManager
     {
 	public:
@@ -60,10 +70,13 @@ namespace dbgl
 	    template<typename ... Types> typename T::ResourceHandle identify(Types&&... params);
 	    /**
 	     * @brief Retrieve a resource by its handle
+	     * @details If the requested resource is not loaded yet, it will be placed in the load queue.
 	     * @param handle Resource handle
 	     * @param forceLoad Forces the resource to be returned loaded
 	     * @return Pointer to the resource or nullptr if handle invalid
 	     * @note This operation has a constant time complexity
+	     * @warning The returned pointer is not intended to be stored. In fact, the pointer can become invalid
+	     * 		after a time.
 	     */
 	    T* request(typename T::ResourceHandle const& handle, bool forceLoad = false);
 	    /**
