@@ -110,10 +110,39 @@ namespace dbgl
 	    auto& res = m_resources[handle.getValue()];
 	    if(forceLoad && !res.isLoaded())
 		res.load();
+	    else if(!res.isLoaded())
+		m_needProcHandles.insert({handle.getValue()});
 	    return &res;
 	}
 	else
 	    return nullptr;
+    }
+
+    template <typename T> bool ResourceManager<T>::needLoad() const
+    {
+	return !m_needProcHandles.empty();
+    }
+
+    template <typename T> unsigned int ResourceManager<T>::getLoadQueueSize() const
+    {
+	return m_needProcHandles.size();
+    }
+
+    template <typename T> unsigned int ResourceManager<T>::size() const
+    {
+	return m_handleFactory.totalInUse();
+    }
+
+    template <typename T> void ResourceManager<T>::loadNext()
+    {
+	if(m_needProcHandles.empty())
+	    return;
+	auto it = m_needProcHandles.begin();
+	if(m_resources[*it].getHandle().getRefCount() > 1 && !m_resources[*it].isLoaded())
+	    m_resources[*it].load();
+	else if(m_resources[*it].getHandle().getRefCount() <= 1 && m_resources[*it].isLoaded())
+	    m_resources[*it].unload();
+	m_needProcHandles.erase(it);
     }
 
     template<class T> uint32_t ResourceManager<T>::computeHash()

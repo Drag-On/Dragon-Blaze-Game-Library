@@ -66,6 +66,25 @@ namespace dbgl
 	     * @note This operation has a constant time complexity
 	     */
 	    T* request(typename T::ResourceHandle const& handle, bool forceLoad = false);
+	    /**
+	     * @brief Checks if there are resources that need to be loaded
+	     * @return True in case there are resources to load, otherwise false
+	     */
+	    bool needLoad() const;
+	    /**
+	     * @brief Provides the amount of resources that need loading
+	     * @return Amount of resources that need loading
+	     */
+	    unsigned int getLoadQueueSize() const;
+	    /**
+	     * @brief Computes the amount of held resources
+	     * @return The amount of held resources
+	     */
+	    unsigned int size() const;
+	    /**
+	     * @brief Loads the next resource in the loading queue
+	     */
+	    void loadNext();
 
 	private:
 	    uint32_t computeHash();

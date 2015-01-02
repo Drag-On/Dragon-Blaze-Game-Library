@@ -139,3 +139,72 @@ TEST(ResourceManager,remove)
     ASSERT(removed == true);
 }
 
+TEST(ResourceManager,needLoad)
+{
+    ResourceManager<TestResource> manager;
+    auto handle0 = manager.add(0, "0");
+    auto handle1 = manager.add(1, "1");
+    auto handle2 = manager.add(2, "2");
+    auto handle3 = manager.add(3, "3");
+    ASSERT_EQ(manager.needLoad(), false);
+    manager.request(handle1, false);
+    ASSERT_EQ(manager.needLoad(), true);
+    manager.loadNext();
+    ASSERT_EQ(manager.needLoad(), false);
+}
+
+TEST(ResourceManager,getLoadQueueSize)
+{
+    ResourceManager<TestResource> manager;
+    auto handle0 = manager.add(0, "0");
+    auto handle1 = manager.add(1, "1");
+    auto handle2 = manager.add(2, "2");
+    auto handle3 = manager.add(3, "3");
+    ASSERT_EQ(manager.getLoadQueueSize(), 0);
+    auto pRes1 = manager.request(handle1, false);
+    ASSERT_EQ(manager.getLoadQueueSize(), 1);
+    auto pRes2 = manager.request(handle2, false);
+    ASSERT_EQ(manager.getLoadQueueSize(), 2);
+    manager.loadNext();
+    ASSERT_EQ(manager.getLoadQueueSize(), 1);
+    manager.loadNext();
+    ASSERT_EQ(manager.getLoadQueueSize(), 0);
+    ASSERT_EQ(pRes1->isLoaded(), true);
+    ASSERT_EQ(pRes2->isLoaded(), true);
+}
+
+TEST(ResourceManager,size)
+{
+    ResourceManager<TestResource> manager;
+    ASSERT_EQ(manager.size(), 0);
+    auto handle0 = manager.add(0, "0");
+    auto handle1 = manager.add(1, "1");
+    auto handle2 = manager.add(2, "2");
+    auto handle3 = manager.add(3, "3");
+    ASSERT_EQ(manager.size(), 4);
+    manager.remove(handle2);
+    ASSERT_EQ(manager.size(), 3);
+    auto handle4 = manager.add(4, "4");
+    ASSERT_EQ(manager.size(), 4);
+    manager.remove(handle0);
+    manager.remove(handle1);
+    manager.remove(handle3);
+    manager.remove(handle4);
+    ASSERT_EQ(manager.size(), 0);
+}
+
+TEST(ResourceManager,loadNext)
+{
+    ResourceManager<TestResource> manager;
+    auto handle0 = manager.add(0, "0");
+    auto handle1 = manager.add(1, "1");
+    auto handle2 = manager.add(2, "2");
+    auto handle3 = manager.add(3, "3");
+    auto pRes1 = manager.request(handle1, false);
+    auto pRes2 = manager.request(handle2, false);
+    while(manager.needLoad())
+	manager.loadNext();
+    ASSERT_EQ(pRes1->isLoaded(), true);
+    ASSERT_EQ(pRes2->isLoaded(), true);
+    ASSERT_NOTHROW(manager.loadNext());
+}
