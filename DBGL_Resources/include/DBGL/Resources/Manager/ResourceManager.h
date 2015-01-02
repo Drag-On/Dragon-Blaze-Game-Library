@@ -39,6 +39,16 @@ namespace dbgl
 	     */
 	    template<typename ... Types> typename T::ResourceHandle add(Types&&... params);
 	    /**
+	     * @brief Removes the resource with the passed handle from the manager
+	     * @details If \p force is not set to true, this will not remove resources that are still in use.
+	     * @param handle Handle of the resource to remove
+	     * @param force Force deletion even if the handle is still in use
+	     * @return True in case the resource has been removed, otherwise false
+	     * @warning This will remove the resource from the resource manager and deallocate it.
+	     * 		The handle of the resource will be invalidated.
+	     */
+	    bool remove(typename T::ResourceHandle& handle, bool force = false);
+	    /**
 	     * @brief Retrieves a resource handle by other identifying parameters
 	     * @details The parameters depend on the resource implementation, but may be something like filename and path.
 	     * @param params Parameters that identify the resource
@@ -53,6 +63,7 @@ namespace dbgl
 	     * @param handle Resource handle
 	     * @param forceLoad Forces the resource to be returned loaded
 	     * @return Pointer to the resource or nullptr if handle invalid
+	     * @note This operation has a constant time complexity
 	     */
 	    T* request(typename T::ResourceHandle const& handle, bool forceLoad = false);
 
@@ -62,8 +73,9 @@ namespace dbgl
 
 	    HandleFactory<> m_handleFactory;
 	    std::vector<T> m_resources;
-	    std::set<typename IResource::ResourceHandle> m_needProcHandles;
+	    std::set<uint32_t> m_needProcHandles;
 	    std::unordered_multimap<uint32_t, unsigned int> m_resLookup;
+	    std::unordered_multimap<unsigned int, uint32_t> m_hashLookup;
     };
 }
 

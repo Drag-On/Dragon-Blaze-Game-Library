@@ -31,6 +31,45 @@ namespace dbgl
 	return handle;
     }
 
+    template<class T> bool ResourceManager<T>::remove(typename T::ResourceHandle& handle, bool force)
+    {
+	auto handleVal = handle.getValue();
+	if (m_handleFactory.isValid(handle) && (handle.getRefCount() <= 2 || force)) // One reference held internally plus the one passed
+	{
+	    // Remove meta data
+	    auto range1 = m_hashLookup.equal_range(handleVal);
+	    if (range1.first != m_hashLookup.end())
+	    {
+		for (auto iter = range1.first; iter != range1.second; ++iter)
+		{
+		    auto range2 = m_resLookup.equal_range(iter->second);
+		    if (range2.first != m_resLookup.end())
+		    {
+			unsigned int dist = std::distance(range2.first, range2.second);
+			auto iter2 = range2.first;
+			for (unsigned int i = 0; i < dist; i++)
+			{
+			    auto& res = m_resources[iter2->second];
+			    if (res.getHandle() == handle)
+				m_resLookup.erase(iter2);
+			    else
+				++iter2;
+			}
+		    }
+		}
+		m_hashLookup.erase(range1.first, range1.second);
+	    }
+
+	    m_resources[handleVal].unload();
+	    handle.invalidate();
+	    if (!m_needProcHandles.empty())
+		m_needProcHandles.erase(
+			std::find(m_needProcHandles.begin(), m_needProcHandles.end(), handleVal));
+	    return true;
+	}
+	return false;
+    }
+
     template<class T> template<typename ... Types> auto ResourceManager<T>::identify(
 	    Types&&... params) -> typename T::ResourceHandle
     {
@@ -56,6 +95,7 @@ namespace dbgl
 	    {
 		// Store hash for future use
 		m_resLookup.insert({hash, i});
+		m_hashLookup.insert({i, hash});
 		return res.getHandle();
 	    }
 	}
@@ -63,10 +103,9 @@ namespace dbgl
 	return typename T::ResourceHandle {};
     }
 
-
     template<class T> T* ResourceManager<T>::request(typename T::ResourceHandle const& handle, bool forceLoad)
     {
-	if (handle.isValid())
+	if (m_handleFactory.isValid(handle))
 	{
 	    auto& res = m_resources[handle.getValue()];
 	    if(forceLoad && !res.isLoaded())

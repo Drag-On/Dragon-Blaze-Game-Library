@@ -111,3 +111,31 @@ TEST(ResourceManager,request)
     ASSERT_EQ(pRes1->m_string, "Hello World");
 }
 
+TEST(ResourceManager,remove)
+{
+    ResourceManager<TestResource> manager;
+    auto handle0 = manager.add(0, "0");
+    auto handle1 = manager.add(1, "1");
+    auto handle2 = manager.add(2, "2");
+    auto handle3 = manager.add(3, "3");
+    auto handle1Copy = handle1;
+    auto pRes1 = manager.request(handle1, true);
+    ASSERT_NEQ(pRes1, nullptr);
+    ASSERT_EQ(pRes1->m_int, 1);
+    ASSERT_EQ(pRes1->m_string, "1");
+    ASSERT(pRes1->isLoaded());
+    bool removed = manager.remove(handle1, false);
+    ASSERT(removed == false);
+    handle1Copy = TestResource::ResourceHandle{};
+    removed = manager.remove(handle1, false);
+    ASSERT(removed == true);
+    auto handle5 = manager.add(5, "5");
+    auto handle5Copy = handle5;
+    auto handle5Ident = manager.identify(5, "5");
+    ASSERT_EQ(handle5, handle5Ident);
+    removed = manager.remove(handle5, false);
+    ASSERT(removed == false);
+    removed = manager.remove(handle5, true);
+    ASSERT(removed == true);
+}
+
