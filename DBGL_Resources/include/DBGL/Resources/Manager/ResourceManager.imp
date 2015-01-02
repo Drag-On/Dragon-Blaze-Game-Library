@@ -1,0 +1,106 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2014 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+    template<class T> ResourceManager<T>::ResourceManager()
+    {
+
+    }
+
+    template<class T> ResourceManager<T>::~ResourceManager()
+    {
+
+    }
+
+    template<class T> template<typename ... Types> auto ResourceManager<T>::add(
+	    Types&&... params) -> typename T::ResourceHandle
+    {
+	auto handle = m_handleFactory.next();
+	if(handle.getValue() >= m_resources.size())
+	    m_resources.emplace_back(handle, std::forward<Types>(params)...);
+	else
+	    m_resources[handle.getValue()] = std::move(T(handle, std::forward<Types>(params)...));
+	return handle;
+    }
+
+    template<class T> template<typename ... Types> auto ResourceManager<T>::identify(
+	    Types&&... params) -> typename T::ResourceHandle
+    {
+	// Compute hash
+	auto hash = computeHash(std::forward<Types>(params)...);
+
+	// Check if the resource has been found previously
+	auto range = m_resLookup.equal_range(hash);
+	if(range.first != m_resLookup.end())
+	{
+	    for (auto iter = range.first; iter != range.second; ++iter)
+	    {
+		auto& res = m_resources[iter->second];
+		if(res.identify(std::forward<Types>(params)...))
+		    return res.getHandle();
+	    }
+	}
+	// Not hashed before, iterate all resources to find
+	for (unsigned int i = 0; i < m_resources.size(); i++)
+	{
+	    auto& res = m_resources[i];
+	    if (res.identify(std::forward<Types>(params)...))
+	    {
+		// Store hash for future use
+		m_resLookup.insert({hash, i});
+		return res.getHandle();
+	    }
+	}
+	// Resource not present
+	return typename T::ResourceHandle {};
+    }
+
+
+    template<class T> T* ResourceManager<T>::request(typename T::ResourceHandle const& handle, bool forceLoad)
+    {
+	if (handle.isValid())
+	{
+	    auto& res = m_resources[handle.getValue()];
+	    if(forceLoad && !res.isLoaded())
+		res.load();
+	    return &res;
+	}
+	else
+	    return nullptr;
+    }
+
+    template<class T> uint32_t ResourceManager<T>::computeHash()
+    {
+	return 0;
+    }
+
+    template<class T> template<typename First, typename ... Last> uint32_t ResourceManager<T>::computeHash(
+	    First const& first, Last&&... last)
+    {
+	uint32_t hashes[2];
+	// Compute hash of first argument
+	if(std::is_pointer<decltype(first)>::value)
+	    hashes[0] = FNVHasher::hash32(reinterpret_cast<void const*>(first), sizeof(first));
+	else
+	    hashes[0] = FNVHasher::hash32(reinterpret_cast<void const*>(&first), sizeof(first));
+	if (sizeof...(last) > 0)
+	{
+	    // There are more arguments, so compute combined hash of them and combine them
+	    hashes[1] = computeHash(last...);
+	    return FNVHasher::hash32(hashes, 2);
+	}
+	else
+	    // No more arguments, return hash of the first argument
+	    return hashes[0];
+    }
+
+}
+
