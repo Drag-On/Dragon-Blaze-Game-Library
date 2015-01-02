@@ -142,9 +142,10 @@ namespace dbgl
 	    return;
 	// Load or unload, depending on reference count
 	auto it = m_needProcHandles.begin();
-	if(m_resources[*it].getHandle().getRefCount() > 2 && !m_resources[*it].isLoaded())
+	auto const& handle = m_resources[*it].peekHandle();
+	if(handle.getRefCount() > 1 && !m_resources[*it].isLoaded())
 	    m_resources[*it].load();
-	else if(m_resources[*it].getHandle().getRefCount() <= 2 && m_resources[*it].isLoaded())
+	else if(handle.getRefCount() <= 1 && m_resources[*it].isLoaded())
 	    m_resources[*it].unload();
 	m_needProcHandles.erase(it);
     }
@@ -180,8 +181,8 @@ namespace dbgl
 		m_unloadIndex -= m_resources.size();
 
 	    auto& res = m_resources[m_unloadIndex];
-	    auto const& handle = res.getHandle();
-	    if(handle.getRefCount() <= 2 && res.isLoaded())
+	    auto const& handle = res.peekHandle();
+	    if(handle.getRefCount() <= 1 && res.isLoaded())
 		m_needProcHandles.insert({handle.getValue()});
 	}
     }

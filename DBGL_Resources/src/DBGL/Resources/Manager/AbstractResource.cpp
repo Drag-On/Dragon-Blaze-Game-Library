@@ -21,6 +21,11 @@ namespace dbgl
 	return m_handle;
     }
 
+    auto AbstractResource::peekHandle() const -> ResourceHandle const&
+    {
+	return m_handle;
+    }
+
     bool AbstractResource::isLoaded() const
     {
 	return m_loaded;

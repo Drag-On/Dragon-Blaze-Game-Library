@@ -36,6 +36,12 @@ namespace dbgl
 	     */
 	    virtual ResourceHandle getHandle() const = 0;
 	    /**
+	     * @brief Provides a constant reference to the handle associated with this resource
+	     * @return Handle of this resource
+	     * @note This will not increase the handle reference count.
+	     */
+	    virtual ResourceHandle const& peekHandle() const = 0;
+	    /**
 	     * @brief Checks if this resource is currently loaded
 	     * @return True in case the resource is loaded, otherwise false
 	     */

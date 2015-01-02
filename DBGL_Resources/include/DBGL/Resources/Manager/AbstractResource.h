@@ -27,6 +27,7 @@ namespace dbgl
 	     */
 	    AbstractResource(ResourceHandle handle);
 	    virtual ResourceHandle getHandle() const;
+	    virtual ResourceHandle const& peekHandle() const;
 	    virtual bool isLoaded() const;
 	    virtual void load();
 	    virtual void unload();
