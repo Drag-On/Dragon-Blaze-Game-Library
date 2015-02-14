@@ -18,7 +18,14 @@ using namespace std;
 int main()
 {
     cout << "Initing..." << endl;
-    Platform::init<OpenGL33>();
+    try
+    {
+	Platform::init<OpenGL33>();
+    }
+    catch (const std::string& ex)
+    {
+	cout << ex << endl;
+    }
     cout << "Creating a window..." << endl;
     auto window = Platform::get()->createWindow("WindowTest", 720, 480, false, 0);
     cout << "Showing window..." << endl;

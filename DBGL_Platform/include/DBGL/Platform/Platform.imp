@@ -15,6 +15,10 @@ namespace dbgl
 	if (s_pType != nullptr)
 	    throw "Platform already initialized!";
 	else
+	{
 	    s_pType = new Type {};
+	    if (s_pType == nullptr)
+		throw "Unable to initialize platform!";
+	}
     }
 }
