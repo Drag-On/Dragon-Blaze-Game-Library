@@ -44,4 +44,4 @@ add_library(DBGL_TGA SHARED ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_TGA "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_TGA "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

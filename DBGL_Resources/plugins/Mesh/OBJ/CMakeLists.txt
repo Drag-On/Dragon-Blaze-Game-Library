@@ -44,4 +44,4 @@ add_library(DBGL_OBJ SHARED ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_OBJ "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_OBJ "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

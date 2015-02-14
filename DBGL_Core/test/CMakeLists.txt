@@ -36,5 +36,5 @@ add_executable(DBGL_CORE_TEST ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_CORE_TEST "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
-target_link_libraries(DBGL_CORE_TEST "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_CORE_TEST "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_CORE_TEST "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

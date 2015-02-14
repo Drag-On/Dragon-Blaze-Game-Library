@@ -35,18 +35,4 @@ add_executable(DBGL_PLATFORM_TEST_OS_MODULE ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_PLATFORM_TEST_OS_MODULE "${PROJECT_BINARY_DIR}/${DBGL_PLATFORM_DLL_NAME}")
-
-######################################################################
-### Copy files
-######################################################################
-add_custom_target(ALWAYS_EXECUTE_OS_MODULE ALL)
-add_dependencies(DBGL_PLATFORM_TEST_OS_MODULE ALWAYS_EXECUTE_OS_MODULE)
-# do the copying
-foreach(file_i ${LIBRARIES2COPY})
-	add_custom_command(TARGET ALWAYS_EXECUTE_OS_MODULE
-                        PRE_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
-                        DEPENDS ${file_i}
-                        )
-endforeach(file_i)
+target_link_libraries(DBGL_PLATFORM_TEST_OS_MODULE "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

@@ -37,6 +37,6 @@ add_executable(DBGL_RESOURCES_TEST ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_RESOURCES_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_CORE_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_PLATFORM_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

@@ -35,18 +35,4 @@ add_executable(DBGL_PLATFORM_TEST_OGL33_GRAPHICS ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_PLATFORM_TEST_OGL33_GRAPHICS "${PROJECT_BINARY_DIR}/${DBGL_PLATFORM_DLL_NAME}")
-
-######################################################################
-### Copy files
-######################################################################
-add_custom_target(ALWAYS_EXECUTE_OGL33_GRAPHICS ALL)
-add_dependencies(DBGL_PLATFORM_TEST_OGL33_GRAPHICS ALWAYS_EXECUTE_OGL33_GRAPHICS)
-# do the copying
-foreach(file_i ${LIBRARIES2COPY})
-	add_custom_command(TARGET ALWAYS_EXECUTE_OGL33_GRAPHICS
-                        PRE_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${file_i} "${PROJECT_BINARY_DIR}"
-                        DEPENDS ${file_i}
-                        )
-endforeach(file_i)
+target_link_libraries(DBGL_PLATFORM_TEST_OGL33_GRAPHICS "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")

@@ -15,6 +15,6 @@ cmake_minimum_required (VERSION 2.6)
 project (DBGL_RESOURCES_PLUGINS C CXX)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Texture/"
-				 "${PROJECT_BINARY_DIR}/Texture/")
+                 "${PROJECT_BINARY_DIR}/Texture/")
 add_subdirectory("${PROJECT_SOURCE_DIR}/Mesh/"
-				 "${PROJECT_BINARY_DIR}/Mesh/")
+                 "${PROJECT_BINARY_DIR}/Mesh/")

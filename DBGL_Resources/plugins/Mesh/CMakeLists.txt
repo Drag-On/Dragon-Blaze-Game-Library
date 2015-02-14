@@ -18,4 +18,4 @@ project (DBGL_RESOURCES_PLUGINS_MESH C CXX)
 ### Add plugin projects
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/OBJ"
-				 "${PROJECT_BINARY_DIR}/OBJ")
+                 "${PROJECT_BINARY_DIR}/OBJ")

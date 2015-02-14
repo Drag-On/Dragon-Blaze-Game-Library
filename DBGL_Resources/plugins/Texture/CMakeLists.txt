@@ -18,8 +18,8 @@ project (DBGL_RESOURCES_PLUGINS_TEXTURE C CXX)
 ### Add plugin projects
 ######################################################################
 add_subdirectory("${PROJECT_SOURCE_DIR}/BMP"
-				 "${PROJECT_BINARY_DIR}/BMP")
+                 "${PROJECT_BINARY_DIR}/BMP")
 add_subdirectory("${PROJECT_SOURCE_DIR}/TGA"
-				 "${PROJECT_BINARY_DIR}/TGA")
+                 "${PROJECT_BINARY_DIR}/TGA")
 add_subdirectory("${PROJECT_SOURCE_DIR}/DDS"
-				 "${PROJECT_BINARY_DIR}/DDS")
+                 "${PROJECT_BINARY_DIR}/DDS")
