@@ -17,13 +17,11 @@ project (DBGL C CXX)
 ######################################################################
 ### Configure compilation details
 ######################################################################
-
-#set (CMAKE_BUILD_TYPE Release)
-
 set (DBGL_LIB_DIR "${PROJECT_SOURCE_DIR}/${CMAKE_BUILD_TYPE}") 			# Path to DBGL library files
 set (DBGL_PLATFORM_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/DBGL_Platform/include") 	# Path to platform headers
 set (DBGL_CORE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/DBGL_Core/include") 		# Path to core headers
 set (DBGL_RESOURCES_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/DBGL_Resources/include")	# Path to resources headers
+#set (CMAKE_BUILD_TYPE Release)
 
 ######################################################################
 ### Platform specific stuff
@@ -46,7 +44,7 @@ endif()
 
 ######################################################################
 ### Set policy
-### This surpresses warnings that occur because all the projects
+### This suppresses warnings that occur because all the projects
 ### build into the same directory. This way it is possible that files
 ### get overwritten by projects later in the build chain! Check for
 ### better option!
@@ -130,6 +128,7 @@ message("DBGL_CORE_DLL_NAME: ${DBGL_CORE_DLL_NAME}")
 message("DBGL_RESOURCES_LIB_NAME: ${DBGL_RESOURCES_LIB_NAME}")
 message("DBGL_RESOURCES_DLL_NAME: ${DBGL_RESOURCES_DLL_NAME}")
 message("GLFW_LIBRARY: ${GLFW_LIBRARY}")
+message("GLEW_LIBRARY: ${GLEW_LIBRARY}")
 message("#################")
 
 ######################################################################
@@ -151,6 +150,7 @@ message("#################")
 ######################################################################
 ### Subprojects
 ######################################################################
+#### Platform
 if(COMPILE_PLATFORM OR COMPILE_ALL)
     add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Platform/"
                      "${PROJECT_BINARY_DIR}")
@@ -159,6 +159,7 @@ if(COMPILE_PLATFORM OR COMPILE_ALL)
                          "${PROJECT_BINARY_DIR}/test/")
     endif(COMPILE_TESTS)
 endif(COMPILE_PLATFORM OR COMPILE_ALL)
+#### Core
 if(COMPILE_CORE OR COMPILE_ALL)
     add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Core/"
                      "${PROJECT_BINARY_DIR}")
@@ -167,6 +168,7 @@ if(COMPILE_CORE OR COMPILE_ALL)
                          "${PROJECT_BINARY_DIR}/test/")
     endif(COMPILE_TESTS)
 endif(COMPILE_CORE OR COMPILE_ALL)
+#### Resources
 if(COMPILE_RESOURCES OR COMPILE_ALL)
     add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Resources/"
                      "${PROJECT_BINARY_DIR}")
