@@ -31,11 +31,11 @@ FIND_PATH(GLFW_INCLUDE_DIR GLFW/glfw3.h DOC "Path to GLFW3 include directory."
   /usr/include/GL
   /usr/local/include/GL
   ${GLFW_ROOT_DIR}/include/ # added by ptr
- 
+  ${PROJECT_SOURCE_DIR}/DBGL_Platform/lib/glfw/include
 )
 
 FIND_LIBRARY(GLFW_LIBRARY DOC "Absolute path to GLFW library."
-  NAMES glfw GLFW.lib libglfw.so
+  NAMES glfw glfw3.dll libglfw.so
   HINTS
   $ENV{GLFW_ROOT}
   PATH_SUFFIXES lib/win32 #For finding the library file under the root of the glfw expanded archive, typically on Windows.
@@ -43,6 +43,7 @@ FIND_LIBRARY(GLFW_LIBRARY DOC "Absolute path to GLFW library."
   /usr/local/lib
   /usr/lib
   ${GLFW_ROOT_DIR}/lib-msvc100/release # added by ptr
+  ${PROJECT_SOURCE_DIR}/DBGL_Platform/lib/glfw/src
 )
 
 SET(GLFW_FOUND 0)
