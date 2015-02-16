@@ -17,6 +17,15 @@
 using namespace dbgl;
 using namespace std;
 
+TEST_INITIALIZE(CSV)
+{
+    // Write test file
+	std::ofstream fout("test.csv");
+	fout << "Hello;World;0;3.74" << std::endl;
+	fout << "42;true;foo;bar" << std::endl;
+	fout << "\"baz\";;;" << std::endl;
+}
+
 TEST(CSV,access)
 {
     try

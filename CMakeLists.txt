@@ -79,13 +79,13 @@ endif(NOT DEFINED GRAPHVIZ_INSTALLED)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
-        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile @ONLY
+        ${PROJECT_SOURCE_DIR}/Doxyfile.in
+        ${PROJECT_SOURCE_DIR}/Doxyfile @ONLY
     )
     add_custom_target(doc
         ${DOXYGEN_EXECUTABLE}
-        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        ${PROJECT_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/DBGL_Platform/
         COMMENT "Generating documentation..." VERBATIM
     )
 else (DOXYGEN_FOUND)
