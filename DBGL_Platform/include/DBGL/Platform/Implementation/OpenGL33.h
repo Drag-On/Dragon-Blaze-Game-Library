@@ -12,6 +12,7 @@
 #define OPENGL33_H_
 
 #include "DBGL/Platform/Platform.h"
+#include "DBGL/Platform/Shader/ShaderProgramCommandsGL33.h"
 
 namespace dbgl
 {
@@ -35,8 +36,10 @@ namespace dbgl
 		virtual ITexture* createTexture(ITexture::Type type);
 		virtual IMesh* createMesh();
 		virtual IRenderContext* createRenderContext(ITexture* tex, bool createDepthBuf = false);
+		virtual IShaderProgramCommands* curShaderProgram();
 	private:
 		bool m_wndCreated = false;
+		static ShaderProgramCommandsGL33 s_shaderProgramCommands;
 	};
 }
 

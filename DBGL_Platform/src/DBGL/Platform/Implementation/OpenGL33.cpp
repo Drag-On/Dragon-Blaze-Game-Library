@@ -19,63 +19,70 @@
 
 namespace dbgl
 {
-    OpenGL33::OpenGL33()
-    {
-	// Initialize window manager
-	if (!glfwInit())
-	    throw "Unable to initialize glfw!";
-    }
+	ShaderProgramCommandsGL33 OpenGL33::s_shaderProgramCommands{};
 
-    OpenGL33::~OpenGL33()
-    {
-	// Terminate window manager
-	glfwTerminate();
-    }
-
-    IWindow* OpenGL33::createWindow(std::string title, int width, int height, bool fullscreen,
-	    unsigned int multisampling)
-    {
-	if(!m_wndCreated)
+	OpenGL33::OpenGL33()
 	{
-	    m_wndCreated = true;
-	    return new WindowGL33 { title, width, height, fullscreen, multisampling };
+		// Initialize window manager
+		if (!glfwInit())
+			throw "Unable to initialize glfw!";
 	}
-	else
-	    throw "Creation of multiple windows is currently not supported";
-    }
 
-    IMonitor* OpenGL33::createMonitor()
-    {
-	return new MonitorGL33{};
-    }
+	OpenGL33::~OpenGL33()
+	{
+		// Terminate window manager
+		glfwTerminate();
+	}
 
-    ITimer* OpenGL33::createTimer()
-    {
-	return new TimerGL33{};
-    }
+	IWindow* OpenGL33::createWindow(std::string title, int width, int height, bool fullscreen,
+			unsigned int multisampling)
+	{
+		if (!m_wndCreated)
+		{
+			m_wndCreated = true;
+			return new WindowGL33 { title, width, height, fullscreen, multisampling };
+		}
+		else
+			throw "Creation of multiple windows is currently not supported";
+	}
 
-    IShader* OpenGL33::createShader(IShader::Type type, std::string code)
-    {
-	return new ShaderGL33{type, code};
-    }
+	IMonitor* OpenGL33::createMonitor()
+	{
+		return new MonitorGL33 { };
+	}
 
-    IShaderProgram* OpenGL33::createShaderProgram()
-    {
-	return new ShaderProgramGL33{};
-    }
+	ITimer* OpenGL33::createTimer()
+	{
+		return new TimerGL33 { };
+	}
 
-    ITexture* OpenGL33::createTexture(ITexture::Type type)
-    {
-	return new TextureGL33{type};
-    }
+	IShader* OpenGL33::createShader(IShader::Type type, std::string code)
+	{
+		return new ShaderGL33 { type, code };
+	}
 
-    IMesh* OpenGL33::createMesh()
-    {
-	return new MeshGL33{};
-    }
+	IShaderProgram* OpenGL33::createShaderProgram()
+	{
+		return new ShaderProgramGL33 { };
+	}
 
-    IRenderContext* OpenGL33::createRenderContext(ITexture* tex, bool createDepthBuf)
-    {
-	return new RenderContextGL33Texture{tex, createDepthBuf};
-    }
+	ITexture* OpenGL33::createTexture(ITexture::Type type)
+	{
+		return new TextureGL33 { type };
+	}
+
+	IMesh* OpenGL33::createMesh()
+	{
+		return new MeshGL33 { };
+	}
+
+	IRenderContext* OpenGL33::createRenderContext(ITexture* tex, bool createDepthBuf)
+	{
+		return new RenderContextGL33Texture { tex, createDepthBuf };
+	}
+
+	IShaderProgramCommands* OpenGL33::curShaderProgram()
+	{
+		return &s_shaderProgramCommands;
+	}
 }

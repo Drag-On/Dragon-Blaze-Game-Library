@@ -17,6 +17,7 @@
 #include "DBGL/Platform/Time/ITimer.h"
 #include "DBGL/Platform/Shader/IShader.h"
 #include "DBGL/Platform/Shader/IShaderProgram.h"
+#include "DBGL/Platform/Shader/IShaderProgramCommands.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 
 namespace dbgl
@@ -97,6 +98,11 @@ namespace dbgl
 			 * @note The created object needs to be deleted manually
 			 */
 			virtual IRenderContext* createRenderContext(ITexture* tex, bool createDepthBuf = false) = 0;
+			/**
+			 * @brief Provides functionality to operate on the currently in-use shader program
+			 * @return A pointer to the currently in-use shader program
+			 */
+			virtual IShaderProgramCommands* curShaderProgram() = 0;
 		};
 
 		/**
