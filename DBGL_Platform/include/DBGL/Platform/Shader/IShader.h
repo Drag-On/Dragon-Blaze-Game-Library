@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 /// Dragon Blaze Game Library
 ///
-/// Copyright (c) 2014 by Jan Moeller
+/// Copyright (c) 2015 by Jan Moeller
 ///
 /// This software is provided "as-is" and does not claim to be
 /// complete or free of bugs in any way. It should work, but
@@ -15,32 +15,32 @@
 
 namespace dbgl
 {
-    /**
-     * @brief Interface class for shaders
-     */
-    class IShader
-    {
+	/**
+	 * @brief Interface class for shaders
+	 */
+	class IShader
+	{
 	public:
-	    /**
-	     * @brief Lists all supported shader types
-	     */
-	    enum class Type
-	    {
-		VERTEX,  //!< VERTEX
-		FRAGMENT,//!< FRAGMENT
-		GEOMETRY,//!< GEOMETRY
-		COMPUTE, //!< COMPUTE
-	    };
+		/**
+		 * @brief Lists all supported shader types
+		 */
+		enum class Type
+		{
+			VERTEX,  //!< VERTEX
+			FRAGMENT,  //!< FRAGMENT
+			GEOMETRY,  //!< GEOMETRY
+			COMPUTE, //!< COMPUTE
+		};
 
-	    /**
-	     * @brief Destructor
-	     */
-	    virtual ~IShader() = default;
-	    /**
-	     * @brief Compiles the shader
-	     */
-	    virtual void compile() = 0;
-    };
+		/**
+		 * @brief Destructor
+		 */
+		virtual ~IShader() = default;
+		/**
+		 * @brief Compiles the shader
+		 */
+		virtual void compile() = 0;
+	};
 }
 
 #endif /* ISHADER_H_ */

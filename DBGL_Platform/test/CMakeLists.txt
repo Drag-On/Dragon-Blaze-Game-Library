@@ -1,7 +1,7 @@
 ######################################################################
 ### Dragon Blaze Game Library
 ###
-### Copyright (c) 2014 by Jan Moeller
+### Copyright (c) 2015 by Jan Moeller
 ###
 ### This software is provided "as-is" and does not claim to be
 ### complete or free of bugs in any way. It should work, but

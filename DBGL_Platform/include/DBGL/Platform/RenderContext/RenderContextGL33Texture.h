@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 /// Dragon Blaze Game Library
 ///
-/// Copyright (c) 2014 by Jan Moeller
+/// Copyright (c) 2015 by Jan Moeller
 ///
 /// This software is provided "as-is" and does not claim to be
 /// complete or free of bugs in any way. It should work, but
@@ -15,25 +15,25 @@
 
 namespace dbgl
 {
-    /**
-     * @brief RenderContext that draws onto a texture instead of the screen
-     */
-    class RenderContextGL33Texture: public RenderContextGL33
-    {
+	/**
+	 * @brief RenderContext that draws onto a texture instead of the screen
+	 */
+	class RenderContextGL33Texture: public RenderContextGL33
+	{
 	public:
-	    /**
-	     * @brief Creates a new render context using a texture as output
-	     * @param tex Texture to render to
-	     * @param createDepthBuf Indicates if a depth buffer should be created
-	     */
-	    RenderContextGL33Texture(ITexture* tex, bool createDepthBuf = false);
-	    virtual ~RenderContextGL33Texture();
-	    virtual int getWidth();
-	    virtual int getHeight();
+		/**
+		 * @brief Creates a new render context using a texture as output
+		 * @param tex Texture to render to
+		 * @param createDepthBuf Indicates if a depth buffer should be created
+		 */
+		RenderContextGL33Texture(ITexture* tex, bool createDepthBuf = false);
+		virtual ~RenderContextGL33Texture();
+		virtual int getWidth();
+		virtual int getHeight();
 
 	private:
-	    TextureGL33* m_pTex = nullptr;
-    };
+		TextureGL33* m_pTex = nullptr;
+	};
 }
 
 #endif /* RENDERCONTEXTGL33TEXTURE_H_ */
