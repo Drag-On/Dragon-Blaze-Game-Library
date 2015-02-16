@@ -166,10 +166,8 @@ namespace dbgl
 		std::string line{};
 		std::string type{};
 		std::vector<std::string> params;
-		while(lineStream.good())
+		while(std::getline(lineStream, line))
 		{
-		    // Read line
-		    std::getline(lineStream, line);
 		    if (line.length() == 0) // Skip empty lines
 			continue;
 		    params.clear();
@@ -234,6 +232,11 @@ namespace dbgl
 			// Might be a comment or some other line we can skip
 			continue;
 		}
+		if(lineStream.bad())
+		{
+			// TODO: Error handling
+			return nullptr;
+		}
 		// Create mesh
 		auto mesh = Platform::get()->createMesh();
 		interpret(mesh, origFaces, origVertices, origNormals, origUvs);
@@ -274,9 +277,15 @@ namespace dbgl
 		if (file.is_open())
 		{
 		    file.seekg(0, std::ios::end);
-		    contents.resize(file.tellg());
+		    unsigned int size = file.tellg();
+		    contents.resize(size);
 		    file.seekg(0, std::ios::beg);
-		    file.read(&contents[0], contents.size());
+//		    file.read(&contents[0], size);
+
+		    char buffer[4096];
+		    while (file.read(buffer, sizeof(buffer)))
+		    	contents.append(buffer, sizeof(buffer));
+		    contents.append(buffer, file.gcount());
 		}
 		// Close file
 		file.close();

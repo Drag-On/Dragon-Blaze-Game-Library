@@ -45,7 +45,7 @@ TEST(MeshIO,obj)
 	FAIL();
     else
     {
-	auto mesh = io.load("plugins/Mesh/OBJ/test.obj");
+	auto mesh = io.load("test/MeshTests/test.obj");
 	ASSERT(mesh);
 	ASSERT(mesh->vertices().size() == 6 * 6);
 	ASSERT(mesh->normals().size() == 0);

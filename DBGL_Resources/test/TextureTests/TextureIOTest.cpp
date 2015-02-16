@@ -69,7 +69,7 @@ TEST(TextureIO,bmp)
     if (!io.addFormat("plugins/Texture/BMP/libDBGL_BMP." + Library::getFileExtension()))
 	FAIL();
     else
-	testImg(io, "plugins/Texture/BMP/test.bmp");
+	testImg(io, "test/TextureTests/test.bmp");
 }
 
 TEST(TextureIO,tga)
@@ -79,7 +79,7 @@ TEST(TextureIO,tga)
     if (!io.addFormat("plugins/Texture/TGA/libDBGL_TGA." + Library::getFileExtension()))
 	FAIL();
     else
-	testImg(io, "plugins/Texture/TGA/test.tga");
+	testImg(io, "test/TextureTests/test.tga");
 }
 
 TEST(TextureIO,dds)
@@ -90,6 +90,6 @@ TEST(TextureIO,dds)
 	FAIL();
     else
     {
-	testImg(io, "plugins/Texture/DDS/test.dds", 200); // DDS compression destroys a lot of information...
+	testImg(io, "test/TextureTests/test.dds", 200); // DDS compression destroys a lot of information...
     }
 }
