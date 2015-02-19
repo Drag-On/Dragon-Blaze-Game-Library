@@ -94,7 +94,7 @@ namespace dbgl
 		 * @copydoc IRenderContext::readPixels()
 		 */
 		virtual void readPixels(int x, int y, int width, int height,
-				ITexture::PixelFormat format, ITexture::PixelType type,
+				ITextureCommands::PixelFormat format, ITextureCommands::PixelType type,
 				unsigned int bufsize, char* buf);
 		/**
 		 * @copydoc IRenderContext::drawMesh()

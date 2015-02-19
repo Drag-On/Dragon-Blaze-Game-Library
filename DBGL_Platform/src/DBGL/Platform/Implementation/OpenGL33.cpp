@@ -20,6 +20,7 @@
 namespace dbgl
 {
 	ShaderProgramCommandsGL33 OpenGL33::s_shaderProgramCommands{};
+	TextureCommandsGL33 OpenGL33::s_textureCommands{};
 
 	OpenGL33::OpenGL33()
 	{
@@ -76,13 +77,18 @@ namespace dbgl
 		return new MeshGL33 { };
 	}
 
-	IRenderContext* OpenGL33::createRenderContext(ITexture* tex, bool createDepthBuf)
+	IRenderContext* OpenGL33::createRenderContext(unsigned int width, unsigned int height, bool createDepthBuf)
 	{
-		return new RenderContextGL33Texture { tex, createDepthBuf };
+		return new RenderContextGL33Texture { width, height, createDepthBuf };
 	}
 
 	IShaderProgramCommands* OpenGL33::curShaderProgram()
 	{
 		return &s_shaderProgramCommands;
+	}
+
+	ITextureCommands* OpenGL33::curTexture()
+	{
+		return &s_textureCommands;
 	}
 }

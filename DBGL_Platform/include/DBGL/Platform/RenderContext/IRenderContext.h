@@ -14,6 +14,7 @@
 #include <array>
 #include "DBGL/Platform/Mesh/IMesh.h"
 #include "DBGL/Platform/Texture/ITexture.h"
+#include "DBGL/Platform/Texture/ITextureCommands.h"
 
 namespace dbgl
 {
@@ -97,8 +98,7 @@ namespace dbgl
 		 * @param dest Destination factor
 		 * @note Set both \p src and \p dest to ZERO in order to disable alpha blending
 		 */
-		virtual void setAlphaBlend(AlphaBlendValue src,
-				AlphaBlendValue dest) = 0;
+		virtual void setAlphaBlend(AlphaBlendValue src, AlphaBlendValue dest) = 0;
 		/**
 		 * @brief Retrieves the currently set source factor for alpha blending
 		 * @return Source factor
@@ -167,8 +167,7 @@ namespace dbgl
 		 * @param width Width
 		 * @param height Height
 		 */
-		virtual void viewport(unsigned int x, unsigned int y,
-				unsigned int width, unsigned int height) = 0;
+		virtual void viewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) = 0;
 		/**
 		 * @brief Reads out the pixels of the current buffer
 		 * @param x X coordinate to start reading from
@@ -180,9 +179,8 @@ namespace dbgl
 		 * @param bufsize Size of the passed buffer
 		 * @param[out] buf Buffer to write data to
 		 */
-		virtual void readPixels(int x, int y, int width, int height,
-				ITexture::PixelFormat format, ITexture::PixelType type,
-				unsigned int bufsize, char* buf) = 0;
+		virtual void readPixels(int x, int y, int width, int height, ITextureCommands::PixelFormat format,
+				ITextureCommands::PixelType type, unsigned int bufsize, char* buf) = 0;
 		/**
 		 * @brief Renders the \p mesh to this render context
 		 * @param mesh Mesh to draw

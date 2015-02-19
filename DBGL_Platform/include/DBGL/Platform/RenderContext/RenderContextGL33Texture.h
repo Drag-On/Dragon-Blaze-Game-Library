@@ -26,13 +26,16 @@ namespace dbgl
 		 * @param tex Texture to render to
 		 * @param createDepthBuf Indicates if a depth buffer should be created
 		 */
-		RenderContextGL33Texture(ITexture* tex, bool createDepthBuf = false);
+		RenderContextGL33Texture(unsigned int width, unsigned int height, bool createDepthBuf = false);
 		virtual ~RenderContextGL33Texture();
 		virtual int getWidth();
 		virtual int getHeight();
+		virtual ITexture* getTexture();
 
 	private:
 		TextureGL33* m_pTex = nullptr;
+		unsigned int m_width = 0;
+		unsigned int m_height = 0;
 	};
 }
 

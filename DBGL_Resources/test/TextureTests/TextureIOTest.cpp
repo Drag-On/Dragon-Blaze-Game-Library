@@ -40,9 +40,10 @@ TEST_TERMINATE(TextureIO)
 void testImg(TextureIO& io, std::string const& path, unsigned char accuracy = 0)
 {
     auto tex = io.load(path);
+    tex->bind();
     ASSERT(tex);
-    ASSERT(tex->getWidth() == 2);
-    ASSERT(tex->getHeight() == 2);
+    ASSERT(Platform::get()->curTexture()->getWidth() == 2);
+    ASSERT(Platform::get()->curTexture()->getHeight() == 2);
     auto img = TextureUtility::createImageData(tex);
     ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getRed(), static_cast<unsigned char>(0), accuracy));
     ASSERT(dbgl::isSimilar(img.getPixel(0, 0).getGreen(), static_cast<unsigned char>(0), accuracy));

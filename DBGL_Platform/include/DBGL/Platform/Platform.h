@@ -19,6 +19,7 @@
 #include "DBGL/Platform/Shader/IShaderProgram.h"
 #include "DBGL/Platform/Shader/IShaderProgramCommands.h"
 #include "DBGL/Platform/Texture/ITexture.h"
+#include "DBGL/Platform/Texture/ITextureCommands.h"
 
 namespace dbgl
 {
@@ -92,17 +93,23 @@ namespace dbgl
 			virtual IMesh* createMesh() = 0;
 			/**
 			 * @brief Creates a render context that can be used to draw onto textures
-			 * @param tex Texture to draw onto
+			 * @param width Width in pixels
+			 * @param height Height in pixels
 			 * @param createDepthBuf Flag indicating if a depth buffer is needed
 			 * @return Pointer to the created render context
 			 * @note The created object needs to be deleted manually
 			 */
-			virtual IRenderContext* createRenderContext(ITexture* tex, bool createDepthBuf = false) = 0;
+			virtual IRenderContext* createRenderContext(unsigned int width, unsigned int height, bool createDepthBuf = false) = 0;
 			/**
 			 * @brief Provides functionality to operate on the currently in-use shader program
 			 * @return A pointer to the currently in-use shader program
 			 */
 			virtual IShaderProgramCommands* curShaderProgram() = 0;
+			/**
+			 * @brief Provides functionality to operate on the currently bound texture
+			 * @return A pointer to the currently bound texture
+			 */
+			virtual ITextureCommands* curTexture() = 0;
 		};
 
 		/**

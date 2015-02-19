@@ -13,6 +13,7 @@
 
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Shader/ShaderProgramCommandsGL33.h"
+#include "DBGL/Platform/Texture/TextureCommandsGL33.h"
 
 namespace dbgl
 {
@@ -35,11 +36,13 @@ namespace dbgl
 		virtual IShaderProgram* createShaderProgram();
 		virtual ITexture* createTexture(ITexture::Type type);
 		virtual IMesh* createMesh();
-		virtual IRenderContext* createRenderContext(ITexture* tex, bool createDepthBuf = false);
+		virtual IRenderContext* createRenderContext(unsigned int width, unsigned int height, bool createDepthBuf = false);
 		virtual IShaderProgramCommands* curShaderProgram();
+		virtual ITextureCommands* curTexture();
 	private:
 		bool m_wndCreated = false;
 		static ShaderProgramCommandsGL33 s_shaderProgramCommands;
+		static TextureCommandsGL33 s_textureCommands;
 	};
 }
 
