@@ -347,7 +347,7 @@ namespace dbgl
     {
 		if (*this != rhs)
 		{ 
-			for(int i = 0; i < m_data.getDimension(); i++)
+			for(unsigned int i = 0; i < m_data.getDimension(); i++)
 				m_data[i] = rhs.m_data[i];
 		} 
 		return *this;

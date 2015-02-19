@@ -119,8 +119,8 @@ namespace dbgl
 	template<typename T, unsigned int N, unsigned int M> template <unsigned int O> const Matrix<T,M,O> Matrix<T,N,M>::operator*(Matrix<T,O,N> const& rhs) const
 	{
 		Matrix<T,M,O> mat{};
-		for(int x = 0; x < M; x++)
-			for(int y = 0; y < O; y++)
+		for(unsigned int x = 0; x < M; x++)
+			for(unsigned int y = 0; y < O; y++)
 			{
 				mat[x][y] = 0;
 				for(int xThis = 0; xThis < getWidth(); xThis++)

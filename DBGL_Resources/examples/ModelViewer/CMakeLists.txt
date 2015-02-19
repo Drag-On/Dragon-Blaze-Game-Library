@@ -9,17 +9,17 @@
 ######################################################################
 
 ######################################################################
-### Main library cmake compilation file
+### Basics example cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_RESOURCES C CXX)
- 
+project (DBGL_RESOURCES_EXAMPLE_MODELVIEWER C CXX)
+
 ######################################################################
 ### Project code files
 ######################################################################
-file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+file(GLOB_RECURSE SRC_FILES
+    "*.h"
+    "*.cpp"
 )
 
 ######################################################################
@@ -32,23 +32,11 @@ include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 ######################################################################
 ### Make target
 ######################################################################
-add_library(DBGL_Resources SHARED ${SRC})
-set_target_properties(DBGL_Resources PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(DBGL_RESOURCES_EXAMPLE_MODELVIEWER ${SRC_FILES})
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
-
-######################################################################
-### Compile plugins
-######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/plugins/"
-                 "${PROJECT_BINARY_DIR}/plugins/")
-
-######################################################################
-### Compile example applications
-######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/examples/"
-                 "${PROJECT_BINARY_DIR}/examples/")
+target_link_libraries(DBGL_RESOURCES_EXAMPLE_MODELVIEWER "${DBGL_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_EXAMPLE_MODELVIEWER "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_EXAMPLE_MODELVIEWER "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
