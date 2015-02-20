@@ -14,13 +14,15 @@
 #include <streambuf>
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Implementation/OpenGL33.h"
-#include "DBGL/Resources/Mesh/MeshUtility.h"
-#include "DBGL/Resources/Texture/TextureUtility.h"
-#include "DBGL/Resources/Color/Color.h"
 #include "DBGL/Core/Math/Matrix4x4.h"
 #include "DBGL/Core/Math/Vector3.h"
 #include "DBGL/Core/Math/Quaternion.h"
 #include "DBGL/Core/Math/Utility.h"
+#include "DBGL/Resources/Mesh/MeshUtility.h"
+#include "DBGL/Resources/Mesh/MeshIO.h"
+#include "DBGL/Resources/Texture/TextureUtility.h"
+#include "DBGL/Resources/Texture/TextureIO.h"
+#include "DBGL/Resources/Color/Color.h"
 
 using namespace dbgl;
 using namespace std;
@@ -46,6 +48,9 @@ float matSpecWidth = 3;
 double delta = 1;
 float moveSpeed = 50.0f;
 QuatF meshRotation;
+
+TextureIO textureIO {};
+MeshIO meshIO {};
 
 /**
  * @brief Resizes the render context with the window
@@ -192,25 +197,39 @@ int main()
 	cout << "Initing..." << endl;
 	Platform::init<OpenGL33>();
 	cout << "Creating a window..." << endl;
-	pWnd = Platform::get()->createWindow("Model Viewer", 720, 480, false, 0);
+	pWnd = Platform::get()->createWindow("Model Viewer", 720, 480, false, 4);
 	cout << "Setting rendering properties..." << endl;
 	pWnd->getRenderContext().setDepthTest(IRenderContext::DepthTestValue::Less);
-	pWnd->getRenderContext().setFaceCulling(IRenderContext::FaceCullingValue::Off);
+	pWnd->getRenderContext().setFaceCulling(IRenderContext::FaceCullingValue::Back);
 	cout << "Creating timer..." << endl;
 	pTimer = Platform::get()->createTimer();
 	cout << "Adding handlers..." << endl;
 	pWnd->addFramebufferResizeCallback(resizeHandler);
 	pWnd->addInputCallback(inputHandler);
+	cout << "Loading plugins..." << endl;
+	textureIO.addFormat("plugins/Texture/BMP/libDBGL_BMP." + Library::getFileExtension());
+	textureIO.addFormat("plugins/Texture/TGA/libDBGL_TGA." + Library::getFileExtension());
+	textureIO.addFormat("plugins/Texture/DDS/libDBGL_DDS." + Library::getFileExtension());
+	meshIO.addFormat("plugins/Mesh/OBJ/libDBGL_OBJ." + Library::getFileExtension());
 	cout << "Loading default mesh..." << endl;
-//	pMesh = MeshUtility::createCube();
-	pMesh = MeshUtility::createPyramid();
+	pMesh = MeshUtility::createIcosahedron(false);
 	MeshUtility::generateTangentBase(pMesh);
 	pMesh->updateBuffers();
 	cout << "Loading default textures..." << endl;
 	unsigned char whiteVal[] = { 255, 255, 255, 255 };
 	pTexDiff = TextureUtility::createTexture(TextureUtility::ImageData(&whiteVal[0], 1, 1));
+//	pTexDiff = textureIO.load("test.bmp");
+	pTexDiff->bind();
+	Platform::get()->curTexture()->generateMipMaps();
 	pTexSpec = TextureUtility::createTexture(TextureUtility::ImageData(&whiteVal[0], 1, 1));
+	pTexSpec->bind();
+	Platform::get()->curTexture()->generateMipMaps();
+	whiteVal[0] = 255 / 2;
+	whiteVal[1] = 255 / 2;
+	whiteVal[2] = 255;
 	pTexNorm = TextureUtility::createTexture(TextureUtility::ImageData(&whiteVal[0], 1, 1));
+	pTexNorm->bind();
+	Platform::get()->curTexture()->generateMipMaps();
 	cout << "Loading default shader..." << endl;
 	pSP = loadShader("DiffSpecNorm.vert", "DiffSpecNorm.frag");
 	cout << "Showing window..." << endl;
