@@ -58,6 +58,14 @@ namespace dbgl
 		 */
 		static IMesh* createIcosahedron(bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
 		/**
+		 * @brief Creates a sphere by refining an icosahedron
+		 * @param refine Amount of refinement steps to do. The higher, the more polygons the sphere will have
+		 * @param sendToGPU Determines if buffers should be updated after creation
+		 * @param usage Initial usage pattern
+		 * @return The created mesh
+		 */
+		static IMesh* createIcoSphere(unsigned int refine, bool sendToGPU = true, IMesh::Usage usage = IMesh::Usage::StaticDraw);
+		/**
 		 * @brief Generates normals for a mesh
 		 * @param[in,out] mesh Mesh to generate normals for
 		 */

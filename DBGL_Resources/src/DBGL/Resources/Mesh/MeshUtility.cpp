@@ -11,6 +11,7 @@
 #include <cstring>
 #include <array>
 #include <map>
+#include <type_traits>
 #include "DBGL/Core/Math/Vector3.h"
 #include "DBGL/Core/Math/Vector2.h"
 #include "DBGL/Core/Collection/Tree/KdTree.h"
@@ -371,6 +372,190 @@ namespace dbgl
 			{	0, 1},
 		};
 		generateNormals(mesh);
+
+		if (sendToGPU)
+			mesh->updateBuffers();
+		return mesh;
+	}
+
+	IMesh* MeshUtility::createIcoSphere(unsigned int refine, bool sendToGPU, IMesh::Usage usage)
+	{
+		auto mesh = Platform::get()->createMesh();
+		mesh->setUsage(usage);
+
+		// Generate icosahedron
+		float t = (1.0f + std::sqrt(5.0f)) / 2.0f;
+		mesh->vertices() =
+		{
+			Vec3f {-1, t, 0}.normalize(),
+			Vec3f {1, t, 0}.normalize(),
+			Vec3f {-1, -t, 0}.normalize(),
+			Vec3f {1, -t, 0}.normalize(),
+			Vec3f {0, -1, t}.normalize(),
+			Vec3f {0, 1, t}.normalize(),
+			Vec3f {0, -1, -t}.normalize(),
+			Vec3f {0, 1, -t}.normalize(),
+			Vec3f {t, 0, -1}.normalize(),
+			Vec3f {t, 0, 1}.normalize(),
+			Vec3f {-t, 0, -1}.normalize(),
+			Vec3f {-t, 0, 1}.normalize(),
+		};
+		mesh->indices() =
+		{
+			0, 11, 5,
+			0, 5, 1,
+			0, 1, 7,
+			0, 7, 10,
+			0, 10, 11,
+			1, 5, 9,
+			5, 11, 4,
+			11, 10, 2,
+			10, 7, 6,
+			7, 1, 8,
+			3, 9, 4,
+			3, 4, 2,
+			3, 2, 6,
+			3, 6, 8,
+			3, 8, 9,
+			4, 9, 5,
+			2, 4, 11,
+			6, 2, 10,
+			8, 6, 7,
+			9, 8, 1,
+		};
+		// Refine by subdividing the basic triangles
+		std::remove_reference<decltype(mesh->indices())>::type newIndices;
+		std::map<uint64_t, unsigned int> subdivisionIndices;
+		// Computes the vertex in-between two other vertices by their index and inserts it into vertices
+		auto subdivideEdge = [&](unsigned int i, unsigned int j)
+		{
+			// Compute hash
+			uint64_t key = (static_cast<uint64_t>(std::min(i, j)) << 32) + std::max(i, j);
+			// Check if vertex already exists
+			auto vertIter = subdivisionIndices.find(key);
+			if(vertIter != subdivisionIndices.end())
+				return vertIter->second;
+			else
+			{
+				// Otherwise compute vertex between the passed vertices
+				auto& v1 = mesh->vertices()[i];
+				auto& v2 = mesh->vertices()[j];
+				Vec3f middle = (v1 + v2).normalize();// On unit sphere
+				unsigned int index = mesh->vertices().size();
+				subdivisionIndices.insert({key, index});
+				mesh->vertices().push_back(middle);
+				return index;
+			}
+		};
+		for (unsigned int i = 0; i < refine; i++)
+		{
+			newIndices.clear();
+			for (unsigned int i = 0; i < mesh->indices().size(); i += 3)
+			{
+				unsigned int index0 = mesh->indices()[i + 0];
+				unsigned int index1 = mesh->indices()[i + 1];
+				unsigned int index2 = mesh->indices()[i + 2];
+
+				// replace triangle by 4 triangles
+				int a = subdivideEdge(index0, index1);
+				int b = subdivideEdge(index1, index2);
+				int c = subdivideEdge(index2, index0);
+
+				newIndices.push_back(index0);
+				newIndices.push_back(a);
+				newIndices.push_back(c);
+				newIndices.push_back(index1);
+				newIndices.push_back(b);
+				newIndices.push_back(a);
+				newIndices.push_back(index2);
+				newIndices.push_back(c);
+				newIndices.push_back(b);
+				newIndices.push_back(a);
+				newIndices.push_back(b);
+				newIndices.push_back(c);
+			}
+			mesh->indices().clear();
+			mesh->indices().insert(mesh->indices().begin(), newIndices.begin(), newIndices.end());
+		}
+
+		// Compute UVs
+		auto computeUV = [&](Vec3f normal)
+		{
+			float u;
+			float v;
+			float normalisedX = 0;
+			float normalisedZ = -1;
+			if (((normal.x() * normal.x()) + (normal.z() * normal.z())) > 0)
+			{
+				normalisedX = std::sqrt((normal.x() * normal.x()) / ((normal.x() * normal.x()) + (normal.z() * normal.z())));
+				if (normal.x() < 0)
+					normalisedX = -normalisedX;
+				normalisedZ = std::sqrt((normal.z() * normal.z()) / ((normal.x() * normal.x()) + (normal.z() * normal.z())));
+				if (normal.z() < 0)
+					normalisedZ = -normalisedZ;
+			}
+			if (normalisedZ == 0)
+				u = (normalisedX * dbgl::pi()) / 2;
+			else
+			{
+				u = std::atan(normalisedX / normalisedZ);
+				if (normalisedZ < 0)
+					u += dbgl::pi();
+			}
+			if (u < 0)
+				u += 2 * dbgl::pi();
+			u /= 2 * dbgl::pi();
+			v = (-normal.y() + 1) / 2;
+			return Vec2f {u, v};
+		};
+		for (auto vertex : mesh->vertices())
+			mesh->uvs().push_back(computeUV(vertex));
+		// Repair texture seams by duplicating the vertices that need to wrap around the texture border
+		newIndices.clear();
+		std::map<uint64_t, unsigned int> correctionList;
+		for (int i = mesh->indices().size() - 3; i >= 0; i -= 3)
+		{
+			Vec2f& uv1 = mesh->uvs()[mesh->indices()[i + 0]];
+			Vec2f& uv2 = mesh->uvs()[mesh->indices()[i + 1]];
+			Vec2f& uv3 = mesh->uvs()[mesh->indices()[i + 2]];
+			Vec3f uv1_3d { uv1.x(), uv1.y(), 0 };
+			Vec3f uv2_3d { uv2.x(), uv2.y(), 0 };
+			Vec3f uv3_3d { uv3.x(), uv3.y(), 0 };
+			Vec3f cross = ((uv1_3d - uv2_3d).cross(uv3_3d - uv2_3d));
+			if (cross.z() <= 0)
+			{ // UVs are mapped in counter-clockwise order, thus there is a seam
+				for (int j = i; j < i + 3; j++)
+				{
+					unsigned int index = mesh->indices()[j];
+					Vec3f& vertex = mesh->vertices()[index];
+					Vec2f& uv = mesh->uvs()[index];
+					if (uv.x() >= 0.9f)
+					{
+						if (correctionList.count(index) > 0)
+							newIndices.push_back(correctionList[index]);
+						else
+						{
+							Vec2f newUV = uv;
+							newUV.x() -= 1;
+							mesh->uvs().push_back(newUV);
+							mesh->vertices().push_back(mesh->vertices()[index]);
+							unsigned int correctedVertexIndex = mesh->vertices().size() - 1;
+							correctionList.insert( { index, correctedVertexIndex });
+							newIndices.push_back(correctedVertexIndex);
+						}
+					}
+					else
+						newIndices.push_back(index);
+				}
+			}
+			else
+				newIndices.insert(newIndices.begin(), mesh->indices().begin() + i, mesh->indices().begin() + i + 3);
+		}
+		mesh->indices().clear();
+		mesh->indices().insert(mesh->indices().begin(), newIndices.begin(), newIndices.end());
+
+		// Compute normals
+		mesh->normals().insert(mesh->normals().begin(), mesh->vertices().begin(), mesh->vertices().end());
 
 		if (sendToGPU)
 			mesh->updateBuffers();
