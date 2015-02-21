@@ -41,12 +41,13 @@ Mat4f matView = Mat4f::makeView(Vec3f { 0.0, 0.0, 5.0 }, Vec3f { 0, 0, -1 }, Vec
 Vec3f lightPos { 5, 4, 2 };
 Vec3f lightColor { 1, 1, 1 };
 float lightIntensity = 15.0f;
-Vec3f lightAmbient { 0.1f, 0.1f, 0.1f };
+Vec3f lightAmbientColor { 1, 1, 1 };
+float lightAmbientIntensity = 0.1f;
 Vec3f matSpecColor { 1, 1, 1 };
 float matSpecWidth = 3;
 
 double delta = 1;
-float moveSpeed = 50.0f;
+float moveSpeed = 10.0f;
 QuatF meshRotation;
 
 TextureIO textureIO {};
@@ -62,33 +63,13 @@ void resizeHandler(IWindow::FramebufferResizeEventArgs const& args)
 	matProj = Mat4f::makeProjection(pi_4(), float(pWnd->getFrameWidth()) / pWnd->getFrameHeight(), 0.01, 100);
 }
 
-void inputHandler(IWindow::InputEventArgs const& /* args */)
+void inputHandler(IWindow::InputEventArgs const& args)
 {
 	auto& input = pWnd->getInput();
-	// Move light
-	if (input.isDown(Input::Key::KEY_W))
-		lightPos.z() -= moveSpeed * delta;
-	if (input.isDown(Input::Key::KEY_A))
-		lightPos.x() -= moveSpeed * delta;
-	if (input.isDown(Input::Key::KEY_S))
-		lightPos.z() += moveSpeed * delta;
-	if (input.isDown(Input::Key::KEY_D))
-		lightPos.x() += moveSpeed * delta;
-	if (input.isDown(Input::Key::KEY_Q))
-		lightPos.y() -= moveSpeed * delta;
-	if (input.isDown(Input::Key::KEY_E))
-		lightPos.y() += moveSpeed * delta;
 
-	// Rotate mesh
-	if (input.isDown(Input::Key::KEY_UP))
-		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{1, 0, 0}, static_cast<float>(moveSpeed * delta)};
-	if (input.isDown(Input::Key::KEY_LEFT))
-		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{0, 1, 0}, static_cast<float>(-moveSpeed * delta)};
-	if (input.isDown(Input::Key::KEY_DOWN))
-		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{1, 0, 0}, static_cast<float>(-moveSpeed * delta)};
-	if (input.isDown(Input::Key::KEY_RIGHT))
-		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{0, 1, 0}, static_cast<float>(moveSpeed * delta)};
-	matModel = meshRotation.getMatrix();
+	// Close on escape
+	if(args.key == Input::Key::KEY_ESCAPE && args.action == Input::KeyState::PRESSED)
+		pWnd->close();
 }
 
 /**
@@ -124,7 +105,27 @@ IShaderProgram* loadShader(string vertex, string fragment)
  */
 void update()
 {
+	auto& input = pWnd->getInput();
+	// Move light
+	if (input.isDown(Input::Key::KEY_W))
+		lightPos = QuatF{Vec3f{static_cast<float>(-moveSpeed * delta), 0, 0}} * lightPos;
+	if (input.isDown(Input::Key::KEY_A))
+		lightPos = QuatF{Vec3f{0, static_cast<float>(-moveSpeed * delta), 0}} * lightPos;
+	if (input.isDown(Input::Key::KEY_S))
+		lightPos = QuatF{Vec3f{static_cast<float>(moveSpeed * delta), 0, 0}} * lightPos;
+	if (input.isDown(Input::Key::KEY_D))
+		lightPos = QuatF{Vec3f{0, static_cast<float>(moveSpeed * delta), 0}} * lightPos;
 
+	// Rotate mesh
+	if (input.isDown(Input::Key::KEY_UP))
+		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{1, 0, 0}, static_cast<float>(moveSpeed * delta)};
+	if (input.isDown(Input::Key::KEY_LEFT))
+		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{0, 1, 0}, static_cast<float>(-moveSpeed * delta)};
+	if (input.isDown(Input::Key::KEY_DOWN))
+		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{1, 0, 0}, static_cast<float>(-moveSpeed * delta)};
+	if (input.isDown(Input::Key::KEY_RIGHT))
+		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{0, 1, 0}, static_cast<float>(moveSpeed * delta)};
+	matModel = meshRotation.getMatrix();
 }
 
 /**
@@ -175,7 +176,7 @@ void render()
 	Platform::get()->curShaderProgram()->setUniformInt(handle_numLights, 1);
 	Platform::get()->curShaderProgram()->setUniformFloat3(handle_lightPos, lightPos.getDataPointer());
 	Platform::get()->curShaderProgram()->setUniformFloat3(handle_lightColor, (lightIntensity * lightColor).getDataPointer());
-	Platform::get()->curShaderProgram()->setUniformFloat3(handle_lightAmbient, lightAmbient.getDataPointer());
+	Platform::get()->curShaderProgram()->setUniformFloat3(handle_lightAmbient, (lightAmbientIntensity * lightAmbientColor).getDataPointer());
 	// Material
 	Platform::get()->curShaderProgram()->setUniformFloat3(handle_matSpecCol, matSpecColor.getDataPointer());
 	Platform::get()->curShaderProgram()->setUniformFloat(handle_matSpecWidth, matSpecWidth);
@@ -212,13 +213,12 @@ int main()
 	textureIO.addFormat("plugins/Texture/DDS/libDBGL_DDS." + Library::getFileExtension());
 	meshIO.addFormat("plugins/Mesh/OBJ/libDBGL_OBJ." + Library::getFileExtension());
 	cout << "Loading default mesh..." << endl;
-	pMesh = MeshUtility::createIcosahedron(false);
+	pMesh = MeshUtility::createIcoSphere(3, false);
 	MeshUtility::generateTangentBase(pMesh);
 	pMesh->updateBuffers();
 	cout << "Loading default textures..." << endl;
 	unsigned char whiteVal[] = { 255, 255, 255, 255 };
 	pTexDiff = TextureUtility::createTexture(TextureUtility::ImageData(&whiteVal[0], 1, 1));
-//	pTexDiff = textureIO.load("test.bmp");
 	pTexDiff->bind();
 	Platform::get()->curTexture()->generateMipMaps();
 	pTexSpec = TextureUtility::createTexture(TextureUtility::ImageData(&whiteVal[0], 1, 1));
