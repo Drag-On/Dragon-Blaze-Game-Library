@@ -113,7 +113,7 @@ namespace dbgl
 			file.close();
 
 			// Flip vertically since tgas are layed out the wrong way
-			flipVertical(&img[0], fileHeader.imHeight, fileHeader.imWidth * colorMode);
+//			flipVertical(&img[0], fileHeader.imHeight, fileHeader.imWidth * colorMode);
 			// Create texture
 			auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 			tex->bind();

@@ -130,7 +130,7 @@ namespace dbgl
 			file.close();
 
 			// Flip vertically since bmps are layed out the wrong way
-			flipVertical(&img[0], infoHeader.width, infoHeader.height);
+//			flipVertical(&img[0], infoHeader.width, infoHeader.height);
 			// Create texture
 			auto tex = Platform::get()->createTexture(ITexture::Type::TEX2D);
 			tex->bind();
