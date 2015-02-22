@@ -62,6 +62,14 @@ namespace dbgl
 		 */
 		virtual FaceCullingValue getFaceCulling() const;
 		/**
+		 * @copydoc IRenderContext::setDrawMode()
+		 */
+		virtual void setDrawMode(DrawMode mode);
+		/**
+		 * @copydoc IRenderContext::getDrawMode()
+		 */
+		virtual DrawMode getDrawMode() const;
+		/**
 		 * @copydoc IRenderContext::setMultisampling()
 		 */
 		virtual void setMultisampling(bool msaa);

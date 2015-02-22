@@ -144,7 +144,7 @@ namespace dbgl
 			glCullFace(GL_FRONT_AND_BACK);
 			break;
 		default:
-			throw std::invalid_argument("Unkown value for face culling.");
+			throw std::invalid_argument("Unknown value for face culling.");
 			return;
 		}
 		m_curFaceCullingVal = val;
@@ -153,6 +153,44 @@ namespace dbgl
 	auto RenderContextGL33::getFaceCulling() const -> FaceCullingValue
 	{
 		return m_curFaceCullingVal;
+	}
+
+	void RenderContextGL33::setDrawMode(DrawMode mode)
+	{
+		GLenum glMode = GL_FILL;
+		switch(mode)
+		{
+		case DrawMode::Fill:
+			glMode = GL_FILL;
+			break;
+		case DrawMode::Line:
+			glMode = GL_LINE;
+			break;
+		case DrawMode::Point:
+			glMode = GL_POINT;
+			break;
+		default:
+			throw std::invalid_argument("Unknown value for draw mode.");
+			return;
+		}
+		glPolygonMode(GL_FRONT_AND_BACK, glMode);
+	}
+
+	auto RenderContextGL33::getDrawMode() const -> DrawMode
+	{
+		GLint current[2];
+		glGetIntegerv(GL_POLYGON_MODE, current);
+		switch(current[0])
+		{
+		case GL_FILL:
+			return DrawMode::Fill;
+		case GL_LINE:
+			return DrawMode::Line;
+		case GL_POINT:
+			return DrawMode::Point;
+		default:
+			throw std::invalid_argument("Unknown value for draw mode.");
+		}
 	}
 
 	void RenderContextGL33::setMultisampling(bool msaa)

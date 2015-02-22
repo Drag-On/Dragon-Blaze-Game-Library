@@ -72,6 +72,15 @@ namespace dbgl
 			Back,     //!< Back
 			FrontBack,     //!< FrontBack
 		};
+		/**
+		 * @brief Options that can be set for the draw mode
+		 */
+		enum class DrawMode
+		{
+			Point,//!< Point
+			Line, //!< Line
+			Fill, //!< Fill
+		};
 
 		/**
 		 * @brief Destructor
@@ -119,6 +128,16 @@ namespace dbgl
 		 * @return Currently set face culling behavior
 		 */
 		virtual FaceCullingValue getFaceCulling() const = 0;
+		/**
+		 * @brief Changes the current draw mode
+		 * @param mode New mode
+		 */
+		virtual void setDrawMode(DrawMode mode) = 0;
+		/**
+		 * @brief Retrieves the currently set draw mode
+		 * @return The current draw mode
+		 */
+		virtual DrawMode getDrawMode() const = 0;
 		/**
 		 * @brief Enables or disables multisampling
 		 * @note Note that the window has to be created with multisampling flag in order
