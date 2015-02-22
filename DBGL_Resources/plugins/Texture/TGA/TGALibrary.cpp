@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <fstream>
 #include "DBGL/Resources/Texture/IImageFormatModule.h"
+#include "DBGL/Core/Utility/BitUtility.h"
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Texture/ITextureCommands.h"
 
@@ -85,18 +86,18 @@ namespace dbgl
 			// Read file header
 			file.seekg(0, std::ios::beg);
 			FileHeaderTGA fileHeader { };
-			char fHeader[18];
-			file.read(&fHeader[0], 18);
+			unsigned char fHeader[18];
+			file.read(reinterpret_cast<char*>(&fHeader[0]), 18);
 			fileHeader.idLength = fHeader[0];
 			fileHeader.colorMapType = fHeader[1];
 			fileHeader.imageType = fHeader[2];
-			fileHeader.colorMapOffset = (fHeader[3] << 0) | (fHeader[4] << 8);
-			fileHeader.colorMapEntries = (fHeader[5] << 0) | (fHeader[6] << 8);
+			fileHeader.colorMapOffset = BitUtility::readUInt16_LE(&fHeader[3]);
+			fileHeader.colorMapEntries = BitUtility::readUInt16_LE(&fHeader[5]);
 			fileHeader.colorMapBPP = fHeader[7];
-			fileHeader.xOrig = (fHeader[8] << 0) | (fHeader[9] << 8);
-			fileHeader.yOrig = (fHeader[10] << 0) | (fHeader[11] << 8);
-			fileHeader.imWidth = (fHeader[12] << 0) | (fHeader[13] << 8);
-			fileHeader.imHeight = (fHeader[14] << 0) | (fHeader[15] << 8);
+			fileHeader.xOrig = BitUtility::readUInt16_LE(&fHeader[8]);
+			fileHeader.yOrig = BitUtility::readUInt16_LE(&fHeader[10]);
+			fileHeader.imWidth = BitUtility::readUInt16_LE(&fHeader[12]);
+			fileHeader.imHeight = BitUtility::readUInt16_LE(&fHeader[14]);
 			fileHeader.bpp = fHeader[16];
 			fileHeader.imDescriptor = fHeader[17];
 			if (fileHeader.colorMapType != 0 || (fileHeader.imageType != 2 && fileHeader.imageType != 3)
@@ -107,7 +108,7 @@ namespace dbgl
 			// Read actual image
 			int colorMode = fileHeader.bpp / 8;
 			const unsigned int imageDataLength = fileHeader.imWidth * fileHeader.imHeight * colorMode;
-			char img[imageDataLength];
+			char* img = new char[imageDataLength];
 			file.read(img, imageDataLength);
 			// Close file
 			file.close();
@@ -121,7 +122,8 @@ namespace dbgl
 			auto pixelFormat =
 					colorMode == 3 ? ITextureCommands::PixelFormat::BGR : ITextureCommands::PixelFormat::BGRA;
 			Platform::get()->curTexture()->write(0, fileHeader.imWidth, fileHeader.imHeight, pixelFormat,
-					ITextureCommands::PixelType::UBYTE, &img[0]);
+					ITextureCommands::PixelType::UBYTE, img);
+			delete[] img;
 			return tex;
 		}
 
