@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <fstream>
 #include "DBGL/Resources/Texture/IImageFormatModule.h"
+#include "DBGL/Core/Utility/BitUtility.h"
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Texture/ITextureCommands.h"
 
@@ -95,36 +96,36 @@ namespace dbgl
 			// Read file header
 			file.seekg(0, std::ios::beg);
 			FileHeaderBMP fileHeader { };
-			char fHeader[14];
-			file.read(&fHeader[0], 14);
-			fileHeader.id = *reinterpret_cast<uint16_t*>(&fHeader[0]);
-			fileHeader.fileSize = *reinterpret_cast<uint32_t*>(&fHeader[2]);
-			fileHeader.res = *reinterpret_cast<uint32_t*>(&fHeader[6]);
-			fileHeader.off = *reinterpret_cast<uint32_t*>(&fHeader[10]);
+			unsigned char fHeader[14];
+			file.read(reinterpret_cast<char*>(&fHeader[0]), 14);
+			fileHeader.id = BitUtility::readUInt16_LE(&fHeader[0]);
+			fileHeader.fileSize = BitUtility::readUInt32_LE(&fHeader[2]);
+			fileHeader.res = BitUtility::readUInt32_LE(&fHeader[6]);
+			fileHeader.off = BitUtility::readUInt32_LE(&fHeader[10]);
 			if (fileHeader.id != 0x4D42 || fileHeader.fileSize <= 0)
 				return nullptr;
 			// Read info header
 			InfoHeaderBMP infoHeader { };
-			char iHeader[40];
-			file.read(&iHeader[0], 40);
-			infoHeader.size = *reinterpret_cast<uint32_t*>(&iHeader[0]);
-			infoHeader.width = *reinterpret_cast<uint32_t*>(&iHeader[4]);
-			infoHeader.height = *reinterpret_cast<uint32_t*>(&iHeader[8]);
-			infoHeader.panes = *reinterpret_cast<uint16_t*>(&iHeader[10]);
-			infoHeader.bpp = *reinterpret_cast<uint16_t*>(&iHeader[12]);
-			infoHeader.compr = *reinterpret_cast<uint32_t*>(&iHeader[16]);
-			infoHeader.imgSize = *reinterpret_cast<uint32_t*>(&iHeader[20]);
-			infoHeader.xPixPerMeter = *reinterpret_cast<uint32_t*>(&iHeader[24]);
-			infoHeader.yPixPerMeter = *reinterpret_cast<uint32_t*>(&iHeader[28]);
-			infoHeader.indexClr = *reinterpret_cast<uint32_t*>(&iHeader[32]);
-			infoHeader.clr = *reinterpret_cast<uint32_t*>(&iHeader[36]);
+			unsigned char iHeader[40];
+			file.read(reinterpret_cast<char*>(&iHeader[0]), 40);
+			infoHeader.size = BitUtility::readUInt32_LE(&iHeader[0]);
+			infoHeader.width = BitUtility::readUInt32_LE(&iHeader[4]);
+			infoHeader.height = BitUtility::readUInt32_LE(&iHeader[8]);
+			infoHeader.panes = BitUtility::readUInt16_LE(&iHeader[12]);
+			infoHeader.bpp = BitUtility::readUInt16_LE(&iHeader[14]);
+			infoHeader.compr = BitUtility::readUInt32_LE(&iHeader[16]);
+			infoHeader.imgSize = BitUtility::readUInt32_LE(&iHeader[20]);
+			infoHeader.xPixPerMeter = BitUtility::readUInt32_LE(&iHeader[24]);
+			infoHeader.yPixPerMeter = BitUtility::readUInt32_LE(&iHeader[28]);
+			infoHeader.indexClr = BitUtility::readUInt32_LE(&iHeader[32]);
+			infoHeader.clr = BitUtility::readUInt32_LE(&iHeader[36]);
 			if (infoHeader.size != 40 || infoHeader.width <= 0 || infoHeader.height <= 0 || infoHeader.compr != 0)
 				return nullptr;
 			// Read image data
 			if (fileHeader.off > 0)
 				file.seekg(fileHeader.off, std::ios::beg);
 			const unsigned int imgSize { fileHeader.fileSize - fileHeader.off };
-			char img[imgSize];
+			char* img = new char[imgSize];
 			file.read(&img[0], imgSize);
 			// Close file
 			file.close();
@@ -137,6 +138,7 @@ namespace dbgl
 			Platform::get()->curTexture()->setRowAlignment(ITextureCommands::RowAlignment::UNPACK, 4);
 			Platform::get()->curTexture()->write(0, infoHeader.width, infoHeader.height,
 					ITextureCommands::PixelFormat::BGR, ITextureCommands::PixelType::UBYTE, &img[0]);
+			delete[] img;
 			return tex;
 		}
 
