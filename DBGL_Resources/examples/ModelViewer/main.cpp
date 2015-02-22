@@ -92,6 +92,7 @@ void inputHandler(IWindow::InputEventArgs const& args)
 	// Close on escape
 	if(args.key == Input::Key::KEY_ESCAPE && args.action == Input::KeyState::PRESSED)
 		pWnd->close();
+
 	// Modify lights
 	// Ambient intensity
 	if(args.key == Input::Key::KEY_KP_ADD && args.action == Input::KeyState::PRESSED && args.input.isDown(Input::Modifier::KEY_CONTROL))
@@ -115,6 +116,23 @@ void inputHandler(IWindow::InputEventArgs const& args)
 		matSpecWidth = 1;
 	if(lightAmbientIntensity < 0)
 		lightAmbientIntensity = 0;
+
+	// Draw mode
+	if(args.key == Input::Key::KEY_ENTER && args.action == Input::KeyState::PRESSED)
+	{
+		switch(pWnd->getRenderContext().getDrawMode())
+		{
+		case IRenderContext::DrawMode::Fill:
+			pWnd->getRenderContext().setDrawMode(IRenderContext::DrawMode::Line);
+			break;
+		case IRenderContext::DrawMode::Line:
+			pWnd->getRenderContext().setDrawMode(IRenderContext::DrawMode::Point);
+			break;
+		case IRenderContext::DrawMode::Point:
+			pWnd->getRenderContext().setDrawMode(IRenderContext::DrawMode::Fill);
+			break;
+		}
+	}
 }
 
 /**
@@ -433,6 +451,7 @@ bool interpretCommand(std::string const& command)
 		cout << R"str(:: [+][-] to modify light intensity.)str" << endl;
 		cout << R"str(:: [CTRL] + [+][-] to modify ambient light intensity.)str" << endl;
 		cout << R"str(:: [ALT] + [+][-] to modify specular exponent.)str" << endl;
+		cout << R"str(:: [ENTER] to switch between draw modes.)str" << endl;
 		return true;
 	}
 	else if(command == "exit")
