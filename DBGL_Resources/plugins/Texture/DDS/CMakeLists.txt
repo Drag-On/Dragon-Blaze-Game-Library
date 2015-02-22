@@ -34,6 +34,7 @@ file(GLOB_RECURSE SRC_FILES
 ### Include directories
 ######################################################################
 include_directories(${DBGL_RESOURCES_INCLUDE_DIR})
+include_directories(${DBGL_CORE_INCLUDE_DIR})
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 
 ######################################################################
@@ -45,3 +46,4 @@ add_library(DBGL_DDS SHARED ${SRC_FILES})
 ### Link libraries
 ######################################################################
 target_link_libraries(DBGL_DDS "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_DDS "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")

@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <fstream>
 #include "DBGL/Resources/Texture/IImageFormatModule.h"
+#include "DBGL/Core/Utility/BitUtility.h"
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Texture/ITextureCommands.h"
 
@@ -173,36 +174,26 @@ namespace dbgl
 			file.read(reinterpret_cast<char*>(&fHeader[0]), 128);
 			for (auto i = 0; i < 4; i++)
 				fileHeader.id[i] = fHeader[i];
-			fileHeader.size = (fHeader[4] << 0) | (fHeader[5] << 8) | (fHeader[6] << 16) | (fHeader[7] << 24);
-			fileHeader.flags = (fHeader[8] << 0) | (fHeader[9] << 8) | (fHeader[10] << 16) | (fHeader[11] << 24);
-			fileHeader.height = (fHeader[12] << 0) | (fHeader[13] << 8) | (fHeader[14] << 16) | (fHeader[15] << 24);
-			fileHeader.width = (fHeader[16] << 0) | (fHeader[17] << 8) | (fHeader[18] << 16) | (fHeader[19] << 24);
-			fileHeader.pitchLinearSize = (fHeader[20] << 0) | (fHeader[21] << 8) | (fHeader[22] << 16)
-					| (fHeader[23] << 24);
-			fileHeader.depth = (fHeader[24] << 0) | (fHeader[25] << 8) | (fHeader[26] << 16) | (fHeader[27] << 24);
-			fileHeader.mipMapCount = (fHeader[28] << 0) | (fHeader[29] << 8) | (fHeader[30] << 16)
-					| (fHeader[31] << 24);
+			fileHeader.size = BitUtility::readUInt32_LE(&fHeader[4]);
+			fileHeader.flags = BitUtility::readUInt32_LE(&fHeader[8]);
+			fileHeader.height = BitUtility::readUInt32_LE(&fHeader[12]);
+			fileHeader.width = BitUtility::readUInt32_LE(&fHeader[16]);
+			fileHeader.pitchLinearSize = BitUtility::readUInt32_LE(&fHeader[20]);
+			fileHeader.depth = BitUtility::readUInt32_LE(&fHeader[24]);
+			fileHeader.mipMapCount = BitUtility::readUInt32_LE(&fHeader[28]);
 			/* fileHeader.reserved */
-			fileHeader.pixelFormat.size = (fHeader[76] << 0) | (fHeader[77] << 8) | (fHeader[78] << 16)
-					| (fHeader[79] << 24);
-			fileHeader.pixelFormat.flags = (fHeader[80] << 0) | (fHeader[81] << 8) | (fHeader[82] << 16)
-					| (fHeader[83] << 24);
-			fileHeader.pixelFormat.fourCC = (fHeader[84] << 0) | (fHeader[85] << 8) | (fHeader[86] << 16)
-					| (fHeader[87] << 24);
-			fileHeader.pixelFormat.rgbBitCount = (fHeader[88] << 0) | (fHeader[89] << 8) | (fHeader[90] << 16)
-					| (fHeader[91] << 24);
-			fileHeader.pixelFormat.rBitMask = (fHeader[92] << 0) | (fHeader[93] << 8) | (fHeader[94] << 16)
-					| (fHeader[95] << 24);
-			fileHeader.pixelFormat.gBitMask = (fHeader[96] << 0) | (fHeader[97] << 8) | (fHeader[98] << 16)
-					| (fHeader[99] << 24);
-			fileHeader.pixelFormat.bBitMask = (fHeader[100] << 0) | (fHeader[101] << 8) | (fHeader[102] << 16)
-					| (fHeader[103] << 24);
-			fileHeader.pixelFormat.aBitMask = (fHeader[104] << 0) | (fHeader[105] << 8) | (fHeader[106] << 16)
-					| (fHeader[107] << 24);
-			fileHeader.caps = (fHeader[108] << 0) | (fHeader[109] << 8) | (fHeader[110] << 16) | (fHeader[111] << 24);
-			fileHeader.caps2 = (fHeader[112] << 0) | (fHeader[113] << 8) | (fHeader[114] << 16) | (fHeader[115] << 24);
-			fileHeader.caps3 = (fHeader[116] << 0) | (fHeader[116] << 8) | (fHeader[118] << 16) | (fHeader[119] << 24);
-			fileHeader.caps4 = (fHeader[120] << 0) | (fHeader[121] << 8) | (fHeader[122] << 16) | (fHeader[123] << 24);
+			fileHeader.pixelFormat.size = BitUtility::readUInt32_LE(&fHeader[76]);
+			fileHeader.pixelFormat.flags = BitUtility::readUInt32_LE(&fHeader[80]);
+			fileHeader.pixelFormat.fourCC = BitUtility::readUInt32_LE(&fHeader[84]);
+			fileHeader.pixelFormat.rgbBitCount = BitUtility::readUInt32_LE(&fHeader[88]);
+			fileHeader.pixelFormat.rBitMask = BitUtility::readUInt32_LE(&fHeader[92]);
+			fileHeader.pixelFormat.gBitMask = BitUtility::readUInt32_LE(&fHeader[96]);
+			fileHeader.pixelFormat.bBitMask = BitUtility::readUInt32_LE(&fHeader[100]);
+			fileHeader.pixelFormat.aBitMask = BitUtility::readUInt32_LE(&fHeader[104]);
+			fileHeader.caps = BitUtility::readUInt32_LE(&fHeader[108]);
+			fileHeader.caps2 = BitUtility::readUInt32_LE(&fHeader[112]);
+			fileHeader.caps3 = BitUtility::readUInt32_LE(&fHeader[116]);
+			fileHeader.caps4 = BitUtility::readUInt32_LE(&fHeader[120]);
 			/* fileHeader.reserved 2 */
 			if (strncmp(fileHeader.id, "DDS ", 4) != 0 || fileHeader.height <= 0 || fileHeader.width <= 0
 					|| (fileHeader.pixelFormat.fourCC != static_cast<uint32_t>(FourCC::DXT1)
@@ -212,7 +203,7 @@ namespace dbgl
 			// Read actual image data
 			const unsigned int bufsize {
 					fileHeader.mipMapCount > 1 ? fileHeader.pitchLinearSize * 2 : fileHeader.pitchLinearSize };
-			char buffer[bufsize] { };
+			char* buffer = new char[bufsize];
 			file.read(buffer, bufsize);
 			// Close file
 			file.close();
@@ -231,6 +222,7 @@ namespace dbgl
 				format = ITextureCommands::PixelFormatCompressed::COMP_DXT5;
 				break;
 			default:
+				delete[] buffer;
 				// Should never get here
 				return nullptr;
 			}
@@ -264,6 +256,7 @@ namespace dbgl
 				if (height < 1)
 					height = 1;
 			}
+			delete[] buffer;
 			return tex;
 		}
 
