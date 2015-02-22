@@ -75,6 +75,9 @@ struct loadMesh
 } loadMesh;
 std::mutex loadMeshMutex;
 
+std::string screenshotFile;
+std::mutex screenShotMutex;
+
 /**
  * @brief Resizes the render context with the window
  * @param args
@@ -330,6 +333,22 @@ void checkLoad()
 		loadMesh.ppTarget = nullptr;
 	}
 	loadMeshMutex.unlock();
+
+	// Check if we need to take a snapshot
+	screenShotMutex.lock();
+	if(screenshotFile.size() != 0)
+	{
+		const unsigned int bufSize = pWnd->getFrameWidth() * pWnd->getFrameHeight() * 4;
+		char* buffer = new char[bufSize];
+		pWnd->getRenderContext().readPixels(0, 0, pWnd->getFrameWidth(), pWnd->getFrameHeight(), ITextureCommands::PixelFormat::RGBA, ITextureCommands::PixelType::UBYTE, bufSize, buffer);
+		auto img = TextureUtility::ImageData{reinterpret_cast<unsigned char*>(buffer), static_cast<unsigned int>(pWnd->getFrameWidth()), static_cast<unsigned int>(pWnd->getFrameHeight())};
+		auto tex = TextureUtility::createTexture(img);
+		textureIO.write(tex, screenshotFile);
+		delete tex;
+		delete[] buffer;
+		screenshotFile.clear();
+	}
+	screenShotMutex.unlock();
 }
 
 void runGraphics()
@@ -379,9 +398,9 @@ void runGraphics()
 		delta = pTimer->getDelta();
 		pWnd->pollEvents();
 		pWnd->getRenderContext().clear(IRenderContext::COLOR | IRenderContext::DEPTH);
-		checkLoad();
 		update();
 		render();
+		checkLoad();
 		pWnd->swapBuffer();
 	}
 	delete pMesh;
@@ -427,6 +446,7 @@ bool interpretCommand(std::string const& command)
 		cout << R"str(::Console commands:)str" << endl;
 		cout << R"str(:: "help" for help.)str" << endl;
 		cout << R"str(:: "exit" to quit the program.)str" << endl;
+		cout << R"str(:: "screenshot <filename>" to save a screenshot.)str" << endl;
 		cout << R"str(:: "set tex diffuse <filename>" to load a diffuse texture map.)str" << endl;
 		cout << R"str(:: "set tex diffuse color <red>,<green>,<blue>,<alpha>" to use a color as a diffuse texture map.)str" << endl;
 		cout << R"str(:: "set tex specular <filename>" to load a specular texture map.)str" << endl;
@@ -476,7 +496,14 @@ bool interpretCommand(std::string const& command)
 
 		std::vector<std::string> tokens;
 		tokenize(command, ' ', tokens);
-		if(tokens.size() >= 4)
+		if(tokens.size() == 2 && tokens[0] == "screenshot")
+		{
+			screenShotMutex.lock();
+			screenshotFile = tokens[1];
+			screenShotMutex.unlock();
+			return true;
+		}
+		else if(tokens.size() >= 4)
 		{
 			if(tokens[0] == "set" && tokens[1] == "light")
 			{
