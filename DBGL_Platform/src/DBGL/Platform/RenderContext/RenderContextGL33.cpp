@@ -193,6 +193,43 @@ namespace dbgl
 		}
 	}
 
+	void RenderContextGL33::setLineWidth(float width)
+	{
+		glLineWidth(width);
+	}
+
+	float RenderContextGL33::getLineWidth() const
+	{
+		float width;
+		glGetFloatv(GL_LINE_WIDTH, &width);
+		return width;
+	}
+
+	void RenderContextGL33::setLineAntialiasing(bool smooth)
+	{
+		if(smooth)
+			glEnable(GL_LINE_SMOOTH);
+		else
+			glDisable(GL_LINE_SMOOTH);
+	}
+
+	bool RenderContextGL33::getLineAntialiasing() const
+	{
+		return glIsEnabled(GL_LINE_SMOOTH);
+	}
+
+	void RenderContextGL33::setPointSize(float size)
+	{
+		glPointSize(size);
+	}
+
+	float RenderContextGL33::getPointSize() const
+	{
+		float size;
+		glGetFloatv(GL_POINT_SIZE, &size);
+		return size;
+	}
+
 	void RenderContextGL33::setMultisampling(bool msaa)
 	{
 		if (!isBound())

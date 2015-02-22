@@ -70,6 +70,30 @@ namespace dbgl
 		 */
 		virtual DrawMode getDrawMode() const;
 		/**
+		 * @copydoc IRenderContext::setLineWidth()
+		 */
+		virtual void setLineWidth(float width);
+		/**
+		 * @copydoc IRenderContext::getLineWidth()
+		 */
+		virtual float getLineWidth() const;
+		/**
+		 * @copydoc IRenderContext::setLineAntialiasing()
+		 */
+		virtual void setLineAntialiasing(bool smooth);
+		/**
+		 * @copydoc IRenderContext::getLineAntialiasing()
+		 */
+		virtual bool getLineAntialiasing() const;
+		/**
+		 * @copydoc IRenderContext::setPointSize()
+		 */
+		virtual void setPointSize(float size);
+		/**
+		 * @copydoc IRenderContext::getPointSize()
+		 */
+		virtual float getPointSize() const;
+		/**
 		 * @copydoc IRenderContext::setMultisampling()
 		 */
 		virtual void setMultisampling(bool msaa);

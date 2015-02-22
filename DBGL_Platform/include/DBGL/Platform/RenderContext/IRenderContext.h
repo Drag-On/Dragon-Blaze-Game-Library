@@ -139,6 +139,36 @@ namespace dbgl
 		 */
 		virtual DrawMode getDrawMode() const = 0;
 		/**
+		 * @brief Modifies the width of lines drawn in line mode
+		 * @param width New line width
+		 */
+		virtual void setLineWidth(float width) = 0;
+		/**
+		 * @brief Retrieves the currently set line width
+		 * @return Current line width
+		 */
+		virtual float getLineWidth() const = 0;
+		/**
+		 * @brief Enables or disables line antialiasing
+		 * @param smooth True to enable smoothing, false otherwise
+		 */
+		virtual void setLineAntialiasing(bool smooth) = 0;
+		/**
+		 * @brief Retrieves the current line antialiasing setting
+		 * @return True if smoothing is enabled, otherwise false
+		 */
+		virtual bool getLineAntialiasing() const = 0;
+		/**
+		 * @brief Modifies the size of points in point mode
+		 * @param size New point size
+		 */
+		virtual void setPointSize(float size) = 0;
+		/**
+		 * @brief Retrieves the currently set point size
+		 * @return Current point size
+		 */
+		virtual float getPointSize() const = 0;
+		/**
 		 * @brief Enables or disables multisampling
 		 * @note Note that the window has to be created with multisampling flag in order
 		 * 	     for this to have an effect
