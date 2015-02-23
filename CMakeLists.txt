@@ -11,7 +11,7 @@
 ######################################################################
 ### Main library cmake compilation file
 ######################################################################
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 project (DBGL C CXX)
 
 ######################################################################
@@ -177,3 +177,8 @@ if(COMPILE_RESOURCES OR COMPILE_ALL)
                          "${PROJECT_BINARY_DIR}/test/")
     endif(COMPILE_TESTS)
 endif(COMPILE_RESOURCES OR COMPILE_ALL)
+
+######################################################################
+### Copy asset files
+######################################################################
+ file(COPY "${PROJECT_SOURCE_DIR}/Assets" DESTINATION "${PROJECT_BINARY_DIR}")

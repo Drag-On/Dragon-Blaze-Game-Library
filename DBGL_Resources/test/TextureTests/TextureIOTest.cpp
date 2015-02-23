@@ -70,7 +70,7 @@ TEST(TextureIO,bmp)
 	if (!io.addFormat("plugins/Texture/BMP/libDBGL_BMP." + Library::getFileExtension()))
 		FAIL();
 	else
-		testImg(io, "test/TextureTests/test.bmp");
+		testImg(io, "Assets/Textures/test2x2.bmp");
 }
 
 TEST(TextureIO,tga)
@@ -80,7 +80,7 @@ TEST(TextureIO,tga)
 	if (!io.addFormat("plugins/Texture/TGA/libDBGL_TGA." + Library::getFileExtension()))
 		FAIL();
 	else
-		testImg(io, "test/TextureTests/test.tga");
+		testImg(io, "Assets/Textures/test2x2.tga");
 }
 
 TEST(TextureIO,dds)
@@ -91,7 +91,7 @@ TEST(TextureIO,dds)
 		FAIL();
 	else
 	{
-		testImg(io, "test/TextureTests/test.dds", 255);
+		testImg(io, "Assets/Textures/test2x2.dds", 255);
 		// TODO: This basically bypasses half of the test - however DDS compression destroys a lot of information,
 		// especially with small artificial images, so the loaded test image basically is off by so much that it
 		// doesn't make sense to test for colors anymore. Better file?

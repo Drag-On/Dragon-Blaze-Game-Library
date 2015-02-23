@@ -389,7 +389,7 @@ void runGraphics()
 	pTexNorm->bind();
 	Platform::get()->curTexture()->generateMipMaps();
 	cout << "> Loading default shader..." << endl;
-	pSP = loadShader("DiffSpecNorm.vert", "DiffSpecNorm.frag");
+	pSP = loadShader("Assets/Shaders/DiffSpecNorm.vert", "Assets/Shaders/DiffSpecNorm.frag");
 	cout << "> Showing window..." << endl;
 	pWnd->show();
 	initialized = true;
