@@ -22,6 +22,21 @@ namespace dbgl
     class MeshGL33 : public IMesh
     {
 	public:
+    	/**
+    	 * @brief Default constructor
+    	 */
+    	MeshGL33() = default;
+    	/**
+    	 * @brief Copy constructor
+    	 * @param copy Mesh to copy
+    	 */
+    	MeshGL33(MeshGL33 const& copy);
+    	/**
+    	 * @brief Copy-assignment operator
+    	 * @param copy Mesh to copy
+    	 * @return The copy
+    	 */
+    	MeshGL33& operator=(MeshGL33 const& copy);
 	    /**
 	     * @brief Destructor
 	     */
@@ -86,6 +101,10 @@ namespace dbgl
 	     * @copydoc IMesh::updateBuffers()
 	     */
 	    virtual void updateBuffers();
+	    /**
+	     * @copydoc IMesh::clone()
+	     */
+	    virtual IMesh* clone() const;
 	    /**
 	     * @return Internal index buffer handle
 	     */

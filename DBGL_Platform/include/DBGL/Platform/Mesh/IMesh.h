@@ -105,6 +105,11 @@ namespace dbgl
 		 * @brief Updates the underlying hardware buffers
 		 */
 		virtual void updateBuffers() = 0;
+	    /**
+	     * @brief Generates a deep copy of this mesh
+	     * @return The clone
+	     */
+	    virtual IMesh* clone() const = 0;
 	};
 }
 

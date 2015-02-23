@@ -28,9 +28,21 @@ namespace dbgl
 	     * @param type Texture type
 	     */
 	    TextureGL33(Type type);
+	    /**
+	     * @brief Copy constructor
+	     * @param copy Texture to copy
+	     */
+	    TextureGL33(TextureGL33 const& copy);
+	    /**
+	     * @brief Copy-assignment operator
+	     * @param copy Texture to copy
+	     * @return This texture
+	     */
+	    TextureGL33& operator=(TextureGL33 const& copy);
 	    virtual ~TextureGL33();
-	    virtual void bind();
-	    virtual Type getType();
+	    virtual void bind() const;
+	    virtual Type getType() const;
+	    virtual ITexture* clone() const;
 
 	    /**
 	     * @return Internal texture handle

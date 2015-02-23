@@ -12,6 +12,47 @@
 
 namespace dbgl
 {
+	MeshGL33::MeshGL33(MeshGL33 const& copy)
+	{
+		m_indices = copy.m_indices;
+		m_vertices = copy.m_vertices;
+		m_normals = copy.m_normals;
+		m_uv = copy.m_uv;
+		m_tangents = copy.m_tangents;
+		m_bitangents = copy.m_bitangents;
+		m_usage = copy.m_usage;
+		updateBuffers();
+	}
+
+	MeshGL33& MeshGL33::operator=(MeshGL33 const& copy)
+	{
+		if(this != &copy)
+		{
+			this->~MeshGL33();
+			m_vertexBuffer = GL_INVALID_VALUE;
+			m_indexBuffer = GL_INVALID_VALUE;
+			m_normalBuffer = GL_INVALID_VALUE;
+			m_uvBuffer = GL_INVALID_VALUE;
+			m_tangentBuffer = GL_INVALID_VALUE;
+			m_bitangentBuffer = GL_INVALID_VALUE;
+			m_indexCount = 0;
+			m_vertexCount = 0;
+			m_normalsCount = 0;
+			m_uvCount = 0;
+			m_tangentCount = 0;
+			m_bitangentCount = 0;
+			m_indices = copy.m_indices;
+			m_vertices = copy.m_vertices;
+			m_normals = copy.m_normals;
+			m_uv = copy.m_uv;
+			m_tangents = copy.m_tangents;
+			m_bitangents = copy.m_bitangents;
+			m_usage = copy.m_usage;
+			updateBuffers();
+		}
+		return *this;
+	}
+
 	MeshGL33::~MeshGL33()
 	{
 		if (m_indexBuffer != GL_INVALID_VALUE)
@@ -159,6 +200,12 @@ namespace dbgl
 		}
 		else if (m_bitangentBuffer != GL_INVALID_VALUE)
 			glDeleteBuffers(1, &m_bitangentBuffer);
+	}
+
+	IMesh* MeshGL33::clone() const
+	{
+		MeshGL33* clone = new MeshGL33{*this};
+		return clone;
 	}
 
 	GLuint MeshGL33::getIndexHandle() const

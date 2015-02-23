@@ -34,12 +34,17 @@ namespace dbgl
 		/**
 		 * @brief Binds the texture to a texture unit
 		 */
-		virtual void bind() = 0;
+		virtual void bind() const = 0;
 		/**
 		 * @brief Retrieves the type of this texture
 		 * @return Texture type
 		 */
-		virtual Type getType() = 0;
+		virtual Type getType() const = 0;
+		/**
+		 * @brief Produces a deep copy of this texture
+		 * @return The copy
+		 */
+		virtual ITexture* clone() const = 0;
 	};
 }
 
