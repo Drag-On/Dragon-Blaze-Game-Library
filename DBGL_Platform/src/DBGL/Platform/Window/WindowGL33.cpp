@@ -43,6 +43,7 @@ namespace dbgl
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_SAMPLES, multisampling);
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		if (fullscreen)
@@ -79,6 +80,10 @@ namespace dbgl
 		// Wrap context in vao
 		glGenVertexArrays(1, &m_vertexArrayId);
 		glBindVertexArray(m_vertexArrayId);
+
+		// Register OpenGL Debug callback if available
+		if (GLEW_ARB_debug_output)
+			glDebugMessageCallbackARB((GLDEBUGPROCARB)WindowGL33::debugCallback, nullptr);
 	}
 
 	WindowGL33::~WindowGL33()
@@ -461,9 +466,51 @@ namespace dbgl
 		return removed;
 	}
 
+
+	void WindowGL33::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei /* length */,
+			const GLchar* message, const void* /* userParam */)
+	{
+		std::string sourceOut, typeOut, severityOut;
+		if (source == GL_DEBUG_SOURCE_API_ARB)
+			sourceOut = "OpenGL";
+		else if (source == GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB)
+			sourceOut = "Windows";
+		else if (source == GL_DEBUG_SOURCE_SHADER_COMPILER_ARB)
+			sourceOut = "Shader Compiler";
+		else if (source == GL_DEBUG_SOURCE_THIRD_PARTY_ARB)
+			sourceOut = "Third Party";
+		else if (source == GL_DEBUG_SOURCE_APPLICATION_ARB)
+			sourceOut = "Application";
+		else if (source == GL_DEBUG_SOURCE_OTHER_ARB)
+			sourceOut = "Other";
+
+		if (type == GL_DEBUG_TYPE_ERROR_ARB)
+			typeOut = "Error";
+		else if (type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB)
+			typeOut = "Deprecated behavior";
+		else if (type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB)
+			typeOut = "Undefined behavior";
+		else if (type == GL_DEBUG_TYPE_PORTABILITY_ARB)
+			typeOut = "Portability";
+		else if (type == GL_DEBUG_TYPE_PERFORMANCE_ARB)
+			typeOut = "Performance";
+		else if (type == GL_DEBUG_TYPE_OTHER_ARB)
+			typeOut = "Other";
+
+		if (severity == GL_DEBUG_SEVERITY_HIGH_ARB)
+			severityOut = "High";
+		else if (severity == GL_DEBUG_SEVERITY_MEDIUM_ARB)
+			severityOut = "Medium";
+		else if (severity == GL_DEBUG_SEVERITY_LOW_ARB)
+			severityOut = "Low";
+
+		std::cerr << "OpenGL error: Source: " << sourceOut << "; Type: " << typeOut << "; ID: " << id << "; Severity: "
+				<< severityOut << "; Message: " << message << std::endl;
+	}
+
 	void WindowGL33::errorCallback(int error, const char* description)
 	{
-		std::cerr << "Error: " << error << ", " << description << std::endl;
+		std::cerr << "GLFW error: " << error << ", " << description << std::endl;
 		throw std::runtime_error { description };
 	}
 

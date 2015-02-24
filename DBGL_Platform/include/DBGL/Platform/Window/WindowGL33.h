@@ -212,6 +212,8 @@ namespace dbgl
 
 		static std::unordered_map<GLFWwindow*, WindowGL33*> s_windows;
 
+		static void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+				const GLchar* message, const void* userParam);
 		static void errorCallback(int error, const char* description);
 		static void closeCallback(GLFWwindow* window);
 		static void focusCallback(GLFWwindow* window, int focused);
