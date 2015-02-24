@@ -28,6 +28,7 @@
 #include "DBGL/Resources/Texture/TextureUtility.h"
 #include "DBGL/Resources/Texture/TextureIO.h"
 #include "DBGL/Resources/Color/Color.h"
+#include "DBGL/Resources/Sprite/BitmapFont.h"
 
 using namespace dbgl;
 using namespace std;
@@ -40,6 +41,8 @@ ITexture* pTexDiff = nullptr;
 ITexture* pTexSpec = nullptr;
 ITexture* pTexNorm = nullptr;
 IShaderProgram* pSP = nullptr;
+IShaderProgram* pSP_sprite = nullptr;
+BitmapFont* pFont = nullptr;
 
 Mat4f matModel, matProj;
 Mat4f matView = Mat4f::makeView(Vec3f { 0.0, 0.0, 5.0 }, Vec3f { 0, 0, -1 }, Vec3f { 0, 1, 0 });
@@ -55,6 +58,10 @@ float matSpecWidth = 3;
 double delta = 1;
 float moveSpeed = 10.0f;
 QuatF meshRotation;
+
+unsigned int fps = 0;
+double curElapsed = 0;
+unsigned int curFrames = 0;
 
 TextureIO textureIO {};
 MeshIO meshIO {};
@@ -192,6 +199,16 @@ void update()
 	if (input.isDown(Input::Key::KEY_RIGHT))
 		meshRotation = meshRotation * QuatF{meshRotation.getInverted() * Vec3f{0, 1, 0}, static_cast<float>(moveSpeed * delta)};
 	matModel = meshRotation.getMatrix();
+
+	// Count frames per second
+	curElapsed += delta;
+	curFrames++;
+	if(curElapsed >= 1.0)
+	{
+		curElapsed -= 1.0;
+		fps = curFrames;
+		curFrames = 0;
+	}
 }
 
 /**
@@ -251,8 +268,11 @@ void render()
 	Platform::get()->curShaderProgram()->setUniformSampler(handle_texSpec, 1);
 	Platform::get()->curShaderProgram()->setUniformSampler(handle_texNorm, 2);
 
-	// Render
+	// Render mesh
 	pWnd->getRenderContext().drawMesh(pMesh);
+
+	// Render FPS in upper left corner
+	pFont->drawText(&pWnd->getRenderContext(), pSP_sprite, std::to_string(fps), 10, pWnd->getFrameHeight() - pFont->getLineHeight() - 10);
 }
 
 void checkLoad()
@@ -390,6 +410,8 @@ void runGraphics()
 	Platform::get()->curTexture()->generateMipMaps();
 	cout << "> Loading default shader..." << endl;
 	pSP = loadShader("Assets/Shaders/DiffSpecNorm.vert", "Assets/Shaders/DiffSpecNorm.frag");
+	pSP_sprite = loadShader("Assets/Shaders/Sprite.vert", "Assets/Shaders/Sprite.frag");
+	pFont = new BitmapFont{};
 	cout << "> Showing window..." << endl;
 	pWnd->show();
 	initialized = true;
@@ -413,8 +435,12 @@ void runGraphics()
 	pTexNorm = nullptr;
 	delete pSP;
 	pSP = nullptr;
+	delete pSP_sprite;
+	pSP_sprite = nullptr;
 	delete pWnd;
 	pWnd = nullptr;
+	delete pFont;
+	pFont = nullptr;
 	cout << "Destroying platform..." << endl << "> ";
 	std::flush(cout);
 	Platform::destroy();
