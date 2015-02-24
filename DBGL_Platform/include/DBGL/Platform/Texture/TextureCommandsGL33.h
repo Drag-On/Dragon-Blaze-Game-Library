@@ -33,6 +33,8 @@ namespace dbgl
 		virtual void setRowAlignment(RowAlignment type, unsigned int align);
 		virtual void setMinFilter(MinFilter filter);
 		virtual void setMagFilter(MagFilter filter);
+		virtual void setWrapMode(WrapDirection dir, WrapMode mode);
+		virtual WrapMode getWrapMode(WrapDirection dir);
 		virtual void generateMipMaps();
 		virtual void getSize(unsigned int& width, unsigned int& height, unsigned int level = 0);
 		virtual unsigned int getWidth() const;
@@ -75,6 +77,12 @@ namespace dbgl
 		 * @return OpenGL equivalent of \p filter
 		 */
 		static GLenum magFilter2GL(MagFilter filter);
+		/**
+		 * @brief Converts WrapMode into OpenGL values
+		 * @param mode Mode to convert
+		 * @return OpenGL equivalent of \p mode
+		 */
+		static GLint wrapMode2GL(WrapMode mode);
 		/**
 		 * @brief Converts PixelFormatCompressed into OpenGL values
 		 * @param format Format to convert

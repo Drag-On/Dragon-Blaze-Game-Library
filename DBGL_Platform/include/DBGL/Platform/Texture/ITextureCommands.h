@@ -77,6 +77,23 @@ namespace dbgl
 			NEAREST,  //!< NEAREST
 			LINEAR, //!< LINEAR
 		};
+		/**
+		 * @brief Lists all supported texture wrapping modes
+		 */
+		enum class WrapMode
+		{
+			CLAMP_TO_EDGE,  //!< CLAMP_TO_EDGE
+			MIRRORED_REPEAT,//!< MIRRORED_REPEAT
+			REPEAT,         //!< REPEAT
+		};
+		/**
+		 * @brief Lists all supported texture wrap directions
+		 */
+		enum class WrapDirection
+		{
+			S,//!< S
+			T,//!< T
+		};
 
 		/**
 		 * @brief Default destructor
@@ -125,6 +142,18 @@ namespace dbgl
 		 * @param filter New filter
 		 */
 		virtual void setMagFilter(MagFilter filter) = 0;
+		/**
+		 * @brief Sets a wrapping for the currently active texture
+		 * @param dir Wrapping direction
+		 * @param mode New wrapping mode
+		 */
+		virtual void setWrapMode(WrapDirection dir, WrapMode mode) = 0;
+		/**
+		 * @brief Retrieves the wrap mode currently set for a certain direction
+		 * @param dir Direction
+		 * @return Current wrap mode
+		 */
+		virtual WrapMode getWrapMode(WrapDirection dir) = 0;
 		/**
 		 * @brief Generates mip maps for the texture.
 		 * @details Overwrites any previously set mip maps

@@ -68,6 +68,34 @@ namespace dbgl
 		glTexParameteri(texType2GL(s_pCurTexture->getType()), GL_TEXTURE_MAG_FILTER, magFilter2GL(filter));
 	}
 
+	void TextureCommandsGL33::setWrapMode(WrapDirection dir, WrapMode mode)
+	{
+		if(dir == WrapDirection::S)
+			glTexParameteri(texType2GL(s_pCurTexture->getType()), GL_TEXTURE_WRAP_S, wrapMode2GL(mode));
+		else
+			glTexParameteri(texType2GL(s_pCurTexture->getType()), GL_TEXTURE_WRAP_T, wrapMode2GL(mode));
+	}
+
+	auto TextureCommandsGL33::getWrapMode(WrapDirection dir) -> WrapMode
+	{
+		GLint val;
+		if(dir == WrapDirection::S)
+			glGetTexParameteriv(texType2GL(s_pCurTexture->getType()), GL_TEXTURE_WRAP_S, &val);
+		else
+			glGetTexParameteriv(texType2GL(s_pCurTexture->getType()), GL_TEXTURE_WRAP_T, &val);
+		switch(val)
+		{
+		case GL_CLAMP_TO_EDGE:
+			return WrapMode::CLAMP_TO_EDGE;
+		case GL_MIRRORED_REPEAT:
+			return WrapMode::MIRRORED_REPEAT;
+		case GL_REPEAT:
+			return WrapMode::REPEAT;
+		default:
+			throw std::runtime_error { "Unknown value returned for wrap mode!" };
+		}
+	}
+
 	void TextureCommandsGL33::generateMipMaps()
 	{
 		glGenerateMipmap(texType2GL(s_pCurTexture->getType()));
@@ -209,6 +237,21 @@ namespace dbgl
 			return GL_NEAREST;
 		default:
 			return GL_INVALID_ENUM;
+		}
+	}
+
+	GLint TextureCommandsGL33::wrapMode2GL(WrapMode mode)
+	{
+		switch (mode)
+		{
+		case WrapMode::CLAMP_TO_EDGE:
+			return GL_CLAMP_TO_EDGE;
+		case WrapMode::MIRRORED_REPEAT:
+			return GL_MIRRORED_REPEAT;
+		case WrapMode::REPEAT:
+			return GL_REPEAT;
+		default:
+			return GL_INVALID_VALUE;
 		}
 	}
 
