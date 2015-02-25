@@ -230,6 +230,30 @@ namespace dbgl
 		return size;
 	}
 
+	void RenderContextGL33::enableDepthBuffer(bool enable)
+	{
+		glDepthMask(enable);
+	}
+
+	bool RenderContextGL33::isDepthBufferEnabled() const
+	{
+		GLboolean val;
+		glGetBooleanv(GL_DEPTH_WRITEMASK, &val);
+		return val;
+	}
+
+	void RenderContextGL33::enableColorBuffer(bool red, bool green, bool blue, bool alpha)
+	{
+		glColorMask(red, green, blue, alpha);
+	}
+
+	std::array<bool, 4> RenderContextGL33::isColorBufferEnabled() const
+	{
+		GLboolean vals[4];
+		glGetBooleanv(GL_COLOR_WRITEMASK, &vals[0]);
+		return {(bool)vals[0], (bool)vals[1], (bool)vals[2], (bool)vals[3]};
+	}
+
 	void RenderContextGL33::setMultisampling(bool msaa)
 	{
 		if (!isBound())

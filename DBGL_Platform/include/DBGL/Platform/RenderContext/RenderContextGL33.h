@@ -94,6 +94,22 @@ namespace dbgl
 		 */
 		virtual float getPointSize() const;
 		/**
+		 * @copydoc IRenderContext::enableDepthBuffer()
+		 */
+		virtual void enableDepthBuffer(bool enable);
+		/**
+		 * @copydoc IRenderContext::isDepthBufferEnabled()
+		 */
+		virtual bool isDepthBufferEnabled() const;
+		/**
+		 * @copydoc IRenderContext::enableColorBuffer()
+		 */
+		virtual void enableColorBuffer(bool red, bool green, bool blue, bool alpha);
+		/**
+		 * @copydoc IRenderContext::isColorBufferEnabled()
+		 */
+		virtual std::array<bool, 4> isColorBufferEnabled() const;
+		/**
 		 * @copydoc IRenderContext::setMultisampling()
 		 */
 		virtual void setMultisampling(bool msaa);

@@ -169,6 +169,29 @@ namespace dbgl
 		 */
 		virtual float getPointSize() const = 0;
 		/**
+		 * @brief Enables or disables the depth buffer
+		 * @param enable Indicates if depth testing should be enabled or disabled
+		 */
+		virtual void enableDepthBuffer(bool enable) = 0;
+		/**
+		 * @brief Retrieves the current depth testing state
+		 * @return True if enabled, otherwise false
+		 */
+		virtual bool isDepthBufferEnabled() const = 0;
+		/**
+		 * @brief Enables or disables the color buffer components
+		 * @param red Indicates if the red component should be written
+		 * @param green Indicates if the green component should be written
+		 * @param blue Indicates if the blue component should be written
+		 * @param alpha Indicates if the alpha component should be written
+		 */
+		virtual void enableColorBuffer(bool red, bool green, bool blue, bool alpha) = 0;
+		/**
+		 * @brief Retrieves the current color buffer component states
+		 * @return Array in the order red-green-blue-alpha, indicating if the components are enabled
+		 */
+		virtual std::array<bool, 4> isColorBufferEnabled() const = 0;
+		/**
 		 * @brief Enables or disables multisampling
 		 * @note Note that the window has to be created with multisampling flag in order
 		 * 	     for this to have an effect
