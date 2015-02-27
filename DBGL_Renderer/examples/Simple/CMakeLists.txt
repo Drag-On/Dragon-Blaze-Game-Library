@@ -9,22 +9,23 @@
 ######################################################################
 
 ######################################################################
-### Main library cmake compilation file
+### Basics example cmake compilation file
 ######################################################################
 cmake_minimum_required (VERSION 2.6)
-project (DBGL_RESOURCES C CXX)
- 
+project (DBGL_RENDERER_EXAMPLE_SIMPLE C CXX)
+
 ######################################################################
 ### Project code files
 ######################################################################
-file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+file(GLOB_RECURSE SRC_FILES
+    "*.h"
+    "*.cpp"
 )
 
 ######################################################################
 ### Include directories
 ######################################################################
+include_directories(${DBGL_RENDERER_INCLUDE_DIR})
 include_directories(${DBGL_RESOURCES_INCLUDE_DIR})
 include_directories(${DBGL_CORE_INCLUDE_DIR})
 include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
@@ -32,17 +33,12 @@ include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 ######################################################################
 ### Make target
 ######################################################################
-add_library(DBGL_Resources SHARED ${SRC})
-set_target_properties(DBGL_Resources PROPERTIES LINKER_LANGUAGE CXX)
+add_executable(DBGL_RENDERER_EXAMPLE_SIMPLE ${SRC_FILES})
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
-
-######################################################################
-### Compile plugins
-######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/plugins/"
-                 "${PROJECT_BINARY_DIR}/plugins/")
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_RENDERER_DLL_NAME}")
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
