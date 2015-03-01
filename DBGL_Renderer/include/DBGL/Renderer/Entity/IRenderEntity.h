@@ -32,7 +32,13 @@ namespace dbgl
 		 */
 		virtual bool isTranslucent() = 0;
 		/**
-		 * @brief Sets all necessary render states that are needed to render this entity
+		 * @brief Sets all render states and shader uniforms, that are unique to this entity.
+		 * @note This method is guaranteed to be called before rendering of each entity.
+		 */
+		virtual void setupUnique() = 0;
+		/**
+		 * @brief Sets additional render states and shader uniforms, that are the same for each entity with this material.
+		 * @note This method may be optimized out be the renderer if two subsequently rendered object have the same material.
 		 */
 		virtual void setupMaterial() = 0;
 		/**

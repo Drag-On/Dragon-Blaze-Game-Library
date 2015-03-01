@@ -173,6 +173,7 @@ namespace dbgl
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
 		for(auto e : m_entities) // TODO: ordered by material
 		{
+			e->setupUnique();
 			e->setupMaterial();
 			rc->drawMesh(e->getMesh());
 		}
@@ -181,6 +182,7 @@ namespace dbgl
 		rc->enableDepthBuffer(true);
 		for(auto e : m_translucentEntities) // TODO: order
 		{
+			e->setupUnique();
 			e->setupMaterial();
 			rc->drawMesh(e->getMesh());
 		}
@@ -194,8 +196,9 @@ namespace dbgl
 		rc->clear(IRenderContext::COLOR | IRenderContext::DEPTH);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for(auto e : m_entities) // TODO: ordered by material
+		for(auto e : m_entities) // TODO: ordered front-to-back
 		{
+			e->setupUnique();
 			e->setupMaterial();
 			rc->drawMesh(e->getMesh());
 		}
@@ -203,6 +206,7 @@ namespace dbgl
 		// Render translucent objects in back-to-front order
 		for(auto e : m_translucentEntities) // TODO: order
 		{
+			e->setupUnique();
 			e->setupMaterial();
 			rc->drawMesh(e->getMesh());
 		}

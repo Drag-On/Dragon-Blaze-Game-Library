@@ -85,7 +85,7 @@ public:
 	{
 		return m_translucent;
 	}
-	virtual void setupMaterial()
+	virtual void setupUnique()
 	{
 		// Use shader
 		m_pShaderProgram->use();
@@ -94,18 +94,27 @@ public:
 		auto MVP = cam.m_projection * cam.m_view * m_modelMat;
 		auto ITMV = (cam.m_view * m_modelMat).getInverted().transpose();
 
+		// Get uniform handles
+		auto handle_MVP = m_pShaderProgram->getUniformHandle("MVP");
+		auto handle_ITMV = m_pShaderProgram->getUniformHandle("ITMV");
+
+		// Set uniform values
+		Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(handle_MVP, 1, false, MVP.getDataPointer());
+		Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(handle_ITMV, 1, false, ITMV.getDataPointer());
+	}
+	virtual void setupMaterial()
+	{
+		// Use shader
+		m_pShaderProgram->use();
+
 		// Bind textures
 		Platform::get()->curTexture()->activateUnit(0);
 		m_pTexture->bind();
 
 		// Get uniform handles
-		auto handle_MVP = m_pShaderProgram->getUniformHandle("MVP");
-		auto handle_ITMV = m_pShaderProgram->getUniformHandle("ITMV");
 		auto handle_texDiff = m_pShaderProgram->getUniformHandle("tex_diffuse");
 
 		// Set uniform values
-		Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(handle_MVP, 1, false, MVP.getDataPointer());
-		Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(handle_ITMV, 1, false, ITMV.getDataPointer());
 		Platform::get()->curShaderProgram()->setUniformSampler(handle_texDiff, 0);
 	}
 	virtual int getMaterialId()
@@ -189,7 +198,7 @@ int main()
 	pTex->bind();
 	Platform::get()->curTexture()->generateMipMaps();
 	cout << "Initializing renderer..." << endl;
-	pRenderer = new ForwardRenderer{false};
+	pRenderer = new ForwardRenderer{true};
 	pRenderer->setCameraEntity(&cam);
 	Entity e1{pSphere, pShaderProgram, pTex, false, 0};
 	pRenderer->addEntity(&e1);
