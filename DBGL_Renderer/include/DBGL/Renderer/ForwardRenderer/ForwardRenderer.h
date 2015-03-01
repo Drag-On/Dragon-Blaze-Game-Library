@@ -15,6 +15,7 @@
 #include <functional>
 #include "DBGL/Renderer/IRenderer.h"
 #include "DBGL/Platform/Shader/IShaderProgram.h"
+#include "DBGL/Platform/Platform.h"
 
 namespace dbgl
 {
@@ -37,6 +38,8 @@ namespace dbgl
 		virtual bool removeEntity(IRenderEntity* entity);
 		virtual void setCameraEntity(ICameraEntity* camera);
 		virtual void render(IRenderContext* rc);
+		virtual double getDeltaTime() const;
+		virtual unsigned int getFPS() const;
 		void setUseZPrePass(bool use);
 		bool getUseZPrePass() const;
 	private:
@@ -50,6 +53,11 @@ namespace dbgl
 		IShaderProgram::UniformHandle m_prePassMVPHandle;
 		bool m_useZPrePass = false;
 		std::function<void(IRenderContext*)> m_renderFunction;
+		double m_delta = 1;
+		unsigned int m_fps = 0;
+		double m_curElapsed = 0;
+		unsigned int m_curFrames = 0;
+		ITimer* m_pTime = nullptr;
 	};
 }
 

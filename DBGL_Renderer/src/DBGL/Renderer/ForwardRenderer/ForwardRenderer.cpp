@@ -42,6 +42,9 @@ namespace dbgl
 		delete fragment;
 		m_prePassMVPHandle = m_pZPrePassShader->getUniformHandle("MVP");
 
+		// Timer
+		m_pTime = Platform::get()->createTimer();
+
 		// Default render function
 		if (useZPrePass)
 			m_renderFunction = std::bind(&ForwardRenderer::renderWithZPrePass, this, std::placeholders::_1);
@@ -52,6 +55,7 @@ namespace dbgl
 	ForwardRenderer::~ForwardRenderer()
 	{
 		delete m_pZPrePassShader;
+		delete m_pTime;
 	}
 
 	bool ForwardRenderer::addEntity(IRenderEntity* entity)
@@ -95,8 +99,37 @@ namespace dbgl
 	{
 		// Don't render if there is no camera attached
 		if(!m_pCamera)
+		{
+			m_curFrames = 0;
+			m_curElapsed = 0;
+			m_delta = 0;
+			m_fps = 0;
 			return;
+		}
+
+		// Timing
+		m_delta = m_pTime->getDelta();
+		m_curElapsed += m_delta;
+		m_curFrames++;
+		if(m_curElapsed >= 1.0)
+		{
+			m_curElapsed -= 1.0;
+			m_fps = m_curFrames;
+			m_curFrames = 0;
+		}
+
+		// Render!
 		m_renderFunction(rc);
+	}
+
+	double ForwardRenderer::getDeltaTime() const
+	{
+		return m_delta;
+	}
+
+	unsigned int ForwardRenderer::getFPS() const
+	{
+		return m_fps;
 	}
 
 	void ForwardRenderer::setUseZPrePass(bool use)

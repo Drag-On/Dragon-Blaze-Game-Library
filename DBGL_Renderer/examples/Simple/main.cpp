@@ -33,11 +33,6 @@ IShaderProgram* pShaderProgramSprite = nullptr;
 ITexture* pTex = nullptr;
 BitmapFont* pFont = nullptr;
 
-double delta = 1;
-unsigned int fps = 0;
-double curElapsed = 0;
-unsigned int curFrames = 0;
-
 class Camera : public ICameraEntity
 {
 public:
@@ -170,18 +165,6 @@ IShaderProgram* loadShader(string vertex, string fragment)
 
 void update()
 {
-	delta = pTimer->getDelta();
-
-	// Count frames per second
-	curElapsed += delta;
-	curFrames++;
-	if(curElapsed >= 1.0)
-	{
-		curElapsed -= 1.0;
-		fps = curFrames;
-		curFrames = 0;
-	}
-
 	cam.update();
 }
 
@@ -195,9 +178,9 @@ int main()
 	pTimer = Platform::get()->createTimer();
 	cout << "Setting rendering properties..." << endl;
 	pWnd->getRenderContext().setDepthTest(IRenderContext::DepthTestValue::Less);
-	pWnd->getRenderContext().setFaceCulling(IRenderContext::FaceCullingValue::Off);
+	pWnd->getRenderContext().setFaceCulling(IRenderContext::FaceCullingValue::Back);
 	cout << "Initializing default meshes, textures and shader..." << endl;
-	pSphere = MeshUtility::createIcoSphere(2, true, IMesh::Usage::StaticDraw);
+	pSphere = MeshUtility::createIcoSphere(4, true, IMesh::Usage::StaticDraw);
 	pShaderProgram = loadShader("Assets/Shaders/CamLight.vert", "Assets/Shaders/CamLight.frag");
 	pShaderProgramSprite = loadShader("Assets/Shaders/Sprite.vert", "Assets/Shaders/Sprite.frag");
 	pFont = new BitmapFont{};
@@ -206,7 +189,7 @@ int main()
 	pTex->bind();
 	Platform::get()->curTexture()->generateMipMaps();
 	cout << "Initializing renderer..." << endl;
-	pRenderer = new ForwardRenderer{true};
+	pRenderer = new ForwardRenderer{false};
 	pRenderer->setCameraEntity(&cam);
 	Entity e1{pSphere, pShaderProgram, pTex, false, 0};
 	pRenderer->addEntity(&e1);
@@ -222,7 +205,7 @@ int main()
 		e1.update();
 		e2.update();
 		pRenderer->render(&pWnd->getRenderContext());
-		pFont->drawText(&pWnd->getRenderContext(), pShaderProgramSprite, std::to_string(fps), 10, pWnd->getFrameHeight() - pFont->getLineHeight() - 10);
+		pFont->drawText(&pWnd->getRenderContext(), pShaderProgramSprite, std::to_string(pRenderer->getFPS()), 10, pWnd->getFrameHeight() - pFont->getLineHeight() - 10);
 		pWnd->swapBuffer();
 	}
 	delete pSphere;

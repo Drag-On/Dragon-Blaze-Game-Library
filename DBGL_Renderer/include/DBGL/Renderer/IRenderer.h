@@ -50,6 +50,16 @@ namespace dbgl
 		 * @note This method does not swap the back buffer
 		 */
 		virtual void render(IRenderContext* rc) = 0;
+		/**
+		 * @brief Returns the time since last frame
+		 * @return Time since last frame
+		 */
+		virtual double getDeltaTime() const = 0;
+		/**
+		 * @brief Returns the current frames per second
+		 * @return Frames per second
+		 */
+		virtual unsigned int getFPS() const = 0;
 	};
 }
 
