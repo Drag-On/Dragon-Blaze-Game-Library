@@ -10,527 +10,524 @@
 
 namespace dbgl
 {
-    template<typename Data, typename Point> KdTree<Data, Point>::KdTree()
-    {
-	m_size = 0;
-    }
-
-    template<typename Data, typename Point> template<class RandomAccessIterator> KdTree<Data, Point>::KdTree(
-	    RandomAccessIterator begin, RandomAccessIterator end)
-    {
-	m_pRoot = buildTree(begin, end, 0, nullptr);
-	m_size = std::distance(begin, end);
-    }
-
-    template<typename Data, typename Point> template<class RandomAccessIterator1, class RandomAccessIterator2> KdTree<
-	    Data, Point>::KdTree(RandomAccessIterator1 beginPoint, RandomAccessIterator1 endPoint,
-	    RandomAccessIterator2 beginDat, RandomAccessIterator2 endDat)
-    {
-	m_size = std::distance(beginPoint, endPoint);
-	if(static_cast<int>(m_size) != std::distance(beginDat, endDat))
-	    throw std::range_error {"Invalid size of point- and data list."};
-	std::vector<Container> containers{};
-	containers.reserve(m_size);
-	auto itD = beginDat;
-	for (auto itP = beginPoint; itP != endPoint; ++itP)
+	template<typename Data, typename Point> KdTree<Data, Point>::KdTree()
 	{
-	    containers.push_back({*itP, *itD});
-	    ++itD;
+		m_size = 0;
 	}
 
-	m_pRoot = buildTree(containers.begin(), containers.end(), 0, nullptr);
-    }
-
-    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> const& other)
-    {
-	m_pRoot = copyNode(*other.m_pRoot);
-	m_size = other.m_size;
-    }
-
-    template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> && other)
-    {
-	m_pRoot = other.m_pRoot;
-	m_size = other.m_size;
-	other.m_pRoot = nullptr;
-	other.m_size = 0;
-    }
-
-    template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(
-	    KdTree<Data, Point> const& other)
-    {
-	if (this != &other)
+	template<typename Data, typename Point> template<class RandomAccessIterator> KdTree<Data, Point>::KdTree(
+			RandomAccessIterator begin, RandomAccessIterator end)
 	{
-	    m_pRoot = copyNode(*other.m_pRoot);
-	    m_size = other.m_size;
+		m_pRoot = buildTree(begin, end, 0, nullptr);
+		m_size = std::distance(begin, end);
 	}
-	return *this;
-    }
 
-    template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(
-	    KdTree<Data, Point> && other)
-    {
-	if (this != &other)
+	template<typename Data, typename Point> template<class RandomAccessIterator1, class RandomAccessIterator2> KdTree<
+			Data, Point>::KdTree(RandomAccessIterator1 beginPoint, RandomAccessIterator1 endPoint,
+			RandomAccessIterator2 beginDat, RandomAccessIterator2 endDat)
 	{
-	    free(m_pRoot);
-	    m_pRoot = other.m_pRoot;
-	    other.m_pRoot = nullptr;
-	    m_size = other.m_size;
-	    other.m_size = 0;
-	}
-	return *this;
-    }
-
-    template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
-    {
-	// Free all nodes
-	if (m_pRoot != nullptr)
-	    free(m_pRoot);
-    }
-
-    template<typename Data, typename Point> auto KdTree<Data, Point>::copyNode(Node& node) const -> Node*
-    {
-	Node* pNewNode = new Node {};
-	pNewNode->point = node.point;
-	pNewNode->data = node.data;
-	if (node.leftChild != nullptr)
-	{
-	    pNewNode->leftChild = copyNode(*node.leftChild);
-	    pNewNode->leftChild->parent = pNewNode;
-	}
-	if (node.rightChild != nullptr)
-	{
-	    pNewNode->rightChild = copyNode(*node.rightChild);
-	    pNewNode->rightChild->parent = pNewNode;
-	}
-	return pNewNode;
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::free(Node* node)
-    {
-	if (node != nullptr)
-	{
-	    if (node->leftChild != nullptr)
-		free(node->leftChild);
-	    if (node->rightChild != nullptr)
-		free(node->rightChild);
-	    delete node;
-	    node = nullptr;
-	}
-    }
-
-    template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
-	    RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth,
-	    Node* parent) const -> Node*
-    {
-	// Choose median by axis as pivot element. This will result in a well-balanced tree.
-	auto amountOfElements = std::distance(begin, end);
-	if (amountOfElements > 0)
-	{
-	    // Select axis for splitting plane
-	    auto axis = curDepth % Point::getDimension();
-	    auto itMiddle = begin + (end - begin) / 2;
-	    auto compare = [axis](Container const& a, Container const& b)
-	    {
-		return a.point[axis] < b.point[axis];
-	    };
-	    std::nth_element(begin, itMiddle, end, compare);
-	    auto container = *itMiddle;
-	    // Create node and subtree
-	    auto node = new Node();
-	    node->point = container.point;
-	    node->data = container.data;
-	    node->parent = parent;
-	    // Recursively create subtrees
-	    node->leftChild = buildTree(begin, itMiddle, curDepth + 1, node);
-	    node->rightChild = buildTree(std::next(itMiddle), end, curDepth + 1, node);
-	    return node;
-	}
-	else
-	    return nullptr;
-    }
-
-    template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point) const
-    {
-	auto result = searchFor(point, m_pRoot, 0);
-	if (result != nullptr)
-	    return &result->data;
-	else
-	    return nullptr;
-    }
-
-    template<typename Data, typename Point> Data* KdTree<Data, Point>::getSimilar(Point const& point,
-	    double precision) const
-    {
-	auto result = searchForSimilar(point, m_pRoot, 0, nullptr, precision);
-	if (result != nullptr)
-	    return &result->data;
-	else
-	    return nullptr;
-    }
-
-    template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(Point const& point,
-	    Node* node, unsigned int curDepth, unsigned int *level) const -> Node*
-    {
-	if (node != nullptr)
-	{
-	    // Check if the start node is already matching
-	    if (point == node->point)
-	    {
-		if (level != nullptr)
-		    *level = curDepth;
-		return node;
-	    }
-	    // Otherwise check child nodes
-	    auto axis = curDepth % Point::getDimension();
-	    if (point[axis] <= node->point[axis])
-		return searchFor(point, node->leftChild, curDepth + 1, level);
-	    else
-		return searchFor(point, node->rightChild, curDepth + 1, level);
-	}
-	else
-	    return nullptr;
-    }
-
-    template<typename Data, typename Point> auto KdTree<Data, Point>::searchForSimilar(Point const& point,
-	    Node* node, unsigned int curDepth, unsigned int *level, double precision) const -> Node*
-    {
-	if (node != nullptr)
-	{
-	    // Check if the start node is already matching
-	    if (point.isSimilar(node->point, precision))
-	    {
-		if (level != nullptr)
-		    *level = curDepth;
-		return node;
-	    }
-	    // Otherwise check child nodes
-	    auto axis = curDepth % Point::getDimension();
-	    if (point[axis] <= node->point[axis])
-		return searchForSimilar(point, node->leftChild, curDepth + 1, level, precision);
-	    else
-		return searchForSimilar(point, node->rightChild, curDepth + 1, level, precision);
-	}
-	else
-	    return nullptr;
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::insert(Point const& point,
-	    Data const& data)
-    {
-	if (m_pRoot != nullptr)
-	    insert(point, data, *m_pRoot, 0);
-	else
-	{
-	    m_pRoot = new Node {};
-	    m_pRoot->point = point;
-	    m_pRoot->data = data;
-	}
-	m_size++;
-    }
-
-    template<typename Data, typename Point> auto KdTree<Data, Point>::insert(Point const& point,
-	    Data const& data, Node& node, unsigned int curDepth) -> Node&
-    {
-	auto axis = curDepth % Point::getDimension();
-	// Check if we can insert here
-	if (point[axis] <= node.point[axis] && node.leftChild == nullptr)
-	{
-	    node.leftChild = new Node {};
-	    node.leftChild->point = point;
-	    node.leftChild->data = data;
-	    node.leftChild->parent = &node;
-	    return *node.leftChild;
-	}
-	else if (point[axis] > node.point[axis] && node.rightChild == nullptr)
-	{
-	    node.rightChild = new Node {};
-	    node.rightChild->point = point;
-	    node.rightChild->data = data;
-	    node.rightChild->parent = &node;
-	    return *node.rightChild;
-	}
-	// Otherwise check child nodes
-	if (point[axis] <= node.point[axis])
-	    return insert(point, data, *node.leftChild, curDepth + 1);
-	else
-	    return insert(point, data, *node.rightChild, curDepth + 1);
-    }
-
-    template<typename Data, typename Point> bool KdTree<Data, Point>::remove(Point const& point)
-    {
-	// Check if the node to delete exists
-	unsigned int level {};
-	auto node2Delete = searchFor(point, m_pRoot, 0, &level);
-	if (node2Delete == nullptr)
-	    return false;
-	else
-	{
-	    // It exists, thus collect all of its children and rebuild the partial tree from them
-	    std::vector<Container> children{};
-	    getAllChildren(children, *node2Delete);
-	    auto parent = node2Delete->parent;
-	    Node** attachHere = &m_pRoot;
-	    if (parent != nullptr)
-	    {
-		if (parent->leftChild == node2Delete)
-		    attachHere = &parent->leftChild;
-		else
-		    attachHere = &parent->rightChild;
-	    }
-	    free(node2Delete);
-	    *attachHere = buildTree(children.begin(), children.end(), level);
-	    m_size--;
-	    return true;
-	}
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::getAllChildren(std::vector<Container>& container,
-	    Node const& node) const
-    {
-	if (node.leftChild != nullptr)
-	    getAllNodes(*node.leftChild, container);
-	if (node.rightChild != nullptr)
-	    getAllNodes(*node.rightChild, container);
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::getAllNodes(Node const& node,
-	    std::vector<Container>& list) const
-    {
-	if (node.leftChild != nullptr)
-	    getAllNodes(*node.leftChild, list);
-	if (node.rightChild != nullptr)
-	    getAllNodes(*node.rightChild, list);
-	list.push_back( { node.point, node.data });
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::getAll(std::vector<Container>& container) const
-    {
-	if (m_pRoot != nullptr)
-	{
-	    getAllChildren(container, *m_pRoot);
-	    container.push_back( { m_pRoot->point, m_pRoot->data });
-	}
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::balance()
-    {
-	if (m_pRoot != nullptr)
-	{
-	    std::vector<Container> nodes{};
-	    nodes.reserve(m_size);
-	    getAllChildren(nodes, *m_pRoot);
-	    nodes.push_back( { m_pRoot->point, m_pRoot->data });
-	    free(m_pRoot);
-	    m_pRoot = buildTree(nodes.begin(), nodes.end(), 0);
-	}
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(Point const& point,
-	    Point& nearest, Data& data) const
-    {
-	NearestNeighbor curBest {};
-	findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
-	nearest = curBest.pNode->point;
-	data = curBest.pNode->data;
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(Point const& point,
-	    Node const& node, NearestNeighbor& currentBest, bool goDown, unsigned int curDepth) const
-    {
-	auto axis = curDepth % Point::getDimension();
-	if (goDown)
-	{
-	    // Check if we go left or right
-	    if (point[axis] <= node.point[axis] && node.leftChild != nullptr)
-		findNearestNeighbor(point, *node.leftChild, currentBest, true, curDepth + 1);
-	    else if (point[axis] > node.point[axis] && node.rightChild != nullptr)
-		findNearestNeighbor(point, *node.rightChild, currentBest, true, curDepth + 1);
-	    else
-	    {
-		// This is a leaf node
-		if (currentBest.pNode != nullptr)
+		m_size = std::distance(beginPoint, endPoint);
+		if (static_cast<int>(m_size) != std::distance(beginDat, endDat))
+			throw std::range_error { "Invalid size of point- and data list." };
+		std::vector<Container> containers { };
+		containers.reserve(m_size);
+		auto itD = beginDat;
+		for (auto itP = beginPoint; itP != endPoint; ++itP)
 		{
-		    // Check if the newly found node is closer
-		    auto sqLengthCurBest = currentBest.sqDist;
-		    auto sqLengthCur = (point - node.point).getSquaredLength();
-		    if (sqLengthCur < sqLengthCurBest)
-		    {
+			containers.push_back( { *itP, *itD });
+			++itD;
+		}
+
+		m_pRoot = buildTree(containers.begin(), containers.end(), 0, nullptr);
+	}
+
+	template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> const& other)
+	{
+		m_pRoot = copyNode(*other.m_pRoot);
+		m_size = other.m_size;
+	}
+
+	template<typename Data, typename Point> KdTree<Data, Point>::KdTree(KdTree<Data, Point> && other)
+	{
+		m_pRoot = other.m_pRoot;
+		m_size = other.m_size;
+		other.m_pRoot = nullptr;
+		other.m_size = 0;
+	}
+
+	template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(
+			KdTree<Data, Point> const& other)
+	{
+		if (this != &other)
+		{
+			m_pRoot = copyNode(*other.m_pRoot);
+			m_size = other.m_size;
+		}
+		return *this;
+	}
+
+	template<typename Data, typename Point> KdTree<Data, Point>& KdTree<Data, Point>::operator=(
+			KdTree<Data, Point> && other)
+	{
+		if (this != &other)
+		{
+			free(m_pRoot);
+			m_pRoot = other.m_pRoot;
+			other.m_pRoot = nullptr;
+			m_size = other.m_size;
+			other.m_size = 0;
+		}
+		return *this;
+	}
+
+	template<typename Data, typename Point> KdTree<Data, Point>::~KdTree()
+	{
+		// Free all nodes
+		if (m_pRoot != nullptr)
+			free(m_pRoot);
+	}
+
+	template<typename Data, typename Point> auto KdTree<Data, Point>::copyNode(Node& node) const -> Node*
+	{
+		Node* pNewNode = new Node { };
+		pNewNode->point = node.point;
+		pNewNode->data = node.data;
+		if (node.leftChild != nullptr)
+		{
+			pNewNode->leftChild = copyNode(*node.leftChild);
+			pNewNode->leftChild->parent = pNewNode;
+		}
+		if (node.rightChild != nullptr)
+		{
+			pNewNode->rightChild = copyNode(*node.rightChild);
+			pNewNode->rightChild->parent = pNewNode;
+		}
+		return pNewNode;
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::free(Node* node)
+	{
+		if (node != nullptr)
+		{
+			if (node->leftChild != nullptr)
+				free(node->leftChild);
+			if (node->rightChild != nullptr)
+				free(node->rightChild);
+			delete node;
+			node = nullptr;
+		}
+	}
+
+	template<typename Data, typename Point> template<class RandomAccessIterator> auto KdTree<Data, Point>::buildTree(
+			RandomAccessIterator begin, RandomAccessIterator end, unsigned int curDepth, Node* parent) const -> Node*
+	{
+		// Choose median by axis as pivot element. This will result in a well-balanced tree.
+		auto amountOfElements = std::distance(begin, end);
+		if (amountOfElements > 0)
+		{
+			// Select axis for splitting plane
+			auto axis = curDepth % Point::getDimension();
+			auto itMiddle = begin + (end - begin) / 2;
+			auto compare = [axis](Container const& a, Container const& b)
+			{
+				return a.point[axis] < b.point[axis];
+			};
+			std::nth_element(begin, itMiddle, end, compare);
+			auto container = *itMiddle;
+			// Create node and subtree
+			auto node = new Node();
+			node->point = container.point;
+			node->data = container.data;
+			node->parent = parent;
+			// Recursively create subtrees
+			node->leftChild = buildTree(begin, itMiddle, curDepth + 1, node);
+			node->rightChild = buildTree(std::next(itMiddle), end, curDepth + 1, node);
+			return node;
+		}
+		else
+			return nullptr;
+	}
+
+	template<typename Data, typename Point> Data* KdTree<Data, Point>::get(Point const& point) const
+	{
+		auto result = searchFor(point, m_pRoot, 0);
+		if (result != nullptr)
+			return &result->data;
+		else
+			return nullptr;
+	}
+
+	template<typename Data, typename Point> Data* KdTree<Data, Point>::getSimilar(Point const& point,
+			double precision) const
+	{
+		auto result = searchForSimilar(point, m_pRoot, 0, nullptr, precision);
+		if (result != nullptr)
+			return &result->data;
+		else
+			return nullptr;
+	}
+
+	template<typename Data, typename Point> auto KdTree<Data, Point>::searchFor(Point const& point, Node* node,
+			unsigned int curDepth, unsigned int *level) const -> Node*
+	{
+		if (node != nullptr)
+		{
+			// Check if the start node is already matching
+			if (point == node->point)
+			{
+				if (level != nullptr)
+					*level = curDepth;
+				return node;
+			}
+			// Otherwise check child nodes
+			auto axis = curDepth % Point::getDimension();
+			if (point[axis] <= node->point[axis])
+				return searchFor(point, node->leftChild, curDepth + 1, level);
+			else
+				return searchFor(point, node->rightChild, curDepth + 1, level);
+		}
+		else
+			return nullptr;
+	}
+
+	template<typename Data, typename Point> auto KdTree<Data, Point>::searchForSimilar(Point const& point, Node* node,
+			unsigned int curDepth, unsigned int *level, double precision) const -> Node*
+	{
+		if (node != nullptr)
+		{
+			// Check if the start node is already matching
+			if (point.isSimilar(node->point, precision))
+			{
+				if (level != nullptr)
+					*level = curDepth;
+				return node;
+			}
+			// Otherwise check child nodes
+			auto axis = curDepth % Point::getDimension();
+			if (point[axis] <= node->point[axis])
+				return searchForSimilar(point, node->leftChild, curDepth + 1, level, precision);
+			else
+				return searchForSimilar(point, node->rightChild, curDepth + 1, level, precision);
+		}
+		else
+			return nullptr;
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::insert(Point const& point, Data const& data)
+	{
+		if (m_pRoot != nullptr)
+			insert(point, data, *m_pRoot, 0);
+		else
+		{
+			m_pRoot = new Node { };
+			m_pRoot->point = point;
+			m_pRoot->data = data;
+		}
+		m_size++;
+	}
+
+	template<typename Data, typename Point> auto KdTree<Data, Point>::insert(Point const& point, Data const& data,
+			Node& node, unsigned int curDepth) -> Node&
+	{
+		auto axis = curDepth % Point::getDimension();
+		// Check if we can insert here
+		if (point[axis] <= node.point[axis] && node.leftChild == nullptr)
+		{
+			node.leftChild = new Node { };
+			node.leftChild->point = point;
+			node.leftChild->data = data;
+			node.leftChild->parent = &node;
+			return *node.leftChild;
+		}
+		else if (point[axis] > node.point[axis] && node.rightChild == nullptr)
+		{
+			node.rightChild = new Node { };
+			node.rightChild->point = point;
+			node.rightChild->data = data;
+			node.rightChild->parent = &node;
+			return *node.rightChild;
+		}
+		// Otherwise check child nodes
+		if (point[axis] <= node.point[axis])
+			return insert(point, data, *node.leftChild, curDepth + 1);
+		else
+			return insert(point, data, *node.rightChild, curDepth + 1);
+	}
+
+	template<typename Data, typename Point> bool KdTree<Data, Point>::remove(Point const& point)
+	{
+		// Check if the node to delete exists
+		unsigned int level { };
+		auto node2Delete = searchFor(point, m_pRoot, 0, &level);
+		if (node2Delete == nullptr)
+			return false;
+		else
+		{
+			// It exists, thus collect all of its children and rebuild the partial tree from them
+			std::vector<Container> children { };
+			getAllChildren(children, *node2Delete);
+			auto parent = node2Delete->parent;
+			Node** attachHere = &m_pRoot;
+			if (parent != nullptr)
+			{
+				if (parent->leftChild == node2Delete)
+					attachHere = &parent->leftChild;
+				else
+					attachHere = &parent->rightChild;
+			}
+			free(node2Delete);
+			*attachHere = buildTree(children.begin(), children.end(), level);
+			m_size--;
+			return true;
+		}
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::getAllChildren(std::vector<Container>& container,
+			Node const& node) const
+	{
+		if (node.leftChild != nullptr)
+			getAllNodes(*node.leftChild, container);
+		if (node.rightChild != nullptr)
+			getAllNodes(*node.rightChild, container);
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::getAllNodes(Node const& node,
+			std::vector<Container>& list) const
+	{
+		if (node.leftChild != nullptr)
+			getAllNodes(*node.leftChild, list);
+		if (node.rightChild != nullptr)
+			getAllNodes(*node.rightChild, list);
+		list.push_back( { node.point, node.data });
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::getAll(std::vector<Container>& container) const
+	{
+		if (m_pRoot != nullptr)
+		{
+			getAllChildren(container, *m_pRoot);
+			container.push_back( { m_pRoot->point, m_pRoot->data });
+		}
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::balance()
+	{
+		if (m_pRoot != nullptr)
+		{
+			std::vector<Container> nodes { };
+			nodes.reserve(m_size);
+			getAllChildren(nodes, *m_pRoot);
+			nodes.push_back( { m_pRoot->point, m_pRoot->data });
+			free(m_pRoot);
+			m_pRoot = buildTree(nodes.begin(), nodes.end(), 0);
+		}
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(Point const& point,
+			Point& nearest, Data& data) const
+	{
+		NearestNeighbor curBest { };
+		findNearestNeighbor(point, *m_pRoot, curBest, true, 0);
+		nearest = curBest.pNode->point;
+		data = curBest.pNode->data;
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findNearestNeighbor(Point const& point,
+			Node const& node, NearestNeighbor& currentBest, bool goDown, unsigned int curDepth) const
+	{
+		auto axis = curDepth % Point::getDimension();
+		if (goDown)
+		{
+			// Check if we go left or right
+			if (point[axis] <= node.point[axis] && node.leftChild != nullptr)
+				findNearestNeighbor(point, *node.leftChild, currentBest, true, curDepth + 1);
+			else if (point[axis] > node.point[axis] && node.rightChild != nullptr)
+				findNearestNeighbor(point, *node.rightChild, currentBest, true, curDepth + 1);
+			else
+			{
+				// This is a leaf node
+				if (currentBest.pNode != nullptr)
+				{
+					// Check if the newly found node is closer
+					auto sqLengthCurBest = currentBest.sqDist;
+					auto sqLengthCur = (point - node.point).getSquaredLength();
+					if (sqLengthCur < sqLengthCurBest)
+					{
+						currentBest.pNode = &node;
+						currentBest.sqDist = sqLengthCur;
+					}
+				}
+				else
+				{
+					currentBest.pNode = &node;
+					currentBest.sqDist = (point - currentBest.pNode->point).getSquaredLength();
+				}
+				goDown = false;
+				return;
+			}
+		}
+		// Check if we've found a better match
+		auto sqLengthCurBest = currentBest.sqDist;
+		auto sqLengthCur = (point - node.point).getSquaredLength();
+		if (sqLengthCur < sqLengthCurBest)
+		{
 			currentBest.pNode = &node;
 			currentBest.sqDist = sqLengthCur;
-		    }
+		}
+		// Check if there could be a closer point on the other side of the splitting plane
+		auto dist = point[axis] - node.point[axis];
+		if (dist * dist < currentBest.sqDist)
+		{
+			auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
+			if (otherSide != nullptr)
+				findNearestNeighbor(point, *otherSide, currentBest, true, curDepth + 1);
+		}
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(Point const& point,
+			unsigned int k, std::vector<Container>& nearest) const
+	{
+		if (k == 0)
+			std::invalid_argument("Cannot search for zero nearest neighbors.");
+		if (k > size())
+			k = size();
+
+		std::vector<NearestNeighbor> curBest { };
+		findKNearestNeighbors(point, k, *m_pRoot, curBest, true, 0);
+		for (auto nn : curBest)
+			nearest.push_back( { nn.pNode->point, nn.pNode->data });
+	}
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(Point const& point,
+			unsigned int k, Node const& node, std::vector<NearestNeighbor>& currentBest, bool goDown,
+			unsigned int curDepth) const
+	{
+		// Calculate current axis
+		auto axis = curDepth % Point::getDimension();
+		// Declare sort lambda used later on
+		auto sortFunc = [] (NearestNeighbor nn1, NearestNeighbor nn2) -> bool
+		{
+			return nn1.sqDist < nn2.sqDist;
+		};
+		if (goDown)
+		{
+			// Check if we go left or right
+			if (point[axis] <= node.point[axis] && node.leftChild != nullptr)
+				findKNearestNeighbors(point, k, *node.leftChild, currentBest, true, curDepth + 1);
+			else if (point[axis] > node.point[axis] && node.rightChild != nullptr)
+				findKNearestNeighbors(point, k, *node.rightChild, currentBest, true, curDepth + 1);
+			else
+			{
+				// This is a leaf node
+				// If we've already found k nearest neighbors, check if the current node is closer
+				// than the furthest of the already found ones
+				if (currentBest.size() == k)
+				{
+					// Sort by squared distance
+					std::sort(currentBest.begin(), currentBest.end(), sortFunc);
+					// Check if the newly found node is closer
+					auto& leastClosest = currentBest[k - 1];
+					auto sqLengthCurBest = leastClosest.sqDist;
+					auto sqLengthCur = (point - node.point).getSquaredLength();
+					if (sqLengthCur < sqLengthCurBest)
+					{
+						leastClosest.pNode = &node;
+						leastClosest.sqDist = sqLengthCur;
+					}
+				}
+				else
+				{
+					NearestNeighbor nn { };
+					nn.pNode = &node;
+					nn.sqDist = (point - node.point).getSquaredLength();
+					currentBest.push_back(nn);
+				}
+				goDown = false;
+				return;
+			}
+		}
+		// If we didn't find k neighbors yet just add the point
+		auto sqLengthCur = (point - node.point).getSquaredLength();
+		if (currentBest.size() < k)
+		{
+			NearestNeighbor nn { };
+			nn.pNode = &node;
+			nn.sqDist = sqLengthCur;
+			currentBest.push_back(nn);
 		}
 		else
 		{
-		    currentBest.pNode = &node;
-		    currentBest.sqDist = (point - currentBest.pNode->point).getSquaredLength();
+			// Check if we've found a better match
+			// Sort by squared distance
+			std::sort(currentBest.begin(), currentBest.end(), sortFunc);
+			// Check if the newly found node is closer
+			auto& leastClosest = currentBest[k - 1];
+			auto sqLengthCurBest = leastClosest.sqDist;
+			if (sqLengthCur < sqLengthCurBest)
+			{
+				leastClosest.pNode = &node;
+				leastClosest.sqDist = sqLengthCur;
+			}
 		}
-		goDown = false;
-		return;
-	    }
-	}
-	// Check if we've found a better match
-	auto sqLengthCurBest = currentBest.sqDist;
-	auto sqLengthCur = (point - node.point).getSquaredLength();
-	if (sqLengthCur < sqLengthCurBest)
-	{
-	    currentBest.pNode = &node;
-	    currentBest.sqDist = sqLengthCur;
-	}
-	// Check if there could be a closer point on the other side of the splitting plane
-	auto dist = point[axis] - node.point[axis];
-	if (dist * dist < currentBest.sqDist)
-	{
-	    auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
-	    if (otherSide != nullptr)
-		findNearestNeighbor(point, *otherSide, currentBest, true, curDepth + 1);
-	}
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(
-	    Point const& point, unsigned int k, std::vector<Container>& nearest) const
-    {
-	if (k == 0)
-	    std::invalid_argument("Cannot search for zero nearest neighbors.");
-	if (k > size())
-	    k = size();
-
-	std::vector<NearestNeighbor> curBest {};
-	findKNearestNeighbors(point, k, *m_pRoot, curBest, true, 0);
-	for (auto nn : curBest)
-	    nearest.push_back( { nn.pNode->point, nn.pNode->data });
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::findKNearestNeighbors(
-	    Point const& point, unsigned int k, Node const& node, std::vector<NearestNeighbor>& currentBest,
-	    bool goDown, unsigned int curDepth) const
-    {
-	// Calculate current axis
-	auto axis = curDepth % Point::getDimension();
-	// Declare sort lambda used later on
-	auto sortFunc = [] (NearestNeighbor nn1, NearestNeighbor nn2) -> bool
-	{
-	    return nn1.sqDist < nn2.sqDist;
-	};
-	if (goDown)
-	{
-	    // Check if we go left or right
-	    if (point[axis] <= node.point[axis] && node.leftChild != nullptr)
-		findKNearestNeighbors(point, k, *node.leftChild, currentBest, true, curDepth + 1);
-	    else if (point[axis] > node.point[axis] && node.rightChild != nullptr)
-		findKNearestNeighbors(point, k, *node.rightChild, currentBest, true, curDepth + 1);
-	    else
-	    {
-		// This is a leaf node
-		// If we've already found k nearest neighbors, check if the current node is closer
-		// than the furthest of the already found ones
-		if (currentBest.size() == k)
+		// Check if there could be a closer point on the other side of the splitting plane
+		auto dist = point[axis] - node.point[axis];
+		for (auto best : currentBest)
 		{
-		    // Sort by squared distance
-		    std::sort(currentBest.begin(), currentBest.end(), sortFunc);
-		    // Check if the newly found node is closer
-		    auto& leastClosest = currentBest[k - 1];
-		    auto sqLengthCurBest = leastClosest.sqDist;
-		    auto sqLengthCur = (point - node.point).getSquaredLength();
-		    if (sqLengthCur < sqLengthCurBest)
-		    {
-			leastClosest.pNode = &node;
-			leastClosest.sqDist = sqLengthCur;
-		    }
+			if (dist * dist < best.sqDist)
+			{
+				auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
+				if (otherSide != nullptr)
+					findKNearestNeighbors(point, k, *otherSide, currentBest, true, curDepth + 1);
+			}
 		}
-		else
-		{
-		    NearestNeighbor nn {};
-		    nn.pNode = &node;
-		    nn.sqDist = (point - node.point).getSquaredLength();
-		    currentBest.push_back(nn);
-		}
-		goDown = false;
-		return;
-	    }
 	}
-	// If we didn't find k neighbors yet just add the point
-	auto sqLengthCur = (point - node.point).getSquaredLength();
-	if (currentBest.size() < k)
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
+			Hyperrectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const
 	{
-	    NearestNeighbor nn {};
-	    nn.pNode = &node;
-	    nn.sqDist = sqLengthCur;
-	    currentBest.push_back(nn);
+		if (m_pRoot != nullptr)
+			findRange(range, *m_pRoot, 0, result);
 	}
-	else
+
+	template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
+			Hyperrectangle<PrecisionType, Point::getDimension()> const& range, Node const& node, unsigned int curDepth,
+			std::vector<Container>& result) const
 	{
-	    // Check if we've found a better match
-	    // Sort by squared distance
-	    std::sort(currentBest.begin(), currentBest.end(), sortFunc);
-	    // Check if the newly found node is closer
-	    auto& leastClosest = currentBest[k - 1];
-	    auto sqLengthCurBest = leastClosest.sqDist;
-	    if (sqLengthCur < sqLengthCurBest)
-	    {
-		leastClosest.pNode = &node;
-		leastClosest.sqDist = sqLengthCur;
-	    }
+		// Calculate current axis
+		auto axis = curDepth % Point::getDimension();
+		if (range.contains(node.point))
+			result.push_back( { node.point, node.data });
+		if (node.point[axis] >= range.left(axis) && node.leftChild != nullptr)
+			findRange(range, *node.leftChild, curDepth + 1, result);
+		if (node.point[axis] <= range.right(axis) && node.rightChild != nullptr)
+			findRange(range, *node.rightChild, curDepth + 1, result);
 	}
-	// Check if there could be a closer point on the other side of the splitting plane
-	auto dist = point[axis] - node.point[axis];
-	for (auto best : currentBest)
+
+	template<typename Data, typename Point> unsigned int KdTree<Data, Point>::size() const
 	{
-	    if (dist * dist < best.sqDist)
-	    {
-		auto otherSide = dist <= 0 ? node.rightChild : node.leftChild;
-		if (otherSide != nullptr)
-		    findKNearestNeighbors(point, k, *otherSide, currentBest, true, curDepth + 1);
-	    }
+		return m_size;
 	}
-    }
 
-    template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
-	    Hyperrectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const
-    {
-	if (m_pRoot != nullptr)
-	    findRange(range, *m_pRoot, 0, result);
-    }
+	template<typename Data, typename Point> void KdTree<Data, Point>::clear()
+	{
+		// Free all nodes
+		if (m_pRoot != nullptr)
+			free(m_pRoot);
+		m_pRoot = nullptr;
+		m_size = 0;
+	}
 
-    template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
-	    Hyperrectangle<PrecisionType, Point::getDimension()> const& range, Node const& node,
-	    unsigned int curDepth, std::vector<Container>& result) const
-    {
-	// Calculate current axis
-	auto axis = curDepth % Point::getDimension();
-	if (range.contains(node.point))
-	    result.push_back( { node.point, node.data } );
-	if (node.point[axis] >= range.left(axis) && node.leftChild != nullptr)
-	    findRange(range, *node.leftChild, curDepth + 1, result);
-	if (node.point[axis] <= range.right(axis) && node.rightChild != nullptr)
-	    findRange(range, *node.rightChild, curDepth + 1, result);
-    }
+	template<typename Data, typename Point> void KdTree<Data, Point>::accept(AbstractTreeVisitor& visitor)
+	{
+		AbstractTree::accept(visitor);
+		if (m_pRoot != nullptr)
+			m_pRoot->accept(visitor);
+	}
 
-    template<typename Data, typename Point> unsigned int KdTree<Data, Point>::size() const
-    {
-	return m_size;
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::clear()
-    {
-	// Free all nodes
-	if (m_pRoot != nullptr)
-	    free(m_pRoot);
-	m_pRoot = nullptr;
-	m_size = 0;
-    }
-
-    template<typename Data, typename Point> void KdTree<Data, Point>::accept(AbstractTreeVisitor& visitor)
-    {
-	AbstractTree::accept(visitor);
-	if (m_pRoot != nullptr)
-	    m_pRoot->accept(visitor);
-    }
-
-    template<typename Data, typename Point> template<class Visitor> void KdTree<Data, Point>::accept(
-	    Visitor& visitor)
-    {
-	AbstractTree::accept<Visitor, KdTree<Data, Point>*>(visitor);
-	if (m_pRoot != nullptr)
-	    m_pRoot->accept<Visitor>(visitor);
-    }
+	template<typename Data, typename Point> template<class Visitor> void KdTree<Data, Point>::accept(Visitor& visitor)
+	{
+		AbstractTree::accept<Visitor, KdTree<Data, Point>*>(visitor);
+		if (m_pRoot != nullptr)
+			m_pRoot->accept<Visitor>(visitor);
+	}
 }

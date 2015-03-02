@@ -8,63 +8,72 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_DBGL_CORE_MATH_PLANE_H_
-#define INCLUDE_DBGL_CORE_MATH_PLANE_H_
+#ifndef INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_
+#define INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_
 
-#include "Vector3.h"
+#include "Vector.h"
 
 namespace dbgl
 {
 	/**
 	 * @brief Basic three-dimensional plane class
 	 */
-	template<typename T> class Plane
+	template<typename T, unsigned int D = 3> class HyperPlane
 	{
 	public:
 		/**
 		 * @brief Default constructor
 		 */
-		Plane() = default;
+		HyperPlane() = default;
 		/**
 		 * @brief Constructor
 		 * @param base Base point on the plane
 		 * @param normal Plane normal
 		 */
-		Plane(Vector3<T> base, Vector3<T> normal);
+		HyperPlane(Vector<T, D> base, Vector<T, D> normal);
 		/**
 		 * @brief Provides the plane normal
 		 * @return Plane normal
 		 */
-		Vector3<T>& normal();
+		Vector<T, D>& normal();
 		/**
 		 * @brief Provides the plane base point
 		 * @return Plane base point
 		 */
-		Vector3<T>& base();
+		Vector<T, D>& base();
 		/**
 		 * @brief Checks if two planes intersect
 		 * @param other Plane to check
 		 * @return True if intersecting, otherwise false
 		 */
-		bool intersects(Plane const& other) const;
+		bool intersects(HyperPlane<T, D> const& other) const;
 		/**
 		 * @brief Computes the distance between a point and this plane
 		 * @param point Point to check
 		 * @return Unsigned distance
 		 */
-		T getDistance(Vec3f const& point) const;
+		T getDistance(Vector<T, D> const& point) const;
 		/**
 		 * @brief Computes the signed distance between a point and this plane
 		 * @param point Point to check
 		 * @return Signed distance
 		 */
-		T getSignedDistance(Vec3f const& point) const;
+		T getSignedDistance(Vector<T, D> const& point) const;
 	private:
-		Vector3<T> m_base;
-		Vector3<T> m_normal;
+		Vector<T, D> m_base;
+		Vector<T, D> m_normal;
 	};
+
+	/**
+	 * @brief Two-dimensional plane, i.e. a line
+	 */
+	template<typename T> using Line = HyperPlane<T, 2>;
+	/**
+	 * @brief Three-dimensional plane
+	 */
+	template<typename T> using Plane = HyperPlane<T, 3>;
 }
 
-#include "Plane.imp"
+#include "HyperPlane.imp"
 
-#endif /* INCLUDE_DBGL_CORE_MATH_PLANE_H_ */
+#endif /* INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_ */

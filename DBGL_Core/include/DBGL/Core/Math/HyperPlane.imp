@@ -10,32 +10,32 @@
 
 namespace dbgl
 {
-	template<typename T> Plane<T>::Plane(Vector3<T> base, Vector3<T> normal)
+	template<typename T, unsigned int D> HyperPlane<T, D>::HyperPlane(Vector<T, D> base, Vector<T, D> normal)
 			: m_base { base }, m_normal { normal }
 	{
 	}
 
-	template<typename T> Vector3<T>& Plane<T>::normal()
+	template<typename T, unsigned int D> Vector<T, D>& HyperPlane<T, D>::normal()
 	{
 		return m_normal;
 	}
 
-	template<typename T> Vector3<T>& Plane<T>::base()
+	template<typename T, unsigned int D> Vector<T, D>& HyperPlane<T, D>::base()
 	{
 		return m_base;
 	}
 
-	template<typename T> bool Plane<T>::intersects(Plane const& other) const
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(HyperPlane<T, D> const& other) const
 	{
 		return m_normal.getNormalized().cross(other.m_normal.getNormalized()) != 0;
 	}
 
-	template<typename T> T Plane<T>::getDistance(Vec3f const& point) const
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(Vector<T, D> const& point) const
 	{
 		return std::abs(getSignedDistance(point));
 	}
 
-	template<typename T> T Plane<T>::getSignedDistance(Vec3f const& point) const
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getSignedDistance(Vector<T, D> const& point) const
 	{
 		return m_normal * point - m_normal * m_base;
 	}
