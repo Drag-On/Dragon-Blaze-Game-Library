@@ -1,0 +1,58 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere()
+			: m_center { }, m_radius { 1 }
+	{
+	}
+
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& center, T radius)
+			: m_center { center }, m_radius { radius }
+	{
+	}
+
+	template<typename T, unsigned int D> Vector<T, D>& HyperSphere<T, D>::center()
+	{
+		return m_center;
+	}
+
+	template<typename T, unsigned int D> T& HyperSphere<T, D>::radius()
+	{
+		return m_radius;
+	}
+
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(HyperSphere<T, D> const& other) const
+	{
+		return getSignedDistance(other) <= 0;
+	}
+
+	template<typename T, unsigned int D> T HyperSphere<T, D>::getDistance(Vector<T, D> const& point) const
+	{
+		return std::abs(getSignedDistance(point));
+	}
+
+	template<typename T, unsigned int D> T HyperSphere<T, D>::getDistance(HyperSphere<T, D> const& sphere) const
+	{
+		return std::abs(getSignedDistance(sphere));
+	}
+
+	template<typename T, unsigned int D> T HyperSphere<T, D>::getSignedDistance(Vector<T, D> const& point) const
+	{
+		return (point - m_center).getLength() - m_radius;
+	}
+
+	template<typename T, unsigned int D> T HyperSphere<T, D>::getSignedDistance(HyperSphere<T, D> const& sphere) const
+	{
+		return (sphere.m_center - m_center).getLength() - m_radius - sphere.m_radius;
+	}
+}
+
