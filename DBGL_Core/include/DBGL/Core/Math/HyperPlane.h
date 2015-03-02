@@ -54,11 +54,23 @@ namespace dbgl
 		 */
 		T getDistance(Vector<T, D> const& point) const;
 		/**
+		 * @brief Computes the distance between a plane and this plane
+		 * @param plane Plane to check
+		 * @return Unsigned distance
+		 */
+		T getDistance(HyperPlane<T, D> const& plane) const;
+		/**
 		 * @brief Computes the signed distance between a point and this plane
 		 * @param point Point to check
 		 * @return Signed distance
 		 */
 		T getSignedDistance(Vector<T, D> const& point) const;
+		/**
+		 * @brief Computes the distance between a plane and this plane
+		 * @param plane Plane to check
+		 * @return Signed distance
+		 */
+		T getSignedDistance(HyperPlane<T, D> const& plane) const;
 	private:
 		Vector<T, D> m_base;
 		Vector<T, D> m_normal;

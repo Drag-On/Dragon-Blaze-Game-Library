@@ -60,6 +60,6 @@ template<class T, unsigned int D> void testIntersectsDistance()
 
 TEST(Hyperplane,intersects)
 {
-	testIntersects<float, 2>();
-	testIntersects<float, 3>();
+	testIntersectsDistance<float, 2>();
+	testIntersectsDistance<float, 3>();
 }

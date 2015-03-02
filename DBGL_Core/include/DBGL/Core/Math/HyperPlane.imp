@@ -35,8 +35,21 @@ namespace dbgl
 		return std::abs(getSignedDistance(point));
 	}
 
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(HyperPlane<T, D> const& plane) const
+	{
+		return std::abs(getSignedDistance(plane));
+	}
+
 	template<typename T, unsigned int D> T HyperPlane<T, D>::getSignedDistance(Vector<T, D> const& point) const
 	{
 		return m_normal * point - m_normal * m_base;
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getSignedDistance(HyperPlane<T, D> const& plane) const
+	{
+		if(intersects(plane))
+			return 0;
+		else
+			return getSignedDistance(plane.m_base);
 	}
 }
