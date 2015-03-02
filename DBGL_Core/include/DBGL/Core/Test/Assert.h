@@ -13,6 +13,7 @@
 
 #include <string>
 #include <stdexcept>
+#include "DBGL/Core/Math/Utility.h"
 
 namespace dbgl
 {
@@ -49,7 +50,11 @@ namespace dbgl
 
 #define ASSERT_EQ(first, last) ASSERT((first) == (last))
 
+#define ASSERT_APPROX(first, last, precision) ASSERT(dbgl::isSimilar((first), (last), precision));
+
 #define ASSERT_NEQ(first, last) ASSERT((first) != (last))
+
+#define ASSERT_NAPPROX(first, last, precision) ASSERT(!dbgl::isSimilar((first), (last), precision));
 
 #define ASSERT_THROWS(chk,ex) do{bool thrown = false; try {{chk;}}catch(ex& e){thrown = true;}catch(...){throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}if(!thrown)throw AssertException{__FILE__, __LINE__, "\""#chk "\" failed."};}while(false)
 
