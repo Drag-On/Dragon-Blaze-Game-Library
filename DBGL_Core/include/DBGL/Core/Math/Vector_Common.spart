@@ -27,6 +27,12 @@ template<TEMPLATE_LIST> Vector<T,N>::Vector()
 		(*this)[i] = 0;
 }
 
+template<TEMPLATE_LIST> Vector<T,N>::Vector(T value)
+{
+	for(unsigned int i = 0; i < getDimension(); i++)
+		(*this)[i] = value;
+}
+
 template<TEMPLATE_LIST> Vector<T,N>::Vector(const Vector<T,N> &other)
 {
 	assert(this->getDimension() == other.getDimension());
