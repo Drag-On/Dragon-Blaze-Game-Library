@@ -53,12 +53,12 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T, unsigned int D> T Hyperrectangle<T, D>::left(unsigned int dimension) const
+    template<typename T, unsigned int D> T Hyperrectangle<T, D>::lower(unsigned int dimension) const
     {
 	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
 
-    template<typename T, unsigned int D> T Hyperrectangle<T, D>::right(unsigned int dimension) const
+    template<typename T, unsigned int D> T Hyperrectangle<T, D>::upper(unsigned int dimension) const
     {
 	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
@@ -67,7 +67,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < D; i++)
 	{
-	    if (point[i] < left(i) || point[i] > right(i))
+	    if (point[i] < lower(i) || point[i] > upper(i))
 		return false;
 	}
 	return true;
@@ -78,7 +78,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < D; i++)
 	{
-	    if (other.right(i) < left(i) || other.left(i) > right(i))
+	    if (other.upper(i) < lower(i) || other.lower(i) > upper(i))
 		return false;
 	}
 	return true;
@@ -170,12 +170,12 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T> T Hyperrectangle<T, 2>::left(unsigned int dimension) const
+    template<typename T> T Hyperrectangle<T, 2>::lower(unsigned int dimension) const
     {
 	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
 
-    template<typename T> T Hyperrectangle<T, 2>::right(unsigned int dimension) const
+    template<typename T> T Hyperrectangle<T, 2>::upper(unsigned int dimension) const
     {
 	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
@@ -184,7 +184,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < 2; i++)
 	{
-	    if (point[i] < left(i) || point[i] > right(i))
+	    if (point[i] < lower(i) || point[i] > upper(i))
 		return false;
 	}
 	return true;
@@ -194,7 +194,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < 2; i++)
 	{
-	    if (other.right(i) < left(i) || other.left(i) > right(i))
+	    if (other.upper(i) < lower(i) || other.lower(i) > upper(i))
 		return false;
 	}
 	return true;
@@ -283,12 +283,12 @@ namespace dbgl
 	return m_extent;
     }
 
-    template<typename T> T Hyperrectangle<T, 3>::left(unsigned int dimension) const
+    template<typename T> T Hyperrectangle<T, 3>::lower(unsigned int dimension) const
     {
 	return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
 
-    template<typename T> T Hyperrectangle<T, 3>::right(unsigned int dimension) const
+    template<typename T> T Hyperrectangle<T, 3>::upper(unsigned int dimension) const
     {
 	return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
     }
@@ -297,7 +297,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < 3; i++)
 	{
-	    if (point[i] < left(i) || point[i] > right(i))
+	    if (point[i] < lower(i) || point[i] > upper(i))
 		return false;
 	}
 	return true;
@@ -307,7 +307,7 @@ namespace dbgl
     {
 	for (unsigned int i = 0; i < 3; i++)
 	{
-	    if (other.right(i) < left(i) || other.left(i) > right(i))
+	    if (other.upper(i) < lower(i) || other.lower(i) > upper(i))
 		return false;
 	}
 	return true;

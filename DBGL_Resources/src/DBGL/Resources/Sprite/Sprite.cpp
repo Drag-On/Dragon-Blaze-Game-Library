@@ -134,20 +134,20 @@ namespace dbgl
 		uvs.extent().x() = m_rect.extent().x() / width;
 		uvs.extent().y() = m_rect.extent().y() / height;
 		// Set them
-		float lowerX = m_flipX ? uvs.right(0) : uvs.left(0);
-		float upperX = m_flipX ? uvs.left(0) : uvs.right(0);
-		float lowerY = m_flipY ? uvs.right(1) : uvs.left(1);
-		float upperY = m_flipY ? uvs.left(1) : uvs.right(1);
+		float lowerX = m_flipX ? uvs.upper(0) : uvs.lower(0);
+		float upperX = m_flipX ? uvs.lower(0) : uvs.upper(0);
+		float lowerY = m_flipY ? uvs.upper(1) : uvs.lower(1);
+		float upperY = m_flipY ? uvs.lower(1) : uvs.upper(1);
 		m_pMesh->uvs()[tl] = Vec2f { lowerX, upperY };
 		m_pMesh->uvs()[tr] = Vec2f { upperX, upperY };
 		m_pMesh->uvs()[ll] = Vec2f { lowerX, lowerY };
 		m_pMesh->uvs()[lr] = Vec2f { upperX, lowerY };
 		// Set appropriate coordinates
-		m_pMesh->vertices()[tl] = Vec3f { 0, static_cast<float>(m_rect.right(1)) - m_rect.left(1), 0 };
-		m_pMesh->vertices()[tr] = Vec3f { static_cast<float>(m_rect.right(0)) - m_rect.left(0),
-				static_cast<float>(m_rect.right(1)) - m_rect.left(1), 0 };
+		m_pMesh->vertices()[tl] = Vec3f { 0, static_cast<float>(m_rect.upper(1)) - m_rect.lower(1), 0 };
+		m_pMesh->vertices()[tr] = Vec3f { static_cast<float>(m_rect.upper(0)) - m_rect.lower(0),
+				static_cast<float>(m_rect.upper(1)) - m_rect.lower(1), 0 };
 		m_pMesh->vertices()[ll] = Vec3f { 0, 0, 0 };
-		m_pMesh->vertices()[lr] = Vec3f { static_cast<float>(m_rect.right(0)) - m_rect.left(0), 0, 0 };
+		m_pMesh->vertices()[lr] = Vec3f { static_cast<float>(m_rect.upper(0)) - m_rect.lower(0), 0, 0 };
 		m_pMesh->updateBuffers();
 	}
 
@@ -157,9 +157,9 @@ namespace dbgl
 		float width = Platform::get()->curTexture()->getWidth();
 		float height = Platform::get()->curTexture()->getHeight();
 		// Crop rectangle if needed
-		if (m_rect.right(0) > width)
+		if (m_rect.upper(0) > width)
 			m_rect.extent()[0] = width - m_rect.pos()[0];
-		if (m_rect.right(1) > height)
+		if (m_rect.upper(1) > height)
 			m_rect.extent()[1] = height - m_rect.pos()[1];
 	}
 

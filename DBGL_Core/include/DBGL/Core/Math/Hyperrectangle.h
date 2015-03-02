@@ -60,17 +60,17 @@ namespace dbgl
 	     */
 	    Vector<T, D>& extent();
 	    /**
-	     * @brief Provides the "left" coordinate of the hyperrectangle of a certain dimension
-	     * @param dimension Dimension to get the "left" coordinate for
-	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     * @brief Provides the lower bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the lower coordinate for
+	     * @return The lower bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T left(unsigned int dimension) const;
+	    T lower(unsigned int dimension) const;
 	    /**
-	     * @brief Provides the "right" coordinate of the hyperrectangle of a certain dimension
-	     * @param dimension Dimension to get the "right" coordinate for
-	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     * @brief Provides the upper bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the upper coordinate for
+	     * @return The upper bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T right(unsigned int dimension) const;
+	    T upper(unsigned int dimension) const;
 	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this hyperrectangle
 	     * @param point Point to check
@@ -120,6 +120,10 @@ namespace dbgl
 	     * @return Dimensionality of the hyperrectangle
 	     */
 	    static constexpr unsigned int getDimension();
+	    /**
+	     * @brief The precision type used by this object
+	     */
+	    using PrecisionType = T;
 	private:
 	    Vector<T, D> m_pos;
 	    Vector<T, D> m_extent;
@@ -172,17 +176,17 @@ namespace dbgl
 	     */
 	    Vector2<T>& extent();
 	    /**
-	     * @brief Provides the "left" coordinate of the rectangle of a certain dimension
-	     * @param dimension Dimension to get the "left" coordinate for
-	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     * @brief Provides the lower bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the lower coordinate for
+	     * @return The lower bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T left(unsigned int dimension) const;
+	    T lower(unsigned int dimension) const;
 	    /**
-	     * @brief Provides the "right" coordinate of the rectangle of a certain dimension
-	     * @param dimension Dimension to get the "right" coordinate for
-	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     * @brief Provides the upper bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the upper coordinate for
+	     * @return The upper bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T right(unsigned int dimension) const;
+	    T upper(unsigned int dimension) const;
 	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this rectangle
 	     * @param point Point to check
@@ -232,6 +236,10 @@ namespace dbgl
 	     * @return 2
 	     */
 	    static constexpr unsigned int getDimension();
+	    /**
+	     * @brief The precision type used by this object
+	     */
+	    using PrecisionType = T;
 	private:
 	    Vector2<T> m_pos;
 	    Vector2<T> m_extent;
@@ -284,17 +292,17 @@ namespace dbgl
 	     */
 	    Vector3<T>& extent();
 	    /**
-	     * @brief Provides the "left" coordinate of the box of a certain dimension
-	     * @param dimension Dimension to get the "left" coordinate for
-	     * @return The "left" coordinate for \p dimension, i.e. the smaller one
+	     * @brief Provides the lower bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the lower coordinate for
+	     * @return The lower bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T left(unsigned int dimension) const;
+	    T lower(unsigned int dimension) const;
 	    /**
-	     * @brief Provides the "right" coordinate of the box of a certain dimension
-	     * @param dimension Dimension to get the "right" coordinate for
-	     * @return The "right" coordinate for \p dimension, i.e. the bigger one
+	     * @brief Provides the upper bound of the rectangle along a certain dimension
+	     * @param dimension Dimension to get the upper coordinate for
+	     * @return The upper bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
 	     */
-	    T right(unsigned int dimension) const;
+	    T upper(unsigned int dimension) const;
 	    /**
 	     * @brief Checks if the passed coordinates are within the bounds of this box
 	     * @param point Point to check
@@ -344,6 +352,10 @@ namespace dbgl
 	     * @return 3
 	     */
 	    static constexpr unsigned int getDimension();
+	    /**
+	     * @brief The precision type used by this object
+	     */
+	    using PrecisionType = T;
 	private:
 	    Vector3<T> m_pos;
 	    Vector3<T> m_extent;

@@ -497,9 +497,9 @@ namespace dbgl
 		auto axis = curDepth % Point::getDimension();
 		if (range.contains(node.point))
 			result.push_back( { node.point, node.data });
-		if (node.point[axis] >= range.left(axis) && node.leftChild != nullptr)
+		if (node.point[axis] >= range.lower(axis) && node.leftChild != nullptr)
 			findRange(range, *node.leftChild, curDepth + 1, result);
-		if (node.point[axis] <= range.right(axis) && node.rightChild != nullptr)
+		if (node.point[axis] <= range.upper(axis) && node.rightChild != nullptr)
 			findRange(range, *node.rightChild, curDepth + 1, result);
 	}
 

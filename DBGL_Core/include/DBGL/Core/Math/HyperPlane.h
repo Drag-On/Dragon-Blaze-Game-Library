@@ -71,6 +71,15 @@ namespace dbgl
 		 * @return Signed distance
 		 */
 		T getSignedDistance(HyperPlane<T, D> const& plane) const;
+	    /**
+	     * @brief Dimensionality of the hyperplane
+	     * @return Dimensionality of the hyperplane
+	     */
+	    static constexpr unsigned int getDimension();
+	    /**
+	     * @brief The precision type used by this object
+	     */
+	    using PrecisionType = T;
 	private:
 		Vector<T, D> m_base;
 		Vector<T, D> m_normal;

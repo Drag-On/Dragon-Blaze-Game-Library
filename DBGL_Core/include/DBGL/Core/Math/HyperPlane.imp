@@ -52,4 +52,9 @@ namespace dbgl
 		else
 			return getSignedDistance(plane.m_base);
 	}
+
+	template<typename T, unsigned int D> constexpr unsigned int HyperPlane<T, D>::getDimension()
+	{
+		return D;
+	}
 }

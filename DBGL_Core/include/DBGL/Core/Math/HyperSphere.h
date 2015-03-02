@@ -38,6 +38,18 @@ namespace dbgl
 		 * @return Sphere radius
 		 */
 		T& radius();
+	    /**
+	     * @brief Provides the lower bound of the sphere along a certain dimension
+	     * @param dimension Dimension to get the lower coordinate for
+	     * @return The lower bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
+	     */
+	    T lower(unsigned int dimension) const;
+	    /**
+	     * @brief Provides the upper bound of the sphere along a certain dimension
+	     * @param dimension Dimension to get the upper coordinate for
+	     * @return The upper bound coordinate for \p dimension, i.e. the smallest coordinate still within the shape
+	     */
+	    T upper(unsigned int dimension) const;
 		/**
 		 * @brief Checks if two spheres intersect
 		 * @param other Sphere to check
@@ -68,6 +80,15 @@ namespace dbgl
 		 * @return Signed distance
 		 */
 		T getSignedDistance(HyperSphere<T, D> const& sphere) const;
+	    /**
+	     * @brief Dimensionality of the hypersphere
+	     * @return Dimensionality of the hypersphere
+	     */
+	    static constexpr unsigned int getDimension();
+	    /**
+	     * @brief The precision type used by this object
+	     */
+	    using PrecisionType = T;
 	private:
 		Vector<T, D> m_center;
 		T m_radius;
