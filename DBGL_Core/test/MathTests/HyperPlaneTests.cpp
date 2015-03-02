@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Math/Hyperplane.h"
+#include "DBGL/Core/Math/HyperPlane.h"
 
 using namespace dbgl;
 using namespace std;
@@ -27,7 +27,7 @@ template<class T, unsigned int D> void testConstructor()
 	ASSERT_NOTHROW(plane.getDistance(plane2.base()));
 }
 
-TEST(Hyperplane,construct)
+TEST(HyperPlane,construct)
 {
 	testConstructor<float, 2>();
 	testConstructor<float, 3>();
@@ -58,7 +58,7 @@ template<class T, unsigned int D> void testIntersectsDistance()
 	ASSERT_APPROX(plane2.getDistance(Vector<T, D>()), static_cast<T>(std::sqrt(2.0f)), static_cast<T>(0.001f));
 }
 
-TEST(Hyperplane,intersects)
+TEST(HyperPlane,intersects)
 {
 	testIntersectsDistance<float, 2>();
 	testIntersectsDistance<float, 3>();
