@@ -73,7 +73,7 @@ namespace dbgl
 	return true;
     }
 
-    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::overlaps(
+    template<typename T, unsigned int D> bool Hyperrectangle<T, D>::intersects(
 	    Hyperrectangle<T, D> const& other) const
     {
 	for (unsigned int i = 0; i < D; i++)
@@ -190,7 +190,7 @@ namespace dbgl
 	return true;
     }
 
-    template<typename T> bool Hyperrectangle<T, 2>::overlaps(Hyperrectangle<T, 2> const& other) const
+    template<typename T> bool Hyperrectangle<T, 2>::intersects(Hyperrectangle<T, 2> const& other) const
     {
 	for (unsigned int i = 0; i < 2; i++)
 	{
@@ -303,7 +303,7 @@ namespace dbgl
 	return true;
     }
 
-    template<typename T> bool Hyperrectangle<T, 3>::overlaps(Hyperrectangle<T, 3> const& other) const
+    template<typename T> bool Hyperrectangle<T, 3>::intersects(Hyperrectangle<T, 3> const& other) const
     {
 	for (unsigned int i = 0; i < 3; i++)
 	{

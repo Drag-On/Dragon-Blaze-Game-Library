@@ -82,7 +82,7 @@ namespace dbgl
 	     * @param other Hyperrectangle to check
 	     * @return True in case \p other overlaps with (or touches) this hyperrectangle, otherwise false
 	     */
-	    bool overlaps(Hyperrectangle<T, D> const& other) const;
+	    bool intersects(Hyperrectangle<T, D> const& other) const;
 	    /**
 	     * @brief Checks, if this hyperrectangle is similar to another one
 	     * @param other Other hyperrectangle to check
@@ -194,7 +194,7 @@ namespace dbgl
 	     * @param other Rectangle to check
 	     * @return True in case \p other overlaps with (or touches) this rectangle, otherwise false
 	     */
-	    bool overlaps(Hyperrectangle<T, 2> const& other) const;
+	    bool intersects(Hyperrectangle<T, 2> const& other) const;
 	    /**
 	     * @brief Checks, if this rectangle is similar to another one
 	     * @param other Other rectangle to check
@@ -306,7 +306,7 @@ namespace dbgl
 	     * @param other Box to check
 	     * @return True in case \p other overlaps with (or touches) this box, otherwise false
 	     */
-	    bool overlaps(Hyperrectangle<T, 3> const& other) const;
+	    bool intersects(Hyperrectangle<T, 3> const& other) const;
 	    /**
 	     * @brief Checks, if this box is similar to another one
 	     * @param other Other box to check
