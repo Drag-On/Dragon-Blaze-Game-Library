@@ -10,7 +10,7 @@
 
 namespace dbgl
 {
-	template<typename T, unsigned int D> HyperPlane<T, D>::HyperPlane(Vector<T, D> base, Vector<T, D> normal)
+	template<typename T, unsigned int D> HyperPlane<T, D>::HyperPlane(Vector<T, D> const& base, Vector<T, D> const& normal)
 			: m_base { base }, m_normal { normal }
 	{
 	}
@@ -27,7 +27,7 @@ namespace dbgl
 
 	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(HyperPlane<T, D> const& other) const
 	{
-		return m_normal.getNormalized().cross(other.m_normal.getNormalized()) != 0;
+		return m_normal.getNormalized().cross(other.m_normal.getNormalized()) != Vector<T, D>() || getDistance(other.m_base) == 0;
 	}
 
 	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(Vector<T, D> const& point) const

@@ -30,7 +30,7 @@ namespace dbgl
 		 * @param base Base point on the plane
 		 * @param normal Plane normal
 		 */
-		HyperPlane(Vector<T, D> base, Vector<T, D> normal);
+		HyperPlane(Vector<T, D> const& base, Vector<T, D> const& normal);
 		/**
 		 * @brief Provides the plane normal
 		 * @return Plane normal
