@@ -11,8 +11,8 @@
 #ifndef INCLUDE_DBGL_RENDERER_IRENDERENTITY_H_
 #define INCLUDE_DBGL_RENDERER_IRENDERENTITY_H_
 
-#include "DBGL/Core/Math/Matrix4x4.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
+#include "DBGL/Core/Math/Matrix4x4.h"
 
 namespace dbgl
 {
@@ -49,6 +49,11 @@ namespace dbgl
 		 * 		 of identical materials.
 		 */
 		virtual int getMaterialId() = 0;
+		/**
+		 * @brief Provides a bounding sphere for this entity in model space. The center is assumed to be coincident with the model origin.
+		 * @returns The sphere radius
+		 */
+		virtual float getBoundingSphere() = 0;
 		/**
 		 * @brief Retrieves the entitie's model matrix
 		 * @return Model matrix

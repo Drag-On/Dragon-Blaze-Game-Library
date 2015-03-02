@@ -35,6 +35,41 @@ namespace dbgl
 		 * @return Camera projection matrix
 		 */
 		virtual Mat4f const& getProjectionMatrix() = 0;
+		/**
+		 * @brief Retrieves the camera position in world space
+		 * @return Cam position
+		 */
+		virtual Vec3f const& getPosition() = 0;
+		/**
+		 * @brief Retrieves the camera's direction vector in world space
+		 * @return Cam direction
+		 */
+		virtual Vec3f const& getDirection() = 0;
+		/**
+		 * @brief Retrieves the camera's up vector in world space
+		 * @return Cam up direction
+		 */
+		virtual Vec3f const& getUp() = 0;
+		/**
+		 * @brief Retrieves the camera's distance to the near plane
+		 * @return Near plane
+		 */
+		virtual float getNear() = 0;
+		/**
+		 * @brief Retrieves the camera's distance to the far plane
+		 * @return Far plane
+		 */
+		virtual float getFar() = 0;
+		/**
+		 * @brief Retrieves the camera's field of view
+		 * @return Field of view
+		 */
+		virtual float getFieldOfView() = 0;
+		/**
+		 * @brief Retrieves the camera's ratio
+		 * @return Ratio
+		 */
+		virtual float getRatio() = 0;
 	};
 }
 

@@ -10,7 +10,8 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <list>
+#include <random>
 #include "DBGL/Platform/Platform.h"
 #include "DBGL/Platform/Implementation/OpenGL33.h"
 #include "DBGL/Core/Math/Matrix4x4.h"
@@ -33,12 +34,14 @@ IShaderProgram* pShaderProgramSprite = nullptr;
 ITexture* pTex = nullptr;
 BitmapFont* pFont = nullptr;
 
+std::default_random_engine random;
+
 class Camera : public ICameraEntity
 {
 public:
 	Mat4f m_view;
 	Mat4f m_projection;
-	Vec3f m_pos;
+	Vec3f m_pos, m_dir, m_up;
 	QuatF m_orientation;
 	Camera(Vec3f pos, QuatF orient) : m_pos(pos), m_orientation(orient)
 	{
@@ -51,12 +54,40 @@ public:
 	{
 		return m_projection;
 	}
+	virtual Vec3f const& getPosition()
+	{
+		return m_pos;
+	}
+	virtual Vec3f const& getDirection()
+	{
+		return m_dir;
+	}
+	virtual Vec3f const& getUp()
+	{
+		return m_up;
+	}
+	virtual float getNear()
+	{
+		return 1;
+	}
+	virtual float getFar()
+	{
+		return 100;
+	}
+	virtual float getFieldOfView()
+	{
+		return pi_4();
+	}
+	virtual float getRatio()
+	{
+		return float(pWnd->getFrameWidth()) / pWnd->getFrameHeight();
+	}
 	void update()
 	{
-		auto dir = /*m_orientation * */Vec3f{0, 0, -1};
-		auto up = Vec3f{0, 1, 0};
-		m_view = Mat4f::makeView(m_pos, dir, up);
-		m_projection = Mat4f::makeProjection(pi_4(), float(pWnd->getFrameWidth()) / pWnd->getFrameHeight(), 0.01, 100);
+		m_dir = /*m_orientation * */Vec3f{0, 0, -1};
+		m_up = Vec3f{0, 1, 0};
+		m_view = Mat4f::makeView(m_pos, m_dir, m_up);
+		m_projection = Mat4f::makeProjection(getFieldOfView(), getRatio(), getNear(), getFar());
 	}
 };
 
@@ -73,13 +104,15 @@ public:
 	Vec3f m_pos;
 	QuatF m_orientation;
 	Mat4f m_modelMat;
-	Entity(IMesh* mesh, IShaderProgram* shaderProgram, ITexture* tex, bool translucent, int materialID)
+	float m_radius;
+	Entity(IMesh* mesh, IShaderProgram* shaderProgram, ITexture* tex, bool translucent, int materialID, float radius)
 	{
 		m_pMesh = mesh;
 		m_pShaderProgram = shaderProgram;
 		m_pTexture = tex;
 		m_translucent = translucent;
 		m_materialID = materialID;
+		m_radius = radius;
 	}
 	virtual bool isTranslucent()
 	{
@@ -129,11 +162,17 @@ public:
 	{
 		return m_pMesh;
 	}
+	virtual float getBoundingSphere()
+	{
+		return m_radius;
+	}
 	void update()
 	{
 		m_modelMat = Mat4f::makeTranslation(m_pos) * m_orientation;
 	}
 };
+
+std::list<Entity> entities;
 
 /**
  * @brief Resizes the render context with the window
@@ -142,6 +181,10 @@ public:
 void resizeHandler(IWindow::FramebufferResizeEventArgs const& args)
 {
 	pWnd->getRenderContext().viewport(0, 0, args.width, args.height);
+}
+
+void inputHandler(IWindow::InputEventArgs const& args)
+{
 }
 
 /**
@@ -172,9 +215,36 @@ IShaderProgram* loadShader(string vertex, string fragment)
 	return pSProg;
 }
 
+void addRandomEntities(unsigned int amount)
+{
+	std::uniform_real_distribution<float> dist(-10, 10);
+	auto randFloat = std::bind(dist, random);
+	for(unsigned int i = 0; i < amount; i++)
+	{
+		entities.emplace_back(pSphere, pShaderProgram, pTex, false, 0, 1);
+		auto last = entities.rbegin();
+		last->m_pos = Vec3f{randFloat(), randFloat(), randFloat()};
+		pRenderer->addEntity(&(*last));
+	}
+}
+
 void update()
 {
 	cam.update();
+	for(auto& e : entities)
+		e.update();
+
+	auto& input = pWnd->getInput();
+	// Move first entity
+	auto e = entities.begin();
+	if (input.isDown(Input::Key::KEY_W))
+		e->m_pos.z() -= 1.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_A))
+		e->m_pos.x() -= 1.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_S))
+		e->m_pos.z() += 1.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_D))
+		e->m_pos.x() += 1.5f * pRenderer->getDeltaTime();
 }
 
 int main()
@@ -184,6 +254,7 @@ int main()
 	cout << "Creating a window..." << endl;
 	pWnd = Platform::get()->createWindow("Renderer", 720, 480, false, 4);
 	pWnd->addFramebufferResizeCallback(resizeHandler);
+	pWnd->addInputCallback(inputHandler);
 	pTimer = Platform::get()->createTimer();
 	cout << "Setting rendering properties..." << endl;
 	pWnd->getRenderContext().setDepthTest(IRenderContext::DepthTestValue::Less);
@@ -198,21 +269,15 @@ int main()
 	pTex->bind();
 	Platform::get()->curTexture()->generateMipMaps();
 	cout << "Initializing renderer..." << endl;
-	pRenderer = new ForwardRenderer{true};
+	pRenderer = new ForwardRenderer{false};
 	pRenderer->setCameraEntity(&cam);
-	Entity e1{pSphere, pShaderProgram, pTex, false, 0};
-	pRenderer->addEntity(&e1);
-	Entity e2{pSphere, pShaderProgram, pTex, false, 1};
-	e2.m_pos = Vec3f{-1.0f, 0.0f, -2.0f};
-	pRenderer->addEntity(&e2);
+	addRandomEntities(50);
 	cout << "Showing window..." << endl;
 	pWnd->show();
 	while (pWnd->isOpen())
 	{
 		pWnd->pollEvents();
 		update();
-		e1.update();
-		e2.update();
 		pRenderer->render(&pWnd->getRenderContext());
 		pFont->drawText(&pWnd->getRenderContext(), pShaderProgramSprite, std::to_string(pRenderer->getFPS()), 10, pWnd->getFrameHeight() - pFont->getLineHeight() - 10);
 		pWnd->swapBuffer();

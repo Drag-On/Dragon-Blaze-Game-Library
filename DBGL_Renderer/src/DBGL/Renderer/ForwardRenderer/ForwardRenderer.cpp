@@ -93,6 +93,8 @@ namespace dbgl
 	void ForwardRenderer::setCameraEntity(ICameraEntity* camera)
 	{
 		m_pCamera = camera;
+		if (m_pCamera)
+			m_frustumCulling.setCamera(m_pCamera);
 	}
 
 	void ForwardRenderer::render(IRenderContext* rc)
@@ -148,6 +150,7 @@ namespace dbgl
 
 	void ForwardRenderer::renderWithZPrePass(IRenderContext* rc)
 	{
+		cullAll();
 		Mat4f VP = m_pCamera->getProjectionMatrix() * m_pCamera->getViewMatrix();
 
 		// Do Z Pre-Pass
@@ -157,7 +160,7 @@ namespace dbgl
 		rc->setDepthTest(IRenderContext::DepthTestValue::Less);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
 		m_pZPrePassShader->use();
-		for(auto e : m_entities) // TODO: front-to-back order
+		for(auto& e : m_entitiesCulled) // TODO: front-to-back order
 		{
 			Mat4f MVP = VP * e->getModelMatrix();
 			Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(m_prePassMVPHandle, 1, false,
@@ -171,7 +174,7 @@ namespace dbgl
 		rc->clear(IRenderContext::COLOR);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for(auto e : m_entities) // TODO: ordered by material
+		for(auto& e : m_entitiesCulled) // TODO: ordered by material
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -180,7 +183,7 @@ namespace dbgl
 
 		// Render translucent objects in back-to-front order
 		rc->enableDepthBuffer(true);
-		for(auto e : m_translucentEntities) // TODO: order
+		for(auto& e : m_translucentEntitiesCulled) // TODO: order
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -190,13 +193,14 @@ namespace dbgl
 
 	void ForwardRenderer::renderWithoutZPrePass(IRenderContext* rc)
 	{
+		cullAll();
 		// Do color pass
 		rc->enableColorBuffer(true, true, true, true);
 		rc->enableDepthBuffer(true);
 		rc->clear(IRenderContext::COLOR | IRenderContext::DEPTH);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for(auto e : m_entities) // TODO: ordered front-to-back
+		for(auto& e : m_entitiesCulled) // TODO: ordered front-to-back
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -204,11 +208,40 @@ namespace dbgl
 		}
 
 		// Render translucent objects in back-to-front order
-		for(auto e : m_translucentEntities) // TODO: order
+		for(auto& e : m_translucentEntitiesCulled) // TODO: order
 		{
 			e->setupUnique();
 			e->setupMaterial();
 			rc->drawMesh(e->getMesh());
+		}
+	}
+
+	void ForwardRenderer::cullAll()
+	{
+		// Clear old culling
+		m_entitiesCulled.clear();
+		m_translucentEntitiesCulled.clear();
+		m_frustumCulling.update();
+
+		// Iterate over all entities to determine the potentially visible ones
+		// TODO: Object hierarchy for early pruning
+		for(auto& e : m_entities)
+		{
+			// Frustum culling
+			Vec4f const& center = e->getModelMatrix()[3];
+			Vec3f c{center[0], center[1], center[2]};
+			float radius = e->getBoundingSphere();
+			if(m_frustumCulling.checkSphere(c, radius))
+				m_entitiesCulled.push_back(&*e);
+		}
+		for(auto& e : m_translucentEntities)
+		{
+			// Frustum culling
+			Vec4f const& center = e->getModelMatrix()[3];
+			Vec3f c{center[0], center[1], center[2]};
+			float radius = e->getBoundingSphere();
+			if(m_frustumCulling.checkSphere(c, radius))
+				m_translucentEntitiesCulled.push_back(&*e);
 		}
 	}
 }

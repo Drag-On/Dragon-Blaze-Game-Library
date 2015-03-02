@@ -14,6 +14,7 @@
 #include <vector>
 #include <functional>
 #include "DBGL/Renderer/IRenderer.h"
+#include "DBGL/Renderer/Culling/FrustumCulling.h"
 #include "DBGL/Platform/Shader/IShaderProgram.h"
 #include "DBGL/Platform/Platform.h"
 
@@ -45,9 +46,12 @@ namespace dbgl
 	private:
 		void renderWithZPrePass(IRenderContext* rc);
 		void renderWithoutZPrePass(IRenderContext* rc);
+		void cullAll();
 
 		std::vector<IRenderEntity*> m_translucentEntities; // TODO: Use more appropriate data structure
 		std::vector<IRenderEntity*> m_entities;
+		std::vector<IRenderEntity*> m_translucentEntitiesCulled;
+		std::vector<IRenderEntity*> m_entitiesCulled;
 		ICameraEntity* m_pCamera = nullptr;
 		IShaderProgram* m_pZPrePassShader;
 		IShaderProgram::UniformHandle m_prePassMVPHandle;
@@ -58,6 +62,7 @@ namespace dbgl
 		double m_curElapsed = 0;
 		unsigned int m_curFrames = 0;
 		ITimer* m_pTime = nullptr;
+		FrustumCulling m_frustumCulling;
 	};
 }
 
