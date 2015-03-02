@@ -1,0 +1,95 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename VOLUME, typename PRECISION> VolumetricKdTree<VOLUME, PRECISION>::VolumetricKdTree()
+			: m_pRoot { nullptr }
+	{
+	}
+
+	template<typename VOLUME, typename PRECISION> VolumetricKdTree<VOLUME, PRECISION>::~VolumetricKdTree()
+	{
+		free(m_pRoot);
+	}
+
+	template<typename VOLUME, typename PRECISION> void VolumetricKdTree<VOLUME, PRECISION>::insert(VOLUME const& volume)
+	{
+		if (m_pRoot != nullptr)
+			insert(volume, m_pRoot, 0);
+		else
+		{
+			m_pRoot = new Node { };
+			m_pRoot->m_data = volume;
+		}
+	}
+
+	template<typename VOLUME, typename PRECISION> void VolumetricKdTree<VOLUME, PRECISION>::free(Node* node)
+	{
+		if (node == nullptr)
+			return;
+		// Disconnect from parent
+		if (node->m_pParent != nullptr)
+		{
+			if (node->m_pParent->m_pLeftChild == node)
+				node->m_pParent->m_pLeftChild = nullptr;
+			else
+				node->m_pParent->m_pRightChild = nullptr;
+		}
+		// Free child nodes
+		if (node->m_pLeftChild != nullptr)
+			free(node->m_pLeftChild);
+		if (node->m_pRightChild != nullptr)
+			free(node->m_pRightChild);
+		// Free node itself
+		delete node;
+	}
+
+	template<typename VOLUME, typename PRECISION> auto VolumetricKdTree<VOLUME, PRECISION>::insert(VOLUME const& data,
+			Node* node, unsigned int curDepth) -> Node*
+	{
+		// Check if volume intersects with separator plane of node
+		if (data.lower(curDepth) <= node->m_data.upper(curDepth) && data.upper(curDepth) > node->m_data.upper(curDepth))
+		{
+			// Volume is on both sides of the separating plane, therefore it's neither on the left nor the right
+			node->m_undecidable.push_back(data);
+			return node;
+		}
+		else if (data.upper(curDepth) <= node->m_data.upper(curDepth))
+		{
+			// Either create a new node
+			if (node->m_pLeftChild)
+				return insert(data, node->m_pLeftChild, curDepth + 1);
+			else // Or insert it into the child node
+			{
+				Node* child = new Node { };
+				child->m_pParent = node;
+				node->m_pLeftChild = child;
+				child->m_data = data;
+				return child;
+			}
+		}
+		else
+		{
+			// Either create a new node
+			if (node->m_pRightChild)
+				return insert(data, node->m_pRightChild, curDepth + 1);
+			else // Or insert it into the child node
+			{
+				Node* child = new Node { };
+				child->m_pParent = node;
+				node->m_pRightChild = child;
+				child->m_data = data;
+				return child;
+			}
+		}
+	}
+}
+
