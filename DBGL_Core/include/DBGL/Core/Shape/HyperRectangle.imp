@@ -1,0 +1,174 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T, unsigned int D> HyperRectangle<T, D>::HyperRectangle()
+	{
+		for (unsigned int i = 0; i < D; i++)
+		{
+			m_pos[i] = 0;
+			m_extent[i] = 1;
+		}
+	}
+
+	template<typename T, unsigned int D> HyperRectangle<T, D>::HyperRectangle(Vector<T, D> const& pos,
+			Vector<T, D> const& extent)
+	{
+		m_pos = pos;
+		m_extent = extent;
+	}
+
+	template<typename T, unsigned int D> HyperRectangle<T, D>::HyperRectangle(HyperRectangle<T, D> const& other)
+	{
+		m_pos = other.m_pos;
+		m_extent = other.m_extent;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D> const& HyperRectangle<T, D>::getPos() const
+	{
+		return m_pos;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D>& HyperRectangle<T, D>::pos()
+	{
+		return m_pos;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D> const& HyperRectangle<T, D>::getExtent() const
+	{
+		return m_extent;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D>& HyperRectangle<T, D>::extent()
+	{
+		return m_extent;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D> HyperRectangle<T, D>::getCenter() const
+	{
+		Vector<T, D> center;
+		for (unsigned int i = 0; i < D; i++)
+			center[i] = lower(i) + m_extent[i] / 2.0;
+		return center;
+	}
+
+	template<typename T, unsigned int D> T HyperRectangle<T, D>::lower(unsigned int dimension) const
+	{
+		return std::min(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+	}
+
+	template<typename T, unsigned int D> T HyperRectangle<T, D>::upper(unsigned int dimension) const
+	{
+		return std::max(m_pos[dimension], m_pos[dimension] + m_extent[dimension]);
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::contains(Vector<T, D> const& point) const
+	{
+		for (unsigned int i = 0; i < D; i++)
+		{
+			if (point[i] < lower(i) || point[i] > upper(i))
+				return false;
+		}
+		return true;
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(IShape<T, D> const& /* other */) const
+	{
+		throw std::logic_error(
+				"No way to handle intersections between rectangles and your shape has been implemented yet.");
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(HyperRectangle<T, D> const& other) const
+	{
+		for (unsigned int i = 0; i < D; i++)
+		{
+			if (other.upper(i) < lower(i) || other.lower(i) > upper(i))
+				return false;
+		}
+		return true;
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(HyperPlane<T, D> const& other) const
+	{
+		return other.intersects(*this);
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(HyperSphere<T, D> const& other) const
+	{
+		// If the sphere center is contained in the box, both bodies intersect
+		if (contains(other.getCenter()))
+			return true;
+		// If the sphere center is not further away from any box corner than its radius, then they intersect
+		for (unsigned int i = 0; i < 2 * D; i++)
+		{
+			if (other.contains((*this)[i]))
+				return true;
+		}
+		// If the sphere is on the positive side of any plane there is no intersection
+		for (unsigned int j = 0; j < D; j++)
+		{
+			Vector<T, D> pos = m_pos;
+			pos[j] = lower(j);
+			Vector<T, D> normal;
+			normal[j] = 1;
+			HyperPlane<T, D> p1 { pos, -normal };
+			Vector<T, D> otherPos = m_pos;
+			otherPos[j] = upper(j);
+			HyperPlane<T, D> p2 { otherPos, normal };
+			if (p1.getSignedDistance(other.getCenter()) > other.getRadius()
+					|| p2.getSignedDistance(other.getCenter()) > other.getRadius())
+				return false;
+		}
+		// If the sphere center lies between any D-1 corners of the box it is guaranteed to intersect
+		unsigned int hits = 0;
+		for (unsigned int k = 0; k < D; k++)
+		{
+			auto center = other.getCenter();
+			if (center[k] >= lower(k) && center[k] <= upper(k))
+				hits++;
+		}
+		// Otherwise there is no intersection
+		return hits >= D - 1;
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::isSimilar(HyperRectangle<T, D> const& other,
+			double precision) const
+	{
+		return (m_pos.isSimilar(other.m_pos) && m_extent.isSimilar(other.m_extent));
+	}
+
+	template<typename T, unsigned int D> HyperRectangle<T, D>& HyperRectangle<T, D>::operator=(
+			HyperRectangle<T, D> const& rhs)
+	{
+		m_pos = rhs.m_pos;
+		m_extent = rhs.m_extent;
+		return *this;
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::operator==(HyperRectangle<T, D> const& rhs) const
+	{
+		return (m_pos == rhs.m_pos && m_extent == rhs.m_extent);
+	}
+
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::operator!=(HyperRectangle<T, D> const& rhs) const
+	{
+		return !(*this == rhs);
+	}
+
+	template<typename T, unsigned int D> T HyperRectangle<T, D>::operator[](std::size_t const& index) const
+	{
+		if (index < D)
+			return m_pos[index];
+		else
+			return m_pos[index - D] + m_extent[index - D];
+	}
+}
+

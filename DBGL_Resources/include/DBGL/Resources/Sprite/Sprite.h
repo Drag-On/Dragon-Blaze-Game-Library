@@ -11,9 +11,9 @@
 #ifndef INCLUDE_DBGL_RESOURCES_SPRITE_SPRITE_H_
 #define INCLUDE_DBGL_RESOURCES_SPRITE_SPRITE_H_
 
+#include "DBGL/Core/Shape/Hyperrectangle.h"
 #include "DBGL/Platform/Texture/ITexture.h"
 #include "DBGL/Platform/Mesh/IMesh.h"
-#include "DBGL/Core/Math/Hyperrectangle.h"
 
 namespace dbgl
 {

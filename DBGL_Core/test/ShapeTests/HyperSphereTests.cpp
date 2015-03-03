@@ -8,8 +8,10 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include "DBGL/Core/Shape/HyperSphere.h"
+#include "DBGL/Core/Shape/HyperPlane.h"
+#include "DBGL/Core/Shape/HyperRectangle.h"
 #include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Math/HyperSphere.h"
 
 using namespace dbgl;
 using namespace std;
@@ -32,19 +34,39 @@ namespace dbgl_test_hypersphere
 	{
 		HyperSphere<T, D> sphere { };
 		HyperSphere<T, D> sphere2 { };
+		HyperPlane<T, D> plane {};
+		plane.normal()[0] = 1;
+		HyperRectangle<T, D> rect {};
 		ASSERT_EQ(sphere.intersects(sphere2), true);
+		ASSERT_EQ(sphere.intersects(plane), true);
+		ASSERT_EQ(sphere.intersects(rect), true);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2), -2);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2.center()), -1);
 		sphere.center()[0] = 1;
+		plane.base()[0] = 10;
 		ASSERT_EQ(sphere.intersects(sphere2), true);
+		ASSERT_EQ(sphere.intersects(plane), false);
+		ASSERT_EQ(sphere.intersects(rect), true);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2), -1);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2.center()), 0);
 		sphere.center()[0] = 2;
+		plane.base()[0] = 0;
 		ASSERT_EQ(sphere.intersects(sphere2), true);
+		ASSERT_EQ(sphere.intersects(plane), false);
+		ASSERT_EQ(sphere.intersects(rect), true);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2), 0);
 		ASSERT_EQ(sphere.getSignedDistance(sphere2.center()), 1);
 		sphere.center()[0] = 2.1f;
+		plane.base()[0] = 1;
+		plane.base()[1] = 1;
+		plane.normal()[0] = 1;
+		plane.normal()[1] = 1;
+		plane.normal().normalize();
+		rect.pos()[0] = 1;
+		rect.pos()[1] = 1;
 		ASSERT_EQ(sphere.intersects(sphere2), false);
+		ASSERT_EQ(sphere.intersects(plane), true);
+		ASSERT_EQ(sphere.intersects(rect), false);
 		ASSERT_APPROX(sphere.getSignedDistance(sphere2), 0.1f, 0.01f);
 		ASSERT_APPROX(sphere.getSignedDistance(sphere2.center()), 1.1f, 0.01f);
 	}

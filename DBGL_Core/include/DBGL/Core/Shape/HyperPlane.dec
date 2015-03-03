@@ -8,17 +8,23 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_
-#define INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_
+#ifndef INCLUDE_DBGL_CORE_MATH_HYPERPLANE_DEC_
+#define INCLUDE_DBGL_CORE_MATH_HYPERPLANE_DEC_
 
-#include "Vector.h"
+#include "IShape.h"
+#include "DBGL/Core/Math/Utility.h"
+#include <limits>
 
 namespace dbgl
 {
+	template<typename T, unsigned int D> class Vector;
+	template<typename T, unsigned int D> class HyperRectangle;
+	template<typename T, unsigned int D> class HyperSphere;
+
 	/**
 	 * @brief Basic three-dimensional plane class
 	 */
-	template<typename T, unsigned int D = 3> class HyperPlane
+	template<typename T, unsigned int D = 3> class HyperPlane: public IShape<T, D>
 	{
 	public:
 		/**
@@ -32,6 +38,10 @@ namespace dbgl
 		 */
 		HyperPlane(Vector<T, D> const& base, Vector<T, D> const& normal);
 		/**
+		 * @brief Destructor
+		 */
+		virtual ~HyperPlane() = default;
+		/**
 		 * @brief Provides the plane normal
 		 * @return Plane normal
 		 */
@@ -42,11 +52,37 @@ namespace dbgl
 		 */
 		Vector<T, D>& base();
 		/**
-		 * @brief Checks if two planes intersect
-		 * @param other Plane to check
-		 * @return True if intersecting, otherwise false
+		 * @copydoc IShape::getCenter()
+		 */
+		virtual Vector<T, D> getCenter() const;
+		/**
+		 * @copydoc IShape::lower()
+		 */
+		virtual T lower(unsigned int dimension) const;
+		/**
+		 * @copydoc IShape::upper()
+		 */
+		virtual T upper(unsigned int dimension) const;
+		/**
+		 * @copydoc IShape::contains()
+		 */
+		virtual bool contains(Vector<T, D> const& point) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		virtual bool intersects(IShape<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
 		 */
 		bool intersects(HyperPlane<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		bool intersects(HyperSphere<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		bool intersects(HyperRectangle<T, D> const& other) const;
 		/**
 		 * @brief Computes the distance between a point and this plane
 		 * @param point Point to check
@@ -71,15 +107,10 @@ namespace dbgl
 		 * @return Signed distance
 		 */
 		T getSignedDistance(HyperPlane<T, D> const& plane) const;
-	    /**
-	     * @brief Dimensionality of the hyperplane
-	     * @return Dimensionality of the hyperplane
-	     */
-	    static constexpr unsigned int getDimension();
-	    /**
-	     * @brief The precision type used by this object
-	     */
-	    using PrecisionType = T;
+		/**
+		 * @brief The precision type used by this object
+		 */
+		using PrecisionType = T;
 	private:
 		Vector<T, D> m_base;
 		Vector<T, D> m_normal;
@@ -95,6 +126,4 @@ namespace dbgl
 	template<typename T> using Plane = HyperPlane<T, 3>;
 }
 
-#include "HyperPlane.imp"
-
-#endif /* INCLUDE_DBGL_CORE_MATH_HYPERPLANE_H_ */
+#endif /* INCLUDE_DBGL_CORE_MATH_HYPERPLANE_DEC_ */

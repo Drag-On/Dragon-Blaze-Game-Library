@@ -9,11 +9,11 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <vector>
-#include "DBGL/Core/Math/Hyperrectangle.h"
 #include "DBGL/Core/Math/Vector2.h"
 #include "DBGL/Core/Math/Vector3.h"
 #include "DBGL/Core/Test/Test.h"
 #include "DBGL/Core/Collection/Tree/KdTree.h"
+#include "DBGL/Core/Shape/Hyperrectangle.h"
 
 using namespace dbgl;
 using namespace std;

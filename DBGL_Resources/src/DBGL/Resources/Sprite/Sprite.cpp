@@ -94,12 +94,12 @@ namespace dbgl
 
 	unsigned int Sprite::getWidth() const
 	{
-		return m_rect.getExtent().x();
+		return m_rect.getExtent()[0];
 	}
 
 	unsigned int Sprite::getHeight() const
 	{
-		return m_rect.getExtent().y();
+		return m_rect.getExtent()[1];
 	}
 
 	bool Sprite::getFlipX() const
@@ -129,10 +129,10 @@ namespace dbgl
 		float height = Platform::get()->curTexture()->getHeight();
 		// Calculate new uvs
 		Rectangle<float> uvs { };
-		uvs.pos().x() = m_rect.pos().x() / width;
-		uvs.pos().y() = m_rect.pos().y() / height;
-		uvs.extent().x() = m_rect.extent().x() / width;
-		uvs.extent().y() = m_rect.extent().y() / height;
+		uvs.pos()[0] = m_rect.pos()[0] / width;
+		uvs.pos()[1] = m_rect.pos()[1] / height;
+		uvs.extent()[0] = m_rect.extent()[0] / width;
+		uvs.extent()[1] = m_rect.extent()[1] / height;
 		// Set them
 		float lowerX = m_flipX ? uvs.upper(0) : uvs.lower(0);
 		float upperX = m_flipX ? uvs.lower(0) : uvs.upper(0);

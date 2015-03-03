@@ -1,0 +1,159 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#ifndef HyperRectangle_DEC_
+#define HyperRectangle_DEC_
+
+#include <algorithm>
+#include "IShape.h"
+
+namespace dbgl
+{
+	template<typename T, unsigned int D> class Vector;
+	template<typename T, unsigned int D> class HyperPlane;
+	template<typename T, unsigned int D> class HyperSphere;
+
+	/**
+	 * @brief A general axis-aligned rectangle class (i.e. for arbitrary dimensions)
+	 */
+	template<typename T, unsigned int D> class HyperRectangle: public IShape<T, D>
+	{
+	public:
+		/**
+		 * @brief Constructs a HyperRectangle located at the origin with extent 1
+		 */
+		HyperRectangle();
+		/**
+		 * @brief Constructs a HyperRectangle from a position vector and an extent vector
+		 * @param pos Coordinates to use
+		 * @param extent Extent to use
+		 */
+		HyperRectangle(Vector<T, D> const& pos, Vector<T, D> const& extent);
+		/**
+		 * @brief Copies a HyperRectangle
+		 * @param other HyperRectangle to copy
+		 */
+		HyperRectangle(HyperRectangle<T, D> const& other);
+		/**
+		 * @brief Destructor
+		 */
+		virtual ~HyperRectangle() = default;
+		/**
+		 * @brief Provides access to the HyperRectangles coordinates
+		 * @return Position of the HyperRectangle
+		 */
+		Vector<T, D> const& getPos() const;
+		/**
+		 * @brief Provides access to the HyperRectangles coordinates
+		 * @return Position of the HyperRectangle
+		 */
+		Vector<T, D>& pos();
+		/**
+		 * @brief Provides access to the HyperRectangles extent
+		 * @return Extent of the HyperRectangle
+		 */
+		Vector<T, D> const& getExtent() const;
+		/**
+		 * @brief Provides access to the HyperRectangles extent
+		 * @return Extent of the HyperRectangle
+		 */
+		Vector<T, D>& extent();
+		/**
+		 * @copydoc IShape::getCenter()
+		 */
+		virtual Vector<T, D> getCenter() const;
+		/**
+		 * @copydoc IShape::lower()
+		 */
+		virtual T lower(unsigned int dimension) const;
+		/**
+		 * @copydoc IShape::upper()
+		 */
+		virtual T upper(unsigned int dimension) const;
+		/**
+		 * @copydoc IShape::contains()
+		 */
+		virtual bool contains(Vector<T, D> const& point) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		virtual bool intersects(IShape<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		bool intersects(HyperRectangle<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		bool intersects(HyperPlane<T, D> const& other) const;
+		/**
+		 * @copydoc IShape::intersects()
+		 */
+		bool intersects(HyperSphere<T, D> const& other) const;
+		/**
+		 * @brief Checks, if this HyperRectangle is similar to another one
+		 * @param other Other HyperRectangle to check
+		 * @param precision Precision of the check
+		 * @return True in case the two HyperRectangles are similar, otherwise false
+		 */
+		bool isSimilar(HyperRectangle<T, D> const& other, double precision = 0.1) const;
+		/**
+		 * @brief Assigns another HyperRectangle by copying its values
+		 * @param rhs HyperRectangle to copy
+		 * @return Reference to this HyperRectangle
+		 */
+		HyperRectangle<T, D>& operator=(HyperRectangle<T, D> const& rhs);
+		/**
+		 * @brief Value comparison
+		 * @param rhs HyperRectangle to compare
+		 * @return True in case both HyperRectangles are equal, otherwise false
+		 */
+		bool operator==(HyperRectangle<T, D> const& rhs) const;
+		/**
+		 * @brief Value comparison
+		 * @param rhs HyperRectangle to compare
+		 * @return False in case both HyperRectangles are equal, otherwise true
+		 */
+		bool operator!=(HyperRectangle<T, D> const& rhs) const;
+		/**
+		 * @brief Direct access operator
+		 * @param index Index of the component to access
+		 * @return Component \p index of the position of this HyperRectangle
+		 * @details The returned values are ordered: position.x, position.y, ..., position.x + extent.x, ...
+		 */
+		T operator[](std::size_t const& index) const;
+		/**
+		 * @brief The precision type used by this object
+		 */
+		using PrecisionType = T;
+	private:
+		Vector<T, D> m_pos;
+		Vector<T, D> m_extent;
+	};
+
+	/**
+	 * @brief Axis-aligned bounding rectangle
+	 */
+	template<typename T> using Rectangle = HyperRectangle<T, 2>;
+	/**
+	 * @brief Axis-aligned bounding box
+	 */
+	template<typename T> using Box = HyperRectangle<T, 3>;
+	/**
+	 * @brief Axis-aligned bounding rectangle
+	 */
+	template<typename T> using AABR = HyperRectangle<T, 2>;
+	/**
+	 * @brief Axis-aligned bounding box
+	 */
+	template<typename T> using AABB = HyperRectangle<T, 3>;
+}
+
+#endif /* Hyperrectangle_DEC_ */

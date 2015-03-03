@@ -483,14 +483,14 @@ namespace dbgl
 	}
 
 	template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
-			Hyperrectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const
+			HyperRectangle<PrecisionType, Point::getDimension()> const& range, std::vector<Container>& result) const
 	{
 		if (m_pRoot != nullptr)
 			findRange(range, *m_pRoot, 0, result);
 	}
 
 	template<typename Data, typename Point> void KdTree<Data, Point>::findRange(
-			Hyperrectangle<PrecisionType, Point::getDimension()> const& range, Node const& node, unsigned int curDepth,
+			HyperRectangle<PrecisionType, Point::getDimension()> const& range, Node const& node, unsigned int curDepth,
 			std::vector<Container>& result) const
 	{
 		// Calculate current axis

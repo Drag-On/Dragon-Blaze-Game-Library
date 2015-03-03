@@ -25,12 +25,17 @@ namespace dbgl
 		return m_center;
 	}
 
-	template<typename T, unsigned int D> Vector<T, D> const& HyperSphere<T, D>::getCenter()  const
+	template<typename T, unsigned int D> Vector<T, D> HyperSphere<T, D>::getCenter()  const
 	{
 		return m_center;
 	}
 
 	template<typename T, unsigned int D> T& HyperSphere<T, D>::radius()
+	{
+		return m_radius;
+	}
+
+	template<typename T, unsigned int D> T const& HyperSphere<T, D>::getRadius()  const
 	{
 		return m_radius;
 	}
@@ -43,6 +48,27 @@ namespace dbgl
 	template<typename T, unsigned int D> T HyperSphere<T, D>::upper(unsigned int dimension) const
 	{
 		return m_center[dimension] + m_radius;
+	}
+
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::contains(Vector<T, D> const& point) const
+	{
+		return getSignedDistance(point) <= 0;
+	}
+
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(IShape<T, D> const& /* other */) const
+	{
+		throw std::logic_error(
+				"No way to handle intersections between spheres and your shape has been implemented yet.");
+	}
+
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(HyperRectangle<T, D> const& other) const
+	{
+		return other.intersects(*this);
+	}
+
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(HyperPlane<T, D> const& other) const
+	{
+		return other.intersects(*this);
 	}
 
 	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(HyperSphere<T, D> const& other) const
@@ -78,11 +104,6 @@ namespace dbgl
 	template<typename T, unsigned int D>bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
 	{
 		return !(*this == other);
-	}
-
-	template<typename T, unsigned int D> constexpr unsigned int HyperSphere<T, D>::getDimension()
-	{
-		return D;
 	}
 }
 

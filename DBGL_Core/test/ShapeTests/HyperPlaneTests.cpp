@@ -8,8 +8,10 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include "DBGL/Core/Shape/HyperPlane.h"
+#include "DBGL/Core/Shape/HyperSphere.h"
+#include "DBGL/Core/Shape/HyperRectangle.h"
 #include "DBGL/Core/Test/Test.h"
-#include "DBGL/Core/Math/HyperPlane.h"
 
 using namespace dbgl;
 using namespace std;
@@ -56,6 +58,26 @@ template<class T, unsigned int D> void testIntersectsDistance()
 	plane2.normal().normalize();
 	ASSERT_EQ(plane.intersects(plane2), true);
 	ASSERT_APPROX(plane2.getDistance(Vector<T, D>()), static_cast<T>(std::sqrt(2.0f)), static_cast<T>(0.001f));
+
+	HyperSphere<T, D> sphere{};
+	ASSERT_EQ(plane.intersects(sphere), true);
+	ASSERT_EQ(plane2.intersects(sphere), false);
+	HyperRectangle<T, D> rectangle{};
+	ASSERT_EQ(plane.intersects(rectangle), true);
+	ASSERT_EQ(plane2.intersects(rectangle), true);
+
+	plane2.base()[0] = 1;
+	plane2.base()[1] = 0;
+	plane2.normal()[0] = 1;
+	plane2.normal()[1] = 0;
+	ASSERT_EQ(plane2.intersects(sphere), true);
+	ASSERT_EQ(plane2.intersects(rectangle), true);
+
+	plane2.base()[0] = 2;
+	plane2.base()[1] = 0;
+	plane2.normal()[0] = 1;
+	plane2.normal()[1] = 0;
+	ASSERT_EQ(plane2.intersects(rectangle), false);
 }
 
 TEST(HyperPlane,intersects)

@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include "AbstractTree.h"
-#include "DBGL/Core/Math/Hyperrectangle.h"
+#include "DBGL/Core/Shape/Hyperrectangle.h"
 
 namespace dbgl
 {
@@ -186,7 +186,7 @@ namespace dbgl
 		 * @param range Range to find all points in
 		 * @param[out] result This list will be filled with the found points
 		 */
-		void findRange(Hyperrectangle<PrecisionType, Point::getDimension()> const& range,
+		void findRange(HyperRectangle<PrecisionType, Point::getDimension()> const& range,
 				std::vector<Container>& result) const;
 		/**
 		 * @brief Collects all nodes stored in the tree
@@ -330,7 +330,7 @@ namespace dbgl
 		 * @param curDepth Current depth
 		 * @param result[out] Matching nodes will be appended here
 		 */
-		void findRange(Hyperrectangle<PrecisionType, Point::getDimension()> const& range, Node const& node,
+		void findRange(HyperRectangle<PrecisionType, Point::getDimension()> const& range, Node const& node,
 				unsigned int curDepth, std::vector<Container>& result) const;
 
 		/**

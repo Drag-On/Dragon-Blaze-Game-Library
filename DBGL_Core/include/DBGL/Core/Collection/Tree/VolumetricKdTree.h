@@ -12,9 +12,10 @@
 #define INCLUDE_DBGL_CORE_COLLECTION_TREE_VOLUMETRICKDTREE_H_
 
 #include "AbstractTree.h"
-#include "DBGL/Core/Math/HyperPlane.h"
 #include <vector>
 #include <functional>
+#include "DBGL/Core/Shape/HyperPlane.h"
+#include "DBGL/Core/Shape/HyperRectangle.h"
 
 namespace dbgl
 {
@@ -64,7 +65,7 @@ namespace dbgl
 		 * @param range Range to find all volumes in
 		 * @param[out] out This list will be filled with the found entities
 		 */
-		void findRange(Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range,
+		void findRange(HyperRectangle<PRECISION, VOLUME::getDimension()> const& range,
 				std::vector<Aggregate>& out) const;
 
 	private:
@@ -144,7 +145,7 @@ namespace dbgl
 		 * @param range Range to find all volumes in
 		 * @param[out] out This list will be filled with the found entities
 		 */
-		void findRange(Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out,
+		void findRange(HyperRectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out,
 				Node* node, unsigned int curDepth) const;
 
 		/**

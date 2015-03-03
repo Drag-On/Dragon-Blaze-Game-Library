@@ -225,7 +225,7 @@ namespace dbgl
 	}
 
 	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::findRange(
-			Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out) const
+			HyperRectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out) const
 	{
 		if (m_pRoot == nullptr)
 			return;
@@ -233,7 +233,7 @@ namespace dbgl
 	}
 
 	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::findRange(
-			Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out, Node* node,
+			HyperRectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out, Node* node,
 			unsigned int curDepth) const
 	{
 

@@ -1,0 +1,111 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T, unsigned int D> HyperPlane<T, D>::HyperPlane(Vector<T, D> const& base,
+			Vector<T, D> const& normal)
+			: m_base { base }, m_normal { normal }
+	{
+	}
+
+	template<typename T, unsigned int D> Vector<T, D>& HyperPlane<T, D>::normal()
+	{
+		return m_normal;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D>& HyperPlane<T, D>::base()
+	{
+		return m_base;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D> HyperPlane<T, D>::getCenter() const
+	{
+		return m_base;
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::lower(unsigned int dimension) const
+	{
+		if (m_normal[dimension] == m_normal.getSquaredLength())
+			return m_base[dimension];
+		else
+			return -std::numeric_limits<T>::infinity();
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::upper(unsigned int dimension) const
+	{
+		if (m_normal[dimension] == m_normal.getSquaredLength())
+			return m_base[dimension];
+		else
+			return std::numeric_limits<T>::infinity();
+	}
+
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::contains(Vector<T, D> const& point) const
+	{
+		return getDistance(point) == 0;
+	}
+
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(IShape<T, D> const& /* other */) const
+	{
+		throw std::logic_error(
+				"No way to handle intersections between planes and your shape has been implemented yet.");
+	}
+
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(HyperPlane<T, D> const& other) const
+	{
+		return m_normal.getNormalized().cross(other.m_normal.getNormalized()) != Vector<T, D>()
+				|| getDistance(other.m_base) == 0;
+	}
+
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(HyperSphere<T, D> const& other) const
+	{
+		return getDistance(other.getCenter()) <= other.getRadius();
+	}
+
+	template<typename T, unsigned int D> bool HyperPlane<T, D>::intersects(HyperRectangle<T, D> const& other) const
+	{
+		bool positive = false;
+		bool negative = false;
+		for (unsigned int i = 0; i < 2 * D; i++)
+		{
+			auto signum = dbgl::sign(getSignedDistance(other[i]));
+			if (signum == 0)
+				return true;
+			else if (signum == 1)
+				positive = true;
+			else
+				negative = true;
+		}
+		return positive && negative;
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(Vector<T, D> const& point) const
+	{
+		return std::abs(getSignedDistance(point));
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(HyperPlane<T, D> const& plane) const
+	{
+		return std::abs(getSignedDistance(plane));
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getSignedDistance(Vector<T, D> const& point) const
+	{
+		return m_normal * point - m_normal * m_base;
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getSignedDistance(HyperPlane<T, D> const& plane) const
+	{
+		if (intersects(plane))
+			return 0;
+		else
+			return getSignedDistance(plane.m_base);
+	}
+}
