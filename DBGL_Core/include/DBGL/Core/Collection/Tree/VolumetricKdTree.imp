@@ -10,28 +10,30 @@
 
 namespace dbgl
 {
-	template<typename VOLUME, typename PRECISION> VolumetricKdTree<VOLUME, PRECISION>::VolumetricKdTree()
+	template<typename VOLUME, typename DATA, typename PRECISION> VolumetricKdTree<VOLUME, DATA, PRECISION>::VolumetricKdTree()
 			: m_pRoot { nullptr }
 	{
 	}
 
-	template<typename VOLUME, typename PRECISION> VolumetricKdTree<VOLUME, PRECISION>::~VolumetricKdTree()
+	template<typename VOLUME, typename DATA, typename PRECISION> VolumetricKdTree<VOLUME, DATA, PRECISION>::~VolumetricKdTree()
 	{
 		free(m_pRoot);
 	}
 
-	template<typename VOLUME, typename PRECISION> void VolumetricKdTree<VOLUME, PRECISION>::insert(VOLUME const& volume)
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::insert(
+			VOLUME const& volume, DATA const& data)
 	{
 		if (m_pRoot != nullptr)
-			insert(volume, m_pRoot, 0);
+			insert(volume, data, m_pRoot, 0);
 		else
 		{
 			m_pRoot = new Node { };
-			m_pRoot->m_data = volume;
+			m_pRoot->m_data = Aggregate { volume, data };
 		}
 	}
 
-	template<typename VOLUME, typename PRECISION> void VolumetricKdTree<VOLUME, PRECISION>::free(Node* node)
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::free(
+			Node* node)
 	{
 		if (node == nullptr)
 			return;
@@ -52,44 +54,189 @@ namespace dbgl
 		delete node;
 	}
 
-	template<typename VOLUME, typename PRECISION> auto VolumetricKdTree<VOLUME, PRECISION>::insert(VOLUME const& data,
-			Node* node, unsigned int curDepth) -> Node*
+	template<typename VOLUME, typename DATA, typename PRECISION> auto VolumetricKdTree<VOLUME, DATA, PRECISION>::insert(
+			VOLUME const& volume, DATA const& data, Node* node, unsigned int curDepth) -> Node*
 	{
-		// Check if volume intersects with separator plane of node
-		if (data.lower(curDepth) <= node->m_data.upper(curDepth) && data.upper(curDepth) > node->m_data.upper(curDepth))
+		// Check if center point of the volume is on lower or upper side of split plane
+		if (volume.getCenter()[curDepth % D] <= node->m_data.m_volume.getCenter()[curDepth % D])
 		{
-			// Volume is on both sides of the separating plane, therefore it's neither on the left nor the right
-			node->m_undecidable.push_back(data);
-			return node;
-		}
-		else if (data.upper(curDepth) <= node->m_data.upper(curDepth))
-		{
-			// Either create a new node
+			// Either insert it into the child node...
 			if (node->m_pLeftChild)
-				return insert(data, node->m_pLeftChild, curDepth + 1);
-			else // Or insert it into the child node
+				return insert(volume, data, node->m_pLeftChild, curDepth + 1);
+			else // Or create a new node
 			{
 				Node* child = new Node { };
 				child->m_pParent = node;
 				node->m_pLeftChild = child;
-				child->m_data = data;
+				child->m_data = Aggregate { volume, data };
 				return child;
 			}
 		}
 		else
 		{
-			// Either create a new node
+			// Either insert it into the child node...
 			if (node->m_pRightChild)
-				return insert(data, node->m_pRightChild, curDepth + 1);
-			else // Or insert it into the child node
+				return insert(volume, data, node->m_pRightChild, curDepth + 1);
+			else //Or create a new node
 			{
 				Node* child = new Node { };
 				child->m_pParent = node;
 				node->m_pRightChild = child;
-				child->m_data = data;
+				child->m_data = Aggregate { volume, data };
 				return child;
 			}
 		}
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> unsigned int VolumetricKdTree<VOLUME, DATA, PRECISION>::remove(
+			VOLUME const& volume, DATA const& data)
+	{
+		if (m_pRoot == nullptr)
+			return 0;
+		return remove(volume, data, m_pRoot, 0);
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> unsigned int VolumetricKdTree<VOLUME, DATA, PRECISION>::remove(
+			VOLUME const& volume, DATA const& data, Node* node, unsigned int curDepth)
+	{
+		unsigned int removed = 0;
+		if (volume.getCenter()[curDepth % D] <= node->m_data.m_volume.getCenter()[curDepth % D])
+		{
+			if (node->m_pLeftChild)
+				removed += remove(volume, data, node->m_pLeftChild, curDepth + 1);
+		}
+		else
+		{
+			if (node->m_pRightChild)
+				removed += remove(volume, data, node->m_pRightChild, curDepth + 1);
+		}
+		if (node->m_data.m_volume == volume && node->m_data.m_data == data)
+		{
+			removed++;
+			Node* replacedNode = removeNode(node, curDepth);
+			delete node;
+			removed += remove(volume, data, replacedNode, curDepth);
+		}
+		return removed;
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::get(
+			VOLUME const& volume, std::vector<DATA*>& out) const
+	{
+		if (m_pRoot == nullptr)
+			return;
+		get(volume, out, m_pRoot, 0);
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::get(
+			VOLUME const& volume, std::vector<DATA*>& out, Node* node, unsigned int curDepth) const
+	{
+		if (node->m_data.m_volume == volume)
+			out.push_back(&node->m_data.m_data);
+		if (volume.getCenter()[curDepth % D] <= node->m_data.m_volume.getCenter()[curDepth % D])
+		{
+			if (node->m_pLeftChild)
+				get(volume, out, node->m_pLeftChild, curDepth + 1);
+		}
+		else
+		{
+			if (node->m_pRightChild)
+				get(volume, out, node->m_pRightChild, curDepth + 1);
+		}
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> auto VolumetricKdTree<VOLUME, DATA, PRECISION>::findMinNode(
+			Node* start, unsigned int dimension, unsigned int& depth, unsigned int curDepth,
+			Node* curMin) const -> Node*
+	{
+		Node* nNode = curMin;
+		if (!nNode || start->m_data.m_volume.getCenter()[dimension] < curMin->m_data.m_volume.getCenter()[dimension])
+		{
+			nNode = start;
+			depth = curDepth;
+		}
+		if (start->m_pLeftChild)
+			nNode = findMinNode(start->m_pLeftChild, dimension, depth, curDepth + 1, nNode);
+		if (start->m_pRightChild)
+			nNode = findMinNode(start->m_pRightChild, dimension, depth, curDepth + 1, nNode);
+		return nNode;
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> auto VolumetricKdTree<VOLUME, DATA, PRECISION>::findMaxNode(
+			Node* start, unsigned int dimension, unsigned int& depth, unsigned int curDepth,
+			Node* curMax) const -> Node*
+	{
+		Node* nNode = curMax;
+		if (!nNode || start->m_data.m_volume.getCenter()[dimension] > curMax->m_data.m_volume.getCenter()[dimension])
+		{
+			nNode = start;
+			depth = curDepth;
+		}
+		if (start->m_pLeftChild)
+			nNode = findMinNode(start->m_pLeftChild, dimension, depth, curDepth + 1, nNode);
+		if (start->m_pRightChild)
+			nNode = findMinNode(start->m_pRightChild, dimension, depth, curDepth + 1, nNode);
+		return nNode;
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> auto VolumetricKdTree<VOLUME, DATA, PRECISION>::removeNode(
+			Node* node, unsigned int depth) -> Node*
+	{
+		// Find a node to replace the removed one
+		Node* replaceNode = nullptr;
+		unsigned int dim = depth % D;
+		unsigned int foundDepth;
+		if (node->m_pRightChild)
+			replaceNode = findMinNode(node->m_pRightChild, dim, foundDepth, depth + 1);
+		else if (node->m_pLeftChild)
+			replaceNode = findMaxNode(node->m_pLeftChild, dim, foundDepth, depth + 1);
+		if (!replaceNode)
+		{
+			// Node is a leaf and can thus be removed
+			if (node->m_pParent)
+			{
+				if (node->m_pParent->m_pLeftChild == node)
+					node->m_pParent->m_pLeftChild = nullptr;
+				else
+					node->m_pParent->m_pRightChild = nullptr;
+			}
+		}
+		else
+		{
+			// Find a replacement for the node that will be the replacement for the node we remove
+			removeNode(replaceNode, foundDepth);
+			// Replace node with new node
+			if (node->m_pParent)
+			{
+				if (node->m_pParent->m_pLeftChild == node)
+					node->m_pParent->m_pLeftChild = replaceNode;
+				else
+					node->m_pParent->m_pRightChild = replaceNode;
+			}
+			replaceNode->m_pParent = node->m_pParent;
+			replaceNode->m_pLeftChild = node->m_pLeftChild;
+			replaceNode->m_pRightChild = node->m_pRightChild;
+			if (node->m_pLeftChild)
+				node->m_pLeftChild->m_pParent = replaceNode;
+			if (node->m_pRightChild)
+				node->m_pRightChild->m_pParent = replaceNode;
+		}
+		return replaceNode;
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::findRange(
+			Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out) const
+	{
+		if (m_pRoot == nullptr)
+			return;
+		findRange(range, out, m_pRoot, 0);
+	}
+
+	template<typename VOLUME, typename DATA, typename PRECISION> void VolumetricKdTree<VOLUME, DATA, PRECISION>::findRange(
+			Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out, Node* node,
+			unsigned int curDepth) const
+	{
+
 	}
 }
 

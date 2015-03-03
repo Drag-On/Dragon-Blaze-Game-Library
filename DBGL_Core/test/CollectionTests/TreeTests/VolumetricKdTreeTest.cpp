@@ -19,42 +19,87 @@
 using namespace dbgl;
 using namespace std;
 
-namespace dbgl_volumetrickdtree_test
-{
-	class Volume: public Sphere<float>
-	{
-	public:
-		Volume() = default;
-		Volume(unsigned int i, Vec3f center, float radius)
-				: Sphere<float> ( center, radius ), id { i }
-		{
-		}
-		unsigned int id = 0;
-	};
-}
-
-using Volume = dbgl_volumetrickdtree_test::Volume;
-
 TEST(VolumetricKdTree,construct)
 {
-	VolumetricKdTree<Volume> tree;
+	VolumetricKdTree<Sphere<float>, unsigned int> tree;
 }
 
 TEST(VolumetricKdTree,insert)
 {
-	VolumetricKdTree<Volume> tree;
-	Volume v0 { 0, Vec3f{}, 1 };
-	Volume v1 { 1, Vec3f{1, 0, 0}, 1 };
-	Volume v2 { 2, Vec3f{1, 1, 0}, 1 };
-	Volume v3 { 3, Vec3f{5, 1, 0}, 1 };
-	Volume v4 { 4, Vec3f{-1, 0, 0}, 1 };
-	Volume v5 { 5, Vec3f{3, 3, 0}, 1 };
-	Volume v6 { 6, Vec3f{3, 4, 0}, 1 };
-	tree.insert(v0);
-	tree.insert(v1);
-	tree.insert(v2);
-	tree.insert(v3);
-	tree.insert(v4);
-	tree.insert(v5);
-	tree.insert(v6);
+	VolumetricKdTree<Circle<float>, unsigned int> tree;
+	Circle<float> v0 { Vec2f { }, 1 };
+	Circle<float> v1 { Vec2f { 1, 0 }, 1 };
+	Circle<float> v2 { Vec2f { 1, 1 }, 1 };
+	Circle<float> v3 { Vec2f { 5, 1 }, 1 };
+	Circle<float> v4 { Vec2f { -1, 0 }, 1 };
+	Circle<float> v5 { Vec2f { 3, 3 }, 1 };
+	Circle<float> v6 { Vec2f { 3, 4 }, 1 };
+	tree.insert(v0, 0);
+	tree.insert(v1, 1);
+	tree.insert(v2, 2);
+	tree.insert(v3, 3);
+	tree.insert(v4, 4);
+	tree.insert(v5, 5);
+	tree.insert(v6, 6);
+}
+
+TEST(VolumetricKdTree,remove)
+{
+	VolumetricKdTree<Circle<float>, unsigned int> tree;
+	Circle<float> v0 { Vec2f { }, 1 };
+	Circle<float> v1 { Vec2f { 1, 0 }, 1 };
+	Circle<float> v2 { Vec2f { 1, 1 }, 1 };
+	Circle<float> v3 { Vec2f { 5, 1 }, 1 };
+	Circle<float> v4 { Vec2f { -1, 0 }, 1 };
+	Circle<float> v5 { Vec2f { 3, 3 }, 1 };
+	Circle<float> v6 { Vec2f { 3, 4 }, 1 };
+	tree.insert(v0, 0);
+	tree.insert(v1, 1);
+	tree.insert(v2, 2);
+	tree.insert(v3, 3);
+	tree.insert(v4, 4);
+	tree.insert(v5, 5);
+	tree.insert(v6, 6);
+	tree.insert(v6, 6);
+	auto removed = tree.remove(v5, 5);
+	ASSERT_EQ(removed, 1);
+	removed = tree.remove(v2, 2);
+	ASSERT_EQ(removed, 1);
+	removed = tree.remove(v3, 42);
+	ASSERT_EQ(removed, 0);
+	removed = tree.remove(v6, 6);
+	ASSERT_EQ(removed, 2);
+}
+
+TEST(VolumetricKdTree,get)
+{
+	VolumetricKdTree<Circle<float>, unsigned int> tree;
+	Circle<float> v0 { Vec2f { }, 1 };
+	Circle<float> v1 { Vec2f { 1, 0 }, 1 };
+	Circle<float> v2 { Vec2f { 1, 1 }, 1 };
+	Circle<float> v3 { Vec2f { 5, 1 }, 1 };
+	Circle<float> v4 { Vec2f { -1, 0 }, 1 };
+	Circle<float> v5 { Vec2f { 3, 3 }, 1 };
+	Circle<float> v6 { Vec2f { 3, 4 }, 1 };
+	Circle<float> v7 { Vec2f { 3, 4 }, 1 };
+	tree.insert(v0, 0);
+	tree.insert(v1, 1);
+	tree.insert(v2, 2);
+	tree.insert(v3, 3);
+	tree.insert(v4, 4);
+	tree.insert(v5, 5);
+	tree.insert(v6, 6);
+	tree.insert(v7, 7);
+	std::vector<unsigned int*> data;
+	tree.get(v0, data);
+	ASSERT_EQ(data.size(), 1);
+	ASSERT_EQ(*data[0], 0);
+	data.clear();
+	tree.get(v6, data);
+	ASSERT_EQ(data.size(), 2);
+	ASSERT_EQ(*data[0], 6);
+	ASSERT_EQ(*data[1], 7);
+	data.clear();
+	tree.get({ Vec2f { 10, 10 }, 42 }, data);
+	ASSERT_EQ(data.size(), 0);
 }

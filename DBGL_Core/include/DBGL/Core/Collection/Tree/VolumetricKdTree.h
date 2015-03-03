@@ -14,21 +14,22 @@
 #include "AbstractTree.h"
 #include "DBGL/Core/Math/HyperPlane.h"
 #include <vector>
+#include <functional>
 
 namespace dbgl
 {
-	template<typename VOLUME, typename PRECISION = float> class VolumetricKdTree: public AbstractTree
+	template<typename VOLUME, typename DATA, typename PRECISION = float> class VolumetricKdTree: public AbstractTree
 	{
 	public:
-		class Node: public AbstractTree::Node
+		/**
+		 * @brief Internal structure to keep data and volume together
+		 */
+		struct Aggregate
 		{
-		public:
-			Node* m_pParent = nullptr;
-			Node* m_pLeftChild = nullptr;
-			Node* m_pRightChild = nullptr;
-			VOLUME m_data;
-			std::vector<VOLUME> m_undecidable;
+			VOLUME m_volume;
+			DATA m_data;
 		};
+
 		/**
 		 * @brief Constructs an empty tree
 		 */
@@ -40,10 +41,47 @@ namespace dbgl
 		/**
 		 * @brief Inserts a new volume into the tree
 		 * @param volume New volume to add
+		 * @param data Data belonging to that volume
 		 */
-		void insert(VOLUME const& volume);
+		void insert(VOLUME const& volume, DATA const& data);
+		/**
+		 * @brief Retrieves pointers to all data objects that have a volume attached that is reasonably similar to \p volume
+		 * @param volume Volume to search for
+		 * @param[out] out Pointers to all found data objects will be pushed to this container
+		 * @note The pointers retrieved this way can be used to modify the data within the tree. However, they are not guaranteed
+		 * 		 to stay valid after further calls to tree functionality.
+		 */
+		void get(VOLUME const& volume, std::vector<DATA*>& out) const;
+		/**
+		 * @brief Removes a volume completely from the tree
+		 * @param volume Volume to remove
+		 * @param data Data that belongs to that volume
+		 * @return Amount of removed nodes
+		 */
+		unsigned int remove(VOLUME const& volume, DATA const& data);
+		/**
+		 * @brief Finds all volumes that intersect with \p range
+		 * @param range Range to find all volumes in
+		 * @param[out] out This list will be filled with the found entities
+		 */
+		void findRange(Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range,
+				std::vector<Aggregate>& out) const;
 
 	private:
+		const unsigned int D = VOLUME::getDimension();
+		/**
+		 * @brief One node within the tree
+		 */
+		class Node: public AbstractTree::Node
+		{
+		public:
+			Node* m_pParent = nullptr;
+			Node* m_pLeftChild = nullptr;
+			Node* m_pRightChild = nullptr;
+			Aggregate m_data;
+			VOLUME m_bounds;
+		};
+
 		/**
 		 * @brief Frees the passed node and all nodes further down in the hierarchy
 		 * @param node Node to free
@@ -52,13 +90,66 @@ namespace dbgl
 		void free(Node* node);
 		/**
 		 * @brief Inserts new volume data below \p node
+		 * @param volume Volume information
 		 * @param data Data to construct node from
 		 * @param node Node to insert below
 		 * @param curDepth Depth of \p node
 		 * @return
 		 */
-		Node* insert(VOLUME const& data, Node* node, unsigned int curDepth);
+		Node* insert(VOLUME const& volume, DATA const& data, Node* node, unsigned int curDepth);
+		/**
+		 * @brief Retrieves pointers to all data objects that have a volume attached that is reasonably similar to \p volume
+		 * @param volume Volume to search for
+		 * @param[out] out Pointers to all found data objects will be pushed to this container
+		 * @param node Node to start searching for
+		 * @param curDepth Depth of \p node
+		 */
+		void get(VOLUME const& volume, std::vector<DATA*>& out, Node* node, unsigned int curDepth) const;
+		/**
+		 * @brief Removes a volume completely from the tree
+		 * @param volume Volume to remove
+		 * @param data Data that belongs to that volume
+		 * @param node Node to start searching
+		 * @param curDepth Depth of \p node
+		 * @return Amount of removed nodes
+		 */
+		unsigned int remove(VOLUME const& volume, DATA const& data, Node* node, unsigned int curDepth);
+		/**
+		 * @brief Finds the node with the least \p dimension coordinate
+		 * @param start Node to start searching from
+		 * @param dimension Dimension to minimize
+		 * @param curMin Current minimum
+		 * @return The found node
+		 */
+		Node* findMinNode(Node* start, unsigned int dimension, unsigned int& depth, unsigned int curDepth,
+				Node* curMin = nullptr) const;
+		/**
+		 * @brief Finds the node with the largest \p dimension coordinate
+		 * @param start Node to start searching from
+		 * @param dimension Dimension to maximize
+		 * @param curMax Current maximum
+		 * @return The found node
+		 */
+		Node* findMaxNode(Node* start, unsigned int dimension, unsigned int& depth, unsigned int curDepth,
+				Node* curMax = nullptr) const;
+		/**
+		 * @brief Removes the passed node
+		 * @param node Node to remove
+		 * @param depth Depth of the node
+		 * @returns The node that has been put into the place of the removed one
+		 */
+		Node* removeNode(Node* node, unsigned int depth);
+		/**
+		 * @brief Finds all volumes that intersect with \p range
+		 * @param range Range to find all volumes in
+		 * @param[out] out This list will be filled with the found entities
+		 */
+		void findRange(Hyperrectangle<PRECISION, VOLUME::getDimension()> const& range, std::vector<Aggregate>& out,
+				Node* node, unsigned int curDepth) const;
 
+		/**
+		 * @brief Root node
+		 */
 		Node* m_pRoot;
 	};
 }

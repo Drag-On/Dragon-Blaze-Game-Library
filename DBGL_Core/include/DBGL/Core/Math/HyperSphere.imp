@@ -25,20 +25,25 @@ namespace dbgl
 		return m_center;
 	}
 
+	template<typename T, unsigned int D> Vector<T, D> const& HyperSphere<T, D>::getCenter()  const
+	{
+		return m_center;
+	}
+
 	template<typename T, unsigned int D> T& HyperSphere<T, D>::radius()
 	{
 		return m_radius;
 	}
 
 	template<typename T, unsigned int D> T HyperSphere<T, D>::lower(unsigned int dimension) const
-    {
+	{
 		return m_center[dimension] - m_radius;
-    }
+	}
 
-    template<typename T, unsigned int D> T HyperSphere<T, D>::upper(unsigned int dimension) const
-    {
-    	return m_center[dimension] + m_radius;
-    }
+	template<typename T, unsigned int D> T HyperSphere<T, D>::upper(unsigned int dimension) const
+	{
+		return m_center[dimension] + m_radius;
+	}
 
 	template<typename T, unsigned int D> bool HyperSphere<T, D>::intersects(HyperSphere<T, D> const& other) const
 	{
@@ -63,6 +68,16 @@ namespace dbgl
 	template<typename T, unsigned int D> T HyperSphere<T, D>::getSignedDistance(HyperSphere<T, D> const& sphere) const
 	{
 		return (sphere.m_center - m_center).getLength() - m_radius - sphere.m_radius;
+	}
+
+	template<typename T, unsigned int D>bool HyperSphere<T, D>::operator==(HyperSphere<T, D> const& other) const
+	{
+		return m_center == other.m_center && m_radius == other.m_radius;
+	}
+
+	template<typename T, unsigned int D>bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
+	{
+		return !(*this == other);
 	}
 
 	template<typename T, unsigned int D> constexpr unsigned int HyperSphere<T, D>::getDimension()

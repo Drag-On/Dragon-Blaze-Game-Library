@@ -34,6 +34,11 @@ namespace dbgl
 		 */
 		Vector<T, D>& center();
 		/**
+		 * @brief Provides the sphere center
+		 * @return Sphere center
+		 */
+		Vector<T, D> const& getCenter() const;
+		/**
 		 * @brief Provides the sphere radius
 		 * @return Sphere radius
 		 */
@@ -80,6 +85,18 @@ namespace dbgl
 		 * @return Signed distance
 		 */
 		T getSignedDistance(HyperSphere<T, D> const& sphere) const;
+		/**
+		 * @brief Equality operator
+		 * @param other Hypersphere to compare with
+		 * @return True if both shapes are equal, otherwise false
+		 */
+		bool operator==(HyperSphere<T, D> const& other) const;
+		/**
+		 * @brief Inequality operator
+		 * @param other Hypersphere to compare with
+		 * @return False if both shapes are equal, otherwise true
+		 */
+		bool operator!=(HyperSphere<T, D> const& other) const;
 	    /**
 	     * @brief Dimensionality of the hypersphere
 	     * @return Dimensionality of the hypersphere
