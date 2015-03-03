@@ -112,6 +112,26 @@ namespace dbgl
 	 * @return Clamped value
 	 */
 	template<typename T, typename R = T> constexpr R clamp(T val, T min, T max);
+	/**
+	 * @brief Signum of a value
+	 * @param val Value to get signum for
+	 * @return -1 if \p val is negative, 0 if it is zero, otherwise 1
+	 */
+	template<typename T> constexpr int sign(T val);
+	/**
+	 * @brief Signum of a value
+	 * @param val Value to get signum for
+	 * @param isSigned false, type is not signed
+	 * @return -1 if \p val is negative, 0 if it is zero, otherwise 1
+	 */
+	template<typename T> inline constexpr int sign(T x, std::false_type isSigned);
+	/**
+	 * @brief Signum of a value
+	 * @param val Value to get signum for
+	 * @param isSigned true, type is signed
+	 * @return -1 if \p val is negative, 0 if it is zero, otherwise 1
+	 */
+	template<typename T> inline constexpr int sign(T x, std::true_type isSigned);
 }
 
 #include "Utility.imp"

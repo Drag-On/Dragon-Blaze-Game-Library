@@ -10,30 +10,45 @@
 
 namespace dbgl
 {
-    template<typename T> bool isSimilar(T a, T b, T precision)
-    {
-	return std::abs(a - b) <= precision;
-    }
+	template<typename T> bool isSimilar(T a, T b, T precision)
+	{
+		return std::abs(a - b) <= precision;
+	}
 
-    template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(
-	    T a, T b, int ulp)
-    {
-	return std::abs(a - b) <= std::numeric_limits<T>::epsilon() * std::max(std::abs(a), std::abs(b)) * ulp;
-    }
+	template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(T a, T b,
+			int ulp)
+	{
+		return std::abs(a - b) <= std::numeric_limits<T>::epsilon() * std::max(std::abs(a), std::abs(b)) * ulp;
+	}
 
-    template<typename T> constexpr T toRadians(T degrees)
-    {
-	return degrees * (pi() / 180);
-    }
+	template<typename T> constexpr T toRadians(T degrees)
+	{
+		return degrees * (pi() / 180);
+	}
 
-    template<typename T> constexpr T toDegrees(T radians)
-    {
-	return radians * (180 / pi());
-    }
+	template<typename T> constexpr T toDegrees(T radians)
+	{
+		return radians * (180 / pi());
+	}
 
-    template<typename T, typename R> constexpr R clamp(T val, T min, T max)
-    {
-	return static_cast<R>(val < min ? min : val > max ? max : val);
-    }
+	template<typename T, typename R> constexpr R clamp(T val, T min, T max)
+	{
+		return static_cast<R>(val < min ? min : val > max ? max : val);
+	}
+
+	template<typename T> constexpr int sign(T val)
+	{
+		return sign(val, std::is_signed<T>());
+	}
+
+	template<typename T> inline constexpr int sign(T x, std::false_type is_signed)
+	{
+		return T(0) < x;
+	}
+
+	template<typename T> inline constexpr int sign(T x, std::true_type is_signed)
+	{
+		return (T(0) < x) - (x < T(0));
+	}
 }
 
