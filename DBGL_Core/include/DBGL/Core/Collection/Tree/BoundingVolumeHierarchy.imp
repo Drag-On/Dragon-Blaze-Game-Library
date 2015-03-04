@@ -1,0 +1,88 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename Data, typename Volume> BoundingVolumeHierarchy<Data, Volume>::~BoundingVolumeHierarchy()
+	{
+		free(m_pRoot);
+	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::insert(Volume const& volume,
+			Data const& data)
+	{
+		if (m_pRoot)
+			insert(volume, data, m_pRoot);
+		else
+		{
+			m_pRoot = new Node { };
+			m_pRoot->m_bounds = volume;
+			m_pRoot->m_info.m_volume = volume;
+			m_pRoot->m_info.m_data = data;
+		}
+	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::free(Node* node)
+	{
+		if (node != nullptr)
+		{
+			if (node->m_pLeftChild != nullptr)
+				free(node->m_pLeftChild);
+			if (node->m_pRightChild != nullptr)
+				free(node->m_pRightChild);
+			delete node;
+			node = nullptr;
+		}
+	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::insert(Volume const& volume,
+			Data const& data, Node* node)
+	{
+		// Resize bounding volume
+		node->m_bounds.resizeInclude(volume);
+		// Check which child fits better
+		float ratings[2] = { rateNode(node->m_pLeftChild, node, volume), rateNode(node->m_pRightChild, node, volume) };
+		Node** target;
+		if (ratings[0] >= ratings[1])
+			target = &node->m_pLeftChild;
+		else
+			target = &node->m_pRightChild;
+		// Insert into target node or create new
+		if (*target)
+			insert(volume, data, *target);
+		else
+		{
+			(*target) = new Node { };
+			(*target)->m_bounds = volume;
+			(*target)->m_info.m_volume = volume;
+			(*target)->m_info.m_data = data;
+			(*target)->m_pParent = node;
+		}
+	}
+
+	template<typename Data, typename Volume> float BoundingVolumeHierarchy<Data, Volume>::rateNode(Node* node,
+			Node* parent, Volume const& volume) const
+	{
+		float score = 0;
+		if (node)
+		{
+			if (node->m_bounds.intersects(volume))
+				score += node->m_bounds.getBoundingRadius() - volume.getBoundingRadius();
+			score -= (volume.getCenter() - node->m_bounds.getCenter()).getLength();
+		}
+		else
+		{
+			if (parent)
+				score += (volume.getCenter() - parent->m_bounds.getCenter()).getLength();
+		}
+		return score;
+	}
+}
+

@@ -25,7 +25,7 @@ namespace dbgl
 		return m_center;
 	}
 
-	template<typename T, unsigned int D> Vector<T, D> HyperSphere<T, D>::getCenter()  const
+	template<typename T, unsigned int D> Vector<T, D> HyperSphere<T, D>::getCenter() const
 	{
 		return m_center;
 	}
@@ -35,7 +35,7 @@ namespace dbgl
 		return m_radius;
 	}
 
-	template<typename T, unsigned int D> T const& HyperSphere<T, D>::getRadius()  const
+	template<typename T, unsigned int D> T const& HyperSphere<T, D>::getRadius() const
 	{
 		return m_radius;
 	}
@@ -76,6 +76,42 @@ namespace dbgl
 		return getSignedDistance(other) <= 0;
 	}
 
+	template<typename T, unsigned int D> void HyperSphere<T, D>::resizeInclude(IShape<T, D> const& other)
+	{
+		// Compute new bounding box. TODO: Find a better fit depending on shape
+		Vector<T, D> lower, upper;
+		for (unsigned int i = 0; i < D; i++)
+		{
+			lower[i] = std::min(this->lower(i), other.lower(i));
+			upper[i] = std::max(this->upper(i), other.upper(i));
+		}
+		auto diagHalf = (upper - lower) / 2.0;
+		m_center = lower + diagHalf;
+		m_radius = diagHalf.getLength();
+	}
+
+	template<typename T, unsigned int D> void HyperSphere<T, D>::resizeInclude(HyperSphere<T, D> const& other)
+	{
+		// Compute new bounding box.
+		Vector<T, D> lower, upper, diagHalf;
+		T radius = 0;
+		for (unsigned int i = 0; i < D; i++)
+		{
+			lower[i] = std::min(this->lower(i), other.lower(i));
+			upper[i] = std::max(this->upper(i), other.upper(i));
+			diagHalf[i] = (upper[i] - lower[i]) / 2.0;
+			if (diagHalf[i] > radius)
+				radius = diagHalf[i];
+		}
+		m_center = lower + diagHalf;
+		m_radius = radius;
+	}
+
+	template<typename T, unsigned int D> T HyperSphere<T, D>::getBoundingRadius() const
+	{
+		return m_radius;
+	}
+
 	template<typename T, unsigned int D> T HyperSphere<T, D>::getDistance(Vector<T, D> const& point) const
 	{
 		return std::abs(getSignedDistance(point));
@@ -96,12 +132,12 @@ namespace dbgl
 		return (sphere.m_center - m_center).getLength() - m_radius - sphere.m_radius;
 	}
 
-	template<typename T, unsigned int D>bool HyperSphere<T, D>::operator==(HyperSphere<T, D> const& other) const
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::operator==(HyperSphere<T, D> const& other) const
 	{
 		return m_center == other.m_center && m_radius == other.m_radius;
 	}
 
-	template<typename T, unsigned int D>bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
+	template<typename T, unsigned int D> bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
 	{
 		return !(*this == other);
 	}

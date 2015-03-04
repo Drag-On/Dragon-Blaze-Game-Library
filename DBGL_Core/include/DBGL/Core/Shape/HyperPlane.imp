@@ -86,6 +86,16 @@ namespace dbgl
 		return positive && negative;
 	}
 
+	template<typename T, unsigned int D> void HyperPlane<T, D>::resizeInclude(IShape<T, D> const& /* other */)
+	{
+		static_assert(true, "A plane can never be resized to include arbitrary objects.");
+	}
+
+	template<typename T, unsigned int D> T HyperPlane<T, D>::getBoundingRadius() const
+	{
+		return std::numeric_limits<T>::infinity();
+	}
+
 	template<typename T, unsigned int D> T HyperPlane<T, D>::getDistance(Vector<T, D> const& point) const
 	{
 		return std::abs(getSignedDistance(point));

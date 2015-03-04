@@ -8,6 +8,8 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
+
 namespace dbgl
 {
 	template<typename T, unsigned int D> HyperRectangle<T, D>::HyperRectangle()
@@ -137,6 +139,30 @@ namespace dbgl
 		}
 		// Otherwise there is no intersection
 		return hits >= D - 1;
+	}
+
+	template<typename T, unsigned int D> void HyperRectangle<T, D>::resizeInclude(IShape<T, D> const& other)
+	{
+		// Compute new bounding box. TODO: Find a better fit depending on shape
+		Vector<T, D> lower, upper;
+		for (unsigned int i = 0; i < D; i++)
+		{
+			lower[i] = std::min(this->lower(i), other.lower(i));
+			upper[i] = std::max(this->upper(i), other.upper(i));
+		}
+		m_pos = lower;
+		m_extent = upper - lower;
+	}
+
+	template<typename T, unsigned int D> T HyperRectangle<T, D>::getBoundingRadius() const
+	{
+		Vector<T, D> lower, upper;
+		for (unsigned int i = 0; i < D; i++)
+		{
+			lower[i] = this->lower(i);
+			upper[i] = this->upper(i);
+		}
+		return (upper - lower).getLength();
 	}
 
 	template<typename T, unsigned int D> bool HyperRectangle<T, D>::isSimilar(HyperRectangle<T, D> const& other,

@@ -52,6 +52,16 @@ namespace dbgl
 		 */
 		virtual bool intersects(IShape<T, D> const& other) const = 0;
 		/**
+		 * @brief Resizes the shape so that it includes the passed one. Does nothing if the passed shape is already completely contained
+		 * @param other Shape to include
+		 */
+		virtual void resizeInclude(IShape<T, D> const& other) = 0;
+		/**
+		 * @brief Provides the radius of the smallest sphere fully containing this shape
+		 * @return Radius of bounding sphere
+		 */
+		virtual T getBoundingRadius() const = 0;
+		/**
 		 * @brief Dimensionality of the shape
 		 * @return Dimensionality of the shape
 		 */

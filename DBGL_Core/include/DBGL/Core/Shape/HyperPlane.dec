@@ -84,6 +84,14 @@ namespace dbgl
 		 */
 		bool intersects(HyperRectangle<T, D> const& other) const;
 		/**
+		 * @copydoc IShape::resizeInclude()
+		 */
+		virtual void resizeInclude(IShape<T, D> const& other);
+		/**
+		 * @copydoc IShape::getBoundingRadius()
+		 */
+		virtual T getBoundingRadius() const;
+		/**
 		 * @brief Computes the distance between a point and this plane
 		 * @param point Point to check
 		 * @return Unsigned distance
