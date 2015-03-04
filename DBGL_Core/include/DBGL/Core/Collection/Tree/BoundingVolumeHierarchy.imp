@@ -84,5 +84,26 @@ namespace dbgl
 		}
 		return score;
 	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::get(
+			IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
+			std::vector<Aggregate*>& result) const
+	{
+		if (!m_pRoot)
+			return;
+		get(range, result, m_pRoot);
+	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::get(
+			IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
+			std::vector<Aggregate*>& result, Node* node) const
+	{
+		if (node->m_info.m_volume.intersects(range))
+			result.push_back(&node->m_info);
+		if (node->m_pLeftChild && node->m_pLeftChild->m_bounds.intersects(range))
+			get(range, result, node->m_pLeftChild);
+		if (node->m_pRightChild && node->m_pRightChild->m_bounds.intersects(range))
+			get(range, result, node->m_pRightChild);
+	}
 }
 

@@ -12,12 +12,29 @@
 #define INCLUDE_DBGL_CORE_COLLECTION_TREE_BOUNDINGVOLUMEHIERARCHY_H_
 
 #include "AbstractTree.h"
+#include "DBGL/Core/Shape/IShape.h"
+#include <vector>
 
 namespace dbgl
 {
 	template<typename Data, typename Volume> class BoundingVolumeHierarchy: public AbstractTree
 	{
 	public:
+		/**
+		 * @brief Aggregates data and volume
+		 */
+		class Aggregate
+		{
+		public:
+			/**
+			 * @brief Volume
+			 */
+			Volume m_volume;
+			/**
+			 * @brief Data
+			 */
+			Data m_data;
+		};
 		/**
 		 * @brief Destructor
 		 */
@@ -28,13 +45,15 @@ namespace dbgl
 		 * @param data Data to store with the volume
 		 */
 		void insert(Volume const& volume, Data const& data);
+		/**
+		 * @brief Finds all points within \p range
+		 * @param range Range to find all points in
+		 * @param[out] result This list will be filled with the found points
+		 */
+		void get(IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
+				std::vector<Aggregate*>& result) const;
+
 	private:
-		class Aggregate
-		{
-		public:
-			Volume m_volume;
-			Data m_data;
-		};
 		class Node: public AbstractTree::Node
 		{
 		public:
@@ -48,6 +67,8 @@ namespace dbgl
 		void free(Node* node);
 		void insert(Volume const& volume, Data const& data, Node* node);
 		float rateNode(Node* node, Node* parent, Volume const& volume) const;
+		void get(IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range, std::vector<Aggregate*>& result,
+				Node* node) const;
 
 		Node* m_pRoot = nullptr;
 	};

@@ -8,20 +8,17 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef INCLUDE_DBGL_CORE_SHAPE_HYPERSPHERE_H_
-#define INCLUDE_DBGL_CORE_SHAPE_HYPERSPHERE_H_
+#ifndef INCLUDE_DBGL_CORE_SHAPE_SHAPES_H_
+#define INCLUDE_DBGL_CORE_SHAPE_SHAPES_H_
 
-/*
- * NOTE: This includes both the declaration and the implementation of the template class. In order to resolve
- *       dependency-issues they have been split into separate files that can be included separately.
- */
+#include "IShape.h"
 
-#include "HyperSphere.dec"
-
-#include "DBGL/Core/Math/Vector.h"
 #include "HyperPlane.dec"
+#include "HyperSphere.dec"
 #include "HyperRectangle.dec"
 
+#include "HyperPlane.imp"
 #include "HyperSphere.imp"
+#include "HyperRectangle.imp"
 
-#endif /* INCLUDE_DBGL_CORE_SHAPE_HYPERSPHERE_H_ */
+#endif /* INCLUDE_DBGL_CORE_SHAPE_SHAPES_H_ */

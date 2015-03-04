@@ -8,9 +8,7 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-#include "DBGL/Core/Shape/HyperSphere.h"
-#include "DBGL/Core/Shape/HyperPlane.h"
-#include "DBGL/Core/Shape/HyperRectangle.h"
+#include "DBGL/Core/Shape/Shapes.h"
 #include "DBGL/Core/Test/Test.h"
 
 using namespace dbgl;

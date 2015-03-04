@@ -12,6 +12,7 @@
 #define INCLUDE_DBGL_CORE_MATH_HYPERSPHERE_DEC_
 
 #include "IShape.h"
+#include "DBGL/Core/Math/Vector.h"
 
 namespace dbgl
 {

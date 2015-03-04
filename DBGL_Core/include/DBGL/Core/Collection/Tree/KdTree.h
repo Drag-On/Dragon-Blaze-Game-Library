@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include "AbstractTree.h"
-#include "DBGL/Core/Shape/Hyperrectangle.h"
+#include "DBGL/Core/Shape/Shapes.h"
 
 namespace dbgl
 {

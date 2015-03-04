@@ -82,8 +82,17 @@ namespace dbgl
 		return true;
 	}
 
-	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(IShape<T, D> const& /* other */) const
+	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(IShape<T, D> const& other) const
 	{
+		HyperRectangle<T, D> const* pRect = dynamic_cast<HyperRectangle<T, D> const*>(&other);
+		if (pRect)
+			return intersects(*pRect);
+		HyperSphere<T, D> const* pSphere = dynamic_cast<HyperSphere<T, D> const*>(&other);
+		if (pSphere)
+			return intersects(*pSphere);
+		HyperPlane<T, D> const* pPlane = dynamic_cast<HyperPlane<T, D> const*>(&other);
+		if (pPlane)
+			return intersects(*pPlane);
 		throw std::logic_error(
 				"No way to handle intersections between rectangles and your shape has been implemented yet.");
 	}

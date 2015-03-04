@@ -11,7 +11,7 @@
 #ifndef INCLUDE_DBGL_RENDERER_CULLING_FRUSTUMCULLING_H_
 #define INCLUDE_DBGL_RENDERER_CULLING_FRUSTUMCULLING_H_
 
-#include "DBGL/Core/Shape/HyperPlane.h"
+#include "DBGL/Core/Shape/Shapes.h"
 #include "DBGL/Core/Math/Matrix4x4.h"
 #include "DBGL/Core/Math/Vector3.h"
 #include "DBGL/Renderer/Entity/ICameraEntity.h"
