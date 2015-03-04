@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <algorithm>
+#include <bitset>
 
 namespace dbgl
 {
@@ -52,6 +53,18 @@ namespace dbgl
 	template<typename T, unsigned int D> Vector<T, D>& HyperRectangle<T, D>::extent()
 	{
 		return m_extent;
+	}
+
+	template<typename T, unsigned int D> Vector<T, D> HyperRectangle<T, D>::getCorner(unsigned int index) const
+	{
+		Vector<T, D> corner = m_pos;
+		std::bitset<D> bitset(index);
+		for (unsigned int i = 0; i < D; i++)
+		{
+			if (bitset[i])
+				corner[i] += m_extent[i];
+		}
+		return corner;
 	}
 
 	template<typename T, unsigned int D> Vector<T, D> HyperRectangle<T, D>::getCenter() const
@@ -120,7 +133,7 @@ namespace dbgl
 		// If the sphere center is not further away from any box corner than its radius, then they intersect
 		for (unsigned int i = 0; i < 2 * D; i++)
 		{
-			if (other.contains((*this)[i]))
+			if (other.contains(getCorner(i)))
 				return true;
 		}
 		// If the sphere is on the positive side of any plane there is no intersection

@@ -65,6 +65,12 @@ namespace dbgl
 		 */
 		Vector<T, D>& extent();
 		/**
+		 * @brief Returns the ith corner point of the hyperrectangle
+		 * @param index Corner index
+		 * @return The ith corner point
+		 */
+		Vector<T, D> getCorner(unsigned int index) const;
+		/**
 		 * @copydoc IShape::getCenter()
 		 */
 		virtual Vector<T, D> getCenter() const;

@@ -17,6 +17,17 @@
 using namespace dbgl;
 using namespace std;
 
+void checkResult(std::vector<BoundingVolumeHierarchy<int, Sphere<float>>::Aggregate*> const& result,
+		std::vector<int> needed)
+{
+	for (auto item : result)
+	{
+		auto it = std::find(needed.begin(), needed.end(), item->m_data);
+		ASSERT(it != needed.end());
+	}
+	ASSERT_EQ(result.size(), needed.size());
+}
+
 TEST(BoundingVolumeHierarchy,construct)
 {
 	BoundingVolumeHierarchy<int, Sphere<float>> bvh { };
@@ -63,5 +74,22 @@ TEST(BoundingVolumeHierarchy,get)
 
 	std::vector<BoundingVolumeHierarchy<int, Sphere<float>>::Aggregate*> results;
 	bvh.get(AABB<float> { }, results);
-	ASSERT_EQ(results.size(), 4);
+	checkResult(results, { 0, 2, 4, 6 });
+	results.clear();
+
+	bvh.get(AABB<float> { Vec3f { 0, 0, 0 }, Vec3f { 8, 2, 0 } }, results);
+	checkResult(results, { 0, 1, 2, 4, 6 });
+	results.clear();
+
+	bvh.get(AABB<float> { Vec3f { 1.5f, 3.5f, 0 }, Vec3f { 1, 1, 1 } }, results);
+	checkResult(results, { 2, 3, 4, 6 });
+	results.clear();
+
+	bvh.get(AABB<float> { Vec3f { -100, -9, 0 }, Vec3f { 1, 1, 1 } }, results);
+	checkResult(results, { });
+	results.clear();
+
+	bvh.get(AABB<float> { Vec3f { 20, -9, 0 }, Vec3f { 40, 100, 10 } }, results);
+	checkResult(results, { 5 });
+	results.clear();
 }
