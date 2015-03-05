@@ -56,7 +56,10 @@ namespace dbgl
 			target = &node->m_pRightChild;
 		// Insert into target node or create new
 		if (*target)
+		{
 			insert(volume, data, *target);
+			node->m_children++;
+		}
 		else
 		{
 			(*target) = new Node { };
@@ -64,6 +67,7 @@ namespace dbgl
 			(*target)->m_info.m_volume = volume;
 			(*target)->m_info.m_data = data;
 			(*target)->m_pParent = node;
+			node->m_children++;
 		}
 	}
 
@@ -85,6 +89,100 @@ namespace dbgl
 		return score;
 	}
 
+	template<typename Data, typename Volume> unsigned int BoundingVolumeHierarchy<Data, Volume>::remove(
+			Volume const& volume, Data const& data)
+	{
+		if (m_pRoot)
+			return remove(volume, data, m_pRoot);
+		else
+			return 0;
+	}
+
+	template<typename Data, typename Volume> unsigned int BoundingVolumeHierarchy<Data, Volume>::remove(
+			Volume const& volume, Data const& data, Node* node)
+	{
+		unsigned int removed = 0;
+		if (node->m_pLeftChild && node->m_pLeftChild->m_bounds.intersects(volume))
+			removed += remove(volume, data, node->m_pLeftChild);
+		if (node->m_pRightChild && node->m_pRightChild->m_bounds.intersects(volume))
+			removed += remove(volume, data, node->m_pRightChild);
+		if (removed > 0)
+		{
+			node->m_children -= removed;
+			node->m_bounds = node->m_info.m_volume;
+			if (node->m_pLeftChild)
+				node->m_bounds.resizeInclude(node->m_pLeftChild->m_bounds);
+			if (node->m_pRightChild)
+				node->m_bounds.resizeInclude(node->m_pRightChild->m_bounds);
+		}
+		if (node->m_info.m_volume.intersects(volume) && node->m_info.m_data == data)
+		{
+			findReplacement(node);
+			delete node;
+			removed++;
+		}
+		return removed;
+	}
+
+	template<typename Data, typename Volume> auto BoundingVolumeHierarchy<Data, Volume>::findReplacement(
+			Node* node) -> Node*
+	{
+		// Compute score for each child
+		int score[2] = { 0, 0 };
+		if (node->m_pLeftChild && node->m_pRightChild)
+		{
+			if (node->m_pLeftChild->m_children > node->m_pRightChild->m_children)
+				score[0] += 10;
+			else
+				score[1] += 10;
+		}
+		else if (node->m_pLeftChild && !node->m_pRightChild)
+			score[0] += 5;
+		else if (!node->m_pLeftChild && node->m_pRightChild)
+			score[1] += 5;
+		else
+		{
+			if(node->m_pParent)
+			{
+				if(node->m_pParent->m_pLeftChild == node)
+					node->m_pParent->m_pLeftChild = nullptr;
+				else
+					node->m_pParent->m_pRightChild = nullptr;
+			}
+			return nullptr;
+		}
+		bool promoteLeft = score[0] > score[1];
+		Node* pChild2Promote = promoteLeft ? node->m_pLeftChild : node->m_pRightChild;
+		// The child will be moved up in the hierarchy, therefore its place must be filled again
+		Node* newChild = findReplacement(pChild2Promote);
+		// Link child into its new place
+		pChild2Promote->m_pParent = node->m_pParent;
+		if (node->m_pParent->m_pLeftChild == node)
+			node->m_pParent->m_pLeftChild = pChild2Promote;
+		else
+			node->m_pParent->m_pRightChild = pChild2Promote;
+		if (promoteLeft)
+			pChild2Promote->m_pLeftChild = newChild;
+		else
+			pChild2Promote->m_pLeftChild = node->m_pLeftChild;
+		if (pChild2Promote->m_pLeftChild)
+			pChild2Promote->m_pLeftChild->m_pParent = pChild2Promote;
+		if (!promoteLeft)
+			pChild2Promote->m_pRightChild = newChild;
+		else
+			pChild2Promote->m_pRightChild = node->m_pRightChild;
+		if (pChild2Promote->m_pRightChild)
+			pChild2Promote->m_pRightChild->m_pParent = pChild2Promote;
+		pChild2Promote->m_children = node->m_children - 1;
+		pChild2Promote->m_bounds = pChild2Promote->m_info.m_volume;
+		if (pChild2Promote->m_pLeftChild)
+			pChild2Promote->m_bounds.resizeInclude(pChild2Promote->m_pLeftChild->m_bounds);
+		if (pChild2Promote->m_pRightChild)
+			pChild2Promote->m_bounds.resizeInclude(pChild2Promote->m_pRightChild->m_bounds);
+		// Return newly linked replacement for node
+		return pChild2Promote;
+	}
+
 	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::get(
 			IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
 			std::vector<Aggregate*>& result) const
@@ -104,6 +202,12 @@ namespace dbgl
 			get(range, result, node->m_pLeftChild);
 		if (node->m_pRightChild && node->m_pRightChild->m_bounds.intersects(range))
 			get(range, result, node->m_pRightChild);
+	}
+
+	template<typename Data, typename Volume> void BoundingVolumeHierarchy<Data, Volume>::clear()
+	{
+		free(m_pRoot);
+		m_pRoot = nullptr;
 	}
 }
 
