@@ -127,40 +127,39 @@ namespace dbgl
 
 	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(HyperSphere<T, D> const& other) const
 	{
-		// If the sphere center is contained in the box, both bodies intersect
-		if (contains(other.getCenter()))
-			return true;
-		// If the sphere center is not further away from any box corner than its radius, then they intersect
-		for (unsigned int i = 0; i < 2 * D; i++)
+		// If the sphere contains any corner point of the box, then they intersect
+		for (unsigned int i = 0; i < std::pow(2, D); i++)
 		{
 			if (other.contains(getCorner(i)))
 				return true;
 		}
-		// If the sphere is on the positive side of any plane there is no intersection
+		// Compute closest point on all planes defining the box. If it is closer to the sphere than its radius,
+		// then sphere and box intersect if the point is between the adjacent corner points
+		HyperPlane<T, D> p1, p2;
 		for (unsigned int j = 0; j < D; j++)
 		{
-			Vector<T, D> pos = m_pos;
-			pos[j] = lower(j);
-			Vector<T, D> normal;
-			normal[j] = 1;
-			HyperPlane<T, D> p1 { pos, -normal };
-			Vector<T, D> otherPos = m_pos;
-			otherPos[j] = upper(j);
-			HyperPlane<T, D> p2 { otherPos, normal };
-			if (p1.getSignedDistance(other.getCenter()) > other.getRadius()
-					|| p2.getSignedDistance(other.getCenter()) > other.getRadius())
+			p1.base() = p2.base() = m_pos;
+			p2.normal() = p2.normal() = Vector<T, D> { 0 };
+			p1.base()[j] = lower(j);
+			p1.normal()[j] = -1;
+			p2.base()[j] = upper(j);
+			p2.normal()[j] = 1;
+			auto dis1 = p1.getSignedDistance(other.getCenter());
+			auto dis2 = p2.getSignedDistance(other.getCenter());
+			if (dis1 > other.getRadius() || dis2 > other.getRadius())
 				return false;
+			else
+			{
+				// Compute intersection point (one is sufficient due to axis-alignment)
+				auto intersection = other.getCenter() + dis1 * -p1.normal();
+				for (unsigned int i = 0; i < D; i++)
+				{
+					if (intersection[i] < lower(i) || intersection[i] > upper(i))
+						return false;
+				}
+			}
 		}
-		// If the sphere center lies between any D-1 corners of the box it is guaranteed to intersect
-		unsigned int hits = 0;
-		for (unsigned int k = 0; k < D; k++)
-		{
-			auto center = other.getCenter();
-			if (center[k] >= lower(k) && center[k] <= upper(k))
-				hits++;
-		}
-		// Otherwise there is no intersection
-		return hits >= D - 1;
+		return true;
 	}
 
 	template<typename T, unsigned int D> void HyperRectangle<T, D>::resizeInclude(IShape<T, D> const& other)
