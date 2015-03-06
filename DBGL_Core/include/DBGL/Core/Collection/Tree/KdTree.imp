@@ -60,6 +60,7 @@ namespace dbgl
 	{
 		if (this != &other)
 		{
+			free(m_pRoot);
 			m_pRoot = copyNode(*other.m_pRoot);
 			m_size = other.m_size;
 		}
