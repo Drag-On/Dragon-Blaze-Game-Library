@@ -139,7 +139,7 @@ namespace dbgl
 		for (unsigned int j = 0; j < D; j++)
 		{
 			p1.base() = p2.base() = m_pos;
-			p2.normal() = p2.normal() = Vector<T, D> { 0 };
+			p1.normal() = p2.normal() = Vector<T, D> { };
 			p1.base()[j] = lower(j);
 			p1.normal()[j] = -1;
 			p2.base()[j] = upper(j);
