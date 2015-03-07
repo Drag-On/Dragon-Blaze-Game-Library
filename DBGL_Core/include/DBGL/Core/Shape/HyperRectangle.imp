@@ -139,10 +139,9 @@ namespace dbgl
 		// Compute closest point on all planes defining the box. If it is closer to the sphere than its radius,
 		// then sphere and box intersect if the point is between the adjacent corner points
 		HyperPlane<T, D> p1, p2;
+		unsigned int overlaps = 0;
 		for (unsigned int j = 0; j < D; j++)
 		{
-			if(other.getCenter()[j] < lower(j) || other.getCenter()[j] > upper(j))
-				return false;
 			p1.base() = p2.base() = m_pos;
 			p1.normal() = p2.normal() = Vector<T, D> { };
 			p1.base()[j] = lower(j);
@@ -153,8 +152,10 @@ namespace dbgl
 			auto dis2 = p2.getSignedDistance(other.getCenter());
 			if (dis1 > other.getRadius() || dis2 > other.getRadius())
 				return false;
+			else if (other.getCenter()[j] >= lower(j) && other.getCenter()[j] <= upper(j))
+				overlaps++;
 		}
-		return true;
+		return overlaps >= D - 1;
 	}
 
 	template<typename T, unsigned int D> void HyperRectangle<T, D>::resizeInclude(IShape<T, D> const& other)
