@@ -127,6 +127,9 @@ namespace dbgl
 
 	template<typename T, unsigned int D> bool HyperRectangle<T, D>::intersects(HyperSphere<T, D> const& other) const
 	{
+		// Check if center of sphere is contained
+		if(contains(other.getCenter()))
+			return true;
 		// If the sphere contains any corner point of the box, then they intersect
 		for (unsigned int i = 0; i < std::pow(2, D); i++)
 		{
@@ -138,6 +141,8 @@ namespace dbgl
 		HyperPlane<T, D> p1, p2;
 		for (unsigned int j = 0; j < D; j++)
 		{
+			if(other.getCenter()[j] < lower(j) || other.getCenter()[j] > upper(j))
+				return false;
 			p1.base() = p2.base() = m_pos;
 			p1.normal() = p2.normal() = Vector<T, D> { };
 			p1.base()[j] = lower(j);
@@ -148,16 +153,6 @@ namespace dbgl
 			auto dis2 = p2.getSignedDistance(other.getCenter());
 			if (dis1 > other.getRadius() || dis2 > other.getRadius())
 				return false;
-			else
-			{
-				// Compute intersection point (one is sufficient due to axis-alignment)
-				auto intersection = other.getCenter() + dis1 * -p1.normal();
-				for (unsigned int i = 0; i < D; i++)
-				{
-					if (intersection[i] < lower(i) || intersection[i] > upper(i))
-						return false;
-				}
-			}
 		}
 		return true;
 	}
