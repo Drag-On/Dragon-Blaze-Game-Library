@@ -217,7 +217,7 @@ namespace dbgl
 	     */
 	    Quaternion<T> lerp(Quaternion<T> const& other, T factor) const;
 	    /**
-	     * @brief Sperical linear interpolation of two quaternions
+	     * @brief Spherical linear interpolation of two quaternions
 	     * @param other Quaternion to interpolate with
 	     * @param factor Factor of interpolation, defined for any real
 	     * @return A new quaternion interpolated out of this one and other
