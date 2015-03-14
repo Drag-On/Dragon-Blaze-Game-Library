@@ -46,6 +46,11 @@ namespace dbgl
 		 */
 		bool checkSphere(Vec3f const& center, float radius);
 		/**
+		 * @brief Provides a bounding sphere of the frustum
+		 * @return The bounding sphere
+		 */
+		Sphere<float> const& getBoundingSphere() const;
+		/**
 		 * @brief Set new camera
 		 * @param pCam New camera
 		 */
@@ -58,6 +63,7 @@ namespace dbgl
 	private:
 		ICameraEntity* m_pCam = nullptr;
 		Plane<float> m_planes[6]; //near, far, left, right, top, bottom;
+		Sphere<float> m_boundingSphere;
 	};
 }
 

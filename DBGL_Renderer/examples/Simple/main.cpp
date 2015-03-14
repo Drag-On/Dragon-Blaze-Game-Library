@@ -84,8 +84,8 @@ public:
 	}
 	void update()
 	{
-		m_dir = /*m_orientation * */Vec3f{0, 0, -1};
-		m_up = Vec3f{0, 1, 0};
+		m_dir = m_orientation * Vec3f{0, 0, -1};
+		m_up = m_orientation * Vec3f{0, 1, 0};
 		m_view = Mat4f::makeView(m_pos, m_dir, m_up);
 		m_projection = Mat4f::makeProjection(getFieldOfView(), getRatio(), getNear(), getFar());
 	}
@@ -104,7 +104,7 @@ public:
 	Vec3f m_pos;
 	QuatF m_orientation;
 	Mat4f m_modelMat;
-	float m_radius;
+	Sphere<float> m_bounds;
 	Entity(IMesh* mesh, IShaderProgram* shaderProgram, ITexture* tex, bool translucent, int materialID, float radius)
 	{
 		m_pMesh = mesh;
@@ -112,11 +112,16 @@ public:
 		m_pTexture = tex;
 		m_translucent = translucent;
 		m_materialID = materialID;
-		m_radius = radius;
+		m_bounds.center() = m_pos;
+		m_bounds.radius() = radius;
 	}
 	virtual bool isTranslucent()
 	{
 		return m_translucent;
+	}
+	virtual bool isStatic()
+	{
+		return true;
 	}
 	virtual void setupUnique()
 	{
@@ -162,13 +167,14 @@ public:
 	{
 		return m_pMesh;
 	}
-	virtual float getBoundingSphere()
+	virtual Sphere<float> const& getBoundingSphere()
 	{
-		return m_radius;
+		return m_bounds;
 	}
 	void update()
 	{
 		m_modelMat = Mat4f::makeTranslation(m_pos) * m_orientation;
+		m_bounds.center() = m_pos;
 	}
 };
 
@@ -185,6 +191,11 @@ void resizeHandler(IWindow::FramebufferResizeEventArgs const& args)
 
 void inputHandler(IWindow::InputEventArgs const& args)
 {
+	auto& input = pWnd->getInput();
+
+	// Close on escape
+	if (args.key == Input::Key::KEY_ESCAPE && args.action == Input::KeyState::PRESSED)
+		pWnd->close();
 }
 
 /**
@@ -224,6 +235,7 @@ void addRandomEntities(unsigned int amount)
 		entities.emplace_back(pSphere, pShaderProgram, pTex, false, 0, 1);
 		auto last = entities.rbegin();
 		last->m_pos = Vec3f{randFloat(), randFloat(), randFloat()};
+		last->update();
 		pRenderer->addEntity(&(*last));
 	}
 }
@@ -235,16 +247,22 @@ void update()
 		e.update();
 
 	auto& input = pWnd->getInput();
-	// Move first entity
-	auto e = entities.begin();
+
+	// Move camera entity
+	float xRot = 0, yRot = 0;
 	if (input.isDown(Input::Key::KEY_W))
-		e->m_pos.z() -= 1.5f * pRenderer->getDeltaTime();
-	if (input.isDown(Input::Key::KEY_A))
-		e->m_pos.x() -= 1.5f * pRenderer->getDeltaTime();
+		cam.m_pos += cam.m_dir * 2.5f * pRenderer->getDeltaTime();
 	if (input.isDown(Input::Key::KEY_S))
-		e->m_pos.z() += 1.5f * pRenderer->getDeltaTime();
+		cam.m_pos -= cam.m_dir * 2.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_A))
+		yRot += 0.5f * pRenderer->getDeltaTime();
 	if (input.isDown(Input::Key::KEY_D))
-		e->m_pos.x() += 1.5f * pRenderer->getDeltaTime();
+		yRot -= 0.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_Q))
+		xRot += 0.5f * pRenderer->getDeltaTime();
+	if (input.isDown(Input::Key::KEY_E))
+		xRot -= 0.5f * pRenderer->getDeltaTime();
+	cam.m_orientation = QuatF(cam.m_up.cross(cam.m_dir), xRot) * QuatF(cam.m_up, yRot) * cam.m_orientation;
 }
 
 int main()

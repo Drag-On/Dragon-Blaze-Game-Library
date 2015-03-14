@@ -15,6 +15,8 @@
 #include <functional>
 #include "DBGL/Renderer/IRenderer.h"
 #include "DBGL/Renderer/Culling/FrustumCulling.h"
+#include "DBGL/Core/Collection/Tree/BoundingVolumeHierarchy.h"
+#include "DBGL/Core/Shape/Shapes.h"
 #include "DBGL/Platform/Shader/IShaderProgram.h"
 #include "DBGL/Platform/Platform.h"
 
@@ -50,6 +52,8 @@ namespace dbgl
 
 		std::vector<IRenderEntity*> m_translucentEntities; // TODO: Use more appropriate data structure
 		std::vector<IRenderEntity*> m_entities;
+		BoundingVolumeHierarchy<IRenderEntity*, Sphere<float>> m_bvh;
+		std::vector<IRenderEntity*> m_bvhCulledEntities;
 		std::vector<IRenderEntity*> m_translucentEntitiesCulled;
 		std::vector<IRenderEntity*> m_entitiesCulled;
 		ICameraEntity* m_pCamera = nullptr;

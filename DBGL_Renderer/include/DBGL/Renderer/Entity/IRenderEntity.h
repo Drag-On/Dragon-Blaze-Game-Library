@@ -13,6 +13,7 @@
 
 #include "DBGL/Platform/Mesh/IMesh.h"
 #include "DBGL/Core/Math/Matrix4x4.h"
+#include "DBGL/Core/Shape/Shapes.h"
 
 namespace dbgl
 {
@@ -32,6 +33,11 @@ namespace dbgl
 		 */
 		virtual bool isTranslucent() = 0;
 		/**
+		 * @brief Checks if the entity is static (i.e. doesn't move in any way)
+		 * @return True if static, otherwise false
+		 */
+		virtual bool isStatic() = 0;
+		/**
 		 * @brief Sets all render states and shader uniforms, that are unique to this entity.
 		 * @note This method is guaranteed to be called before rendering of each entity.
 		 */
@@ -50,10 +56,10 @@ namespace dbgl
 		 */
 		virtual int getMaterialId() = 0;
 		/**
-		 * @brief Provides a bounding sphere for this entity in model space. The center is assumed to be coincident with the model origin.
-		 * @returns The sphere radius
+		 * @brief Provides a bounding sphere for this entity in model space
+		 * @returns The bounding sphere
 		 */
-		virtual float getBoundingSphere() = 0;
+		virtual Sphere<float> const& getBoundingSphere() = 0;
 		/**
 		 * @brief Retrieves the entitie's model matrix
 		 * @return Model matrix

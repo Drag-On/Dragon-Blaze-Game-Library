@@ -18,7 +18,8 @@ namespace dbgl
 	{
 		// Initialize shader for z-pre-pass
 		m_pZPrePassShader = Platform::get()->createShaderProgram();
-		std::string codeVertex = R"code(#version 330 core
+		std::string codeVertex =
+				R"code(#version 330 core
 			layout(location = 0) in vec3 i_v3_Pos_m; // Vertex position in model space
 			uniform mat4 MVP;						 // Model-view-projection matrix
 			void main()
@@ -27,7 +28,8 @@ namespace dbgl
 			})code";
 		auto vertex = Platform::get()->createShader(IShader::Type::VERTEX, codeVertex);
 		vertex->compile();
-		std::string codeFragment = R"code(#version 330 core
+		std::string codeFragment =
+				R"code(#version 330 core
 //            out vec3 color;
 			void main()
 			{
@@ -62,6 +64,8 @@ namespace dbgl
 	{
 		if (entity->isTranslucent())
 			m_translucentEntities.push_back(entity);
+		else if (entity->isStatic())
+			m_bvh.insert(entity->getBoundingSphere(), entity);
 		else
 			m_entities.push_back(entity);
 		return true;
@@ -77,6 +81,10 @@ namespace dbgl
 				m_translucentEntities.erase(it);
 				return true;
 			}
+		}
+		else if (entity->isStatic())
+		{
+			m_bvh.remove(entity->getBoundingSphere(), entity);
 		}
 		else
 		{
@@ -100,7 +108,7 @@ namespace dbgl
 	void ForwardRenderer::render(IRenderContext* rc)
 	{
 		// Don't render if there is no camera attached
-		if(!m_pCamera)
+		if (!m_pCamera)
 		{
 			m_curFrames = 0;
 			m_curElapsed = 0;
@@ -113,7 +121,7 @@ namespace dbgl
 		m_delta = m_pTime->getDelta();
 		m_curElapsed += m_delta;
 		m_curFrames++;
-		if(m_curElapsed >= 1.0)
+		if (m_curElapsed >= 1.0)
 		{
 			m_curElapsed -= 1.0;
 			m_fps = m_curFrames;
@@ -137,7 +145,7 @@ namespace dbgl
 	void ForwardRenderer::setUseZPrePass(bool use)
 	{
 		m_useZPrePass = use;
-		if(use)
+		if (use)
 			m_renderFunction = std::bind(&ForwardRenderer::renderWithZPrePass, this, std::placeholders::_1);
 		else
 			m_renderFunction = std::bind(&ForwardRenderer::renderWithoutZPrePass, this, std::placeholders::_1);
@@ -160,7 +168,7 @@ namespace dbgl
 		rc->setDepthTest(IRenderContext::DepthTestValue::Less);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
 		m_pZPrePassShader->use();
-		for(auto& e : m_entitiesCulled) // TODO: front-to-back order
+		for (auto& e : m_entitiesCulled) // TODO: front-to-back order
 		{
 			Mat4f MVP = VP * e->getModelMatrix();
 			Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(m_prePassMVPHandle, 1, false,
@@ -174,7 +182,7 @@ namespace dbgl
 		rc->clear(IRenderContext::COLOR);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for(auto& e : m_entitiesCulled) // TODO: ordered by material
+		for (auto& e : m_entitiesCulled) // TODO: ordered by material
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -183,7 +191,7 @@ namespace dbgl
 
 		// Render translucent objects in back-to-front order
 		rc->enableDepthBuffer(true);
-		for(auto& e : m_translucentEntitiesCulled) // TODO: order
+		for (auto& e : m_translucentEntitiesCulled) // TODO: order
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -200,7 +208,7 @@ namespace dbgl
 		rc->clear(IRenderContext::COLOR | IRenderContext::DEPTH);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for(auto& e : m_entitiesCulled) // TODO: ordered front-to-back
+		for (auto& e : m_entitiesCulled) // TODO: ordered front-to-back
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -208,7 +216,7 @@ namespace dbgl
 		}
 
 		// Render translucent objects in back-to-front order
-		for(auto& e : m_translucentEntitiesCulled) // TODO: order
+		for (auto& e : m_translucentEntitiesCulled) // TODO: order
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -221,26 +229,33 @@ namespace dbgl
 		// Clear old culling
 		m_entitiesCulled.clear();
 		m_translucentEntitiesCulled.clear();
+		m_bvhCulledEntities.clear();
 		m_frustumCulling.update();
 
 		// Iterate over all entities to determine the potentially visible ones
-		// TODO: Object hierarchy for early pruning
-		for(auto& e : m_entities)
+		// Static entities
+		m_bvh.get(m_frustumCulling.getBoundingSphere(), m_bvhCulledEntities);
+		for (auto& e : m_bvhCulledEntities)
 		{
 			// Frustum culling
-			Vec4f const& center = e->getModelMatrix()[3];
-			Vec3f c{center[0], center[1], center[2]};
-			float radius = e->getBoundingSphere();
-			if(m_frustumCulling.checkSphere(c, radius))
+			auto const& sphere = e->getBoundingSphere();
+			if (m_frustumCulling.checkSphere(sphere.getCenter(), sphere.getRadius()))
 				m_entitiesCulled.push_back(&*e);
 		}
-		for(auto& e : m_translucentEntities)
+		// Dynamic entities
+		for (auto& e : m_entities)
 		{
 			// Frustum culling
-			Vec4f const& center = e->getModelMatrix()[3];
-			Vec3f c{center[0], center[1], center[2]};
-			float radius = e->getBoundingSphere();
-			if(m_frustumCulling.checkSphere(c, radius))
+			auto const& sphere = e->getBoundingSphere();
+			if (m_frustumCulling.checkSphere(sphere.getCenter(), sphere.getRadius()))
+				m_entitiesCulled.push_back(&*e);
+		}
+		// Translucent entities
+		for (auto& e : m_translucentEntities)
+		{
+			// Frustum culling
+			auto const& sphere = e->getBoundingSphere();
+			if (m_frustumCulling.checkSphere(sphere.getCenter(), sphere.getRadius()))
 				m_translucentEntitiesCulled.push_back(&*e);
 		}
 	}
