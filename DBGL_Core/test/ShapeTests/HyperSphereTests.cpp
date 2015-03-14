@@ -19,9 +19,9 @@ namespace dbgl_test_hypersphere
 	template<class T, unsigned int D> void testConstructor()
 	{
 		HyperSphere<T, D> sphere { };
-		ASSERT_EQ(sphere.center(), 0);
+		Vector<T, D> center = Vector<T, D> { };
+		ASSERT_EQ(sphere.center(), center);
 		ASSERT_EQ(sphere.radius(), 1);
-		Vector<T, D> center;
 		center[0] = 1;
 		HyperSphere<T, D> sphere2 { center, 2 };
 		ASSERT_EQ(sphere2.center(), center);

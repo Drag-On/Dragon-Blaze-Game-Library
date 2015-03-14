@@ -55,7 +55,7 @@ namespace dbgl
 	     * @brief Constructs a new vector and initializes all values with the same value
 	     * @param value Value used to initialize
 	     */
-	    Vector(T value);
+	    explicit Vector(T value);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -97,7 +97,7 @@ namespace dbgl
 	     * @brief Constructs a new vector and initializes all values with the same value
 	     * @param value Value used to initialize
 	     */
-	    Vector(T value);
+	    explicit Vector(T value);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -139,7 +139,7 @@ namespace dbgl
 	     * @brief Constructs a new vector and initializes all values with the same value
 	     * @param value Value used to initialize
 	     */
-	    Vector(T value);
+	    explicit Vector(T value);
 	    /**
 	     * @brief Copies a vector
 	     */
@@ -181,7 +181,7 @@ namespace dbgl
 	     * @brief Constructs a new vector and initializes all values with the same value
 	     * @param value Value used to initialize
 	     */
-	    Vector(T value);
+	    explicit Vector(T value);
 	    /**
 	     * @brief Copies a vector
 	     */
