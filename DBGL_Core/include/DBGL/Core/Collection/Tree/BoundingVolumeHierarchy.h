@@ -68,7 +68,7 @@ namespace dbgl
 		 * @param other BVH to move-assign
 		 * @return Reference to this
 		 */
-		BoundingVolumeHierarchy<Data, Volume>& operator=(BoundingVolumeHierarchy<Data, Volume>&& other);
+		BoundingVolumeHierarchy<Data, Volume>& operator=(BoundingVolumeHierarchy<Data, Volume> && other);
 		/**
 		 * @brief Inserts an element into the tree
 		 * @param volume Volumetric data of the element to add
@@ -137,8 +137,8 @@ namespace dbgl
 				std::vector<Aggregate*>& result, Node* node) const;
 		void get(IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
 				std::vector<Data*>& result, Node* node) const;
-		void get(IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range,
-				std::vector<Data>& result, Node* node) const;
+		void get(IShape<typename Volume::PrecisionType, Volume::getDimension()> const& range, std::vector<Data>& result,
+				Node* node) const;
 
 		Node* m_pRoot = nullptr;
 	};

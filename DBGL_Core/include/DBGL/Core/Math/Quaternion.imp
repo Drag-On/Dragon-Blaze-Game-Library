@@ -90,22 +90,22 @@ namespace dbgl
     template <typename T> Quaternion<T>& Quaternion<T>::fromAngleAxis(Vector3<T> axis, T angle)
 	{
     	axis.normalize();
-    	x() = axis.x() * sin(angle / 2);
-		y() = axis.y() * sin(angle / 2);
-		z() = axis.z() * sin(angle / 2);
-		w() = cos(angle / 2);
+    	x() = axis.x() * std::sin(angle / 2.0);
+		y() = axis.y() * std::sin(angle / 2.0);
+		z() = axis.z() * std::sin(angle / 2.0);
+		w() = std::cos(angle / 2.0);
 		
 		return *this;
 	}
     
     template <typename T> Quaternion<T>& Quaternion<T>::fromAngles(Vector3<T> const& angles)
 	{
-    	T cosXHalf = std::cos(angles.x() / 2);
-    	T cosYHalf = std::cos(angles.y() / 2);
-    	T cosZHalf = std::cos(angles.z() / 2);
-    	T sinXHalf = std::sin(angles.x() / 2);
-		T sinYHalf = std::sin(angles.y() / 2);
-		T sinZHalf = std::sin(angles.z() / 2);
+    	T cosXHalf = std::cos(angles.x() / 2.0);
+    	T cosYHalf = std::cos(angles.y() / 2.0);
+    	T cosZHalf = std::cos(angles.z() / 2.0);
+    	T sinXHalf = std::sin(angles.x() / 2.0);
+		T sinYHalf = std::sin(angles.y() / 2.0);
+		T sinZHalf = std::sin(angles.z() / 2.0);
 		
 		w() = cosXHalf * cosYHalf * cosZHalf + sinXHalf * sinYHalf * sinZHalf;
 		x() = sinXHalf * cosYHalf * cosZHalf - cosXHalf * sinYHalf * sinZHalf;
@@ -140,9 +140,9 @@ namespace dbgl
 			axis = start.cross(dest);
 			T s = std::sqrt((1 + cosTheta) * 2);
 	
-			x() = axis.x() * 1 / s;
-			y() = axis.y() * 1 / s;
-			z() = axis.z() * 1 / s;
+			x() = axis.x() * 1.0 / s;
+			y() = axis.y() * 1.0 / s;
+			z() = axis.z() * 1.0 / s;
 			w() = s * 0.5;
 		}
 		
@@ -204,10 +204,10 @@ namespace dbgl
     template <typename T> Vector3<T> Quaternion<T>::getAngles() const
 	{
 		Vector3<T> angles{};
-		angles[0] = atan2(2 * (y() * z() + w() * x()),
+		angles[0] = std::atan2(2 * (y() * z() + w() * x()),
 				w() * w() - x() * x() - y() * y() + z() * z());
-		angles[1] = asin(-2 * (x() * z() - w() * y()));
-		angles[2] = atan2(2 * (x() * y() + w() * z()),
+		angles[1] = std::asin(-2 * (x() * z() - w() * y()));
+		angles[2] = std::atan2(2 * (x() * y() + w() * z()),
 				w() * w() + x() * x() - y() * y() - z() * z());
 		return angles;
 	}
