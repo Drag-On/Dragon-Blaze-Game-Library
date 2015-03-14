@@ -84,7 +84,7 @@ namespace dbgl
 		bool negative = false;
 		for (unsigned int i = 0; i < 2 * D; i++)
 		{
-			auto signum = dbgl::sign(getSignedDistance(other[i]));
+			auto signum = dbgl::sign(getSignedDistance(other.getCorner(i)));
 			if (signum == 0)
 				return true;
 			else if (signum == 1)
