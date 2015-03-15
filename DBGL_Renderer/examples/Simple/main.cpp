@@ -34,7 +34,7 @@ IShaderProgram* pShaderProgramSprite = nullptr;
 ITexture* pTex = nullptr;
 BitmapFont* pFont = nullptr;
 
-std::default_random_engine random;
+std::default_random_engine randomizer;
 
 class Camera : public ICameraEntity
 {
@@ -231,9 +231,9 @@ IShaderProgram* loadShader(string vertex, string fragment)
 void addRandomEntities(unsigned int amount)
 {
 	std::uniform_real_distribution<float> dist(-100, 100);
-	auto randFloat = std::bind(dist, random);
+	auto randFloat = std::bind(dist, randomizer);
 	std::uniform_real_distribution<float> dist2(1, 10);
-	auto randFloat2 = std::bind(dist2, random);
+	auto randFloat2 = std::bind(dist2, randomizer);
 	for(unsigned int i = 0; i < amount; i++)
 	{
 		entities.emplace_back(pSphere, pShaderProgram, pTex, false, 0, 1);

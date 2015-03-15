@@ -33,12 +33,12 @@ include_directories(${DBGL_PLATFORM_INCLUDE_DIR})
 ######################################################################
 ### Make target
 ######################################################################
-add_library(DBGL_RENDERER SHARED ${SRC})
-set_target_properties(DBGL_RENDERER PROPERTIES LINKER_LANGUAGE CXX)
+add_library(DBGL_Renderer SHARED ${SRC})
+set_target_properties(DBGL_Renderer PROPERTIES LINKER_LANGUAGE CXX)
 
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_RENDERER "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_RENDERER "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
-target_link_libraries(DBGL_RENDERER "${DBGL_LIB_DIR}/${DBGL_RESOURCES_LIB_NAME}")
+target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
+target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
+target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_RESOURCES_LIB_NAME}")
