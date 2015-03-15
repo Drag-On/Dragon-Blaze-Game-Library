@@ -7,4 +7,4 @@ void main(){
 	float variance = max(0.0, dot(vec3(0, 0, 1), normal_cam));
 	variance += max(0.0, dot(vec3(0, 0, 1), -normal_cam));
 	color = texture(tex_diffuse, uv).rgba * variance;
-};
+}
