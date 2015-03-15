@@ -10,120 +10,174 @@
 
 namespace dbgl
 {
-	template<typename T> Matrix2x2<T>::Matrix2x2() : BaseMatrixType()
+	template<typename T> Matrix2x2<T>::Matrix2x2()
+			: BaseMatrixType()
 	{
 	}
-	
-	template<typename T> Matrix2x2<T>::Matrix2x2(const BaseMatrixType &other) : BaseMatrixType(other)
+
+	template<typename T> Matrix2x2<T>::Matrix2x2(T value)
+			: BaseMatrixType(value)
+	{
+	}
+
+	template<typename T> template<unsigned int N2, unsigned int M2> Matrix2x2<T>::Matrix2x2(
+			Matrix<T, N2, M2> const& other)
+			: BaseMatrixType(other)
+	{
+	}
+
+	template<typename T> Matrix2x2<T>::Matrix2x2(std::initializer_list<Vector<T, 2>> args)
+			: BaseMatrixType(args)
+	{
+	}
+
+	template<typename T> Matrix2x2<T>::Matrix2x2(const BaseMatrixType &other)
+			: BaseMatrixType(other)
 	{
 	}
 
 	template<typename T> Matrix2x2<T>::~Matrix2x2()
 	{
 	}
-	
+
 	template<typename T> Matrix2x2<T>& Matrix2x2<T>::transpose()
 	{
-		auto copy(*this); // Need old values
-		for(int x = 0; x < this->getWidth(); x++)
-			for(int y = 0; y < this->getHeight(); y++)
-				(*this)[x][y] = copy[y][x];
+		auto copy = getTransposed();
+		for (int x = 0; x < this->getWidth(); x++)
+			(*this)[x] = copy[x];
 		return *this;
 	}
-	
+
 	template<typename T> Matrix2x2<T>& Matrix2x2<T>::invert()
 	{
 		auto copy(*this);
 		T determinant = copy[0][0] * copy[1][1] - copy[1][0] * copy[0][1];
 		assert(determinant != 0);
 		(*this)[0][0] = copy[1][1];
-		(*this)[1][0] = -copy[1][0];
 		(*this)[0][1] = -copy[0][1];
+		(*this)[1][0] = -copy[1][0];
 		(*this)[1][1] = copy[0][0];
 		(*this) *= 1 / determinant;
 		return *this;
 	}
-	
+
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::getInverted() const
 	{
 		auto copy(*this);
 		copy.invert();
 		return copy;
 	}
-	
+
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeRotation(T angle)
 	{
-		BaseMatrixType mat{};
-		T cosAngle = cos(angle);
-		T sinAngle = sin(angle);
+		BaseMatrixType mat;
+		T cosAngle = std::cos(angle);
+		T sinAngle = std::sin(angle);
 		mat[0][0] = cosAngle;
-		mat[1][0] = -sinAngle;
 		mat[0][1] = sinAngle;
+		mat[1][0] = -sinAngle;
 		mat[1][1] = cosAngle;
 		return mat;
 	}
-	
+
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T factor)
 	{
-		BaseMatrixType mat{};
+		BaseMatrixType mat;
 		mat *= factor;
 		return mat;
 	}
-	
+
 	template<typename T> Matrix2x2<T> Matrix2x2<T>::makeScale(T x, T y)
 	{
-		BaseMatrixType mat{};
+		BaseMatrixType mat;
 		mat[0][0] *= x;
 		mat[1][1] *= y;
 		return mat;
 	}
 
-	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator+(BaseMatrixType const& rhs) const
-	{ 
+	template<typename T> inline Matrix2x2<T> Matrix2x2<T>::getTransposed() const
+	{
+		return BaseMatrixType::getTransposed();
+	}
+
+	template<typename T> inline Matrix2x2<T>& Matrix2x2<T>::operator=(BaseMatrixType const& rhs)
+	{
+		BaseMatrixType::operator=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline const Matrix2x2<T> Matrix2x2<T>::operator+(BaseMatrixType const& rhs) const
+	{
 		return BaseMatrixType::operator+(rhs);
 	}
-	
-	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator-(BaseMatrixType const& rhs) const
-	{ 
+
+	template<typename T> inline Matrix2x2<T>& Matrix2x2<T>::operator+=(BaseMatrixType const& rhs)
+	{
+		BaseMatrixType::operator+=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline const Matrix2x2<T> Matrix2x2<T>::operator-(BaseMatrixType const& rhs) const
+	{
 		return BaseMatrixType::operator-(rhs);
 	}
-	
-	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator*(BaseMatrixType const& rhs) const
+
+	template<typename T> inline Matrix2x2<T>& Matrix2x2<T>::operator-=(BaseMatrixType const& rhs)
 	{
-		return BaseMatrixType::operator*(rhs);
+		BaseMatrixType::operator-=(rhs);
+		return *this;
 	}
-	
-	template<typename T> const Vector2<T> Matrix2x2<T>::operator*(Vector<T,2> const& rhs) const
+
+	template<typename T> template<unsigned int O> inline const Matrix<T, 2, O> Matrix2x2<T>::operator*(
+			Matrix<T, O, 2> const& rhs) const
 	{
-		return BaseMatrixType::operator*(rhs);
-	}
-	
-	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator*(T const& rhs) const
-	{ 
 		return BaseMatrixType::operator*(rhs);
 	}
 
-	
-	template<typename T> Matrix2x2<T>& Matrix2x2<T>::operator*=(BaseMatrixType const& rhs)
+	template<typename T> inline const Matrix2x2<T> Matrix2x2<T>::operator*(Matrix<T, 2, 2> const& rhs) const
 	{
-		auto copy(*this);
-		for(int x = 0; x < this->getWidth(); x++)
-			for(int y = 0; y < this->getHeight(); y++)
-			{
-				(*this)[x][y] = 0;
-				for(int i = 0; i < this->getHeight(); i++)
-					(*this)[x][y] += copy[i][y] * rhs[x][i];
-			}
+		return BaseMatrixType::operator*(rhs);
+	}
+
+	template<typename T> inline const Vector2<T> Matrix2x2<T>::operator*(Vector<T, 2> const& rhs) const
+	{
+		return BaseMatrixType::operator*(rhs);
+	}
+
+	template<typename T> inline const Matrix2x2<T> Matrix2x2<T>::operator*(T const& rhs) const
+	{
+		return BaseMatrixType::operator*(rhs);
+	}
+
+	template<typename T> inline Matrix2x2<T>& Matrix2x2<T>::operator*=(T const& rhs)
+	{
+		BaseMatrixType::operator*=(rhs);
 		return *this;
 	}
-	
-	template<typename T> const Matrix2x2<T> Matrix2x2<T>::operator/(T const& rhs) const
-	{ 
+
+	template<typename T> inline const Matrix2x2<T> Matrix2x2<T>::operator/(T const& rhs) const
+	{
 		return BaseMatrixType::operator/(rhs);
 	}
-	
-	template<typename T> Matrix2x2<T> Matrix2x2<T>::operator-() const
+
+	template<typename T> inline Matrix2x2<T>& Matrix2x2<T>::operator/=(T const& rhs)
+	{
+		BaseMatrixType::operator/=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline Matrix2x2<T> Matrix2x2<T>::operator-() const
 	{
 		return BaseMatrixType::operator-();
+	}
+
+	template<typename T> inline Matrix2x2<T> operator*(Matrix<T, 2, 2> const& lhs, T const& rhs)
+	{
+		return lhs * rhs;
+	}
+
+	template<typename T> inline Matrix2x2<T> operator*(T const& lhs, Matrix<T, 2, 2> const& rhs)
+	{
+		return rhs * lhs;
 	}
 }
