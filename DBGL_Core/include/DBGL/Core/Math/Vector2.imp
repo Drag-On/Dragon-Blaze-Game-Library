@@ -10,46 +10,158 @@
 
 namespace dbgl
 {
-	template<typename T> Vector2<T>::Vector2() : BaseVectorType()
-	{
-	}
-	
-	template<typename T> Vector2<T>::Vector2(T x, T y) : BaseVectorType(2, x, y)
+	template<typename T> Vector2<T>::Vector2()
+			: BaseVectorType()
 	{
 	}
 
-	template<typename T> Vector2<T>::Vector2(const BaseVectorType &other) : BaseVectorType(other)
+	template<typename T> Vector2<T>::Vector2(T x, T y)
+			: BaseVectorType( { x, y })
+	{
+	}
+
+	template<typename T> Vector2<T>::Vector2(T value)
+			: BaseVectorType(value)
+	{
+	}
+
+	template<typename T> template<unsigned int N2> Vector2<T>::Vector2(Vector<T, N2> const& other)
+			: BaseVectorType(other)
+	{
+	}
+
+	template<typename T> Vector2<T>::Vector2(const BaseVectorType &other)
+			: BaseVectorType(other)
+	{
+	}
+
+	template<typename T> Vector2<T>::Vector2(std::initializer_list<T> args)
+			: BaseVectorType(args)
 	{
 	}
 
 	template<typename T> Vector2<T>::~Vector2()
 	{
 	}
-	
-	template<typename T> const T& Vector2<T>::x() const
+
+	template<typename T> inline T const& Vector2<T>::x() const
 	{
 		return (*this)[0];
 	}
-	
-	template<typename T> T& Vector2<T>::x()
+
+	template<typename T> inline T& Vector2<T>::x()
 	{
 		return (*this)[0];
 	}
-	
-	template<typename T> const T& Vector2<T>::y() const
+
+	template<typename T> inline T const& Vector2<T>::y() const
 	{
 		return (*this)[1];
 	}
-	
-	template<typename T> T& Vector2<T>::y()
+
+	template<typename T> inline T& Vector2<T>::y()
 	{
 		return (*this)[1];
 	}
-	
+
 	template<typename T> Vector2<T>& Vector2<T>::translate(T x, T y)
 	{
 		this->x() += x;
 		this->y() += y;
 		return *this;
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::normalize()
+	{
+		BaseVectorType::normalize();
+		return *this;
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::getNormalized() const
+	{
+		return BaseVectorType::getNormalized();
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::cross(BaseVectorType const& rhs) const
+	{
+		return BaseVectorType::cross(rhs);
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator=(BaseVectorType const& rhs)
+	{
+		return BaseVectorType::operator=(rhs);
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::operator+(BaseVectorType const& rhs) const
+	{
+		return BaseVectorType::operator+(rhs);
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator+=(BaseVectorType const& rhs)
+	{
+		BaseVectorType::operator+=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::operator-(BaseVectorType const& rhs) const
+	{
+		return BaseVectorType::operator-(rhs);
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator-=(BaseVectorType const& rhs)
+	{
+		BaseVectorType::operator-=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline T Vector2<T>::operator*(BaseVectorType const& rhs) const
+	{
+		return BaseVectorType::operator*(rhs);
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::operator*(T const& rhs) const
+	{
+		return BaseVectorType::operator*(rhs);
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator*=(T const& rhs)
+	{
+		BaseVectorType::operator*=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator*=(BaseVectorType const& rhs)
+	{
+		BaseVectorType::operator*=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::operator/(T const& rhs) const
+	{
+		return BaseVectorType::operator/(rhs);
+	}
+
+	template<typename T> inline Vector2<T>& Vector2<T>::operator/=(T const& rhs)
+	{
+		BaseVectorType::operator/=(rhs);
+		return *this;
+	}
+
+	template<typename T> inline Vector2<T> Vector2<T>::operator-() const
+	{
+		return BaseVectorType::operator-(*this);
+	}
+
+	/*
+	 * Free function operators
+	 */
+	template<typename T> inline Vector2<T> operator*(Vector<T, 2> const& lhs, T const& rhs)
+	{
+		return lhs * rhs;
+	}
+
+	template<typename T> inline Vector2<T> operator*(T const& lhs, Vector<T, 2> const& rhs)
+	{
+		return rhs * lhs;
 	}
 }

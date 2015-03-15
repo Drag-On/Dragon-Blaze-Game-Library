@@ -8,133 +8,228 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
-// This implementation involves some pre-processor (black) magic.
-// In order to prevent copy & pasting of common parts of all Vector
-// specializations, the common part is included from a separate file.
-// In this case deriving from a common supertype was not an option
-// since operators don't work well with inheritance.
-//
-// Specialization was necessary since some types get promoted when
-// using variadic functions; e.g. float becomes double. Using
-// va_arg(args, TYPE) with the wrong type makes the program crash.
-// Unfortunately constructors can not be specialized, just methods
-// or whole classes.
-//////////////////////////////////////////////////////////////////////
-
 namespace dbgl
 {
-    /*
-     * Vector<T,N>
-     * General type, no specialization
-     */
-    #undef T
-	#undef TEMPLATE_LIST
-    #undef RETURN_QUALIFIER
-    #define TEMPLATE_LIST typename T, unsigned int N
-    #define RETURN_QUALIFIER const
-    #include "Vector_Common.spart"
-
-	template<typename T, unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
+	template<typename T, unsigned int N> Vector<T, N>::Vector()
 	{
-		va_list args{};
-		va_start(args, n);
-		
-		for (unsigned int i = 0; i < n && i < getDimension(); i++)
-		{
-		    (*this)[i] = va_arg(args, T);
-		}
-		
-		va_end(args);
-	}
-	
-	/*
-	 * Vector<float,N>
-	 * Specialized for floats
-	 */
-	#undef T
-	#undef TEMPLATE_LIST
-    #undef RETURN_QUALIFIER
-    #define T float
-    #define TEMPLATE_LIST unsigned int N
-    #define RETURN_QUALIFIER
-    #include "Vector_Common.spart"
-	
-	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
-	{
-		va_list args{};
-		va_start(args, n);
-		
-		for (unsigned int i = 0; i < n && i < getDimension(); i++)
-		{
-			(*this)[i] = static_cast<float>(va_arg(args, double));
-		}
-		
-		va_end(args);
-	}
-	
-	/*
-	 * Vector<char,N>
-	 * Specialized for chars
-	 */
-	#undef T
-	#undef TEMPLATE_LIST
-    #undef RETURN_QUALIFIER
-	#define T char
-	#define TEMPLATE_LIST unsigned int N
-    #define RETURN_QUALIFIER
-	#include "Vector_Common.spart"
-	
-	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
-	{
-		va_list args{};
-		va_start(args, n);
-		
-		for (unsigned int i = 0; i < n && i < getDimension(); i++)
-		{
-			(*this)[i] = va_arg(args, int);
-		}
-		
-		va_end(args);
 	}
 
-	/*
-	 * Vector<short,N>
-	 * Specialized for shorts
-	 */
-	#undef T
-	#undef TEMPLATE_LIST
-    #undef RETURN_QUALIFIER
-	#define T short
-	#define TEMPLATE_LIST unsigned int N
-    #define RETURN_QUALIFIER
-	#include "Vector_Common.spart"
-	
-	template<unsigned int N> Vector<T,N>::Vector(unsigned int n, ...)
+	template<typename T, unsigned int N> Vector<T, N>::Vector(T value)
 	{
-		va_list args{};
-		va_start(args, n);
-		
-		for (unsigned int i = 0; i < n && i < getDimension(); i++)
-		{
-			(*this)[i] = va_arg(args, int);
-		}
-		
-		va_end(args);
+		std::fill_n(m_elements, N, value);
 	}
-	
-    #undef T
-    #undef TEMPLATE_LIST
-	
+
+	template<typename T, unsigned int N> template<unsigned int N2> Vector<T, N>::Vector(Vector<T, N2> const& other)
+	{
+		static_assert(N2 <= N, "Vector may not have a larger dimensionality than the constructed.");
+		for (unsigned int i = 0; i < N2; i++)
+			(*this)[i] = other[i];
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>::Vector(Vector<T, N> const& other)
+	{
+		for (unsigned int i = 0; i < N; i++)
+			(*this)[i] = other[i];
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>::Vector(std::initializer_list<T> args)
+	{
+		if (args.size() > N)
+			throw(std::invalid_argument { "Too many arguments." });
+		unsigned int i = 0;
+		for (auto n : args)
+		{
+			(*this)[i] = n;
+			i++;
+		}
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>::~Vector()
+	{
+	}
+
+	template<typename T, unsigned int N> inline constexpr std::size_t Vector<T, N>::getDimension()
+	{
+		return N;
+	}
+
+	template<typename T, unsigned int N> inline T Vector<T, N>::getSquaredLength() const
+	{
+		return this->dot(*this);
+	}
+
+	template<typename T, unsigned int N> inline T Vector<T, N>::getLength() const
+	{
+		return std::sqrt(getSquaredLength());
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::normalize()
+	{
+		(*this) /= getLength();
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::getNormalized() const
+	{
+		Vector<T, N> copy(*this);
+		copy.normalize();
+		return copy;
+	}
+
+	template<typename T, unsigned int N> inline T Vector<T, N>::dot(Vector<T, N> const& rhs) const
+	{
+		return (*this) * rhs;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::cross(Vector<T, N> const& rhs) const
+	{
+		Vector<T, N> copy(*this);
+		copy *= rhs;
+		return copy;
+	}
+
+	template<typename T, unsigned int N> bool Vector<T, N>::isZero() const
+	{
+		return std::all_of(std::begin(m_elements), std::end(m_elements), [](T e)
+		{	return e==0;});
+	}
+
+	template<typename T, unsigned int N> bool Vector<T, N>::isSimilar(Vector<T, N> const& other, double precision) const
+	{
+		return ((*this) - other).getSquaredLength() <= precision * precision;
+	}
+
+	template<typename T, unsigned int N> inline T const* Vector<T, N>::getDataPointer() const
+	{
+		return &((*this)[0]);
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator=(Vector<T, N> const& rhs)
+	{
+		if (*this != rhs)
+		{
+			for (unsigned int i = 0; i < N; i++)
+				(*this)[i] = rhs[i];
+		}
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::operator+(Vector<T, N> const& rhs) const
+	{
+		Vector<T, N> tmp(*this);
+		tmp += rhs;
+		return tmp;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator+=(Vector<T, N> const& rhs)
+	{
+		for (unsigned int i = 0; i < N; i++)
+			(*this)[i] += rhs[i];
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::operator-(Vector<T, N> const& rhs) const
+	{
+		Vector<T, N> tmp(*this);
+		tmp -= rhs;
+		return tmp;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator-=(Vector<T, N> const& rhs)
+	{
+		for (unsigned int i = 0; i < N; i++)
+			(*this)[i] -= rhs[i];
+		return *this;
+	}
+
+	template<typename T, unsigned int N> T Vector<T, N>::operator*(Vector<T, N> const& rhs) const
+	{
+		T dotProd = 0;
+		for (unsigned int i = 0; i < N; i++)
+			dotProd += (*this)[i] * rhs[i];
+		return dotProd;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::operator*(T const& rhs) const
+	{
+		Vector<T, N> tmp(*this);
+		tmp *= rhs;
+		return tmp;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator*=(T const& rhs)
+	{
+		for (unsigned int i = 0; i < N; i++)
+			(*this)[i] *= rhs;
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator*=(Vector<T, N> const& rhs)
+	{
+		Vector<T, N> temp(*this); // Need copy of unmodified data
+		for (unsigned int i = 0; i < N; i++)
+		{
+			int i1 = (i + 1) % N;
+			int i2 = (i + 2) % N;
+			(*this)[i] = temp[i1] * rhs[i2] - temp[i2] * rhs[i1];
+		}
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::operator/(T const& rhs) const
+	{
+		Vector<T, N> tmp(*this);
+		tmp /= rhs;
+		return tmp;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N>& Vector<T, N>::operator/=(T const& rhs)
+	{
+		for (unsigned int i = 0; i < N; i++)
+			(*this)[i] /= rhs;
+		return *this;
+	}
+
+	template<typename T, unsigned int N> Vector<T, N> Vector<T, N>::operator-() const
+	{
+		Vector<T, N> tmp(*this);
+		for (unsigned int i = 0; i < N; i++)
+			tmp[i] = -(*this)[i];
+		return tmp;
+	}
+
+	template<typename T, unsigned int N> bool Vector<T, N>::operator==(Vector<T, N> const& rhs) const
+	{
+		for (unsigned int i = 0; i < N; i++)
+			if ((*this)[i] != rhs[i])
+				return false;
+		return true;
+	}
+
+	template<typename T, unsigned int N> bool Vector<T, N>::operator!=(Vector<T, N> const& rhs) const
+	{
+		return !(*this == rhs);
+	}
+
+	template<typename T, unsigned int N> inline T& Vector<T, N>::operator[](std::size_t const& index)
+	{
+		return m_elements[index];
+	}
+
+	template<typename T, unsigned int N> inline T const& Vector<T, N>::operator[](std::size_t const& index) const
+	{
+		return m_elements[index];
+	}
+
 	/*
 	 * Free function operators
 	 */
-	template<typename T, unsigned int N> const Vector<T, N> operator*(Vector<T, N> const& lhs, T const& rhs)
+	template<typename T, unsigned int N> inline Vector<T, N> operator*(Vector<T, N> const& lhs, T const& rhs)
 	{
 		return lhs * rhs;
 	}
-	
-	template<typename T, unsigned int N> const Vector<T, N> operator*(T const& lhs, Vector<T, N> const& rhs)
+
+	template<typename T, unsigned int N> inline Vector<T, N> operator*(T const& lhs, Vector<T, N> const& rhs)
 	{
 		return rhs * lhs;
 	}
