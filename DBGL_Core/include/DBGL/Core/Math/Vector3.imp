@@ -160,7 +160,7 @@ namespace dbgl
 
 	template<typename T> inline Vector3<T> Vector3<T>::operator-() const
 	{
-		return BaseVectorType::operator-(*this);
+		return BaseVectorType::operator-();
 	}
 
 	/*
