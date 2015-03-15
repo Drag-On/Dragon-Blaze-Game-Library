@@ -15,8 +15,8 @@ namespace dbgl
 		return std::abs(a - b) <= precision;
 	}
 
-	template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(T a, T b,
-			int ulp)
+	template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isIdentical(T a, T b,
+			unsigned int ulp)
 	{
 		return std::abs(a - b) <= std::numeric_limits<T>::epsilon() * std::max(std::abs(a), std::abs(b)) * ulp;
 	}

@@ -84,14 +84,14 @@ namespace dbgl
 	 */
 	template<typename T> bool isSimilar(T a, T b, T precision = 0.01);
 	/**
-	 * @brief Checks if two values are similar using units in the last place
+	 * @brief Checks if two values are identical up to some units in the last place
 	 * @param a First value
 	 * @param b Second value
 	 * @param ulp Units in last place
 	 * @return True in case they are similar, otherwise false
 	 */
-	template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isSimilar(T a, T b,
-			int ulp);
+	template<typename T> typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type isIdentical(T a, T b,
+			unsigned int ulp);
 	/**
 	 * @brief Converts degrees into radians
 	 * @param degrees Angle to convert
