@@ -72,7 +72,7 @@ public:
 	}
 	virtual float getFar()
 	{
-		return 100;
+		return 300;
 	}
 	virtual float getFieldOfView()
 	{
@@ -102,6 +102,7 @@ public:
 	bool m_translucent = false;
 	int m_materialID;
 	Vec3f m_pos;
+	float m_scale = 1;
 	QuatF m_orientation;
 	Mat4f m_modelMat;
 	Sphere<float> m_bounds;
@@ -173,8 +174,9 @@ public:
 	}
 	void update()
 	{
-		m_modelMat = Mat4f::makeTranslation(m_pos) * m_orientation;
+		m_modelMat = Mat4f::makeTranslation(m_pos) * m_orientation * Mat4f::makeScale(m_scale);
 		m_bounds.center() = m_pos;
+		m_bounds.radius() = m_scale;
 	}
 };
 
@@ -228,13 +230,16 @@ IShaderProgram* loadShader(string vertex, string fragment)
 
 void addRandomEntities(unsigned int amount)
 {
-	std::uniform_real_distribution<float> dist(-10, 10);
+	std::uniform_real_distribution<float> dist(-100, 100);
 	auto randFloat = std::bind(dist, random);
+	std::uniform_real_distribution<float> dist2(1, 10);
+	auto randFloat2 = std::bind(dist2, random);
 	for(unsigned int i = 0; i < amount; i++)
 	{
 		entities.emplace_back(pSphere, pShaderProgram, pTex, false, 0, 1);
 		auto last = entities.rbegin();
 		last->m_pos = Vec3f{randFloat(), randFloat(), randFloat()};
+		last->m_scale = randFloat2();
 		last->update();
 		pRenderer->addEntity(&(*last));
 	}
@@ -289,7 +294,9 @@ int main()
 	cout << "Initializing renderer..." << endl;
 	pRenderer = new ForwardRenderer{false};
 	pRenderer->setCameraEntity(&cam);
-	addRandomEntities(50);
+	unsigned int amountEntities = 500;
+	cout << "Adding " << amountEntities << " entities with " << amountEntities * pSphere->getVertexCount() << " vertices and " << amountEntities * pSphere->getIndexCount() / 3 << " triangles." << endl;
+	addRandomEntities(amountEntities);
 	cout << "Showing window..." << endl;
 	pWnd->show();
 	while (pWnd->isOpen())
