@@ -18,306 +18,324 @@
 using namespace dbgl;
 using namespace std;
 
-const float numbers[] = {-1.5f, 1.0f, 0.256f, 25.0f, -100.38585f, 0.00001f, 42.1337f, 571, 43.495f};
+const float numbers[] = { -1.5f, 1.0f, 0.256f, 25.0f, -100.38585f, 0.00001f, 42.1337f, 571, 43.495f };
 
-template <class Vec> void testConstructor()
+template<class Vec> void testConstructor()
 {
-    Vec vec;
-    for(unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT_EQ(vec[i], 0);
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT_EQ(vec[i], 0);
+	Vec2f vec2 { 42, 23 };
+	Vec vecFromSmaller { vec2 };
+	ASSERT_EQ(vecFromSmaller[0], 42);
+	ASSERT_EQ(vecFromSmaller[1], 23);
+	Vec copy { vec };
+	ASSERT_EQ(copy, vec);
+	Vec init { 1, -3.7f };
+	ASSERT_EQ(init[0], 1);
+	ASSERT_EQ(init[1], -3.7f);
+	for (unsigned int i = 2; i < Vec::getDimension(); i++)
+		ASSERT_EQ(init[i], 0);
+	bool tooManyArguments = true;
+	try
+	{
+		Vec error { -1.5f, 1.0f, 0.256f, 25.0f, -100.38585f, 0.00001f, 42.1337f, 571, 43.495f };
+	}
+	catch (...)
+	{
+		tooManyArguments = false;
+	}
+	ASSERT_EQ(tooManyArguments, false);
 }
 
-TEST(Vector,construct)
+TEST(Vector, construct)
 {
-    testConstructor<Vec2f>();
-    testConstructor<Vec3f>();
-    testConstructor<Vec4f>();
+	testConstructor<Vec2f>();
+	testConstructor<Vec3f>();
+	testConstructor<Vec4f>();
 }
 
 template<class Vec> void testCoordinates()
 {
-    Vec vec;
-    for(unsigned int i = 0; i< vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    for(unsigned int i = 0; i< vec.getDimension(); i++)
-	ASSERT_EQ(vec[i], numbers[i]);
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT_EQ(vec[i], numbers[i]);
 }
 
-TEST(Vector,directaccess)
+TEST(Vector, directaccess)
 {
-    testCoordinates<Vec2f>();
-    testCoordinates<Vec3f>();
-    testCoordinates<Vec4f>();
+	testCoordinates<Vec2f>();
+	testCoordinates<Vec3f>();
+	testCoordinates<Vec4f>();
 }
 
 template<class Vec> void testLength()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    // getSquaredLength()
-    auto sqLen = 0.0;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	sqLen += vec[i] * vec[i];
-    ASSERT(dbgl::isSimilar(vec.getSquaredLength(), (float)sqLen));
-    // getLength()
-    ASSERT(dbgl::isSimilar(vec.getLength(), (float)std::sqrt(sqLen)));
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+// getSquaredLength()
+	auto sqLen = 0.0;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		sqLen += vec[i] * vec[i];
+	ASSERT(dbgl::isSimilar(vec.getSquaredLength(), (float )sqLen));
+// getLength()
+	ASSERT(dbgl::isSimilar(vec.getLength(), (float )std::sqrt(sqLen)));
 }
 
-TEST(Vector,length)
+TEST(Vector, length)
 {
-    testLength<Vec2f>();
-    testLength<Vec3f>();
-    testLength<Vec4f>();
+	testLength<Vec2f>();
+	testLength<Vec3f>();
+	testLength<Vec4f>();
 }
 
 template<class Vec> void testNormalize()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
 
-    // getNormalized
-    auto temp = vec.getNormalized();
-    ASSERT(dbgl::isSimilar(temp.getLength(), 1.0f));
-    // normalize
-    vec.normalize();
-    ASSERT(dbgl::isSimilar(vec.getLength(), 1.0f));
+// getNormalized
+	auto temp = vec.getNormalized();
+	ASSERT(dbgl::isSimilar(temp.getLength(), 1.0f));
+// normalize
+	vec.normalize();
+	ASSERT(dbgl::isSimilar(vec.getLength(), 1.0f));
 }
 
-TEST(Vector,normalize)
+TEST(Vector, normalize)
 {
-    testNormalize<Vec2f>();
-    testNormalize<Vec3f>();
-    testNormalize<Vec4f>();
+	testNormalize<Vec2f>();
+	testNormalize<Vec3f>();
+	testNormalize<Vec4f>();
 }
 
 template<class Vec> void testCross()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    auto temp = vec.cross(vec2);
-    ASSERT_EQ(temp.getDimension(), vec.getDimension());
-    for(unsigned int i = 0; i < temp.getDimension(); i++)
-    {
-	unsigned int i1 = i+1;
-	unsigned int i2 = i+2;
-	if(i2 >= temp.getDimension())
-	    i2 -= temp.getDimension();
-	if(i1 >= temp.getDimension())
-	    i1 -= temp.getDimension();
-	ASSERT(dbgl::isSimilar(temp[i], vec[i1] * vec2[i2] - vec[i2] * vec2[i1]));
-    }
+	auto temp = vec.cross(vec2);
+	ASSERT_EQ(temp.getDimension(), vec.getDimension());
+	for (unsigned int i = 0; i < temp.getDimension(); i++)
+	{
+		unsigned int i1 = i + 1;
+		unsigned int i2 = i + 2;
+		if (i2 >= temp.getDimension())
+			i2 -= temp.getDimension();
+		if (i1 >= temp.getDimension())
+			i1 -= temp.getDimension();
+		ASSERT(dbgl::isSimilar(temp[i], vec[i1] * vec2[i2] - vec[i2] * vec2[i1]));
+	}
 }
 
-TEST(Vector,cross)
+TEST(Vector, cross)
 {
-    testCross<Vec2f>();
-    testCross<Vec3f>();
-    testCross<Vec4f>();
+	testCross<Vec2f>();
+	testCross<Vec3f>();
+	testCross<Vec4f>();
 }
 
 template<class Vec> void testIsZero()
 {
-    Vec vec;
-    Vec vec2;
-    for (unsigned int i = 0; i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	Vec vec2;
+	for (unsigned int i = 0; i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    // isZero
-    ASSERT(vec.isZero());
-    ASSERT(!vec2.isZero());
+// isZero
+	ASSERT(vec.isZero());
+	ASSERT(!vec2.isZero());
 }
 
-TEST(Vector,isZero)
+TEST(Vector, isZero)
 {
-    testIsZero<Vec2f>();
-    testIsZero<Vec3f>();
-    testIsZero<Vec4f>();
+	testIsZero<Vec2f>();
+	testIsZero<Vec3f>();
+	testIsZero<Vec4f>();
 }
 
 template<class Vec> void testGetDataPointer()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT(vec.getDataPointer()[i] == vec[i]);
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT(vec.getDataPointer()[i] == vec[i]);
 }
 
-TEST(Vector,getDataPointer)
+TEST(Vector, getDataPointer)
 {
-    testGetDataPointer<Vec2f>();
-    testGetDataPointer<Vec3f>();
-    testGetDataPointer<Vec4f>();
+	testGetDataPointer<Vec2f>();
+	testGetDataPointer<Vec3f>();
+	testGetDataPointer<Vec4f>();
 }
 
 template<class Vec> void testOperatorAssign()
 {
-    Vec vec;
-    Vec vec2;
-    for (unsigned int i = 0; i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	Vec vec2;
+	for (unsigned int i = 0; i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    vec = vec2;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT_EQ(vec[i], vec2[i]);
+	vec = vec2;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT_EQ(vec[i], vec2[i]);
 }
 
-TEST(Vector,operatorAssign)
+TEST(Vector, operatorAssign)
 {
-    testOperatorAssign<Vec2f>();
-    testOperatorAssign<Vec3f>();
-    testOperatorAssign<Vec4f>();
+	testOperatorAssign<Vec2f>();
+	testOperatorAssign<Vec3f>();
+	testOperatorAssign<Vec4f>();
 }
 
 template<class Vec> void testOperatorAdd()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
-    // +
-    auto vec3 = vec + vec2;
-    for (unsigned int i = 0; i < vec3.getDimension(); i++)
-	ASSERT(vec3[i] == vec[i] + vec2[i]);
-    // +=
-    Vec copy{vec};
-    vec += vec3;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT(vec[i] == copy[i] + vec3[i]);
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
+// +
+	auto vec3 = vec + vec2;
+	for (unsigned int i = 0; i < vec3.getDimension(); i++)
+		ASSERT(vec3[i] == vec[i] + vec2[i]);
+// +=
+	Vec copy { vec };
+	vec += vec3;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT(vec[i] == copy[i] + vec3[i]);
 }
 
-TEST(Vector,operatorAdd)
+TEST(Vector, operatorAdd)
 {
-    testOperatorAdd<Vec2f>();
-    testOperatorAdd<Vec3f>();
-    testOperatorAdd<Vec4f>();
+	testOperatorAdd<Vec2f>();
+	testOperatorAdd<Vec3f>();
+	testOperatorAdd<Vec4f>();
 }
 
 template<class Vec> void testOperatorSubtract()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    // -
-    auto vec3 = vec - vec2;
-    for (unsigned int i = 0; i < vec3.getDimension(); i++)
-	ASSERT(vec3[i] == vec[i] - vec2[i]);
-    // -=
-    Vec copy{vec};
-    vec -= vec3;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT(vec[i] == copy[i] - vec3[i]);
-    // -(unary)
-    copy = vec;
-    vec = -vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT(vec[i] == -copy[i]);
+// -
+	auto vec3 = vec - vec2;
+	for (unsigned int i = 0; i < vec3.getDimension(); i++)
+		ASSERT(vec3[i] == vec[i] - vec2[i]);
+// -=
+	Vec copy { vec };
+	vec -= vec3;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT(vec[i] == copy[i] - vec3[i]);
+// -(unary)
+	copy = vec;
+	vec = -vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT(vec[i] == -copy[i]);
 }
 
-TEST(Vector,operatorSubtract)
+TEST(Vector, operatorSubtract)
 {
-    testOperatorSubtract<Vec2f>();
-    testOperatorSubtract<Vec3f>();
-    testOperatorSubtract<Vec4f>();
+	testOperatorSubtract<Vec2f>();
+	testOperatorSubtract<Vec3f>();
+	testOperatorSubtract<Vec4f>();
 }
 
 template<class Vec> void testOperatorComparison()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    // ==
-    auto vec3 = vec2;
-    ASSERT(vec2 == vec3);
-    // !=
-    ASSERT(vec != vec2);
-    // < <= > >=
-    ASSERT(vec < vec2 || vec >= vec2);
-    ASSERT(vec > vec2 || vec <= vec2);
+// ==
+	auto vec3 = vec2;
+	ASSERT(vec2 == vec3);
+// !=
+	ASSERT(vec != vec2);
 }
 
-TEST(Vector,operatorComparison)
+TEST(Vector, operatorComparison)
 {
-    testOperatorComparison<Vec2f>();
-    testOperatorComparison<Vec3f>();
-    testOperatorComparison<Vec4f>();
+	testOperatorComparison<Vec2f>();
+	testOperatorComparison<Vec3f>();
+	testOperatorComparison<Vec4f>();
 }
 
 template<class Vec> void testOperatorMultiply()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    // *
-    auto vec3 = vec2 * 2;
-    for (unsigned int i = 0; i < vec3.getDimension(); i++)
-	ASSERT(vec3[i] == vec2[i] * 2);
-    float dotProd = 0;
-    for (unsigned int i = 0; i < vec3.getDimension(); i++)
-	dotProd += vec2[i] * vec[i];
-    ASSERT(vec2 * vec == dotProd);
-    // *=
-    Vec copy{vec2};
-    vec2 *= 0.5;
-    for (unsigned int i = 0; i < vec2.getDimension(); i++)
-	ASSERT(vec2[i] == copy[i] * 0.5);
-    copy = vec;
-    vec *= vec2;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	ASSERT(vec[i] == copy[i] * vec2[i]);
+// *
+	auto vec3 = vec2 * 2;
+	for (unsigned int i = 0; i < vec3.getDimension(); i++)
+		ASSERT(vec3[i] == vec2[i] * 2);
+	float dotProd = 0;
+	for (unsigned int i = 0; i < vec3.getDimension(); i++)
+		dotProd += vec2[i] * vec[i];
+	ASSERT(vec2 * vec == dotProd);
+// *=
+	Vec copy { vec2 };
+	vec2 *= 0.5;
+	for (unsigned int i = 0; i < vec2.getDimension(); i++)
+		ASSERT(vec2[i] == copy[i] * 0.5);
+	copy = vec;
+	vec *= vec2;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		ASSERT(vec[i] == copy[i] * vec2[i]);
 }
 
-TEST(Vector,operatorMultiply)
+TEST(Vector, operatorMultiply)
 {
-    testOperatorMultiply<Vec2f>();
-    testOperatorMultiply<Vec3f>();
-    testOperatorMultiply<Vec4f>();
+	testOperatorMultiply<Vec2f>();
+	testOperatorMultiply<Vec3f>();
+	testOperatorMultiply<Vec4f>();
 }
 
 template<class Vec> void testOperatorDivide()
 {
-    Vec vec;
-    for (unsigned int i = 0; i < vec.getDimension(); i++)
-	vec[i] = numbers[i];
-    Vec vec2;
-    for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
-	vec2[i] = numbers[i];
+	Vec vec;
+	for (unsigned int i = 0; i < vec.getDimension(); i++)
+		vec[i] = numbers[i];
+	Vec vec2;
+	for (unsigned int i = vec.getDimension(); i < vec2.getDimension(); i++)
+		vec2[i] = numbers[i];
 
-    // /
-    auto vec3 = vec2 / 2;
-    for (unsigned int i = 0; i < vec3.getDimension(); i++)
-	ASSERT(vec3[i] == vec2[i] / 2);
-    // /=
-    Vec copy{vec2};
-    vec2 /= 0.5;
-    for (unsigned int i = 0; i < vec2.getDimension(); i++)
-	ASSERT(vec2[i] == copy[i] / 0.5);
+// /
+	auto vec3 = vec2 / 2;
+	for (unsigned int i = 0; i < vec3.getDimension(); i++)
+		ASSERT(vec3[i] == vec2[i] / 2);
+// /=
+	Vec copy { vec2 };
+	vec2 /= 0.5;
+	for (unsigned int i = 0; i < vec2.getDimension(); i++)
+		ASSERT(vec2[i] == copy[i] / 0.5);
 }
 
-TEST(Vector,operatorDivide)
+TEST(Vector, operatorDivide)
 {
-    testOperatorDivide<Vec2f>();
-    testOperatorDivide<Vec3f>();
-    testOperatorDivide<Vec4f>();
+	testOperatorDivide<Vec2f>();
+	testOperatorDivide<Vec3f>();
+	testOperatorDivide<Vec4f>();
 }
