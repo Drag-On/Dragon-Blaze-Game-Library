@@ -160,6 +160,10 @@ public:
 	{
 		return m_materialID;
 	}
+	virtual Vec3f const& getPosition()
+	{
+		return m_pos;
+	}
 	virtual Mat4f const& getModelMatrix()
 	{
 		return m_modelMat;
@@ -254,25 +258,28 @@ void update()
 	auto& input = pWnd->getInput();
 
 	// Move camera entity
+	float speedup = 1.0f;
 	float xRot = 0, yRot = 0;
+	if (input.isDown(Input::Key::KEY_SPACE))
+		speedup = 5.0f;
 	if (input.isDown(Input::Key::KEY_W))
-		cam.m_pos += cam.m_dir * 2.5f * pRenderer->getDeltaTime();
+		cam.m_pos += cam.m_dir * 2.5f * pRenderer->getDeltaTime() * speedup;
 	if (input.isDown(Input::Key::KEY_S))
-		cam.m_pos -= cam.m_dir * 2.5f * pRenderer->getDeltaTime();
+		cam.m_pos -= cam.m_dir * 2.5f * pRenderer->getDeltaTime() * speedup;
 	if (input.isDown(Input::Key::KEY_A))
-		yRot += 0.5f * pRenderer->getDeltaTime();
+		yRot += 0.5f * pRenderer->getDeltaTime() * speedup;
 	if (input.isDown(Input::Key::KEY_D))
-		yRot -= 0.5f * pRenderer->getDeltaTime();
+		yRot -= 0.5f * pRenderer->getDeltaTime() * speedup;
 	if (input.isDown(Input::Key::KEY_Q))
-		xRot += 0.5f * pRenderer->getDeltaTime();
+		xRot += 0.5f * pRenderer->getDeltaTime() * speedup;
 	if (input.isDown(Input::Key::KEY_E))
-		xRot -= 0.5f * pRenderer->getDeltaTime();
+		xRot -= 0.5f * pRenderer->getDeltaTime() * speedup;
 	cam.m_orientation = QuatF(cam.m_up.cross(cam.m_dir), xRot) * QuatF(cam.m_up, yRot) * cam.m_orientation;
 }
 
 int main()
 {
-	cout << "Initing..." << endl;
+ 	cout << "Initing..." << endl;
 	Platform::init<OpenGL33>();
 	cout << "Creating a window..." << endl;
 	pWnd = Platform::get()->createWindow("Renderer", 720, 480, false, 4);

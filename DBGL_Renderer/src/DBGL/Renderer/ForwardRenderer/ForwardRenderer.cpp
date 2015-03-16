@@ -159,56 +159,100 @@ namespace dbgl
 	void ForwardRenderer::renderWithZPrePass(IRenderContext* rc)
 	{
 		cullAll();
-		Mat4f VP = m_pCamera->getProjectionMatrix() * m_pCamera->getViewMatrix();
 
-		// Do Z Pre-Pass
-		rc->enableColorBuffer(false, false, false, false);
-		rc->enableDepthBuffer(true);
-		rc->clear(IRenderContext::DEPTH);
-		rc->setDepthTest(IRenderContext::DepthTestValue::Less);
-		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		m_pZPrePassShader->use();
-		for (auto& e : m_entitiesCulled) // TODO: front-to-back order
+		if (m_entitiesCulled.size() > 0)
 		{
-			Mat4f MVP = VP * e->getModelMatrix();
-			Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(m_prePassMVPHandle, 1, false,
-					MVP.getDataPointer());
-			rc->drawMesh(e->getMesh());
+			// Sort the culled entities in front-to-back order, and the translucent entities in back-to-front order
+			auto sortFrontBack = [this](IRenderEntity* e1, IRenderEntity* e2)
+			{
+				return !this->compareBackFront(e1, e2);
+			};
+			auto sortBackFront = [this](IRenderEntity* e1, IRenderEntity* e2)
+			{
+				return this->compareBackFront(e1, e2);
+			};
+			std::sort(m_entitiesCulled.begin(), m_entitiesCulled.end(), sortFrontBack);
+			std::sort(m_translucentEntitiesCulled.begin(), m_translucentEntitiesCulled.end(), sortBackFront);
+
+			Mat4f VP = m_pCamera->getProjectionMatrix() * m_pCamera->getViewMatrix();
+
+			// Do Z Pre-Pass
+			rc->enableColorBuffer(false, false, false, false);
+			rc->enableDepthBuffer(true);
+			rc->clear(IRenderContext::DEPTH);
+			rc->setDepthTest(IRenderContext::DepthTestValue::Less);
+			rc->setDrawMode(IRenderContext::DrawMode::Fill);
+			m_pZPrePassShader->use();
+			for (auto& e : m_entitiesCulled)
+			{
+				Mat4f MVP = VP * e->getModelMatrix();
+				Platform::get()->curShaderProgram()->setUniformFloatMatrix4Array(m_prePassMVPHandle, 1, false,
+						MVP.getDataPointer());
+				rc->drawMesh(e->getMesh());
+			}
+
+			// Sort by material
+			auto sortMaterial = [this](IRenderEntity* e1, IRenderEntity* e2)
+			{
+				return e1->getMaterialId() < e2->getMaterialId();
+			};
+			std::sort(m_entitiesCulled.begin(), m_entitiesCulled.end(), sortMaterial);
+
+			// Do color pass
+			rc->enableColorBuffer(true, true, true, true);
+			rc->enableDepthBuffer(false);
+			rc->clear(IRenderContext::COLOR);
+			rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
+			rc->setDrawMode(IRenderContext::DrawMode::Fill);
+			int curMatId = m_entitiesCulled[0]->getMaterialId();
+			m_entitiesCulled[0]->setupMaterial();
+			for (auto& e : m_entitiesCulled)
+			{
+				if (curMatId != e->getMaterialId())
+				{
+					e->setupMaterial();
+					curMatId = e->getMaterialId();
+				}
+				e->setupUnique();
+				rc->drawMesh(e->getMesh());
+			}
 		}
 
-		// Do color pass
-		rc->enableColorBuffer(true, true, true, true);
-		rc->enableDepthBuffer(false);
-		rc->clear(IRenderContext::COLOR);
-		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
-		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for (auto& e : m_entitiesCulled) // TODO: ordered by material
+		if (m_translucentEntitiesCulled.size() > 0)
 		{
-			e->setupUnique();
-			e->setupMaterial();
-			rc->drawMesh(e->getMesh());
-		}
-
-		// Render translucent objects in back-to-front order
-		rc->enableDepthBuffer(true);
-		for (auto& e : m_translucentEntitiesCulled) // TODO: order
-		{
-			e->setupUnique();
-			e->setupMaterial();
-			rc->drawMesh(e->getMesh());
+			// Render translucent objects in back-to-front order
+			rc->enableDepthBuffer(true);
+			for (auto& e : m_translucentEntitiesCulled)
+			{
+				e->setupUnique();
+				e->setupMaterial();
+				rc->drawMesh(e->getMesh());
+			}
 		}
 	}
 
 	void ForwardRenderer::renderWithoutZPrePass(IRenderContext* rc)
 	{
 		cullAll();
+		// Sort the culled entities in front-to-back order, and the translucent entities in back-to-front order
+		auto sortFrontBack = [this](IRenderEntity* e1, IRenderEntity* e2)
+		{
+			return !this->compareBackFront(e1, e2);
+		};
+		auto sortBackFront = [this](IRenderEntity* e1, IRenderEntity* e2)
+		{
+			return this->compareBackFront(e1, e2);
+		};
+		std::sort(m_entitiesCulled.begin(), m_entitiesCulled.end(), sortFrontBack);
+		std::sort(m_translucentEntitiesCulled.begin(), m_translucentEntitiesCulled.end(), sortBackFront);
+
 		// Do color pass
 		rc->enableColorBuffer(true, true, true, true);
 		rc->enableDepthBuffer(true);
 		rc->clear(IRenderContext::COLOR | IRenderContext::DEPTH);
 		rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
 		rc->setDrawMode(IRenderContext::DrawMode::Fill);
-		for (auto& e : m_entitiesCulled) // TODO: ordered front-to-back
+		for (auto& e : m_entitiesCulled)
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -216,7 +260,7 @@ namespace dbgl
 		}
 
 		// Render translucent objects in back-to-front order
-		for (auto& e : m_translucentEntitiesCulled) // TODO: order
+		for (auto& e : m_translucentEntitiesCulled)
 		{
 			e->setupUnique();
 			e->setupMaterial();
@@ -258,6 +302,12 @@ namespace dbgl
 			if (m_frustumCulling.checkSphere(sphere.getCenter(), sphere.getRadius()))
 				m_translucentEntitiesCulled.push_back(&*e);
 		}
+	}
+
+	inline bool ForwardRenderer::compareBackFront(IRenderEntity* e1, IRenderEntity* e2) const
+	{
+		return ((m_pCamera->getPosition() - e1->getPosition()).getSquaredLength()
+				> (m_pCamera->getPosition() - e2->getPosition()).getSquaredLength());
 	}
 }
 

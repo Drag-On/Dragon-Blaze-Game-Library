@@ -49,6 +49,7 @@ namespace dbgl
 		void renderWithZPrePass(IRenderContext* rc);
 		void renderWithoutZPrePass(IRenderContext* rc);
 		void cullAll();
+		inline bool compareBackFront(IRenderEntity* e1, IRenderEntity* e2) const;
 
 		std::vector<IRenderEntity*> m_translucentEntities; // TODO: Use more appropriate data structure
 		std::vector<IRenderEntity*> m_entities;

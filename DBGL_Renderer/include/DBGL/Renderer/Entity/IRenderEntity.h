@@ -61,6 +61,11 @@ namespace dbgl
 		 */
 		virtual Sphere<float> const& getBoundingSphere() = 0;
 		/**
+		 * @brief Retrieves the entity position in world space
+		 * @return Entity position
+		 */
+		virtual Vec3f const& getPosition() = 0;
+		/**
 		 * @brief Retrieves the entitie's model matrix
 		 * @return Model matrix
 		 */
