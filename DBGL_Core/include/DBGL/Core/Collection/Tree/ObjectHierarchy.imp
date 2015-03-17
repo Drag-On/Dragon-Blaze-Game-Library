@@ -1,0 +1,174 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T> ObjectHierarchy<T>::~ObjectHierarchy()
+	{
+		// Free all nodes
+		for (auto n : m_nodes)
+			free(n);
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::insert(T const& data) -> Node*
+	{
+		Node* node = new Node(this);
+		node->m_data = data;
+		m_nodes.push_back(node);
+		m_size++;
+		return node;
+	}
+
+	template<typename T> bool ObjectHierarchy<T>::remove(Node* node)
+	{
+		auto iter = std::find(m_nodes.begin(), m_nodes.end(), node);
+		if (iter != m_nodes.end())
+		{
+			free(*iter);
+			m_nodes.erase(iter);
+			return true;
+		}
+		return false;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::find(std::function<bool(Node*)> criterion,
+			bool recursive) const -> Node*
+	{
+		return find(m_nodes, criterion, recursive);
+	}
+
+	template<typename T> void ObjectHierarchy<T>::findAll(std::function<bool(Node*)> criterion,
+			std::function<void(Node*)> use, bool recursive) const
+	{
+		findAll(m_nodes, criterion, use, recursive);
+	}
+
+	template<typename T> size_t ObjectHierarchy<T>::rootCount() const
+	{
+		return m_nodes.size();
+	}
+
+	template<typename T> size_t ObjectHierarchy<T>::size() const
+	{
+		return m_size;
+	}
+
+	template<typename T> void ObjectHierarchy<T>::clear()
+	{
+		// Free all nodes
+		for (auto n : m_nodes)
+			free(n);
+		m_size = 0;
+	}
+
+	template<typename T> void ObjectHierarchy<T>::free(Node* node)
+	{
+		for (Node* n : node->m_children)
+			free(n);
+		delete node;
+		m_size--;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::find(std::vector<Node*> const& nodes,
+			std::function<bool(Node*)> criterion, bool recursive) const -> Node*
+	{
+		for (auto n : nodes)
+		{
+			if (criterion(n))
+				return n;
+			if (recursive)
+			{
+				auto found = find(n->m_children, criterion, recursive);
+				if (found)
+					return found;
+			}
+		}
+		return nullptr;
+	}
+
+	template<typename T> void ObjectHierarchy<T>::findAll(std::vector<Node*> const& nodes,
+			std::function<bool(Node*)> criterion, std::function<void(Node*)> use, bool recursive) const
+	{
+		for (auto n : nodes)
+		{
+			if (criterion(n))
+				use(n);
+			if (recursive)
+			{
+				findAll(n->m_children, criterion, use, recursive);
+			}
+		}
+	}
+
+	template<typename T> ObjectHierarchy<T>::Node::Node(ObjectHierarchy* base)
+			: m_pBase(base)
+	{
+	}
+
+	template<typename T> T& ObjectHierarchy<T>::Node::data()
+	{
+		return m_data;
+	}
+
+	template<typename T> T const& ObjectHierarchy<T>::Node::data() const
+	{
+		return m_data;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::Node::parent() -> Node*
+	{
+		return m_pParent;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::Node::parent() const -> Node const*
+	{
+		return m_pParent;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::Node::insert(T const& data) -> Node*
+	{
+		Node* node = new Node(m_pBase);
+		node->m_data = data;
+		node->m_pParent = this;
+		m_children.push_back(node);
+		m_pBase->m_size++;
+		return node;
+	}
+
+	template<typename T> bool ObjectHierarchy<T>::Node::remove(Node* node)
+	{
+		auto iter = std::find(m_children.begin(), m_children.end(), node);
+		if (iter != m_children.end())
+		{
+			free(*iter);
+			m_children.erase(iter);
+			return true;
+		}
+		return false;
+	}
+
+	template<typename T> auto ObjectHierarchy<T>::Node::find(std::function<bool(Node*)> criterion,
+			bool recursive) const -> Node*
+	{
+		return find(m_children, criterion, recursive);
+	}
+
+	template<typename T> void ObjectHierarchy<T>::Node::findAll(std::function<bool(Node*)> criterion,
+			std::function<void(Node*)> use, bool recursive) const
+	{
+		findAll(m_children, criterion, use, recursive);
+	}
+
+	template<typename T> size_t ObjectHierarchy<T>::Node::childCount() const
+	{
+		return m_children.size();
+	}
+}
+
