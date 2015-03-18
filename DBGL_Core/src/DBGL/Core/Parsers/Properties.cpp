@@ -50,7 +50,7 @@ namespace dbgl
 		tokens.push_back(line.substr(start, end));
 		if (tokens.size() != 2)
 		{
-		    LOG.warning("Properties file \"%\" misformatted at line %!", path, lineNo);
+		    Log::getDefault().warning("Properties file \"%\" misformatted at line %!", path, lineNo);
 		    continue;
 		}
 		// Erase trailing spaces for key and leading spaces for value
@@ -58,14 +58,14 @@ namespace dbgl
 		tokens[1].erase(0, tokens[1].find_first_not_of(' '));
 		// Check if property already exists
 		if (m_properties.find(tokens[0]) != m_properties.end())
-		    LOG.warning("Properties file \"%\" contains multiple definitions for key \"%\" at line %!", path, tokens[0], lineNo);
+		    Log::getDefault().warning("Properties file \"%\" contains multiple definitions for key \"%\" at line %!", path, tokens[0], lineNo);
 		    // Add property
 		m_properties[tokens[0]] = tokens[1];
 	    }
 	    file.close();
 	    return true;
 	}
-	LOG.warning("Properties file \"%\" could not be opened!", path.c_str());
+	Log::getDefault().warning("Properties file \"%\" could not be opened!", path.c_str());
 	return false;
     }
 
@@ -78,7 +78,7 @@ namespace dbgl
 	    lineStream >> token;
 	    if (token.substr(0, m_cmntSymbol.size()) != m_keyPrefix)
 	    {
-		LOG.warning("Misformatted argument in \"%\"!", line.c_str());
+		Log::getDefault().warning("Misformatted argument in \"%\"!", line.c_str());
 		return;
 	    }
 	    std::string key = token.substr(m_cmntSymbol.size(), token.size());
@@ -86,7 +86,7 @@ namespace dbgl
 	    lineStream >> value;
 	    // Check if property already exists
 	    if (m_properties.find(key) != m_properties.end())
-		LOG.warning("Multiple definitions for key  \"%\"!", key.c_str());
+		Log::getDefault().warning("Multiple definitions for key  \"%\"!", key.c_str());
 		// Add property
 	    m_properties[key] = value;
 	}
@@ -99,14 +99,14 @@ namespace dbgl
 	    std::string token(argv[i]);
 	    if (token.substr(0, m_cmntSymbol.size()) != m_keyPrefix || argc <= i+1)
 	    {
-		LOG.warning("Misformatted argument in \"%\"!", token.c_str());
+		Log::getDefault().warning("Misformatted argument in \"%\"!", token.c_str());
 		return;
 	    }
 	    std::string key = token.substr(m_cmntSymbol.size(), token.size());
 	    std::string value(argv[i+1]);
 	    // Check if property already exists
 	    if (m_properties.find(key) != m_properties.end())
-		LOG.warning("Multiple definitions for key  \"%\"!", key.c_str());
+		Log::getDefault().warning("Multiple definitions for key  \"%\"!", key.c_str());
 		// Add property
 	    m_properties[key] = value;
 	}
@@ -167,7 +167,7 @@ namespace dbgl
 	}
 	else
 	{
-	    LOG.warning("Properties file \"%\" could not be opened for reading!", m_filename);
+	    Log::getDefault().warning("Properties file \"%\" could not be opened for reading!", m_filename);
 	    return false;
 	}
 	// Replace file with new content
@@ -182,7 +182,7 @@ namespace dbgl
 	}
 	else
 	{
-	    LOG.warning("Properties file \"%\" could not be opened for writing!", m_filename);
+	    Log::getDefault().warning("Properties file \"%\" could not be opened for writing!", m_filename);
 	    return false;
 	}
     }
@@ -204,7 +204,7 @@ namespace dbgl
 		outFile.close();
 		return true;
 	    }
-	    LOG.warning("Properties file \"%\" could not be opened!", path);
+	    Log::getDefault().warning("Properties file \"%\" could not be opened!", path);
 	    return false;
 	}
     }
@@ -213,7 +213,7 @@ namespace dbgl
     {
 	// Check if property already exists
 	if (m_properties.find(key) != m_properties.end())
-	    LOG.warning("Multiple definitions for key  \"%\"!", key.c_str());
+	    Log::getDefault().warning("Multiple definitions for key  \"%\"!", key.c_str());
 	// Add property
 	m_properties[key] = value;
     }

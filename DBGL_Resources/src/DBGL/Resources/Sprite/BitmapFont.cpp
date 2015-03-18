@@ -140,7 +140,7 @@ namespace dbgl
 		std::ifstream input { filename, std::ifstream::in | std::ifstream::binary | std::ios::ate };
 		if (!input.good())
 		{
-			LOG.warning("Unable to open file % for reading!", filename);
+			Log::getDefault().warning("Unable to open file % for reading!", filename);
 			input.close();
 			return 1;
 		}
@@ -150,7 +150,7 @@ namespace dbgl
 		char* data = new char[filesize];
 		if (!data)
 		{
-			LOG.error("Unable to allocate sufficient memory!");
+			Log::getDefault().error("Unable to allocate sufficient memory!");
 			input.close();
 			return 1;
 		}
@@ -178,13 +178,13 @@ namespace dbgl
 		// Check if valid
 		if (m_header.id1 != 0xBF || m_header.id2 != 0xF2)
 		{
-			LOG.error("BFF2 bitmap font header invalid.");
+			Log::getDefault().error("BFF2 bitmap font header invalid.");
 			return false;
 		}
 		// Reject unsupported bpp values
 		if (m_header.bpp != 8 && m_header.bpp != 24 && m_header.bpp != 32)
 		{
-			LOG.error("Bitmap font file has unsupported amount of bits per pixel.");
+			Log::getDefault().error("Bitmap font file has unsupported amount of bits per pixel.");
 			return false;
 		}
 		m_rowPitch = m_header.imgWidth / m_header.cellWidth;
@@ -195,7 +195,7 @@ namespace dbgl
 		const char* img = data + 276;
 		if (276 + texDataSize != filesize)
 		{
-			LOG.error("BFF2 bitmap font corrupt.");
+			Log::getDefault().error("BFF2 bitmap font corrupt.");
 			return false;
 		}
 
@@ -224,7 +224,7 @@ namespace dbgl
 			break;
 		default:
 			// Should never get here
-			LOG.error("BFF2 Bitmap font corrupt.");
+			Log::getDefault().error("BFF2 Bitmap font corrupt.");
 			break;
 		}
 		m_pSprite = new Sprite { m_pTexture };

@@ -56,7 +56,7 @@ namespace dbgl
 	    file.close();
 	    return true;
 	}
-	LOG.warning("CSV file \"%\" could not be opened!", path.c_str());
+	Log::getDefault().warning("CSV file \"%\" could not be opened!", path.c_str());
 	return false;
     }
 
@@ -79,7 +79,7 @@ namespace dbgl
 	    outFile.close();
 	    return true;
 	}
-	LOG.warning("CSV file \"%\" could not be opened!", path);
+	Log::getDefault().warning("CSV file \"%\" could not be opened!", path);
 	return false;
     }
 
