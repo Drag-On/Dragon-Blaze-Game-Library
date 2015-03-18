@@ -35,12 +35,24 @@ namespace dbgl
 			m_pTexture->bind();
 			Platform::get()->curTexture()->generateMipMaps();
 		}
+		AbstractResource::load();
 	}
 
 	void TextureResource::unload()
 	{
 		delete m_pTexture;
 		m_pTexture = nullptr;
+		AbstractResource::unload();
+	}
+
+	bool TextureResource::identify(std::string const& filename) const
+	{
+		return m_filename == filename;
+	}
+
+	ITexture* TextureResource::getTexture()
+	{
+		return m_pTexture;
 	}
 
 	TextureIO& TextureResource::loader()
