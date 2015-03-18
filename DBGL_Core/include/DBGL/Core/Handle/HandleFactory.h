@@ -83,6 +83,20 @@ namespace dbgl
 		     */
 		    unsigned long getRefCount() const;
 		    /**
+		     * @brief Increases the reference count of this handle by one
+		     * @warning This is a dangerous thing to do: usually it is not necessary to manually manipulate
+		     * 			the reference count. If you do, make sure to also call abandon() or all kinds of
+		     * 			bad things may happen
+		     */
+		    void claim();
+		    /**
+		     * @brief Decreases the reference count of this handle by one
+		     * @warning This is a dangerous thing to do: usually it is not necessary to manually manipulate
+		     * 			the reference count. If you do, make sure to also call claim() or all kinds of
+		     * 			bad things may happen
+		     */
+		    void abandon();
+		    /**
 		     * @brief Comparison operator
 		     * @param other Handle to compare to
 		     * @return True if handles are equal, otherwise false
