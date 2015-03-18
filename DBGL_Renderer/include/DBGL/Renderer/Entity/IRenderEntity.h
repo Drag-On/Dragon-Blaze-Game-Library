@@ -66,7 +66,7 @@ namespace dbgl
 		 */
 		virtual Vec3f const& getPosition() = 0;
 		/**
-		 * @brief Retrieves the entitie's model matrix
+		 * @brief Retrieves the entity's model matrix
 		 * @return Model matrix
 		 */
 		virtual Mat4f const& getModelMatrix() = 0;
