@@ -56,7 +56,7 @@ namespace dbgl
 	Log& Log::getDefault()
 	{
 		// This ensures lazy loading
-		static Log instance("Logfile.txt", true, true);
+		static Log instance("Logfile.txt", true, false);
 		return instance;
 	}
 
