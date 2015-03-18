@@ -40,7 +40,7 @@ namespace dbgl
 		IMesh* getMesh();
 		/**
 		 * @brief Reference to the mesh loader instance used by all mesh resources
-		 * @return Reference to mesh load
+		 * @return Reference to mesh loader
 		 * @note This mesh loader needs to be pointed to the right plugins in order to work!
 		 */
 		static MeshIO& loader();
