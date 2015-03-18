@@ -49,35 +49,35 @@ namespace dbgl
 	     */
 	    bool addFormat(Filename const& filename);
 	    /**
-	     * @brief Loads a texture from a certain file
+	     * @brief Loads a resource from a certain file
 	     * @details The correct loader will be chosen based on file extension
 	     * @param filename File to load
-	     * @return Pointer to the loaded texture or nullptr if not loaded
+	     * @return Pointer to the loaded file or nullptr if not loaded
 	     */
 	    T* load(std::string const& filename) const;
 	    /**
-	     * @brief Loads a texture from a certain file
+	     * @brief Loads a resource from a certain file
 	     * @details The correct loader will be chosen based on file extension
 	     * @param filename File to load
-	     * @return Pointer to the loaded texture or nullptr if not loaded
+	     * @return Pointer to the loaded file or nullptr if not loaded
 	     */
 	    T* load(Filename const& filename) const;
 	    /**
-	     * @brief Writes a texture to hard disk
+	     * @brief Writes a resource to hard disk
 	     * @details Image format is automatically determined based on file extension
-	     * @param tex Texture to write
+	     * @param res Resource to write
 	     * @param filename File to write to
 	     * @return True in case the file could be written, otherwise false
 	     */
-	    bool write(T* tex, std::string const& filename) const;
+	    bool write(T* res, std::string const& filename) const;
 	    /**
-	     * @brief Writes a texture to hard disk
+	     * @brief Writes a resource to hard disk
 	     * @details Image format is automatically determined based on file extension
-	     * @param tex Texture to write
+	     * @param res Resource to write
 	     * @param filename File to write to
 	     * @return True in case the file could be written, otherwise false
 	     */
-	    bool write(T* tex, Filename const& filename) const;
+	    bool write(T* res, Filename const& filename) const;
 
 	protected:
 	    std::vector<SimpleLibrary<M>*> m_modules {};
