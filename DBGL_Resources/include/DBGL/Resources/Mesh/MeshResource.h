@@ -34,6 +34,12 @@ namespace dbgl
 		virtual void load();
 		virtual void unload();
 		/**
+		 * @brief Identify this resource by its filename
+		 * @param filename Filename to check
+		 * @return True in case the filename this resource was constructed from matches the passed one
+		 */
+		bool identify(std::string const& filename) const;
+		/**
 		 * @brief Retrieves the actual mesh
 		 * @return Pointer to the loaded mesh or nullptr, if not loaded yet
 		 */

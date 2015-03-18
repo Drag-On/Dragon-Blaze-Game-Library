@@ -36,12 +36,24 @@ namespace dbgl
 			Log::getDefault().error("Couldn't load mesh \"%\". Using a cube instead.", m_filename);
 			m_pMesh = MeshUtility::createCube(true);
 		}
+		AbstractResource::load();
 	}
 
 	void MeshResource::unload()
 	{
 		delete m_pMesh;
 		m_pMesh = nullptr;
+		AbstractResource::unload();
+	}
+
+	bool MeshResource::identify(std::string const& filename) const
+	{
+		return m_filename == filename;
+	}
+
+	IMesh* MeshResource::getMesh()
+	{
+		return m_pMesh;
 	}
 
 	MeshIO& MeshResource::loader()
