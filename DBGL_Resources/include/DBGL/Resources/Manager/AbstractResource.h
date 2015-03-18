@@ -26,6 +26,7 @@ namespace dbgl
 	     * @param handle Handle to assign to this resource
 	     */
 	    AbstractResource(ResourceHandle handle);
+	    ~AbstractResource();
 	    virtual ResourceHandle getHandle() const;
 	    virtual ResourceHandle const& peekHandle() const;
 	    virtual bool isLoaded() const;

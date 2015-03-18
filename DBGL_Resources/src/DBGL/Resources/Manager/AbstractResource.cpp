@@ -12,33 +12,39 @@
 
 namespace dbgl
 {
-    AbstractResource::AbstractResource(ResourceHandle handle) : m_handle { handle }
-    {
-    }
+	AbstractResource::AbstractResource(ResourceHandle handle)
+			: m_handle { handle }
+	{
+	}
 
-    auto AbstractResource::getHandle() const -> ResourceHandle
-    {
-	return m_handle;
-    }
+	AbstractResource::~AbstractResource()
+	{
+		unload();
+	}
 
-    auto AbstractResource::peekHandle() const -> ResourceHandle const&
-    {
-	return m_handle;
-    }
+	auto AbstractResource::getHandle() const -> ResourceHandle
+	{
+		return m_handle;
+	}
 
-    bool AbstractResource::isLoaded() const
-    {
-	return m_loaded;
-    }
+	auto AbstractResource::peekHandle() const -> ResourceHandle const&
+	{
+		return m_handle;
+	}
 
-    void AbstractResource::load()
-    {
-	m_loaded = true;
-    }
+	bool AbstractResource::isLoaded() const
+	{
+		return m_loaded;
+	}
 
-    void AbstractResource::unload()
-    {
-	m_loaded = false;
-    }
+	void AbstractResource::load()
+	{
+		m_loaded = true;
+	}
+
+	void AbstractResource::unload()
+	{
+		m_loaded = false;
+	}
 
 }
