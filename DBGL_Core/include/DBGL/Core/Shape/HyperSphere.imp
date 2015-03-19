@@ -101,19 +101,14 @@ namespace dbgl
 
 	template<typename T, unsigned int D> void HyperSphere<T, D>::resizeInclude(HyperSphere<T, D> const& other)
 	{
-		// Compute new bounding box.
-		Vector<T, D> lower, upper, diagHalf;
-		T radius = 0;
-		for (unsigned int i = 0; i < D; i++)
-		{
-			lower[i] = std::min(this->lower(i), other.lower(i));
-			upper[i] = std::max(this->upper(i), other.upper(i));
-			diagHalf[i] = (upper[i] - lower[i]) / 2.0;
-			if (diagHalf[i] > radius)
-				radius = diagHalf[i];
-		}
-		m_center = lower + diagHalf;
-		m_radius = radius;
+		// Compute connecting vector
+		auto connect = m_center - other.getCenter();
+		auto connectLength = connect.getLength();
+		auto newRadius = ((connectLength + m_radius + other.getRadius()) / 2.0);
+		connect = connect / connectLength;
+		auto halfConnect = connect * newRadius;
+		m_center = other.getCenter() - (connect * other.getRadius()) + halfConnect;
+		m_radius = newRadius;
 	}
 
 	template<typename T, unsigned int D> T HyperSphere<T, D>::getBoundingRadius() const
