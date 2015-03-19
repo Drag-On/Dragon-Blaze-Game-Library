@@ -78,7 +78,8 @@ namespace dbgl
 		{
 			// Note: Using the third row since that one usually has a lot of zeros in 3d graphics
 			for (unsigned int i = 0; i < D; i++)
-				det += (*this)[i][3] * minor(i, 3).determinant();
+				if ((*this)[i][3] != 0)
+					det += (*this)[i][3] * minor(i, 3).determinant();
 			return det;
 		}
 	}
