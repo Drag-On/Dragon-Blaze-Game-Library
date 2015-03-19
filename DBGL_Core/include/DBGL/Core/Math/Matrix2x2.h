@@ -12,7 +12,7 @@
 #define MATRIX2X2_H_
 
 #include "DBGL/Core/Debug/Log.h"
-#include "Matrix.h"
+#include "SquareMatrix.h"
 #include "Vector2.h"
 
 namespace dbgl
@@ -21,9 +21,9 @@ namespace dbgl
 	 * @brief Matrix of size 2 by 2
 	 * @author Jan Moeller
 	 */
-	template<typename T> class Matrix2x2: public Matrix<T, 2, 2>
+	template<typename T> class Matrix2x2: public SquareMatrix<T, 2>
 	{
-		using BaseMatrixType = Matrix<T, 2, 2>;
+		using BaseMatrixType = SquareMatrix<T, 2>;
 	public:
 		// Constructors
 		/**

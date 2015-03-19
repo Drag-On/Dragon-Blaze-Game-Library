@@ -1,0 +1,85 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+namespace dbgl
+{
+	template<typename T, unsigned int D> SquareMatrix<T, D>::SquareMatrix()
+			: Matrix<T, D, D>()
+	{
+	}
+
+	template<typename T, unsigned int D> SquareMatrix<T, D>::SquareMatrix(T value)
+			: Matrix<T, D, D>(value)
+	{
+	}
+
+	template<typename T, unsigned int D> SquareMatrix<T, D>::SquareMatrix(const Matrix<T, D, D> &other)
+			: Matrix<T, D, D>(other)
+	{
+	}
+
+	template<typename T, unsigned int D> template<unsigned int N2, unsigned int M2> SquareMatrix<T, D>::SquareMatrix(
+			Matrix<T, N2, M2> const& other)
+			: Matrix<T, D, D>(other)
+	{
+	}
+
+	template<typename T, unsigned int D> SquareMatrix<T, D>::SquareMatrix(std::initializer_list<Vector<T, D>> args)
+			: Matrix<T, D, D>(args)
+	{
+	}
+
+	template<typename T, unsigned int D> auto SquareMatrix<T, D>::minor(unsigned int column,
+			unsigned int row) const -> SquareMatrix<T, D - 1>
+	{
+		SquareMatrix<T, D - 1> minor;
+		for (unsigned int x = 0; x < D - 1; x++)
+		{
+			for (unsigned int y = 0; y < D - 1; y++)
+			{
+				unsigned int i = x >= column ? x + 1 : x;
+				unsigned int j = y >= row ? y + 1 : y;
+				minor[x][y] = (*this)[i][j];
+			}
+		}
+		return minor;
+	}
+
+	template<typename T, unsigned int D> T SquareMatrix<T, D>::determinant() const
+	{
+		T det = 0;
+		if (D == 2)
+		{
+			det = (*this)[0][0] * (*this)[1][1] - (*this)[0][1] * (*this)[1][0];
+			return det;
+		}
+		else if (D == 3)
+		{
+			T a = (*this)[0][0];
+			T b = (*this)[0][1];
+			T c = (*this)[0][2];
+			T d = (*this)[1][0];
+			T e = (*this)[1][1];
+			T f = (*this)[1][2];
+			T g = (*this)[2][0];
+			T h = (*this)[2][1];
+			T i = (*this)[2][2];
+			T det = (a * e * i) + (b * f * g) + (c * d * h) - (a * f * h) - (b * d * i) - (c * e * g);
+			return det;
+		}
+		else
+		{
+			// Note: Using the third row since that one usually has a lot of zeros in 3d graphics
+			for (unsigned int i = 0; i < D; i++)
+				det += (*this)[i][3] * minor(i, 3).determinant();
+			return det;
+		}
+	}
+}

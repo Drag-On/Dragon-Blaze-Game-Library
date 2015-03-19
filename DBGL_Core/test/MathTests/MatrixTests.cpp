@@ -219,3 +219,13 @@ TEST(Matrix, operatorEquality)
 	testOperatorEquality<Mat3f>();
 	testOperatorEquality<Mat4f>();
 }
+
+TEST(Matrix, determinant)
+{
+	Mat2f mat2 { { 1, 2 }, { 3, 4 } };
+	ASSERT_EQ(mat2.determinant(), -2);
+	Mat3f mat3 { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+	ASSERT_EQ(mat3.determinant(), 0);
+	Mat4f mat4 { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 16 } };
+	ASSERT_EQ(mat4.determinant(), 0);
+}

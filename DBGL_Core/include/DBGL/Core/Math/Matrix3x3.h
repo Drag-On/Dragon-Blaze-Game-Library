@@ -12,7 +12,7 @@
 #define MATRIX3X3_H_
 
 #include "DBGL/Core/Debug/Log.h"
-#include "Matrix.h"
+#include "SquareMatrix.h"
 #include "Vector3.h"
 
 namespace dbgl
@@ -21,9 +21,9 @@ namespace dbgl
 	 * @brief Matrix of size 3 by 3
 	 * @author Jan Moeller
 	 */
-	template<typename T> class Matrix3x3: public Matrix<T, 3, 3>
+	template<typename T> class Matrix3x3: public SquareMatrix<T, 3>
 	{
-		using BaseMatrixType = Matrix<T, 3, 3>;
+		using BaseMatrixType = SquareMatrix<T, 3>;
 	public:
 		// Constructors
 		/**

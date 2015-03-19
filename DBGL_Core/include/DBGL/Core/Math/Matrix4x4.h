@@ -15,7 +15,7 @@
 #include "DBGL/Core/Debug/Log.h"
 #include "Vector3.h"
 #include "Vector4.h"
-#include "Matrix.h"
+#include "SquareMatrix.h"
 #include "Utility.h"
 
 namespace dbgl
@@ -24,9 +24,9 @@ namespace dbgl
 	 * @brief Matrix of size 4 by 4
 	 * @author Jan Moeller
 	 */
-	template<typename T> class Matrix4x4: public Matrix<T, 4, 4>
+	template<typename T> class Matrix4x4: public SquareMatrix<T, 4>
 	{
-		using BaseMatrixType = Matrix<T, 4, 4>;
+		using BaseMatrixType = SquareMatrix<T, 4>;
 	public:
 		// Constructors
 		/**
