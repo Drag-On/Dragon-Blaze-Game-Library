@@ -71,7 +71,7 @@ namespace dbgl
 			T g = (*this)[2][0];
 			T h = (*this)[2][1];
 			T i = (*this)[2][2];
-			T det = (a * e * i) + (b * f * g) + (c * d * h) - (a * f * h) - (b * d * i) - (c * e * g);
+			det = (a * e * i) + (b * f * g) + (c * d * h) - (a * f * h) - (b * d * i) - (c * e * g);
 			return det;
 		}
 		else
@@ -79,7 +79,10 @@ namespace dbgl
 			// Note: Using the third row since that one usually has a lot of zeros in 3d graphics
 			for (unsigned int i = 0; i < D; i++)
 				if ((*this)[i][3] != 0)
-					det += (*this)[i][3] * minor(i, 3).determinant();
+				{
+					int parity = ((i + 5) % 2) == 0 ? 1 : -1;
+					det += parity * (*this)[i][3] * minor(i, 3).determinant();
+				}
 			return det;
 		}
 	}
