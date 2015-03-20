@@ -20,6 +20,49 @@ namespace dbgl
 	{
 	}
 
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& point1)
+	{
+		fromPoints(point1);
+	}
+
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& point1,
+			Vector<T, D> const& point2)
+	{
+		fromPoints(point1, point2);
+	}
+
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& point1,
+			Vector<T, D> const& point2, Vector<T, D> const& point3)
+	{
+		fromPoints(point1, point2, point3);
+	}
+
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& point1,
+			Vector<T, D> const& point2, Vector<T, D> const& point3, Vector<T, D> const& point4)
+	{
+		fromPoints(point1, point2, point3, point4);
+	}
+
+	template<typename T, unsigned int D> template<typename Container> HyperSphere<T, D>::HyperSphere(
+			Container const& container)
+	{
+		std::random_device rd;
+		std::mt19937 mersenne_twister(rd());
+		std::vector<Vector<T, D>> copy;
+		std::copy(container.begin(), container.end(), std::back_inserter(copy));
+		std::shuffle(copy.begin(), copy.end(), mersenne_twister);
+		computeMinimal(copy, {});
+	}
+
+	template<typename T, unsigned int D> template<typename Container> HyperSphere<T, D>::HyperSphere(
+			Container& container)
+	{
+		std::random_device rd;
+		std::mt19937 mersenne_twister(rd());
+		std::shuffle(container.begin(), container.end(), mersenne_twister);
+		computeMinimal(container, {});
+	}
+
 	template<typename T, unsigned int D> Vector<T, D>& HyperSphere<T, D>::center()
 	{
 		return m_center;
@@ -144,6 +187,135 @@ namespace dbgl
 	template<typename T, unsigned int D> bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
 	{
 		return !(*this == other);
+	}
+
+	template<typename T, unsigned int D> void HyperSphere<T, D>::fromPoints(Vector<T, D> const& point)
+	{
+		m_center = point;
+		m_radius = 0;
+	}
+
+	template<typename T, unsigned int D> void HyperSphere<T, D>::fromPoints(Vector<T, D> const& point1,
+			Vector<T, D> const& point2)
+	{
+		auto dist = point1 - point2;
+		m_center = point1 + point2 * 0.5;
+		m_radius = dist.getLength() / 2.0;
+	}
+
+	template<typename T, unsigned int D> void HyperSphere<T, D>::fromPoints(Vector<T, D> const& point1,
+			Vector<T, D> const& point2, Vector<T, D> const& point3)
+	{
+		Vector<T, D> p1 = (point1 + point2) / 2.0;
+		Vector<T, D> p2 = (point2 + point3) / 2.0;
+		Vector<T, D> dir1, dir2;
+		if (D > 2)
+		{
+			// Calculate plane on which all 3 points lie
+			auto normal = (point1 - point2).cross(point1 - point3).normalize();
+			dir1 = (point1 - point2).normalize().cross(normal);
+			dir2 = (point2 - point3).normalize().cross(normal);
+		}
+		else
+		{
+			dir1 = (point1 - point2).normalize();
+			dir1 = Vector<T, D> { -dir1[1], dir1[0] };
+			dir2 = (point2 - point3).normalize();
+			dir2 = Vector<T, D> { -dir2[1], dir2[0] };
+		}
+		// Compute center point by intersection
+		auto r = (-p1[0] * dir2[1] + p1[1] * dir2[0] - dir2[0] * p2[1] + dir2[1] * p2[0])
+				/ (dir2[1] * dir1[0] - dir2[0] * dir1[1]);
+		m_center = p1 + dir1 * r;
+		m_radius = (m_center - point1).getLength();
+	}
+
+	template<typename T, unsigned int D> void HyperSphere<T, D>::fromPoints(Vector<T, D> const& point1,
+			Vector<T, D> const& point2, Vector<T, D> const& point3, Vector<T, D> const& point4)
+	{
+		static_assert(D>=2 && D <=3, "Construction from four points is only implemented for 2D and 3D matrices.");
+		if (D == 2)
+		{
+			// Construct from any three points
+			fromPoints(point1, point2, point3);
+		}
+		else if (D == 3)
+		{
+			SquareMatrix<T, 5> mat { { 0, point1[0] * point1[0] + point1[1] * point1[1] + point1[2] * point1[2],
+					point2[0] * point2[0] + point2[1] * point2[1] + point2[2] * point2[2], point3[0] * point3[0]
+							+ point3[1] * point3[1] + point3[2] * point3[2], point4[0] * point4[0]
+							+ point4[1] * point4[1] + point4[2] * point4[2] }, { 0, point1[0], point2[0], point3[0],
+					point4[0] }, { 0, point1[1], point2[1], point3[1], point4[1] }, { 0, point1[2], point2[2],
+					point3[2], point4[2] }, { 1, 1, 1, 1, 1 } };
+			auto M11 = mat.minor(0, 0).determinant();
+			auto M12 = mat.minor(1, 0).determinant();
+			auto M13 = mat.minor(2, 0).determinant();
+			auto M14 = mat.minor(3, 0).determinant();
+			auto M15 = mat.minor(4, 0).determinant();
+			if (M11 == 0)
+			{
+				// No solution
+				throw(std::invalid_argument("The passed points do not uniquely define a sphere."));
+			}
+			else
+			{
+				m_center[0] = 0.5 * M12 / M11;
+				m_center[1] = -0.5 * M13 / M11;
+				m_center[2] = 0.5 * M14 / M11;
+				m_radius = std::sqrt(
+						m_center[0] * m_center[0] + m_center[1] * m_center[1] + m_center[2] * m_center[2] - M15 / M11);
+			}
+		}
+	}
+
+	template<typename T, unsigned int D> template<typename Container> bool HyperSphere<T, D>::computeMinimal(
+			Container& container, std::vector<Vector<T, D>> onBound)
+	{
+		static_assert(D <= 3, "Not implemented for dimensions greater than 3!");
+		unsigned int containerSize = container.size();
+		unsigned int onBoundSize = onBound.size();
+		if (containerSize == 0 || onBoundSize == D + 1)
+		{
+			decltype(onBound.begin()) it1, it2, it3, it4;
+			it1 = it2 = it3 = it4 = onBound.begin();
+			std::advance(it2, 1);
+			std::advance(it3, 2);
+			std::advance(it4, 3);
+			switch (onBoundSize)
+			{
+			case 1:
+				fromPoints(*it1);
+				return true;
+			case 2:
+				fromPoints(*it1, *it2);
+				return true;
+			case 3:
+				fromPoints(*it1, *it2, *it3);
+				return true;
+			case 4:
+				fromPoints(*it1, *it2, *it3, *it4);
+				return true;
+			default:
+				return false;
+			}
+		}
+		else
+		{
+			// Pick an element from the set of points
+			auto elemIter = container.rbegin();
+			Vector<T, D> p = *elemIter;
+			// Recursive call without the picked element
+			container.pop_back();
+			bool result = computeMinimal(container, onBound);
+			if (!result || !contains(p))
+			{
+				onBound.push_back(p);
+				computeMinimal(container, onBound);
+			}
+			// Re-insert element for next iteration
+			container.push_back(p);
+			return true;
+		}
 	}
 }
 

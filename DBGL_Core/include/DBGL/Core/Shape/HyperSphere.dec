@@ -13,6 +13,11 @@
 
 #include "IShape.h"
 #include "DBGL/Core/Math/Vector.h"
+#include "DBGL/Core/Math/SquareMatrix.h"
+#include <random>
+#include <algorithm>
+#include <iterator>
+#include <vector>
 
 namespace dbgl
 {
@@ -33,6 +38,54 @@ namespace dbgl
 		 * @param radius Sphere radius
 		 */
 		HyperSphere(Vector<T, D> const& center, T radius);
+		/**
+		 * @brief Constructs a sphere from a point
+		 * @details The sphere center will be equal to the point and have radius zero
+		 * @param point1 Center point of the sphere
+		 */
+		HyperSphere(Vector<T, D> const& point1);
+		/**
+		 * @brief Constructs a sphere from two points
+		 * @details The sphere will be constructed such that all points lie on its surface, such that the radius is minimal
+		 * @param point1 One point
+		 * @param point2 A different point
+		 */
+		HyperSphere(Vector<T, D> const& point1, Vector<T, D> const& point2);
+		/**
+		 * @brief Constructs a sphere from three points
+		 * @details The sphere will be constructed such that all points lie on its surface, such that the radius is minimal
+		 * @note The points may not be mutually linearly dependent
+		 * @warning Only implemented for 2D and 3D!
+		 * @param point1 One point
+		 * @param point2 A different point
+		 * @param point3 Another different point
+		 */
+		HyperSphere(Vector<T, D> const& point1, Vector<T, D> const& point2, Vector<T, D> const& point3);
+		/**
+		 * @brief Constructs a sphere from four points
+		 * @details The sphere will be constructed such that all points lie on its surface, such that the radius is minimal
+		 * @note The points may not be mutually linearly dependent
+		 * @warning Only implemented for 2D and 3D!
+		 * @param point1 One point
+		 * @param point2 A different point
+		 * @param point3 Another different point
+		 * @param point4 Yet another different point
+		 */
+		HyperSphere(Vector<T, D> const& point1, Vector<T, D> const& point2, Vector<T, D> const& point3,
+				Vector<T, D> const& point4);
+		/**
+		 * @brief Constructs a minimal sphere from a set of points, using Welzl's algorithm
+		 * @param container Set of points
+		 * @warning The \p container will be copied internally! If it is acceptable for the caller to modify the container
+		 * 			(especially its order), then you might want to call the overload with a non-const reference.
+		 */
+		template<typename Container> HyperSphere(Container const& container);
+		/**
+		 * @brief Constructs a minimal sphere from a set of points, using Welzl's algorithm
+		 * @param container Set of points
+		 * @warning The \p container will be modified!
+		 */
+		template<typename Container> HyperSphere(Container& container);
 		/**
 		 * @brief Destructor
 		 */
@@ -139,6 +192,13 @@ namespace dbgl
 	private:
 		Vector<T, D> m_center;
 		T m_radius;
+
+		void fromPoints(Vector<T, D> const& point);
+		void fromPoints(Vector<T, D> const& point1, Vector<T, D> const& point2);
+		void fromPoints(Vector<T, D> const& point1, Vector<T, D> const& point2, Vector<T, D> const& point3);
+		void fromPoints(Vector<T, D> const& point1, Vector<T, D> const& point2, Vector<T, D> const& point3,
+				Vector<T, D> const& point4);
+		template<typename Container> bool computeMinimal(Container& container, std::vector<Vector<T, D>> onBound);
 	};
 
 	/**
