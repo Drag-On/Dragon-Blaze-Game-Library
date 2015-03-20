@@ -151,12 +151,28 @@ namespace dbgl
 	{
 		// Compute connecting vector
 		auto connect = m_center - other.getCenter();
-		auto connectLength = connect.getLength();
-		auto newRadius = ((connectLength + m_radius + other.getRadius()) / 2.0);
-		connect = connect / connectLength;
-		auto halfConnect = connect * newRadius;
-		m_center = other.getCenter() - (connect * other.getRadius()) + halfConnect;
-		m_radius = newRadius;
+		auto connectSqLength = connect.getSquaredLength();
+		auto sqRadius = m_radius * m_radius;
+		auto sqOtherRadius = other.m_radius * other.m_radius;
+		// If one of the two spheres is completely enclosed in the other, take the bigger one
+		if (connectSqLength + sqRadius <= sqOtherRadius)
+		{
+			m_center = other.m_center;
+			m_radius = other.m_radius;
+			return;
+		}
+		else if (connectSqLength + sqOtherRadius <= sqRadius)
+			return;
+		else
+		{
+			// Otherwise compute new sphere
+			auto connectLength = std::sqrt(connectSqLength);
+			auto newRadius = ((connectLength + m_radius + other.getRadius()) / 2.0);
+			connect = connect / connectLength;
+			auto halfConnect = connect * newRadius;
+			m_center = other.getCenter() - (connect * other.getRadius()) + halfConnect;
+			m_radius = newRadius;
+		}
 	}
 
 	template<typename T, unsigned int D> T HyperSphere<T, D>::getBoundingRadius() const
