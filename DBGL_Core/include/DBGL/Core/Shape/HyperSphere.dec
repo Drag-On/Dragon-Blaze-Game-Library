@@ -33,6 +33,10 @@ namespace dbgl
 		 */
 		HyperSphere();
 		/**
+		 * @brief Copy constructor
+		 */
+		HyperSphere(HyperSphere const& other);
+		/**
 		 * @brief Constructs a sphere from a center point and a radius
 		 * @param center Center point of the sphere
 		 * @param radius Sphere radius
@@ -185,6 +189,11 @@ namespace dbgl
 		 * @return False if both shapes are equal, otherwise true
 		 */
 		bool operator!=(HyperSphere<T, D> const& other) const;
+		/**
+		 * @brief Assignment operator
+		 * @param other Hypersphere to copy from
+		 */
+		HyperSphere<T, D>& operator=(HyperSphere<T, D> const& other);
 		/**
 		 * @brief The precision type used by this object
 		 */

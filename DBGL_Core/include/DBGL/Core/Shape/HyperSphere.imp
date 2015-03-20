@@ -15,6 +15,11 @@ namespace dbgl
 	{
 	}
 
+	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(HyperSphere const& other)
+			: m_center(other.m_center), m_radius(other.m_radius)
+	{
+	}
+
 	template<typename T, unsigned int D> HyperSphere<T, D>::HyperSphere(Vector<T, D> const& center, T radius)
 			: m_center { center }, m_radius { radius }
 	{
@@ -51,7 +56,7 @@ namespace dbgl
 		std::vector<Vector<T, D>> copy;
 		std::copy(container.begin(), container.end(), std::back_inserter(copy));
 		std::shuffle(copy.begin(), copy.end(), mersenne_twister);
-		computeMinimal(copy, {});
+		computeMinimal(copy, { });
 	}
 
 	template<typename T, unsigned int D> template<typename Container> HyperSphere<T, D>::HyperSphere(
@@ -60,7 +65,7 @@ namespace dbgl
 		std::random_device rd;
 		std::mt19937 mersenne_twister(rd());
 		std::shuffle(container.begin(), container.end(), mersenne_twister);
-		computeMinimal(container, {});
+		computeMinimal(container, { });
 	}
 
 	template<typename T, unsigned int D> Vector<T, D>& HyperSphere<T, D>::center()
@@ -187,6 +192,13 @@ namespace dbgl
 	template<typename T, unsigned int D> bool HyperSphere<T, D>::operator!=(HyperSphere<T, D> const& other) const
 	{
 		return !(*this == other);
+	}
+
+	template<typename T, unsigned int D> HyperSphere<T, D>& HyperSphere<T, D>::operator=(HyperSphere<T, D> const& other)
+	{
+		m_center = other.m_center;
+		m_radius = other.m_radius;
+		return *this;
 	}
 
 	template<typename T, unsigned int D> void HyperSphere<T, D>::fromPoints(Vector<T, D> const& point)
