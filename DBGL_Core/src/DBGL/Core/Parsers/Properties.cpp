@@ -95,7 +95,7 @@ namespace dbgl
 		}
 	}
 
-	void Properties::interpret(int argc, char** argv)
+	void Properties::interpret(int argc, char const ** argv)
 	{
 		for (int i = 0; i < argc; i += 2)
 		{

@@ -46,7 +46,7 @@ namespace dbgl
 	     * @param argc Amount of arguments
 	     * @param argv Actual arguments
 	     */
-	    void interpret(int argc, char** argv);
+	    void interpret(int argc, char const ** argv);
 	    /**
 	     * @brief Writes the properties back to file
 	     * @return True in case the file was written, otherwise false
