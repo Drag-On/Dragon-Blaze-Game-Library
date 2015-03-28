@@ -19,7 +19,6 @@
 #include <sstream>
 #include <cstdio>
 #include <unordered_map>
-#include "DBGL/Core/Debug/Log.h"
 
 namespace dbgl
 {
