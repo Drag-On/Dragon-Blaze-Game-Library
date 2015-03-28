@@ -18,6 +18,7 @@
 #include <sstream>
 #include <cstdio>
 #include <vector>
+#include <stdexcept>
 
 namespace dbgl
 {
