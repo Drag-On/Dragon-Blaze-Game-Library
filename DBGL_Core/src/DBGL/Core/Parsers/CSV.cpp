@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Core/Parsers/CSV.h"
+#include "DBGL/Core/Debug/Log.h"
 
 namespace dbgl
 {

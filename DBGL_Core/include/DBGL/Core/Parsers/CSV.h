@@ -18,7 +18,6 @@
 #include <sstream>
 #include <cstdio>
 #include <vector>
-#include "DBGL/Core/Debug/Log.h"
 
 namespace dbgl
 {
