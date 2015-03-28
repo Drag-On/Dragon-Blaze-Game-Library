@@ -29,6 +29,10 @@ namespace dbgl
 	{
 	public:
 		/**
+		 * @brief Creates an empty csv file
+		 */
+		CSV();
+		/**
 		 * @brief Loads a csv file from hard disk
 		 * @param path Path of the file to load
 		 */
@@ -94,14 +98,13 @@ namespace dbgl
 		 * @return Amount of elements in column \p x
 		 */
 		unsigned int getHeight(unsigned int x) const;
-	private:
 		/**
 		 * @brief Loads the specified csv file into RAM
 		 * @param path Path of the file to use
 		 * @return True in case the file could be loaded, otherwise false
 		 */
 		bool read(std::string const& path);
-
+	private:
 		std::string m_filename;
 		std::string m_delimiter = ";";
 		std::vector<std::vector<std::string>> m_table { };

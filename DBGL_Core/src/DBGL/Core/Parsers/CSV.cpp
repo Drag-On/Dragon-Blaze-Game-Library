@@ -13,6 +13,10 @@
 
 namespace dbgl
 {
+	CSV::CSV()
+	{
+	}
+
 	CSV::CSV(std::string const& path)
 			: m_filename { path }
 	{
@@ -22,6 +26,7 @@ namespace dbgl
 
 	bool CSV::read(std::string const& path)
 	{
+		m_filename = path;
 		// Open file
 		std::ifstream file { };
 		file.open(path.c_str(), std::ios::in);
