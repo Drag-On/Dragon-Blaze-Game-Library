@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Core/Debug/Log.h"
+#include "DBGL/Platform/OS/OS.h"
 
 namespace dbgl
 {

@@ -22,7 +22,6 @@
 #include <cstdarg>
 #include <cstring>
 #include <ctime>
-#include "DBGL/Platform/OS/OS.h"
 
 namespace dbgl
 {
