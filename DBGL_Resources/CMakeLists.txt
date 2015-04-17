@@ -7,19 +7,12 @@
 ### complete or free of bugs in any way. It should work, but
 ### it might also begin to hurt your kittens.
 ######################################################################
-
-######################################################################
-### Main library cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_RESOURCES C CXX)
  
 ######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+    "DBGL_Resources/src/*.cpp"
 )
 
 ######################################################################
@@ -38,11 +31,23 @@ set_target_properties(DBGL_Resources PROPERTIES LINKER_LANGUAGE CXX)
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_Resources "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
+target_link_libraries(DBGL_Resources DBGL_Platform)
+target_link_libraries(DBGL_Resources DBGL_Core)
 
 ######################################################################
 ### Compile plugins
 ######################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/plugins/"
-                 "${PROJECT_BINARY_DIR}/plugins/")
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/plugins/Mesh/OBJ/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/plugins/Texture/BMP/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/plugins/Texture/DDS/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/plugins/Texture/TGA/CMakeLists.txt")
+
+######################################################################
+### Compile tests
+######################################################################
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/test/CMakeLists.txt")
+
+######################################################################
+### Compile examples
+######################################################################
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/examples/ModelViewer/CMakeLists.txt")

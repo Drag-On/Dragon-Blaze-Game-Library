@@ -9,25 +9,10 @@
 ######################################################################
 
 ######################################################################
-### Basics example cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_DDS C CXX)
-
-######################################################################
-### Compiler flags
-######################################################################
-# GCC
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fPIC")
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
-######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC_FILES
-    "*.h"
-    "*.cpp"
+    "DBGL_Resources/plugins/Texture/DDS/*.cpp"
 )
 
 ######################################################################
@@ -45,5 +30,5 @@ add_library(DBGL_DDS SHARED ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_DDS "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
-target_link_libraries(DBGL_DDS "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
+target_link_libraries(DBGL_DDS DBGL_Platform)
+target_link_libraries(DBGL_DDS DBGL_Core)

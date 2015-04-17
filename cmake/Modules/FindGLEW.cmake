@@ -5,6 +5,7 @@
 # GLEW_FOUND
 # GLEW_INCLUDE_PATH
 # GLEW_LIBRARY
+# GLEW_DLL
 # 
 
 IF (WIN32)
@@ -18,6 +19,12 @@ IF (WIN32)
 		$ENV{PROGRAMFILES}/GLEW/lib
 		${PROJECT_SOURCE_DIR}/DBGL_Platform/lib/glew/lib
 		DOC "The GLEW library")
+	FIND_LIBRARY( GLEW_DLL
+		NAMES glew32.dll glew32s.dll
+		PATHS
+		$ENV{PROGRAMFILES}/GLEW/lib
+		${PROJECT_SOURCE_DIR}/DBGL_Platform/lib/glew/lib
+		DOC "The GLEW dll")
 ELSE (WIN32)
 	FIND_PATH( GLEW_INCLUDE_PATH GL/glew.h
 		/usr/include
@@ -35,6 +42,16 @@ ELSE (WIN32)
 		/sw/lib
 		/opt/local/lib
 		DOC "The GLEW library")
+	FIND_LIBRARY( GLEW_DLL
+		NAMES glew32.so glew32s.so
+		PATHS
+		/usr/lib64
+		/usr/lib
+		/usr/local/lib64
+		/usr/local/lib
+		/sw/lib
+		/opt/local/lib
+		DOC "The GLEW dll")
 ENDIF (WIN32)
 
 IF (GLEW_INCLUDE_PATH)

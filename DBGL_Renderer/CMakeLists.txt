@@ -7,19 +7,12 @@
 ### complete or free of bugs in any way. It should work, but
 ### it might also begin to hurt your kittens.
 ######################################################################
-
-######################################################################
-### Main library cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_RENDERER C CXX)
  
 ######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+    "DBGL_Renderer/src/*.cpp"
 )
 
 ######################################################################
@@ -39,6 +32,16 @@ set_target_properties(DBGL_Renderer PROPERTIES LINKER_LANGUAGE CXX)
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
-target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_CORE_LIB_NAME}")
-target_link_libraries(DBGL_Renderer "${DBGL_LIB_DIR}/${DBGL_RESOURCES_LIB_NAME}")
+target_link_libraries(DBGL_Renderer DBGL_Platform)
+target_link_libraries(DBGL_Renderer DBGL_Core)
+target_link_libraries(DBGL_Renderer DBGL_Resources)
+
+######################################################################
+### Compile tests
+######################################################################
+#include()
+
+######################################################################
+### Compile examples
+######################################################################
+include("DBGL_Renderer/examples/Simple/CMakeLists.txt")

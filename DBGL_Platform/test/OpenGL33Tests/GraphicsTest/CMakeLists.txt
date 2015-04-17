@@ -9,17 +9,10 @@
 ######################################################################
 
 ######################################################################
-### Basics example cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_PLATFORM_TEST_OGL33_GRAPHICS C CXX)
-
-######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC_FILES
-    "*.h"
-    "*.cpp"
+    "DBGL_Platform/test/OpenGL33Tests/GraphicsTest/*.cpp"
 )
 
 ######################################################################
@@ -35,4 +28,4 @@ add_executable(DBGL_PLATFORM_TEST_OGL33_GRAPHICS ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_PLATFORM_TEST_OGL33_GRAPHICS "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_PLATFORM_TEST_OGL33_GRAPHICS DBGL_Platform)

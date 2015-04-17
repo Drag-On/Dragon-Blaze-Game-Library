@@ -3,6 +3,7 @@
 # GLFW_LIBRARY, the name of the library;
 # GLFW_INCLUDE_DIR, where to find glfw include files.
 # GLFW_FOUND, true if both the GLFW_LIBRARY and GLFW_INCLUDE_DIR have been found.
+# GLFW_DLL, the actual dynamic library file (might be the same as GLFW_LIBRARY)
 #
 # To help locate the library and include file, you could define an environment variable called
 # GLFW_ROOT which points to the root of the glfw library installation. This is pretty useful
@@ -35,6 +36,18 @@ FIND_PATH(GLFW_INCLUDE_DIR GLFW/glfw3.h DOC "Path to GLFW3 include directory."
 )
 
 FIND_LIBRARY(GLFW_LIBRARY DOC "Absolute path to GLFW library."
+  NAMES glfw glfw3.dll libglfw.so
+  HINTS
+  $ENV{GLFW_ROOT}
+  PATH_SUFFIXES lib/win32 #For finding the library file under the root of the glfw expanded archive, typically on Windows.
+  PATHS
+  /usr/local/lib
+  /usr/lib
+  ${GLFW_ROOT_DIR}/lib-msvc100/release # added by ptr
+  ${PROJECT_SOURCE_DIR}/DBGL_Platform/lib/glfw/src
+)
+
+FIND_LIBRARY(GLFW_DLL DOC "Absolute path to GLFW dynamic library."
   NAMES glfw glfw3.dll libglfw.so
   HINTS
   $ENV{GLFW_ROOT}

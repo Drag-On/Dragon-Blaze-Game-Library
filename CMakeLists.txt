@@ -48,15 +48,6 @@ elseif(UNIX)
 endif()
 
 ######################################################################
-### Set policy
-### This suppresses warnings that occur because all the projects
-### build into the same directory. This way it is possible that files
-### get overwritten by projects later in the build chain! Check for
-### better option!
-######################################################################
-cmake_policy(SET CMP0013 OLD)
-
-######################################################################
 ### Set module path
 ######################################################################
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -73,6 +64,9 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 if(UNIX)
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -pthread")
     set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -ldl")
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fPIC")
+    endif(CMAKE_COMPILER_IS_GNUCXX)
 endif(UNIX)
 # TODO: Other compilers
 
@@ -116,7 +110,9 @@ message("DBGL_RESOURCES_DLL_NAME: ${DBGL_RESOURCES_DLL_NAME}")
 message("DBGL_RENDERER_LIB_NAME: ${DBGL_RENDERER_LIB_NAME}")
 message("DBGL_RENDERER_DLL_NAME: ${DBGL_RENDERER_DLL_NAME}")
 message("GLFW_LIBRARY: ${GLFW_LIBRARY}")
+message("GLFW_DLL: ${GLFW_DLL}")
 message("GLEW_LIBRARY: ${GLEW_LIBRARY}")
+message("GLEW_DLL: ${GLEW_DLL}")
 message("#################")
 
 ######################################################################
@@ -129,43 +125,17 @@ message("#################")
 ######################################################################
 ### Subprojects
 ######################################################################
-#### Platform
-add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Platform/"
-				 "${PROJECT_BINARY_DIR}")
-if(COMPILE_TESTS)
-	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Platform/test/"
-					 "${PROJECT_BINARY_DIR}/test/")
-endif(COMPILE_TESTS)
-#### Core
-add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Core/"
-				 "${PROJECT_BINARY_DIR}")
-if(COMPILE_TESTS)
-	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Core/test/"
-					 "${PROJECT_BINARY_DIR}/test/")
-endif(COMPILE_TESTS)
-#### Resources
-add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Resources/"
-				 "${PROJECT_BINARY_DIR}")
-if(COMPILE_TESTS)
-	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Resources/test/"
-					 "${PROJECT_BINARY_DIR}/test/")
-	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Resources/examples/"
-					 "${PROJECT_BINARY_DIR}/examples/")
-endif(COMPILE_TESTS)
-#### Renderer
-add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Renderer/"
-				 "${PROJECT_BINARY_DIR}")
-if(COMPILE_TESTS)
-#	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Renderer/test/"
-#					 "${PROJECT_BINARY_DIR}/test/")
-	add_subdirectory("${PROJECT_SOURCE_DIR}/DBGL_Renderer/examples/"
-					 "${PROJECT_BINARY_DIR}/examples/")
-endif(COMPILE_TESTS)
+include("${PROJECT_SOURCE_DIR}/DBGL_Platform/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Core/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Resources/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Renderer/CMakeLists.txt")
 
 ######################################################################
 ### Copy asset files
 ######################################################################
 file(COPY "${PROJECT_SOURCE_DIR}/Assets" DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY "${GLEW_DLL}" DESTINATION "${PROJECT_BINARY_DIR}")
+file(COPY "${GLFW_DLL}" DESTINATION "${PROJECT_BINARY_DIR}")
  
 ######################################################################
 ### Add target for doxygen
@@ -182,7 +152,7 @@ if(DOXYGEN_FOUND)
     add_custom_target(doc
         ${DOXYGEN_EXECUTABLE}
         ${PROJECT_SOURCE_DIR}/Doxyfile
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/DBGL_Platform/
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Generating documentation..." VERBATIM
     )
 else (DOXYGEN_FOUND)

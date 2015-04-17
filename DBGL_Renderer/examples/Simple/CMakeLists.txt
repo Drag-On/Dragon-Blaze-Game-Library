@@ -9,17 +9,10 @@
 ######################################################################
 
 ######################################################################
-### Basics example cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_RENDERER_EXAMPLE_SIMPLE C CXX)
-
-######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC_FILES
-    "*.h"
-    "*.cpp"
+    "DBGL_Renderer/examples/Simple/*.cpp"
 )
 
 ######################################################################
@@ -38,7 +31,7 @@ add_executable(DBGL_RENDERER_EXAMPLE_SIMPLE ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_RENDERER_DLL_NAME}")
-target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
-target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
-target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE DBGL_Renderer)
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE DBGL_Resources)
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE DBGL_Core)
+target_link_libraries(DBGL_RENDERER_EXAMPLE_SIMPLE DBGL_Platform)

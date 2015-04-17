@@ -9,17 +9,10 @@
 ######################################################################
 
 ######################################################################
-### Main library cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_PLATFORM C CXX)
- 
-######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+    "DBGL_Platform/src/*.cpp"
 )
 
 ######################################################################
@@ -43,3 +36,10 @@ set_target_properties(DBGL_Platform PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(DBGL_Platform "${GLEW_LIBRARY}")
 target_link_libraries(DBGL_Platform "${GLFW_LIBRARY}")
 target_link_libraries(DBGL_Platform "${OPENGL_LIBRARIES}")
+
+######################################################################
+### Compile tests
+######################################################################
+include("${PROJECT_SOURCE_DIR}/DBGL_Platform/test/OpenGL33Tests/GraphicsTest/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Platform/test/OpenGL33Tests/WindowTest/CMakeLists.txt")
+include("${PROJECT_SOURCE_DIR}/DBGL_Platform/test/OSTests/LibraryTest/CMakeLists.txt")

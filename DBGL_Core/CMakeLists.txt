@@ -7,19 +7,12 @@
 ### complete or free of bugs in any way. It should work, but
 ### it might also begin to hurt your kittens.
 ######################################################################
-
-######################################################################
-### Main library cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_CORE C CXX)
  
 ######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC
-    "include/*.h"
-    "src/*.cpp"
+    "DBGL_Core/src/*.cpp"
 )
 
 ######################################################################
@@ -37,4 +30,9 @@ set_target_properties(DBGL_Core PROPERTIES LINKER_LANGUAGE CXX)
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_Core "${DBGL_LIB_DIR}/${DBGL_PLATFORM_LIB_NAME}")
+target_link_libraries(DBGL_Core DBGL_Platform)
+
+######################################################################
+### Compile tests
+######################################################################
+include("${PROJECT_SOURCE_DIR}/DBGL_Core/test/CMakeLists.txt")

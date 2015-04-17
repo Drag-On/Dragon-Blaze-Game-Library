@@ -9,17 +9,10 @@
 ######################################################################
 
 ######################################################################
-### Basics example cmake compilation file
-######################################################################
-cmake_minimum_required (VERSION 2.6)
-project (DBGL_RESOURCES_TEST C CXX)
-
-######################################################################
 ### Project code files
 ######################################################################
 file(GLOB_RECURSE SRC_FILES
-    "*.h"
-    "*.cpp"
+    "DBGL_Resources/test/*.cpp"
 )
 
 ######################################################################
@@ -37,6 +30,6 @@ add_executable(DBGL_RESOURCES_TEST ${SRC_FILES})
 ######################################################################
 ### Link libraries
 ######################################################################
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_RESOURCES_DLL_NAME}")
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_CORE_DLL_NAME}")
-target_link_libraries(DBGL_RESOURCES_TEST "${DBGL_LIB_DIR}/${DBGL_PLATFORM_DLL_NAME}")
+target_link_libraries(DBGL_RESOURCES_TEST DBGL_Resources)
+target_link_libraries(DBGL_RESOURCES_TEST DBGL_Core)
+target_link_libraries(DBGL_RESOURCES_TEST DBGL_Platform)
