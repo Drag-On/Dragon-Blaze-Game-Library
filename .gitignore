@@ -6,6 +6,7 @@
 .cproject
 .project
 .settings
+.idea
 CMakeFiles
 Makefile
 /*/*.cmake
