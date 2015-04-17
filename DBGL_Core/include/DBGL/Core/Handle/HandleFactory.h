@@ -11,6 +11,7 @@
 #ifndef INCLUDE_DBGL_CORE_HANDLE_HANDLEFACTORY_H_
 #define INCLUDE_DBGL_CORE_HANDLE_HANDLEFACTORY_H_
 
+#include <string>
 #include <vector>
 #include <set>
 #include <limits>
