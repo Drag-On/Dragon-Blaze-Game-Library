@@ -43,7 +43,13 @@ namespace dbgl
 		virtual void render(IRenderContext* rc);
 		virtual double getDeltaTime() const;
 		virtual unsigned int getFPS() const;
+		/**
+		 * @brief Change the z prepass setting
+		 */
 		void setUseZPrePass(bool use);
+		/**
+		 * @brief Retrieve the current z prepass setting
+		 */
 		bool getUseZPrePass() const;
 	private:
 		void renderWithZPrePass(IRenderContext* rc);

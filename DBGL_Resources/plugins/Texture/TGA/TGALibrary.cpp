@@ -147,7 +147,7 @@ namespace dbgl
 		 */
 		virtual bool write(ITexture* data, std::string const& path) const
 		{
-			return write(tex, Filename { path });
+			return write(data, Filename { path });
 		}
 		/**
 		 * @copydoc IImageFormatLibrary::write()

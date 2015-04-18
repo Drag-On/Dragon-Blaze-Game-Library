@@ -180,7 +180,7 @@ namespace dbgl
 		 * @brief Retrieves the pixel data of the texture
 		 * @param format Format to convert to
 		 * @param type Type to convert to
-		 * @param buffer[out] Buffer to write to. Must be big enough to hold the data.
+		 * @param[out] buffer Buffer to write to. Must be big enough to hold the data.
 		 * @param level Mip level
 		 */
 		virtual void getPixelData(PixelFormat format, PixelType type, char* buffer, unsigned int level = 0) const = 0;

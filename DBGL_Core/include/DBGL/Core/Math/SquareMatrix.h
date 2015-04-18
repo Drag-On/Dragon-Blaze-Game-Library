@@ -63,8 +63,14 @@ namespace dbgl
 	template<typename T> class SquareMatrix<T, 1> : public Matrix<T, 1, 1>
 	{
 	public:
-		SquareMatrix<T, 1> minor(unsigned int row, unsigned int column) const;
-		T determinant() const;
+	/**
+	 * @copydoc SquareMatrix::minor()
+	 */
+	SquareMatrix<T, 1> minor(unsigned int row, unsigned int column) const;
+	/**
+	 * @copydoc SquareMatrix::determinant()
+	 */
+	T determinant() const;
 	};
 }
 

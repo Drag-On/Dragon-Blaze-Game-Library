@@ -21,7 +21,13 @@ namespace dbgl
 	class IShaderProgramCommands
 	{
 	public:
+		/**
+		 * @brief Type of attribute handles
+		 */
 		using AttribHandle = IShaderProgram::AttribHandle;
+		/**
+		 * @brief Type of uniform handles
+		 */
 		using UniformHandle = IShaderProgram::UniformHandle;
 		/**
 		 * @brief Default destructor
