@@ -19,6 +19,9 @@
 
 namespace dbgl
 {
+	/**
+	 * @brief Loads tga image files from hard disk
+	 */
 	class TGAModule: public IImageFormatLibrary
 	{
 	private:
@@ -36,7 +39,6 @@ namespace dbgl
 			delete[] lineBuffer;
 		}
 
-	public:
 		struct FileHeaderTGA
 		{
 			unsigned char idLength = 0; /* 1 byte */
@@ -53,30 +55,44 @@ namespace dbgl
 			unsigned char imDescriptor = 0; /* 1 byte */
 		};
 
+	public:
+		/**
+		 * @brief Destructor
+		 */
 		virtual ~TGAModule() = default;
-
+		/**
+		 * @copydoc IImageFormatLibrary::canLoad()
+		 */
 		virtual bool canLoad() const
 		{
 			return true;
 		}
-
+		/**
+		 * @copydoc IImageFormatLibrary::canWrite()
+		 */
 		virtual bool canWrite() const
 		{
 			return false;
 		}
-
+		/**
+		 * @copydoc IImageFormatLibrary::matchExtension()
+		 */
 		virtual bool matchExtension(std::string const& extension) const
 		{
 			std::string lowercaseExt { };
 			std::transform(extension.begin(), extension.end(), std::back_inserter(lowercaseExt), ::tolower);
 			return lowercaseExt == ".tga" || lowercaseExt == "tga";
 		}
-
+		/**
+		 * @copydoc IImageFormatLibrary::load()
+		 */
 		virtual ITexture* load(std::string const& path) const
 		{
 			return load(Filename { path });
 		}
-
+		/**
+		 * @copydoc IImageFormatLibrary::load()
+		 */
 		virtual ITexture* load(Filename const& path) const
 		{
 			// Open file stream
@@ -126,12 +142,16 @@ namespace dbgl
 			delete[] img;
 			return tex;
 		}
-
-		virtual bool write(ITexture* tex, std::string const& path) const
+		/**
+		 * @copydoc IImageFormatLibrary::write()
+		 */
+		virtual bool write(ITexture* data, std::string const& path) const
 		{
 			return write(tex, Filename { path });
 		}
-
+		/**
+		 * @copydoc IImageFormatLibrary::write()
+		 */
 		virtual bool write(ITexture* /* tex */, Filename const& /* path */) const
 		{
 			return false;
@@ -139,11 +159,17 @@ namespace dbgl
 	};
 }
 
+/**
+ * @brief Create library object
+ */
 extern "C" dbgl::IImageFormatLibrary* create()
 {
 	return new dbgl::TGAModule { };
 }
 
+/**
+ * @brief Destroy library object
+ */
 extern "C" void destroy(dbgl::IImageFormatLibrary* mod)
 {
 	delete mod;
