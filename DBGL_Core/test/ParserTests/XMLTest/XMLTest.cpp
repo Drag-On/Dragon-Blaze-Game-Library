@@ -58,4 +58,38 @@ TEST(XML, constructor)
     ASSERT_EQ(xml1.root()->children()[2]->content(), "Comment");
 }
 
+TEST(XML, modify)
+{
+    std::stringstream contents;
+    contents << "<Main>" << std::endl;
+    contents << "</Main>" << std::endl;
 
+    XML xml(contents);
+    xml.root()->name() = "Marvin";
+    xml.root()->content() = "FooBar";
+    xml.root()->attributes().emplace_back("Brick", "Wall");
+    xml.root()->createChild("Enemy", XML::ElementType::Element)->attributes().emplace_back("race", "Vogon");
+    xml.root()->createChild("Friend", XML::ElementType::Element)->attributes().emplace_back("name", "Ford Prefect");
+    xml.root()->children()[1]->content() = "42";
+    ASSERT_EQ(xml.root()->name(), "Marvin");
+    ASSERT_EQ(xml.root()->content(), "FooBar");
+    ASSERT_EQ(xml.root()->attributes().size(), 1);
+    ASSERT_EQ(xml.root()->attributes()[0].name(), "Brick");
+    ASSERT_EQ(xml.root()->attributes()[0].value(), "Wall");
+    ASSERT_EQ(xml.root()->children().size(), 2);
+    ASSERT_EQ(xml.root()->children()[0]->name(), "Enemy");
+    ASSERT_EQ(xml.root()->children()[0]->parent(), xml.root());
+    ASSERT_EQ(xml.root()->children()[1]->name(), "Friend");
+    ASSERT_EQ(xml.root()->children()[1]->parent(), xml.root());
+
+    xml.root()->removeChild(0);
+    ASSERT_EQ(xml.root()->children().size(), 1);
+    ASSERT_EQ(xml.root()->children()[0]->name(), "Friend");
+    ASSERT_EQ(xml.root()->children()[0]->parent(), xml.root());
+
+    ASSERT_EQ(xml.declaration(), nullptr);
+    xml.replaceDeclaration();
+    ASSERT_NEQ(xml.declaration(), nullptr);
+    ASSERT_EQ(xml.declaration()->name(), "?xml");
+    ASSERT_EQ(xml.declaration()->type(), XML::ElementType::ProcInstruction);
+}

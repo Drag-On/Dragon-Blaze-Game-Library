@@ -127,6 +127,18 @@ namespace dbgl
              * @brief Child elements (if any)
              */
             std::vector<Element*> const& children() const;
+            /**
+             * @brief Create a new child element
+             * @param name Tag name
+             * @param type Type of element to create
+             * @returns Pointer to the created element
+             */
+            Element* createChild(std::string const& name, ElementType type);
+            /**
+             * @brief Removes a child element
+             * @param num Position of child in children vector.
+             */
+            void removeChild(unsigned int num);
         private:
             std::string m_name;
             std::string m_content;
@@ -168,6 +180,15 @@ namespace dbgl
          * @brief Root node (might be nullptr if file is empty)
          */
         Element const* root() const;
+        /**
+         * @brief Removes any current xml declaration and creates a new one
+         */
+        void replaceDeclaration();
+        /**
+         * @brief Removes all nodes and creates an empty root node
+         * @param name Tag name
+         */
+        void replaceRoot(std::string const& name);
 
     private:
         void readFromStream(std::istream& in);
@@ -175,7 +196,7 @@ namespace dbgl
         Element* tryReadElement(std::stringstream& content);
         bool tryReadAttributes(std::stringstream& content, std::vector<Attribute>& attributes);
         void tryReadContent(std::stringstream& content, Element* elem);
-        void free(Element* elem);
+        static void free(Element* elem);
 
         Element* m_pRoot = nullptr;
         Element* m_pDeclaration = nullptr;

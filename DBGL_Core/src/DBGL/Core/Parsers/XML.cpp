@@ -310,6 +310,23 @@ namespace dbgl
         return m_children;
     }
 
+    auto XML::Element::createChild(std::string const& name, ElementType type) -> Element*
+    {
+        Element* e = new Element;
+        e->m_name = name;
+        e->m_pParent = this;
+        e->m_type = type;
+        m_children.push_back(e);
+        return e;
+    }
+
+    void XML::Element::removeChild(unsigned int num)
+    {
+        auto e = m_children[num];
+        m_children.erase(m_children.begin() + num);
+        XML::free(e);
+    }
+
     XML::Element* XML::declaration()
     {
         return m_pDeclaration;
@@ -328,6 +345,22 @@ namespace dbgl
     XML::Element const* XML::root() const
     {
         return m_pRoot;
+    }
+
+    void XML::replaceDeclaration()
+    {
+        free(m_pDeclaration);
+        m_pDeclaration = new Element;
+        m_pDeclaration->m_name = "?xml";
+        m_pDeclaration->m_type = ElementType::ProcInstruction;
+    }
+
+    void XML::replaceRoot(std::string const& name)
+    {
+        free(m_pRoot);
+        m_pRoot = new Element;
+        m_pRoot->m_name = name;
+        m_pRoot->m_type = ElementType::Element;
     }
 }
 
