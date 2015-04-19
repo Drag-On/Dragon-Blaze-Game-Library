@@ -104,7 +104,10 @@ namespace dbgl
             isEmptyElement = tryReadAttributes(content, e->m_attributes);
         // Read content
         if (e->m_type == ElementType::Element && !isEmptyElement)
+        {
             tryReadContent(content, e);
+            StringUtility::trim(e->m_content);
+        }
         // Read comment
         if(e->m_type == ElementType::Comment)
             tryReadComment(content, e);
