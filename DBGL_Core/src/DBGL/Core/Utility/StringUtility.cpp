@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <sstream>
 
 namespace dbgl
 {
@@ -30,5 +31,99 @@ namespace dbgl
     std::string& StringUtility::trim(std::string& s)
     {
         return trimLeft(trimRight(s));
+    }
+
+    template<>
+    signed char StringUtility::parseAs(std::string const& s)
+    {
+        return static_cast<signed char>(std::stoi(s));
+    }
+
+    template<>
+    unsigned char StringUtility::parseAs(std::string const& s)
+    {
+        return static_cast<unsigned char>(std::stoi(s));
+    }
+
+    template<>
+    char StringUtility::parseAs(std::string const& s)
+    {
+        return static_cast<char>(std::stoi(s));
+    }
+
+    template<>
+    signed short StringUtility::parseAs(std::string const& s)
+    {
+        return static_cast<signed short>(std::stoi(s));
+    }
+
+    template<>
+    unsigned short StringUtility::parseAs(std::string const& s)
+    {
+        return  static_cast<unsigned short>(std::stoul(s));
+    }
+
+    template<>
+    signed int StringUtility::parseAs(std::string const& s)
+    {
+        return std::stoi(s);
+    }
+
+    template<>
+    unsigned int StringUtility::parseAs(std::string const& s)
+    {
+        return static_cast<unsigned int>(std::stoul(s));
+    }
+
+    template<>
+    signed long StringUtility::parseAs(std::string const& s)
+    {
+        return std::stol(s);
+    }
+
+    template<>
+    unsigned long StringUtility::parseAs(std::string const& s)
+    {
+        return std::stoul(s);
+    }
+
+    template<>
+    signed long long StringUtility::parseAs(std::string const& s)
+    {
+        return std::stoll(s);
+    }
+
+    template<>
+    unsigned long long StringUtility::parseAs(std::string const& s)
+    {
+        return std::stoull(s);
+    }
+
+    template<>
+    float StringUtility::parseAs(std::string const& s)
+    {
+        return std::stof(s);
+    }
+
+    template<>
+    double StringUtility::parseAs(std::string const& s)
+    {
+        return std::stod(s);
+    }
+
+    template<>
+    long double StringUtility::parseAs(std::string const& s)
+    {
+        return std::stold(s);
+    }
+
+    template<>
+    bool StringUtility::parseAs(std::string const& s)
+    {
+        bool val;
+        std::stringstream ss;
+        ss << s;
+        ss >> std::boolalpha >> val;
+        return val;
     }
 }
