@@ -109,7 +109,7 @@ namespace dbgl
             StringUtility::trim(e->m_content);
         }
         // Read comment
-        if(e->m_type == ElementType::Comment)
+        if (e->m_type == ElementType::Comment)
             tryReadComment(content, e);
 
         return e;
@@ -153,6 +153,7 @@ namespace dbgl
                 name += curCharacter;
             }
         }
+        StringUtility::trim(name);
         return !name.empty();
     }
 
@@ -213,12 +214,12 @@ namespace dbgl
             content.read(&curCharacter, 1);
             comment += curCharacter;
 
-            if(comment.size() >= 3)
+            if (comment.size() >= 3)
             {
-                std::string substr = comment.substr(comment.size()-3);
-                if(substr == "-->")
+                std::string substr = comment.substr(comment.size() - 3);
+                if (substr == "-->")
                 {
-                    substr = comment.substr(0, comment.size()-3);
+                    substr = comment.substr(0, comment.size() - 3);
                     pElement->m_content = StringUtility::trim(substr);
                     return;
                 }
@@ -236,18 +237,18 @@ namespace dbgl
         }
     }
 
-    XML::Attribute::Attribute(std::string const& name, std::string const& value) : m_name{name}, m_value{value}
+    XML::Attribute::Attribute(std::string const& name, std::string const& value) : m_key{name}, m_value{value}
     {
     }
 
-    std::string& XML::Attribute::name()
+    std::string& XML::Attribute::key()
     {
-        return m_name;
+        return m_key;
     }
 
-    std::string const& XML::Attribute::name() const
+    std::string const& XML::Attribute::key() const
     {
-        return m_name;
+        return m_key;
     }
 
     std::string& XML::Attribute::value()
@@ -361,6 +362,99 @@ namespace dbgl
         m_pRoot = new Element;
         m_pRoot->m_name = name;
         m_pRoot->m_type = ElementType::Element;
+    }
+
+    bool XML::write(std::ostream& out)
+    {
+        if (out.good())
+        {
+            if (m_pDeclaration)
+                writeProcIns(out, m_pDeclaration, 0);
+            if (m_pRoot)
+                return write(out, m_pRoot, 0);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    bool XML::write(std::string const& file)
+    {
+        std::ofstream outStream;
+        outStream.open(file.c_str(), std::ios::out);
+        if (outStream.is_open())
+        {
+            write(outStream);
+            outStream.close();
+            return true;
+        }
+        else
+        {
+            throw std::runtime_error("Couldn't open file " + file + ".");
+            return false;
+        }
+    }
+
+    bool XML::write(std::ostream& out, Element* e, unsigned int level)
+    {
+        switch (e->type())
+        {
+            case ElementType::Element:
+                return writeElement(out, e, level);
+            case ElementType::ProcInstruction:
+                return writeProcIns(out, e, level);
+            case ElementType::Comment:
+                return writeComment(out, e, level);
+        }
+        return false;
+    }
+
+    bool XML::writeProcIns(std::ostream& out, Element* e, unsigned int level)
+    {
+        writeIndent(out, level);
+        out << "<";
+        if (e->name().size() <= 0 || e->name()[0] != '?')
+            out << "?";
+        out << e->name() << " ";
+        for (auto a : e->m_attributes)
+            out << a.key() << "=\"" << a.value() << "\" ";
+        out << "?>" << std::endl;
+        return true;
+    }
+
+    bool XML::writeComment(std::ostream& out, XML::Element* e, unsigned int level)
+    {
+        writeIndent(out, level);
+        out << "<!--" << " " << e->content() << " -->" << std::endl;
+        return true;
+    }
+
+    bool XML::writeElement(std::ostream& out, XML::Element* e, unsigned int level)
+    {
+        writeIndent(out, level);
+        out << "<" << e->name() << " ";
+        for (auto a : e->m_attributes)
+            out << a.key() << "=\"" << a.value() << "\" ";
+        out << ">";
+        if (e->m_content.size() > 0)
+            out << e->m_content;
+        if (e->m_children.size() > 0)
+        {
+            out << std::endl;
+            for (auto c : e->m_children)
+            {
+                write(out, c, level + 1);
+            }
+            writeIndent(out, level);
+        }
+        out << "</" << e->name() << ">" << std::endl;
+        return true;
+    }
+
+    void XML::writeIndent(std::ostream& out, unsigned int level)
+    {
+        for (unsigned int i = 0; i < level; i++)
+            out << "  ";
     }
 }
 

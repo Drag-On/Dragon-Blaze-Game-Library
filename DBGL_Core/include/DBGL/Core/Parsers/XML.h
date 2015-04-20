@@ -59,11 +59,11 @@ namespace dbgl
             /**
              * @brief Attribute name
              */
-            std::string& name();
+            std::string& key();
             /**
              * @brief Attribute name
              */
-            std::string const& name() const;
+            std::string const& key() const;
             /**
              * @brief Attribute value
              */
@@ -74,7 +74,7 @@ namespace dbgl
             std::string const& value() const;
 
         private:
-            std::string m_name;
+            std::string m_key;
             std::string m_value;
 
             friend class XML;
@@ -151,6 +151,10 @@ namespace dbgl
         };
 
         /**
+         * @brief Creates an empty XML file
+         */
+        XML() = default;
+        /**
          * @brief Construct by reading in a file
          * @param file File to read from
          */
@@ -189,6 +193,18 @@ namespace dbgl
          * @param name Tag name
          */
         void replaceRoot(std::string const& name);
+        /**
+         * @brief Writes the xml to an output stream
+         * @param out Stream to write to
+         * @returns True in case write was successful, otherwise false
+         */
+        bool write(std::ostream& out);
+        /**
+         * @brief Writes the xml to a file
+         * @param file Name of the file to write to
+         * @returns True in case write was successful, otherwise false
+         */
+        bool write(std::string const& file);
 
     private:
         void readFromStream(std::istream& in);
@@ -196,11 +212,16 @@ namespace dbgl
         Element* tryReadElement(std::stringstream& content);
         bool tryReadAttributes(std::stringstream& content, std::vector<Attribute>& attributes);
         void tryReadContent(std::stringstream& content, Element* elem);
+        void tryReadComment(std::stringstream& stringstream, Element* pElement);
+        bool write(std::ostream& out, Element* e, unsigned int level);
+        bool writeProcIns(std::ostream& out, Element* e, unsigned int level);
+        bool writeComment(std::ostream& out, Element* e, unsigned int level);
+        bool writeElement(std::ostream& out, Element* e, unsigned int level);
+        void writeIndent(std::ostream& out, unsigned int level);
         static void free(Element* elem);
 
         Element* m_pRoot = nullptr;
         Element* m_pDeclaration = nullptr;
-        void tryReadComment(std::stringstream& stringstream, Element* pElement);
     };
 }
 
