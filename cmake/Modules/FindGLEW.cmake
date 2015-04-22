@@ -43,7 +43,7 @@ ELSE (WIN32)
 		/opt/local/lib
 		DOC "The GLEW library")
 	FIND_LIBRARY( GLEW_DLL
-		NAMES glew32.so glew32s.so
+		NAMES glew32.so glew32s.so libGLEW.so
 		PATHS
 		/usr/lib64
 		/usr/lib
