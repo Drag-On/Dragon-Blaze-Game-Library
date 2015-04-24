@@ -40,7 +40,15 @@ namespace dbgl
 		virtual void load();
 		virtual void unload();
 	protected:
+		/**
+		 * @brief Retrieves the texture at a certain position
+		 * @param i Position within the loaded textures list
+		 */
 		TextureResource* getTexture(unsigned int i) const;
+		/**
+		 * @brief Retrieves the shader program at a certain position
+		 * @param i Position within the loaded shader program list
+		 */
 		ShaderProgramResource* getShaderProgram(unsigned int i) const;
 
 		std::vector<std::string> m_texPaths;

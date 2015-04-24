@@ -80,6 +80,9 @@ namespace dbgl
 	    bool write(T* res, Filename const& filename) const;
 
 	protected:
+		/**
+		 * @brief List of loaded modules
+		 */
 	    std::vector<SimpleLibrary<M>*> m_modules {};
     };
 }

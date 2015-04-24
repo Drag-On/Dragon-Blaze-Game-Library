@@ -84,32 +84,32 @@ namespace dbgl
 	    void setRed(float red);
 	    /**
 	     * @brief Modify green component
-	     * @param red New green component in range 0 to 255
+	     * @param green New green component in range 0 to 255
 	     */
 	    void setGreen(unsigned char green);
 	    /**
 	     * @brief Modify green component
-	     * @param red New green component in range 0 to 1
+	     * @param green New green component in range 0 to 1
 	     */
 	    void setGreen(float green);
 	    /**
 	     * @brief Modify blue component
-	     * @param red New blue component in range 0 to 255
+	     * @param blue New blue component in range 0 to 255
 	     */
 	    void setBlue(unsigned char blue);
 	    /**
 	     * @brief Modify blue component
-	     * @param red New blue component in range 0 to 1
+	     * @param blue New blue component in range 0 to 1
 	     */
 	    void setBlue(float blue);
 	    /**
 	     * @brief Modify alpha component
-	     * @param red New alpha component in range 0 to 255
+	     * @param alpha New alpha component in range 0 to 255
 	     */
 	    void setAlpha(unsigned char alpha);
 	    /**
 	     * @brief Modify alpha component
-	     * @param red New alpha component in range 0 to 1
+	     * @param alpha New alpha component in range 0 to 1
 	     */
 	    void setAlpha(float alpha);
 	private:
