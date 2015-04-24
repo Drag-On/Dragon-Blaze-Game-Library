@@ -13,6 +13,11 @@
 
 #include "Matrix.h"
 
+// On some linux versions of gcc there seems to be a macro called "minor"
+#ifdef minor
+# undef minor
+#endif
+
 namespace dbgl
 {
 	/**
