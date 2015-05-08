@@ -8,237 +8,292 @@
 /// it might also begin to hurt your kittens.
 //////////////////////////////////////////////////////////////////////
 
+#include "Matrix.h"
+
 namespace dbgl
 {
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>::Matrix()
-	{
-		for (unsigned int x = 0; x < N; x++)
-			m_columns[x][x] = 1;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>::Matrix()
+    {
+        for (unsigned int x = 0; x < N; x++)
+            m_columns[x][x] = 1;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>::Matrix(T value)
-	{
-		for (unsigned int x = 0; x < N; x++)
-			m_columns[x] = Vector<T, M>(value);
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>::Matrix(T value)
+    {
+        for (unsigned int x = 0; x < N; x++)
+            m_columns[x] = Vector<T, M>(value);
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>::Matrix(const Matrix<T, N, M> &other)
-	{
-		for (unsigned int x = 0; x < N; x++)
-			m_columns[x] = other[x];
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>::Matrix(const Matrix<T, N, M>& other)
+    {
+        for (unsigned int x = 0; x < N; x++)
+            m_columns[x] = other[x];
+    }
 
-	template<typename T, unsigned int N, unsigned int M> template<unsigned int N2, unsigned int M2> Matrix<T, N, M>::Matrix(
-			Matrix<T, N2, M2> const& other)
-			: Matrix()
-	{
-		static_assert(N2 <= N && M2 <= M, "Matrix may not have a larger dimensionality than the constructed.");
-		for (unsigned int x = 0; x < N2; x++)
-			for (unsigned int y = 0; y < M2; y++)
-				m_columns[x][y] = other[x][y];
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    template<unsigned int N2, unsigned int M2>
+    Matrix<T, N, M>::Matrix(
+            Matrix<T, N2, M2> const& other)
+            : Matrix()
+    {
+        static_assert(N2 <= N && M2 <= M, "Matrix may not have a larger dimensionality than the constructed.");
+        for (unsigned int x = 0; x < N2; x++)
+            for (unsigned int y = 0; y < M2; y++)
+                m_columns[x][y] = other[x][y];
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>::Matrix(
-			std::initializer_list<Vector<T, M>> args)
-	{
-		if (args.size() > N)
-			throw(std::invalid_argument { "Too many arguments." });
-		unsigned int i = 0;
-		for (auto n : args)
-		{
-			m_columns[i] = n;
-			i++;
-		}
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>::Matrix(
+            std::initializer_list<Vector<T, M>> args)
+    {
+        if (args.size() > N)
+            throw(std::invalid_argument {"Too many arguments."});
+        unsigned int i = 0;
+        for (auto n : args)
+        {
+            m_columns[i] = n;
+            i++;
+        }
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>::~Matrix()
-	{
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>::~Matrix()
+    {
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline constexpr int Matrix<T, N, M>::getWidth()
-	{
-		return N;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    inline constexpr int Matrix<T, N, M>::getWidth()
+    {
+        return N;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline constexpr int Matrix<T, N, M>::getHeight()
-	{
-		return M;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    inline constexpr int Matrix<T, N, M>::getHeight()
+    {
+        return M;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, M, N> Matrix<T, N, M>::getTransposed() const
-	{
-		Matrix<T, M, N> transposed { };
-		for (unsigned int x = 0; x < N; x++)
-			for (unsigned int y = 0; y < M; y++)
-				transposed[y][x] = m_columns[x][y];
-		return transposed;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, M, N> Matrix<T, N, M>::getTransposed() const
+    {
+        Matrix<T, M, N> transposed{};
+        for (unsigned int x = 0; x < N; x++)
+            for (unsigned int y = 0; y < M; y++)
+                transposed[y][x] = m_columns[x][y];
+        return transposed;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T, N, M>::isZero() const
-	{
-		return std::all_of(std::begin(m_columns), std::end(m_columns), [](Vector<T, M> e)
-		{	return e.isZero();});
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    template<unsigned int A, unsigned int B>
+    auto Matrix<T, N, M>::getSubMatrix() const -> Matrix<T, A, B>
+    {
+        Matrix<T, A, B> mat;
+        for (unsigned int i = 0; i < A; i++)
+            for (unsigned int j = 0; j < B; j++)
+                mat[i][j] = m_columns[i][j];
+        return std::move(mat);
+    }
 
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T, N, M>::isIdentity() const
-	{
-		for (unsigned int x = 0; x < N; x++)
-			for (unsigned int y = 0; y < M; y++)
-			{
-				if (x == y && m_columns[x][y] != 1)
-					return false;
-				else if (x != y && m_columns[x][y] != 0)
-					return false;
-			}
-		return true;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    template<unsigned int A, unsigned int B, unsigned int C, unsigned int D>
+    auto Matrix<T, N, M>::getSubMatrix() const -> Matrix<T, C + 1 - A, D + 1 - B>
+    {
+        Matrix<T, C + 1 - A, D + 1 - B> mat;
+        for (unsigned int i = A; i <= C; i++)
+            for (unsigned int j = B; j <= D; j++)
+                mat[i - A][j - B] = m_columns[i][j];
+        return std::move(mat);
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline T const* Matrix<T, N, M>::getDataPointer() const
-	{
-		return &(m_columns[0][0]);
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    bool Matrix<T, N, M>::isZero() const
+    {
+        return std::all_of(std::begin(m_columns), std::end(m_columns), [](Vector<T, M> e) { return e.isZero(); });
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>& Matrix<T, N, M>::operator=(
-			Matrix<T, N, M> const& rhs)
-	{
-		if (*this != rhs)
-		{
-			for (unsigned int i = 0; i < N; i++)
-				m_columns[i] = rhs[i];
-		}
-		return *this;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    bool Matrix<T, N, M>::isIdentity() const
+    {
+        for (unsigned int x = 0; x < N; x++)
+            for (unsigned int y = 0; y < M; y++)
+            {
+                if (x == y && m_columns[x][y] != 1)
+                    return false;
+                else if (x != y && m_columns[x][y] != 0)
+                    return false;
+            }
+        return true;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> Matrix<T, N, M>::operator+(
-			Matrix<T, N, M> const& rhs) const
-	{
-		Matrix<T, N, M> tmp(*this);
-		tmp += rhs;
-		return tmp;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    inline T const* Matrix<T, N, M>::getDataPointer() const
+    {
+        return &(m_columns[0][0]);
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>& Matrix<T, N, M>::operator+=(
-			Matrix<T, N, M> const& rhs)
-	{
-		for (unsigned int i = 0; i < N; i++)
-			m_columns[i] += rhs[i];
-		return *this;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>& Matrix<T, N, M>::operator=(
+            Matrix<T, N, M> const& rhs)
+    {
+        if (*this != rhs)
+        {
+            for (unsigned int i = 0; i < N; i++)
+                m_columns[i] = rhs[i];
+        }
+        return *this;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> Matrix<T, N, M>::operator-(
-			Matrix<T, N, M> const& rhs) const
-	{
-		Matrix<T, N, M> tmp(*this);
-		tmp -= rhs;
-		return tmp;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    const Matrix<T, N, M> Matrix<T, N, M>::operator+(
+            Matrix<T, N, M> const& rhs) const
+    {
+        Matrix<T, N, M> tmp(*this);
+        tmp += rhs;
+        return tmp;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>& Matrix<T, N, M>::operator-=(
-			Matrix<T, N, M> const& rhs)
-	{
-		for (unsigned int i = 0; i < N; i++)
-			m_columns[i] -= rhs[i];
-		return *this;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>& Matrix<T, N, M>::operator+=(
+            Matrix<T, N, M> const& rhs)
+    {
+        for (unsigned int i = 0; i < N; i++)
+            m_columns[i] += rhs[i];
+        return *this;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> template<unsigned int O> const Matrix<T, M, O> Matrix<T, N, M>::operator*(
-			Matrix<T, O, N> const& rhs) const
-	{
-		Matrix<T, M, O> mat;
-		for (unsigned int x = 0; x < M; x++)
-			for (unsigned int y = 0; y < O; y++)
-			{
-				mat[x][y] = 0;
-				for (unsigned int xThis = 0; xThis < N; xThis++)
-					mat[x][y] += m_columns[xThis][y] * rhs[x][xThis];
-			}
-		return mat;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    const Matrix<T, N, M> Matrix<T, N, M>::operator-(
+            Matrix<T, N, M> const& rhs) const
+    {
+        Matrix<T, N, M> tmp(*this);
+        tmp -= rhs;
+        return tmp;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> const Vector<T, M> Matrix<T, N, M>::operator*(
-			Vector<T, N> const& rhs) const
-	{
-		Vector<T, M> vec;
-		for (unsigned int y = 0; y < M; y++)
-			for (unsigned int x = 0; x < N; x++)
-				vec[y] += m_columns[x][y] * rhs[x];
-		return vec;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>& Matrix<T, N, M>::operator-=(
+            Matrix<T, N, M> const& rhs)
+    {
+        for (unsigned int i = 0; i < N; i++)
+            m_columns[i] -= rhs[i];
+        return *this;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> Matrix<T, N, M>::operator*(
-			T const& rhs) const
-	{
-		Matrix<T, N, M> tmp(*this);
-		tmp *= rhs;
-		return tmp;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    template<unsigned int O>
+    const Matrix<T, M, O> Matrix<T, N, M>::operator*(
+            Matrix<T, O, N> const& rhs) const
+    {
+        Matrix<T, M, O> mat;
+        for (unsigned int x = 0; x < M; x++)
+            for (unsigned int y = 0; y < O; y++)
+            {
+                mat[x][y] = 0;
+                for (unsigned int xThis = 0; xThis < N; xThis++)
+                    mat[x][y] += m_columns[xThis][y] * rhs[x][xThis];
+            }
+        return mat;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>& Matrix<T, N, M>::operator*=(T const& rhs)
-	{
-		for (unsigned int x = 0; x < N; x++)
-			m_columns[x] *= rhs;
-		return *this;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    const Vector<T, M> Matrix<T, N, M>::operator*(
+            Vector<T, N> const& rhs) const
+    {
+        Vector<T, M> vec;
+        for (unsigned int y = 0; y < M; y++)
+            for (unsigned int x = 0; x < N; x++)
+                vec[y] += m_columns[x][y] * rhs[x];
+        return vec;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> const Matrix<T, N, M> Matrix<T, N, M>::operator/(
-			T const& rhs) const
-	{
-		Matrix<T, N, M> tmp(*this);
-		tmp /= rhs;
-		return tmp;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    const Matrix<T, N, M> Matrix<T, N, M>::operator*(
+            T const& rhs) const
+    {
+        Matrix<T, N, M> tmp(*this);
+        tmp *= rhs;
+        return tmp;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M>& Matrix<T, N, M>::operator/=(T const& rhs)
-	{
-		for (unsigned int x = 0; x < N; x++)
-			m_columns[x] /= rhs;
-		return *this;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>& Matrix<T, N, M>::operator*=(T const& rhs)
+    {
+        for (unsigned int x = 0; x < N; x++)
+            m_columns[x] *= rhs;
+        return *this;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> Matrix<T, N, M> Matrix<T, N, M>::operator-() const
-	{
-		Matrix<T, N, M> tmp(*this);
-		for (unsigned int x = 0; x < N; x++)
-			tmp[x] = -m_columns[x];
-		return tmp;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    const Matrix<T, N, M> Matrix<T, N, M>::operator/(
+            T const& rhs) const
+    {
+        Matrix<T, N, M> tmp(*this);
+        tmp /= rhs;
+        return tmp;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T, N, M>::operator==(
-			Matrix<T, N, M> const& rhs) const
-	{
-		for (unsigned int x = 0; x < N; x++)
-			if (m_columns[x] != rhs[x])
-				return false;
-		return true;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M>& Matrix<T, N, M>::operator/=(T const& rhs)
+    {
+        for (unsigned int x = 0; x < N; x++)
+            m_columns[x] /= rhs;
+        return *this;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> bool Matrix<T, N, M>::operator!=(
-			Matrix<T, N, M> const& rhs) const
-	{
-		return !(*this == rhs);
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    Matrix<T, N, M> Matrix<T, N, M>::operator-() const
+    {
+        Matrix<T, N, M> tmp(*this);
+        for (unsigned int x = 0; x < N; x++)
+            tmp[x] = -m_columns[x];
+        return tmp;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline Vector<T, M>& Matrix<T, N, M>::operator[](
-			std::size_t const& index)
-	{
-		return m_columns[index];
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    bool Matrix<T, N, M>::operator==(
+            Matrix<T, N, M> const& rhs) const
+    {
+        for (unsigned int x = 0; x < N; x++)
+            if (m_columns[x] != rhs[x])
+                return false;
+        return true;
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline Vector<T, M> const& Matrix<T, N, M>::operator[](
-			std::size_t const& index) const
-	{
-		return m_columns[index];
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    bool Matrix<T, N, M>::operator!=(
+            Matrix<T, N, M> const& rhs) const
+    {
+        return !(*this == rhs);
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline Matrix<T, N, M> operator*(Matrix<T, N, M> const& lhs,
-			T const& rhs)
-	{
-		return lhs * rhs;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    inline Vector<T, M>& Matrix<T, N, M>::operator[](
+            std::size_t const& index)
+    {
+        return m_columns[index];
+    }
 
-	template<typename T, unsigned int N, unsigned int M> inline Matrix<T, N, M> operator*(T const& lhs,
-			Matrix<T, N, M> const& rhs)
-	{
-		return rhs * lhs;
-	}
+    template<typename T, unsigned int N, unsigned int M>
+    inline Vector<T, M> const& Matrix<T, N, M>::operator[](
+            std::size_t const& index) const
+    {
+        return m_columns[index];
+    }
+
+    template<typename T, unsigned int N, unsigned int M>
+    inline Matrix<T, N, M> operator*(Matrix<T, N, M> const& lhs,
+                                     T const& rhs)
+    {
+        return lhs * rhs;
+    }
+
+    template<typename T, unsigned int N, unsigned int M>
+    inline Matrix<T, N, M> operator*(T const& lhs,
+                                     Matrix<T, N, M> const& rhs)
+    {
+        return rhs * lhs;
+    }
 }
