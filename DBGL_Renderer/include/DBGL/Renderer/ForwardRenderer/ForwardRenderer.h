@@ -12,6 +12,7 @@
 #define INCLUDE_DBGL_RENDERER_FORWARDRENDERER_FORWARDRENDERER_H_
 
 #include <vector>
+#include <unordered_map>
 #include <functional>
 #include "DBGL/Renderer/IRenderer.h"
 #include "DBGL/Renderer/Culling/ICamera.h"
@@ -28,9 +29,8 @@ namespace dbgl
     public:
         /**
          * @brief Constructor
-         * @param useZPrePass Specifies if the renderer should use a depth pre-pass
          */
-        ForwardRenderer(bool useZPrePass = false);
+        ForwardRenderer();
         /**
          * @brief Destructor
          */
@@ -42,26 +42,15 @@ namespace dbgl
         virtual void render(IRenderContext* rc);
         virtual double getDeltaTime() const;
         virtual unsigned int getFPS() const;
-        /**
-         * @brief Change the z prepass setting
-         */
-        void setUseZPrePass(bool use);
-        /**
-         * @brief Retrieve the current z prepass setting
-         */
-        bool getUseZPrePass() const;
-    private:
-        void renderWithZPrePass(IRenderContext* rc);
+    protected:
         void renderWithoutZPrePass(IRenderContext* rc);
         inline bool compareBackFront(GameEntity const* e1, GameEntity const* e2) const;
 
         std::vector<GameEntity const*> m_translucentEntities;
         std::vector<GameEntity const*> m_entities;
+        std::unordered_map<GameEntity const*, unsigned int> m_translucentEntityMap;
+        std::unordered_map<GameEntity const*, unsigned int> m_entityMap;
         ICamera const* m_pCamera = nullptr;
-        IShaderProgram* m_pZPrePassShader;
-        IShaderProgram::UniformHandle m_prePassMVPHandle;
-        bool m_useZPrePass = false;
-        std::function<void(IRenderContext*)> m_renderFunction;
         double m_delta = 1;
         unsigned int m_fps = 0;
         double m_curElapsed = 0;

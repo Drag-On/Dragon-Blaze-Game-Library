@@ -326,7 +326,7 @@ int main()
     pTex->bind();
     Platform::get()->curTexture()->generateMipMaps();
     cout << "Initializing renderer..." << endl;
-    pRenderer = new ForwardRenderer{false};
+    pRenderer = new ForwardRenderer{};
     Scene scenegraph{pRenderer};
     camera.addComponent<TransformComponent>(Vec3f {0.0, 0.0, 5.0}, Vec3f {1, 1, 1}, QuatF {Vec3f {0, 0, 1}});
     camera.addComponent<CameraComponent>(camera.transformComponent(), dbgl::pi_4(), 1, 500, pWnd);
