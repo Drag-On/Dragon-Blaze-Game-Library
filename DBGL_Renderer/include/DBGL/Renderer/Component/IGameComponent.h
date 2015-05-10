@@ -13,21 +13,26 @@
 
 namespace dbgl
 {
-	/**
-	 * @brief Interface class for all entity components
-	 */
-	class IGameComponent
-	{
-	public:
-		/**
-		 * @brief Destructor
-		 */
-		virtual ~IGameComponent() = default;
-		/**
-		 * @brief Update the component
-		 */
-		virtual void update() = 0;
-	};
+    /**
+     * @brief Interface class for all entity components
+     */
+    class IGameComponent
+    {
+    public:
+        /**
+         * @brief Destructor
+         */
+        virtual ~IGameComponent() = default;
+        /**
+         * @brief Update the component
+         */
+        virtual void update() = 0;
+        /**
+         * @brief Creates a clone of this object
+         * @returns An exact clone of this object
+         */
+        virtual IGameComponent* clone() const = 0;
+    };
 }
 
 #endif /* INCLUDE_DBGL_RENDERER_ENTITY_IGAMECOMPONENT_H_ */

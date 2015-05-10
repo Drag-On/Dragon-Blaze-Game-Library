@@ -12,15 +12,40 @@
 #define INCLUDE_DBGL_RENDERER_SCENE_SCENE_H_
 
 #include "DBGL/Core/Collection/Tree/ObjectHierarchy.h"
+#include "DBGL/Core/Shape/Shapes.h"
+#include "DBGL/Renderer/Culling/FrustumCulling.h"
 #include "DBGL/Renderer/Entity/GameEntity.h"
+#include "DBGL/Renderer/IRenderer.h"
 
 namespace dbgl
 {
-	class Scene: public ObjectHierarchy<GameEntity>
-	{
-	public:
-		// TODO: Implement scene graph
-	};
+    class Scene : public ObjectHierarchy<GameEntity>
+    {
+    public:
+        /**
+         * @brief Specify the renderer to use for rendering
+         * @param pRenderer Pointer to renderer to use
+         */
+        Scene(IRenderer* pRenderer);
+        /**
+         * @brief Destructor
+         */
+        virtual ~Scene() = default;
+        /**
+         * @copydoc ObjectHierarchy<GameEntity>::insert()
+         */
+        virtual Node* insert(GameEntity const& data);
+        /**
+         * @copydoc ObjectHierarchy<GameEntity>::remove()
+         */
+        virtual bool remove(Node* node);
+        /**
+         * @brief Traverses the scene graph, updates entities and renders them
+         */
+        void traverse();
+    private:
+        IRenderer* m_pRenderer;
+    };
 }
 
 #endif /* INCLUDE_DBGL_RENDERER_SCENE_SCENE_H_ */

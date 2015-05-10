@@ -17,49 +17,84 @@
 
 namespace dbgl
 {
-	class TransformComponent;
-	class RenderComponent;
+    class TransformComponent;
 
-	class GameEntity
-	{
-	public:
-		/**
-		 * @brief Update the entity and all of its components
-		 */
-		void update();
-		/**
-		 * @brief Create a component and add it to this entity
-		 * @param args Arguments to pass to the component constructor
-		 * @returns A pointer to the component
-		 */
-		template<typename Component, typename ... Args> Component* addComponent(Args ... args);
-		/**
-		 * @brief Removes a component from the entity
-		 * @param component Component that matches the ones to remove
-		 * @return Amount of removed components
-		 */
-		unsigned int removeComponent(IGameComponent* component);
-		/**
-		 * @brief Gets a component
-		 * @param criterion Function or lambda returning true for the component to get
-		 * @return The requested component
-		 */
-		IGameComponent* getComponent(std::function<bool(IGameComponent*)> criterion) const;
-		/**
-		 * @brief A pointer to this entitie's transform component
-		 * @return Pointer to transform component or nullptr if none set
-		 */
-		TransformComponent* transformComponent() const;
-		/**
-		 * @brief A pointer to this entitie's render component
-		 * @return Pointer to render component or nullptr if none set
-		 */
-		RenderComponent* renderComponent() const;
-	private:
-		std::vector<IGameComponent*> m_components;
-		TransformComponent* m_transform = nullptr;
-		RenderComponent* m_render = nullptr;
-	};
+    class RenderComponent;
+
+    class GameEntity
+    {
+    public:
+        /**
+         * @brief Constructor
+         */
+        GameEntity();
+        /**
+         * @brief Copy constructor
+         */
+        GameEntity(GameEntity const& other);
+        /**
+         * @brief Move constructor
+         */
+        GameEntity(GameEntity&& other);
+        /**
+         * @brief Destructor
+         */
+        ~GameEntity();
+        /**
+         * @brief Assignment operator
+         */
+        GameEntity& operator=(GameEntity const& other);
+        /**
+         * @brief Move-assignment operator
+         */
+        GameEntity& operator=(GameEntity&& other);
+        /**
+         * @brief Update the entity and all of its components
+         */
+        void update();
+        /**
+         * @brief Create a component and add it to this entity
+         * @param args Arguments to pass to the component constructor
+         * @returns A pointer to the component
+         */
+        template<typename Component, typename ... Args>
+        Component* addComponent(Args ... args);
+        /**
+         * @brief Removes a component from the entity
+         * @param component Component that matches the ones to remove
+         * @return Amount of removed components
+         */
+        unsigned int removeComponent(IGameComponent* component);
+        /**
+         * @brief Gets a component
+         * @param criterion Function or lambda returning true for the component to get
+         * @return The requested component
+         */
+        IGameComponent* getComponent(std::function<bool(IGameComponent*)> criterion) const;
+        /**
+         * @brief Get a component by type
+         */
+        template<typename T>
+        T* getComponent() const;
+        /**
+         * @brief A pointer to this entity's transform component
+         * @return Pointer to transform component or nullptr if none set
+         */
+        TransformComponent* transformComponent() const;
+        /**
+         * @brief A pointer to this entity's render component
+         * @return Pointer to render component or nullptr if none set
+         */
+        RenderComponent* renderComponent() const;
+    private:
+        void checkSpecialComponent(IGameComponent* comp);
+
+        std::vector<IGameComponent*> m_components;
+        TransformComponent* m_transform = nullptr;
+        RenderComponent* m_render = nullptr;
+    };
 }
+
+#include "GameEntity.imp"
 
 #endif /* INCLUDE_DBGL_RENDERER_ENTITY_GAMEENTITY_H_ */

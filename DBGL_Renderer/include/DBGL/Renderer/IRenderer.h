@@ -11,56 +11,60 @@
 #ifndef INCLUDE_DBGL_RENDERER_IRENDERER_H_
 #define INCLUDE_DBGL_RENDERER_IRENDERER_H_
 
-#include "DBGL/Renderer/Entity/IRenderEntity.h"
-#include "DBGL/Renderer/Entity/ICameraEntity.h"
+#include "DBGL/Renderer/Entity/GameEntity.h"
+#include "DBGL/Renderer/Culling/ICamera.h"
 #include "DBGL/Platform/Window/IWindow.h"
 
 namespace dbgl
 {
-	/**
-	 * @brief Interface class for all renderer implementations
-	 */
-	class IRenderer
-	{
-	public:
-		/**
-		 * @brief Destructor
-		 */
-		virtual ~IRenderer() = default;
-		/**
-		 * @brief Adds a new render entity to the renderer's management
-		 * @param entity Entity to add
-		 * @return True if the entity was added, otherwise false
-		 */
-		virtual bool addEntity(IRenderEntity* entity) = 0;
-		/**
-		 * @brief Removes an entity from the renderer
-		 * @param entity Entity to remove
-		 * @return True if the entity was removed, otherwise false
-		 */
-		virtual bool removeEntity(IRenderEntity* entity) = 0;
-		/**
-		 * @brief Sets a new camera entity
-		 * @param camera Camera to use for rendering. Set nullptr to disable rendering.
-		 */
-		virtual void setCameraEntity(ICameraEntity* camera) = 0;
-		/**
-		 * @brief Renders all entities that have been added
-		 * @param rc Context to render to
-		 * @note This method does not swap the back buffer
-		 */
-		virtual void render(IRenderContext* rc) = 0;
-		/**
-		 * @brief Returns the time since last frame
-		 * @return Time since last frame
-		 */
-		virtual double getDeltaTime() const = 0;
-		/**
-		 * @brief Returns the current frames per second
-		 * @return Frames per second
-		 */
-		virtual unsigned int getFPS() const = 0;
-	};
+    /**
+     * @brief Interface class for all renderer implementations
+     */
+    class IRenderer
+    {
+    public:
+        /**
+         * @brief Destructor
+         */
+        virtual ~IRenderer() = default;
+        /**
+         * @brief Adds a new render entity to the renderer's management
+         * @param entity Entity to add
+         * @return True if the entity was added, otherwise false
+         */
+        virtual bool addEntity(GameEntity const* entity) = 0;
+        /**
+         * @brief Removes an entity from the renderer
+         * @param entity Entity to remove
+         * @return True if the entity was removed, otherwise false
+         */
+        virtual bool removeEntity(GameEntity const* entity) = 0;
+        /**
+         * @brief Removes all entities from the renderer
+         */
+        virtual void clear() = 0;
+        /**
+         * @brief Sets a new camera entity
+         * @param camera Camera to use for rendering. Set nullptr to disable rendering.
+         */
+        virtual void setCameraEntity(ICamera const* camera) = 0;
+        /**
+         * @brief Renders all entities that have been added
+         * @param rc Context to render to
+         * @note This method does not swap the back buffer
+         */
+        virtual void render(IRenderContext* rc) = 0;
+        /**
+         * @brief Returns the time since last frame
+         * @return Time since last frame
+         */
+        virtual double getDeltaTime() const = 0;
+        /**
+         * @brief Returns the current frames per second
+         * @return Frames per second
+         */
+        virtual unsigned int getFPS() const = 0;
+    };
 }
 
 #endif /* INCLUDE_DBGL_RENDERER_IRENDERER_H_ */

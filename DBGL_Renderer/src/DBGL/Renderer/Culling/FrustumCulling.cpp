@@ -80,7 +80,7 @@ namespace dbgl
 		return m_boundingSphere;
 	}
 
-	void FrustumCulling::setCamera(ICameraEntity* pCam)
+	void FrustumCulling::setCamera(ICamera* pCam)
 	{
 		if (pCam)
 			m_pCam = pCam;
@@ -88,7 +88,7 @@ namespace dbgl
 			throw std::invalid_argument("Can't use a null camera for culling.");
 	}
 
-	ICameraEntity* FrustumCulling::getCamera() const
+	ICamera* FrustumCulling::getCamera() const
 	{
 		return m_pCam;
 	}

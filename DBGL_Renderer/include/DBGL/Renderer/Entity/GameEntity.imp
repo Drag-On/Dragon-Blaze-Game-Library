@@ -1,0 +1,35 @@
+//////////////////////////////////////////////////////////////////////
+/// Dragon Blaze Game Library
+///
+/// Copyright (c) 2015 by Jan Moeller
+///
+/// This software is provided "as-is" and does not claim to be
+/// complete or free of bugs in any way. It should work, but
+/// it might also begin to hurt your kittens.
+//////////////////////////////////////////////////////////////////////
+
+#include <DBGL/Renderer/Component/TransformComponent.h>
+
+namespace dbgl
+{
+    template<typename Component, typename ... Args>
+    Component* GameEntity::addComponent(Args ... args)
+    {
+        m_components.push_back(new Component(args...));
+        // Store pointer to special components
+        checkSpecialComponent(m_components.back());
+        return static_cast<Component*>(m_components.back());
+    }
+
+    template<typename T>
+    T* GameEntity::getComponent() const
+    {
+        for (auto c : m_components)
+        {
+            T* componentPointer = dynamic_cast<T*>(c);
+            if (componentPointer)
+                return componentPointer;
+        }
+        return nullptr;
+    }
+}

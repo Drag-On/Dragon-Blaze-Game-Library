@@ -12,49 +12,61 @@
 
 namespace dbgl
 {
-	TransformComponent::TransformComponent(Vec3f const& pos, Vec3f const& scale, QuatF const& rot)
-			: m_pos { pos }, m_scale { scale }, m_rot { rot }
-	{
-	}
+    TransformComponent::TransformComponent(Vec3f const& pos, Vec3f const& scale, QuatF const& rot)
+            : m_pos{pos}, m_scale{scale}, m_rot{rot}
+    {
+    }
 
-	void TransformComponent::update()
-	{
-		m_modelMat = m_rot.getMatrix() * Mat4f::makeScale(m_scale) * Mat4f::makeTranslation(m_pos);
-	}
+    void TransformComponent::update()
+    {
+        m_modelMat = m_rot.getMatrix() * Mat4f::makeScale(m_scale) * Mat4f::makeTranslation(m_pos);
+    }
 
-	Vec3f& TransformComponent::position()
-	{
-		return m_pos;
-	}
+    Vec3f& TransformComponent::position()
+    {
+        return m_pos;
+    }
 
-	Vec3f const& TransformComponent::position() const
-	{
-		return m_pos;
-	}
+    Vec3f const& TransformComponent::position() const
+    {
+        return m_pos;
+    }
 
-	Vec3f& TransformComponent::scale()
-	{
-		return m_scale;
-	}
+    Vec3f& TransformComponent::scale()
+    {
+        return m_scale;
+    }
 
-	Vec3f const& TransformComponent::scale() const
-	{
-		return m_scale;
-	}
+    Vec3f const& TransformComponent::scale() const
+    {
+        return m_scale;
+    }
 
-	QuatF& TransformComponent::rotation()
-	{
-		return m_rot;
-	}
+    QuatF& TransformComponent::rotation()
+    {
+        return m_rot;
+    }
 
-	QuatF const& TransformComponent::rotation() const
-	{
-		return m_rot;
-	}
+    QuatF const& TransformComponent::rotation() const
+    {
+        return m_rot;
+    }
 
-	Mat4f const& TransformComponent::modelMat() const
-	{
-		return m_modelMat;
-	}
+    Mat4f const& TransformComponent::modelMat() const
+    {
+        return m_modelMat;
+    }
 
+    bool TransformComponent::isStatic() const
+    {
+        // TODO: Correct implementation
+        return false;
+    }
+
+    IGameComponent* TransformComponent::clone() const
+    {
+        auto copy = new TransformComponent(m_pos, m_scale, m_rot);
+        copy->m_modelMat = m_modelMat;
+        return copy;
+    }
 }

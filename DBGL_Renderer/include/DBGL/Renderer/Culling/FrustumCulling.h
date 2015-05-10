@@ -14,7 +14,7 @@
 #include "DBGL/Core/Shape/Shapes.h"
 #include "DBGL/Core/Math/Matrix4x4.h"
 #include "DBGL/Core/Math/Vector3.h"
-#include "DBGL/Renderer/Entity/ICameraEntity.h"
+#include "ICamera.h"
 
 namespace dbgl
 {
@@ -54,14 +54,14 @@ namespace dbgl
 		 * @brief Set new camera
 		 * @param pCam New camera
 		 */
-		void setCamera(ICameraEntity* pCam);
+		void setCamera(ICamera* pCam);
 		/**
 		 * @brief Retrieves the currently set camera entity
 		 * @return
 		 */
-		ICameraEntity* getCamera() const;
+		ICamera* getCamera() const;
 	private:
-		ICameraEntity* m_pCam = nullptr;
+		ICamera* m_pCam = nullptr;
 		Plane<float> m_planes[6]; //near, far, left, right, top, bottom;
 		Sphere<float> m_boundingSphere;
 	};

@@ -19,7 +19,7 @@
 namespace dbgl
 {
 	/**
-	 * @brief Shader program resource
+	 * @brief Material resource
 	 */
 	class MaterialResource: public AbstractResource
 	{

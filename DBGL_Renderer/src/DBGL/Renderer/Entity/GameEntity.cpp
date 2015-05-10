@@ -9,54 +9,119 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DBGL/Renderer/Entity/GameEntity.h"
+#include "DBGL/Renderer/Component/RenderComponent.h"
+#include "DBGL/Renderer/Component/TransformComponent.h"
 #include <algorithm>
-#include <typeinfo>
 
 namespace dbgl
 {
-	void GameEntity::update()
-	{
-		for (auto c : m_components)
-			c->update();
-	}
+    GameEntity::GameEntity()
+    {
+    }
 
-	template<typename Component, typename ... Args> Component* GameEntity::addComponent(Args ... args)
-	{
-		m_components.emplace(m_components.end(), args...);
-		// Store pointer to special components
-		if (typeid(Component) == typeid(TransformComponent))
-			m_transform = *m_components.rbegin();
-		if (typeid(Component) == typeid(RenderComponent))
-			m_render = *m_components.rbegin();
-	}
+    GameEntity::GameEntity(GameEntity const& other)
+    {
+        m_components.reserve(other.m_components.size());
+        for (auto comp : other.m_components)
+        {
+            m_components.push_back(comp->clone());
+            checkSpecialComponent(m_components.back());
+        }
+    }
 
-	unsigned int GameEntity::removeComponent(IGameComponent* component)
-	{
-		auto it = std::find(m_components.begin(), m_components.end(), component);
-		if (it != m_components.end())
-		{
-			m_components.erase(it);
-			return 1;
-		}
-		else
-			return 0;
-	}
+    GameEntity::GameEntity(GameEntity&& other)
+    {
+        m_components = std::move(other.m_components);
+        m_transform = other.m_transform;
+        m_render = other.m_render;
+        other.m_components.clear();
+        other.m_transform = nullptr;
+        other.m_render = nullptr;
+    }
 
-	IGameComponent* GameEntity::getComponent(std::function<bool(IGameComponent*)> criterion) const
-	{
-		for (auto c : m_components)
-			if (criterion(c))
-				return c;
-		return nullptr;
-	}
+    GameEntity::~GameEntity()
+    {
+        for (unsigned int i = 0; i < m_components.size(); i++)
+            delete m_components[i];
+    }
 
-	TransformComponent* GameEntity::transformComponent() const
-	{
-		return m_transform;
-	}
+    GameEntity& GameEntity::operator=(GameEntity const& other)
+    {
+        if (this != &other)
+        {
+            for (auto comp : m_components)
+                delete comp;
+            m_components.clear();
+            m_components.reserve(other.m_components.size());
+            for (auto comp : other.m_components)
+            {
+                m_components.push_back(comp->clone());
+                checkSpecialComponent(m_components.back());
+            }
+        }
+        return *this;
+    }
 
-	RenderComponent* GameEntity::renderComponent() const
-	{
-		return m_render;
-	}
+    GameEntity& GameEntity::operator=(GameEntity&& other)
+    {
+        if (this != &other)
+        {
+            for (auto comp : m_components)
+                delete comp;
+            m_components.clear();
+            m_components = std::move(other.m_components);
+            m_transform = other.m_transform;
+            m_render = other.m_render;
+            other.m_components.clear();
+            other.m_transform = nullptr;
+            other.m_render = nullptr;
+        }
+        return *this;
+    }
+
+    void GameEntity::checkSpecialComponent(IGameComponent* comp)
+    {
+        TransformComponent* transform = dynamic_cast<TransformComponent*>(comp);
+        if (transform)
+            m_transform = transform;
+        RenderComponent* render = dynamic_cast<RenderComponent*>(comp);
+        if (render)
+            m_render = render;
+    }
+
+    void GameEntity::update()
+    {
+        for (auto c : m_components)
+            c->update();
+    }
+
+    unsigned int GameEntity::removeComponent(IGameComponent* component)
+    {
+        auto it = std::find(m_components.begin(), m_components.end(), component);
+        if (it != m_components.end())
+        {
+            m_components.erase(it);
+            return 1;
+        }
+        else
+            return 0;
+    }
+
+    IGameComponent* GameEntity::getComponent(std::function<bool(IGameComponent*)> criterion) const
+    {
+        for (auto c : m_components)
+            if (criterion(c))
+                return c;
+        return nullptr;
+    }
+
+    TransformComponent* GameEntity::transformComponent() const
+    {
+        return m_transform;
+    }
+
+    RenderComponent* GameEntity::renderComponent() const
+    {
+        return m_render;
+    }
 }
