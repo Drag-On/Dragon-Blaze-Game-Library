@@ -19,7 +19,7 @@ namespace dbgl
 
     void TransformComponent::update()
     {
-        m_modelMat = m_rot.getMatrix() * Mat4f::makeScale(m_scale) * Mat4f::makeTranslation(m_pos);
+        m_modelMat = m_rot.getMatrix() * Mat4f::makeTranslation(m_pos) * Mat4f::makeScale(m_scale);
     }
 
     Vec3f& TransformComponent::position()

@@ -38,13 +38,30 @@ namespace dbgl
         virtual bool addEntity(GameEntity const* entity);
         virtual bool removeEntity(GameEntity const* entity);
         virtual void clear();
+        virtual void tryOptimize();
         virtual void setCameraEntity(ICamera const* camera);
         virtual void render(IRenderContext* rc);
         virtual double getDeltaTime() const;
         virtual unsigned int getFPS() const;
     protected:
+        /**
+         * @brief Renders the scene without using a depth pre pass
+         */
         void renderWithoutZPrePass(IRenderContext* rc);
-        inline bool compareBackFront(GameEntity const* e1, GameEntity const* e2) const;
+        /**
+         * @brief Sorts the internal entity list front-to-back
+         */
+        void sortNormalEntities();
+        /**
+         * @brief Sorts the translucent entities back-to-front
+         */
+        void sortTranslucentEntities();
+
+        inline bool compareBackFront(GameEntity const* e1, GameEntity const* e2) const
+        {
+            return ((m_pCamera->getPosition() - e1->transformComponent()->position()).getSquaredLength()
+                    > (m_pCamera->getPosition() - e2->transformComponent()->position()).getSquaredLength());
+        }
 
         std::vector<GameEntity const*> m_translucentEntities;
         std::vector<GameEntity const*> m_entities;

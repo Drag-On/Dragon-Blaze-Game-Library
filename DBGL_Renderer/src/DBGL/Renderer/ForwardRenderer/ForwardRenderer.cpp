@@ -31,9 +31,25 @@ namespace dbgl
     bool ForwardRenderer::addEntity(GameEntity const* entity)
     {
         if (entity->renderComponent()->getMaterial()->isTranslucent())
-            m_translucentEntities.push_back(entity);
-        else if (entity->transformComponent()->isStatic())
-            m_entities.push_back(entity);
+        {
+            if (m_translucentEntityMap.count(entity) <= 0)
+            {
+                m_translucentEntities.push_back(entity);
+                m_translucentEntityMap[entity] = m_translucentEntities.size() - 1;
+            }
+            else
+                return false;
+        }
+        else
+        {
+            if (m_entityMap.count(entity) <= 0)
+            {
+                m_entities.push_back(entity);
+                m_entityMap[entity] = m_entities.size() - 1;
+            }
+            else
+                return false;
+        }
         return true;
     }
 
@@ -45,15 +61,17 @@ namespace dbgl
             if (it != m_translucentEntities.end())
             {
                 m_translucentEntities.erase(it);
+                m_translucentEntityMap.erase(entity);
                 return true;
             }
         }
-        else if (entity->transformComponent()->isStatic())
+        else
         {
             auto it = std::find(m_entities.begin(), m_entities.end(), entity);
             if (it != m_entities.end())
             {
                 m_entities.erase(it);
+                m_entityMap.erase(entity);
                 return true;
             }
         }
@@ -64,6 +82,12 @@ namespace dbgl
     {
         m_translucentEntities.clear();
         m_entities.clear();
+    }
+
+    void ForwardRenderer::tryOptimize()
+    {
+        sortNormalEntities();
+        sortTranslucentEntities();
     }
 
     void ForwardRenderer::setCameraEntity(ICamera const* camera)
@@ -111,17 +135,9 @@ namespace dbgl
     void ForwardRenderer::renderWithoutZPrePass(IRenderContext* rc)
     {
         // TODO: Only sort every nth time step
-        // Sort the culled entities in front-to-back order, and the translucent entities in back-to-front order
-        auto sortFrontBack = [this](GameEntity const* e1, GameEntity const* e2)
-        {
-            return !this->compareBackFront(e1, e2);
-        };
-        auto sortBackFront = [this](GameEntity const* e1, GameEntity const* e2)
-        {
-            return this->compareBackFront(e1, e2);
-        };
-        std::sort(m_entities.begin(), m_entities.end(), sortFrontBack);
-        std::sort(m_translucentEntities.begin(), m_translucentEntities.end(), sortBackFront);
+        // Sort the normal entities in front-to-back order, and the translucent entities in back-to-front order
+        sortNormalEntities();
+        sortTranslucentEntities();
 
         // Do color pass
         rc->enableColorBuffer(true, true, true, true);
@@ -129,7 +145,7 @@ namespace dbgl
         rc->clear(IRenderContext::COLOR | IRenderContext::DEPTH);
         rc->setDepthTest(IRenderContext::DepthTestValue::LessEqual);
         rc->setDrawMode(IRenderContext::DrawMode::Fill);
-        for (auto& e :m_entities)
+        for (auto& e : m_entities)
         {
             e->renderComponent()->getMaterial()->setupUnique(*e);
             e->renderComponent()->getMaterial()->setupMaterial();
@@ -145,11 +161,28 @@ namespace dbgl
         }
     }
 
-    bool ForwardRenderer::compareBackFront(GameEntity const* e1, GameEntity const* e2) const
+    void ForwardRenderer::sortNormalEntities()
     {
-        return ((m_pCamera->getPosition() - e1->transformComponent()->position()).getSquaredLength()
-                > (m_pCamera->getPosition() - e2->transformComponent()->position()).getSquaredLength());
+        auto sortFrontBack = [this](GameEntity const* e1, GameEntity const* e2)
+        {
+            return !this->compareBackFront(e1, e2);
+        };
+        std::sort(m_entities.begin(), m_entities.end(), sortFrontBack);
+        m_entityMap.clear();
+        for (unsigned int i = 0; i < m_entities.size(); i++)
+            m_entityMap[m_entities[i]] = i;
     }
 
+    void ForwardRenderer::sortTranslucentEntities()
+    {
+        auto sortBackFront = [this](GameEntity const* e1, GameEntity const* e2)
+        {
+            return this->compareBackFront(e1, e2);
+        };
+        std::sort(m_translucentEntities.begin(), m_translucentEntities.end(), sortBackFront);
+        m_translucentEntityMap.clear();
+        for (unsigned int i = 0; i < m_translucentEntities.size(); i++)
+            m_translucentEntityMap[m_translucentEntities[i]] = i;
+    }
 }
 

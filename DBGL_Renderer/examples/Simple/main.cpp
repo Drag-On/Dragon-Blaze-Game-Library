@@ -292,13 +292,13 @@ void update(Scene* scenegraph)
     if (input.isDown(Input::Key::KEY_S))
         camera.transformComponent()->position() -= cam->getDirection() * 2.5f * pRenderer->getDeltaTime() * speedup;
     if (input.isDown(Input::Key::KEY_A))
-        yRot += 0.5f * pRenderer->getDeltaTime() * speedup;
+        yRot += 0.2f * pRenderer->getDeltaTime() * speedup;
     if (input.isDown(Input::Key::KEY_D))
-        yRot -= 0.5f * pRenderer->getDeltaTime() * speedup;
+        yRot -= 0.2f * pRenderer->getDeltaTime() * speedup;
     if (input.isDown(Input::Key::KEY_Q))
-        xRot += 0.5f * pRenderer->getDeltaTime() * speedup;
+        xRot += 0.2f * pRenderer->getDeltaTime() * speedup;
     if (input.isDown(Input::Key::KEY_E))
-        xRot -= 0.5f * pRenderer->getDeltaTime() * speedup;
+        xRot -= 0.2f * pRenderer->getDeltaTime() * speedup;
     camera.transformComponent()->rotation() =
             QuatF(cam->getUp().cross(cam->getDirection()), xRot) * QuatF(cam->getUp(), yRot) *
             camera.transformComponent()->rotation();
@@ -317,7 +317,7 @@ int main()
     pWnd->getRenderContext().setDepthTest(IRenderContext::DepthTestValue::Less);
     pWnd->getRenderContext().setFaceCulling(IRenderContext::FaceCullingValue::Back);
     cout << "Initializing default meshes, textures and shader..." << endl;
-    pSphere = MeshUtility::createIcoSphere(4, true, IMesh::Usage::StaticDraw);
+    pSphere = MeshUtility::createIcoSphere(3, true, IMesh::Usage::StaticDraw);
     pShaderProgram = loadShader("Assets/Shaders/CamLight.vert", "Assets/Shaders/CamLight.frag");
     pShaderProgramSprite = loadShader("Assets/Shaders/Sprite.vert", "Assets/Shaders/Sprite.frag");
     pFont = new BitmapFont{};

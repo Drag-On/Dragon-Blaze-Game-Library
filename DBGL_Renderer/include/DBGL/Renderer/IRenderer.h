@@ -30,6 +30,7 @@ namespace dbgl
         /**
          * @brief Adds a new render entity to the renderer's management
          * @param entity Entity to add
+         * @note The entity is added only if it is not already known to the renderer
          * @return True if the entity was added, otherwise false
          */
         virtual bool addEntity(GameEntity const* entity) = 0;
@@ -43,6 +44,12 @@ namespace dbgl
          * @brief Removes all entities from the renderer
          */
         virtual void clear() = 0;
+        /**
+         * @brief Initiates a reinitialization
+         * @details Generally brings the renderer into an optimal state. Function heavily depends on the specific
+         *          renderer implementation.
+         */
+        virtual void tryOptimize() = 0;
         /**
          * @brief Sets a new camera entity
          * @param camera Camera to use for rendering. Set nullptr to disable rendering.

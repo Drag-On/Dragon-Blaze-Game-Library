@@ -30,10 +30,11 @@ namespace dbgl
 
     void Scene::traverse()
     {
-        // TODO: Implement properly
-        find([](Node* n)
+        // TODO: Implement properly (Culling...)
+        find([this](Node* n)
              {
                  n->data().update();
+                 m_pRenderer->addEntity(&n->data());
                  return false;
              }, true);
     }
